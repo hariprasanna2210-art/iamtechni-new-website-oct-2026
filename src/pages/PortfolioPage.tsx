@@ -6,6 +6,7 @@ import { projectsData } from '../data/projectsData';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon } from '../utils/serviceIcons';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
+import { ProjectVisualThumbnail } from '../components/common/ServiceVisualMockups';
 
 interface PortfolioPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -84,10 +85,13 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
                 <ScrollRevealItem key={project.id} className="h-full">
                   <div
                     onClick={() => onOpenCaseStudy(project)}
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-6 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
                   >
                     <div>
-                      <div className="flex items-center justify-between text-xs mb-4">
+                      {/* Interactive Visual Thumbnail */}
+                      <ProjectVisualThumbnail projectId={project.id} className="mb-4" />
+
+                      <div className="flex items-center justify-between text-xs mb-3">
                         <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                           {project.category}
                         </span>

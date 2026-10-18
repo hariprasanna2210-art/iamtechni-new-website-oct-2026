@@ -5,6 +5,7 @@ import { PageHero } from '../components/common/PageHero';
 import { solutionsData } from '../data/solutionsData';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon } from '../utils/serviceIcons';
+import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 
 interface SolutionsPageProps {
@@ -111,20 +112,32 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
                       </button>
                     </div>
 
-                    {/* Problem vs Proposed Approach */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
-                      <div className="bg-white/80 p-5 rounded-xl border border-slate-200/80 shadow-2xs">
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 font-mono">
-                          The Business Problem
-                        </h4>
-                        <p className="text-xs text-slate-700 leading-relaxed">{sol.problem}</p>
+                    {/* Problem vs Proposed Approach + Visual Blueprint Preview */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6 items-stretch">
+                      <div className="lg:col-span-4 bg-white/80 p-5 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col justify-between">
+                        <div>
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 font-mono">
+                            The Business Problem
+                          </h4>
+                          <p className="text-xs text-slate-700 leading-relaxed">{sol.problem}</p>
+                        </div>
                       </div>
 
-                      <div className="bg-white/80 p-5 rounded-xl border border-slate-200/80 shadow-2xs">
-                        <h4 className={`text-xs font-bold uppercase tracking-wider ${color.accentText} mb-2 font-mono`}>
-                          IAMTECHNI Architectural Approach
-                        </h4>
-                        <p className="text-xs text-slate-700 leading-relaxed">{sol.proposedApproach}</p>
+                      <div className="lg:col-span-4 bg-white/80 p-5 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col justify-between">
+                        <div>
+                          <h4 className={`text-xs font-bold uppercase tracking-wider ${color.accentText} mb-2 font-mono`}>
+                            IAMTECHNI Architectural Approach
+                          </h4>
+                          <p className="text-xs text-slate-700 leading-relaxed">{sol.proposedApproach}</p>
+                        </div>
+                      </div>
+
+                      <div className="lg:col-span-4 flex items-center">
+                        <ServiceCardThumbnail
+                          slug={sol.relatedServiceName || sol.category}
+                          category={sol.category}
+                          className="h-full"
+                        />
                       </div>
                     </div>
 

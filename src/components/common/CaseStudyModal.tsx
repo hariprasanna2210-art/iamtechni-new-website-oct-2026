@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, CheckCircle2, ArrowRight, Layers, Cpu, Compass } from 'lucide-react';
 import { ProjectItem, PageRoute } from '../../types';
+import { ProjectVisualThumbnail } from './ServiceVisualMockups';
 
 interface CaseStudyModalProps {
   project: ProjectItem | null;
@@ -39,7 +40,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+              className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
               aria-label="Close dialog"
             >
               <X className="w-5 h-5" />
@@ -56,6 +57,10 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
 
         {/* Modal Scroll Content */}
         <div className="p-6 sm:p-8 max-h-[75vh] overflow-y-auto space-y-6">
+          {/* Solution Interface Mockup */}
+          <div>
+            <ProjectVisualThumbnail projectId={project.id} className="shadow-md" />
+          </div>
           {/* Business Challenge */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1.5">

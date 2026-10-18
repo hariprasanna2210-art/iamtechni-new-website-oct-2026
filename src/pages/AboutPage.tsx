@@ -138,34 +138,163 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 gap-8" staggerChildren={0.15}>
             <ScrollRevealItem className="h-full">
-              <div className="h-full bg-[#EAF3FF] rounded-2xl p-8 sm:p-10 border border-blue-200/90 shadow-sm space-y-4 interactive-card-lift">
-                <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
-                  <Target className="w-6 h-6" />
+              <div className="h-full bg-[#EAF3FF] rounded-2xl p-8 sm:p-10 border border-blue-200/90 shadow-sm space-y-4 interactive-card-lift flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
+                    <Target className="w-6 h-6" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-slate-900">Our Mission</h2>
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    To turn complex technical challenges into purposeful, reliable digital solutions that advance our clients’ operations, elevate customer experiences, and build long-term business value.
+                  </p>
                 </div>
-                <h2 className="text-2xl font-bold text-slate-900">Our Mission</h2>
-                <p className="text-sm text-slate-700 leading-relaxed">
-                  To turn complex technical challenges into purposeful, reliable digital solutions that advance our clients’ operations, elevate customer experiences, and build long-term business value.
-                </p>
+
+                {/* Visual Trajectory */}
+                <div className="pt-4 border-t border-blue-200/70">
+                  <div className="bg-white/90 rounded-xl p-3.5 border border-blue-200/80 shadow-2xs space-y-2 font-mono">
+                    <div className="text-[10px] text-[#1266E8] font-bold uppercase tracking-wider flex items-center justify-between">
+                      <span>Delivery Trajectory</span>
+                      <span className="text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded font-semibold text-[9px]">
+                        Zero Technical Debt
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                      <div className="p-1.5 rounded bg-blue-50/80 border border-blue-100 text-slate-800 font-semibold">
+                        01. Scoped
+                      </div>
+                      <div className="p-1.5 rounded bg-blue-50/80 border border-blue-100 text-slate-800 font-semibold">
+                        02. Verified
+                      </div>
+                      <div className="p-1.5 rounded bg-blue-50/80 border border-blue-100 text-slate-800 font-semibold">
+                        03. Scaled
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </ScrollRevealItem>
 
             <ScrollRevealItem className="h-full">
-              <div className="h-full bg-[#F0EAFF] rounded-2xl p-8 sm:p-10 border border-violet-200/90 shadow-sm space-y-4 interactive-card-lift">
-                <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center shadow-xs">
-                  <Eye className="w-6 h-6" />
+              <div className="h-full bg-[#F0EAFF] rounded-2xl p-8 sm:p-10 border border-violet-200/90 shadow-sm space-y-4 interactive-card-lift flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center shadow-xs">
+                    <Eye className="w-6 h-6" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-slate-900">Our Vision</h2>
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    To be the trusted engineering partner for forward-looking organizations, recognized for technical discipline, practical artificial intelligence, and software craftsmanship that endures.
+                  </p>
                 </div>
-                <h2 className="text-2xl font-bold text-slate-900">Our Vision</h2>
-                <p className="text-sm text-slate-700 leading-relaxed">
-                  To be the trusted engineering partner for forward-looking organizations, recognized for technical discipline, practical artificial intelligence, and software craftsmanship that endures.
-                </p>
+
+                {/* Visual Pillars */}
+                <div className="pt-4 border-t border-violet-200/70">
+                  <div className="bg-white/90 rounded-xl p-3.5 border border-violet-200/80 shadow-2xs space-y-2 font-mono">
+                    <div className="text-[10px] text-[#7C3AED] font-bold uppercase tracking-wider flex items-center justify-between">
+                      <span>Strategic Horizon</span>
+                      <span className="text-purple-700 bg-purple-50 px-1.5 py-0.2 rounded font-semibold text-[9px]">
+                        Global Resilience
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                      <div className="p-1.5 rounded bg-purple-50/80 border border-purple-100 text-slate-800 font-semibold">
+                        Craft
+                      </div>
+                      <div className="p-1.5 rounded bg-purple-50/80 border border-purple-100 text-slate-800 font-semibold">
+                        Intelligence
+                      </div>
+                      <div className="p-1.5 rounded bg-purple-50/80 border border-purple-100 text-slate-800 font-semibold">
+                        Longevity
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </ScrollRevealItem>
           </ScrollReveal>
         </div>
       </section>
 
+      {/* Digital Transformation & Engineering Excellence Visual Showcase */}
+      <section className="py-20 bg-white border-b border-slate-200 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left: Engineering Strategy & Governance */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#1266E8]" />
+                <span>Modern Software Delivery</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                Architected for resilience, precision, and longevity.
+              </h2>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                We combine modern frontend architecture, robust backend systems, and containerized cloud pipelines to deliver software that scales predictably. Our teams operate with automated test suites, typed contracts, and continuous security scanning.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+                  <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
+                    <CheckCircle2 className="w-4 h-4 text-[#1266E8]" />
+                    <span>Typed Contracts</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600">TypeScript strict mode and end-to-end schema validation eliminating runtime bugs.</p>
+                </div>
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+                  <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Cloud Native</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600">Multi-region container orchestration across AWS and Azure with zero-downtime updates.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Rich Interactive Engineering Topology Visual */}
+            <div className="lg:col-span-6 w-full">
+              <div className="bg-[#0B1120] rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-xl text-white space-y-4 font-mono">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-xs font-bold text-slate-200">IAMTECHNI // INFRASTRUCTURE TOPO</span>
+                  </div>
+                  <span className="text-[10px] text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
+                    Active Deployments
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
+                    <div className="text-[10px] text-slate-400">CI/CD Gate</div>
+                    <div className="text-sm font-bold text-emerald-400">100% Pass</div>
+                    <div className="text-[9px] text-slate-500">Unit + Integration</div>
+                  </div>
+                  <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
+                    <div className="text-[10px] text-slate-400">Global P99</div>
+                    <div className="text-sm font-bold text-cyan-400">&lt;65ms</div>
+                    <div className="text-[9px] text-slate-500">Edge CDN Ingest</div>
+                  </div>
+                  <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
+                    <div className="text-[10px] text-slate-400">Vulnerability</div>
+                    <div className="text-sm font-bold text-purple-400">0 Critical</div>
+                    <div className="text-[9px] text-slate-500">Continuous Snyk</div>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-850 text-[11px] text-slate-300 space-y-1">
+                  <div className="text-slate-500">// Multi-Region Edge Mesh Active</div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-cyan-400">US-East · EU-Central · AP-South</span>
+                    <span className="text-emerald-400 font-bold">Encrypted TLS 1.3</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Core Values with Distinct 8-Color System */}
-      <section className="py-24 bg-white border-b border-slate-200">
+      <section className="py-24 bg-[#F5F8FC] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mb-14">
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-2">

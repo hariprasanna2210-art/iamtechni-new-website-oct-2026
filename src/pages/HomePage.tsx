@@ -40,7 +40,9 @@ import { insightsData } from '../data/insightsData';
 import { industriesData } from '../data/industriesData';
 import { ColorfulMultiServiceHero } from '../components/home/ColorfulMultiServiceHero';
 import { EnterpriseSolutionsMatrix } from '../components/home/EnterpriseSolutionsMatrix';
-import { ProcessStageVisual } from '../components/common/TechIllustrations';
+import { ProcessStageVisual, IndustryIllustration } from '../components/common/TechIllustrations';
+import { ProjectVisualThumbnail, ArticleGraphic } from '../components/common/ServiceVisualMockups';
+import { CompanyIntroVisual, AiNeuralPipelineVisual, CtaTerminalVisual } from '../components/home/HomeSectionVisuals';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
@@ -138,17 +140,40 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================================= */}
       <section className="py-20 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FE] to-[#F0FDFA] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center space-y-3 mb-14">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-[#1266E8] text-xs font-mono uppercase tracking-widest font-bold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Engineering Disciplines</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-16">
+            {/* Left: Company Introduction Narrative */}
+            <div className="lg:col-span-6 space-y-4">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-[#1266E8] text-xs font-mono uppercase tracking-widest font-bold">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Engineering Disciplines</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                A technology partner for your next stage of growth.
+              </h2>
+              <p className="text-base text-slate-600 leading-relaxed">
+                Every business faces distinct operational challenges. IAMTECHNI brings design, full-stack development, artificial intelligence, cloud infrastructure, and growth engineering together into solutions engineered for long-term reliability.
+              </p>
+
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <div className="p-3 bg-white/80 rounded-xl border border-blue-100 text-xs text-slate-700 space-y-1">
+                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#1266E8]" /> Strongly Typed
+                  </div>
+                  <div className="text-[11px] text-slate-500">TypeScript strict mode across API &amp; client contracts.</div>
+                </div>
+                <div className="p-3 bg-white/80 rounded-xl border border-teal-100 text-xs text-slate-700 space-y-1">
+                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-teal-600" /> Multi-Cloud
+                  </div>
+                  <div className="text-[11px] text-slate-500">Zero vendor lock-in across AWS &amp; Azure runtimes.</div>
+                </div>
+              </div>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-              A technology partner for your next stage of growth.
-            </h2>
-            <p className="text-base text-slate-600 leading-relaxed">
-              Every business faces distinct operational challenges. IAMTECHNI brings design, full-stack development, artificial intelligence, cloud infrastructure, and growth engineering together into solutions engineered for long-term reliability.
-            </p>
+
+            {/* Right: Dedicated Technology Illustration */}
+            <div className="lg:col-span-6">
+              <CompanyIntroVisual />
+            </div>
           </div>
 
           <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.15}>
@@ -342,6 +367,9 @@ export const HomePage: React.FC<HomePageProps> = ({
                     className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
                   >
                     <div>
+                      {/* Interactive Visual Thumbnail */}
+                      <ProjectVisualThumbnail projectId={project.id} className="mb-4" />
+
                       <div className="flex items-center justify-between text-xs mb-3.5">
                         <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                           {project.category}
@@ -514,16 +542,33 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#04C8E8]/15 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-14">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#04C8E8] font-bold mb-2">
-              Artificial Intelligence & Scalability
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-14">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#04C8E8] font-bold">
+                Artificial Intelligence & Scalability
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                Put intelligent technology to practical work.
+              </h2>
+              <p className="text-base text-slate-400 leading-relaxed">
+                We help enterprises move beyond generic chatbot hype. We build grounded, domain-specific AI applications, automated knowledge assistants, and cost-controlled inference pipelines.
+              </p>
+              <div className="flex flex-wrap items-center gap-2 pt-2 text-xs font-mono text-slate-300">
+                <span className="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-cyan-400">
+                  ✓ pgvector Embeddings
+                </span>
+                <span className="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-purple-400">
+                  ✓ Verifiable Citations
+                </span>
+                <span className="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-emerald-400">
+                  ✓ Zero Model Training Leakage
+                </span>
+              </div>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              Put intelligent technology to practical work.
-            </h2>
-            <p className="text-base text-slate-400 mt-2 leading-relaxed">
-              We help enterprises move beyond generic chatbot hype. We build grounded, domain-specific AI applications, automated knowledge assistants, and cost-controlled inference pipelines.
-            </p>
+
+            <div className="lg:col-span-5">
+              <AiNeuralPipelineVisual />
+            </div>
           </div>
 
           <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" staggerChildren={0.1}>
@@ -626,6 +671,8 @@ export const HomePage: React.FC<HomePageProps> = ({
                     className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between shadow-2xs interactive-card-lift`}
                   >
                     <div>
+                      <IndustryIllustration industryId={ind.name} className="mb-4" />
+
                       <div className="flex items-center justify-between text-xs mb-3.5">
                         <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                           SECTOR 0{idx + 1}
@@ -701,6 +748,9 @@ export const HomePage: React.FC<HomePageProps> = ({
                     className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all cursor-pointer group shadow-2xs interactive-card-lift`}
                   >
                     <div>
+                      {/* Interactive Article Graphic Header */}
+                      <ArticleGraphic slug={art.slug} className="mb-4" />
+
                       <div className="flex items-center gap-2 text-xs mb-3">
                         <span className={`font-mono font-bold px-2 py-0.5 rounded text-[11px] ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                           {art.category}
@@ -752,7 +802,10 @@ export const HomePage: React.FC<HomePageProps> = ({
             Tell us what you want to build, improve or transform. Let’s explore the right technology and a practical path forward.
           </p>
 
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+          {/* Interactive Engineering Terminal Visual */}
+          <CtaTerminalVisual className="my-6" />
+
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
             <button
               onClick={() => onOpenProjectModal()}
               className="inline-flex items-center gap-2.5 px-8 py-4 text-sm font-semibold text-white bg-gradient-to-r from-[#1266E8] to-[#5427D9] hover:opacity-95 rounded-xl transition-all shadow-lg active:scale-[0.98] cursor-pointer"

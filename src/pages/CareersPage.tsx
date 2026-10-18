@@ -34,19 +34,54 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
       <Breadcrumbs items={[{ label: 'Careers' }]} onNavigate={onNavigate} />
 
       {/* Hero */}
-      <section className="bg-white border-b border-slate-200 py-16 sm:py-20">
+      <section className="bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-white border-b border-slate-200 py-14 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-xs font-mono font-semibold text-slate-700">
-              <span className="w-2 h-2 rounded-full bg-[#1266E8]" />
-              <span>JOIN THE ENGINEERING PRACTICE</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs font-mono font-semibold text-[#1266E8]">
+                <span className="w-2 h-2 rounded-full bg-[#1266E8]" />
+                <span>JOIN THE ENGINEERING PRACTICE</span>
+              </div>
+              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+                Build Purposeful Technology with IAMTECHNI
+              </h1>
+              <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+                We look for curious, disciplined software engineers, UI specialists, and AI practitioners who take pride in craftsmanship, readability, and real business impact.
+              </p>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
-              Build Purposeful Technology with IAMTECHNI
-            </h1>
-            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-              We look for curious, disciplined software engineers, UI specialists, and AI practitioners who take pride in craftsmanship, readability, and real business impact.
-            </p>
+
+            <div className="lg:col-span-5">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-6 space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div className="text-xs font-mono font-bold text-slate-900">ENGINEERING_CULTURE.TS</div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono font-bold">
+                    HIRING ACTIVE
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-100 space-y-1">
+                    <div className="text-[10px] font-mono text-[#1266E8] font-bold">STACK</div>
+                    <div className="font-bold text-slate-900">TypeScript &amp; Python</div>
+                    <div className="text-[11px] text-slate-600">Modern strongly-typed repos</div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-purple-50/70 border border-purple-100 space-y-1">
+                    <div className="text-[10px] font-mono text-[#5427D9] font-bold">WORKFLOW</div>
+                    <div className="font-bold text-slate-900">Direct Architects</div>
+                    <div className="text-[11px] text-slate-600">Zero bureaucracy squads</div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-cyan-50/70 border border-cyan-100 space-y-1">
+                    <div className="text-[10px] font-mono text-cyan-700 font-bold">AI &amp; CLOUD</div>
+                    <div className="font-bold text-slate-900">Production R&amp;D</div>
+                    <div className="text-[11px] text-slate-600">Private RAG &amp; Kubernetes</div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-100 space-y-1">
+                    <div className="text-[10px] font-mono text-emerald-700 font-bold">QUALITY</div>
+                    <div className="font-bold text-slate-900">100% Peer Reviewed</div>
+                    <div className="text-[11px] text-slate-600">Automated CI/CD pipelines</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

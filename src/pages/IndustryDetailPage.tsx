@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { IndustryItem, PageRoute } from '../types';
+import { IndustryIllustration } from '../components/common/TechIllustrations';
 
 interface IndustryDetailPageProps {
   industry: IndustryItem;
@@ -101,46 +102,29 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
             </div>
 
             {/* Visual Architecture Representation */}
-            <div className="lg:col-span-5 relative">
-              <div className="rounded-2xl bg-white p-6 sm:p-7 border border-slate-200 shadow-xl space-y-5 relative overflow-hidden">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center shadow-xs">
-                      {getIcon(industry.iconName)}
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-slate-900">Domain Blueprint</div>
-                      <div className="text-[11px] text-slate-500">IAMTECHNI Practice</div>
-                    </div>
-                  </div>
-                  <span className="px-2.5 py-1 text-[10px] font-mono font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    Active Practice
+            <div className="lg:col-span-5 relative space-y-4">
+              <IndustryIllustration industryId={industry.name} className="shadow-lg" />
+
+              <div className="rounded-2xl bg-white p-5 border border-slate-200 shadow-sm space-y-3">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <span>Recommended Disciplines</span>
+                  <span className="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    100% Client-Owned
                   </span>
                 </div>
-
-                <div className="space-y-3">
-                  <div className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    Recommended Core Disciplines
-                  </div>
-                  <div className="space-y-2">
-                    {industry.suggestedServices.map((service, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => onNavigate(service.route as PageRoute)}
-                        className="w-full p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/80 hover:border-blue-200 transition-all text-left flex items-center justify-between group"
-                      >
-                        <span className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                          {service.name}
-                        </span>
-                        <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#1266E8] group-hover:translate-x-0.5 transition-transform" />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-                  <span>Guaranteed Code Ownership</span>
-                  <span className="text-emerald-600 font-bold">100% Client-Owned</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {industry.suggestedServices.map((service, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => onNavigate(service.route as PageRoute)}
+                      className="p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/80 hover:border-blue-200 transition-all text-left flex items-center justify-between group cursor-pointer"
+                    >
+                      <span className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8] truncate">
+                        {service.name}
+                      </span>
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1266E8] shrink-0 transition-transform group-hover:translate-x-0.5" />
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>

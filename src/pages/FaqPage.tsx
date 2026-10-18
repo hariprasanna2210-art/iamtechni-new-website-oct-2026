@@ -134,30 +134,63 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
       {/* FAQ Hero */}
       <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-20 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-[#FFFFFF] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-[#1266E8]">
-              <HelpCircle className="w-3.5 h-3.5" />
-              <span>Knowledge Base & FAQs</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-[#1266E8]">
+                <HelpCircle className="w-3.5 h-3.5" />
+                <span>Knowledge Base &amp; FAQs</span>
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                Frequently Asked Questions
+              </h1>
+
+              <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+                Find transparent answers about our engineering capabilities, engagement process, code ownership, pricing models, and security standards.
+              </p>
+
+              {/* Search Input */}
+              <div className="pt-4 max-w-lg relative">
+                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search questions by keyword (e.g. ownership, AI, timeline)..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#1266E8]"
+                />
+              </div>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              Frequently Asked Questions
-            </h1>
-
-            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-              Find transparent answers about our engineering capabilities, engagement process, code ownership, pricing models, and security standards.
-            </p>
-
-            {/* Search Input */}
-            <div className="pt-4 max-w-lg relative">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search questions by keyword (e.g. ownership, AI, timeline)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#1266E8]"
-              />
+            <div className="lg:col-span-5">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-6 space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div className="text-xs font-mono font-bold text-slate-900">TRANSPARENCY_GUARANTEES</div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1266E8] border border-blue-200 text-[10px] font-mono font-bold">
+                    VERIFIED ANSWERS
+                  </span>
+                </div>
+                <div className="space-y-2.5 text-xs">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                    <span className="font-semibold text-slate-800 flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Source Code &amp; IP Ownership
+                    </span>
+                    <span className="font-mono font-bold text-emerald-700">100% Client</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                    <span className="font-semibold text-slate-800 flex items-center gap-2">
+                      <Workflow className="w-4 h-4 text-[#1266E8]" /> Delivery Lifecycle
+                    </span>
+                    <span className="font-mono font-bold text-[#1266E8]">7-Stage Agile</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                    <span className="font-semibold text-slate-800 flex items-center gap-2">
+                      <Lock className="w-4 h-4 text-[#5427D9]" /> AI Data Privacy
+                    </span>
+                    <span className="font-mono font-bold text-[#5427D9]">Zero-Retention</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

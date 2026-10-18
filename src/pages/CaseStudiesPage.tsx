@@ -17,6 +17,7 @@ import { projectsData } from '../data/projectsData';
 import { ProjectItem, PageRoute } from '../types';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
+import { ProjectVisualThumbnail } from '../components/common/ServiceVisualMockups';
 
 interface CaseStudiesPageProps {
   slug?: string;
@@ -64,45 +65,54 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
           />
         </div>
 
-        {/* Individual Case Study Hero */}
+        {/* Individual Case Study Hero with Interactive Project Visual */}
         <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-20 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-[#FFFFFF] border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100/80 text-[#1266E8]">
-                {project.category}
-              </span>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">
-                {project.industry}
-              </span>
-              {project.isDemonstration && (
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200/80">
-                  Concept Demonstration
-                </span>
-              )}
-            </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              <div className="lg:col-span-7 space-y-6">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100/80 text-[#1266E8]">
+                    {project.category}
+                  </span>
+                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">
+                    {project.industry}
+                  </span>
+                  {project.isDemonstration && (
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200/80">
+                      Concept Demonstration
+                    </span>
+                  )}
+                </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight max-w-4xl">
-              {project.title}
-            </h1>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                  {project.title}
+                </h1>
 
-            <p className="text-base sm:text-lg text-slate-600 max-w-3xl leading-relaxed">
-              {project.tagline}
-            </p>
+                <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+                  {project.tagline}
+                </p>
 
-            <div className="pt-2 flex flex-wrap gap-4">
-              <button
-                onClick={() => onStartProject(`Architecture: ${project.title}`)}
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl shadow-md transition-all"
-              >
-                <span>Discuss Similar Architecture</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => onNavigate('/case-studies')}
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-800 text-sm font-semibold rounded-xl border border-slate-200 transition-all shadow-xs"
-              >
-                <span>All Case Studies</span>
-              </button>
+                <div className="pt-2 flex flex-wrap gap-4">
+                  <button
+                    onClick={() => onStartProject(`Architecture: ${project.title}`)}
+                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl shadow-md transition-all cursor-pointer"
+                  >
+                    <span>Discuss Similar Architecture</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => onNavigate('/case-studies')}
+                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-800 text-sm font-semibold rounded-xl border border-slate-200 transition-all shadow-xs cursor-pointer"
+                  >
+                    <span>All Case Studies</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Hero Visual: Realistic Solution Mockup */}
+              <div className="lg:col-span-5 w-full">
+                <ProjectVisualThumbnail projectId={project.id} className="shadow-lg" />
+              </div>
             </div>
           </div>
         </section>
@@ -276,9 +286,12 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
               return (
                 <ScrollRevealItem key={project.id} className="h-full">
                   <div
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl shadow-xs ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 p-7 flex flex-col justify-between space-y-6 group interactive-card-lift`}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl shadow-xs ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 p-6 sm:p-7 flex flex-col justify-between space-y-5 group interactive-card-lift`}
                   >
                     <div className="space-y-4">
+                      {/* Interactive Visual Thumbnail */}
+                      <ProjectVisualThumbnail projectId={project.id} className="mb-2" />
+
                       <div className="flex items-center justify-between gap-3">
                         <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                           {project.category}

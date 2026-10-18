@@ -6,6 +6,7 @@ import { insightsData } from '../data/insightsData';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon } from '../utils/serviceIcons';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
+import { ArticleGraphic } from '../components/common/ServiceVisualMockups';
 
 interface InsightsPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -80,6 +81,57 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
             </div>
           </div>
 
+          {/* Featured Article Spotlight */}
+          {filteredArticles.length > 0 && selectedCategory === 'All' && !searchQuery && (
+            <div
+              onClick={() => onNavigate(`/insights/${filteredArticles[0].slug}` as PageRoute)}
+              className="bg-white border border-blue-200/90 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all cursor-pointer group grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+            >
+              <div className="lg:col-span-6">
+                <ArticleGraphic slug={filteredArticles[0].slug} className="shadow-sm" />
+              </div>
+              <div className="lg:col-span-6 space-y-4">
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1266E8] border border-blue-200 font-mono font-bold text-[11px]">
+                    FEATURED ARCHITECTURE STUDY
+                  </span>
+                  <span className="font-mono font-bold px-2.5 py-0.5 rounded-md text-[11px] bg-slate-100 text-slate-700">
+                    {filteredArticles[0].category}
+                  </span>
+                  <span className="text-slate-400">·</span>
+                  <span className="text-slate-500 font-mono text-[11px] flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-slate-400" />
+                    {filteredArticles[0].readTime}
+                  </span>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-[#1266E8] transition-colors leading-tight">
+                  {filteredArticles[0].title}
+                </h2>
+
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  {filteredArticles[0].excerpt}
+                </p>
+
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-[10px]">
+                      IT
+                    </div>
+                    <div>
+                      <span className="font-bold text-slate-900">{filteredArticles[0].author.name}</span>
+                      <span className="text-slate-400 mx-1.5">·</span>
+                      <span className="text-slate-500 font-mono text-[11px]">{filteredArticles[0].publishedDate}</span>
+                    </div>
+                  </div>
+                  <span className="text-[#1266E8] font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                    Read Featured Study <ArrowRight className="w-4 h-4" />
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
           <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.12}>
             {filteredArticles.map((art, idx) => {
               const color = getCardColorToken(idx);
@@ -89,9 +141,12 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                 <ScrollRevealItem key={art.slug} className="h-full">
                   <article
                     onClick={() => onNavigate(`/insights/${art.slug}` as PageRoute)}
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-6 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
                   >
                     <div>
+                      {/* Editorial Article Graphic */}
+                      <ArticleGraphic slug={art.slug} className="mb-4" />
+
                       <div className="flex items-center justify-between text-xs mb-3.5">
                         <div className="flex items-center gap-2">
                           <span className={`font-mono font-bold px-2.5 py-0.5 rounded-md text-[11px] ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>

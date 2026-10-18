@@ -5,6 +5,7 @@ import { PageHero } from '../components/common/PageHero';
 import { servicesData } from '../data/servicesData';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon } from '../utils/serviceIcons';
+import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 
 interface ServicesDirectoryPageProps {
@@ -155,6 +156,9 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                       className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-xs interactive-card-lift`}
                     >
                       <div>
+                        {/* Visual Service Thumbnail Preview */}
+                        <ServiceCardThumbnail slug={service.slug} category={service.category} className="mb-4" />
+
                         {/* Top Category Badge & Icon */}
                         <div className="flex items-center justify-between text-xs mb-4">
                           <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
