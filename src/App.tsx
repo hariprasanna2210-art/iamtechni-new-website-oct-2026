@@ -22,6 +22,7 @@ import { CareersPage } from './pages/CareersPage';
 import { ContactPage } from './pages/ContactPage';
 import { FaqPage } from './pages/FaqPage';
 import { LegalPage } from './pages/LegalPages';
+import { TrainingPage } from './pages/TrainingPage';
 
 import { servicesData } from './data/servicesData';
 import { insightsData } from './data/insightsData';
@@ -51,6 +52,8 @@ export default function App() {
       path === '/contact' ||
       path === '/contact/consultation' ||
       path === '/faq' ||
+      path === '/training' ||
+      path === '/courses' ||
       path === '/privacy-policy' ||
       path === '/terms'
     ) {
@@ -110,6 +113,8 @@ export default function App() {
       '/services/ui-ux-design': 'UI/UX Design Systems & Research — IAMTECHNI',
       '/services/it-consulting': 'IT Consulting & Technology Roadmaps — IAMTECHNI',
       '/services/training': 'Technical Training & Team Upskilling — IAMTECHNI',
+      '/training': 'IT Training Courses | Full Stack, AWS, AI & DevOps | IAMTECHNI',
+      '/courses': 'IT Training Courses | Full Stack, AWS, AI & DevOps | IAMTECHNI',
       '/services/robotics': 'Robotics & Automation Systems — IAMTECHNI',
       '/services/robotics-emerging-tech': 'Robotics & Emerging Technologies — IAMTECHNI',
       '/industries': 'Industry Solutions & Architectures — IAMTECHNI',
@@ -351,7 +356,21 @@ export default function App() {
       return <ContactPage onNavigate={navigate} />;
     }
 
-    // 14. FAQ
+    // 14. Training & Professional Courses
+    if (
+      currentRoute === '/training' ||
+      currentRoute === '/courses' ||
+      currentRoute === '/services/training'
+    ) {
+      return (
+        <TrainingPage
+          onNavigate={navigate}
+          onOpenProjectModal={handleOpenProjectModal}
+        />
+      );
+    }
+
+    // 15. FAQ
     if (currentRoute === '/faq') {
       return <FaqPage onNavigate={navigate} onOpenProjectModal={handleOpenProjectModal} />;
     }

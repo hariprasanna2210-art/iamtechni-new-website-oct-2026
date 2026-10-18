@@ -26,6 +26,7 @@ export type PageRoute =
   | '/services/mobile-apps'
   | '/services/cloud-devops'
   | '/services/training'
+  | '/training'
   | '/services/robotics'
   | '/industries'
   | '/industries/healthcare'
@@ -166,4 +167,17 @@ export interface CareerItem {
   responsibilities: string[];
   requirements: string[];
   skills: string[];
+}
+
+export interface CourseItem {
+  id: string;
+  title: string;
+  category: 'Software Development' | 'Cloud Computing' | 'AI & Data' | 'DevOps & Security';
+  subtitle: string;
+  description: string;
+  highlights: string[];
+  prerequisites: string;
+  learningOutcomes: string[];
+  iconName: string;
+  colorIndex: number;
 }

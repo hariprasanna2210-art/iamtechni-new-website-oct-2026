@@ -337,6 +337,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               </li>
               <li>
                 <button
+                  onClick={() => onNavigate('/training')}
+                  className="hover:text-white transition-colors text-left cursor-pointer flex items-center gap-1.5 text-cyan-300"
+                >
+                  <span>Technology Training &amp; Courses</span>
+                  <span className="text-[9px] font-mono px-1 py-0.5 rounded-sm bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold leading-none">
+                    NEW
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => onNavigate('/careers')}
                   className="hover:text-white transition-colors text-left cursor-pointer"
                 >

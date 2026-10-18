@@ -575,6 +575,18 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
             </div>
 
             <button
+              onClick={() => handleLinkClick('/training')}
+              className={`hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5 ${
+                currentRoute === '/training' || currentRoute === '/courses' ? 'text-[#1266E8] font-semibold' : ''
+              }`}
+            >
+              <span>Training</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold leading-none">
+                NEW
+              </span>
+            </button>
+
+            <button
               onClick={() => handleLinkClick('/industries')}
               className={`hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 currentRoute === '/industries' ? 'text-[#1266E8] font-semibold' : ''
@@ -926,6 +938,26 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
                   </div>
                 )}
               </div>
+ 
+              {/* 4.5 Training & Courses */}
+              <button
+                onClick={() => handleLinkClick('/training')}
+                className={`w-full text-left py-3 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
+                  currentRoute === '/training' || currentRoute === '/courses'
+                    ? 'text-[#1266E8] bg-blue-50/70 font-bold'
+                    : 'text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span>Technology Training &amp; Courses</span>
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-100 text-emerald-800 font-bold">
+                    NEW
+                  </span>
+                </div>
+                {(currentRoute === '/training' || currentRoute === '/courses') && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]"></span>
+                )}
+              </button>
 
               {/* 5. Industries */}
               <button

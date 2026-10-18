@@ -128,11 +128,100 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+// In-memory store for training course enquiries
+interface CourseEnquiry {
+  id: string;
+  fullName: string;
+  mobileNumber: string;
+  email?: string;
+  course: string;
+  currentStatus: string;
+  learningMode: string;
+  preferredBatch?: string;
+  questions?: string;
+  consent: boolean;
+  createdAt: string;
+}
+
+const courseEnquiries: CourseEnquiry[] = [];
+
+// Course Enquiry Submission Endpoint
+app.post('/api/course-enquiry', (req, res) => {
+  try {
+    const {
+      fullName,
+      mobileNumber,
+      email,
+      course,
+      currentStatus,
+      learningMode,
+      preferredBatch,
+      questions,
+      consent,
+    } = req.body;
+
+    if (!fullName || typeof fullName !== 'string' || !fullName.trim()) {
+      return res.status(400).json({ error: 'Full name is required.' });
+    }
+
+    if (!mobileNumber || typeof mobileNumber !== 'string' || !mobileNumber.trim()) {
+      return res.status(400).json({ error: 'Mobile number is required.' });
+    }
+
+    if (!course || typeof course !== 'string' || !course.trim()) {
+      return res.status(400).json({ error: 'Please select a course.' });
+    }
+
+    if (!consent) {
+      return res.status(400).json({ error: 'Consent to contact is required.' });
+    }
+
+    const referenceId = `IAM-TRN-${Date.now().toString().slice(-6)}`;
+    const newEnquiry: CourseEnquiry = {
+      id: referenceId,
+      fullName: fullName.trim(),
+      mobileNumber: mobileNumber.trim(),
+      email: email ? email.trim() : undefined,
+      course: course.trim(),
+      currentStatus: currentStatus || 'Student',
+      learningMode: learningMode || 'Need Guidance',
+      preferredBatch: preferredBatch ? preferredBatch.trim() : undefined,
+      questions: questions ? questions.trim() : undefined,
+      consent: !!consent,
+      createdAt: new Date().toISOString(),
+    };
+
+    courseEnquiries.push(newEnquiry);
+    console.log(`[IAMTECHNI Training] New enquiry logged:`, {
+      referenceId,
+      fullName: newEnquiry.fullName,
+      course: newEnquiry.course,
+      mobileNumber: newEnquiry.mobileNumber,
+    });
+
+    return res.status(201).json({
+      success: true,
+      referenceId,
+      message: `Enquiry received for ${newEnquiry.course}. Our academic counselor will contact you within 24 hours.`,
+      enquiry: {
+        id: newEnquiry.id,
+        course: newEnquiry.course,
+        fullName: newEnquiry.fullName,
+        createdAt: newEnquiry.createdAt,
+      },
+    });
+  } catch (err: any) {
+    console.error('Error handling course enquiry:', err);
+    return res.status(500).json({ error: 'Internal server error processing enquiry' });
+  }
+});
+
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
     service: 'IAMTECHNI Enterprise Backend',
     geminiConfigured: !!ai,
+    enquiriesCount: courseEnquiries.length,
     timestamp: new Date().toISOString(),
   });
 });
