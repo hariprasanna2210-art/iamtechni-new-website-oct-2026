@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ArrowRight,
   CheckCircle,
+  CheckCircle2,
   ShieldCheck,
   Target,
   Eye,
@@ -87,10 +88,10 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
         onSecondaryCta={() => onNavigate('/services')}
         slug="about"
         customVisual={
-          <div className="relative w-full max-w-md mx-auto aspect-square bg-white rounded-2xl border border-slate-200 shadow-xl p-6 flex flex-col justify-between text-slate-900">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3 text-xs font-mono">
+          <div className="relative w-full max-w-md mx-auto min-h-[280px] sm:aspect-square bg-white rounded-2xl border border-slate-200 shadow-xl p-4 sm:p-6 flex flex-col justify-between text-slate-900">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 text-xs font-mono">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#1266E8] animate-pulse" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#1266E8] animate-pulse shrink-0" />
                 <span className="font-bold text-slate-900">CONNECTED_ECOSYSTEM</span>
               </div>
               <span className="text-[#1266E8] font-bold bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
@@ -125,9 +126,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
               </svg>
             </div>
 
-            <div className="pt-3 border-t border-slate-200 grid grid-cols-2 gap-2 text-[11px] font-mono">
+            <div className="pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
               <div className="text-slate-600 font-medium">PRACTICAL INNOVATION</div>
-              <div className="text-right text-[#1266E8] font-bold">ZERO SHORTCUTS</div>
+              <div className="text-[#1266E8] font-bold">ZERO SHORTCUTS</div>
             </div>
           </div>
         }

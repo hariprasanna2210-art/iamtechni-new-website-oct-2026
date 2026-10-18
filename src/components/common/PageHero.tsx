@@ -92,12 +92,12 @@ export const PageHero: React.FC<PageHeroProps> = ({
             {/* Left Column: Typography, Value Proposition & Actions */}
             <div className="lg:col-span-7 space-y-6">
               {/* Top Kicker Pill */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-xs border border-slate-200 shadow-2xs text-xs font-mono font-semibold text-slate-800">
-                <span className={`w-2 h-2 rounded-full ${token.dotBg}`} />
+              <div className="inline-flex flex-wrap items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-2xl sm:rounded-full bg-white/90 backdrop-blur-xs border border-slate-200 shadow-2xs text-xs font-mono font-semibold text-slate-800 max-w-full">
+                <span className={`w-2 h-2 rounded-full shrink-0 ${token.dotBg}`} />
                 {category && (
                   <>
                     <span className={token.accentText}>{category.toUpperCase()}</span>
-                    <span className="text-slate-300">|</span>
+                    <span className="text-slate-300 hidden sm:inline">|</span>
                   </>
                 )}
                 <span className="text-slate-700">{kicker}</span>
@@ -110,7 +110,7 @@ export const PageHero: React.FC<PageHeroProps> = ({
 
               {/* Tagline if provided */}
               {tagline && (
-                <p className="text-lg sm:text-xl font-semibold text-slate-800 leading-snug">
+                <p className="text-base sm:text-xl font-semibold text-slate-800 leading-snug">
                   {tagline}
                 </p>
               )}
@@ -121,21 +121,21 @@ export const PageHero: React.FC<PageHeroProps> = ({
               </p>
 
               {/* Primary & Secondary Action CTAs */}
-              <div className="pt-2 flex flex-wrap items-center gap-4">
+              <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
                 {onPrimaryCta && (
                   <button
                     onClick={onPrimaryCta}
-                    className={`inline-flex items-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-white ${buttonGradient} hover:opacity-95 rounded-xl transition-all shadow-md active:scale-[0.98] cursor-pointer`}
+                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-white ${buttonGradient} hover:opacity-95 rounded-xl transition-all shadow-md active:scale-[0.98] cursor-pointer`}
                   >
                     <span>{primaryCtaText || `Discuss Your ${title} Project`}</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-4 h-4 shrink-0" />
                   </button>
                 )}
 
                 {onSecondaryCta && (
                   <button
                     onClick={onSecondaryCta}
-                    className="px-6 py-3.5 text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 rounded-xl transition-all border border-slate-200/90 shadow-2xs cursor-pointer"
+                    className="w-full sm:w-auto px-6 py-3.5 text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 rounded-xl transition-all border border-slate-200/90 shadow-2xs cursor-pointer text-center"
                   >
                     {secondaryCtaText}
                   </button>
@@ -144,7 +144,7 @@ export const PageHero: React.FC<PageHeroProps> = ({
             </div>
 
             {/* Right Column: Bespoke High-Fidelity Visual Composition */}
-            <div className="lg:col-span-5 flex items-center justify-center">
+            <div className="lg:col-span-5 flex items-center justify-center w-full">
               {customVisual || <PageHeroVisual type={slug} />}
             </div>
           </div>

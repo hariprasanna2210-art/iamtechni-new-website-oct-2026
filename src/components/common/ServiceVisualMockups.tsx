@@ -42,17 +42,17 @@ export const WebServiceMockup: React.FC<{ className?: string }> = ({ className =
   return (
     <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md overflow-hidden flex flex-col ${className}`}>
       {/* Browser Window Chrome */}
-      <div className="bg-slate-900 px-4 py-2.5 flex items-center justify-between text-xs border-b border-slate-800">
-        <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-rose-500/90" />
-          <span className="w-3 h-3 rounded-full bg-amber-500/90" />
-          <span className="w-3 h-3 rounded-full bg-emerald-500/90" />
-          <div className="ml-3 hidden sm:flex items-center gap-1.5 px-3 py-1 bg-slate-800 rounded-md text-slate-300 font-mono text-[11px] w-64 truncate">
+      <div className="bg-slate-900 px-3.5 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs border-b border-slate-800">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="w-3 h-3 rounded-full bg-rose-500/90 shrink-0" />
+          <span className="w-3 h-3 rounded-full bg-amber-500/90 shrink-0" />
+          <span className="w-3 h-3 rounded-full bg-emerald-500/90 shrink-0" />
+          <div className="ml-2 hidden sm:flex items-center gap-1.5 px-3 py-1 bg-slate-800 rounded-md text-slate-300 font-mono text-[11px] w-64 truncate">
             <Lock className="w-3 h-3 text-emerald-400 shrink-0" />
             <span className="text-slate-400">https://</span>iamtechni.client.app
           </div>
         </div>
-        <div className="flex items-center gap-1.5 bg-slate-800/80 p-0.5 rounded-lg text-[11px] font-mono">
+        <div className="flex items-center gap-1 bg-slate-800/80 p-0.5 rounded-lg text-[11px] font-mono">
           <button
             onClick={() => setActiveView('desktop')}
             className={`px-2 py-0.5 rounded text-xs transition-colors cursor-pointer ${
@@ -82,10 +82,10 @@ export const WebServiceMockup: React.FC<{ className?: string }> = ({ className =
 
       {/* Screen Body */}
       {activeView === 'desktop' && (
-        <div className="p-5 sm:p-6 bg-gradient-to-b from-[#F8FAFD] to-white space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+        <div className="p-4 sm:p-6 bg-gradient-to-b from-[#F8FAFD] to-white space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-[#1266E8] text-white flex items-center justify-center font-bold text-xs">
+              <div className="w-6 h-6 rounded bg-[#1266E8] text-white flex items-center justify-center font-bold text-xs shrink-0">
                 IT
               </div>
               <span className="font-bold text-slate-900 text-xs">Modern Web Platform</span>
@@ -114,8 +114,8 @@ export const WebServiceMockup: React.FC<{ className?: string }> = ({ className =
             </div>
           </div>
 
-          <div className="p-3.5 bg-slate-900 rounded-xl text-slate-300 font-mono text-xs flex items-center justify-between">
-            <div className="flex items-center gap-2">
+          <div className="p-3.5 bg-slate-900 rounded-xl text-slate-300 font-mono text-xs flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-cyan-400">Next.js 15</span>
               <span className="text-slate-500">·</span>
               <span className="text-emerald-400">React 19</span>
@@ -128,8 +128,8 @@ export const WebServiceMockup: React.FC<{ className?: string }> = ({ className =
       )}
 
       {activeView === 'mobile' && (
-        <div className="p-6 bg-[#F8FAFD] flex justify-center">
-          <div className="w-56 bg-slate-900 rounded-3xl p-3 border-2 border-slate-700 shadow-lg text-white space-y-3">
+        <div className="p-4 sm:p-6 bg-[#F8FAFD] flex justify-center">
+          <div className="w-full max-w-[224px] bg-slate-900 rounded-3xl p-3 border-2 border-slate-700 shadow-lg text-white space-y-3">
             <div className="w-16 h-3 bg-slate-800 rounded-full mx-auto" />
             <div className="p-2.5 bg-slate-800/80 rounded-xl space-y-1.5">
               <div className="h-2 w-16 bg-[#1266E8] rounded" />
@@ -174,11 +174,11 @@ export const WebServiceMockup: React.FC<{ className?: string }> = ({ className =
 
 export const EcommerceServiceMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-5 sm:p-6 space-y-4 ${className}`}>
+    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-4 sm:p-6 space-y-4 ${className}`}>
       {/* Top Bar with Cart Status */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
             <ShoppingBag className="w-4 h-4" />
           </div>
           <div>
@@ -186,7 +186,7 @@ export const EcommerceServiceMockup: React.FC<{ className?: string }> = ({ class
             <div className="text-[10px] font-mono text-slate-500">Global Edge Inventory Sync</div>
           </div>
         </div>
-        <div className="text-right">
+        <div className="text-left sm:text-right">
           <div className="text-xs font-bold text-emerald-700">Sub-second P95</div>
           <div className="text-[10px] font-mono text-slate-500">Stripe &amp; Razorpay</div>
         </div>
@@ -195,25 +195,25 @@ export const EcommerceServiceMockup: React.FC<{ className?: string }> = ({ class
       {/* Simulated Product & Tiered Cart */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="p-3.5 bg-amber-50/50 rounded-xl border border-amber-200/80 space-y-2">
-          <div className="flex items-center justify-between text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-1 text-xs">
             <span className="font-bold text-slate-900">Enterprise Tier A</span>
             <span className="font-mono text-amber-700 font-bold">₹12,499</span>
           </div>
           <div className="text-[11px] text-slate-600">Dynamic wholesale price book computed in 12ms.</div>
           <div className="flex items-center gap-1.5 text-[10px] font-mono text-emerald-700">
-            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+            <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
             <span>Warehouse Stock: 4,200 units reserved</span>
           </div>
         </div>
 
         <div className="p-3.5 bg-blue-50/50 rounded-xl border border-blue-200/80 space-y-2">
-          <div className="flex items-center justify-between text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-1 text-xs">
             <span className="font-bold text-slate-900">One-Click Checkout</span>
             <span className="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 font-bold">Live</span>
           </div>
           <div className="text-[11px] text-slate-600">Zero-redirect UPI, Net Banking, and Card checkout.</div>
           <div className="flex items-center gap-1.5 text-[10px] font-mono text-blue-700">
-            <Zap className="w-3 h-3 text-[#1266E8]" />
+            <Zap className="w-3 h-3 text-[#1266E8] shrink-0" />
             <span>Conversion Lift: +34.2%</span>
           </div>
         </div>
@@ -244,10 +244,10 @@ export const EcommerceServiceMockup: React.FC<{ className?: string }> = ({ class
 
 export const CustomSoftwareMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-5 sm:p-6 space-y-4 ${className}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-4 sm:p-6 space-y-4 ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-100 text-[#1266E8] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-blue-100 text-[#1266E8] flex items-center justify-center shrink-0">
             <Workflow className="w-4 h-4" />
           </div>
           <div>
@@ -262,30 +262,30 @@ export const CustomSoftwareMockup: React.FC<{ className?: string }> = ({ classNa
 
       {/* Workflow Stages */}
       <div className="space-y-2">
-        <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+        <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
             <span className="font-semibold text-slate-800">Automated Order Orchestration</span>
           </div>
           <span className="font-mono text-[11px] text-emerald-600 font-bold">Running (P99 82ms)</span>
         </div>
-        <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+        <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-blue-500" />
+            <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
             <span className="font-semibold text-slate-800">ERP &amp; SAP Data Pipeline</span>
           </div>
           <span className="font-mono text-[11px] text-blue-600 font-bold">Synced (Zero Drift)</span>
         </div>
-        <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+        <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-purple-500" />
+            <span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" />
             <span className="font-semibold text-slate-800">Compliance &amp; Digital Signature Vault</span>
           </div>
           <span className="font-mono text-[11px] text-purple-600 font-bold">256-bit Encrypted</span>
         </div>
       </div>
 
-      <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-mono text-slate-500">
+      <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-slate-500">
         <span>MICROSERVICES ARCHITECTURE</span>
         <span className="text-[#1266E8] font-bold">99.99% SERVICE LEVEL</span>
       </div>
@@ -299,10 +299,10 @@ export const CustomSoftwareMockup: React.FC<{ className?: string }> = ({ classNa
 
 export const MobileAppMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-gradient-to-br from-slate-900 to-[#0e1628] text-white p-6 shadow-md border border-slate-800 ${className}`}>
-      <div className="flex flex-col sm:flex-row items-center gap-6">
+    <div className={`w-full rounded-2xl bg-gradient-to-br from-slate-900 to-[#0e1628] text-white p-4 sm:p-6 shadow-md border border-slate-800 ${className}`}>
+      <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
         {/* Smartphone Frame */}
-        <div className="w-48 bg-slate-950 rounded-[32px] p-3 border-4 border-slate-800 shadow-2xl shrink-0 space-y-3">
+        <div className="w-full max-w-[192px] bg-slate-950 rounded-[32px] p-3 border-4 border-slate-800 shadow-2xl shrink-0 space-y-3">
           <div className="w-16 h-3 bg-slate-800 rounded-full mx-auto" />
           <div className="p-3 bg-gradient-to-br from-[#1266E8] to-[#04C8E8] rounded-2xl text-white space-y-1 shadow-inner">
             <div className="text-[9px] font-mono uppercase tracking-wider text-blue-100">Native Balance</div>
@@ -333,11 +333,11 @@ export const MobileAppMockup: React.FC<{ className?: string }> = ({ className = 
           </p>
           <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-1 text-slate-300">
             <div className="flex items-center gap-1.5">
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
+              <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <span>iOS App Store</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
+              <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <span>Google Play</span>
             </div>
           </div>
@@ -353,10 +353,10 @@ export const MobileAppMockup: React.FC<{ className?: string }> = ({ className = 
 
 export const AiMlServiceMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-[#0B1120] border border-slate-800 text-white p-5 sm:p-6 shadow-md space-y-4 font-mono ${className}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+    <div className={`w-full rounded-2xl bg-[#0B1120] border border-slate-800 text-white p-4 sm:p-6 shadow-md space-y-4 font-mono ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-violet-600/20 text-violet-400 flex items-center justify-center border border-violet-500/30">
+          <div className="w-8 h-8 rounded-lg bg-violet-600/20 text-violet-400 flex items-center justify-center border border-violet-500/30 shrink-0">
             <Cpu className="w-4 h-4" />
           </div>
           <div>
@@ -370,7 +370,7 @@ export const AiMlServiceMockup: React.FC<{ className?: string }> = ({ className 
       </div>
 
       {/* Layer Architecture */}
-      <div className="grid grid-cols-3 gap-2.5 text-center text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center text-xs">
         <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
           <div className="text-[10px] text-slate-400">Embedding Dim</div>
           <div className="text-sm font-bold text-cyan-400">1,536</div>
@@ -389,7 +389,7 @@ export const AiMlServiceMockup: React.FC<{ className?: string }> = ({ className 
       </div>
 
       {/* Code / Pipeline Snapshot */}
-      <div className="p-3 bg-slate-950 rounded-xl border border-slate-850 text-[11px] text-slate-300 space-y-1">
+      <div className="p-3 bg-slate-950 rounded-xl border border-slate-850 text-[11px] text-slate-300 space-y-1 overflow-x-auto">
         <div className="text-slate-500">// Real-time predictive anomaly classification</div>
         <div>
           model.<span className="text-purple-400">predict</span>(stream_payload) <span className="text-slate-500">→</span>{' '}
@@ -406,10 +406,10 @@ export const AiMlServiceMockup: React.FC<{ className?: string }> = ({ className 
 
 export const GenerativeAiMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-5 sm:p-6 space-y-3.5 ${className}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-4 sm:p-6 space-y-3.5 ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
             <Bot className="w-4 h-4" />
           </div>
           <div>
@@ -430,13 +430,13 @@ export const GenerativeAiMockup: React.FC<{ className?: string }> = ({ className
         </div>
         <div className="p-3 bg-purple-50/70 border border-purple-200/90 rounded-xl space-y-2 text-slate-800">
           <div className="flex items-center gap-1.5 text-purple-700 font-bold font-mono text-[11px]">
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5 shrink-0" />
             <span>Grounded Response:</span>
           </div>
           <p className="text-xs text-slate-700 leading-relaxed">
             Per SOP-2026 revision 4: Isolate secondary feed valves, verify pressure under 14 PSI, and engage mechanical lockouts prior to electrical breaker disengagement.
           </p>
-          <div className="p-2 bg-white rounded-lg border border-purple-100 text-[10px] font-mono flex items-center justify-between text-purple-900">
+          <div className="p-2 bg-white rounded-lg border border-purple-100 text-[10px] font-mono flex flex-wrap items-center justify-between gap-1 text-purple-900">
             <span>Source: SOP-2026_Rev4.pdf (Page 18, ¶3)</span>
             <span className="text-emerald-600 font-bold">100% Match</span>
           </div>
@@ -452,10 +452,10 @@ export const GenerativeAiMockup: React.FC<{ className?: string }> = ({ className
 
 export const CloudServiceMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-5 sm:p-6 space-y-4 ${className}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-4 sm:p-6 space-y-4 ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0">
             <Cloud className="w-4 h-4" />
           </div>
           <div>
@@ -491,9 +491,9 @@ export const CloudServiceMockup: React.FC<{ className?: string }> = ({ className
         </div>
       </div>
 
-      <div className="p-3 bg-cyan-50/50 rounded-xl border border-cyan-200/70 text-xs text-slate-700 flex items-center justify-between">
+      <div className="p-3 bg-cyan-50/50 rounded-xl border border-cyan-200/70 text-xs text-slate-700 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Server className="w-4 h-4 text-cyan-600" />
+          <Server className="w-4 h-4 text-cyan-600 shrink-0" />
           <span className="font-medium">Infrastructure as Code: Terraform &amp; OpenTofu</span>
         </div>
         <span className="text-[11px] font-mono text-cyan-800 font-bold">100% Declarative</span>
@@ -504,10 +504,10 @@ export const CloudServiceMockup: React.FC<{ className?: string }> = ({ className
 
 export const DevOpsServiceMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-slate-900 border border-slate-800 text-white p-5 sm:p-6 shadow-md space-y-4 font-mono ${className}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+    <div className={`w-full rounded-2xl bg-slate-900 border border-slate-800 text-white p-4 sm:p-6 shadow-md space-y-4 font-mono ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+          <div className="w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30 shrink-0">
             <Zap className="w-4 h-4" />
           </div>
           <div>
@@ -540,7 +540,7 @@ export const DevOpsServiceMockup: React.FC<{ className?: string }> = ({ classNam
         </div>
       </div>
 
-      <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+      <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2">
         <span>ArgoCD · Kubernetes 1.32 · Harbor Registry</span>
         <span className="text-emerald-400 font-bold">Sync: Healthy</span>
       </div>
@@ -554,10 +554,10 @@ export const DevOpsServiceMockup: React.FC<{ className?: string }> = ({ classNam
 
 export const AnalyticsServiceMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-5 sm:p-6 space-y-4 ${className}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-4 sm:p-6 space-y-4 ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
             <BarChart3 className="w-4 h-4" />
           </div>
           <div>
@@ -570,7 +570,7 @@ export const AnalyticsServiceMockup: React.FC<{ className?: string }> = ({ class
         </span>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 text-center">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
         <div className="p-3 bg-teal-50/50 rounded-xl border border-teal-200">
           <div className="text-[10px] font-mono text-slate-500">Query Speed</div>
           <div className="text-base font-extrabold text-teal-850">14ms</div>
@@ -593,10 +593,10 @@ export const AnalyticsServiceMockup: React.FC<{ className?: string }> = ({ class
 
 export const CybersecurityMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-[#0e1628] border border-slate-800 text-white p-5 sm:p-6 shadow-md space-y-4 font-mono ${className}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+    <div className={`w-full rounded-2xl bg-[#0e1628] border border-slate-800 text-white p-4 sm:p-6 shadow-md space-y-4 font-mono ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-rose-600/20 text-rose-400 flex items-center justify-center border border-rose-500/30">
+          <div className="w-8 h-8 rounded-lg bg-rose-600/20 text-rose-400 flex items-center justify-center border border-rose-500/30 shrink-0">
             <ShieldCheck className="w-4 h-4" />
           </div>
           <div>
@@ -610,16 +610,16 @@ export const CybersecurityMockup: React.FC<{ className?: string }> = ({ classNam
       </div>
 
       <div className="space-y-2 text-xs">
-        <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
             <span className="text-slate-200">OWASP Top 10 Mitigation Engine</span>
           </div>
           <span className="text-emerald-400 font-bold">14,280 Blocked</span>
         </div>
-        <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-blue-400" />
+            <span className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
             <span className="text-slate-200">mTLS Handshake &amp; Hardware HSM</span>
           </div>
           <span className="text-cyan-400 font-bold">AES-256 Validated</span>
@@ -635,10 +635,10 @@ export const CybersecurityMockup: React.FC<{ className?: string }> = ({ classNam
 
 export const UiUxDesignMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-5 sm:p-6 space-y-4 ${className}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-4 sm:p-6 space-y-4 ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-pink-100 text-pink-700 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-pink-100 text-pink-700 flex items-center justify-center shrink-0">
             <Layers className="w-4 h-4" />
           </div>
           <div>
@@ -652,7 +652,7 @@ export const UiUxDesignMockup: React.FC<{ className?: string }> = ({ className =
       </div>
 
       {/* Palette Tokens */}
-      <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+      <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-lg bg-[#1266E8] shadow-2xs" title="Cobalt Primary" />
           <div className="w-6 h-6 rounded-lg bg-[#04C8E8] shadow-2xs" title="Cyan Accent" />
@@ -679,10 +679,10 @@ export const UiUxDesignMockup: React.FC<{ className?: string }> = ({ className =
 
 export const MarketingSeoMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-5 sm:p-6 space-y-4 ${className}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+    <div className={`w-full rounded-2xl bg-white border border-slate-200 shadow-md p-4 sm:p-6 space-y-4 ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
             <Globe className="w-4 h-4" />
           </div>
           <div>
@@ -697,7 +697,7 @@ export const MarketingSeoMockup: React.FC<{ className?: string }> = ({ className
 
       {/* Simulated Google SERP Card */}
       <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-        <div className="text-[11px] text-slate-600 flex items-center gap-1.5 font-mono">
+        <div className="text-[11px] text-slate-600 flex flex-wrap items-center gap-1.5 font-mono">
           <span className="text-emerald-700">https://iamtechni.in</span>
           <span>›</span>
           <span>enterprise-engineering</span>
@@ -734,10 +734,10 @@ export const MarketingSeoMockup: React.FC<{ className?: string }> = ({ className
 
 export const RoboticsServiceMockup: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full rounded-2xl bg-slate-950 border border-slate-800 text-white p-5 sm:p-6 shadow-md space-y-4 font-mono ${className}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+    <div className={`w-full rounded-2xl bg-slate-950 border border-slate-800 text-white p-4 sm:p-6 shadow-md space-y-4 font-mono ${className}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-cyan-600/20 text-cyan-400 flex items-center justify-center border border-cyan-500/30">
+          <div className="w-8 h-8 rounded-lg bg-cyan-600/20 text-cyan-400 flex items-center justify-center border border-cyan-500/30 shrink-0">
             <Activity className="w-4 h-4" />
           </div>
           <div>
@@ -750,7 +750,7 @@ export const RoboticsServiceMockup: React.FC<{ className?: string }> = ({ classN
         </span>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 text-center text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-xs">
         <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800">
           <div className="text-[10px] text-slate-400">6-Axis Sync</div>
           <div className="text-sm font-bold text-cyan-400">1,000 Hz</div>
@@ -831,38 +831,38 @@ export const ServiceCardThumbnail: React.FC<{ slug?: string; category?: string; 
   category = '',
   className = ''
 }) => {
-  const s = slug.toLowerCase();
+  const s = `${slug} ${category}`.toLowerCase();
 
-  // 1. Web Development
-  if (s.includes('web') || s.includes('website')) {
+  // 1. Web / Full Stack Development
+  if (s.includes('web') || s.includes('website') || s.includes('full stack') || s.includes('fullstack')) {
     return (
-      <div className={`relative w-full aspect-[16/8] bg-gradient-to-br from-[#1266E8]/10 via-white to-blue-50/50 rounded-xl border border-blue-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between ${className}`}>
-        <div className="flex items-center justify-between border-b border-blue-100 pb-1.5">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-rose-400" />
-            <span className="w-2 h-2 rounded-full bg-amber-400" />
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-[10px] font-mono text-slate-400 ml-1.5 truncate max-w-[140px]">https://app.iamtechni.in</span>
+      <div className={`relative w-full min-h-[125px] sm:aspect-[16/8] bg-gradient-to-br from-[#1266E8]/10 via-white to-blue-50/50 rounded-xl border border-blue-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between gap-2 ${className}`}>
+        <div className="flex items-center justify-between border-b border-blue-100 pb-1.5 gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="w-2 h-2 rounded-full bg-rose-400 shrink-0" />
+            <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+            <span className="text-[10px] font-mono text-slate-400 ml-1 truncate">https://app.iamtechni.in</span>
           </div>
           <span className="text-[9px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200 font-bold shrink-0">
             100 FCP
           </span>
         </div>
-        <div className="flex items-center justify-between my-auto">
-          <div className="space-y-0.5">
+        <div className="flex items-center justify-between my-auto gap-2">
+          <div className="space-y-0.5 min-w-0">
             <div className="text-[11px] font-bold text-slate-800 flex items-center gap-1">
-              <Code2 className="w-3.5 h-3.5 text-[#1266E8]" /> Next.js 15 App Router
+              <Code2 className="w-3.5 h-3.5 text-[#1266E8] shrink-0" /> <span className="truncate">Next.js 15 &amp; Full-Stack</span>
             </div>
-            <div className="text-[9px] font-mono text-slate-500">React 19 Server Components</div>
+            <div className="text-[9px] font-mono text-slate-500 truncate">React 19 · Node.js · PostgreSQL</div>
           </div>
-          <div className="text-right">
+          <div className="text-right shrink-0">
             <div className="text-sm font-extrabold text-[#1266E8]">0.45s</div>
-            <div className="text-[9px] text-emerald-600 font-medium">Core Web Vitals</div>
+            <div className="text-[9px] text-emerald-600 font-medium">Core Vitals</div>
           </div>
         </div>
-        <div className="pt-1 border-t border-blue-100 flex items-center justify-between text-[9px] font-mono text-slate-400">
-          <span>TAILWIND 4 · TYPESCRIPT</span>
-          <span className="text-[#1266E8] font-bold">PRODUCTION READY</span>
+        <div className="pt-1 border-t border-blue-100 flex items-center justify-between text-[9px] font-mono text-slate-400 gap-2">
+          <span className="truncate">TAILWIND 4 · TYPESCRIPT</span>
+          <span className="text-[#1266E8] font-bold shrink-0">PRODUCTION READY</span>
         </div>
       </div>
     );
@@ -871,16 +871,16 @@ export const ServiceCardThumbnail: React.FC<{ slug?: string; category?: string; 
   // 2. E-Commerce
   if (s.includes('e-com') || s.includes('ecommerce') || s.includes('store')) {
     return (
-      <div className={`relative w-full aspect-[16/8] bg-gradient-to-br from-amber-500/10 via-white to-orange-50/50 rounded-xl border border-amber-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between ${className}`}>
-        <div className="flex items-center justify-between border-b border-amber-100 pb-1.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900">
-            <ShoppingBag className="w-3.5 h-3.5 text-amber-600" /> Headless Storefront
+      <div className={`relative w-full min-h-[125px] sm:aspect-[16/8] bg-gradient-to-br from-amber-500/10 via-white to-orange-50/50 rounded-xl border border-amber-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between gap-2 ${className}`}>
+        <div className="flex items-center justify-between border-b border-amber-100 pb-1.5 gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900 min-w-0">
+            <ShoppingBag className="w-3.5 h-3.5 text-amber-600 shrink-0" /> <span className="truncate">Headless Storefront</span>
           </div>
           <span className="text-[9px] font-mono text-amber-800 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200 font-bold shrink-0">
             P99 &lt;180ms
           </span>
         </div>
-        <div className="grid grid-cols-3 gap-2 my-auto text-center font-mono">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 my-auto text-center font-mono">
           <div className="p-1 rounded bg-amber-50/80 border border-amber-100">
             <div className="text-[8px] text-slate-400">Edge Cart</div>
             <div className="text-xs font-bold text-slate-800">&lt;25ms</div>
@@ -894,39 +894,39 @@ export const ServiceCardThumbnail: React.FC<{ slug?: string; category?: string; 
             <div className="text-xs font-bold text-amber-700">1-Click</div>
           </div>
         </div>
-        <div className="pt-1 border-t border-amber-100 flex items-center justify-between text-[9px] font-mono text-slate-400">
-          <span>STRIPE · SHOPIFY PLUS</span>
-          <span className="text-amber-700 font-bold">ZERO INVENTORY DELAY</span>
+        <div className="pt-1 border-t border-amber-100 flex items-center justify-between text-[9px] font-mono text-slate-400 gap-2">
+          <span className="truncate">STRIPE · SHOPIFY PLUS</span>
+          <span className="text-amber-700 font-bold shrink-0">ZERO DELAY</span>
         </div>
       </div>
     );
   }
 
-  // 3. Custom Software
-  if (s.includes('custom') || s.includes('software')) {
+  // 3. Custom Software / Python / .NET
+  if (s.includes('custom') || s.includes('software') || s.includes('python') || s.includes('.net') || s.includes('dotnet')) {
     return (
-      <div className={`relative w-full aspect-[16/8] bg-gradient-to-br from-cyan-500/10 via-white to-sky-50/50 rounded-xl border border-cyan-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between ${className}`}>
-        <div className="flex items-center justify-between border-b border-cyan-100 pb-1.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900">
-            <Terminal className="w-3.5 h-3.5 text-[#04C8E8]" /> Enterprise ERP / CRM
+      <div className={`relative w-full min-h-[125px] sm:aspect-[16/8] bg-gradient-to-br from-cyan-500/10 via-white to-sky-50/50 rounded-xl border border-cyan-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between gap-2 ${className}`}>
+        <div className="flex items-center justify-between border-b border-cyan-100 pb-1.5 gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900 min-w-0">
+            <Terminal className="w-3.5 h-3.5 text-[#04C8E8] shrink-0" /> <span className="truncate">Enterprise Backend &amp; API</span>
           </div>
           <span className="text-[9px] font-mono text-cyan-800 bg-cyan-50 px-1.5 py-0.2 rounded border border-cyan-200 font-bold shrink-0">
             Schema Typed
           </span>
         </div>
-        <div className="flex items-center justify-between my-auto">
-          <div className="space-y-0.5">
-            <div className="text-[11px] font-bold text-slate-800">Event-Driven Architecture</div>
-            <div className="text-[9px] font-mono text-slate-500">PostgreSQL · GraphQL · Redis</div>
+        <div className="flex items-center justify-between my-auto gap-2">
+          <div className="space-y-0.5 min-w-0">
+            <div className="text-[11px] font-bold text-slate-800 truncate">Event-Driven Architecture</div>
+            <div className="text-[9px] font-mono text-slate-500 truncate">Python · .NET · PostgreSQL · Redis</div>
           </div>
-          <div className="p-1.5 rounded bg-cyan-50 border border-cyan-100 text-center font-mono">
+          <div className="p-1.5 rounded bg-cyan-50 border border-cyan-100 text-center font-mono shrink-0">
             <div className="text-[8px] text-slate-500">API Sync</div>
             <div className="text-xs font-bold text-[#04C8E8]">100% Audit</div>
           </div>
         </div>
-        <div className="pt-1 border-t border-cyan-100 flex items-center justify-between text-[9px] font-mono text-slate-400">
-          <span>ROLE-BASED ACL · ZERO LOCK-IN</span>
-          <span className="text-cyan-700 font-bold">100% TESTED</span>
+        <div className="pt-1 border-t border-cyan-100 flex items-center justify-between text-[9px] font-mono text-slate-400 gap-2">
+          <span className="truncate">ROLE-BASED ACL · ZERO LOCK-IN</span>
+          <span className="text-cyan-700 font-bold shrink-0">100% TESTED</span>
         </div>
       </div>
     );
@@ -935,88 +935,88 @@ export const ServiceCardThumbnail: React.FC<{ slug?: string; category?: string; 
   // 4. Mobile Apps
   if (s.includes('mobile') || s.includes('app')) {
     return (
-      <div className={`relative w-full aspect-[16/8] bg-gradient-to-br from-indigo-500/10 via-white to-blue-50/50 rounded-xl border border-indigo-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between ${className}`}>
-        <div className="flex items-center justify-between border-b border-indigo-100 pb-1.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900">
-            <Smartphone className="w-3.5 h-3.5 text-indigo-600" /> React Native &amp; Flutter
+      <div className={`relative w-full min-h-[125px] sm:aspect-[16/8] bg-gradient-to-br from-indigo-500/10 via-white to-blue-50/50 rounded-xl border border-indigo-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between gap-2 ${className}`}>
+        <div className="flex items-center justify-between border-b border-indigo-100 pb-1.5 gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900 min-w-0">
+            <Smartphone className="w-3.5 h-3.5 text-indigo-600 shrink-0" /> <span className="truncate">React Native &amp; Flutter</span>
           </div>
           <span className="text-[9px] font-mono text-indigo-800 bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-200 font-bold shrink-0">
             iOS + Android
           </span>
         </div>
-        <div className="flex items-center justify-between my-auto">
-          <div className="space-y-0.5">
-            <div className="text-[11px] font-bold text-slate-800">Offline-First Synchronization</div>
-            <div className="text-[9px] font-mono text-slate-500">WatermelonDB · Push Notifications</div>
+        <div className="flex items-center justify-between my-auto gap-2">
+          <div className="space-y-0.5 min-w-0">
+            <div className="text-[11px] font-bold text-slate-800 truncate">Offline-First Synchronization</div>
+            <div className="text-[9px] font-mono text-slate-500 truncate">WatermelonDB · Push Notifications</div>
           </div>
-          <div className="p-1.5 rounded bg-indigo-50 border border-indigo-100 text-center font-mono">
+          <div className="p-1.5 rounded bg-indigo-50 border border-indigo-100 text-center font-mono shrink-0">
             <div className="text-[8px] text-slate-500">60 FPS</div>
             <div className="text-xs font-bold text-indigo-600">Native Feel</div>
           </div>
         </div>
-        <div className="pt-1 border-t border-indigo-100 flex items-center justify-between text-[9px] font-mono text-slate-400">
-          <span>SHARED CODEBASE · 90%+ REUSE</span>
-          <span className="text-indigo-700 font-bold">STORE APPROVED</span>
+        <div className="pt-1 border-t border-indigo-100 flex items-center justify-between text-[9px] font-mono text-slate-400 gap-2">
+          <span className="truncate">SHARED CODEBASE · 90%+ REUSE</span>
+          <span className="text-indigo-700 font-bold shrink-0">STORE APPROVED</span>
         </div>
       </div>
     );
   }
 
-  // 5. AI & ML / Generative AI
-  if (s.includes('ai-') || s.includes('machine-learning') || s.includes('ml') || s.includes('gen')) {
+  // 5. AI & ML / Generative AI / Data Analytics
+  if (s.includes('ai') || s.includes('machine') || s.includes('ml') || s.includes('gen') || s.includes('intelligence') || s.includes('data') || s.includes('analytics')) {
     return (
-      <div className={`relative w-full aspect-[16/8] bg-gradient-to-br from-purple-500/10 via-white to-violet-50/50 rounded-xl border border-purple-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between ${className}`}>
-        <div className="flex items-center justify-between border-b border-purple-100 pb-1.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900">
-            <Cpu className="w-3.5 h-3.5 text-[#7C3AED]" /> Grounded AI &amp; Private RAG
+      <div className={`relative w-full min-h-[125px] sm:aspect-[16/8] bg-gradient-to-br from-purple-500/10 via-white to-violet-50/50 rounded-xl border border-purple-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between gap-2 ${className}`}>
+        <div className="flex items-center justify-between border-b border-purple-100 pb-1.5 gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900 min-w-0">
+            <Cpu className="w-3.5 h-3.5 text-[#7C3AED] shrink-0" /> <span className="truncate">Grounded AI &amp; Private RAG</span>
           </div>
           <span className="text-[9px] font-mono text-purple-800 bg-purple-50 px-1.5 py-0.2 rounded border border-purple-200 font-bold shrink-0">
             pgvector
           </span>
         </div>
-        <div className="flex items-center justify-between my-auto">
-          <div className="space-y-0.5">
-            <div className="text-[11px] font-bold text-slate-800">Domain-Specific Knowledge Hub</div>
-            <div className="text-[9px] font-mono text-slate-500">Verifiable Citations · Zero Leakage</div>
+        <div className="flex items-center justify-between my-auto gap-2">
+          <div className="space-y-0.5 min-w-0">
+            <div className="text-[11px] font-bold text-slate-800 truncate">Domain-Specific Knowledge Hub</div>
+            <div className="text-[9px] font-mono text-slate-500 truncate">Verifiable Citations · Zero Leakage</div>
           </div>
-          <div className="p-1.5 rounded bg-purple-50 border border-purple-100 text-center font-mono">
+          <div className="p-1.5 rounded bg-purple-50 border border-purple-100 text-center font-mono shrink-0">
             <div className="text-[8px] text-slate-500">Prompt Cache</div>
             <div className="text-xs font-bold text-[#7C3AED]">92% Hit</div>
           </div>
         </div>
-        <div className="pt-1 border-t border-purple-100 flex items-center justify-between text-[9px] font-mono text-slate-400">
-          <span>ZERO PUBLIC TRAINING LEAKAGE</span>
-          <span className="text-purple-700 font-bold">SOC2 READY</span>
+        <div className="pt-1 border-t border-purple-100 flex items-center justify-between text-[9px] font-mono text-slate-400 gap-2">
+          <span className="truncate">ZERO PUBLIC TRAINING LEAKAGE</span>
+          <span className="text-purple-700 font-bold shrink-0">SOC2 READY</span>
         </div>
       </div>
     );
   }
 
-  // 6. Cloud & DevOps
-  if (s.includes('cloud') || s.includes('devops') || s.includes('migration')) {
+  // 6. Cloud, AWS, Azure & DevOps
+  if (s.includes('cloud') || s.includes('devops') || s.includes('migration') || s.includes('aws') || s.includes('azure')) {
     return (
-      <div className={`relative w-full aspect-[16/8] bg-gradient-to-br from-teal-500/10 via-white to-emerald-50/50 rounded-xl border border-teal-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between ${className}`}>
-        <div className="flex items-center justify-between border-b border-teal-100 pb-1.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900">
-            <Cloud className="w-3.5 h-3.5 text-[#0D9488]" /> Multi-Cloud AWS &amp; Azure
+      <div className={`relative w-full min-h-[125px] sm:aspect-[16/8] bg-gradient-to-br from-teal-500/10 via-white to-emerald-50/50 rounded-xl border border-teal-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between gap-2 ${className}`}>
+        <div className="flex items-center justify-between border-b border-teal-100 pb-1.5 gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900 min-w-0">
+            <Cloud className="w-3.5 h-3.5 text-[#0D9488] shrink-0" /> <span className="truncate">Multi-Cloud AWS &amp; Azure</span>
           </div>
           <span className="text-[9px] font-mono text-teal-800 bg-teal-50 px-1.5 py-0.2 rounded border border-teal-200 font-bold shrink-0">
             99.99% SLA
           </span>
         </div>
-        <div className="flex items-center justify-between my-auto">
-          <div className="space-y-0.5">
-            <div className="text-[11px] font-bold text-slate-800">CI/CD &amp; Zero Downtime Deploy</div>
-            <div className="text-[9px] font-mono text-slate-500">Docker · Kubernetes · Terraform</div>
+        <div className="flex items-center justify-between my-auto gap-2">
+          <div className="space-y-0.5 min-w-0">
+            <div className="text-[11px] font-bold text-slate-800 truncate">CI/CD &amp; Zero Downtime Deploy</div>
+            <div className="text-[9px] font-mono text-slate-500 truncate">Docker · Kubernetes · Terraform</div>
           </div>
-          <div className="p-1.5 rounded bg-teal-50 border border-teal-100 text-center font-mono">
+          <div className="p-1.5 rounded bg-teal-50 border border-teal-100 text-center font-mono shrink-0">
             <div className="text-[8px] text-slate-500">Global P99</div>
             <div className="text-xs font-bold text-[#0D9488]">&lt;45ms</div>
           </div>
         </div>
-        <div className="pt-1 border-t border-teal-100 flex items-center justify-between text-[9px] font-mono text-slate-400">
-          <span>AUTOMATED FINOPS GOVERNANCE</span>
-          <span className="text-teal-700 font-bold">SECURITY HARDENED</span>
+        <div className="pt-1 border-t border-teal-100 flex items-center justify-between text-[9px] font-mono text-slate-400 gap-2">
+          <span className="truncate">AUTOMATED FINOPS GOVERNANCE</span>
+          <span className="text-teal-700 font-bold shrink-0">HARDENED</span>
         </div>
       </div>
     );
@@ -1025,57 +1025,57 @@ export const ServiceCardThumbnail: React.FC<{ slug?: string; category?: string; 
   // 7. Security / Cybersecurity
   if (s.includes('cyber') || s.includes('security')) {
     return (
-      <div className={`relative w-full aspect-[16/8] bg-gradient-to-br from-rose-500/10 via-white to-red-50/50 rounded-xl border border-rose-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between ${className}`}>
-        <div className="flex items-center justify-between border-b border-rose-100 pb-1.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900">
-            <ShieldCheck className="w-3.5 h-3.5 text-rose-600" /> Defensive Security Mesh
+      <div className={`relative w-full min-h-[125px] sm:aspect-[16/8] bg-gradient-to-br from-rose-500/10 via-white to-red-50/50 rounded-xl border border-rose-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between gap-2 ${className}`}>
+        <div className="flex items-center justify-between border-b border-rose-100 pb-1.5 gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900 min-w-0">
+            <ShieldCheck className="w-3.5 h-3.5 text-rose-600 shrink-0" /> <span className="truncate">Defensive Security Mesh</span>
           </div>
           <span className="text-[9px] font-mono text-rose-800 bg-rose-50 px-1.5 py-0.2 rounded border border-rose-200 font-bold shrink-0">
             OWASP Top 10
           </span>
         </div>
-        <div className="flex items-center justify-between my-auto">
-          <div className="space-y-0.5">
-            <div className="text-[11px] font-bold text-slate-800">Zero-Trust Network ACL</div>
-            <div className="text-[9px] font-mono text-slate-500">TLS 1.3 · Continuous Snyk Scan</div>
+        <div className="flex items-center justify-between my-auto gap-2">
+          <div className="space-y-0.5 min-w-0">
+            <div className="text-[11px] font-bold text-slate-800 truncate">Zero-Trust Network ACL</div>
+            <div className="text-[9px] font-mono text-slate-500 truncate">TLS 1.3 · Continuous Snyk Scan</div>
           </div>
-          <div className="p-1.5 rounded bg-rose-50 border border-rose-100 text-center font-mono">
+          <div className="p-1.5 rounded bg-rose-50 border border-rose-100 text-center font-mono shrink-0">
             <div className="text-[8px] text-slate-500">Critical Vulns</div>
             <div className="text-xs font-bold text-emerald-600">0 Reported</div>
           </div>
         </div>
-        <div className="pt-1 border-t border-rose-100 flex items-center justify-between text-[9px] font-mono text-slate-400">
-          <span>ENCRYPTED AT REST &amp; TRANSIT</span>
-          <span className="text-rose-700 font-bold">AUDITED ACL</span>
+        <div className="pt-1 border-t border-rose-100 flex items-center justify-between text-[9px] font-mono text-slate-400 gap-2">
+          <span className="truncate">ENCRYPTED AT REST &amp; TRANSIT</span>
+          <span className="text-rose-700 font-bold shrink-0">AUDITED ACL</span>
         </div>
       </div>
     );
   }
 
-  // 8. Marketing, Analytics, UI/UX, Robotics, and others
+  // 8. Marketing, SEO, UI/UX, Robotics, and others
   return (
-    <div className={`relative w-full aspect-[16/8] bg-gradient-to-br from-blue-500/10 via-white to-slate-50 rounded-xl border border-slate-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between ${className}`}>
-      <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
-        <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900">
-          <Layers className="w-3.5 h-3.5 text-[#1266E8]" /> Engineering Practice
+    <div className={`relative w-full min-h-[125px] sm:aspect-[16/8] bg-gradient-to-br from-blue-500/10 via-white to-slate-50 rounded-xl border border-slate-200/80 p-3 overflow-hidden shadow-2xs flex flex-col justify-between gap-2 ${className}`}>
+      <div className="flex items-center justify-between border-b border-slate-100 pb-1.5 gap-2">
+        <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-900 min-w-0">
+          <Layers className="w-3.5 h-3.5 text-[#1266E8] shrink-0" /> <span className="truncate">Engineering &amp; Growth Practice</span>
         </div>
         <span className="text-[9px] font-mono text-[#1266E8] bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200 font-bold shrink-0">
           Verified
         </span>
       </div>
-      <div className="flex items-center justify-between my-auto">
-        <div className="space-y-0.5">
-          <div className="text-[11px] font-bold text-slate-800">Production Standards</div>
-          <div className="text-[9px] font-mono text-slate-500">Typed Contracts · Automated Gates</div>
+      <div className="flex items-center justify-between my-auto gap-2">
+        <div className="space-y-0.5 min-w-0">
+          <div className="text-[11px] font-bold text-slate-800 truncate">Production Standards</div>
+          <div className="text-[9px] font-mono text-slate-500 truncate">Typed Contracts · Automated Gates</div>
         </div>
-        <div className="p-1.5 rounded bg-blue-50 border border-blue-100 text-center font-mono">
+        <div className="p-1.5 rounded bg-blue-50 border border-blue-100 text-center font-mono shrink-0">
           <div className="text-[8px] text-slate-500">Quality</div>
           <div className="text-xs font-bold text-[#1266E8]">100% Code</div>
         </div>
       </div>
-      <div className="pt-1 border-t border-slate-100 flex items-center justify-between text-[9px] font-mono text-slate-400">
-        <span>IAMTECHNI PRACTICE STANDARDS</span>
-        <span className="text-[#1266E8] font-bold">DISCOVERY READY</span>
+      <div className="pt-1 border-t border-slate-100 flex items-center justify-between text-[9px] font-mono text-slate-400 gap-2">
+        <span className="truncate">IAMTECHNI PRACTICE STANDARDS</span>
+        <span className="text-[#1266E8] font-bold shrink-0">DISCOVERY READY</span>
       </div>
     </div>
   );
@@ -1094,32 +1094,32 @@ export const ProjectVisualThumbnail: React.FC<{ projectId: string; className?: s
   // 1. Omnichannel Retail
   if (id.includes('retail') || id.includes('omnichannel')) {
     return (
-      <div className={`relative w-full aspect-[16/10] bg-gradient-to-br from-amber-500/10 via-white to-blue-500/10 rounded-2xl border border-amber-200/90 p-4 sm:p-5 overflow-hidden flex flex-col justify-between shadow-2xs group-hover:shadow-md transition-shadow ${className}`}>
-        <div className="flex items-center justify-between border-b border-amber-100 pb-2.5">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-            <span className="text-[10px] font-mono text-slate-500 ml-1.5">storefront.b2b.app</span>
+      <div className={`relative w-full min-h-[145px] sm:aspect-[16/10] bg-gradient-to-br from-amber-500/10 via-white to-blue-500/10 rounded-2xl border border-amber-200/90 p-4 sm:p-5 overflow-hidden flex flex-col justify-between gap-2 shadow-2xs group-hover:shadow-md transition-shadow ${className}`}>
+        <div className="flex items-center justify-between border-b border-amber-100 pb-2.5 gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shrink-0" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0" />
+            <span className="text-[10px] font-mono text-slate-500 ml-1 truncate">storefront.b2b.app</span>
           </div>
-          <span className="text-[10px] font-mono text-amber-800 bg-amber-100/70 px-2 py-0.5 rounded font-bold">Headless Cart</span>
+          <span className="text-[10px] font-mono text-amber-800 bg-amber-100/70 px-2 py-0.5 rounded font-bold shrink-0">Headless Cart</span>
         </div>
         <div className="space-y-2 py-2">
           <div className="p-2 bg-white rounded-xl border border-amber-200 flex items-center justify-between shadow-2xs">
             <div className="flex items-center gap-2">
-              <ShoppingBag className="w-4 h-4 text-amber-600" />
+              <ShoppingBag className="w-4 h-4 text-amber-600 shrink-0" />
               <div className="text-xs font-bold text-slate-900">Wholesale Tier B</div>
             </div>
             <span className="text-xs font-mono font-bold text-emerald-600">₹14,900</span>
           </div>
           <div className="flex items-center gap-2 text-[10px] font-mono text-slate-600">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Redis volatile stock reservation active</span>
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+            <span className="truncate">Redis volatile stock reservation active</span>
           </div>
         </div>
-        <div className="pt-2 border-t border-amber-100 flex items-center justify-between text-[10px] font-mono text-slate-500">
-          <span>NEXT.js APP ROUTER</span>
-          <span className="text-amber-700 font-bold">180ms P95 CHECKOUT</span>
+        <div className="pt-2 border-t border-amber-100 flex items-center justify-between text-[10px] font-mono text-slate-500 gap-2">
+          <span className="truncate">NEXT.js APP ROUTER</span>
+          <span className="text-amber-700 font-bold shrink-0">180ms P95 CHECKOUT</span>
         </div>
       </div>
     );
@@ -1128,13 +1128,13 @@ export const ProjectVisualThumbnail: React.FC<{ projectId: string; className?: s
   // 2. Enterprise RAG Assistant
   if (id.includes('rag') || id.includes('knowledge') || id.includes('assistant')) {
     return (
-      <div className={`relative w-full aspect-[16/10] bg-gradient-to-br from-violet-500/10 via-white to-blue-500/10 rounded-2xl border border-violet-200/90 p-4 sm:p-5 overflow-hidden flex flex-col justify-between shadow-2xs group-hover:shadow-md transition-shadow ${className}`}>
-        <div className="flex items-center justify-between border-b border-violet-100 pb-2.5">
-          <div className="flex items-center gap-1.5">
-            <Bot className="w-4 h-4 text-violet-600" />
-            <span className="text-xs font-bold text-slate-900">RAG Document Assistant</span>
+      <div className={`relative w-full min-h-[145px] sm:aspect-[16/10] bg-gradient-to-br from-violet-500/10 via-white to-blue-500/10 rounded-2xl border border-violet-200/90 p-4 sm:p-5 overflow-hidden flex flex-col justify-between gap-2 shadow-2xs group-hover:shadow-md transition-shadow ${className}`}>
+        <div className="flex items-center justify-between border-b border-violet-100 pb-2.5 gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <Bot className="w-4 h-4 text-violet-600 shrink-0" />
+            <span className="text-xs font-bold text-slate-900 truncate">RAG Document Assistant</span>
           </div>
-          <span className="text-[10px] font-mono text-violet-800 bg-violet-100/70 px-2 py-0.5 rounded font-bold">FastAPI + pgvector</span>
+          <span className="text-[10px] font-mono text-violet-800 bg-violet-100/70 px-2 py-0.5 rounded font-bold shrink-0">FastAPI + pgvector</span>
         </div>
         <div className="space-y-2 py-2">
           <div className="p-2.5 bg-violet-50 rounded-xl border border-violet-200 text-xs text-slate-800">
@@ -1144,9 +1144,9 @@ export const ProjectVisualThumbnail: React.FC<{ projectId: string; className?: s
             </p>
           </div>
         </div>
-        <div className="pt-2 border-t border-violet-100 flex items-center justify-between text-[10px] font-mono text-slate-500">
-          <span>HYBRID BM25 + VECTOR</span>
-          <span className="text-violet-700 font-bold">EXACT CITATIONS</span>
+        <div className="pt-2 border-t border-violet-100 flex items-center justify-between text-[10px] font-mono text-slate-500 gap-2">
+          <span className="truncate">HYBRID BM25 + VECTOR</span>
+          <span className="text-violet-700 font-bold shrink-0">EXACT CITATIONS</span>
         </div>
       </div>
     );
@@ -1155,13 +1155,13 @@ export const ProjectVisualThumbnail: React.FC<{ projectId: string; className?: s
   // 3. Telemedicine / Healthcare
   if (id.includes('telemedicine') || id.includes('health') || id.includes('ehr')) {
     return (
-      <div className={`relative w-full aspect-[16/10] bg-gradient-to-br from-teal-500/10 via-white to-cyan-500/10 rounded-2xl border border-teal-200/90 p-4 sm:p-5 overflow-hidden flex flex-col justify-between shadow-2xs group-hover:shadow-md transition-shadow ${className}`}>
-        <div className="flex items-center justify-between border-b border-teal-100 pb-2.5">
-          <div className="flex items-center gap-1.5">
-            <Activity className="w-4 h-4 text-teal-600" />
-            <span className="text-xs font-bold text-slate-900">Clinical EHR &amp; Telehealth</span>
+      <div className={`relative w-full min-h-[145px] sm:aspect-[16/10] bg-gradient-to-br from-teal-500/10 via-white to-cyan-500/10 rounded-2xl border border-teal-200/90 p-4 sm:p-5 overflow-hidden flex flex-col justify-between gap-2 shadow-2xs group-hover:shadow-md transition-shadow ${className}`}>
+        <div className="flex items-center justify-between border-b border-teal-100 pb-2.5 gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <Activity className="w-4 h-4 text-teal-600 shrink-0" />
+            <span className="text-xs font-bold text-slate-900 truncate">Clinical EHR &amp; Telehealth</span>
           </div>
-          <span className="text-[10px] font-mono text-teal-800 bg-teal-100/70 px-2 py-0.5 rounded font-bold">HIPAA Compliant</span>
+          <span className="text-[10px] font-mono text-teal-800 bg-teal-100/70 px-2 py-0.5 rounded font-bold shrink-0">HIPAA Compliant</span>
         </div>
         <div className="grid grid-cols-2 gap-2 py-2">
           <div className="p-2 bg-white rounded-xl border border-teal-200 text-center">
@@ -1173,9 +1173,9 @@ export const ProjectVisualThumbnail: React.FC<{ projectId: string; className?: s
             <div className="text-xs font-bold text-emerald-600">Encrypted PHI</div>
           </div>
         </div>
-        <div className="pt-2 border-t border-teal-100 flex items-center justify-between text-[10px] font-mono text-slate-500">
-          <span>ZERO-TRUST AUDIT</span>
-          <span className="text-teal-700 font-bold">EHR INTEGRATED</span>
+        <div className="pt-2 border-t border-teal-100 flex items-center justify-between text-[10px] font-mono text-slate-500 gap-2">
+          <span className="truncate">ZERO-TRUST AUDIT</span>
+          <span className="text-teal-700 font-bold shrink-0">EHR INTEGRATED</span>
         </div>
       </div>
     );
@@ -1183,13 +1183,13 @@ export const ProjectVisualThumbnail: React.FC<{ projectId: string; className?: s
 
   // 4. Industrial IoT
   return (
-    <div className={`relative w-full aspect-[16/10] bg-gradient-to-br from-indigo-500/10 via-white to-blue-500/10 rounded-2xl border border-indigo-200/90 p-4 sm:p-5 overflow-hidden flex flex-col justify-between shadow-2xs group-hover:shadow-md transition-shadow ${className}`}>
-      <div className="flex items-center justify-between border-b border-indigo-100 pb-2.5">
-        <div className="flex items-center gap-1.5">
-          <Cpu className="w-4 h-4 text-indigo-600" />
-          <span className="text-xs font-bold text-slate-900">IoT Telemetry &amp; SCADA</span>
+    <div className={`relative w-full min-h-[145px] sm:aspect-[16/10] bg-gradient-to-br from-indigo-500/10 via-white to-blue-500/10 rounded-2xl border border-indigo-200/90 p-4 sm:p-5 overflow-hidden flex flex-col justify-between gap-2 shadow-2xs group-hover:shadow-md transition-shadow ${className}`}>
+      <div className="flex items-center justify-between border-b border-indigo-100 pb-2.5 gap-2">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <Cpu className="w-4 h-4 text-indigo-600 shrink-0" />
+          <span className="text-xs font-bold text-slate-900 truncate">IoT Telemetry &amp; SCADA</span>
         </div>
-        <span className="text-[10px] font-mono text-indigo-800 bg-indigo-100/70 px-2 py-0.5 rounded font-bold">TimescaleDB</span>
+        <span className="text-[10px] font-mono text-indigo-800 bg-indigo-100/70 px-2 py-0.5 rounded font-bold shrink-0">TimescaleDB</span>
       </div>
       <div className="grid grid-cols-2 gap-2 py-2">
         <div className="p-2 bg-white rounded-xl border border-indigo-200 text-center">
@@ -1201,9 +1201,9 @@ export const ProjectVisualThumbnail: React.FC<{ projectId: string; className?: s
           <div className="text-xs font-bold text-emerald-600">&lt;1.8s Alert</div>
         </div>
       </div>
-      <div className="pt-2 border-t border-indigo-100 flex items-center justify-between text-[10px] font-mono text-slate-500">
-        <span>MQTT / OPC-UA GATEWAY</span>
-        <span className="text-indigo-700 font-bold">FAIL-SAFE EDGE</span>
+      <div className="pt-2 border-t border-indigo-100 flex items-center justify-between text-[10px] font-mono text-slate-500 gap-2">
+        <span className="truncate">MQTT / OPC-UA GATEWAY</span>
+        <span className="text-indigo-700 font-bold shrink-0">FAIL-SAFE EDGE</span>
       </div>
     </div>
   );
@@ -1221,34 +1221,34 @@ export const ArticleGraphic: React.FC<{ slug: string; className?: string }> = ({
 
   if (s.includes('rag') || s.includes('vector')) {
     return (
-      <div className={`relative w-full aspect-[16/9] bg-gradient-to-br from-[#0B1120] via-slate-900 to-[#1e1b4b] rounded-2xl p-6 text-white overflow-hidden border border-slate-800 shadow-md flex flex-col justify-between ${className}`}>
+      <div className={`relative w-full min-h-[165px] sm:aspect-[16/9] bg-gradient-to-br from-[#0B1120] via-slate-900 to-[#1e1b4b] rounded-2xl p-4 sm:p-6 text-white overflow-hidden border border-slate-800 shadow-md flex flex-col justify-between gap-2 ${className}`}>
         <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
-          <span className="text-xs font-mono text-purple-400 font-bold uppercase tracking-wider">
+        <div className="flex flex-wrap items-center justify-between gap-1.5 border-b border-slate-800/80 pb-2.5">
+          <span className="text-[11px] sm:text-xs font-mono text-purple-400 font-bold uppercase tracking-wider">
             ARCHITECTURE DIAGRAM // ENTERPRISE RAG
           </span>
-          <span className="text-[11px] font-mono text-emerald-400">Hybrid BM25 + pgvector</span>
+          <span className="text-[10px] sm:text-[11px] font-mono text-emerald-400">Hybrid BM25 + pgvector</span>
         </div>
-        <div className="grid grid-cols-3 gap-3 my-auto py-2 text-center text-xs font-mono">
-          <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-            <div className="text-[10px] text-slate-400">Lexical Precision</div>
-            <div className="text-base font-bold text-amber-300">BM25 Search</div>
-            <div className="text-[9px] text-slate-400">Exact SKU &amp; Section</div>
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 my-auto py-1.5 text-center text-xs font-mono">
+          <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
+            <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">Lexical</div>
+            <div className="text-xs sm:text-base font-bold text-amber-300 truncate">BM25</div>
+            <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">Exact Match</div>
           </div>
-          <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-            <div className="text-[10px] text-slate-400">Dense Embedding</div>
-            <div className="text-base font-bold text-cyan-400">Cosine 1536d</div>
-            <div className="text-[9px] text-slate-400">Semantic Context</div>
+          <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
+            <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">Embedding</div>
+            <div className="text-xs sm:text-base font-bold text-cyan-400 truncate">1536d</div>
+            <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">Semantic</div>
           </div>
-          <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-            <div className="text-[10px] text-slate-400">Reciprocal Rank</div>
-            <div className="text-base font-bold text-emerald-400">RRF Top-5</div>
-            <div className="text-[9px] text-slate-400">Zero Hallucination</div>
+          <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
+            <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">Rank Fusion</div>
+            <div className="text-xs sm:text-base font-bold text-emerald-400 truncate">RRF Top-5</div>
+            <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">Verified</div>
           </div>
         </div>
-        <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+        <div className="pt-2 border-t border-slate-800/80 text-[10px] sm:text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2">
           <span>Grounded Ingest Pipeline</span>
-          <span className="text-purple-300 font-bold">15% Token Sliding Overlap</span>
+          <span className="text-purple-300 font-bold">15% Token Overlap</span>
         </div>
       </div>
     );
@@ -1256,32 +1256,32 @@ export const ArticleGraphic: React.FC<{ slug: string; className?: string }> = ({
 
   // Cloud FinOps / Micro-Frontends / Zero-Trust fallbacks
   return (
-    <div className={`relative w-full aspect-[16/9] bg-gradient-to-br from-[#090D1A] via-slate-900 to-[#0e1e38] rounded-2xl p-6 text-white overflow-hidden border border-slate-800 shadow-md flex flex-col justify-between ${className}`}>
+    <div className={`relative w-full min-h-[165px] sm:aspect-[16/9] bg-gradient-to-br from-[#090D1A] via-slate-900 to-[#0e1e38] rounded-2xl p-4 sm:p-6 text-white overflow-hidden border border-slate-800 shadow-md flex flex-col justify-between gap-2 ${className}`}>
       <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
-        <span className="text-xs font-mono text-[#04C8E8] font-bold uppercase tracking-wider">
+      <div className="flex flex-wrap items-center justify-between gap-1.5 border-b border-slate-800/80 pb-2.5">
+        <span className="text-[11px] sm:text-xs font-mono text-[#04C8E8] font-bold uppercase tracking-wider">
           TECHNICAL BENCHMARK // ENTERPRISE DEPLOYMENT
         </span>
-        <span className="text-[11px] font-mono text-emerald-400">Zero-Downtime Rollout</span>
+        <span className="text-[10px] sm:text-[11px] font-mono text-emerald-400">Zero-Downtime Rollout</span>
       </div>
-      <div className="grid grid-cols-3 gap-3 my-auto py-2 text-center text-xs font-mono">
-        <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-          <div className="text-[10px] text-slate-400">Performance</div>
-          <div className="text-base font-bold text-[#1266E8]">99.99%</div>
-          <div className="text-[9px] text-slate-400">Availability SLA</div>
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 my-auto py-1.5 text-center text-xs font-mono">
+        <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
+          <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">Availability</div>
+          <div className="text-xs sm:text-base font-bold text-[#1266E8]">99.99%</div>
+          <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">Multi-AZ SLA</div>
         </div>
-        <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-          <div className="text-[10px] text-slate-400">P99 Latency</div>
-          <div className="text-base font-bold text-cyan-400">&lt;85ms</div>
-          <div className="text-[9px] text-slate-400">Edge CDN Cache</div>
+        <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
+          <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">P99 Latency</div>
+          <div className="text-xs sm:text-base font-bold text-cyan-400">&lt;85ms</div>
+          <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">Edge CDN</div>
         </div>
-        <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-          <div className="text-[10px] text-slate-400">Infrastructure</div>
-          <div className="text-base font-bold text-emerald-400">Kubernetes</div>
-          <div className="text-[9px] text-slate-400">GitOps Managed</div>
+        <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
+          <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">Orchestration</div>
+          <div className="text-xs sm:text-base font-bold text-emerald-400 truncate">K8s / ECS</div>
+          <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">GitOps</div>
         </div>
       </div>
-      <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+      <div className="pt-2 border-t border-slate-800/80 text-[10px] sm:text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2">
         <span>IAMTECHNI Engineering Research Practice</span>
         <span className="text-[#04C8E8] font-bold">PRODUCTION BENCHMARKED</span>
       </div>

@@ -608,7 +608,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                             : 'bg-white/80 hover:bg-white border-slate-200 text-slate-700'
                         }`}
                       >
-                        <div className="flex items-center justify-between gap-3 mb-1.5">
+                        <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
                           <div className="flex items-center gap-2.5">
                             <span
                               className={`w-6 h-6 rounded-md text-[11px] font-mono font-bold flex items-center justify-center shrink-0 ${
@@ -624,7 +624,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-2">
+                          <div className="flex flex-wrap items-center gap-2 pl-8 sm:pl-0">
                             <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/70">
                               {stage.protocol}
                             </span>
@@ -650,7 +650,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
 
               {/* Active Stage Deep-Dive Card */}
               <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-                <div className="flex items-center justify-between text-xs pb-2 border-b border-slate-100">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs pb-2 border-b border-slate-100">
                   <span className="font-mono text-slate-500 uppercase text-[10px] font-bold">
                     Stage {activeStage.step} Inspection
                   </span>
@@ -664,10 +664,10 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                 <p className="text-xs text-slate-600 leading-relaxed">
                   {activeStage.description} This layer operates within private VPC subnet boundaries, with zero public egress and automated latency alerting.
                 </p>
-                <div className="pt-2 flex items-center justify-between text-[11px] font-mono text-slate-500">
+                <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500">
                   <span>Target SLA: {activeStage.metric}</span>
                   <span className="text-emerald-600 font-semibold flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5" /> ISO/OWASP Compliant
+                    <ShieldCheck className="w-3.5 h-3.5 shrink-0" /> ISO/OWASP Compliant
                   </span>
                 </div>
               </div>

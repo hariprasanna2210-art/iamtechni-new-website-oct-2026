@@ -365,7 +365,7 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
       // -----------------------------------------------------------------------
       case 'web-development':
         return (
-          <div className="relative w-full max-w-xl mx-auto aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
+          <div className="relative w-full max-w-xl mx-auto min-h-[280px] sm:aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
             {/* Desktop Browser Window Mockup */}
             <div className="relative w-full rounded-2xl bg-white shadow-2xl border border-slate-200/90 overflow-hidden transform hover:-translate-y-1 transition-transform duration-500">
               {/* Browser Header Bar */}
@@ -454,7 +454,7 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
       // -----------------------------------------------------------------------
       case 'ai-machine-learning':
         return (
-          <div className="relative w-full max-w-xl mx-auto aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
+          <div className="relative w-full max-w-xl mx-auto min-h-[280px] sm:aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
             <div className="relative w-full h-full rounded-2xl bg-[#090D1A]/90 border border-violet-800/60 shadow-2xl p-6 overflow-hidden flex flex-col justify-between text-white">
               {/* Background ambient neural grid */}
               <div className="absolute inset-0 bg-[radial-gradient(#1e1b4b_1px,transparent_1px)] [background-size:18px_18px] opacity-60" />
@@ -522,7 +522,7 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
       // -----------------------------------------------------------------------
       case 'ecommerce':
         return (
-          <div className="relative w-full max-w-xl mx-auto aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
+          <div className="relative w-full max-w-xl mx-auto min-h-[280px] sm:aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
             <div className="relative w-full rounded-2xl bg-white shadow-2xl border border-orange-200/90 overflow-hidden p-4 sm:p-5 space-y-4">
               {/* Storefront Header */}
               <div className="flex items-center justify-between pb-3 border-b border-orange-100">
@@ -581,7 +581,7 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
       // -----------------------------------------------------------------------
       case 'mobile-apps':
         return (
-          <div className="relative w-full max-w-xl mx-auto aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
+          <div className="relative w-full max-w-xl mx-auto min-h-[280px] sm:aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
             <div className="relative flex items-center justify-center gap-4 sm:gap-6">
               {/* Phone Mockup 1 (Primary Front Facing) */}
               <div className="w-44 sm:w-52 rounded-3xl bg-slate-900 p-2.5 shadow-2xl border-4 border-slate-800 z-10 transform -rotate-2 hover:rotate-0 transition-transform duration-300">
@@ -639,7 +639,7 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
       // -----------------------------------------------------------------------
       case 'cloud-devops':
         return (
-          <div className="relative w-full max-w-xl mx-auto aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
+          <div className="relative w-full max-w-xl mx-auto min-h-[280px] sm:aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
             <div className="relative w-full rounded-2xl bg-white shadow-2xl border border-teal-200/90 p-5 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-teal-100">
                 <div className="flex items-center gap-2">
@@ -689,7 +689,7 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
       // -----------------------------------------------------------------------
       case 'digital-marketing':
         return (
-          <div className="relative w-full max-w-xl mx-auto aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
+          <div className="relative w-full max-w-xl mx-auto min-h-[280px] sm:aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
             <div className="relative w-full rounded-2xl bg-white shadow-2xl border border-orange-200/90 p-5 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-orange-100">
                 <div className="flex items-center gap-2">
@@ -756,7 +756,7 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
       // -----------------------------------------------------------------------
       case 'custom-software':
         return (
-          <div className="relative w-full max-w-xl mx-auto aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
+          <div className="relative w-full max-w-xl mx-auto min-h-[280px] sm:aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
             <div className="relative w-full rounded-2xl bg-white shadow-2xl border border-indigo-200/90 p-5 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-indigo-100">
                 <div className="flex items-center gap-2">
@@ -806,7 +806,7 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
       // -----------------------------------------------------------------------
       case 'data-analytics':
         return (
-          <div className="relative w-full max-w-xl mx-auto aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
+          <div className="relative w-full max-w-xl mx-auto min-h-[280px] sm:aspect-[16/11] flex items-center justify-center p-2 sm:p-4">
             <div className="relative w-full rounded-2xl bg-white shadow-2xl border border-emerald-200/90 p-5 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-emerald-100">
                 <div className="flex items-center gap-2">
@@ -893,18 +893,18 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
             {/* Category Kicker Badge */}
             <div className="flex items-center gap-3">
               <div
-                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full ${current.colorTheme.kickerBg} border ${current.colorTheme.kickerBorder} shadow-xs text-xs font-semibold ${current.colorTheme.kickerText} backdrop-blur-md transition-all`}
+                className={`inline-flex flex-wrap items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-2xl sm:rounded-full ${current.colorTheme.kickerBg} border ${current.colorTheme.kickerBorder} shadow-xs text-xs font-semibold ${current.colorTheme.kickerText} backdrop-blur-md transition-all max-w-full`}
               >
-                <current.icon className="w-3.5 h-3.5" />
+                <current.icon className="w-3.5 h-3.5 shrink-0" />
                 <span className="font-bold">{current.serviceTitle}</span>
-                <span className="opacity-40">|</span>
+                <span className="opacity-40 hidden sm:inline">|</span>
                 <span className="opacity-90">{current.category}</span>
               </div>
             </div>
 
             {/* Slide Headline */}
             <h1
-              className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-balance transition-all ${
+              className={`text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-balance transition-all ${
                 current.colorTheme.isDark ? 'text-white' : 'text-slate-900'
               }`}
             >
@@ -918,7 +918,7 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
 
             {/* Slide Description */}
             <p
-              className={`text-base sm:text-lg leading-relaxed max-w-xl transition-colors ${
+              className={`text-sm sm:text-lg leading-relaxed max-w-xl transition-colors ${
                 current.colorTheme.isDark ? 'text-slate-300' : 'text-slate-600'
               }`}
             >
@@ -926,18 +926,18 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
             </p>
 
             {/* Action Buttons: Service Specific Primary + Secondary Contact */}
-            <div className="pt-2 flex flex-wrap items-center gap-4">
+            <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
               <button
                 onClick={() => onNavigate(current.serviceRoute)}
-                className={`inline-flex items-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-white bg-gradient-to-r ${current.colorTheme.buttonGradient} hover:opacity-95 rounded-xl transition-all shadow-md active:scale-[0.98] group`}
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-white bg-gradient-to-r ${current.colorTheme.buttonGradient} hover:opacity-95 rounded-xl transition-all shadow-md active:scale-[0.98] group`}
               >
                 <span>{current.primaryCtaText}</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
               </button>
 
               <button
                 onClick={() => onOpenProjectModal(current.serviceTitle)}
-                className={`inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-xl transition-all shadow-xs ${
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-xl transition-all shadow-xs ${
                   current.colorTheme.isDark
                     ? 'bg-slate-800/90 text-white hover:bg-slate-700 border border-slate-700'
                     : 'bg-white hover:bg-slate-50 text-slate-800 border border-slate-200/90'

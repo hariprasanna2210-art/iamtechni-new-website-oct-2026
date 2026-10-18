@@ -93,10 +93,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
         }}
         slug="contact"
         customVisual={
-          <div className="relative w-full max-w-md mx-auto aspect-square bg-white rounded-2xl border border-slate-200 shadow-xl p-6 flex flex-col justify-between text-slate-900">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3 text-xs font-mono">
+          <div className="relative w-full max-w-md mx-auto min-h-[280px] sm:aspect-square bg-white rounded-2xl border border-slate-200 shadow-xl p-4 sm:p-6 flex flex-col justify-between text-slate-900">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 text-xs font-mono">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                 <span className="font-bold text-slate-900">COMMUNICATION_DESK</span>
               </div>
               <span className="text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
@@ -104,40 +104,40 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
               </span>
             </div>
 
-            <div className="space-y-3.5 my-auto py-2">
-              <div className="p-3.5 bg-[#E1F8F2] rounded-xl border border-teal-200 flex items-center gap-3">
+            <div className="space-y-3 my-auto py-3">
+              <div className="p-3 sm:p-3.5 bg-[#E1F8F2] rounded-xl border border-teal-200 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-[#0D9488] text-white flex items-center justify-center shrink-0 shadow-xs">
                   <Phone className="w-5 h-5" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-[10px] font-mono uppercase text-[#0D9488] font-bold">Direct Phone Line</div>
-                  <div className="text-sm font-extrabold text-slate-900">{COMPANY_CONTACT.phone}</div>
+                  <div className="text-sm font-extrabold text-slate-900 truncate">{COMPANY_CONTACT.phone}</div>
                 </div>
               </div>
 
-              <div className="p-3.5 bg-[#EAF3FF] rounded-xl border border-blue-200 flex items-center gap-3">
+              <div className="p-3 sm:p-3.5 bg-[#EAF3FF] rounded-xl border border-blue-200 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-[#1266E8] text-white flex items-center justify-center shrink-0 shadow-xs">
                   <Mail className="w-5 h-5" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-[10px] font-mono uppercase text-[#1266E8] font-bold">Official Email</div>
-                  <div className="text-sm font-extrabold text-slate-900">{COMPANY_CONTACT.email}</div>
+                  <div className="text-xs sm:text-sm font-extrabold text-slate-900 break-all">{COMPANY_CONTACT.email}</div>
                 </div>
               </div>
 
-              <div className="p-3.5 bg-[#FFF5D9] rounded-xl border border-amber-200 flex items-center gap-3">
+              <div className="p-3 sm:p-3.5 bg-[#FFF5D9] rounded-xl border border-amber-200 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-[#D97706] text-white flex items-center justify-center shrink-0 shadow-xs">
                   <Clock className="w-5 h-5" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-[10px] font-mono uppercase text-amber-800 font-bold">SLA Response</div>
                   <div className="text-xs font-bold text-slate-900">&lt; 24 hours guaranteed</div>
                 </div>
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-[11px] font-mono text-slate-500">
-              <span>ZERO UNSOLICITED SALES OUTREACH</span>
+            <div className="pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-[11px] font-mono text-slate-500">
+              <span>ZERO UNSOLICITED SALES</span>
               <span className="text-emerald-700 font-bold">CONFIDENTIAL BRIEF</span>
             </div>
           </div>
@@ -467,23 +467,23 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                     {errors.consent && <p className="text-xs text-rose-500 mt-1">{errors.consent}</p>}
                   </div>
 
-                  <div className="pt-2 flex items-center justify-between border-t border-slate-100">
+                  <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-100">
                     <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                      <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                       <span>Enterprise Confidentiality</span>
                     </div>
 
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#1266E8] to-[#5427D9] text-white rounded-xl text-xs font-semibold hover:opacity-95 transition-opacity disabled:opacity-50 cursor-pointer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#1266E8] to-[#5427D9] text-white rounded-xl text-xs font-semibold hover:opacity-95 transition-opacity disabled:opacity-50 cursor-pointer"
                     >
                       {isSubmitting ? (
                         'Validating...'
                       ) : (
                         <>
                           <span>Submit Project Inquiry</span>
-                          <ArrowRight className="w-4 h-4" />
+                          <ArrowRight className="w-4 h-4 shrink-0" />
                         </>
                       )}
                     </button>

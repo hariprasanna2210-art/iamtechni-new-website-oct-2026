@@ -46,6 +46,7 @@ import { COMPANY_CONTACT } from '../data/companyInfo';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { TrainingHeroVisual } from '../components/heroes/TrainingHeroVisual';
+import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 
 interface TrainingPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -273,39 +274,39 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
               </p>
 
               {/* Action Buttons: Explore Courses + Direct WhatsApp */}
-              <div className="pt-2 flex flex-wrap items-center gap-4">
+              <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3.5 sm:gap-4">
                 <button
                   onClick={scrollToCatalog}
-                  className="inline-flex items-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#1266E8] via-[#0B5CD5] to-[#5427D9] hover:opacity-95 rounded-xl transition-all shadow-md active:scale-[0.98] cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#1266E8] via-[#0B5CD5] to-[#5427D9] hover:opacity-95 rounded-xl transition-all shadow-md active:scale-[0.98] cursor-pointer"
                 >
                   <span>Explore Courses</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 shrink-0" />
                 </button>
 
                 <a
                   href={getCourseWhatsAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-all border border-emerald-300 shadow-2xs cursor-pointer group"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-all border border-emerald-300 shadow-2xs cursor-pointer group"
                   title="Enquire directly on WhatsApp"
                 >
-                  <WhatsAppIcon className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
+                  <WhatsAppIcon className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform shrink-0" />
                   <span>Enquire on WhatsApp</span>
                 </a>
               </div>
 
               {/* Training Value Indicators */}
-              <div className="pt-6 border-t border-slate-200/80 flex flex-wrap items-center gap-6 text-xs font-medium text-slate-600">
+              <div className="pt-6 border-t border-slate-200/80 flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-medium text-slate-600">
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Practical Code Labs &amp; Capstones</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-[#1266E8]" />
+                  <ShieldCheck className="w-4 h-4 text-[#1266E8] shrink-0" />
                   <span>Industry-Experienced Mentors</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
                   <span>Classroom &amp; Online Batches</span>
                 </div>
               </div>
@@ -339,12 +340,12 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
             </div>
 
             {/* Filter Pills */}
-            <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs max-w-full overflow-x-auto">
+            <div className="flex flex-nowrap sm:flex-wrap items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-xl shadow-2xs w-full md:w-auto overflow-x-auto">
               {courseCategories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer shrink-0 ${
                     selectedCategory === cat
                       ? 'bg-slate-900 text-white shadow-2xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -370,9 +371,12 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
               return (
                 <ScrollRevealItem key={course.id} className="h-full">
                   <div
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-6 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 shadow-2xs interactive-card-lift group`}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-5 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 shadow-2xs interactive-card-lift group`}
                   >
                     <div>
+                      {/* Visual Lab / Curriculum Preview */}
+                      <ServiceCardThumbnail slug={course.title} category={course.category} className="mb-4" />
+
                       {/* Top Meta Bar */}
                       <div className="flex items-center justify-between text-xs mb-4">
                         <span

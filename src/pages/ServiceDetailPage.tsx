@@ -286,16 +286,16 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
           <p className="text-base text-blue-100 max-w-2xl mx-auto leading-relaxed">
             Schedule an exploratory engineering consultation to evaluate project scope, architecture, budget, and implementation timelines.
           </p>
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
+          <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-3.5 sm:gap-4">
             <button
               onClick={() => onStartProject(service.title)}
-              className="px-8 py-3.5 bg-white text-[#1266E8] hover:bg-blue-50 rounded-xl font-bold text-sm transition-all shadow-md active:scale-[0.98] cursor-pointer"
+              className="px-8 py-3.5 bg-white text-[#1266E8] hover:bg-blue-50 rounded-xl font-bold text-sm transition-all shadow-md active:scale-[0.98] cursor-pointer text-center"
             >
               Discuss Your Project
             </button>
             <button
               onClick={() => onNavigate('/contact')}
-              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white rounded-xl font-semibold text-sm transition-all border border-white/30 cursor-pointer"
+              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white rounded-xl font-semibold text-sm transition-all border border-white/30 cursor-pointer text-center"
             >
               Contact Engineering
             </button>

@@ -47,7 +47,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     case 'web-development':
     case 'website-development':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           {/* Ambient Glows */}
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-[#04C8E8]/20 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-[#1266E8]/20 rounded-full blur-3xl pointer-events-none" />
@@ -147,7 +147,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     case 'ecommerce':
     case 'ecommerce-development':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-[#EA580C]/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-[#7C3AED]/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -214,7 +214,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     case 'custom-software':
     case 'custom-software-development':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -269,7 +269,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     /* ========================================================================== */
     case 'ui-ux-design':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-violet-500/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-pink-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -336,7 +336,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     case 'mobile-apps':
     case 'mobile-app-development':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -402,7 +402,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     /* ========================================================================== */
     case 'ai-machine-learning':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-[#04C8E8]/20 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-[#5427D9]/20 rounded-full blur-3xl pointer-events-none" />
 
@@ -468,7 +468,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     /* ========================================================================== */
     case 'generative-ai':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-cyan-400/20 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-violet-500/20 rounded-full blur-3xl pointer-events-none" />
 
@@ -527,7 +527,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     case 'robotics':
     case 'robotics-emerging-tech':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -591,7 +591,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     case 'seo':
     case 'social-media-marketing':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-orange-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -660,7 +660,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     case 'devops':
     case 'cloud-migration':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-sky-500/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-teal-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -721,7 +721,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     /* ========================================================================== */
     case 'data-analytics':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -784,7 +784,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     /* ========================================================================== */
     case 'cybersecurity':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-red-500/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -840,7 +840,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     case 'it-consulting':
     case 'training':
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -896,7 +896,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
     /* ========================================================================== */
     default:
       return (
-        <div className="relative w-full max-w-lg mx-auto aspect-[16/11]">
+        <div className="relative w-full max-w-lg mx-auto min-h-[280px] sm:aspect-[16/11]">
           <div className="absolute -top-10 -right-10 w-64 h-64 bg-[#1266E8]/20 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#04C8E8]/20 rounded-full blur-3xl pointer-events-none" />
 

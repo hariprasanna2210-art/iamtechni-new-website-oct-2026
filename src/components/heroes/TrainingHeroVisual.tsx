@@ -28,20 +28,20 @@ export const TrainingHeroVisual: React.FC<TrainingHeroVisualProps> = ({ classNam
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#1266E8]/15 rounded-full blur-[90px] pointer-events-none" />
 
       {/* Main Glassmorphic Laptop & Tech Composition Container */}
-      <div className="relative bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-3xl shadow-[0_20px_50px_rgba(18,102,232,0.14),0_1px_3px_rgba(0,0,0,0.06)] p-5 sm:p-6 overflow-hidden">
+      <div className="relative bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-3xl shadow-[0_20px_50px_rgba(18,102,232,0.14),0_1px_3px_rgba(0,0,0,0.06)] p-4 sm:p-6 overflow-hidden">
         
         {/* Top Window Bar */}
-        <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-200/80">
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-rose-400" />
-            <span className="w-3 h-3 rounded-full bg-amber-400" />
-            <span className="w-3 h-3 rounded-full bg-emerald-400" />
-            <span className="text-[11px] font-mono font-bold text-slate-700 ml-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-200/80">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="w-3 h-3 rounded-full bg-rose-400 shrink-0" />
+            <span className="w-3 h-3 rounded-full bg-amber-400 shrink-0" />
+            <span className="w-3 h-3 rounded-full bg-emerald-400 shrink-0" />
+            <span className="text-[11px] font-mono font-bold text-slate-700 ml-1 truncate">
               iamtechni-lab // main.ts
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-lg text-[11px] font-mono">
+          <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg text-[11px] font-mono">
             <button
               onClick={() => setActiveTab('editor')}
               className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
@@ -76,14 +76,14 @@ export const TrainingHeroVisual: React.FC<TrainingHeroVisualProps> = ({ classNam
         </div>
 
         {/* Realistic Interactive Code & Lab Editor Screen */}
-        <div className="relative bg-[#0B1120] rounded-2xl p-4 font-mono text-xs text-slate-200 border border-slate-800 shadow-inner overflow-hidden min-h-[200px]">
+        <div className="relative bg-[#0B1120] rounded-2xl p-3.5 sm:p-4 font-mono text-xs text-slate-200 border border-slate-800 shadow-inner overflow-x-auto min-h-[200px]">
           {/* Subtle line numbers & syntax */}
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800/80 text-[10px] text-slate-400">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800/80 text-[10px] text-slate-400">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
               <span className="text-emerald-400 font-bold">READY TO EXECUTE</span>
             </div>
-            <span>TypeScript 5.8 · Docker Pod · Active</span>
+            <span>TypeScript 5.8 · Docker Pod</span>
           </div>
 
           {activeTab === 'editor' && (
@@ -172,7 +172,7 @@ export const TrainingHeroVisual: React.FC<TrainingHeroVisualProps> = ({ classNam
         </div>
 
         {/* Floating Interactive Badge Elements */}
-        <div className="grid grid-cols-3 gap-2.5 mt-4 pt-3 border-t border-slate-200/80">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-4 pt-3 border-t border-slate-200/80">
           <div className="p-2.5 rounded-xl bg-[#EAF3FF] border border-blue-200/90 flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-[#1266E8] text-white flex items-center justify-center shrink-0">
               <Code2 className="w-3.5 h-3.5" />
@@ -211,10 +211,10 @@ export const TrainingHeroVisual: React.FC<TrainingHeroVisualProps> = ({ classNam
         </div>
 
         {/* Status Bar */}
-        <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-mono text-slate-500">
+        <div className="mt-3 pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-slate-500">
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-            100% Practical &amp; Industry-Aligned Curriculum
+            <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
+            <span>100% Practical &amp; Industry-Aligned Curriculum</span>
           </span>
           <span className="text-[#1266E8] font-bold">BATCHES OPEN</span>
         </div>

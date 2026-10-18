@@ -41,7 +41,7 @@ import { industriesData } from '../data/industriesData';
 import { ColorfulMultiServiceHero } from '../components/home/ColorfulMultiServiceHero';
 import { EnterpriseSolutionsMatrix } from '../components/home/EnterpriseSolutionsMatrix';
 import { ProcessStageVisual, IndustryIllustration } from '../components/common/TechIllustrations';
-import { ProjectVisualThumbnail, ArticleGraphic } from '../components/common/ServiceVisualMockups';
+import { ProjectVisualThumbnail, ArticleGraphic, ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { CompanyIntroVisual, AiNeuralPipelineVisual, CtaTerminalVisual } from '../components/home/HomeSectionVisuals';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { getCardColorToken } from '../utils/cardColorTokens';
@@ -154,7 +154,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 Every business faces distinct operational challenges. IAMTECHNI brings design, full-stack development, artificial intelligence, cloud infrastructure, and growth engineering together into solutions engineered for long-term reliability.
               </p>
 
-              <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                 <div className="p-3 bg-white/80 rounded-xl border border-blue-100 text-xs text-slate-700 space-y-1">
                   <div className="font-bold text-slate-900 flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-[#1266E8]" /> Strongly Typed
@@ -179,7 +179,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.15}>
             {/* Advantage 1 - Blue (#EAF3FF) */}
             <ScrollRevealItem className="h-full">
-              <div className="bg-[#EAF3FF] h-full rounded-2xl p-8 border border-blue-200/90 shadow-xs hover:shadow-md hover:border-blue-300 transition-all relative overflow-hidden group interactive-card-lift">
+              <div className="bg-[#EAF3FF] h-full rounded-2xl p-6 sm:p-8 border border-blue-200/90 shadow-xs hover:shadow-md hover:border-blue-300 transition-all relative overflow-hidden group interactive-card-lift">
                 <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
                   <Code2 className="w-6 h-6" />
                 </div>
@@ -194,7 +194,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             {/* Advantage 2 - Violet (#F0EAFF) */}
             <ScrollRevealItem className="h-full">
-              <div className="bg-[#F0EAFF] h-full rounded-2xl p-8 border border-violet-200/90 shadow-xs hover:shadow-md hover:border-violet-300 transition-all relative overflow-hidden group interactive-card-lift">
+              <div className="bg-[#F0EAFF] h-full rounded-2xl p-6 sm:p-8 border border-violet-200/90 shadow-xs hover:shadow-md hover:border-violet-300 transition-all relative overflow-hidden group interactive-card-lift">
                 <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
                   <Cpu className="w-6 h-6" />
                 </div>
@@ -209,7 +209,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             {/* Advantage 3 - Teal (#E1F8F2) */}
             <ScrollRevealItem className="h-full">
-              <div className="bg-[#E1F8F2] h-full rounded-2xl p-8 border border-teal-200/90 shadow-xs hover:shadow-md hover:border-teal-300 transition-all relative overflow-hidden group interactive-card-lift">
+              <div className="bg-[#E1F8F2] h-full rounded-2xl p-6 sm:p-8 border border-teal-200/90 shadow-xs hover:shadow-md hover:border-teal-300 transition-all relative overflow-hidden group interactive-card-lift">
                 <div className="w-12 h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
                   <ShieldCheck className="w-6 h-6" />
                 </div>
@@ -269,9 +269,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <ScrollRevealItem key={service.id} className="h-full">
                   <div
                     onClick={() => onNavigate(`/services/${service.slug}` as PageRoute)}
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-5 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
                   >
                     <div>
+                      {/* Visual Service Thumbnail */}
+                      <ServiceCardThumbnail slug={service.slug} category={service.category} className="mb-4" />
+
                       {/* Top Row with Category Badge & Icon */}
                       <div className="flex items-center justify-between text-xs mb-4">
                         <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
@@ -339,12 +342,12 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Filter Tabs */}
-            <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs max-w-full overflow-x-auto">
+            <div className="flex flex-nowrap sm:flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs w-full md:w-auto overflow-x-auto">
               {['All', 'E-commerce', 'AI & ML', 'Custom Software', 'Cloud & DevOps'].map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedProjectFilter(cat)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer shrink-0 ${
                     selectedProjectFilter === cat
                       ? 'bg-slate-900 text-white shadow-2xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -364,7 +367,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <ScrollRevealItem key={project.id} className="h-full">
                   <div
                     onClick={() => onOpenCaseStudy(project)}
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-5 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
                   >
                     <div>
                       {/* Interactive Visual Thumbnail */}
@@ -456,7 +459,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     }`}
                   >
                     <span
-                      className={`text-xs font-mono font-bold w-7 h-7 flex items-center justify-center rounded-lg ${
+                      className={`text-xs font-mono font-bold w-7 h-7 flex items-center justify-center rounded-lg shrink-0 ${
                         activeProcessStep === idx
                           ? 'bg-[#04C8E8] text-slate-950'
                           : 'bg-slate-100 text-slate-600'
@@ -464,7 +467,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     >
                       <StepIcon className="w-4 h-4" />
                     </span>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="text-sm font-bold flex items-center gap-2">
                         <span>{stg.step}. {stg.title}</span>
                       </div>
@@ -477,7 +480,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                       </div>
                     </div>
                     <ChevronRight
-                      className={`w-4 h-4 ${
+                      className={`w-4 h-4 shrink-0 ${
                         activeProcessStep === idx ? 'text-[#04C8E8]' : 'text-slate-300'
                       }`}
                     />
@@ -488,9 +491,9 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             {/* Stage Detail Display Card with Visual Illustration */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="bg-white rounded-2xl p-8 sm:p-10 border border-slate-200 shadow-xl flex flex-col justify-between">
+              <div className="bg-white rounded-2xl p-5 sm:p-8 lg:p-10 border border-slate-200 shadow-xl flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between text-xs font-mono text-slate-500 pb-4 border-b border-slate-200">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-500 pb-4 border-b border-slate-200">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#1266E8] animate-pulse" />
                       <span className="font-bold text-slate-800">STAGE {processStages[activeProcessStep].step} OF 07</span>
