@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
 import { PageRoute } from '../../types';
+import { IamtechniLogo } from '../common/IamtechniLogo';
 
 export interface ChatMessage {
   id: string;
@@ -324,9 +325,9 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
               setIsMinimized(false);
             }}
             aria-label="Open IAMTECHNI AI Assistant"
-            className="relative group flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-[#0F52BA] to-[#0A3D8F] text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300/50"
+            className="relative group flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-[#0A192F] via-[#0F52BA] to-[#1266E8] text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300/50 p-2.5"
           >
-            <Headphones className="w-6 h-6 transition-transform group-hover:rotate-6" />
+            <IamtechniLogo size="sm" showWordmark={false} className="w-8 h-8 transition-transform group-hover:scale-110" />
             <span className="absolute -top-1 -right-1 flex h-4 w-4">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white"></span>
@@ -347,8 +348,8 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3.5 bg-gradient-to-r from-slate-900 via-[#0A192F] to-[#0F52BA] text-white border-b border-slate-800">
             <div className="flex items-center gap-2.5">
-              <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-blue-600/30 border border-blue-400/30 text-white">
-                <Bot className="w-5 h-5 text-blue-300" />
+              <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-white/10 border border-white/20 p-1">
+                <IamtechniLogo size="sm" showWordmark={false} className="w-6 h-6" />
                 <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-slate-900"></span>
               </div>
               <div>
@@ -436,8 +437,8 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
                       className={`flex gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}
                     >
                       {!isUser && (
-                        <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center mt-1 shadow-2xs">
-                          <Bot className="w-4 h-4" />
+                        <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-slate-900 border border-slate-800 text-white flex items-center justify-center mt-1 p-0.5 shadow-2xs">
+                          <IamtechniLogo size="sm" showWordmark={false} className="w-5 h-5" />
                         </div>
                       )}
 

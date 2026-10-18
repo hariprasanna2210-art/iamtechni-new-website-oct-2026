@@ -100,7 +100,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-14 border-b border-slate-800/80">
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
-            <IamtechniLogo size="md" />
+            <IamtechniLogo size="md" variant="dark" />
             <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
               IAMTECHNI combines software engineering, artificial intelligence, cloud technologies, and digital growth services to help businesses transform ideas into practical digital solutions.
             </p>

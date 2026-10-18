@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
               aria-label="IAMTECHNI Home"
             >
               {/* Official IAMTECHNI logo with 100% transparent background */}
-              <IamtechniLogo size="sm" />
+              <IamtechniLogo size="md" />
             </button>
           </div>
 
