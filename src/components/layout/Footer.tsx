@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, ShieldCheck, Mail, Globe, Phone, Clock, MessageSquare, ArrowRight } from 'lucide-react';
+import { ArrowUpRight, ShieldCheck, Mail, Globe, Phone, Clock, MessageSquare, ArrowRight, Sparkles } from 'lucide-react';
 import { IamtechniLogo } from '../common/IamtechniLogo';
 import { PageRoute } from '../../types';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
@@ -73,6 +73,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                   </div>
                 </div>
               </a>
+
+              {/* Ask AI Advisor CTA */}
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent('iamtechni:open-chat'))}
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600/30 hover:bg-blue-600/50 text-blue-200 hover:text-white border border-blue-400/40 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-98 cursor-pointer"
+                title="Open IAMTECHNI AI Assistant"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-blue-300" />
+                <span>Ask AI Advisor</span>
+              </button>
 
               {/* Consultation CTA */}
               <button

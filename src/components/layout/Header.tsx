@@ -395,6 +395,18 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
 
           {/* Zone 3: Direct Phone Link, Action Button & Mobile Menu Toggle */}
           <div className="flex items-center gap-2.5 shrink-0">
+            {/* AI Advisor Chatbot Trigger */}
+            <button
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
+              }}
+              className="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F52BA] bg-blue-50/90 hover:bg-blue-100 hover:text-blue-800 transition-colors py-1.5 px-3 rounded-xl border border-blue-200/90 shadow-2xs whitespace-nowrap cursor-pointer"
+              title="Chat with IAMTECHNI AI Solutions Advisor"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#0F52BA]" />
+              <span>AI Advisor</span>
+            </button>
+
             {/* Compact direct phone link */}
             <a
               href="tel:+917418120053"
@@ -516,6 +528,17 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
                 <span>Email Us</span>
               </a>
             </div>
+
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
+              }}
+              className="w-full py-2.5 text-xs font-semibold text-[#0F52BA] bg-blue-50 hover:bg-blue-100 rounded-xl flex items-center justify-center gap-2 border border-blue-200 transition-colors cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#0F52BA]" />
+              <span>Ask IAMTECHNI AI Advisor</span>
+            </button>
 
             <button
               onClick={() => {

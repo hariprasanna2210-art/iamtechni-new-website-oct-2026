@@ -4,6 +4,7 @@ import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { ProjectModal } from './components/common/ProjectModal';
 import { CaseStudyModal } from './components/common/CaseStudyModal';
+import { GeminiChatbot } from './components/chat/GeminiChatbot';
 
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
@@ -416,6 +417,12 @@ export default function App() {
           onStartProject={handleOpenProjectModal}
         />
       )}
+
+      {/* IAMTECHNI Enterprise AI Chatbot powered by Gemini */}
+      <GeminiChatbot
+        onNavigate={navigate}
+        onOpenProjectModal={handleOpenProjectModal}
+      />
     </div>
   );
 }
