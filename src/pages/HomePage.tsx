@@ -19,7 +19,19 @@ import {
   Globe,
   Radio,
   Server,
-  Workflow
+  Workflow,
+  Activity,
+  Compass,
+  Palette,
+  ShoppingBag,
+  Smartphone,
+  Lock,
+  BarChart3,
+  Stethoscope,
+  Landmark,
+  Factory,
+  GraduationCap,
+  Briefcase
 } from 'lucide-react';
 import { PageRoute, ProjectItem } from '../types';
 import { servicesData } from '../data/servicesData';
@@ -27,7 +39,10 @@ import { projectsData } from '../data/projectsData';
 import { insightsData } from '../data/insightsData';
 import { industriesData } from '../data/industriesData';
 import { ColorfulMultiServiceHero } from '../components/home/ColorfulMultiServiceHero';
+import { DigitalEcosystemIllustration } from '../components/home/DigitalEcosystemIllustration';
+import { ProcessStageVisual } from '../components/common/TechIllustrations';
 import { getCardColorToken } from '../utils/cardColorTokens';
+import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
 
 interface HomePageProps {
   onNavigate: (route: PageRoute) => void;
@@ -123,8 +138,9 @@ export const HomePage: React.FC<HomePageProps> = ({
       <section className="py-20 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FE] to-[#F0FDFA] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center space-y-3 mb-14">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold">
-              Engineering Disciplines
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-[#1266E8] text-xs font-mono uppercase tracking-widest font-bold">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Engineering Disciplines</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               A technology partner for your next stage of growth.
@@ -136,8 +152,8 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Advantage 1 - Blue (#EAF3FF) */}
-            <div className="bg-[#EAF3FF] rounded-2xl p-8 border border-blue-200/90 shadow-xs hover:shadow-md hover:border-blue-300 transition-all relative overflow-hidden group">
-              <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center mb-5 shadow-xs">
+            <div className="bg-[#EAF3FF] rounded-2xl p-8 border border-blue-200/90 shadow-xs hover:shadow-md hover:border-blue-300 transition-all relative overflow-hidden group interactive-card-lift">
+              <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
                 <Code2 className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-slate-900 mb-2">
@@ -149,8 +165,8 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Advantage 2 - Violet (#F0EAFF) */}
-            <div className="bg-[#F0EAFF] rounded-2xl p-8 border border-violet-200/90 shadow-xs hover:shadow-md hover:border-violet-300 transition-all relative overflow-hidden group">
-              <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center mb-5 shadow-xs">
+            <div className="bg-[#F0EAFF] rounded-2xl p-8 border border-violet-200/90 shadow-xs hover:shadow-md hover:border-violet-300 transition-all relative overflow-hidden group interactive-card-lift">
+              <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
                 <Cpu className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-slate-900 mb-2">
@@ -162,8 +178,8 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Advantage 3 - Teal (#E1F8F2) */}
-            <div className="bg-[#E1F8F2] rounded-2xl p-8 border border-teal-200/90 shadow-xs hover:shadow-md hover:border-teal-300 transition-all relative overflow-hidden group">
-              <div className="w-12 h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center mb-5 shadow-xs">
+            <div className="bg-[#E1F8F2] rounded-2xl p-8 border border-teal-200/90 shadow-xs hover:shadow-md hover:border-teal-300 transition-all relative overflow-hidden group interactive-card-lift">
+              <div className="w-12 h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-slate-900 mb-2">
@@ -173,6 +189,33 @@ export const HomePage: React.FC<HomePageProps> = ({
                 Automated CI/CD deployment pipelines, defensive hardening, OWASP security best practices, and proactive cloud FinOps governance that prevent budget surprises.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 2.5 3D DIGITAL TECHNOLOGY ECOSYSTEM ARCHITECTURE ILLUSTRATION SECTION     */}
+      {/* ========================================================================= */}
+      <section className="py-20 bg-gradient-to-b from-white via-slate-50/50 to-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center space-y-3 mb-10">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-100 text-[#0284C7] text-xs font-mono uppercase tracking-widest font-bold">
+              <Activity className="w-3.5 h-3.5 text-[#04C8E8]" />
+              <span>Interactive Topology</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              The IAMTECHNI Connected Technology Ecosystem
+            </h2>
+            <p className="text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Explore how our frontend experiences, microservices, neural intelligence, and multi-cloud infrastructure interconnect in an unified high-performance stack.
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <DigitalEcosystemIllustration
+              onExploreServices={() => onNavigate('/services')}
+              onDiscussProject={() => onOpenProjectModal('Ecosystem Architecture Inquiry')}
+            />
           </div>
         </div>
       </section>
@@ -191,15 +234,15 @@ export const HomePage: React.FC<HomePageProps> = ({
                 Technology capabilities. One connected vision.
               </h2>
               <p className="text-sm text-slate-600 mt-2 leading-relaxed">
-                From high-speed web experiences to autonomous robotics, explore our 13 specialized practices built to transform complex business requirements into working software.
+                From high-speed web experiences to autonomous robotics, explore our 18 specialized practices built to transform complex business requirements into working software.
               </p>
             </div>
 
             <button
               onClick={() => onNavigate('/services')}
-              className="inline-flex items-center gap-2 text-xs font-bold text-[#1266E8] hover:text-[#0B5CD5] underline underline-offset-4"
+              className="inline-flex items-center gap-2 text-xs font-bold text-[#1266E8] hover:text-[#0B5CD5] underline underline-offset-4 cursor-pointer"
             >
-              <span>Explore All 13 Service Practices</span>
+              <span>Explore All 18 Service Practices</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -207,21 +250,23 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {servicesData.slice(0, 6).map((service, idx) => {
               const color = getCardColorToken(idx);
+              const ServiceIcon = getServiceIcon(service.slug);
 
               return (
                 <div
                   key={service.id}
                   onClick={() => onNavigate(`/services/${service.slug}` as PageRoute)}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs`}
+                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
                 >
                   <div>
-                    <div className="flex items-center justify-between text-xs mb-3.5">
+                    {/* Top Row with Category Badge & Icon */}
+                    <div className="flex items-center justify-between text-xs mb-4">
                       <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                         {service.category.toUpperCase()}
                       </span>
-                      <span className="text-[11px] font-mono bg-white/80 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200/80">
-                        0{idx + 1}
-                      </span>
+                      <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                        <ServiceIcon className="w-4.5 h-4.5" />
+                      </div>
                     </div>
 
                     <h3 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2.5 flex items-center justify-between">
@@ -285,7 +330,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <button
                   key={cat}
                   onClick={() => setSelectedProjectFilter(cat)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                     selectedProjectFilter === cat
                       ? 'bg-slate-900 text-white shadow-2xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -305,7 +350,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div
                   key={project.id}
                   onClick={() => onOpenCaseStudy(project)}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs`}
+                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
                 >
                   <div>
                     <div className="flex items-center justify-between text-xs mb-3.5">
@@ -351,7 +396,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="mt-12 text-center">
             <button
               onClick={() => onNavigate('/portfolio')}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 hover:border-slate-300 text-slate-800 text-xs font-semibold rounded-xl transition-all shadow-xs"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 hover:border-slate-300 text-slate-800 text-xs font-semibold rounded-xl transition-all shadow-xs cursor-pointer active:scale-98"
             >
               <span>Explore Complete Portfolio Directory</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -378,82 +423,92 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Step Selector List */}
+            {/* Step Selector List with Icons */}
             <div className="lg:col-span-5 space-y-2">
-              {processStages.map((stg, idx) => (
-                <button
-                  key={stg.step}
-                  onClick={() => setActiveProcessStep(idx)}
-                  className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-center gap-3 ${
-                    activeProcessStep === idx
-                      ? 'bg-slate-900 text-white border-slate-900 shadow-md'
-                      : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700'
-                  }`}
-                >
-                  <span
-                    className={`text-xs font-mono font-bold px-2 py-0.5 rounded-sm ${
+              {processStages.map((stg, idx) => {
+                const StepIcon = getProcessStepIcon(stg.step);
+                return (
+                  <button
+                    key={stg.step}
+                    onClick={() => setActiveProcessStep(idx)}
+                    className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-center gap-3 cursor-pointer ${
                       activeProcessStep === idx
-                        ? 'bg-[#04C8E8] text-slate-950'
-                        : 'bg-slate-100 text-slate-600'
+                        ? 'bg-slate-900 text-white border-slate-900 shadow-md'
+                        : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700'
                     }`}
                   >
-                    {stg.step}
-                  </span>
-                  <div className="flex-1">
-                    <div className="text-sm font-bold">{stg.title}</div>
-                    <div
-                      className={`text-[11px] truncate ${
-                        activeProcessStep === idx ? 'text-slate-300' : 'text-slate-500'
+                    <span
+                      className={`text-xs font-mono font-bold w-7 h-7 flex items-center justify-center rounded-lg ${
+                        activeProcessStep === idx
+                          ? 'bg-[#04C8E8] text-slate-950'
+                          : 'bg-slate-100 text-slate-600'
                       }`}
                     >
-                      {stg.tagline}
+                      <StepIcon className="w-4 h-4" />
+                    </span>
+                    <div className="flex-1">
+                      <div className="text-sm font-bold flex items-center gap-2">
+                        <span>{stg.step}. {stg.title}</span>
+                      </div>
+                      <div
+                        className={`text-[11px] truncate ${
+                          activeProcessStep === idx ? 'text-slate-300' : 'text-slate-500'
+                        }`}
+                      >
+                        {stg.tagline}
+                      </div>
                     </div>
-                  </div>
-                  <ChevronRight
-                    className={`w-4 h-4 ${
-                      activeProcessStep === idx ? 'text-[#04C8E8]' : 'text-slate-300'
-                    }`}
-                  />
-                </button>
-              ))}
+                    <ChevronRight
+                      className={`w-4 h-4 ${
+                        activeProcessStep === idx ? 'text-[#04C8E8]' : 'text-slate-300'
+                      }`}
+                    />
+                  </button>
+                );
+              })}
             </div>
 
-            {/* Stage Detail Display Card (Clean Light Enterprise Aesthetic) */}
-            <div className="lg:col-span-7 bg-white rounded-2xl p-8 sm:p-10 border border-slate-200 shadow-xl flex flex-col justify-between min-h-[380px]">
-              <div>
-                <div className="flex items-center justify-between text-xs font-mono text-slate-500 pb-4 border-b border-slate-200">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#1266E8]" />
-                    <span className="font-bold text-slate-800">STAGE {processStages[activeProcessStep].step} OF 07</span>
+            {/* Stage Detail Display Card with Visual Illustration */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="bg-white rounded-2xl p-8 sm:p-10 border border-slate-200 shadow-xl flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono text-slate-500 pb-4 border-b border-slate-200">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#1266E8] animate-pulse" />
+                      <span className="font-bold text-slate-800">STAGE {processStages[activeProcessStep].step} OF 07</span>
+                    </div>
+                    <span className="text-[#1266E8] font-bold bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
+                      IAMTECHNI_STANDARD
+                    </span>
                   </div>
-                  <span className="text-[#1266E8] font-bold bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
-                    IAMTECHNI_STANDARD
-                  </span>
+
+                  <div className="mt-6 mb-6">
+                    <h3 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">
+                      {processStages[activeProcessStep].title}
+                    </h3>
+                    <div className="text-sm font-semibold text-[#1266E8] mb-4">
+                      {processStages[activeProcessStep].tagline}
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed mb-6">
+                      {processStages[activeProcessStep].details}
+                    </p>
+
+                    {/* Integrated Interactive Visual for the Stage */}
+                    <ProcessStageVisual stageIndex={activeProcessStep} />
+                  </div>
                 </div>
 
-                <div className="mt-8">
-                  <h3 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">
-                    {processStages[activeProcessStep].title}
-                  </h3>
-                  <div className="text-sm font-semibold text-[#1266E8] mb-4">
-                    {processStages[activeProcessStep].tagline}
+                <div className="pt-6 border-t border-slate-200 flex items-center justify-between">
+                  <div className="text-xs text-slate-500">
+                    Continuous CI/CD quality gates &amp; peer reviews at every milestone.
                   </div>
-                  <p className="text-sm text-slate-600 leading-relaxed max-w-xl">
-                    {processStages[activeProcessStep].details}
-                  </p>
+                  <button
+                    onClick={() => onOpenProjectModal(`Process Discussion: Stage ${processStages[activeProcessStep].title}`)}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1266E8] hover:underline cursor-pointer"
+                  >
+                    Discuss Your Workflow <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-              </div>
-
-              <div className="pt-8 border-t border-slate-200 flex items-center justify-between">
-                <div className="text-xs text-slate-500">
-                  Continuous CI/CD quality gates &amp; peer reviews at every milestone.
-                </div>
-                <button
-                  onClick={() => onOpenProjectModal()}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1266E8] hover:underline cursor-pointer"
-                >
-                  Discuss Your Workflow <ArrowRight className="w-3.5 h-3.5" />
-                </button>
               </div>
             </div>
           </div>
@@ -482,8 +537,8 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-cyan-950 text-[#04C8E8] flex items-center justify-center mb-4">
+            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
+              <div className="w-10 h-10 rounded-xl bg-cyan-950 text-[#04C8E8] flex items-center justify-center mb-4 shadow-sm">
                 <Search className="w-5 h-5" />
               </div>
               <h3 className="text-base font-bold text-white mb-2">Private Document RAG</h3>
@@ -492,8 +547,8 @@ export const HomePage: React.FC<HomePageProps> = ({
               </p>
             </div>
 
-            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-blue-950 text-[#1266E8] flex items-center justify-center mb-4">
+            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
+              <div className="w-10 h-10 rounded-xl bg-blue-950 text-[#1266E8] flex items-center justify-center mb-4 shadow-sm">
                 <Cpu className="w-5 h-5" />
               </div>
               <h3 className="text-base font-bold text-white mb-2">Knowledge Assistants</h3>
@@ -502,8 +557,8 @@ export const HomePage: React.FC<HomePageProps> = ({
               </p>
             </div>
 
-            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-purple-950 text-[#5427D9] flex items-center justify-center mb-4">
+            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
+              <div className="w-10 h-10 rounded-xl bg-purple-950 text-[#5427D9] flex items-center justify-center mb-4 shadow-sm">
                 <Workflow className="w-5 h-5" />
               </div>
               <h3 className="text-base font-bold text-white mb-2">Workflow Automation</h3>
@@ -512,8 +567,8 @@ export const HomePage: React.FC<HomePageProps> = ({
               </p>
             </div>
 
-            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center mb-4">
+            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
+              <div className="w-10 h-10 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center mb-4 shadow-sm">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <h3 className="text-base font-bold text-white mb-2">Guardrails & Cost FinOps</h3>
@@ -527,7 +582,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <span>Every AI deployment is backed by privacy compliance, rate-limiting, and evaluation benchmarks.</span>
             <button
               onClick={() => onNavigate('/services/ai-machine-learning')}
-              className="text-[#04C8E8] hover:underline font-semibold flex items-center gap-1 shrink-0"
+              className="text-[#04C8E8] hover:underline font-semibold flex items-center gap-1 shrink-0 cursor-pointer"
             >
               Explore AI & Machine Learning Practice <ArrowRight className="w-3.5 h-3.5" />
             </button>
@@ -555,7 +610,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             <button
               onClick={() => onNavigate('/industries')}
-              className="text-xs font-bold text-[#1266E8] hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-[#1266E8] hover:underline flex items-center gap-1 cursor-pointer"
             >
               View All Industries <ArrowRight className="w-3.5 h-3.5" />
             </button>
@@ -564,14 +619,24 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {industriesData.slice(0, 6).map((ind, idx) => {
               const color = getCardColorToken(idx + 2);
+              const IndIcon = getIndustryIcon(ind.name);
 
               return (
                 <div
                   key={ind.id}
                   onClick={() => onNavigate('/industries')}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between shadow-2xs`}
+                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between shadow-2xs interactive-card-lift`}
                 >
                   <div>
+                    <div className="flex items-center justify-between text-xs mb-3.5">
+                      <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                        SECTOR 0{idx + 1}
+                      </span>
+                      <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                        <IndIcon className="w-4.5 h-4.5" />
+                      </div>
+                    </div>
+
                     <h3 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2">
                       {ind.name}
                     </h3>
@@ -634,7 +699,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <article
                   key={art.slug}
                   onClick={() => onNavigate(`/insights/${art.slug}` as PageRoute)}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all cursor-pointer group shadow-2xs`}
+                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all cursor-pointer group shadow-2xs interactive-card-lift`}
                 >
                   <div>
                     <div className="flex items-center gap-2 text-xs mb-3">
@@ -675,6 +740,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-slate-900 border border-slate-800 rounded-full text-xs font-mono text-[#04C8E8]">
+            <Sparkles className="w-3.5 h-3.5" />
             <span>READY TO COLLABORATE</span>
           </div>
 
@@ -689,7 +755,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
             <button
               onClick={() => onOpenProjectModal()}
-              className="inline-flex items-center gap-2.5 px-8 py-4 text-sm font-semibold text-white bg-gradient-to-r from-[#1266E8] to-[#5427D9] hover:opacity-95 rounded-xl transition-all shadow-lg active:scale-[0.98]"
+              className="inline-flex items-center gap-2.5 px-8 py-4 text-sm font-semibold text-white bg-gradient-to-r from-[#1266E8] to-[#5427D9] hover:opacity-95 rounded-xl transition-all shadow-lg active:scale-[0.98] cursor-pointer"
             >
               <span>Discuss Your Project</span>
               <ArrowRight className="w-4 h-4" />
@@ -697,7 +763,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             <button
               onClick={() => onNavigate('/contact')}
-              className="inline-flex items-center gap-2 px-8 py-4 text-sm font-semibold text-slate-300 bg-slate-900/90 hover:bg-slate-800 border border-slate-800 rounded-xl transition-all"
+              className="inline-flex items-center gap-2 px-8 py-4 text-sm font-semibold text-slate-300 bg-slate-900/90 hover:bg-slate-800 border border-slate-800 rounded-xl transition-all cursor-pointer"
             >
               <span>Contact IAMTECHNI</span>
             </button>

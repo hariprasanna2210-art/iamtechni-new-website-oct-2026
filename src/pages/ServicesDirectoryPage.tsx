@@ -4,6 +4,7 @@ import { PageRoute } from '../types';
 import { PageHero } from '../components/common/PageHero';
 import { servicesData } from '../data/servicesData';
 import { getCardColorToken } from '../utils/cardColorTokens';
+import { getServiceIcon } from '../utils/serviceIcons';
 
 interface ServicesDirectoryPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -144,22 +145,23 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
               {filteredServices.map((service, idx) => {
                 // Deterministic color assignment cycling through 8 distinct palettes
                 const color = getCardColorToken(idx);
+                const ServiceIcon = getServiceIcon(service.slug);
 
                 return (
                   <div
                     key={service.id}
                     onClick={() => onNavigate(`/services/${service.slug}` as PageRoute)}
-                    className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-xs`}
+                    className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-xs interactive-card-lift`}
                   >
                     <div>
-                      {/* Top Category Badge & Slug Pill */}
-                      <div className="flex items-center justify-between text-xs mb-3.5">
+                      {/* Top Category Badge & Icon */}
+                      <div className="flex items-center justify-between text-xs mb-4">
                         <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                           {service.category.toUpperCase()}
                         </span>
-                        <span className="text-[11px] font-mono bg-white/80 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200/80">
-                          {service.slug}
-                        </span>
+                        <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                          <ServiceIcon className="w-4.5 h-4.5" />
+                        </div>
                       </div>
 
                       <h2 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2.5 flex items-center justify-between">
