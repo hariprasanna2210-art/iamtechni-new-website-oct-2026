@@ -23,20 +23,18 @@ export interface ScrollRevealItemProps {
 
 /**
  * Container variant that controls staggered reveal of child elements
+ * Crucial: Do NOT set opacity: 0 on the container, as hiding a tall card grid
+ * causes a massive empty blank space until intersection threshold is satisfied.
  */
 const createContainerVariants = (
-  staggerChildren = 0.12,
-  delayChildren = 0.05
+  staggerChildren = 0.08,
+  delayChildren = 0.02
 ): Variants => ({
-  hidden: {
-    opacity: 0,
-  },
+  hidden: {},
   visible: {
-    opacity: 1,
     transition: {
       staggerChildren,
       delayChildren,
-      when: 'beforeChildren',
     },
   },
 });
@@ -45,8 +43,8 @@ const createContainerVariants = (
  * Child item variant for staggered fade-up
  */
 const createItemVariants = (
-  duration = 0.55,
-  yOffset = 24
+  duration = 0.45,
+  yOffset = 18
 ): Variants => ({
   hidden: {
     opacity: 0,
@@ -69,10 +67,10 @@ const createItemVariants = (
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
   className = '',
-  staggerChildren = 0.12,
-  delayChildren = 0.05,
+  staggerChildren = 0.08,
+  delayChildren = 0.02,
   once = true,
-  amount = 0.15,
+  amount = 'some',
   as = 'div',
 }) => {
   const shouldReduceMotion = useReducedMotion();
@@ -90,7 +88,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
       variants={createContainerVariants(staggerChildren, delayChildren)}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, amount }}
+      viewport={{ once, amount, margin: '0px 0px -40px 0px' }}
       className={className}
     >
       {children}
@@ -105,8 +103,8 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
 export const ScrollRevealItem: React.FC<ScrollRevealItemProps> = ({
   children,
   className = '',
-  duration = 0.55,
-  yOffset = 24,
+  duration = 0.45,
+  yOffset = 18,
   as = 'div',
 }) => {
   const shouldReduceMotion = useReducedMotion();
@@ -145,10 +143,10 @@ export const ScrollRevealSection: React.FC<ScrollRevealSectionProps> = ({
   children,
   className = '',
   delay = 0,
-  duration = 0.6,
-  yOffset = 28,
+  duration = 0.5,
+  yOffset = 20,
   once = true,
-  amount = 0.15,
+  amount = 'some',
 }) => {
   const shouldReduceMotion = useReducedMotion();
 

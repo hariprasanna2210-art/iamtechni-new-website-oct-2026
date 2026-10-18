@@ -245,7 +245,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
       {/* ======================================================================= */}
       {/* 1. HERO SECTION: Technology Education & Learning                       */}
       {/* ======================================================================= */}
-      <section className="relative overflow-hidden border-b border-slate-200 py-16 lg:py-24 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-white">
+      <section className="relative overflow-hidden border-b border-slate-200 py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-white">
         {/* Layered Ambient Glows */}
         <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-gradient-to-tr from-[#04C8E8]/20 via-[#1266E8]/15 to-[#5427D9]/20 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute -bottom-10 left-10 w-[300px] h-[250px] bg-gradient-to-tr from-[#04C8E8]/10 to-transparent rounded-full blur-[80px] pointer-events-none" />
@@ -322,8 +322,8 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
       {/* ======================================================================= */}
       {/* 2. COURSE CATALOG (13 Individual Colorful Cards)                       */}
       {/* ======================================================================= */}
-      <section ref={catalogRef} id="courses-catalog" className="py-24 bg-[#F4F7FC] border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <section ref={catalogRef} id="courses-catalog" className="py-14 sm:py-16 lg:py-20 bg-[#F4F7FC] border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           {/* Header & Filter Bar */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-4 border-b border-slate-200">
             <div>
@@ -357,7 +357,12 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
           </div>
 
           {/* Staggered Course Cards Grid */}
-          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.08}>
+          <ScrollReveal
+            key={selectedCategory}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+            staggerChildren={0.06}
+            amount="some"
+          >
             {filteredCourses.map((course, idx) => {
               const color = getCardColorToken(course.colorIndex);
               const CourseIcon = getCourseIconComponent(course.iconName);
@@ -365,7 +370,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
               return (
                 <ScrollRevealItem key={course.id} className="h-full">
                   <div
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 shadow-2xs interactive-card-lift group`}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-6 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 shadow-2xs interactive-card-lift group`}
                   >
                     <div>
                       {/* Top Meta Bar */}
@@ -443,9 +448,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
       {/* ======================================================================= */}
       {/* 3. CHOOSE YOUR LEARNING PATH                                            */}
       {/* ======================================================================= */}
-      <section className="py-20 bg-white border-b border-slate-200">
+      <section className="py-14 sm:py-16 lg:py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-14">
+          <div className="max-w-3xl mb-10">
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
               Structured Trajectories
             </div>
@@ -457,10 +462,10 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
             </p>
           </div>
 
-          <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.1}>
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8" staggerChildren={0.08} amount="some">
             {/* Path 1: Software & Web Development */}
             <ScrollRevealItem className="h-full">
-              <div className="bg-[#EAF3FF] h-full rounded-2xl p-7 border border-blue-200/90 shadow-2xs flex flex-col justify-between interactive-card-lift">
+              <div className="bg-[#EAF3FF] h-full rounded-2xl p-6 sm:p-7 border border-blue-200/90 shadow-2xs flex flex-col justify-between interactive-card-lift">
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold bg-blue-100 text-[#1266E8] border border-blue-300">
@@ -502,7 +507,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
 
             {/* Path 2: Cloud Computing & Infrastructure */}
             <ScrollRevealItem className="h-full">
-              <div className="bg-[#E4FAFF] h-full rounded-2xl p-7 border border-cyan-200/90 shadow-2xs flex flex-col justify-between interactive-card-lift">
+              <div className="bg-[#E4FAFF] h-full rounded-2xl p-6 sm:p-7 border border-cyan-200/90 shadow-2xs flex flex-col justify-between interactive-card-lift">
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold bg-cyan-100 text-[#0284C7] border border-cyan-300">
@@ -544,7 +549,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
 
             {/* Path 3: AI, Machine Learning & Generative AI */}
             <ScrollRevealItem className="h-full">
-              <div className="bg-[#F0EAFF] h-full rounded-2xl p-7 border border-violet-200/90 shadow-2xs flex flex-col justify-between interactive-card-lift">
+              <div className="bg-[#F0EAFF] h-full rounded-2xl p-6 sm:p-7 border border-violet-200/90 shadow-2xs flex flex-col justify-between interactive-card-lift">
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold bg-violet-100 text-[#7C3AED] border border-violet-300">
@@ -590,9 +595,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
       {/* ======================================================================= */}
       {/* 4. PRACTICAL LEARNING APPROACH                                          */}
       {/* ======================================================================= */}
-      <section className="py-20 bg-[#F5F8FC] border-b border-slate-200">
+      <section className="py-14 sm:py-16 lg:py-20 bg-[#F5F8FC] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-14">
+          <div className="max-w-3xl mb-10">
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
               Methodology
             </div>
@@ -651,9 +656,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
       {/* ======================================================================= */}
       {/* 5. WHO CAN JOIN?                                                        */}
       {/* ======================================================================= */}
-      <section className="py-20 bg-white border-b border-slate-200">
+      <section className="py-14 sm:py-16 lg:py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-12">
+          <div className="max-w-3xl mb-10">
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
               Target Audiences
             </div>
@@ -712,7 +717,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
       {/* ======================================================================= */}
       {/* 6. COURSE ENQUIRY FORM SECTION                                         */}
       {/* ======================================================================= */}
-      <section ref={enquiryFormRef} id="enquiry-form" className="py-24 bg-[#F4F7FC] border-b border-slate-200">
+      <section ref={enquiryFormRef} id="enquiry-form" className="py-14 sm:py-16 lg:py-20 bg-[#F4F7FC] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             {/* Left Column: Form Details & Quick WhatsApp alternative */}
@@ -1053,9 +1058,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
       {/* ======================================================================= */}
       {/* 7. HOW ENQUIRY WORKS                                                    */}
       {/* ======================================================================= */}
-      <section className="py-20 bg-white border-b border-slate-200">
+      <section className="py-14 sm:py-16 lg:py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-14">
+          <div className="max-w-3xl mb-10">
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
               Admission Workflow
             </div>
@@ -1114,7 +1119,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
       {/* ======================================================================= */}
       {/* 8. FREQUENTLY ASKED QUESTIONS                                           */}
       {/* ======================================================================= */}
-      <section className="py-20 bg-[#F4F7FC] border-b border-slate-200">
+      <section className="py-14 sm:py-16 lg:py-20 bg-[#F4F7FC] border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-2">
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold">
@@ -1169,7 +1174,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
       {/* ======================================================================= */}
       {/* 9. FINAL CALL TO ACTION (Luminous Section with WhatsApp & Enquiry)       */}
       {/* ======================================================================= */}
-      <section className="py-24 bg-[#090D1A] text-white relative overflow-hidden">
+      <section className="py-16 sm:py-20 lg:py-24 bg-[#090D1A] text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#1266E8]/20 via-transparent to-[#5427D9]/20 pointer-events-none" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-6">
