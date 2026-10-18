@@ -137,7 +137,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
 
           {/* Footer Actions */}
           <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-xs text-slate-500">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
               <span>Related Services:</span>
               {project.relatedServices.map((rel, idx) => (
                 <button

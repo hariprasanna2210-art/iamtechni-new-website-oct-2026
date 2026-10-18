@@ -16,16 +16,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
     <footer className="bg-[#080B11] text-white border-t border-slate-800/80 pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Prominent Direct Contact Highlight Bar */}
-        <div className="mb-14 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-[#0e1628] border border-slate-800 shadow-xl">
+        <div className="mb-14 p-4 sm:p-8 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-[#0e1628] border border-slate-800 shadow-xl overflow-hidden">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-1.5">
-              <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
                 <span className="text-[#04C8E8] font-bold uppercase tracking-wider">
                   Direct Inquiries & Project Discovery
                 </span>
-                <span className="text-slate-500">·</span>
-                <span className="text-slate-400">Response within 24 hours</span>
+                <span className="text-slate-500 hidden sm:inline">·</span>
+                <span className="text-slate-400 block sm:inline">Response within 24 hours</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-bold text-white">
                 Have a project or technology requirement in mind?
@@ -414,7 +414,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
             © {currentYear} IAMTECHNI. All rights reserved. Technology that moves your business forward.
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <button
               onClick={() => onNavigate('/privacy-policy')}
               className="hover:text-slate-300 transition-colors cursor-pointer"
@@ -427,9 +427,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
             >
               Terms of Use
             </button>
-            <span className="text-slate-700">·</span>
+            <span className="text-slate-700 hidden sm:inline">·</span>
             <span className="text-slate-500 font-mono">+91-7418120053</span>
-            <span className="text-slate-700">·</span>
+            <span className="text-slate-700 hidden sm:inline">·</span>
             <span className="text-slate-500 font-mono">iamtechni.in</span>
           </div>
         </div>

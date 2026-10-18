@@ -41,6 +41,7 @@ import { industriesData } from '../data/industriesData';
 import { ColorfulMultiServiceHero } from '../components/home/ColorfulMultiServiceHero';
 import { DigitalEcosystemIllustration } from '../components/home/DigitalEcosystemIllustration';
 import { ProcessStageVisual } from '../components/common/TechIllustrations';
+import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
 
@@ -150,53 +151,59 @@ export const HomePage: React.FC<HomePageProps> = ({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.15}>
             {/* Advantage 1 - Blue (#EAF3FF) */}
-            <div className="bg-[#EAF3FF] rounded-2xl p-8 border border-blue-200/90 shadow-xs hover:shadow-md hover:border-blue-300 transition-all relative overflow-hidden group interactive-card-lift">
-              <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                <Code2 className="w-6 h-6" />
+            <ScrollRevealItem className="h-full">
+              <div className="bg-[#EAF3FF] h-full rounded-2xl p-8 border border-blue-200/90 shadow-xs hover:shadow-md hover:border-blue-300 transition-all relative overflow-hidden group interactive-card-lift">
+                <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
+                  <Code2 className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  Modern Software Craftsmanship
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  We write clean, strongly-typed TypeScript and Python code, enforce component modularity, and create architectures designed for maintainability and rapid onboarding.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">
-                Modern Software Craftsmanship
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                We write clean, strongly-typed TypeScript and Python code, enforce component modularity, and create architectures designed for maintainability and rapid onboarding.
-              </p>
-            </div>
+            </ScrollRevealItem>
 
             {/* Advantage 2 - Violet (#F0EAFF) */}
-            <div className="bg-[#F0EAFF] rounded-2xl p-8 border border-violet-200/90 shadow-xs hover:shadow-md hover:border-violet-300 transition-all relative overflow-hidden group interactive-card-lift">
-              <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                <Cpu className="w-6 h-6" />
+            <ScrollRevealItem className="h-full">
+              <div className="bg-[#F0EAFF] h-full rounded-2xl p-8 border border-violet-200/90 shadow-xs hover:shadow-md hover:border-violet-300 transition-all relative overflow-hidden group interactive-card-lift">
+                <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
+                  <Cpu className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  Practical, Grounded Intelligence
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  We deploy Retrieval-Augmented Generation (RAG) and private document search with strict citation traceability, ensuring your proprietary data never leaks into public models.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">
-                Practical, Grounded Intelligence
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                We deploy Retrieval-Augmented Generation (RAG) and private document search with strict citation traceability, ensuring your proprietary data never leaks into public models.
-              </p>
-            </div>
+            </ScrollRevealItem>
 
             {/* Advantage 3 - Teal (#E1F8F2) */}
-            <div className="bg-[#E1F8F2] rounded-2xl p-8 border border-teal-200/90 shadow-xs hover:shadow-md hover:border-teal-300 transition-all relative overflow-hidden group interactive-card-lift">
-              <div className="w-12 h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                <ShieldCheck className="w-6 h-6" />
+            <ScrollRevealItem className="h-full">
+              <div className="bg-[#E1F8F2] h-full rounded-2xl p-8 border border-teal-200/90 shadow-xs hover:shadow-md hover:border-teal-300 transition-all relative overflow-hidden group interactive-card-lift">
+                <div className="w-12 h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
+                  <ShieldCheck className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  Enterprise Reliability &amp; Security
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  Automated CI/CD deployment pipelines, defensive hardening, OWASP security best practices, and proactive cloud FinOps governance that prevent budget surprises.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">
-                Enterprise Reliability &amp; Security
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                Automated CI/CD deployment pipelines, defensive hardening, OWASP security best practices, and proactive cloud FinOps governance that prevent budget surprises.
-              </p>
-            </div>
-          </div>
+            </ScrollRevealItem>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ========================================================================= */}
       {/* 2.5 3D DIGITAL TECHNOLOGY ECOSYSTEM ARCHITECTURE ILLUSTRATION SECTION     */}
       {/* ========================================================================= */}
-      <section className="py-20 bg-gradient-to-b from-white via-slate-50/50 to-white border-b border-slate-200">
+      <ScrollRevealSection className="py-20 bg-gradient-to-b from-white via-slate-50/50 to-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center space-y-3 mb-10">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-100 text-[#0284C7] text-xs font-mono uppercase tracking-widest font-bold">
@@ -218,10 +225,10 @@ export const HomePage: React.FC<HomePageProps> = ({
             />
           </div>
         </div>
-      </section>
+      </ScrollRevealSection>
 
       {/* ========================================================================= */}
-      {/* 3. CAPABILITIES DIRECTORY (Vibrant Card Grid with Color Highlights)        */}
+      {/* 3. CAPABILITIES DIRECTORY (Vibrant Card Grid with Staggered ScrollReveal)  */}
       {/* ========================================================================= */}
       <section className="py-24 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -247,67 +254,68 @@ export const HomePage: React.FC<HomePageProps> = ({
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.1}>
             {servicesData.slice(0, 6).map((service, idx) => {
               const color = getCardColorToken(idx);
               const ServiceIcon = getServiceIcon(service.slug);
 
               return (
-                <div
-                  key={service.id}
-                  onClick={() => onNavigate(`/services/${service.slug}` as PageRoute)}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
-                >
-                  <div>
-                    {/* Top Row with Category Badge & Icon */}
-                    <div className="flex items-center justify-between text-xs mb-4">
-                      <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                        {service.category.toUpperCase()}
-                      </span>
-                      <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
-                        <ServiceIcon className="w-4.5 h-4.5" />
-                      </div>
-                    </div>
-
-                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2.5 flex items-center justify-between">
-                      <span>{service.title}</span>
-                      <span className={`w-2 h-2 rounded-full ${color.dotBg} shrink-0 opacity-80 group-hover:scale-125 transition-transform`} />
-                    </h3>
-
-                    <p className="text-xs text-slate-700 leading-relaxed mb-6 line-clamp-3">
-                      {service.summary}
-                    </p>
-
-                    <div className="space-y-2 mb-6">
-                      <div className="text-[11px] font-bold text-slate-700 uppercase font-mono">
-                        Key Capabilities:
-                      </div>
-                      {service.capabilities.slice(0, 3).map((cap, cIdx) => (
-                        <div key={cIdx} className="flex items-center gap-2 text-xs text-slate-700">
-                          <span className={`w-1.5 h-1.5 rounded-full ${color.dotBg}`} />
-                          <span className="line-clamp-1">{cap.title}</span>
+                <ScrollRevealItem key={service.id} className="h-full">
+                  <div
+                    onClick={() => onNavigate(`/services/${service.slug}` as PageRoute)}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
+                  >
+                    <div>
+                      {/* Top Row with Category Badge & Icon */}
+                      <div className="flex items-center justify-between text-xs mb-4">
+                        <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                          {service.category.toUpperCase()}
+                        </span>
+                        <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                          <ServiceIcon className="w-4.5 h-4.5" />
                         </div>
-                      ))}
+                      </div>
+
+                      <h3 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2.5 flex items-center justify-between">
+                        <span>{service.title}</span>
+                        <span className={`w-2 h-2 rounded-full ${color.dotBg} shrink-0 opacity-80 group-hover:scale-125 transition-transform`} />
+                      </h3>
+
+                      <p className="text-xs text-slate-700 leading-relaxed mb-6 line-clamp-3">
+                        {service.summary}
+                      </p>
+
+                      <div className="space-y-2 mb-6">
+                        <div className="text-[11px] font-bold text-slate-700 uppercase font-mono">
+                          Key Capabilities:
+                        </div>
+                        {service.capabilities.slice(0, 3).map((cap, cIdx) => (
+                          <div key={cIdx} className="flex items-center gap-2 text-xs text-slate-700">
+                            <span className={`w-1.5 h-1.5 rounded-full ${color.dotBg}`} />
+                            <span className="line-clamp-1">{cap.title}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold">
+                      <span className={`${color.accentText} flex items-center gap-1.5 group-hover:translate-x-1 transition-transform`}>
+                        View Service Details <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
+                      <span className="text-slate-500 font-mono text-[11px] bg-white/70 px-2 py-0.5 rounded border border-slate-200/60">
+                        {service.technologies[0]}
+                      </span>
                     </div>
                   </div>
-
-                  <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold">
-                    <span className={`${color.accentText} flex items-center gap-1.5 group-hover:translate-x-1 transition-transform`}>
-                      View Service Details <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                    <span className="text-slate-500 font-mono text-[11px] bg-white/70 px-2 py-0.5 rounded border border-slate-200/60">
-                      {service.technologies[0]}
-                    </span>
-                  </div>
-                </div>
+                </ScrollRevealItem>
               );
             })}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* 4. FEATURED PROJECTS (High-Impact Filterable Showcase)                    */}
+      {/* 4. FEATURED PROJECTS (High-Impact Filterable Showcase with ScrollReveal)  */}
       {/* ========================================================================= */}
       <section className="py-24 bg-[#F5F8FC] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -325,7 +333,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Filter Tabs */}
-            <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs">
+            <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs max-w-full overflow-x-auto">
               {['All', 'E-commerce', 'AI & ML', 'Custom Software', 'Cloud & DevOps'].map((cat) => (
                 <button
                   key={cat}
@@ -342,56 +350,57 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.12}>
             {filteredProjects.map((project, idx) => {
               const color = getCardColorToken(idx + 1);
 
               return (
-                <div
-                  key={project.id}
-                  onClick={() => onOpenCaseStudy(project)}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between text-xs mb-3.5">
-                      <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                        {project.category}
-                      </span>
-                      <span className="text-[11px] font-mono bg-white/80 text-slate-700 px-2.5 py-0.5 rounded-md border border-slate-200/80 font-medium">
-                        {project.clientBadge}
-                      </span>
-                    </div>
-
-                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-2">
-                      {project.title}
-                    </h3>
-
-                    <p className="text-xs text-slate-700 leading-relaxed mb-4 line-clamp-3">
-                      {project.tagline}
-                    </p>
-
-                    <div className="flex flex-wrap gap-1.5 mb-6">
-                      {project.techStack.slice(0, 4).map((tech, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-0.5 text-[11px] font-mono bg-white/90 text-slate-700 rounded-md border border-slate-200/90"
-                        >
-                          {tech}
+                <ScrollRevealItem key={project.id} className="h-full">
+                  <div
+                    onClick={() => onOpenCaseStudy(project)}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between text-xs mb-3.5">
+                        <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                          {project.category}
                         </span>
-                      ))}
+                        <span className="text-[11px] font-mono bg-white/80 text-slate-700 px-2.5 py-0.5 rounded-md border border-slate-200/80 font-medium">
+                          {project.clientBadge}
+                        </span>
+                      </div>
+
+                      <h3 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-2">
+                        {project.title}
+                      </h3>
+
+                      <p className="text-xs text-slate-700 leading-relaxed mb-4 line-clamp-3">
+                        {project.tagline}
+                      </p>
+
+                      <div className="flex flex-wrap gap-1.5 mb-6">
+                        {project.techStack.slice(0, 4).map((tech, i) => (
+                          <span
+                            key={i}
+                            className="px-2 py-0.5 text-[11px] font-mono bg-white/90 text-slate-700 rounded-md border border-slate-200/90"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs">
+                      <span className="text-slate-600 font-medium text-[11px]">{project.industry}</span>
+                      <span className={`${color.accentText} font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform`}>
+                        View Case Study <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
                     </div>
                   </div>
-
-                  <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs">
-                    <span className="text-slate-600 font-medium text-[11px]">{project.industry}</span>
-                    <span className={`${color.accentText} font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform`}>
-                      View Case Study <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                </div>
+                </ScrollRevealItem>
               );
             })}
-          </div>
+          </ScrollReveal>
 
           <div className="mt-12 text-center">
             <button
@@ -498,7 +507,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </div>
                 </div>
 
-                <div className="pt-6 border-t border-slate-200 flex items-center justify-between">
+                <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="text-xs text-slate-500">
                     Continuous CI/CD quality gates &amp; peer reviews at every milestone.
                   </div>
@@ -536,47 +545,55 @@ export const HomePage: React.FC<HomePageProps> = ({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
-              <div className="w-10 h-10 rounded-xl bg-cyan-950 text-[#04C8E8] flex items-center justify-center mb-4 shadow-sm">
-                <Search className="w-5 h-5" />
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" staggerChildren={0.1}>
+            <ScrollRevealItem className="h-full">
+              <div className="bg-[#10162A] h-full border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
+                <div className="w-10 h-10 rounded-xl bg-cyan-950 text-[#04C8E8] flex items-center justify-center mb-4 shadow-sm">
+                  <Search className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Private Document RAG</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Query thousands of internal contracts, SOPs, and engineering manuals with verifiable source page citations.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-white mb-2">Private Document RAG</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Query thousands of internal contracts, SOPs, and engineering manuals with verifiable source page citations.
-              </p>
-            </div>
+            </ScrollRevealItem>
 
-            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
-              <div className="w-10 h-10 rounded-xl bg-blue-950 text-[#1266E8] flex items-center justify-center mb-4 shadow-sm">
-                <Cpu className="w-5 h-5" />
+            <ScrollRevealItem className="h-full">
+              <div className="bg-[#10162A] h-full border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
+                <div className="w-10 h-10 rounded-xl bg-blue-950 text-[#1266E8] flex items-center justify-center mb-4 shadow-sm">
+                  <Cpu className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Knowledge Assistants</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Domain-specific assistants trained on your proprietary processes without leaking data to public training sets.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-white mb-2">Knowledge Assistants</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Domain-specific assistants trained on your proprietary processes without leaking data to public training sets.
-              </p>
-            </div>
+            </ScrollRevealItem>
 
-            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
-              <div className="w-10 h-10 rounded-xl bg-purple-950 text-[#5427D9] flex items-center justify-center mb-4 shadow-sm">
-                <Workflow className="w-5 h-5" />
+            <ScrollRevealItem className="h-full">
+              <div className="bg-[#10162A] h-full border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
+                <div className="w-10 h-10 rounded-xl bg-purple-950 text-[#5427D9] flex items-center justify-center mb-4 shadow-sm">
+                  <Workflow className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Workflow Automation</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Automated document extraction, invoice classification, and human-in-the-loop review queues.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-white mb-2">Workflow Automation</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Automated document extraction, invoice classification, and human-in-the-loop review queues.
-              </p>
-            </div>
+            </ScrollRevealItem>
 
-            <div className="bg-[#10162A] border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
-              <div className="w-10 h-10 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center mb-4 shadow-sm">
-                <ShieldCheck className="w-5 h-5" />
+            <ScrollRevealItem className="h-full">
+              <div className="bg-[#10162A] h-full border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
+                <div className="w-10 h-10 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center mb-4 shadow-sm">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Guardrails & Cost FinOps</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Cost-aware token budgeting, prompt caching, and defensive filters against prompt injection attacks.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-white mb-2">Guardrails & Cost FinOps</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Cost-aware token budgeting, prompt caching, and defensive filters against prompt injection attacks.
-              </p>
-            </div>
-          </div>
+            </ScrollRevealItem>
+          </ScrollReveal>
 
           <div className="mt-10 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
             <span>Every AI deployment is backed by privacy compliance, rate-limiting, and evaluation benchmarks.</span>
@@ -591,7 +608,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. INDUSTRIES SERVED                                                      */}
+      {/* 7. INDUSTRIES SERVED (Staggered ScrollReveal)                             */}
       {/* ========================================================================= */}
       <section className="py-24 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -616,57 +633,58 @@ export const HomePage: React.FC<HomePageProps> = ({
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.1}>
             {industriesData.slice(0, 6).map((ind, idx) => {
               const color = getCardColorToken(idx + 2);
               const IndIcon = getIndustryIcon(ind.name);
 
               return (
-                <div
-                  key={ind.id}
-                  onClick={() => onNavigate('/industries')}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between shadow-2xs interactive-card-lift`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between text-xs mb-3.5">
-                      <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                        SECTOR 0{idx + 1}
-                      </span>
-                      <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
-                        <IndIcon className="w-4.5 h-4.5" />
+                <ScrollRevealItem key={ind.id} className="h-full">
+                  <div
+                    onClick={() => onNavigate('/industries')}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between shadow-2xs interactive-card-lift`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between text-xs mb-3.5">
+                        <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                          SECTOR 0{idx + 1}
+                        </span>
+                        <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                          <IndIcon className="w-4.5 h-4.5" />
+                        </div>
+                      </div>
+
+                      <h3 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2">
+                        {ind.name}
+                      </h3>
+                      <p className="text-xs text-slate-700 leading-relaxed mb-4">
+                        {ind.summary}
+                      </p>
+
+                      <div className="space-y-1.5 text-xs text-slate-700">
+                        <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wide">
+                          Core Challenge Addressed:
+                        </div>
+                        <div className="text-[11px] text-slate-600 line-clamp-2">
+                          {ind.coreChallenges[0]}
+                        </div>
                       </div>
                     </div>
 
-                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2">
-                      {ind.name}
-                    </h3>
-                    <p className="text-xs text-slate-700 leading-relaxed mb-4">
-                      {ind.summary}
-                    </p>
-
-                    <div className="space-y-1.5 text-xs text-slate-700">
-                      <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wide">
-                        Core Challenge Addressed:
-                      </div>
-                      <div className="text-[11px] text-slate-600 line-clamp-2">
-                        {ind.coreChallenges[0]}
-                      </div>
+                    <div className={`pt-4 mt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold ${color.accentText}`}>
+                      <span>Explore Industry Solutions</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
-
-                  <div className={`pt-4 mt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold ${color.accentText}`}>
-                    <span>Explore Industry Solutions</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
+                </ScrollRevealItem>
               );
             })}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* 8. LATEST ENGINEERING INSIGHTS                                            */}
+      {/* 8. LATEST ENGINEERING INSIGHTS (Staggered ScrollReveal)                   */}
       {/* ========================================================================= */}
       <section className="py-24 bg-[#F5F8FC] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -691,44 +709,45 @@ export const HomePage: React.FC<HomePageProps> = ({
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.15}>
             {insightsData.map((art, idx) => {
               const color = getCardColorToken(idx + 3);
 
               return (
-                <article
-                  key={art.slug}
-                  onClick={() => onNavigate(`/insights/${art.slug}` as PageRoute)}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all cursor-pointer group shadow-2xs interactive-card-lift`}
-                >
-                  <div>
-                    <div className="flex items-center gap-2 text-xs mb-3">
-                      <span className={`font-mono font-bold px-2 py-0.5 rounded text-[11px] ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                        {art.category}
-                      </span>
-                      <span className="text-slate-400" aria-hidden="true">·</span>
-                      <span className="text-slate-500 font-mono text-[11px]">{art.readTime}</span>
+                <ScrollRevealItem key={art.slug} className="h-full">
+                  <article
+                    onClick={() => onNavigate(`/insights/${art.slug}` as PageRoute)}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all cursor-pointer group shadow-2xs interactive-card-lift`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-2 text-xs mb-3">
+                        <span className={`font-mono font-bold px-2 py-0.5 rounded text-[11px] ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                          {art.category}
+                        </span>
+                        <span className="text-slate-400" aria-hidden="true">·</span>
+                        <span className="text-slate-500 font-mono text-[11px]">{art.readTime}</span>
+                      </div>
+
+                      <h3 className="text-base font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-3">
+                        {art.title}
+                      </h3>
+
+                      <p className="text-xs text-slate-700 leading-relaxed mb-6 line-clamp-3">
+                        {art.excerpt}
+                      </p>
                     </div>
 
-                    <h3 className="text-base font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-3">
-                      {art.title}
-                    </h3>
-
-                    <p className="text-xs text-slate-700 leading-relaxed mb-6 line-clamp-3">
-                      {art.excerpt}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
-                    <span className="font-mono text-[11px]">{art.publishedDate}</span>
-                    <span className={`${color.accentText} font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform`}>
-                      Read Article <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                </article>
+                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
+                      <span className="font-mono text-[11px]">{art.publishedDate}</span>
+                      <span className={`${color.accentText} font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform`}>
+                        Read Article <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
+                    </div>
+                  </article>
+                </ScrollRevealItem>
               );
             })}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 

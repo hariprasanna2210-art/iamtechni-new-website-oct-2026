@@ -23,6 +23,7 @@ import {
 import { PageRoute } from '../types';
 import { PageHero } from '../components/common/PageHero';
 import { getCardColorToken } from '../utils/cardColorTokens';
+import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 
 interface AboutPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -135,27 +136,31 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
       {/* Mission & Vision with Distinct Coordinated Pastel Cards */}
       <section className="py-20 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FE] to-[#F0FDFA] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-[#EAF3FF] rounded-2xl p-8 sm:p-10 border border-blue-200/90 shadow-sm space-y-4 interactive-card-lift">
-              <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
-                <Target className="w-6 h-6" />
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 gap-8" staggerChildren={0.15}>
+            <ScrollRevealItem className="h-full">
+              <div className="h-full bg-[#EAF3FF] rounded-2xl p-8 sm:p-10 border border-blue-200/90 shadow-sm space-y-4 interactive-card-lift">
+                <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
+                  <Target className="w-6 h-6" />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-900">Our Mission</h2>
+                <p className="text-sm text-slate-700 leading-relaxed">
+                  To turn complex technical challenges into purposeful, reliable digital solutions that advance our clients’ operations, elevate customer experiences, and build long-term business value.
+                </p>
               </div>
-              <h2 className="text-2xl font-bold text-slate-900">Our Mission</h2>
-              <p className="text-sm text-slate-700 leading-relaxed">
-                To turn complex technical challenges into purposeful, reliable digital solutions that advance our clients’ operations, elevate customer experiences, and build long-term business value.
-              </p>
-            </div>
+            </ScrollRevealItem>
 
-            <div className="bg-[#F0EAFF] rounded-2xl p-8 sm:p-10 border border-violet-200/90 shadow-sm space-y-4 interactive-card-lift">
-              <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center shadow-xs">
-                <Eye className="w-6 h-6" />
+            <ScrollRevealItem className="h-full">
+              <div className="h-full bg-[#F0EAFF] rounded-2xl p-8 sm:p-10 border border-violet-200/90 shadow-sm space-y-4 interactive-card-lift">
+                <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center shadow-xs">
+                  <Eye className="w-6 h-6" />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-900">Our Vision</h2>
+                <p className="text-sm text-slate-700 leading-relaxed">
+                  To be the trusted engineering partner for forward-looking organizations, recognized for technical discipline, practical artificial intelligence, and software craftsmanship that endures.
+                </p>
               </div>
-              <h2 className="text-2xl font-bold text-slate-900">Our Vision</h2>
-              <p className="text-sm text-slate-700 leading-relaxed">
-                To be the trusted engineering partner for forward-looking organizations, recognized for technical discipline, practical artificial intelligence, and software craftsmanship that endures.
-              </p>
-            </div>
-          </div>
+            </ScrollRevealItem>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -171,32 +176,33 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <ScrollReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.1}>
             {values.map((val, idx) => {
               const color = getCardColorToken(idx);
               const ValueIcon = val.icon;
 
               return (
-                <div
-                  key={idx}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 shadow-xs ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 flex flex-col justify-between interactive-card-lift group`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                        {val.step}
-                      </span>
-                      <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
-                        <ValueIcon className="w-4.5 h-4.5" />
+                <ScrollRevealItem key={idx} className="h-full">
+                  <div
+                    className={`h-full ${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 shadow-xs ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 flex flex-col justify-between interactive-card-lift group`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                          {val.step}
+                        </span>
+                        <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                          <ValueIcon className="w-4.5 h-4.5" />
+                        </div>
                       </div>
+                      <h3 className="text-lg font-bold text-slate-900 mb-2">{val.title}</h3>
+                      <p className="text-xs text-slate-700 leading-relaxed">{val.desc}</p>
                     </div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-2">{val.title}</h3>
-                    <p className="text-xs text-slate-700 leading-relaxed">{val.desc}</p>
                   </div>
-                </div>
+                </ScrollRevealItem>
               );
             })}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 

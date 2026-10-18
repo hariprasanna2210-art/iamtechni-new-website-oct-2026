@@ -384,7 +384,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#141A24]">
+    <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#141A24] w-full overflow-x-hidden">
       {/* Top Global Navigation */}
       <Header
         currentRoute={currentRoute}
@@ -393,7 +393,7 @@ export default function App() {
       />
 
       {/* Main Page Content Body */}
-      <main className="flex-1 w-full">{renderPage()}</main>
+      <main className="flex-1 w-full overflow-x-hidden">{renderPage()}</main>
 
       {/* Shared Global Footer */}
       <Footer

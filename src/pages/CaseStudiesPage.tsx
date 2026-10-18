@@ -16,6 +16,7 @@ import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { projectsData } from '../data/projectsData';
 import { ProjectItem, PageRoute } from '../types';
 import { getCardColorToken } from '../utils/cardColorTokens';
+import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 
 interface CaseStudiesPageProps {
   slug?: string;
@@ -268,67 +269,68 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
       {/* Grid of Case Studies */}
       <section className="py-20 bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 gap-8" staggerChildren={0.12}>
             {filtered.map((project, idx) => {
               const color = getCardColorToken(idx);
 
               return (
-                <div
-                  key={project.id}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl shadow-xs ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 p-7 flex flex-col justify-between space-y-6 group`}
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                        {project.category}
-                      </span>
-                      <span className="text-xs text-slate-600 font-medium">{project.industry}</span>
+                <ScrollRevealItem key={project.id} className="h-full">
+                  <div
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl shadow-xs ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 p-7 flex flex-col justify-between space-y-6 group interactive-card-lift`}
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                          {project.category}
+                        </span>
+                        <span className="text-xs text-slate-600 font-medium">{project.industry}</span>
+                      </div>
+
+                      <h2 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors">
+                        {project.title}
+                      </h2>
+
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        {project.tagline}
+                      </p>
+
+                      <div className="space-y-2 pt-2">
+                        <div className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                          Key Highlights
+                        </div>
+                        <div className="space-y-1.5">
+                          {project.keyFeatures.slice(0, 3).map((feat, fIdx) => (
+                            <div key={fIdx} className="flex items-center gap-2 text-xs text-slate-700">
+                              <CheckCircle2 className={`w-3.5 h-3.5 ${color.accentText} shrink-0`} />
+                              <span className="truncate">{feat}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
 
-                    <h2 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors">
-                      {project.title}
-                    </h2>
-
-                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                      {project.tagline}
-                    </p>
-
-                    <div className="space-y-2 pt-2">
-                      <div className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
-                        Key Highlights
-                      </div>
-                      <div className="space-y-1.5">
-                        {project.keyFeatures.slice(0, 3).map((feat, fIdx) => (
-                          <div key={fIdx} className="flex items-center gap-2 text-xs text-slate-700">
-                            <CheckCircle2 className={`w-3.5 h-3.5 ${color.accentText} shrink-0`} />
-                            <span className="truncate">{feat}</span>
-                          </div>
+                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between">
+                      <div className="flex flex-wrap gap-1.5 max-w-[60%]">
+                        {project.techStack.slice(0, 3).map((tech, tIdx) => (
+                          <span key={tIdx} className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/90 text-slate-700 border border-slate-200/80">
+                            {tech}
+                          </span>
                         ))}
                       </div>
+
+                      <button
+                        onClick={() => onNavigate(`/case-studies/${project.id}` as PageRoute)}
+                        className={`inline-flex items-center gap-1 text-xs font-bold ${color.accentText} hover:underline group-hover:translate-x-1 transition-all cursor-pointer`}
+                      >
+                        <span>Read Study</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
-
-                  <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between">
-                    <div className="flex flex-wrap gap-1.5 max-w-[60%]">
-                      {project.techStack.slice(0, 3).map((tech, tIdx) => (
-                        <span key={tIdx} className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/90 text-slate-700 border border-slate-200/80">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-
-                    <button
-                      onClick={() => onNavigate(`/case-studies/${project.id}` as PageRoute)}
-                      className={`inline-flex items-center gap-1 text-xs font-bold ${color.accentText} hover:underline group-hover:translate-x-1 transition-all cursor-pointer`}
-                    >
-                      <span>Read Study</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
+                </ScrollRevealItem>
               );
             })}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
     </div>

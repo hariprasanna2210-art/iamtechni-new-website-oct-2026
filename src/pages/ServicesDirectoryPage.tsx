@@ -5,6 +5,7 @@ import { PageHero } from '../components/common/PageHero';
 import { servicesData } from '../data/servicesData';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon } from '../utils/serviceIcons';
+import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 
 interface ServicesDirectoryPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -141,85 +142,86 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.08}>
               {filteredServices.map((service, idx) => {
                 // Deterministic color assignment cycling through 8 distinct palettes
                 const color = getCardColorToken(idx);
                 const ServiceIcon = getServiceIcon(service.slug);
 
                 return (
-                  <div
-                    key={service.id}
-                    onClick={() => onNavigate(`/services/${service.slug}` as PageRoute)}
-                    className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-xs interactive-card-lift`}
-                  >
-                    <div>
-                      {/* Top Category Badge & Icon */}
-                      <div className="flex items-center justify-between text-xs mb-4">
-                        <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                          {service.category.toUpperCase()}
-                        </span>
-                        <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
-                          <ServiceIcon className="w-4.5 h-4.5" />
-                        </div>
-                      </div>
-
-                      <h2 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2.5 flex items-center justify-between">
-                        <span>{service.title}</span>
-                        <span className={`w-2 h-2 rounded-full ${color.dotBg} shrink-0 opacity-80 group-hover:scale-125 transition-transform`} />
-                      </h2>
-
-                      <p className="text-xs text-slate-700 leading-relaxed mb-4 line-clamp-3">
-                        {service.summary}
-                      </p>
-
-                      {/* Capabilities Bullet List */}
-                      <div className="space-y-1.5 mb-5 text-xs">
-                        <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wide">
-                          Key Capabilities:
-                        </div>
-                        {service.capabilities.slice(0, 3).map((cap, i) => (
-                          <div key={i} className="flex items-center gap-1.5 text-slate-700 text-[11px]">
-                            <span className={`w-1.5 h-1.5 rounded-full ${color.dotBg}`} />
-                            <span className="line-clamp-1">{cap.title}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Technology Chips */}
-                      <div className="flex flex-wrap gap-1.5 mb-4">
-                        {service.technologies.slice(0, 4).map((tech, i) => (
-                          <span
-                            key={i}
-                            className="px-2 py-0.5 text-[10px] font-mono bg-white/90 text-slate-700 rounded-md border border-slate-200/90"
-                          >
-                            {tech}
+                  <ScrollRevealItem key={service.id} className="h-full">
+                    <div
+                      onClick={() => onNavigate(`/services/${service.slug}` as PageRoute)}
+                      className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-xs interactive-card-lift`}
+                    >
+                      <div>
+                        {/* Top Category Badge & Icon */}
+                        <div className="flex items-center justify-between text-xs mb-4">
+                          <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                            {service.category.toUpperCase()}
                           </span>
-                        ))}
+                          <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                            <ServiceIcon className="w-4.5 h-4.5" />
+                          </div>
+                        </div>
+
+                        <h2 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2.5 flex items-center justify-between">
+                          <span>{service.title}</span>
+                          <span className={`w-2 h-2 rounded-full ${color.dotBg} shrink-0 opacity-80 group-hover:scale-125 transition-transform`} />
+                        </h2>
+
+                        <p className="text-xs text-slate-700 leading-relaxed mb-4 line-clamp-3">
+                          {service.summary}
+                        </p>
+
+                        {/* Capabilities Bullet List */}
+                        <div className="space-y-1.5 mb-5 text-xs">
+                          <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wide">
+                            Key Capabilities:
+                          </div>
+                          {service.capabilities.slice(0, 3).map((cap, i) => (
+                            <div key={i} className="flex items-center gap-1.5 text-slate-700 text-[11px]">
+                              <span className={`w-1.5 h-1.5 rounded-full ${color.dotBg}`} />
+                              <span className="line-clamp-1">{cap.title}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Technology Chips */}
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {service.technologies.slice(0, 4).map((tech, i) => (
+                            <span
+                              key={i}
+                              className="px-2 py-0.5 text-[10px] font-mono bg-white/90 text-slate-700 rounded-md border border-slate-200/90"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Bottom CTA Action Strip */}
+                      <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold">
+                        <span className={`${color.accentText} flex items-center gap-1.5 group-hover:underline`}>
+                          Explore Service Architecture
+                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onStartProject(service.title);
+                          }}
+                          className="text-[11px] font-mono text-slate-500 hover:text-slate-900 cursor-pointer"
+                        >
+                          Quick Brief
+                        </button>
                       </div>
                     </div>
-
-                    {/* Bottom CTA Action Strip */}
-                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold">
-                      <span className={`${color.accentText} flex items-center gap-1.5 group-hover:underline`}>
-                        Explore Service Architecture
-                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                      </span>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onStartProject(service.title);
-                        }}
-                        className="text-[11px] font-mono text-slate-500 hover:text-slate-900"
-                      >
-                        Quick Brief
-                      </button>
-                    </div>
-                  </div>
+                  </ScrollRevealItem>
                 );
               })}
-            </div>
+            </ScrollReveal>
           )}
         </div>
       </section>

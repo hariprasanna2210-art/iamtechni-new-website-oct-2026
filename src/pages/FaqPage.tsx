@@ -248,7 +248,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
                 Our solutions engineering team is available for a direct technical consultation.
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={() => onOpenProjectModal('General Inquiry')}
                 className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs"

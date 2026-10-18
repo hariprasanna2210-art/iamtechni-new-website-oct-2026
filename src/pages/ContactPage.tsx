@@ -163,11 +163,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Card 1: Direct Phone Contact */}
-            <div className="bg-[#E1F8F2] border border-teal-200/90 rounded-2xl p-7 shadow-sm hover:shadow-md hover:border-teal-400 transition-all flex flex-col justify-between interactive-card-lift">
+            <div className="bg-[#E1F8F2] border border-teal-200/90 rounded-2xl p-7 shadow-sm hover:shadow-md hover:border-teal-400 transition-all flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-14 h-14 rounded-2xl bg-[#0D9488] text-white flex items-center justify-center shadow-md">
-                    <Phone className="w-7 h-7" />
+                  <div className="w-12 h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center shadow-xs">
+                    <Phone className="w-6 h-6" />
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-teal-100 text-teal-900 border border-teal-300">
                     DIRECT CALL
@@ -198,19 +198,19 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
               {/* Call Now Action Button */}
               <a
                 href={COMPANY_CONTACT.phoneTel}
-                className="w-full py-3.5 px-5 bg-[#0D9488] hover:bg-[#0f766e] text-white rounded-xl font-bold text-sm transition-all shadow-sm flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
+                className="w-full py-3.5 px-4 sm:px-5 bg-[#0D9488] hover:bg-[#0f766e] text-white rounded-xl font-bold text-xs sm:text-sm transition-all shadow-sm flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
               >
-                <PhoneCall className="w-4 h-4" />
-                <span>Call Now ({COMPANY_CONTACT.phone})</span>
+                <PhoneCall className="w-4 h-4 shrink-0" />
+                <span className="truncate">Call Now ({COMPANY_CONTACT.phone})</span>
               </a>
             </div>
 
             {/* Card 2: Official Email Contact */}
-            <div className="bg-[#EAF3FF] border border-blue-200/90 rounded-2xl p-7 shadow-sm hover:shadow-md hover:border-blue-400 transition-all flex flex-col justify-between interactive-card-lift">
+            <div className="bg-[#EAF3FF] border border-blue-200/90 rounded-2xl p-6 sm:p-7 shadow-sm hover:shadow-md hover:border-blue-400 transition-all flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-14 h-14 rounded-2xl bg-[#1266E8] text-white flex items-center justify-center shadow-md">
-                    <Mail className="w-7 h-7" />
+                  <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
+                    <Mail className="w-6 h-6" />
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-blue-100 text-blue-900 border border-blue-300">
                     OFFICIAL INBOX
@@ -241,10 +241,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
               {/* Email Us Action Button */}
               <a
                 href={COMPANY_CONTACT.emailMailto}
-                className="w-full py-3.5 px-5 bg-[#1266E8] hover:bg-[#0f53be] text-white rounded-xl font-bold text-sm transition-all shadow-sm flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
+                className="w-full py-3.5 px-4 sm:px-5 bg-[#1266E8] hover:bg-[#0f53be] text-white rounded-xl font-bold text-xs sm:text-sm transition-all shadow-sm flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
               >
-                <Mail className="w-4 h-4" />
-                <span>Email Us ({COMPANY_CONTACT.email})</span>
+                <Mail className="w-4 h-4 shrink-0" />
+                <span className="truncate">Email Us ({COMPANY_CONTACT.email})</span>
               </a>
             </div>
           </div>
@@ -256,7 +256,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             {/* Form Column (7 cols) */}
-            <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-8 shadow-2xs">
+            <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-2xs">
               {isSubmitted ? (
                 <div className="py-12 text-center space-y-5">
                   <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto text-emerald-600 border border-emerald-200">

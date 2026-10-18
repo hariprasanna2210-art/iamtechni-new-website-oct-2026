@@ -5,6 +5,7 @@ import { PageHero } from '../components/common/PageHero';
 import { insightsData } from '../data/insightsData';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon } from '../utils/serviceIcons';
+import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 
 interface InsightsPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -79,53 +80,54 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.12}>
             {filteredArticles.map((art, idx) => {
               const color = getCardColorToken(idx);
               const ArticleIcon = getServiceIcon(art.category);
 
               return (
-                <article
-                  key={art.slug}
-                  onClick={() => onNavigate(`/insights/${art.slug}` as PageRoute)}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between text-xs mb-3.5">
-                      <div className="flex items-center gap-2">
-                        <span className={`font-mono font-bold px-2.5 py-0.5 rounded-md text-[11px] ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                          {art.category}
-                        </span>
-                        <span className="text-slate-400" aria-hidden="true">·</span>
-                        <span className="text-slate-500 font-mono text-[11px] flex items-center gap-1">
-                          <Clock className="w-3 h-3 text-slate-400" />
-                          {art.readTime}
-                        </span>
+                <ScrollRevealItem key={art.slug} className="h-full">
+                  <article
+                    onClick={() => onNavigate(`/insights/${art.slug}` as PageRoute)}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between text-xs mb-3.5">
+                        <div className="flex items-center gap-2">
+                          <span className={`font-mono font-bold px-2.5 py-0.5 rounded-md text-[11px] ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                            {art.category}
+                          </span>
+                          <span className="text-slate-400" aria-hidden="true">·</span>
+                          <span className="text-slate-500 font-mono text-[11px] flex items-center gap-1">
+                            <Clock className="w-3 h-3 text-slate-400" />
+                            {art.readTime}
+                          </span>
+                        </div>
+                        <div className={`w-8 h-8 rounded-lg ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                          <ArticleIcon className="w-4 h-4" />
+                        </div>
                       </div>
-                      <div className={`w-8 h-8 rounded-lg ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
-                        <ArticleIcon className="w-4 h-4" />
-                      </div>
+
+                      <h2 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-3">
+                        {art.title}
+                      </h2>
+
+                      <p className="text-xs text-slate-700 leading-relaxed mb-6 line-clamp-4">
+                        {art.excerpt}
+                      </p>
                     </div>
 
-                    <h2 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-3">
-                      {art.title}
-                    </h2>
-
-                    <p className="text-xs text-slate-700 leading-relaxed mb-6 line-clamp-4">
-                      {art.excerpt}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
-                    <span className="font-mono text-[11px]">{art.publishedDate}</span>
-                    <span className={`${color.accentText} font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform`}>
-                      Read Article <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                </article>
+                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
+                      <span className="font-mono text-[11px]">{art.publishedDate}</span>
+                      <span className={`${color.accentText} font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform`}>
+                        Read Article <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
+                    </div>
+                  </article>
+                </ScrollRevealItem>
               );
             })}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
     </div>

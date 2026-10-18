@@ -5,6 +5,7 @@ import { PageHero } from '../components/common/PageHero';
 import { technologyData } from '../data/technologyData';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getTechCategoryIcon } from '../utils/serviceIcons';
+import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 
 interface TechnologyPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -94,37 +95,38 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+                <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2" staggerChildren={0.06}>
                   {group.items.map((item, idx) => {
                     const itemColor = getCardColorToken(idx);
                     const ItemIcon = getServiceIcon(item.name);
 
                     return (
-                      <div
-                        key={idx}
-                        className={`${itemColor.cardBg} ${itemColor.cardBorder} border rounded-xl p-5 hover:border-slate-300 transition-all flex flex-col justify-between shadow-2xs interactive-card-lift group`}
-                      >
-                        <div>
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-2.5">
-                              <div className={`w-8 h-8 rounded-lg ${itemColor.iconBg} text-white flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform`}>
-                                <ItemIcon className="w-4 h-4" />
+                      <ScrollRevealItem key={idx} className="h-full">
+                        <div
+                          className={`h-full ${itemColor.cardBg} ${itemColor.cardBorder} border rounded-xl p-5 hover:border-slate-300 transition-all flex flex-col justify-between shadow-2xs interactive-card-lift group`}
+                        >
+                          <div>
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-2.5">
+                                <div className={`w-8 h-8 rounded-lg ${itemColor.iconBg} text-white flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform`}>
+                                  <ItemIcon className="w-4 h-4" />
+                                </div>
+                                <h3 className="text-sm font-bold text-slate-900">{item.name}</h3>
                               </div>
-                              <h3 className="text-sm font-bold text-slate-900">{item.name}</h3>
+                              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md font-bold ${itemColor.badgeBg} ${itemColor.badgeText} border ${itemColor.badgeBorder}`}>
+                                {item.level}
+                              </span>
                             </div>
-                            <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md font-bold ${itemColor.badgeBg} ${itemColor.badgeText} border ${itemColor.badgeBorder}`}>
-                              {item.level}
-                            </span>
+                            <div className={`text-[11px] font-semibold ${itemColor.accentText} mb-2 font-mono`}>
+                              {item.role}
+                            </div>
+                            <p className="text-xs text-slate-700 leading-relaxed">{item.description}</p>
                           </div>
-                          <div className={`text-[11px] font-semibold ${itemColor.accentText} mb-2 font-mono`}>
-                            {item.role}
-                          </div>
-                          <p className="text-xs text-slate-700 leading-relaxed">{item.description}</p>
                         </div>
-                      </div>
+                      </ScrollRevealItem>
                     );
                   })}
-                </div>
+                </ScrollReveal>
               </div>
             );
           })}
