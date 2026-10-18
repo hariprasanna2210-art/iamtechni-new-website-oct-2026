@@ -13,7 +13,12 @@ import {
   Network,
   Sparkles,
   Layers,
-  Workflow
+  Workflow,
+  Code2,
+  GraduationCap,
+  Activity,
+  Zap,
+  Globe
 } from 'lucide-react';
 import { PageRoute } from '../types';
 import { PageHero } from '../components/common/PageHero';
@@ -29,31 +34,37 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
     {
       step: '01 / CLARITY',
       title: 'Clarity & Directness',
+      icon: Compass,
       desc: 'We avoid technical jargon, obscure estimates, and buzzwords. We speak in clear, plain language about architecture trade-offs, feasibility, and real costs.',
     },
     {
       step: '02 / CRAFTSMANSHIP',
       title: 'Engineering Craftsmanship',
+      icon: Code2,
       desc: 'We write clean, strongly-typed code designed for human readability and automated testability. We don’t cut corners that create technical debt.',
     },
     {
       step: '03 / INNOVATION',
       title: 'Practical Innovation',
+      icon: Cpu,
       desc: 'We apply artificial intelligence, machine learning, and cloud primitives where they solve real operational problems with demonstrable business return.',
     },
     {
       step: '04 / COLLABORATION',
       title: 'Transparent Collaboration',
+      icon: Users,
       desc: 'We treat our clients as partners in code. Regular demos, shared sprint boards, and clear milestone criteria ensure complete visibility at every stage.',
     },
     {
       step: '05 / LEARNING',
       title: 'Continuous Learning',
+      icon: GraduationCap,
       desc: 'Technology evolves rapidly. Our team invests continuous effort in mastering modern framework standards, defensive security practices, and emerging AI architectures.',
     },
     {
       step: '06 / RELIABILITY',
       title: 'Long-Term Reliability',
+      icon: ShieldCheck,
       desc: 'We stand behind our work. From documentation to handover and ongoing maintenance support, we engineer software designed to outlast short-term trends.',
     },
   ];
@@ -78,7 +89,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
           <div className="relative w-full max-w-md mx-auto aspect-square bg-white rounded-2xl border border-slate-200 shadow-xl p-6 flex flex-col justify-between text-slate-900">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3 text-xs font-mono">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#1266E8]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#1266E8] animate-pulse" />
                 <span className="font-bold text-slate-900">CONNECTED_ECOSYSTEM</span>
               </div>
               <span className="text-[#1266E8] font-bold bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
@@ -125,7 +136,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
       <section className="py-20 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FE] to-[#F0FDFA] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-[#EAF3FF] rounded-2xl p-8 sm:p-10 border border-blue-200/90 shadow-sm space-y-4">
+            <div className="bg-[#EAF3FF] rounded-2xl p-8 sm:p-10 border border-blue-200/90 shadow-sm space-y-4 interactive-card-lift">
               <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
                 <Target className="w-6 h-6" />
               </div>
@@ -135,7 +146,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
               </p>
             </div>
 
-            <div className="bg-[#F0EAFF] rounded-2xl p-8 sm:p-10 border border-violet-200/90 shadow-sm space-y-4">
+            <div className="bg-[#F0EAFF] rounded-2xl p-8 sm:p-10 border border-violet-200/90 shadow-sm space-y-4 interactive-card-lift">
               <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center shadow-xs">
                 <Eye className="w-6 h-6" />
               </div>
@@ -163,18 +174,21 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {values.map((val, idx) => {
               const color = getCardColorToken(idx);
+              const ValueIcon = val.icon;
 
               return (
                 <div
                   key={idx}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 shadow-xs ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 flex flex-col justify-between`}
+                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 shadow-xs ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 flex flex-col justify-between interactive-card-lift group`}
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center justify-between mb-4">
                       <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                         {val.step}
                       </span>
-                      <span className={`w-2 h-2 rounded-full ${color.dotBg}`} />
+                      <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                        <ValueIcon className="w-4.5 h-4.5" />
+                      </div>
                     </div>
                     <h3 className="text-lg font-bold text-slate-900 mb-2">{val.title}</h3>
                     <p className="text-xs text-slate-700 leading-relaxed">{val.desc}</p>

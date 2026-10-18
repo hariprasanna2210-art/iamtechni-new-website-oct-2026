@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { ArrowRight, Search, BookOpen, Clock, Tag } from 'lucide-react';
+import { ArrowRight, Search, BookOpen, Clock, Tag, Sparkles } from 'lucide-react';
 import { PageRoute } from '../types';
 import { PageHero } from '../components/common/PageHero';
 import { insightsData } from '../data/insightsData';
 import { getCardColorToken } from '../utils/cardColorTokens';
+import { getServiceIcon } from '../utils/serviceIcons';
 
 interface InsightsPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -58,39 +59,52 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs w-full md:w-auto">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
-                    selectedCategory === cat
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+              {categories.map((cat) => {
+                const CatIcon = cat === 'All' ? Sparkles : getServiceIcon(cat);
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                      selectedCategory === cat
+                        ? 'bg-slate-900 text-white shadow-2xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <CatIcon className="w-3.5 h-3.5" />
+                    <span>{cat}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {filteredArticles.map((art, idx) => {
               const color = getCardColorToken(idx);
+              const ArticleIcon = getServiceIcon(art.category);
 
               return (
                 <article
                   key={art.slug}
                   onClick={() => onNavigate(`/insights/${art.slug}` as PageRoute)}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs`}
+                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
                 >
                   <div>
-                    <div className="flex items-center gap-2 text-xs mb-3.5">
-                      <span className={`font-mono font-bold px-2.5 py-0.5 rounded-md text-[11px] ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                        {art.category}
-                      </span>
-                      <span className="text-slate-400" aria-hidden="true">·</span>
-                      <span className="text-slate-500 font-mono text-[11px]">{art.readTime}</span>
+                    <div className="flex items-center justify-between text-xs mb-3.5">
+                      <div className="flex items-center gap-2">
+                        <span className={`font-mono font-bold px-2.5 py-0.5 rounded-md text-[11px] ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                          {art.category}
+                        </span>
+                        <span className="text-slate-400" aria-hidden="true">·</span>
+                        <span className="text-slate-500 font-mono text-[11px] flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-slate-400" />
+                          {art.readTime}
+                        </span>
+                      </div>
+                      <div className={`w-8 h-8 rounded-lg ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                        <ArticleIcon className="w-4 h-4" />
+                      </div>
                     </div>
 
                     <h2 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-3">

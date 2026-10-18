@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2, ChevronRight, Cpu, Layers } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ChevronRight, Cpu, Layers, Sparkles } from 'lucide-react';
 import { PageRoute } from '../types';
 import { PageHero } from '../components/common/PageHero';
 import { technologyData } from '../data/technologyData';
 import { getCardColorToken } from '../utils/cardColorTokens';
+import { getServiceIcon, getTechCategoryIcon } from '../utils/serviceIcons';
 
 interface TechnologyPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -54,23 +55,28 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
             >
               All Disciplines
             </button>
-            {technologyData.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
-                  activeCategory === cat.id
-                    ? 'bg-slate-900 text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                {cat.category}
-              </button>
-            ))}
+            {technologyData.map((cat) => {
+              const CatIcon = getTechCategoryIcon(cat.id);
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                    activeCategory === cat.id
+                      ? 'bg-slate-900 text-white shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <CatIcon className="w-3.5 h-3.5" />
+                  <span>{cat.category}</span>
+                </button>
+              );
+            })}
           </div>
 
           {filteredCategories.map((group, groupIdx) => {
             const groupColor = getCardColorToken(groupIdx);
+            const CatHeaderIcon = getTechCategoryIcon(group.id);
 
             return (
               <div
@@ -78,8 +84,9 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
                 className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm space-y-6"
               >
                 <div>
-                  <div className={`text-xs font-mono font-bold ${groupColor.accentText} uppercase tracking-wider mb-1`}>
-                    PRACTICE ECOSYSTEM // {group.category.toUpperCase()}
+                  <div className={`text-xs font-mono font-bold ${groupColor.accentText} uppercase tracking-wider mb-1 flex items-center gap-2`}>
+                    <CatHeaderIcon className="w-4 h-4" />
+                    <span>PRACTICE ECOSYSTEM // {group.category.toUpperCase()}</span>
                   </div>
                   <h2 className="text-2xl font-bold text-slate-900">{group.category}</h2>
                   <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
@@ -90,15 +97,21 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
                   {group.items.map((item, idx) => {
                     const itemColor = getCardColorToken(idx);
+                    const ItemIcon = getServiceIcon(item.name);
 
                     return (
                       <div
                         key={idx}
-                        className={`${itemColor.cardBg} ${itemColor.cardBorder} border rounded-xl p-5 hover:border-slate-300 transition-all flex flex-col justify-between shadow-2xs`}
+                        className={`${itemColor.cardBg} ${itemColor.cardBorder} border rounded-xl p-5 hover:border-slate-300 transition-all flex flex-col justify-between shadow-2xs interactive-card-lift group`}
                       >
                         <div>
-                          <div className="flex items-center justify-between mb-2">
-                            <h3 className="text-sm font-bold text-slate-900">{item.name}</h3>
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2.5">
+                              <div className={`w-8 h-8 rounded-lg ${itemColor.iconBg} text-white flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform`}>
+                                <ItemIcon className="w-4 h-4" />
+                              </div>
+                              <h3 className="text-sm font-bold text-slate-900">{item.name}</h3>
+                            </div>
                             <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md font-bold ${itemColor.badgeBg} ${itemColor.badgeText} border ${itemColor.badgeBorder}`}>
                               {item.level}
                             </span>

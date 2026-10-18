@@ -8,6 +8,10 @@ import {
   CheckCircle2,
   Phone,
   Mail,
+  Code2,
+  Workflow,
+  Lock,
+  Sparkles,
 } from 'lucide-react';
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { PageRoute } from '../types';
@@ -176,45 +180,64 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
               </button>
             </div>
           ) : (
-            filteredCategories.map((cat, catIdx) => (
-              <div key={catIdx} className="space-y-4">
-                <h2 className="text-lg font-bold text-slate-900 px-1 border-b border-slate-200 pb-2">
-                  {cat.category}
-                </h2>
-                <div className="space-y-3">
-                  {cat.items.map((item, itemIdx) => {
-                    const key = `${catIdx}-${itemIdx}`;
-                    const isOpen = openItems[key];
-                    return (
-                      <div
-                        key={itemIdx}
-                        className="rounded-2xl border border-slate-200/90 bg-white overflow-hidden shadow-2xs transition-all"
-                      >
-                        <button
-                          onClick={() => toggleItem(key)}
-                          className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors"
-                          aria-expanded={isOpen}
+            filteredCategories.map((cat, catIdx) => {
+              const getCategoryIcon = (name: string) => {
+                if (name.includes('Services') || name.includes('Technical')) return Code2;
+                if (name.includes('Process') || name.includes('Timeline')) return Workflow;
+                if (name.includes('Pricing') || name.includes('Ownership')) return Sparkles;
+                return ShieldCheck;
+              };
+              const CatIcon = getCategoryIcon(cat.category);
+
+              return (
+                <div key={catIdx} className="space-y-4">
+                  <div className="flex items-center gap-2.5 px-1 border-b border-slate-200 pb-3">
+                    <div className="w-7 h-7 rounded-lg bg-blue-100 text-[#1266E8] flex items-center justify-center shadow-2xs">
+                      <CatIcon className="w-4 h-4" />
+                    </div>
+                    <h2 className="text-lg font-bold text-slate-900">
+                      {cat.category}
+                    </h2>
+                  </div>
+                  <div className="space-y-3">
+                    {cat.items.map((item, itemIdx) => {
+                      const key = `${catIdx}-${itemIdx}`;
+                      const isOpen = openItems[key];
+                      return (
+                        <div
+                          key={itemIdx}
+                          className={`rounded-2xl border transition-all duration-200 ${
+                            isOpen
+                              ? 'border-blue-200 bg-white shadow-md'
+                              : 'border-slate-200/90 bg-white shadow-2xs hover:border-slate-300'
+                          }`}
                         >
-                          <span className="text-sm sm:text-base font-bold text-slate-900">
-                            {item.question}
-                          </span>
-                          <ChevronDown
-                            className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
-                              isOpen ? 'rotate-180 text-[#1266E8]' : ''
-                            }`}
-                          />
-                        </button>
-                        {isOpen && (
-                          <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100">
-                            {item.answer}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                          <button
+                            onClick={() => toggleItem(key)}
+                            className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors cursor-pointer"
+                            aria-expanded={isOpen}
+                          >
+                            <span className="text-sm sm:text-base font-bold text-slate-900">
+                              {item.question}
+                            </span>
+                            <ChevronDown
+                              className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
+                                isOpen ? 'rotate-180 text-[#1266E8]' : ''
+                              }`}
+                            />
+                          </button>
+                          {isOpen && (
+                            <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                              {item.answer}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
 
           {/* Have More Questions CTA Box */}

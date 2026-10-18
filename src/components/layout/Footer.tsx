@@ -111,7 +111,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
             <div className="pt-3 flex items-center gap-3">
               <button
                 onClick={onStartProject}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[#1266E8] to-[#5427D9] text-white text-xs font-semibold rounded-xl hover:opacity-95 transition-opacity cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[#1266E8] to-[#5427D9] text-white text-xs font-semibold rounded-xl hover:opacity-95 transition-opacity cursor-pointer shadow-sm active:scale-98"
               >
                 <span>Start a Project</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -121,6 +121,40 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                 className="px-4 py-2 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 text-xs font-medium rounded-xl transition-colors cursor-pointer"
               >
                 Contact IAMTECHNI
+              </button>
+            </div>
+
+            {/* Social & Channel Icons */}
+            <div className="pt-4 flex items-center gap-2">
+              <a
+                href="https://iamtechni.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-[#04C8E8] text-slate-400 hover:text-[#04C8E8] flex items-center justify-center transition-all hover:scale-105"
+                title="IAMTECHNI Website"
+              >
+                <Globe className="w-4 h-4" />
+              </a>
+              <a
+                href={COMPANY_CONTACT.emailMailto}
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-[#1266E8] text-slate-400 hover:text-[#1266E8] flex items-center justify-center transition-all hover:scale-105"
+                title="Email Inquiries"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
+              <a
+                href={COMPANY_CONTACT.phoneTel}
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-teal-400 text-slate-400 hover:text-teal-400 flex items-center justify-center transition-all hover:scale-105"
+                title="Phone Line"
+              >
+                <Phone className="w-4 h-4" />
+              </a>
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent('iamtechni:open-chat'))}
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-violet-400 text-slate-400 hover:text-violet-400 flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
+                title="AI Architecture Advisor"
+              >
+                <Sparkles className="w-4 h-4" />
               </button>
             </div>
           </div>

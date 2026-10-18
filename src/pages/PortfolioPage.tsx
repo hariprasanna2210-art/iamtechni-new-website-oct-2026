@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2, ChevronRight, Cpu, Layers } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ChevronRight, Cpu, Layers, Sparkles } from 'lucide-react';
 import { PageRoute, ProjectItem } from '../types';
 import { PageHero } from '../components/common/PageHero';
 import { projectsData } from '../data/projectsData';
 import { getCardColorToken } from '../utils/cardColorTokens';
+import { getServiceIcon } from '../utils/serviceIcons';
 
 interface PortfolioPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -76,21 +77,22 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project, idx) => {
               const color = getCardColorToken(idx);
+              const ProjectIcon = getServiceIcon(project.category);
 
               return (
                 <div
                   key={project.id}
                   onClick={() => onOpenCaseStudy(project)}
-                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs`}
+                  className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
                 >
                   <div>
-                    <div className="flex items-center justify-between text-xs mb-3.5">
+                    <div className="flex items-center justify-between text-xs mb-4">
                       <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                         {project.category}
                       </span>
-                      <span className="text-[11px] font-mono bg-white/80 text-slate-700 px-2.5 py-0.5 rounded-md border border-slate-200/80 font-medium">
-                        {project.clientBadge}
-                      </span>
+                      <div className={`w-8 h-8 rounded-lg ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                        <ProjectIcon className="w-4 h-4" />
+                      </div>
                     </div>
 
                     <h2 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-2 flex items-center justify-between">
@@ -141,10 +143,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
           </p>
           <div className="pt-2">
             <button
-              onClick={() => onStartProject()}
+              onClick={() => onStartProject('Custom Project Scoping')}
               className="px-8 py-3.5 text-xs font-bold text-[#1266E8] bg-white rounded-xl hover:bg-blue-50 transition-all shadow-md active:scale-98 cursor-pointer"
             >
-              Start Project Discovery
+              Discuss Your Project
             </button>
           </div>
         </div>

@@ -163,11 +163,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Card 1: Direct Phone Contact */}
-            <div className="bg-[#E1F8F2] border border-teal-200/90 rounded-2xl p-7 shadow-sm hover:shadow-md hover:border-teal-400 transition-all flex flex-col justify-between">
+            <div className="bg-[#E1F8F2] border border-teal-200/90 rounded-2xl p-7 shadow-sm hover:shadow-md hover:border-teal-400 transition-all flex flex-col justify-between interactive-card-lift">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center shadow-xs">
-                    <Phone className="w-6 h-6" />
+                  <div className="w-14 h-14 rounded-2xl bg-[#0D9488] text-white flex items-center justify-center shadow-md">
+                    <Phone className="w-7 h-7" />
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-teal-100 text-teal-900 border border-teal-300">
                     DIRECT CALL
@@ -206,11 +206,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
             </div>
 
             {/* Card 2: Official Email Contact */}
-            <div className="bg-[#EAF3FF] border border-blue-200/90 rounded-2xl p-7 shadow-sm hover:shadow-md hover:border-blue-400 transition-all flex flex-col justify-between">
+            <div className="bg-[#EAF3FF] border border-blue-200/90 rounded-2xl p-7 shadow-sm hover:shadow-md hover:border-blue-400 transition-all flex flex-col justify-between interactive-card-lift">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
-                    <Mail className="w-6 h-6" />
+                  <div className="w-14 h-14 rounded-2xl bg-[#1266E8] text-white flex items-center justify-center shadow-md">
+                    <Mail className="w-7 h-7" />
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-blue-100 text-blue-900 border border-blue-300">
                     OFFICIAL INBOX
