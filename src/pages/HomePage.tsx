@@ -39,7 +39,7 @@ import { projectsData } from '../data/projectsData';
 import { insightsData } from '../data/insightsData';
 import { industriesData } from '../data/industriesData';
 import { ColorfulMultiServiceHero } from '../components/home/ColorfulMultiServiceHero';
-import { EnterpriseSolutionsMatrix } from '../components/home/EnterpriseSolutionsMatrix';
+import { DigitalEcosystemIllustration } from '../components/home/DigitalEcosystemIllustration';
 import { ProcessStageVisual } from '../components/common/TechIllustrations';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { getCardColorToken } from '../utils/cardColorTokens';
@@ -201,12 +201,31 @@ export const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       {/* ========================================================================= */}
-      {/* 2.5 ENTERPRISE SOLUTIONS & ARCHITECTURE MATRIX (Relevant to IAMTECHNI)     */}
+      {/* 2.5 3D DIGITAL TECHNOLOGY ECOSYSTEM ARCHITECTURE ILLUSTRATION SECTION     */}
       {/* ========================================================================= */}
-      <EnterpriseSolutionsMatrix
-        onNavigate={onNavigate}
-        onOpenProjectModal={onOpenProjectModal}
-      />
+      <ScrollRevealSection className="py-20 bg-gradient-to-b from-white via-slate-50/50 to-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center space-y-3 mb-10">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-100 text-[#0284C7] text-xs font-mono uppercase tracking-widest font-bold">
+              <Activity className="w-3.5 h-3.5 text-[#04C8E8]" />
+              <span>Interactive Topology</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              The IAMTECHNI Connected Technology Ecosystem
+            </h2>
+            <p className="text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Explore how our frontend experiences, microservices, neural intelligence, and multi-cloud infrastructure interconnect in an unified high-performance stack.
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <DigitalEcosystemIllustration
+              onExploreServices={() => onNavigate('/services')}
+              onDiscussProject={() => onOpenProjectModal('Ecosystem Architecture Inquiry')}
+            />
+          </div>
+        </div>
+      </ScrollRevealSection>
 
       {/* ========================================================================= */}
       {/* 3. CAPABILITIES DIRECTORY (Vibrant Card Grid with Staggered ScrollReveal)  */}
