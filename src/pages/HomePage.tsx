@@ -39,6 +39,7 @@ import { projectsData } from '../data/projectsData';
 import { insightsData } from '../data/insightsData';
 import { industriesData } from '../data/industriesData';
 import { ColorfulMultiServiceHero } from '../components/home/ColorfulMultiServiceHero';
+import { HeroSection } from '../components/robot-hero/HeroSection';
 import { EnterpriseSolutionsMatrix } from '../components/home/EnterpriseSolutionsMatrix';
 import { ProcessStageVisual, IndustryIllustration } from '../components/common/TechIllustrations';
 import { ProjectVisualThumbnail, ArticleGraphic, ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
@@ -128,9 +129,9 @@ export const HomePage: React.FC<HomePageProps> = ({
   return (
     <div className="w-full">
       {/* ========================================================================= */}
-      {/* 1. COLORFUL MULTI-SERVICE HERO SECTION (8 Animated Distinct Slides)       */}
+      {/* 1. FUTURISTIC 3D HUMANOID ROBOT PRESENTER HERO SECTION                    */}
       {/* ========================================================================= */}
-      <ColorfulMultiServiceHero
+      <HeroSection
         onNavigate={onNavigate}
         onOpenProjectModal={onOpenProjectModal}
       />

@@ -41,11 +41,13 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(64);
 
-  // Measure header height dynamically for exact mobile panel alignment
+  // Measure header height dynamically for exact mobile panel and 100svh hero alignment
   useEffect(() => {
     const updateHeaderHeight = () => {
       if (headerRef.current) {
-        setHeaderHeight(headerRef.current.offsetHeight);
+        const h = headerRef.current.offsetHeight;
+        setHeaderHeight(h);
+        document.documentElement.style.setProperty('--header-height', `${h}px`);
       }
     };
     updateHeaderHeight();
@@ -274,7 +276,7 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
             : 'bg-white border-slate-200/60 py-3.5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 xl:gap-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 xl:gap-5">
           {/* Zone 1: Brand Wordmark / Logo */}
           <div className="shrink-0 flex items-center">
             <button
@@ -288,7 +290,7 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
           </div>
 
           {/* Zone 2: Navigation Links (Desktop - preserved layout and mega menus) */}
-          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-xs xl:text-sm font-medium text-slate-600">
+          <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5 2xl:gap-6 text-xs xl:text-[13px] font-medium text-slate-600">
             {/* Services with Mega Menu */}
             <div
               className="relative py-2"

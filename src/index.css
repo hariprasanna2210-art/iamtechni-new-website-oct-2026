@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+:root {
+  --header-height: 74px;
+}
+
 @layer base {
   html, body {
     overflow-x: hidden;
