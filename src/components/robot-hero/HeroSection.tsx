@@ -53,6 +53,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   // Scene 1: Trigger automatic welcome wave immediately after hero becomes visible
   useEffect(() => {
     const timer = window.setTimeout(() => {
+      setAnimationState('greeting');
       setGreetTriggerCount((prev) => prev + 1);
     }, 450);
     return () => window.clearTimeout(timer);
@@ -68,14 +69,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       setActiveServiceId((currentId) => {
         const idx = ROBOT_SERVICE_CARDS.findIndex((c) => c.id === currentId);
         const nextIdx = (idx + 1) % ROBOT_SERVICE_CARDS.length;
-        // When looping back to the start of the sequence, perform the friendly welcome wave
-        if (nextIdx === 0) {
+        const nextCard = ROBOT_SERVICE_CARDS[nextIdx];
+        // When looping back to Scene 1 / greeting card, perform the welcoming wave
+        if (nextIdx === 0 || nextCard.primaryGestureState === 'greeting') {
           setGreetTriggerCount((prev) => prev + 1);
         }
-        return ROBOT_SERVICE_CARDS[nextIdx].id;
+        setAnimationState(nextCard.primaryGestureState);
+        return nextCard.id;
       });
-      setAnimationState('explaining');
-    }, 3900);
+    }, 4300);
 
     return () => window.clearInterval(interval);
   }, [isAutoPlaying, isSpeaking, isHeroVisible]);
@@ -91,8 +93,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   // Manual service selection temporarily takes control, then resumes autoplay automatically
   const handleSelectService = (serviceId: string) => {
+    const selectedCard = ROBOT_SERVICE_CARDS.find((c) => c.id === serviceId);
     setActiveServiceId(serviceId);
-    setAnimationState('explaining');
+    setAnimationState(selectedCard?.primaryGestureState || 'explaining');
+    if (selectedCard?.primaryGestureState === 'greeting') {
+      setGreetTriggerCount((prev) => prev + 1);
+    }
     setIsAutoPlaying(false);
 
     if (resumeTimerRef.current) {

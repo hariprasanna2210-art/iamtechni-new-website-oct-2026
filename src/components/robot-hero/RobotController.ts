@@ -1,6 +1,13 @@
 import { PageRoute } from '../../types';
 
-export type RobotAnimationState = 'idle' | 'greeting' | 'explaining' | 'speaking';
+export type RobotAnimationState =
+  | 'idle'
+  | 'greeting'
+  | 'explaining'
+  | 'presenting'
+  | 'pointing'
+  | 'returnToIdle'
+  | 'speaking';
 
 export interface RobotJointTargets {
   waistYaw: number;
@@ -11,24 +18,30 @@ export interface RobotJointTargets {
   headYaw: number;
   headPitch: number;
   headRoll: number;
-  // Right arm (viewer's right side / robot's left or right anatomical)
+
+  // Viewer-Right Arm
   rightShoulderPitch: number;
   rightShoulderYaw: number;
   rightShoulderRoll: number;
-  rightElbowPitch: number;
-  rightWristRoll: number;
-  rightWristPitch: number;
-  rightFingerCurl: number;
-  rightPointing: boolean;
-  // Left arm (viewer's left side — closest to Left-Side Headline & CTAs)
+  rightElbowPitch: number;      // Z-plane lift (-0.22 = tucked inward at waist, 1.82 = raised in open presenter window)
+  rightElbowForward: number;    // X-plane forward hinge flexion (-0.68 = relaxed forward bend, -0.25 = raised presenter)
+  rightWristRoll: number;       // Radial/ulnar wrist deviation
+  rightWristPitch: number;      // Wrist flexion/extension
+  rightWristSupination: number; // Forearm/palm pronation-supination
+  rightFingerCurl: number;      // 0 = open palm, 0.42 = relaxed idle, 0.85 = curled
+  rightPointing: number;        // 0 = normal cascade, 1 = index finger extended & others curled into palm
+
+  // Viewer-Left Arm
   leftShoulderPitch: number;
   leftShoulderYaw: number;
   leftShoulderRoll: number;
   leftElbowPitch: number;
+  leftElbowForward: number;
   leftWristRoll: number;
   leftWristPitch: number;
+  leftWristSupination: number;
   leftFingerCurl: number;
-  leftPointing: boolean;
+  leftPointing: number;
 }
 
 export interface RobotServiceCardItem {
@@ -51,12 +64,56 @@ export interface RobotServiceCardItem {
   badgeText: string;
   explanation: string;
   speechText: string;
+  primaryGestureState: RobotAnimationState;
+  activeHand: 'left' | 'right' | 'both';
   pose: Partial<RobotJointTargets>;
+  followUpPose?: Partial<RobotJointTargets>;
 }
 
 /**
- * The 8 synchronized services & continuous 7-scene choreography
- * requested for the IAMTECHNI AI Ambassador Hero.
+ * Natural relaxed human presenter idle stance:
+ * Both arms rest comfortably alongside the torso with elbows softly bent forward (-0.68 rad)
+ * and wrists angled slightly inward (-0.20 rad) so the hands rest naturally near the waist,
+ * completely clear of the floating service cards.
+ */
+export const DEFAULT_IDLE_POSE: RobotJointTargets = {
+  waistYaw: -0.02,
+  waistPitch: 0.0,
+  torsoYaw: -0.04,
+  torsoPitch: 0.015,
+  torsoRoll: 0.0,
+  headYaw: -0.04,
+  headPitch: 0.0,
+  headRoll: 0.0,
+
+  // Viewer-right arm in comfortable relaxed presenter rest alongside torso
+  rightShoulderPitch: -0.22,
+  rightShoulderYaw: -0.22,
+  rightShoulderRoll: 0.15,
+  rightElbowPitch: -0.2,
+  rightElbowForward: -0.68,
+  rightWristRoll: -0.05,
+  rightWristPitch: 0.08,
+  rightWristSupination: -0.45,
+  rightFingerCurl: 0.42,
+  rightPointing: 0,
+
+  // Viewer-left arm in comfortable relaxed presenter rest (subtle human asymmetry)
+  leftShoulderPitch: -0.24,
+  leftShoulderYaw: 0.22,
+  leftShoulderRoll: 0.16,
+  leftElbowPitch: -0.22,
+  leftElbowForward: -0.72,
+  leftWristRoll: 0.05,
+  leftWristPitch: 0.08,
+  leftWristSupination: 0.45,
+  leftFingerCurl: 0.4,
+  leftPointing: 0,
+};
+
+/**
+ * The 8 synchronized services & human-biomechanical presenter choreography
+ * for the IAMTECHNI AI Ambassador Hero.
  */
 export const ROBOT_SERVICE_CARDS: RobotServiceCardItem[] = [
   {
@@ -75,31 +132,39 @@ export const ROBOT_SERVICE_CARDS: RobotServiceCardItem[] = [
       'Custom AI assistants, Retrieval-Augmented Generation (RAG), predictive models, and intelligent workflow automation tailored to your business.',
     speechText:
       'We engineer custom AI and Machine Learning systems, from private RAG assistants to predictive models that automate complex workflows.',
+    primaryGestureState: 'explaining',
+    activeHand: 'right',
     pose: {
-      waistYaw: -0.1,
-      torsoYaw: -0.18,
-      torsoPitch: -0.02,
-      torsoRoll: 0.02,
-      headYaw: -0.22,
-      headPitch: -0.08,
-      headRoll: -0.04,
-      // Raises right hand and open palm to introduce AI & Machine Learning
-      rightShoulderPitch: -1.08,
-      rightShoulderRoll: -0.44,
-      rightShoulderYaw: -0.22,
-      rightElbowPitch: -0.92,
-      rightWristRoll: 0.65,
-      rightWristPitch: -0.12,
-      rightFingerCurl: 0.04,
-      rightPointing: false,
-      // Left arm poised gently toward headline
-      leftShoulderPitch: -0.36,
-      leftShoulderRoll: 0.24,
-      leftShoulderYaw: 0.12,
-      leftElbowPitch: -0.62,
-      leftWristRoll: -0.25,
-      leftFingerCurl: 0.26,
-      leftPointing: false,
+      // Open-palm explanatory gesture with right hand raised comfortably in the clear upper-mid window,
+      // while the left arm rests naturally at the side.
+      waistYaw: -0.06,
+      torsoYaw: -0.12,
+      torsoPitch: 0.02,
+      torsoRoll: 0.015,
+      headYaw: -0.16,
+      headPitch: -0.04,
+      headRoll: -0.02,
+      rightShoulderPitch: -0.32,
+      rightShoulderRoll: 0.46,
+      rightShoulderYaw: 0.14,
+      rightElbowPitch: 1.82,
+      rightElbowForward: -0.28,
+      rightWristRoll: -0.14,
+      rightWristPitch: 0.12,
+      rightWristSupination: 0.38, // Palm rotated slightly upward/forward
+      rightFingerCurl: 0.06,      // Open expressive palm
+      rightPointing: 0,
+      // Left arm remains relaxed at side with a natural forward bend
+      leftShoulderPitch: -0.24,
+      leftShoulderRoll: 0.16,
+      leftShoulderYaw: 0.22,
+      leftElbowPitch: -0.22,
+      leftElbowForward: -0.72,
+      leftWristRoll: 0.05,
+      leftWristPitch: 0.08,
+      leftWristSupination: 0.45,
+      leftFingerCurl: 0.4,
+      leftPointing: 0,
     },
   },
   {
@@ -118,28 +183,38 @@ export const ROBOT_SERVICE_CARDS: RobotServiceCardItem[] = [
       'High-speed corporate websites, web applications, and conversion-focused e-commerce platforms engineered for performance and clarity.',
     speechText:
       'We design and build modern Web and E-commerce platforms with fast load times, responsive interfaces, and seamless checkout experiences.',
+    primaryGestureState: 'presenting',
+    activeHand: 'left',
     pose: {
-      // Scene 2: Gestures directly toward the left-side headline and CTA buttons
-      waistYaw: -0.14,
-      torsoYaw: -0.26,
-      torsoPitch: 0.03,
-      torsoRoll: -0.03,
-      headYaw: -0.34,
-      headPitch: 0.04,
-      headRoll: 0.04,
-      leftShoulderPitch: -0.88,
-      leftShoulderRoll: 0.56,
-      leftShoulderYaw: 0.28,
-      leftElbowPitch: -0.78,
-      leftWristRoll: -0.72,
+      // One-hand open-palm presentation gesture with the left hand in the clear mid-upper left window
+      // (above the Web & E-commerce card), while the right arm rests naturally at the side!
+      waistYaw: -0.1,
+      torsoYaw: -0.2,
+      torsoPitch: 0.025,
+      torsoRoll: -0.02,
+      headYaw: -0.26,
+      headPitch: 0.03,
+      headRoll: 0.03,
+      leftShoulderPitch: -0.34,
+      leftShoulderRoll: 0.48,
+      leftShoulderYaw: -0.16,
+      leftElbowPitch: 1.84,
+      leftElbowForward: -0.28,
+      leftWristRoll: 0.16,
       leftWristPitch: 0.1,
-      leftFingerCurl: 0.02,
-      leftPointing: false,
-      rightShoulderPitch: -0.24,
-      rightShoulderRoll: -0.18,
-      rightElbowPitch: -0.52,
-      rightFingerCurl: 0.32,
-      rightPointing: false,
+      leftWristSupination: -0.38,
+      leftFingerCurl: 0.05,
+      leftPointing: 0,
+      // Right arm relaxed at side
+      rightShoulderPitch: -0.22,
+      rightShoulderRoll: 0.15,
+      rightShoulderYaw: -0.22,
+      rightElbowPitch: -0.2,
+      rightElbowForward: -0.68,
+      rightWristRoll: -0.05,
+      rightWristSupination: -0.45,
+      rightFingerCurl: 0.42,
+      rightPointing: 0,
     },
   },
   {
@@ -158,29 +233,37 @@ export const ROBOT_SERVICE_CARDS: RobotServiceCardItem[] = [
       'Sleek iOS and Android mobile applications with native 60fps responsiveness, secure authentication, and offline-ready synchronization.',
     speechText:
       'Our Mobile App Development team delivers native-grade iOS and Android applications built for speed, reliability, and intuitive user engagement.',
+    primaryGestureState: 'explaining',
+    activeHand: 'both',
     pose: {
-      // Scene 4: Coordinated dual-hand framing pose introducing mobile & web ecosystems
-      waistYaw: -0.08,
-      torsoYaw: -0.16,
-      torsoPitch: 0.04,
-      torsoRoll: 0.02,
-      headYaw: -0.2,
-      headPitch: 0.08,
-      headRoll: -0.03,
-      leftShoulderPitch: -0.72,
-      leftShoulderRoll: 0.36,
-      leftShoulderYaw: 0.22,
-      leftElbowPitch: -0.96,
-      leftWristRoll: -0.58,
-      leftFingerCurl: 0.06,
-      leftPointing: false,
-      rightShoulderPitch: -0.68,
-      rightShoulderRoll: -0.32,
-      rightShoulderYaw: -0.18,
-      rightElbowPitch: -0.92,
-      rightWristRoll: 0.54,
-      rightFingerCurl: 0.08,
-      rightPointing: false,
+      // Two-hand asymmetric explanatory gesture in the clear upper-mid window
+      waistYaw: -0.05,
+      torsoYaw: -0.12,
+      torsoPitch: 0.03,
+      torsoRoll: 0.015,
+      headYaw: -0.16,
+      headPitch: 0.04,
+      headRoll: -0.02,
+      leftShoulderPitch: -0.34,
+      leftShoulderRoll: 0.44,
+      leftShoulderYaw: -0.14,
+      leftElbowPitch: 1.84,
+      leftElbowForward: -0.3,
+      leftWristRoll: 0.14,
+      leftWristPitch: 0.08,
+      leftWristSupination: -0.36,
+      leftFingerCurl: 0.08,
+      leftPointing: 0,
+      rightShoulderPitch: -0.28,
+      rightShoulderRoll: 0.38,
+      rightShoulderYaw: 0.12,
+      rightElbowPitch: 1.72,
+      rightElbowForward: -0.26,
+      rightWristRoll: -0.12,
+      rightWristPitch: 0.06,
+      rightWristSupination: 0.32,
+      rightFingerCurl: 0.12,
+      rightPointing: 0,
     },
   },
   {
@@ -199,28 +282,44 @@ export const ROBOT_SERVICE_CARDS: RobotServiceCardItem[] = [
       'Resilient AWS and Azure cloud architectures, Kubernetes container orchestration, automated CI/CD pipelines, and Zero-Trust security.',
     speechText:
       'With Cloud and DevOps, we modernize infrastructure on AWS and Azure using automated CI/CD pipelines and scalable container architectures.',
+    primaryGestureState: 'pointing',
+    activeHand: 'right',
     pose: {
-      // Scene 5: Gestures upward and outward toward Cloud, DevOps & Enterprise scale
-      waistYaw: 0.12,
-      torsoYaw: 0.22,
+      // Gentle index-finger point toward the upper-right Cloud & DevOps card, while left arm stays relaxed at side
+      waistYaw: 0.09,
+      torsoYaw: 0.18,
       torsoPitch: -0.02,
-      torsoRoll: 0.03,
-      headYaw: 0.28,
-      headPitch: -0.1,
-      headRoll: 0.04,
-      rightShoulderPitch: -1.12,
-      rightShoulderRoll: -0.52,
-      rightShoulderYaw: -0.24,
-      rightElbowPitch: -0.76,
-      rightWristRoll: 0.62,
-      rightWristPitch: -0.08,
-      rightFingerCurl: 0.0,
-      rightPointing: true,
-      leftShoulderPitch: -0.26,
-      leftShoulderRoll: 0.2,
-      leftElbowPitch: -0.54,
-      leftFingerCurl: 0.3,
-      leftPointing: false,
+      torsoRoll: 0.02,
+      headYaw: 0.24,
+      headPitch: -0.07,
+      headRoll: 0.03,
+      rightShoulderPitch: -0.36,
+      rightShoulderRoll: 0.54,
+      rightShoulderYaw: 0.18,
+      rightElbowPitch: 1.94,
+      rightElbowForward: -0.22,
+      rightWristRoll: -0.22,
+      rightWristPitch: -0.06,
+      rightWristSupination: 0.24,
+      rightFingerCurl: 0.06,
+      rightPointing: 1, // Distinct index-finger point with middle/ring/pinky tucked into palm
+      // Left arm relaxed at side
+      leftShoulderPitch: -0.24,
+      leftShoulderRoll: 0.16,
+      leftShoulderYaw: 0.22,
+      leftElbowPitch: -0.22,
+      leftElbowForward: -0.72,
+      leftWristSupination: 0.45,
+      leftFingerCurl: 0.4,
+      leftPointing: 0,
+    },
+    followUpPose: {
+      // After pointing for ~1.3s, smoothly opens palm into an upward open-palm gesture
+      rightElbowPitch: 1.84,
+      rightWristRoll: -0.12,
+      rightWristSupination: 0.42,
+      rightFingerCurl: 0.05,
+      rightPointing: 0,
     },
   },
   {
@@ -239,28 +338,35 @@ export const ROBOT_SERVICE_CARDS: RobotServiceCardItem[] = [
       'Technical SEO, search-intent architecture, performance campaigns, and conversion optimization that drive measurable business growth.',
     speechText:
       'Through Digital Marketing and Technical SEO, we amplify your search visibility and convert high-intent visitors into lasting customers.',
+    primaryGestureState: 'presenting',
+    activeHand: 'right',
     pose: {
-      // Scene 6: Expressive open presentation gesture introducing digital growth & analytics
-      waistYaw: 0.1,
-      torsoYaw: 0.18,
+      // Welcoming, outward-facing open-palm gesture with right hand in the clear window
+      waistYaw: 0.08,
+      torsoYaw: 0.16,
       torsoPitch: 0.02,
       torsoRoll: -0.02,
-      headYaw: 0.24,
+      headYaw: 0.22,
       headPitch: 0.02,
-      headRoll: -0.04,
-      rightShoulderPitch: -0.82,
-      rightShoulderRoll: -0.48,
-      rightShoulderYaw: -0.18,
-      rightElbowPitch: -0.88,
-      rightWristRoll: 0.7,
-      rightFingerCurl: 0.02,
-      rightPointing: false,
-      leftShoulderPitch: -0.54,
-      leftShoulderRoll: 0.34,
-      leftElbowPitch: -0.76,
-      leftWristRoll: -0.45,
-      leftFingerCurl: 0.12,
-      leftPointing: false,
+      headRoll: -0.03,
+      rightShoulderPitch: -0.34,
+      rightShoulderRoll: 0.48,
+      rightShoulderYaw: 0.16,
+      rightElbowPitch: 1.82,
+      rightElbowForward: -0.28,
+      rightWristRoll: -0.18,
+      rightWristPitch: 0.08,
+      rightWristSupination: 0.44,
+      rightFingerCurl: 0.05,
+      rightPointing: 0,
+      leftShoulderPitch: -0.24,
+      leftShoulderRoll: 0.16,
+      leftShoulderYaw: 0.22,
+      leftElbowPitch: -0.22,
+      leftElbowForward: -0.72,
+      leftWristSupination: 0.45,
+      leftFingerCurl: 0.4,
+      leftPointing: 0,
     },
   },
   {
@@ -279,26 +385,37 @@ export const ROBOT_SERVICE_CARDS: RobotServiceCardItem[] = [
       'Scalable custom enterprise software, multi-tenant SaaS platforms, API integrations, and operational systems engineered around your workflows.',
     speechText:
       'We build Custom Software and enterprise platforms that replace manual bottlenecks with secure, scalable digital operations.',
+    primaryGestureState: 'explaining',
+    activeHand: 'both',
     pose: {
-      waistYaw: 0.08,
-      torsoYaw: 0.16,
-      torsoPitch: 0.05,
-      torsoRoll: 0.02,
-      headYaw: 0.22,
-      headPitch: 0.08,
-      headRoll: 0.03,
-      rightShoulderPitch: -0.64,
-      rightShoulderRoll: -0.42,
-      rightShoulderYaw: -0.15,
-      rightElbowPitch: -0.78,
-      rightWristRoll: 0.56,
-      rightFingerCurl: 0.04,
-      rightPointing: false,
-      leftShoulderPitch: -0.32,
-      leftShoulderRoll: 0.22,
-      leftElbowPitch: -0.58,
-      leftFingerCurl: 0.28,
-      leftPointing: false,
+      // Measured explanatory gestures with both hands (asymmetric heights & wrist angles)
+      waistYaw: 0.05,
+      torsoYaw: 0.1,
+      torsoPitch: 0.03,
+      torsoRoll: 0.015,
+      headYaw: 0.14,
+      headPitch: 0.05,
+      headRoll: 0.02,
+      rightShoulderPitch: -0.34,
+      rightShoulderRoll: 0.44,
+      rightShoulderYaw: 0.14,
+      rightElbowPitch: 1.86,
+      rightElbowForward: -0.28,
+      rightWristRoll: -0.14,
+      rightWristPitch: 0.08,
+      rightWristSupination: 0.38,
+      rightFingerCurl: 0.08,
+      rightPointing: 0,
+      leftShoulderPitch: -0.28,
+      leftShoulderRoll: 0.38,
+      leftShoulderYaw: -0.12,
+      leftElbowPitch: 1.72,
+      leftElbowForward: -0.26,
+      leftWristRoll: 0.1,
+      leftWristPitch: 0.06,
+      leftWristSupination: -0.32,
+      leftFingerCurl: 0.14,
+      leftPointing: 0,
     },
   },
   {
@@ -317,27 +434,35 @@ export const ROBOT_SERVICE_CARDS: RobotServiceCardItem[] = [
       'Intelligent robotics control interfaces, edge telemetry, IoT integration, and end-to-end business process automation.',
     speechText:
       'Our Robotics and Automation practice connects intelligent software with physical systems, edge telemetry, and autonomous workflows.',
+    primaryGestureState: 'greeting',
+    activeHand: 'right',
     pose: {
-      // Scene 1 / 7: Welcoming forward-facing ambassador pose with raised right hand
-      waistYaw: -0.04,
-      torsoYaw: -0.08,
-      torsoPitch: -0.02,
+      // Welcoming gesture: raises right hand naturally to wave, while left arm stays relaxed at side
+      waistYaw: -0.03,
+      torsoYaw: -0.06,
+      torsoPitch: -0.01,
       torsoRoll: 0.02,
-      headYaw: -0.08,
-      headPitch: -0.04,
-      headRoll: 0.05,
-      rightShoulderPitch: -1.16,
-      rightShoulderRoll: -0.46,
-      rightShoulderYaw: -0.12,
-      rightElbowPitch: -1.04,
-      rightWristRoll: 0.42,
-      rightFingerCurl: 0.02,
-      rightPointing: false,
-      leftShoulderPitch: -0.48,
-      leftShoulderRoll: 0.28,
-      leftElbowPitch: -0.72,
-      leftFingerCurl: 0.18,
-      leftPointing: false,
+      headYaw: -0.06,
+      headPitch: -0.03,
+      headRoll: 0.04,
+      rightShoulderPitch: -0.34,
+      rightShoulderRoll: 0.54,
+      rightShoulderYaw: 0.14,
+      rightElbowPitch: 1.94,
+      rightElbowForward: -0.2,
+      rightWristRoll: -0.1,
+      rightWristPitch: 0.04,
+      rightWristSupination: 0.1,
+      rightFingerCurl: 0.05,
+      rightPointing: 0,
+      leftShoulderPitch: -0.24,
+      leftShoulderRoll: 0.16,
+      leftShoulderYaw: 0.22,
+      leftElbowPitch: -0.22,
+      leftElbowForward: -0.72,
+      leftWristSupination: 0.45,
+      leftFingerCurl: 0.4,
+      leftPointing: 0,
     },
   },
   {
@@ -356,28 +481,35 @@ export const ROBOT_SERVICE_CARDS: RobotServiceCardItem[] = [
       'Human-centered UI/UX design systems paired with real-time business intelligence dashboards and actionable executive telemetry.',
     speechText:
       'We combine human-centered UI and UX design systems with real-time Data Analytics dashboards so every decision is clear and measurable.',
+    primaryGestureState: 'presenting',
+    activeHand: 'left',
     pose: {
-      // Scene 7: Friendly poised ambassador stance with open welcoming gesture toward viewer & left content
-      waistYaw: -0.06,
-      torsoYaw: -0.12,
+      // Calm one-hand open-palm gesture with left hand in the clear window, right arm relaxed at side
+      waistYaw: -0.05,
+      torsoYaw: -0.1,
       torsoPitch: 0.02,
-      torsoRoll: -0.02,
-      headYaw: -0.14,
+      torsoRoll: -0.015,
+      headYaw: -0.12,
       headPitch: 0.02,
-      headRoll: 0.03,
-      leftShoulderPitch: -0.76,
-      leftShoulderRoll: 0.44,
-      leftShoulderYaw: 0.2,
-      leftElbowPitch: -0.84,
-      leftWristRoll: -0.62,
-      leftFingerCurl: 0.04,
-      leftPointing: false,
-      rightShoulderPitch: -0.44,
-      rightShoulderRoll: -0.26,
-      rightElbowPitch: -0.68,
-      rightWristRoll: 0.35,
-      rightFingerCurl: 0.2,
-      rightPointing: false,
+      headRoll: 0.025,
+      leftShoulderPitch: -0.34,
+      leftShoulderRoll: 0.46,
+      leftShoulderYaw: -0.16,
+      leftElbowPitch: 1.84,
+      leftElbowForward: -0.28,
+      leftWristRoll: 0.14,
+      leftWristPitch: 0.08,
+      leftWristSupination: -0.38,
+      leftFingerCurl: 0.06,
+      leftPointing: 0,
+      rightShoulderPitch: -0.22,
+      rightShoulderRoll: 0.15,
+      rightShoulderYaw: -0.22,
+      rightElbowPitch: -0.2,
+      rightElbowForward: -0.68,
+      rightWristSupination: -0.45,
+      rightFingerCurl: 0.42,
+      rightPointing: 0,
     },
   },
 ];
@@ -392,32 +524,5 @@ export const HERO_SERVICE_LABELS: {
   route: card.route,
 }));
 
-export const DEFAULT_IDLE_POSE: RobotJointTargets = {
-  waistYaw: -0.04,
-  waistPitch: 0.0,
-  torsoYaw: -0.08,
-  torsoPitch: 0.02,
-  torsoRoll: 0.0,
-  headYaw: -0.06,
-  headPitch: 0.0,
-  headRoll: 0.0,
-  rightShoulderPitch: -0.26,
-  rightShoulderYaw: -0.06,
-  rightShoulderRoll: -0.18,
-  rightElbowPitch: -0.56,
-  rightWristRoll: 0.18,
-  rightWristPitch: 0.0,
-  rightFingerCurl: 0.28,
-  rightPointing: false,
-  leftShoulderPitch: -0.24,
-  leftShoulderYaw: 0.06,
-  leftShoulderRoll: 0.18,
-  leftElbowPitch: -0.52,
-  leftWristRoll: -0.18,
-  leftWristPitch: 0.0,
-  leftFingerCurl: 0.28,
-  leftPointing: false,
-};
-
 export const WELCOME_SPEECH_SCRIPT =
-  "Welcome to IAMTECHNI. We transform ideas into intelligent digital solutions through AI, software engineering, modern web experiences, cloud technologies, and digital growth. Explore our services and discover what is possible with IAMTECHNI.";
+  'Welcome to IAMTECHNI. We transform ideas into intelligent digital solutions through AI, software engineering, modern web experiences, cloud technologies, and digital growth. Explore our services and discover what is possible with IAMTECHNI.';

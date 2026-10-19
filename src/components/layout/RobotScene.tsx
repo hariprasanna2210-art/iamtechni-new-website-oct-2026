@@ -24,6 +24,7 @@ interface FingerRig {
   proximal: THREE.Group;
   middle: THREE.Group;
   distal: THREE.Group;
+  fingerIndex: number; // 0 = thumb, 1 = index, 2 = middle, 3 = ring, 4 = pinky
   isThumb?: boolean;
   isIndex?: boolean;
 }
@@ -484,66 +485,288 @@ const HumanoidAmbassador: React.FC<HumanoidAmbassadorProps> = ({
   }, [activeServiceId, animationState, isSpeaking, speechEnergy, isVisible]);
 
   const jointPoseRef = useRef<RobotJointTargets>({ ...DEFAULT_IDLE_POSE });
+  const internalGestureStateRef = useRef<RobotAnimationState>(animationState);
+  const conversationalWeightRef = useRef({ left: 0.2, right: 0.6 });
   const pointerDampRef = useRef({ x: 0, y: 0 });
-  const wavePhaseRef = useRef({ weight: 1, angle: 0 });
+  const wavePhaseRef = useRef({ weight: 0, angle: 0 });
   const blinkStateRef = useRef({
     nextBlinkTime: 2.2,
     blinkProgress: 0,
     isBlinking: false,
   });
 
-  // Smooth GSAP choreography transition whenever the active service / scene changes
+  // Helper: Proximal-to-distal human biomechanical tween (Shoulder -> Elbow -> Wrist -> Fingers)
+  // with natural timing asymmetry between left and right arms
+  const scheduleBiomechanicalPose = (
+    tl: gsap.core.Timeline,
+    target: RobotJointTargets,
+    startTime: number,
+    leadHand: 'left' | 'right' | 'both',
+    baseDuration = 0.96
+  ) => {
+    const pose = jointPoseRef.current;
+    const rightDelay = leadHand === 'left' ? 0.14 : 0.0;
+    const leftDelay = leadHand === 'left' ? 0.0 : 0.14;
+
+    // 1. Core & Head lead the gesture shift
+    tl.to(
+      pose,
+      {
+        waistYaw: target.waistYaw,
+        waistPitch: target.waistPitch,
+        torsoYaw: target.torsoYaw,
+        torsoPitch: target.torsoPitch,
+        torsoRoll: target.torsoRoll,
+        headYaw: target.headYaw,
+        headPitch: target.headPitch,
+        headRoll: target.headRoll,
+        duration: baseDuration * 0.92,
+        ease: 'sine.inOut',
+        overwrite: 'auto',
+      },
+      startTime
+    );
+
+    // 2. Right Arm: Shoulder -> Elbow -> Wrist -> Fingers
+    tl.to(
+      pose,
+      {
+        rightShoulderPitch: target.rightShoulderPitch,
+        rightShoulderYaw: target.rightShoulderYaw,
+        rightShoulderRoll: target.rightShoulderRoll,
+        duration: baseDuration * 0.95,
+        ease: 'power2.inOut',
+        overwrite: 'auto',
+      },
+      startTime + rightDelay + 0.02
+    );
+    tl.to(
+      pose,
+      {
+        rightElbowPitch: target.rightElbowPitch,
+        rightElbowForward: target.rightElbowForward,
+        duration: baseDuration * 1.02,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      },
+      startTime + rightDelay + 0.09
+    );
+    tl.to(
+      pose,
+      {
+        rightWristRoll: target.rightWristRoll,
+        rightWristPitch: target.rightWristPitch,
+        rightWristSupination: target.rightWristSupination,
+        duration: baseDuration * 1.06,
+        ease: 'sine.out',
+        overwrite: 'auto',
+      },
+      startTime + rightDelay + 0.16
+    );
+    tl.to(
+      pose,
+      {
+        rightFingerCurl: target.rightFingerCurl,
+        rightPointing: target.rightPointing,
+        duration: baseDuration * 0.85,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      },
+      startTime + rightDelay + 0.22
+    );
+
+    // 3. Left Arm: Shoulder -> Elbow -> Wrist -> Fingers (with slight timing offset)
+    tl.to(
+      pose,
+      {
+        leftShoulderPitch: target.leftShoulderPitch,
+        leftShoulderYaw: target.leftShoulderYaw,
+        leftShoulderRoll: target.leftShoulderRoll,
+        duration: baseDuration * 0.95,
+        ease: 'power2.inOut',
+        overwrite: 'auto',
+      },
+      startTime + leftDelay + 0.02
+    );
+    tl.to(
+      pose,
+      {
+        leftElbowPitch: target.leftElbowPitch,
+        leftElbowForward: target.leftElbowForward,
+        duration: baseDuration * 1.02,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      },
+      startTime + leftDelay + 0.09
+    );
+    tl.to(
+      pose,
+      {
+        leftWristRoll: target.leftWristRoll,
+        leftWristPitch: target.leftWristPitch,
+        leftWristSupination: target.leftWristSupination,
+        duration: baseDuration * 1.06,
+        ease: 'sine.out',
+        overwrite: 'auto',
+      },
+      startTime + leftDelay + 0.16
+    );
+    tl.to(
+      pose,
+      {
+        leftFingerCurl: target.leftFingerCurl,
+        leftPointing: target.leftPointing,
+        duration: baseDuration * 0.85,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      },
+      startTime + leftDelay + 0.22
+    );
+  };
+
+  // Multi-phase GSAP choreography synchronized with service explanations:
+  // Enters primary gesture (presenting / pointing / explaining / greeting),
+  // performs conversational emphasis, then blends smoothly into returnToIdle -> idle pause.
   useEffect(() => {
     const activeCard = ROBOT_SERVICE_CARDS.find((c) => c.id === activeServiceId);
-    const targetPose =
-      animationState === 'explaining' && activeCard
-        ? { ...DEFAULT_IDLE_POSE, ...activeCard.pose }
-        : { ...DEFAULT_IDLE_POSE };
+    if (!activeCard || animationState === 'idle') {
+      internalGestureStateRef.current = 'returnToIdle';
+      const idleTl = gsap.timeline({
+        onComplete: () => {
+          internalGestureStateRef.current = 'idle';
+        },
+      });
+      scheduleBiomechanicalPose(idleTl, DEFAULT_IDLE_POSE, 0, 'right', 1.05);
+      idleTl.to(
+        conversationalWeightRef.current,
+        { left: 0.08, right: 0.08, duration: 0.8, ease: 'sine.out' },
+        0
+      );
+      return () => {
+        idleTl.kill();
+      };
+    }
 
-    gsap.killTweensOf(jointPoseRef.current);
-    gsap.to(jointPoseRef.current, {
-      ...targetPose,
-      duration: 1.1,
-      ease: 'power3.inOut',
-      overwrite: 'auto',
-    });
-  }, [activeServiceId, animationState]);
+    const primaryTarget: RobotJointTargets = {
+      ...DEFAULT_IDLE_POSE,
+      ...activeCard.pose,
+    };
+    const leadHand = activeCard.activeHand;
+    internalGestureStateRef.current = activeCard.primaryGestureState;
 
-  // Scene 1: Welcoming Hand-Wave Gesture (runs automatically on mount & when user clicks Greet)
+    const tl = gsap.timeline();
+
+    // Activate conversational wrist/forearm emphasis only on the active gesturing hand(s)
+    tl.to(
+      conversationalWeightRef.current,
+      {
+        left: leadHand === 'left' || leadHand === 'both' ? 1.0 : 0.15,
+        right: leadHand === 'right' || leadHand === 'both' ? 1.0 : 0.15,
+        duration: 0.65,
+        ease: 'sine.inOut',
+      },
+      0
+    );
+
+    // Phase 1 (0.0s - 1.15s): Proximal-to-distal entry into the service's primary gesture
+    scheduleBiomechanicalPose(tl, primaryTarget, 0, leadHand, 0.96);
+
+    // Phase 2 (1.35s - 2.75s): If pointing or follow-up pose exists, transition smoothly from point to open-palm explanation
+    if (activeCard.followUpPose) {
+      const followUpTarget: RobotJointTargets = {
+        ...primaryTarget,
+        ...activeCard.followUpPose,
+      };
+      tl.call(
+        () => {
+          internalGestureStateRef.current = 'explaining';
+        },
+        [],
+        1.35
+      );
+      scheduleBiomechanicalPose(tl, followUpTarget, 1.35, leadHand, 0.88);
+    }
+
+    // Phase 3 (2.95s - 4.10s): Smooth returnToIdle pause before the next service card
+    if (!isSpeaking) {
+      tl.call(
+        () => {
+          internalGestureStateRef.current = 'returnToIdle';
+        },
+        [],
+        2.95
+      );
+      tl.to(
+        conversationalWeightRef.current,
+        {
+          left: 0.12,
+          right: 0.12,
+          duration: 0.9,
+          ease: 'sine.inOut',
+        },
+        2.95
+      );
+      scheduleBiomechanicalPose(tl, DEFAULT_IDLE_POSE, 2.95, leadHand, 1.02);
+      tl.call(
+        () => {
+          internalGestureStateRef.current = 'idle';
+        },
+        [],
+        4.05
+      );
+    }
+
+    return () => {
+      tl.kill();
+    };
+  }, [activeServiceId, animationState, isSpeaking]);
+
+  // Welcoming Hand-Wave Gesture:
+  // Raises right hand naturally from a relaxed position, waves gently with wrist, forearm & fingers,
+  // and lowers the hand smoothly back to a relaxed position.
   useEffect(() => {
     if (greetTriggerCount === 0) return;
 
-    const tl = gsap.timeline();
+    internalGestureStateRef.current = 'greeting';
+    const tl = gsap.timeline({
+      onComplete: () => {
+        internalGestureStateRef.current = 'returnToIdle';
+      },
+    });
+
+    // 1. Raise right hand smoothly from relaxed position
     tl.to(
       wavePhaseRef.current,
       {
         weight: 1,
-        duration: 0.25,
+        duration: 0.55,
         ease: 'power2.out',
       },
       0
     );
 
+    // 2. Gentle wrist & forearm wave (3 soft oscillations)
     tl.fromTo(
       wavePhaseRef.current,
       { angle: 0 },
       {
-        angle: Math.PI * 4,
-        duration: 1.8,
+        angle: Math.PI * 3.5,
+        duration: 1.75,
         ease: 'sine.inOut',
       },
-      0.1
+      0.2
     );
 
+    // 3. Smoothly lower the hand back to a relaxed position (weight -> 0)
     tl.to(
       wavePhaseRef.current,
       {
-        weight: 0.35,
+        weight: 0,
         angle: 0,
-        duration: 0.5,
+        duration: 0.85,
         ease: 'power2.inOut',
       },
-      1.9
+      1.95
     );
 
     return () => {
@@ -1194,10 +1417,10 @@ const HumanoidAmbassador: React.FC<HumanoidAmbassadorProps> = ({
       // 5 Articulated 3-Phalanx Fingers in TRUE anatomical order (Thumb + Index on inner/upper side)
       const fingers: FingerRig[] = [];
       const fingerSpecs = [
-        { radialOffset: 0.044, len: 0.043, splay: 0.06, isIndex: true },
-        { radialOffset: 0.015, len: 0.048, splay: 0.02, isIndex: false },
-        { radialOffset: -0.014, len: 0.044, splay: -0.02, isIndex: false },
-        { radialOffset: -0.041, len: 0.036, splay: -0.06, isIndex: false },
+        { radialOffset: 0.044, len: 0.043, splay: 0.06, fingerIndex: 1, isIndex: true },
+        { radialOffset: 0.015, len: 0.048, splay: 0.02, fingerIndex: 2, isIndex: false },
+        { radialOffset: -0.014, len: 0.044, splay: -0.02, fingerIndex: 3, isIndex: false },
+        { radialOffset: -0.041, len: 0.036, splay: -0.06, fingerIndex: 4, isIndex: false },
       ];
 
       fingerSpecs.forEach((spec) => {
@@ -1251,6 +1474,7 @@ const HumanoidAmbassador: React.FC<HumanoidAmbassadorProps> = ({
           proximal,
           middle,
           distal,
+          fingerIndex: spec.fingerIndex,
           isIndex: spec.isIndex,
         });
       });
@@ -1295,6 +1519,7 @@ const HumanoidAmbassador: React.FC<HumanoidAmbassadorProps> = ({
         proximal: thumbProximal,
         middle: thumbMiddle,
         distal: thumbDistal,
+        fingerIndex: 0,
         isThumb: true,
       });
 
@@ -1535,54 +1760,230 @@ const HumanoidAmbassador: React.FC<HumanoidAmbassadorProps> = ({
       }
     });
 
-    // 6. Natural Humanoid Arm & Hand Kinematics (Both elbows bend naturally UPWARD!)
-    const speakGesture = speakingNow
-      ? Math.sin(elapsed * 4.8) * 0.08 * motionScale
-      : 0;
+    // 6. Natural Human-Like Presenter Arm, Wrist & 5-Finger Biomechanics
+    const speechBoost = speakingNow ? 1.45 : 1.0;
+    const leftConvWeight =
+      conversationalWeightRef.current.left * speechBoost * motionScale;
+    const rightConvWeight =
+      conversationalWeightRef.current.right * speechBoost * motionScale;
 
-    // Viewer-Left Arm (graceful raised presenter gesture toward Left-Side Headline & Services)
-    rig.viewerLeftArm.clavicleGroup.rotation.z = breathWave * 0.015;
-    rig.viewerLeftArm.shoulderGroup.rotation.z =
-      -0.38 - Math.abs(pose.leftShoulderRoll) * 0.35;
-    rig.viewerLeftArm.shoulderGroup.rotation.x =
-      -0.14 + pose.leftShoulderPitch * 0.2 + breathWave * 0.02 + speakGesture;
-    rig.viewerLeftArm.shoulderGroup.rotation.y = -0.16;
-    rig.viewerLeftArm.elbowGroup.rotation.z =
-      -2.08 - Math.abs(pose.leftElbowPitch) * 0.22 - speakGesture * 0.45;
-    rig.viewerLeftArm.elbowGroup.rotation.x = -0.15;
-    rig.viewerLeftArm.wristGroup.rotation.y = 0.08;
-    rig.viewerLeftArm.wristGroup.rotation.z = 0.14;
+    // Non-repetitive multi-frequency conversational phrasing (asymmetric between left and right arms)
+    const leftBeat =
+      (Math.sin(elapsed * 2.7 + 0.4) * 0.55 +
+        Math.sin(elapsed * 4.3 + 1.9) * 0.45) *
+      leftConvWeight;
+    const rightBeat =
+      (Math.sin(elapsed * 2.5 - 0.7) * 0.55 +
+        Math.sin(elapsed * 4.1 + 0.6) * 0.45) *
+      rightConvWeight;
 
+    // --- VIEWER-LEFT ARM (Explaining & Presenting toward Left-Side Content & Cards) ---
+    const leftLiftProgress = THREE.MathUtils.clamp(
+      (pose.leftElbowPitch + 0.22) / 2.06,
+      0,
+      1
+    );
+    // Natural 3D forward arc during arm raising/lowering so hands never pass through side cards
+    const leftMidLiftArc = Math.sin(leftLiftProgress * Math.PI) * 0.36;
+
+    rig.viewerLeftArm.clavicleGroup.rotation.z =
+      breathWave * 0.012 - leftLiftProgress * 0.055;
+
+    rig.viewerLeftArm.shoulderGroup.rotation.z = -THREE.MathUtils.clamp(
+      pose.leftShoulderRoll + leftBeat * 0.035,
+      0.12,
+      0.72
+    );
+    rig.viewerLeftArm.shoulderGroup.rotation.x = THREE.MathUtils.clamp(
+      pose.leftShoulderPitch -
+        leftMidLiftArc * 0.5 +
+        breathWave * 0.015 +
+        leftBeat * 0.055,
+      -0.95,
+      0.08
+    );
+    rig.viewerLeftArm.shoulderGroup.rotation.y = THREE.MathUtils.clamp(
+      pose.leftShoulderYaw + leftBeat * 0.045,
+      -0.55,
+      0.55
+    );
+
+    rig.viewerLeftArm.elbowGroup.rotation.z = -THREE.MathUtils.clamp(
+      pose.leftElbowPitch + leftBeat * 0.11,
+      -0.35,
+      2.08
+    );
+    rig.viewerLeftArm.elbowGroup.rotation.x = THREE.MathUtils.clamp(
+      pose.leftElbowForward - leftMidLiftArc - leftBeat * 0.06,
+      -1.35,
+      -0.08
+    );
+
+    // Coordinated wrist pronation/supination & emphasis rotation
+    rig.viewerLeftArm.wristGroup.rotation.y = THREE.MathUtils.clamp(
+      pose.leftWristSupination - leftBeat * 0.14,
+      -0.92,
+      0.92
+    );
+    rig.viewerLeftArm.wristGroup.rotation.z = THREE.MathUtils.clamp(
+      pose.leftWristRoll + leftBeat * 0.09,
+      -0.52,
+      0.52
+    );
+    rig.viewerLeftArm.wristGroup.rotation.x = THREE.MathUtils.clamp(
+      pose.leftWristPitch + leftBeat * 0.07,
+      -0.45,
+      0.45
+    );
+
+    // Individual 5-Finger Articulation (Natural Cascade, Open Palm & Pointing)
+    const leftPointW = THREE.MathUtils.clamp(pose.leftPointing, 0, 1);
     rig.viewerLeftArm.fingers.forEach((f) => {
-      const curl = pose.leftFingerCurl * 0.28;
-      f.proximal.rotation.x = curl * 0.4;
-      f.middle.rotation.x = curl * 0.5;
-      f.distal.rotation.x = curl * 0.4;
+      const cascadeOffset = f.isThumb ? 0.0 : (f.fingerIndex - 1) * 0.075;
+      const beatOpen = Math.max(0, leftBeat) * 0.08;
+      const baseCurl = THREE.MathUtils.clamp(
+        pose.leftFingerCurl + cascadeOffset - beatOpen,
+        0.02,
+        0.92
+      );
+      const pointTargetCurl = f.isIndex
+        ? 0.01
+        : f.isThumb
+        ? 0.95
+        : 1.45 + (f.fingerIndex - 2) * 0.12;
+      const finalCurl = THREE.MathUtils.lerp(baseCurl, pointTargetCurl, leftPointW);
+
+      f.proximal.rotation.x = -finalCurl * 0.68;
+      f.middle.rotation.x = -finalCurl * 0.88;
+      f.distal.rotation.x = -finalCurl * 0.68;
     });
 
-    // Viewer-Right Arm (friendly raised Welcome Wave & Service Presentation)
+    // --- VIEWER-RIGHT ARM (Welcoming Wave, Open-Palm Explaining, Presenting & Pointing) ---
     const waveW = wavePhaseRef.current.weight;
-    const waveOsc = Math.sin(wavePhaseRef.current.angle) * 0.26 * waveW;
+    const waveOsc = Math.sin(wavePhaseRef.current.angle) * 0.25 * waveW;
 
-    rig.viewerRightArm.clavicleGroup.rotation.z = -breathWave * 0.015;
-    rig.viewerRightArm.shoulderGroup.rotation.z =
-      0.5 + Math.abs(pose.rightShoulderRoll) * 0.36 + waveW * 0.2;
-    rig.viewerRightArm.shoulderGroup.rotation.x =
-      -0.15 - breathWave * 0.02 - speakGesture;
-    rig.viewerRightArm.shoulderGroup.rotation.y = 0.16;
+    const rightTargetElbow = THREE.MathUtils.lerp(
+      pose.rightElbowPitch + rightBeat * 0.11,
+      1.96 + waveOsc * 0.42,
+      waveW
+    );
+    const rightLiftProgress = THREE.MathUtils.clamp(
+      (rightTargetElbow + 0.22) / 2.18,
+      0,
+      1
+    );
+    const rightMidLiftArc = Math.sin(rightLiftProgress * Math.PI) * 0.36;
 
-    rig.viewerRightArm.elbowGroup.rotation.z =
-      1.96 + waveW * 0.22 + waveOsc * 0.6 + speakGesture * 0.45;
-    rig.viewerRightArm.elbowGroup.rotation.x = 0.14;
-    rig.viewerRightArm.wristGroup.rotation.y = 0.06;
-    rig.viewerRightArm.wristGroup.rotation.z = -0.12 + waveOsc * 0.78;
-    rig.viewerRightArm.wristGroup.rotation.x = 0;
+    rig.viewerRightArm.clavicleGroup.rotation.z =
+      -breathWave * 0.012 + rightLiftProgress * 0.055;
 
+    rig.viewerRightArm.shoulderGroup.rotation.z = THREE.MathUtils.clamp(
+      THREE.MathUtils.lerp(
+        pose.rightShoulderRoll + rightBeat * 0.035,
+        0.56,
+        waveW
+      ),
+      0.12,
+      0.75
+    );
+    rig.viewerRightArm.shoulderGroup.rotation.x = THREE.MathUtils.clamp(
+      THREE.MathUtils.lerp(
+        pose.rightShoulderPitch -
+          rightMidLiftArc * 0.5 -
+          breathWave * 0.015 +
+          rightBeat * 0.055,
+        -0.34,
+        waveW
+      ),
+      -0.95,
+      0.08
+    );
+    rig.viewerRightArm.shoulderGroup.rotation.y = THREE.MathUtils.clamp(
+      THREE.MathUtils.lerp(
+        pose.rightShoulderYaw - rightBeat * 0.045,
+        0.14,
+        waveW
+      ),
+      -0.55,
+      0.55
+    );
+
+    rig.viewerRightArm.elbowGroup.rotation.z = THREE.MathUtils.clamp(
+      rightTargetElbow,
+      -0.35,
+      2.12
+    );
+    rig.viewerRightArm.elbowGroup.rotation.x = THREE.MathUtils.clamp(
+      THREE.MathUtils.lerp(
+        pose.rightElbowForward - rightMidLiftArc - rightBeat * 0.06,
+        -0.18,
+        waveW
+      ),
+      -1.35,
+      -0.08
+    );
+
+    // Coordinated wrist pronation/supination & gentle wave oscillation
+    rig.viewerRightArm.wristGroup.rotation.y = THREE.MathUtils.clamp(
+      THREE.MathUtils.lerp(
+        pose.rightWristSupination + rightBeat * 0.14,
+        0.08,
+        waveW
+      ),
+      -0.92,
+      0.92
+    );
+    rig.viewerRightArm.wristGroup.rotation.z = THREE.MathUtils.clamp(
+      THREE.MathUtils.lerp(
+        pose.rightWristRoll - rightBeat * 0.09,
+        -0.12 + waveOsc * 0.72,
+        waveW
+      ),
+      -0.55,
+      0.55
+    );
+    rig.viewerRightArm.wristGroup.rotation.x = THREE.MathUtils.clamp(
+      THREE.MathUtils.lerp(pose.rightWristPitch + rightBeat * 0.07, 0.0, waveW),
+      -0.45,
+      0.45
+    );
+
+    // Individual 5-Finger Articulation (Natural Cascade, Waving Ripple & Index Pointing)
+    const rightPointW = THREE.MathUtils.clamp(
+      pose.rightPointing * (1 - waveW),
+      0,
+      1
+    );
     rig.viewerRightArm.fingers.forEach((f) => {
-      const curl = pose.rightFingerCurl * 0.22;
-      f.proximal.rotation.x = curl * 0.35;
-      f.middle.rotation.x = curl * 0.45;
-      f.distal.rotation.x = curl * 0.35;
+      const cascadeOffset = f.isThumb ? 0.0 : (f.fingerIndex - 1) * 0.075;
+      const beatOpen = Math.max(0, rightBeat) * 0.08;
+      const waveFingerRipple =
+        Math.sin(wavePhaseRef.current.angle * 1.4 - f.fingerIndex * 0.42) *
+        0.075 *
+        waveW;
+
+      const baseCurl = THREE.MathUtils.clamp(
+        THREE.MathUtils.lerp(pose.rightFingerCurl, 0.05, waveW) +
+          cascadeOffset * (1 - waveW * 0.5) -
+          beatOpen +
+          waveFingerRipple,
+        0.02,
+        0.92
+      );
+      const pointTargetCurl = f.isIndex
+        ? 0.01
+        : f.isThumb
+        ? 0.95
+        : 1.45 + (f.fingerIndex - 2) * 0.12;
+      const finalCurl = THREE.MathUtils.lerp(
+        baseCurl,
+        pointTargetCurl,
+        rightPointW
+      );
+
+      f.proximal.rotation.x = -finalCurl * 0.68;
+      f.middle.rotation.x = -finalCurl * 0.88;
+      f.distal.rotation.x = -finalCurl * 0.68;
     });
 
     // 7. Subtle Technical Halo Counter-Rotation
