@@ -427,16 +427,16 @@ const ResponsiveCameraRig: React.FC = () => {
       const aspect = size.width / Math.max(1, size.height);
       if (size.width < 500) {
         camera.fov = 30;
-        camera.position.set(0, 0.44, 5.45);
-        camera.lookAt(0, 0.4, 0);
+        camera.position.set(0, 0.58, 5.45);
+        camera.lookAt(0, 0.54, 0);
       } else if (aspect > 1.35) {
         camera.fov = 28;
-        camera.position.set(0, 0.46, 5.05);
-        camera.lookAt(0, 0.41, 0);
+        camera.position.set(0, 0.58, 5.05);
+        camera.lookAt(0, 0.54, 0);
       } else {
         camera.fov = 29;
-        camera.position.set(0, 0.45, 5.25);
-        camera.lookAt(0, 0.41, 0);
+        camera.position.set(0, 0.57, 5.25);
+        camera.lookAt(0, 0.54, 0);
       }
       camera.updateProjectionMatrix();
     }
@@ -857,14 +857,14 @@ const HumanoidAmbassador: React.FC<HumanoidAmbassadorProps> = ({
     const rootSceneGroup = new THREE.Group();
     const ambassadorRoot = new THREE.Group();
     ambassadorRoot.name = 'AmbassadorRoot';
-    ambassadorRoot.position.set(0, -0.34, 0);
+    ambassadorRoot.position.set(0, -0.15, 0);
     rootSceneGroup.add(ambassadorRoot);
 
     // =========================================================================
     // A. STUDIO PLATFORM & SUBTLE CONCENTRIC HOLOGRAPHIC HALO
     // =========================================================================
     const platformGroup = new THREE.Group();
-    platformGroup.position.set(0, -1.36, 0);
+    platformGroup.position.set(0, -1.17, 0);
     rootSceneGroup.add(platformGroup);
 
     const shadowCanvas = document.createElement('canvas');
@@ -1646,7 +1646,7 @@ const HumanoidAmbassador: React.FC<HumanoidAmbassadorProps> = ({
       rig.mixer.stopAllAction();
       rig.disposableGeometries.forEach((g) => g.dispose());
       rig.disposableMaterials.forEach((m) => m.dispose());
-      rig.disposableTextures.forEach((t) => m.dispose());
+      rig.disposableTextures.forEach((t) => t.dispose());
     };
   }, [rig]);
 
@@ -2081,7 +2081,7 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
       <Canvas
         shadows={!isHeadless}
         dpr={isHeadless ? 1 : [1, 2]}
-        camera={{ position: [0, 0.46, 5.05], fov: 28, near: 0.1, far: 100 }}
+        camera={{ position: [0, 0.58, 5.05], fov: 28, near: 0.1, far: 100 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >
         <StudioEnvironment />

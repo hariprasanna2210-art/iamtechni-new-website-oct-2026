@@ -293,7 +293,7 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
           <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5 2xl:gap-6 text-xs xl:text-[13px] font-medium text-slate-600">
             {/* Services with Mega Menu */}
             <div
-              className="relative py-2"
+              className="py-2"
               onMouseEnter={() => handleMouseEnter('services')}
               onMouseLeave={handleMouseLeave}
             >
@@ -312,178 +312,180 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
               {/* Services Mega Menu Dropdown */}
               {activeMegaMenu === 'services' && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 w-[720px] bg-white rounded-2xl shadow-xl border border-slate-200 p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
+                  className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 pointer-events-auto before:absolute before:-top-4 before:-left-16 before:-right-16 before:h-8 before:content-['']"
                   role="menu"
                 >
-                  <div className="grid grid-cols-3 gap-6">
-                    {/* Column 1: Experiences */}
-                    <div>
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-[#04C8E8]" /> Digital Experiences
+                  <div className="w-[960px] max-w-[calc(100vw-48px)] xl:w-[1060px] bg-white rounded-2xl shadow-xl border border-slate-200 p-6 animate-in fade-in zoom-in-95 duration-150">
+                    <div className="grid grid-cols-3 gap-6">
+                      {/* Column 1: Experiences */}
+                      <div>
+                        <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5 px-2">
+                          <Sparkles className="w-3.5 h-3.5 text-[#04C8E8]" /> Digital Experiences
+                        </div>
+                        <div className="space-y-1">
+                          <button
+                            onClick={() => handleLinkClick('/services/web-development')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              Web Development
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              Flagship corporate websites & web apps
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleLinkClick('/services/ecommerce')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              E-commerce Development
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              Storefronts, checkout & inventory sync
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleLinkClick('/services/ui-ux-design')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              UI/UX Design Systems
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              User research & accessible prototypes
+                            </div>
+                          </button>
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <button
-                          onClick={() => handleLinkClick('/services/web-development')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            Web Development
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            Flagship corporate websites & web apps
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => handleLinkClick('/services/ecommerce')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            E-commerce Development
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            Storefronts, checkout & inventory sync
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => handleLinkClick('/services/ui-ux-design')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            UI/UX Design Systems
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            User research & accessible prototypes
-                          </div>
-                        </button>
+
+                      {/* Column 2: Software & AI */}
+                      <div>
+                        <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5 px-2">
+                          <Code2 className="w-3.5 h-3.5 text-[#1266E8]" /> Software & Intelligence
+                        </div>
+                        <div className="space-y-1">
+                          <button
+                            onClick={() => handleLinkClick('/services/custom-software')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              Custom Software
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              Business portals & workflow systems
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleLinkClick('/services/mobile-apps')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              Mobile App Engineering
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              Cross-platform & progressive web apps
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleLinkClick('/services/ai-machine-learning')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              AI & Machine Learning
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              Private RAG & document assistants
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleLinkClick('/services/data-analytics')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              Data Analytics & BI
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              ETL pipelines & KPI dashboards
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleLinkClick('/services/robotics')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              Robotics & Emerging Tech
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              Autonomous systems & IoT telemetry
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Column 3: Cloud & Growth */}
+                      <div>
+                        <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5 px-2">
+                          <Cloud className="w-3.5 h-3.5 text-[#5427D9]" /> Cloud & Growth
+                        </div>
+                        <div className="space-y-1">
+                          <button
+                            onClick={() => handleLinkClick('/services/cloud-devops')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              Cloud & DevOps
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              AWS, Azure & CI/CD automation
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleLinkClick('/services/cybersecurity')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              Cybersecurity Hardening
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              Defensive audits & secure coding
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleLinkClick('/services/digital-marketing')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              Digital Marketing & SEO
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              Technical SEO & search rankings
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => handleLinkClick('/services/training')}
+                            className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
+                          >
+                            <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                              Technical Training
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed mt-0.5">
+                              Engineering labs & team upskilling
+                            </div>
+                          </button>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Column 2: Software & AI */}
-                    <div>
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
-                        <Code2 className="w-3.5 h-3.5 text-[#1266E8]" /> Software & Intelligence
-                      </div>
-                      <div className="space-y-2">
-                        <button
-                          onClick={() => handleLinkClick('/services/custom-software')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            Custom Software
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            Business portals & workflow systems
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => handleLinkClick('/services/mobile-apps')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            Mobile App Engineering
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            Cross-platform & progressive web apps
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => handleLinkClick('/services/ai-machine-learning')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            AI & Machine Learning
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            Private RAG & document assistants
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => handleLinkClick('/services/data-analytics')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            Data Analytics & BI
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            ETL pipelines & KPI dashboards
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => handleLinkClick('/services/robotics')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            Robotics & Emerging Tech
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            Autonomous systems & IoT telemetry
-                          </div>
-                        </button>
-                      </div>
+                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 px-2">
+                      <span>13 Specialized Technical Practices</span>
+                      <button
+                        onClick={() => handleLinkClick('/services')}
+                        className="text-[#1266E8] font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        View All Services Directory <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
                     </div>
-
-                    {/* Column 3: Cloud & Growth */}
-                    <div>
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
-                        <Cloud className="w-3.5 h-3.5 text-[#5427D9]" /> Cloud & Growth
-                      </div>
-                      <div className="space-y-2">
-                        <button
-                          onClick={() => handleLinkClick('/services/cloud-devops')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            Cloud & DevOps
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            AWS, Azure & CI/CD automation
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => handleLinkClick('/services/cybersecurity')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            Cybersecurity Hardening
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            Defensive audits & secure coding
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => handleLinkClick('/services/digital-marketing')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            Digital Marketing & SEO
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            Technical SEO & search rankings
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => handleLinkClick('/services/training')}
-                          className="block text-left w-full p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
-                        >
-                          <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                            Technical Training
-                          </div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1">
-                            Engineering labs & team upskilling
-                          </div>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                    <span>13 Specialized Technical Practices</span>
-                    <button
-                      onClick={() => handleLinkClick('/services')}
-                      className="text-[#1266E8] font-semibold hover:underline flex items-center gap-1 cursor-pointer"
-                    >
-                      View All Services Directory <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
                   </div>
                 </div>
               )}
@@ -491,7 +493,7 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
 
             {/* Solutions with Mega Menu */}
             <div
-              className="relative py-2"
+              className="py-2"
               onMouseEnter={() => handleMouseEnter('solutions')}
               onMouseLeave={handleMouseLeave}
             >
@@ -510,67 +512,69 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
               {/* Solutions Dropdown */}
               {activeMegaMenu === 'solutions' && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 w-[540px] bg-white rounded-2xl shadow-xl border border-slate-200 p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
+                  className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 pointer-events-auto before:absolute before:-top-4 before:-left-20 before:-right-20 before:h-8 before:content-['']"
                   role="menu"
                 >
-                  <div className="grid grid-cols-2 gap-4">
-                    <button
-                      onClick={() => handleLinkClick('/solutions')}
-                      className="block text-left p-3 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
-                    >
-                      <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                        Business Process Automation
-                      </div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
-                        Replace manual spreadsheets and email approval friction.
-                      </div>
-                    </button>
+                  <div className="w-[580px] max-w-[calc(100vw-48px)] bg-white rounded-2xl shadow-xl border border-slate-200 p-6 animate-in fade-in zoom-in-95 duration-150">
+                    <div className="grid grid-cols-2 gap-4">
+                      <button
+                        onClick={() => handleLinkClick('/solutions')}
+                        className="block text-left p-3 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
+                      >
+                        <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                          Business Process Automation
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                          Replace manual spreadsheets and email approval friction.
+                        </div>
+                      </button>
 
-                    <button
-                      onClick={() => handleLinkClick('/solutions')}
-                      className="block text-left p-3 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
-                    >
-                      <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                        AI Knowledge & Document Search
-                      </div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
-                        Private enterprise RAG assistants with verifiable citations.
-                      </div>
-                    </button>
+                      <button
+                        onClick={() => handleLinkClick('/solutions')}
+                        className="block text-left p-3 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
+                      >
+                        <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                          AI Knowledge & Document Search
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                          Private enterprise RAG assistants with verifiable citations.
+                        </div>
+                      </button>
 
-                    <button
-                      onClick={() => handleLinkClick('/solutions')}
-                      className="block text-left p-3 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
-                    >
-                      <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                        Custom Business Dashboards
-                      </div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
-                        Real-time revenue, telemetry, and KPI data integration.
-                      </div>
-                    </button>
+                      <button
+                        onClick={() => handleLinkClick('/solutions')}
+                        className="block text-left p-3 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
+                      >
+                        <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                          Custom Business Dashboards
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                          Real-time revenue, telemetry, and KPI data integration.
+                        </div>
+                      </button>
 
-                    <button
-                      onClick={() => handleLinkClick('/solutions')}
-                      className="block text-left p-3 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
-                    >
-                      <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
-                        Cloud Modernization & Migration
-                      </div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
-                        AWS & Azure topologies with zero-downtime CI/CD.
-                      </div>
-                    </button>
-                  </div>
+                      <button
+                        onClick={() => handleLinkClick('/solutions')}
+                        className="block text-left p-3 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
+                      >
+                        <div className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8]">
+                          Cloud Modernization & Migration
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                          AWS & Azure topologies with zero-downtime CI/CD.
+                        </div>
+                      </button>
+                    </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                    <span>Engineered around practical business challenges</span>
-                    <button
-                      onClick={() => handleLinkClick('/solutions')}
-                      className="text-[#1266E8] font-semibold hover:underline flex items-center gap-1 cursor-pointer"
-                    >
-                      Explore Solutions Directory <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 px-1">
+                      <span>Engineered around practical business challenges</span>
+                      <button
+                        onClick={() => handleLinkClick('/solutions')}
+                        className="text-[#1266E8] font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        Explore Solutions Directory <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}

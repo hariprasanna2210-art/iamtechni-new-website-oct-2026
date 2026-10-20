@@ -163,19 +163,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
 
         {/* RIGHT COLUMN: 54% Desktop Width — Large Sculpted 3D Humanoid AI Ambassador */}
-        <div className="w-full lg:w-[54%] h-[420px] sm:h-[480px] lg:h-full min-h-0 flex flex-col justify-between py-1">
-          {/* Top-Right Compact Optional Speech & Greet Controls */}
-          <div className="flex items-center justify-center lg:justify-end">
+        <div className="w-full lg:w-[54%] h-[440px] sm:h-[500px] lg:h-full min-h-0 flex flex-col justify-start py-1">
+          {/* Top-Right Voice Note Autoplay & Gesture Controls */}
+          <div className="flex items-center justify-center lg:justify-end mb-1 z-20">
             <RobotSpeechControls
               customScript={activeCard.speechText}
+              autoPlay={true}
               onSpeakingStateChange={handleSpeakingStateChange}
               onTriggerGreeting={handleTriggerGreeting}
             />
           </div>
 
-          {/* Dominant 3D Humanoid Robot Stage + Unobtrusive Perimeter Indicators */}
-          <div className="relative flex-1 min-h-0 w-full flex flex-col justify-end">
-            <div className="flex-1 min-h-0 w-full">
+          {/* Dominant 3D Humanoid Robot Stage + Raised Framing */}
+          <div className="relative flex-1 min-h-0 w-full flex flex-col justify-between">
+            <div className="flex-1 min-h-0 w-full -mt-2 lg:-mt-5">
               <RobotScene
                 activeServiceId={activeServiceId}
                 animationState={animationState}
