@@ -1,181 +1,93 @@
-import React, { useEffect, useRef } from 'react';
-import {
-  ArrowRight,
-  MessageSquare,
-  ArrowUpRight,
-  Cpu,
-  Globe,
-  Smartphone,
-  Cloud,
-  TrendingUp,
-  Code2,
-  Bot,
-  BarChart3,
-} from 'lucide-react';
-import gsap from 'gsap';
+import React from 'react';
+import { ArrowRight, MessageSquare, CheckCircle2 } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { PageRoute } from '../../types';
-import { ROBOT_SERVICE_CARDS } from './RobotController';
 
 export interface HeroContentProps {
-  activeServiceId: string;
-  onSelectServiceCard: (cardId: string) => void;
   onNavigate: (route: PageRoute) => void;
   onOpenProjectModal: (serviceName?: string) => void;
+  activeServiceSlug?: string;
+  onSelectService?: (serviceSlugOrId: string) => void;
+  isAutoPlaying?: boolean;
 }
 
-const getServiceIcon = (id: string) => {
-  switch (id) {
-    case 'ai-ml':
-      return <Cpu className="w-4 h-4" />;
-    case 'web-dev':
-      return <Globe className="w-4 h-4" />;
-    case 'mobile-apps':
-      return <Smartphone className="w-4 h-4" />;
-    case 'cloud-devops':
-      return <Cloud className="w-4 h-4" />;
-    case 'digital-marketing':
-      return <TrendingUp className="w-4 h-4" />;
-    case 'software-solutions':
-      return <Code2 className="w-4 h-4" />;
-    case 'robotics-automation':
-      return <Bot className="w-4 h-4" />;
-    case 'uiux-analytics':
-    default:
-      return <BarChart3 className="w-4 h-4" />;
-  }
-};
-
 export const HeroContent: React.FC<HeroContentProps> = ({
-  activeServiceId,
-  onSelectServiceCard,
   onNavigate,
   onOpenProjectModal,
 }) => {
-  const activeServiceRef = useRef<HTMLDivElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
-  const activeIndex = Math.max(
-    0,
-    ROBOT_SERVICE_CARDS.findIndex((c) => c.id === activeServiceId)
-  );
-  const activeCard = ROBOT_SERVICE_CARDS[activeIndex] || ROBOT_SERVICE_CARDS[0];
-
-  // Subtle transition whenever activeServiceId updates in sync with the 3D robot
-  useEffect(() => {
-    const el = activeServiceRef.current;
-    if (!el) return;
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-    if (prefersReducedMotion) return;
-
-    gsap.killTweensOf(el);
-    gsap.fromTo(
-      el,
-      { y: 3 },
-      { y: 0, duration: 0.32, ease: 'power2.out', clearProps: 'transform' }
-    );
-  }, [activeServiceId]);
+  // Staggered animated words for headline
+  const headlineWords = [
+    { text: 'Build', isHighlight: false },
+    { text: 'Smarter.', isHighlight: true },
+    { text: 'Innovate', isHighlight: false },
+    { text: 'Faster.', isHighlight: true },
+    { text: 'Grow', isHighlight: false },
+    { text: 'Further.', isHighlight: true },
+  ];
 
   return (
-    <div className="flex flex-col justify-center min-h-0 space-y-3.5 xl:space-y-4 text-left">
-      {/* Eyebrow */}
-      <div>
-        <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-extrabold tracking-[0.14em] uppercase text-[#087BFA]">
-          <span className="w-2 h-2 rounded-full bg-[#00C7F2] shrink-0" />
-          <span>IAMTECHNI | TECHNOLOGY THAT MOVES YOU FORWARD</span>
-        </div>
-      </div>
+    <div className="w-full max-w-[580px] flex flex-col justify-center text-left space-y-5 sm:space-y-6">
+      {/* 1. Eyebrow Pill */}
+      <motion.div
+        initial={prefersReducedMotion ? {} : { opacity: 0, y: -6 }}
+        animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+        className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-slate-100/80 border border-[#E2E8F0] text-[#2563EB] text-[10px] sm:text-xs font-bold tracking-[0.08em] uppercase shadow-2xs whitespace-nowrap shrink-0 max-w-full"
+      >
+        <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] shrink-0" />
+        <span className="truncate">IAMTECHNI | TECHNOLOGY THAT MOVES YOU FORWARD</span>
+      </motion.div>
 
-      {/* Main Headline (Responsive clamp for 1366x768 through 1440x900+) */}
-      <h1 className="text-[clamp(1.85rem,3.1vw,3.35rem)] font-extrabold tracking-tight text-[#071638] leading-[1.08]">
-        Build <span className="text-[#087BFA]">Smarter.</span>{' '}
-        Innovate{' '}
-        <span className="bg-gradient-to-r from-[#087BFA] via-[#174DEB] to-[#00C7F2] bg-clip-text text-transparent">
-          Faster.
-        </span>{' '}
-        Grow <span className="text-[#174DEB]">Further.</span>
+      {/* 2. Headline with Staggered Word Reveal & Single Gradient on Highlight Words */}
+      <h1 className="text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-extrabold tracking-tight text-[#0B1B3F] leading-[1.12]">
+        {headlineWords.map((word, i) => (
+          <motion.span
+            key={`${word.text}-${i}`}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
+            animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.45,
+              delay: prefersReducedMotion ? 0 : 0.08 * i,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="inline-block mr-[0.28em]"
+          >
+            {word.isHighlight ? (
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] to-[#06B6D4]">
+                {word.text}
+              </span>
+            ) : (
+              <span className="text-[#0B1B3F]">{word.text}</span>
+            )}
+          </motion.span>
+        ))}
       </h1>
 
-      {/* Supporting Description */}
-      <p className="text-[clamp(0.875rem,1.05vw,1.05rem)] text-slate-600 leading-relaxed max-w-xl font-normal">
+      {/* 3. Subtitle (slate #475569) */}
+      <motion.p
+        initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
+        animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 0.4, ease: 'easeOut' }}
+        className="text-sm sm:text-base text-[#475569] leading-relaxed font-normal"
+      >
         We transform ideas into intelligent digital solutions through AI,
         software engineering, modern web experiences, cloud technologies, and
         digital growth.
-      </p>
+      </motion.p>
 
-      {/* Compact Animated Service Label & Synchronized Explanation */}
-      <div className="pt-0.5 space-y-2.5">
-        {/* Live Synchronized Active Service Banner */}
-        <div
-          ref={activeServiceRef}
-          className="p-3.5 sm:p-4 rounded-2xl bg-white border border-[#087BFA]/25 shadow-[0_8px_28px_rgba(7,22,56,0.06)]"
-        >
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="w-6 h-6 rounded-lg bg-[#087BFA] text-white flex items-center justify-center shrink-0">
-                {getServiceIcon(activeCard.id)}
-              </span>
-              <span className="text-xs sm:text-sm font-extrabold text-[#071638] truncate">
-                {activeCard.title}
-              </span>
-              <span className="hidden sm:inline-block text-[11px] font-semibold text-[#087BFA]">
-                · {activeCard.badgeText}
-              </span>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => onNavigate(activeCard.route)}
-              className="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-[#087BFA] hover:text-[#174DEB] transition-colors cursor-pointer"
-            >
-              <span>Details</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-          <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
-            {activeCard.explanation}
-          </p>
-        </div>
-
-        {/* Compact Interactive 8-Service Selector Grid */}
-        <div
-          className="flex flex-wrap gap-1.5"
-          role="tablist"
-          aria-label="IAMTECHNI Core Services"
-        >
-          {ROBOT_SERVICE_CARDS.map((card) => {
-            const isActive = card.id === activeServiceId;
-            return (
-              <button
-                key={card.id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => onSelectServiceCard(card.id)}
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-200 cursor-pointer border ${
-                  isActive
-                    ? 'bg-[#087BFA] text-white border-[#087BFA] shadow-[0_4px_12px_rgba(8,123,250,0.24)]'
-                    : 'bg-white/95 hover:bg-[#F3F8FF] text-[#071638] border-slate-200/90 hover:border-[#087BFA]/40'
-                }`}
-              >
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    isActive ? 'bg-[#00C7F2]' : 'bg-[#087BFA]/50'
-                  }`}
-                />
-                <span>{card.title}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Primary & Secondary CTA Buttons */}
-      <div className="pt-1 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3">
+      {/* 4. Primary & Secondary CTA Buttons */}
+      <motion.div
+        initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
+        animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 0.52, ease: 'easeOut' }}
+        className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5"
+      >
         <button
           type="button"
           onClick={() => onNavigate('/services')}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#087BFA] to-[#174DEB] hover:from-[#174DEB] hover:to-[#7200F5] text-white font-bold text-xs sm:text-sm shadow-[0_10px_24px_rgba(8,123,250,0.26)] hover:shadow-[0_14px_30px_rgba(23,77,235,0.32)] transition-all active:scale-[0.99] cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow-md transition-all duration-200 active:scale-[0.98] cursor-pointer"
         >
           <span>Explore Our Services</span>
           <ArrowRight className="w-4 h-4" />
@@ -184,12 +96,39 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         <button
           type="button"
           onClick={() => onOpenProjectModal('General Technology Inquiry')}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-[#F3F8FF] text-[#071638] font-bold text-xs sm:text-sm border-2 border-[#087BFA]/30 hover:border-[#087BFA] shadow-2xs transition-all active:scale-[0.99] cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-[#0B1B3F] font-semibold text-xs sm:text-sm border border-[#E2E8F0] hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all duration-200 active:scale-[0.98] cursor-pointer"
         >
-          <MessageSquare className="w-4 h-4 text-[#087BFA]" />
+          <MessageSquare className="w-4 h-4 text-[#2563EB]" />
           <span>Talk to Our Team</span>
         </button>
-      </div>
+      </motion.div>
+
+      {/* 5. Trust Row (3 items from existing data separated by thin dividers) */}
+      <motion.div
+        initial={prefersReducedMotion ? {} : { opacity: 0 }}
+        animate={prefersReducedMotion ? {} : { opacity: 1 }}
+        transition={{ duration: 0.6, delay: prefersReducedMotion ? 0 : 0.65, ease: 'easeOut' }}
+        className="pt-2 sm:pt-3 border-t border-[#E2E8F0] flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-[#475569]"
+      >
+        <div className="flex items-center gap-1.5 font-medium">
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB]" />
+          <span>13 Core Disciplines</span>
+        </div>
+
+        <div className="hidden xs:block w-px h-3.5 bg-[#E2E8F0]" aria-hidden="true" />
+
+        <div className="flex items-center gap-1.5 font-medium">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4]" />
+          <span>AI · Cloud · Web · Growth</span>
+        </div>
+
+        <div className="hidden sm:block w-px h-3.5 bg-[#E2E8F0]" aria-hidden="true" />
+
+        <div className="flex items-center gap-1.5 font-medium">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]" />
+          <span>India &amp; Global Delivery</span>
+        </div>
+      </motion.div>
     </div>
   );
 };

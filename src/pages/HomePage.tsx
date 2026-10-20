@@ -40,6 +40,7 @@ import { insightsData } from '../data/insightsData';
 import { industriesData } from '../data/industriesData';
 import { ColorfulMultiServiceHero } from '../components/home/ColorfulMultiServiceHero';
 import { HeroSection } from '../components/robot-hero/HeroSection';
+import { HomeServicesSection } from '../components/home/HomeServicesSection';
 import { EnterpriseSolutionsMatrix } from '../components/home/EnterpriseSolutionsMatrix';
 import { ProcessStageVisual, IndustryIllustration } from '../components/common/TechIllustrations';
 import { ProjectVisualThumbnail, ArticleGraphic, ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
@@ -137,7 +138,12 @@ export const HomePage: React.FC<HomePageProps> = ({
       />
 
       {/* ========================================================================= */}
-      {/* 2. COLORFUL TRUST & CORE ADVANTAGES (Soft Lavender / Blue Tint Section)   */}
+      {/* 2. SERVICES BUILT FOR YOUR NEXT STAGE OF GROWTH (Pill Tabs & Card Carousel)*/}
+      {/* ========================================================================= */}
+      <HomeServicesSection onNavigate={onNavigate} />
+
+      {/* ========================================================================= */}
+      {/* 3. COLORFUL TRUST & CORE ADVANTAGES (Soft Lavender / Blue Tint Section)   */}
       {/* ========================================================================= */}
       <section className="py-20 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FE] to-[#F0FDFA] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

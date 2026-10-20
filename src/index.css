@@ -2,6 +2,17 @@
 
 :root {
   --header-height: 74px;
+  /* Reusable Hero & Tech Brand Design Tokens */
+  --hero-bg: #F8FAFC;
+  --hero-glow: rgba(37, 99, 235, 0.08);
+  --hero-headline: #0B1B3F;
+  --hero-highlight-start: #2563EB;
+  --hero-highlight-end: #06B6D4;
+  --hero-body: #475569;
+  --hero-border: #E2E8F0;
+  --hero-primary: #2563EB;
+  --hero-primary-hover: #1D4ED8;
+  --hero-accent-cyan: #06B6D4;
 }
 
 @layer base {

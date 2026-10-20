@@ -228,6 +228,7 @@ app.get('/api/health', (_req, res) => {
 
 async function startServer() {
   if (!isProduction) {
+    app.use(express.static(path.resolve(__dirname, 'public')));
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
