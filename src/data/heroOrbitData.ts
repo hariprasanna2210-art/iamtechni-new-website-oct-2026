@@ -1,214 +1,175 @@
-import React from 'react';
-import {
-  SiReact,
-  SiNextdotjs,
-  SiTypescript,
-  SiTailwindcss,
-  SiNodedotjs,
-  SiPython,
-  SiDocker,
-  SiKubernetes,
-  SiFigma,
-  SiPostgresql,
-  SiGithub,
-} from 'react-icons/si';
-import { FaAws } from 'react-icons/fa';
-import { TbBrandAzure, TbBrandOpenai } from 'react-icons/tb';
+import { PageRoute } from '../types';
+import { projectsData } from './projectsData';
+import { coursesData } from './coursesData';
+import { servicesData } from './servicesData';
+import { industriesData } from './industriesData';
+import { insightsData } from './insightsData';
+import { careersData } from './careersData';
 
-export interface OrbitBadgeItem {
+export interface HeroBrandCardConfig {
   id: string;
-  name: string;
-  shortName?: string;
-  ring: 'inner' | 'middle' | 'outer';
-  icon?: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
-  isBrandIcon?: boolean;
-  brandText?: string;
-  brandColor?: string;
-  services: string[]; // Related service IDs/slugs for dynamic highlight
+  sceneNumber: number;
+  sceneLabel: string;
+  title: string;
+  countBadge: string;
+  rotatingSubtitles: string[];
+  route: PageRoute;
+  side: 'left-top' | 'left-mid' | 'left-bottom' | 'right-top' | 'right-mid' | 'right-bottom';
+  iconType: 'projects' | 'training' | 'marketing' | 'industries' | 'insights' | 'careers';
+  floatDuration: number;
+  floatDelay: number;
+  speechText: string;
+  // Beam target coordinates in 500x460 stage SVG space
+  beamTarget: { x: number; y: number };
+  // Subtle robot head/torso turn target
+  robotTargetServiceId: string;
+  isHidden?: boolean;
 }
 
 /**
- * Single source of truth for the 3 orbiting rings around the hero robot.
- * Easily extensible by adding new items to any ring.
+ * Generates the 6 IAMTECHNI brand cards dynamically from the real data files.
+ * If any data file array is empty, its card is marked isHidden = true.
  */
-export const HERO_ORBIT_ITEMS: OrbitBadgeItem[] = [
-  // =========================================================================
-  // LAYER 1: INNER RING (IAMTECHNI Brand Items)
-  // Small glass badges with the IAMTECHNI symbol & short brand words
-  // =========================================================================
-  {
-    id: 'brand-ai',
-    name: 'IAMTECHNI AI',
-    brandText: 'IAMTECHNI AI',
-    ring: 'inner',
-    isBrandIcon: true,
-    brandColor: '#2563EB',
-    services: ['ai-ml', 'ai-machine-learning'],
-  },
-  {
-    id: 'brand-engineering',
-    name: 'Engineering',
-    brandText: 'Engineering',
-    ring: 'inner',
-    isBrandIcon: true,
-    brandColor: '#06B6D4',
-    services: ['web-dev', 'custom-software', 'web-development'],
-  },
-  {
-    id: 'brand-innovation',
-    name: 'Innovation',
-    brandText: 'Innovation',
-    ring: 'inner',
-    isBrandIcon: true,
-    brandColor: '#2563EB',
-    services: ['robotics', 'robotics-automation', 'ai-ml'],
-  },
-  {
-    id: 'brand-delivery',
-    name: 'Global Delivery',
-    brandText: 'Delivery',
-    ring: 'inner',
-    isBrandIcon: true,
-    brandColor: '#06B6D4',
-    services: ['cloud-devops', 'cloud-computing', 'digital-marketing'],
-  },
+export function getHeroBrandCards(): HeroBrandCardConfig[] {
+  const digitalMarketingService = servicesData.find(
+    (s) => s.slug === 'digital-marketing' || s.id === 'digital-marketing'
+  );
 
-  // =========================================================================
-  // LAYER 2: MIDDLE RING (Web & Core Technologies - Logo + Name)
-  // Small white pill badges
-  // =========================================================================
-  {
-    id: 'tech-react',
-    name: 'React',
-    ring: 'middle',
-    icon: SiReact,
-    brandColor: '#61DAFB',
-    services: ['web-dev', 'web-development', 'mobile-apps'],
-  },
-  {
-    id: 'tech-nextjs',
-    name: 'Next.js',
-    ring: 'middle',
-    icon: SiNextdotjs,
-    brandColor: '#000000',
-    services: ['web-dev', 'web-development'],
-  },
-  {
-    id: 'tech-typescript',
-    name: 'TypeScript',
-    ring: 'middle',
-    icon: SiTypescript,
-    brandColor: '#3178C6',
-    services: ['web-dev', 'custom-software', 'custom-software-development'],
-  },
-  {
-    id: 'tech-tailwind',
-    name: 'Tailwind CSS',
-    ring: 'middle',
-    icon: SiTailwindcss,
-    brandColor: '#06B6D4',
-    services: ['web-dev', 'ui-ux', 'ui-ux-design'],
-  },
-  {
-    id: 'tech-nodejs',
-    name: 'Node.js',
-    ring: 'middle',
-    icon: SiNodedotjs,
-    brandColor: '#339933',
-    services: ['custom-software', 'custom-software-development', 'web-dev'],
-  },
-  {
-    id: 'tech-python',
-    name: 'Python',
-    ring: 'middle',
-    icon: SiPython,
-    brandColor: '#3776AB',
-    services: ['ai-ml', 'ai-machine-learning', 'robotics', 'data-analytics'],
-  },
+  const cards: HeroBrandCardConfig[] = [
+    // LEFT TOP: IAMTECHNI Projects
+    {
+      id: 'brand-projects',
+      sceneNumber: 1,
+      sceneLabel: 'Scene 01 · Portfolio',
+      title: 'IAMTECHNI Projects',
+      countBadge: `${projectsData.length} Projects Delivered`,
+      rotatingSubtitles:
+        projectsData.length > 0
+          ? projectsData.map((p) => p.title)
+          : ['Enterprise Engineering Portfolio'],
+      route: '/portfolio',
+      side: 'left-top',
+      iconType: 'projects',
+      floatDuration: 5.2,
+      floatDelay: 0,
+      speechText: `Explore our portfolio of ${projectsData.length} engineered case studies, including ${projectsData[0]?.title || 'scalable web and AI platforms'}.`,
+      beamTarget: { x: 75, y: 75 },
+      robotTargetServiceId: 'ai-ml',
+      isHidden: projectsData.length === 0,
+    },
 
-  // =========================================================================
-  // LAYER 3: OUTER RING (Tools & Platforms - Logo Only)
-  // Small round badges
-  // =========================================================================
-  {
-    id: 'platform-aws',
-    name: 'AWS',
-    ring: 'outer',
-    icon: FaAws,
-    brandColor: '#FF9900',
-    services: ['cloud-devops', 'cloud-computing'],
-  },
-  {
-    id: 'platform-azure',
-    name: 'Microsoft Azure',
-    shortName: 'Azure',
-    ring: 'outer',
-    icon: TbBrandAzure,
-    brandColor: '#0078D4',
-    services: ['cloud-devops', 'cloud-computing'],
-  },
-  {
-    id: 'platform-docker',
-    name: 'Docker',
-    ring: 'outer',
-    icon: SiDocker,
-    brandColor: '#2496ED',
-    services: ['cloud-devops', 'custom-software'],
-  },
-  {
-    id: 'platform-kubernetes',
-    name: 'Kubernetes',
-    ring: 'outer',
-    icon: SiKubernetes,
-    brandColor: '#326CE5',
-    services: ['cloud-devops', 'cloud-computing'],
-  },
-  {
-    id: 'platform-figma',
-    name: 'Figma',
-    ring: 'outer',
-    icon: SiFigma,
-    brandColor: '#F24E1E',
-    services: ['ui-ux', 'ui-ux-design', 'web-dev'],
-  },
-  {
-    id: 'platform-postgres',
-    name: 'PostgreSQL',
-    ring: 'outer',
-    icon: SiPostgresql,
-    brandColor: '#4169E1',
-    services: ['custom-software', 'cloud-devops', 'data-analytics'],
-  },
-  {
-    id: 'platform-openai',
-    name: 'OpenAI',
-    ring: 'outer',
-    icon: TbBrandOpenai,
-    brandColor: '#10A37F',
-    services: ['ai-ml', 'ai-machine-learning'],
-  },
-  {
-    id: 'platform-github',
-    name: 'GitHub',
-    ring: 'outer',
-    icon: SiGithub,
-    brandColor: '#181717',
-    services: ['cloud-devops', 'custom-software'],
-  },
-];
+    // LEFT MID: IAMTECHNI Training
+    {
+      id: 'brand-training',
+      sceneNumber: 2,
+      sceneLabel: 'Scene 02 · Academy',
+      title: 'IAMTECHNI Training',
+      countBadge: `${coursesData.length} Courses`,
+      rotatingSubtitles:
+        coursesData.length > 0
+          ? coursesData.map((c) => c.title)
+          : ['Hands-On Technical Programs'],
+      route: '/training',
+      side: 'left-mid',
+      iconType: 'training',
+      floatDuration: 5.6,
+      floatDelay: 0.7,
+      speechText: `We offer ${coursesData.length} industry-aligned technical training programs, featuring ${coursesData[0]?.title || 'Full Stack and AI Engineering'}.`,
+      beamTarget: { x: 60, y: 220 },
+      robotTargetServiceId: 'web-dev',
+      isHidden: coursesData.length === 0,
+    },
 
-/**
- * Filter items by ring layer
- */
-export const getOrbitItemsByRing = (ring: 'inner' | 'middle' | 'outer'): OrbitBadgeItem[] => {
-  return HERO_ORBIT_ITEMS.filter((item) => item.ring === ring);
-};
+    // LEFT BOTTOM: Digital Marketing
+    {
+      id: 'brand-marketing',
+      sceneNumber: 3,
+      sceneLabel: 'Scene 03 · Growth',
+      title: digitalMarketingService?.title || 'Digital Marketing',
+      countBadge: 'SEO · Ads · Growth Funnels',
+      rotatingSubtitles: [
+        'SEO · Ads · Growth Funnels',
+        digitalMarketingService?.tagline || 'Search visibility & conversion',
+        'Technical SEO & Performance Campaigns',
+      ],
+      route: `/services/${digitalMarketingService?.slug || 'digital-marketing'}` as PageRoute,
+      side: 'left-bottom',
+      iconType: 'marketing',
+      floatDuration: 5.0,
+      floatDelay: 1.4,
+      speechText:
+        'Our Digital Marketing and Technical SEO practice builds high-converting growth funnels, search visibility, and measurable ROI.',
+      beamTarget: { x: 75, y: 360 },
+      robotTargetServiceId: 'mobile-apps',
+      isHidden: !digitalMarketingService && servicesData.length === 0,
+    },
 
-/**
- * Check if a badge relates to the currently active service
- */
-export const isBadgeRelatedToService = (item: OrbitBadgeItem, activeServiceId: string): boolean => {
-  if (!activeServiceId) return false;
-  const target = activeServiceId.toLowerCase().trim();
-  return item.services.some((s) => s.toLowerCase() === target || target.includes(s.toLowerCase()));
-};
+    // RIGHT TOP: Industries
+    {
+      id: 'brand-industries',
+      sceneNumber: 4,
+      sceneLabel: 'Scene 04 · Sectors',
+      title: 'Industries',
+      countBadge: `${industriesData.length} Industries Served`,
+      rotatingSubtitles:
+        industriesData.length > 0
+          ? industriesData.map((ind) => ind.name)
+          : ['Cross-Sector Solutions'],
+      route: '/industries',
+      side: 'right-top',
+      iconType: 'industries',
+      floatDuration: 5.4,
+      floatDelay: 0.4,
+      speechText: `We deliver tailored digital infrastructure across ${industriesData.length} core industries, including ${industriesData[0]?.name || 'Education, Retail, and Healthcare'}.`,
+      beamTarget: { x: 425, y: 75 },
+      robotTargetServiceId: 'cloud-devops',
+      isHidden: industriesData.length === 0,
+    },
+
+    // RIGHT MID: Insights
+    {
+      id: 'brand-insights',
+      sceneNumber: 5,
+      sceneLabel: 'Scene 05 · Research',
+      title: 'Insights',
+      countBadge: `${insightsData.length} Articles Published`,
+      rotatingSubtitles:
+        insightsData.length > 0
+          ? insightsData.map((art) => art.title)
+          : ['Engineering Architecture & AI Briefs'],
+      route: '/insights',
+      side: 'right-mid',
+      iconType: 'insights',
+      floatDuration: 5.8,
+      floatDelay: 1.1,
+      speechText: `Read our latest technical research and architecture briefs, including ${insightsData[0]?.title || 'Modern Enterprise RAG Systems'}.`,
+      beamTarget: { x: 440, y: 220 },
+      robotTargetServiceId: 'digital-marketing',
+      isHidden: insightsData.length === 0,
+    },
+
+    // RIGHT BOTTOM: Careers
+    {
+      id: 'brand-careers',
+      sceneNumber: 6,
+      sceneLabel: 'Scene 06 · Careers',
+      title: 'Careers',
+      countBadge: `We're Hiring · ${careersData.length} Openings`,
+      rotatingSubtitles:
+        careersData.length > 0
+          ? careersData.map((job) => `${job.title} (${job.location})`)
+          : [`We're Hiring · ${careersData.length} Openings`],
+      route: '/careers',
+      side: 'right-bottom',
+      iconType: 'careers',
+      floatDuration: 5.3,
+      floatDelay: 1.8,
+      speechText: `Join our engineering team! We are currently hiring across ${careersData.length} open roles including ${careersData[0]?.title || 'Full-Stack and AI Engineering'}.`,
+      beamTarget: { x: 425, y: 360 },
+      robotTargetServiceId: 'custom-software',
+      isHidden: careersData.length === 0,
+    },
+  ];
+
+  return cards.filter((c) => !c.isHidden);
+}

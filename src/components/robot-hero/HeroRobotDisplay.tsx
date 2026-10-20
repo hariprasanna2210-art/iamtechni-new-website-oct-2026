@@ -643,7 +643,12 @@ export const HeroRobotDisplay: React.FC<HeroRobotDisplayProps> = ({
       >
         <img
           src="/robot-hero.png"
-          alt="IAMTECHNI Cute 3D AI Robot Ambassador"
+          alt="IAMTECHNI 3D AI Robot Ambassador presenting enterprise technology services"
+          width={360}
+          height={380}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
           className="h-[290px] sm:h-[340px] lg:h-[360px] xl:h-[380px] w-auto max-w-full object-contain pointer-events-auto transition-transform duration-300 hover:scale-[1.02]"
           style={{
             filter: 'drop-shadow(0 14px 28px rgba(8, 123, 250, 0.20))',

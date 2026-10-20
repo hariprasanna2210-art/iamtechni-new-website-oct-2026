@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { IamtechniLogo } from '../common/IamtechniLogo';
 import { PageRoute } from '../../types';
+import { COMPANY_CONTACT } from '../../data/companyInfo';
 
 interface HeaderProps {
   currentRoute: PageRoute;
@@ -55,11 +56,13 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
     return () => window.removeEventListener('resize', updateHeaderHeight);
   }, []);
 
-  // Track scroll state for sticky elevation
+  // Track scroll state with hysteresis to prevent jitter near threshold
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const y = window.scrollY;
+      setIsScrolled((prev) => (prev ? y > 8 : y > 24));
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -270,13 +273,14 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
     <>
       <header
         ref={headerRef}
-        className={`sticky top-0 z-40 w-full transition-all duration-200 border-b ${
+        className={`sticky top-0 z-40 w-full transition-colors duration-200 border-b ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-xs border-slate-200/90 py-2.5'
-            : 'bg-white border-slate-200/60 py-3.5'
+            ? 'bg-white/95 backdrop-blur-md shadow-xs border-slate-200/90'
+            : 'bg-white border-slate-200/60'
         }`}
       >
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 xl:gap-5">
+        {/* Main Navbar Row */}
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3 xl:gap-5">
           {/* Zone 1: Brand Wordmark / Logo */}
           <div className="shrink-0 flex items-center">
             <button
@@ -638,7 +642,7 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
             </button>
           </nav>
 
-          {/* Zone 3: Direct Phone Link, Action Button & Mobile Menu Toggle */}
+          {/* Zone 3: Action Buttons & Mobile Menu Toggle */}
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             {/* AI Advisor Chatbot Trigger */}
             <button
@@ -652,14 +656,14 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
               <span>AI Advisor</span>
             </button>
 
-            {/* Compact direct phone link */}
+            {/* Direct Phone Call Pill Button */}
             <a
-              href="tel:+917418120053"
-              className="hidden xl:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-[#0D9488] transition-colors py-1.5 px-3 rounded-xl hover:bg-slate-50 border border-slate-200/90 shadow-2xs whitespace-nowrap"
-              title="Call IAMTECHNI"
+              href={COMPANY_CONTACT.phoneTel}
+              className="hidden xl:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 transition-colors py-1.5 px-3 rounded-xl border border-slate-200/90 shadow-2xs whitespace-nowrap"
+              title={`Call ${COMPANY_CONTACT.phone}`}
             >
-              <Phone className="w-3.5 h-3.5 text-[#0D9488]" />
-              <span className="font-mono">+91-7418120053</span>
+              <Phone className="w-3.5 h-3.5 text-emerald-600" />
+              <span>{COMPANY_CONTACT.phone}</span>
             </a>
 
             {/* Desktop Start a Project CTA button */}
@@ -1046,14 +1050,14 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
               {/* Direct Call & Email Buttons */}
               <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
                 <a
-                  href="tel:+917418120053"
+                  href={COMPANY_CONTACT.phoneTel}
                   className="min-h-[44px] py-2.5 px-3 bg-teal-50 border border-teal-200 text-[#0D9488] hover:bg-teal-100 rounded-xl flex items-center justify-center gap-1.5 transition-colors"
                 >
                   <Phone className="w-4 h-4" />
                   <span>Call Us</span>
                 </a>
                 <a
-                  href="mailto:iamtechni.hr@outlook.com"
+                  href={COMPANY_CONTACT.emailMailto}
                   className="min-h-[44px] py-2.5 px-3 bg-blue-50 border border-blue-200 text-[#1266E8] hover:bg-blue-100 rounded-xl flex items-center justify-center gap-1.5 transition-colors"
                 >
                   <Mail className="w-4 h-4" />
@@ -1086,7 +1090,7 @@ export const Header: React.FC<HeaderProps> = ({ currentRoute, onNavigate, onStar
               </button>
 
               <div className="text-center text-[11px] text-slate-400 font-mono pt-1">
-                +91-7418120053 · iamtechni.hr@outlook.com
+                {COMPANY_CONTACT.phone} · {COMPANY_CONTACT.email}
               </div>
             </div>
           </div>

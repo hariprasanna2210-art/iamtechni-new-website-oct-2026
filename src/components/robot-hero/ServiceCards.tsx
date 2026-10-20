@@ -2,8 +2,12 @@ import React from 'react';
 import {
   Cpu,
   Globe,
+  Smartphone,
   Cloud,
   TrendingUp,
+  Code2,
+  Bot,
+  BarChart3,
   ChevronLeft,
   ChevronRight,
   Play,
@@ -16,23 +20,31 @@ import { ROBOT_SERVICE_CARDS } from './RobotController';
 export interface ServiceCardsProps {
   activeServiceId: string;
   isAutoPlaying: boolean;
-  onSelectService: (idOrSlug: string) => void;
+  onSelectService: (serviceId: string) => void;
   onToggleAutoPlay: () => void;
   onNavigate: (route: PageRoute) => void;
   parallaxOffset?: { x: number; y: number };
 }
 
-const getCardIcon = (id: string) => {
+export const getCardIcon = (id: string) => {
   switch (id) {
     case 'ai-ml':
-      return <Cpu className="w-3.5 h-3.5" />;
+      return <Cpu className="w-4 h-4" />;
     case 'web-dev':
-      return <Globe className="w-3.5 h-3.5" />;
+      return <Globe className="w-4 h-4" />;
+    case 'mobile-apps':
+      return <Smartphone className="w-4 h-4" />;
     case 'cloud-devops':
-      return <Cloud className="w-3.5 h-3.5" />;
+      return <Cloud className="w-4 h-4" />;
     case 'digital-marketing':
+      return <TrendingUp className="w-4 h-4" />;
+    case 'custom-software':
+      return <Code2 className="w-4 h-4" />;
+    case 'robotics':
+      return <Bot className="w-4 h-4" />;
+    case 'ui-ux':
     default:
-      return <TrendingUp className="w-3.5 h-3.5" />;
+      return <BarChart3 className="w-4 h-4" />;
   }
 };
 
@@ -40,10 +52,11 @@ export const mapServiceToOrbitCardId = (idOrSlug: string): string => {
   const s = (idOrSlug || '').toLowerCase();
   if (
     s.includes('ai') ||
-    s.includes('machine-learning') ||
-    s.includes('generative') ||
-    s.includes('robotics') ||
-    s.includes('data-analytics')
+    s.includes('machine') ||
+    s.includes('data') ||
+    s.includes('robot') ||
+    s.includes('genai') ||
+    s.includes('generative')
   ) {
     return 'ai-ml';
   }
@@ -57,43 +70,31 @@ export const mapServiceToOrbitCardId = (idOrSlug: string): string => {
     return 'cloud-devops';
   }
   if (
-    s.includes('web') ||
-    s.includes('ecommerce') ||
-    s.includes('commerce') ||
-    s.includes('software') ||
-    s.includes('mobile') ||
-    s.includes('ui-ux') ||
-    s.includes('design')
-  ) {
-    return 'web-dev';
-  }
-  if (
     s.includes('marketing') ||
     s.includes('seo') ||
     s.includes('social') ||
-    s.includes('consulting') ||
+    s.includes('consult') ||
     s.includes('training')
   ) {
     return 'digital-marketing';
   }
-  return 'ai-ml';
+  return 'web-dev';
 };
 
-// 4 Primary symmetrical cards orbiting the robot: 2 on the left, 2 on the right
 export const ORBIT_CARDS_CONFIG = [
   {
     id: 'ai-ml',
-    serviceSlug: 'ai-machine-learning',
+    serviceSlug: 'ai-ml',
     side: 'left',
-    positionClasses: 'top-[8%] left-0 sm:-left-1 xl:-left-3',
+    positionClasses: 'top-[10%] left-0 sm:left-1 xl:-left-2',
     floatOffset: 0,
     duration: 5.2,
   },
   {
     id: 'web-dev',
-    serviceSlug: 'web-development',
+    serviceSlug: 'web-dev',
     side: 'left',
-    positionClasses: 'bottom-[24%] left-0 sm:-left-1 xl:-left-3',
+    positionClasses: 'bottom-[18%] left-0 sm:left-1 xl:-left-2',
     floatOffset: 1.2,
     duration: 5.6,
   },
@@ -101,7 +102,7 @@ export const ORBIT_CARDS_CONFIG = [
     id: 'cloud-devops',
     serviceSlug: 'cloud-devops',
     side: 'right',
-    positionClasses: 'top-[8%] right-0 sm:-right-1 xl:-right-3',
+    positionClasses: 'top-[10%] right-0 sm:right-1 xl:-right-2',
     floatOffset: 0.6,
     duration: 5.0,
   },
@@ -109,7 +110,7 @@ export const ORBIT_CARDS_CONFIG = [
     id: 'digital-marketing',
     serviceSlug: 'digital-marketing',
     side: 'right',
-    positionClasses: 'bottom-[24%] right-0 sm:-right-1 xl:-right-3',
+    positionClasses: 'bottom-[18%] right-0 sm:right-1 xl:-right-2',
     floatOffset: 1.8,
     duration: 5.4,
   },
@@ -125,16 +126,19 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const activeOrbitId = mapServiceToOrbitCardId(activeServiceId);
 
-  const activeIndex = Math.max(
-    0,
-    ROBOT_SERVICE_CARDS.findIndex(
+  const matchedSceneCard =
+    ROBOT_SERVICE_CARDS.find(
       (c) =>
         c.id === activeServiceId ||
         c.route.includes(activeServiceId) ||
         activeServiceId.includes(c.id)
-    )
+    ) ||
+    ROBOT_SERVICE_CARDS.find((c) => c.id === activeOrbitId) ||
+    ROBOT_SERVICE_CARDS[0];
+
+  const activeIndex = ROBOT_SERVICE_CARDS.findIndex(
+    (c) => c.id === matchedSceneCard.id
   );
-  const activeCard = ROBOT_SERVICE_CARDS[activeIndex] || ROBOT_SERVICE_CARDS[0];
 
   const handlePrev = () => {
     const prevIdx =
@@ -150,23 +154,22 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
 
   return (
     <>
-      {/* ========================================================================= */}
-      {/* 1. 4 SYMMETRICAL FLOATING SERVICE CARDS (Desktop/Tablet)                   */}
-      {/* 2 on the left, 2 on the right at equal distances with gentle float & glow */}
-      {/* ========================================================================= */}
+      {/* 1. 4 SYMMETRICAL FLOATING CARDS (Desktop & Tablet >= 768px) */}
       <div className="hidden md:block pointer-events-none absolute inset-0 z-20">
         {ORBIT_CARDS_CONFIG.map((cfg) => {
           const card = ROBOT_SERVICE_CARDS.find((c) => c.id === cfg.id);
           if (!card) return null;
-          const isActive = card.id === activeServiceId || card.id === activeOrbitId;
+
+          const isActive =
+            card.id === activeServiceId || card.id === activeOrbitId;
 
           return (
             <motion.div
               key={card.id}
               className={`pointer-events-auto absolute ${cfg.positionClasses}`}
               style={{
-                x: prefersReducedMotion ? 0 : parallaxOffset.x * 18,
-                y: prefersReducedMotion ? 0 : parallaxOffset.y * 14,
+                x: prefersReducedMotion ? 0 : parallaxOffset.x * 14,
+                y: prefersReducedMotion ? 0 : parallaxOffset.y * 10,
               }}
               animate={
                 prefersReducedMotion
@@ -222,10 +225,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
         })}
       </div>
 
-      {/* ========================================================================= */}
-      {/* 2. MOBILE COMPACT SERVICE ROW (< 768px)                                   */}
-      {/* Clean horizontal pill row directly below robot, zero horizontal overflow  */}
-      {/* ========================================================================= */}
+      {/* 2. MOBILE COMPACT SERVICE ROW (< 768px) */}
       <div className="flex md:hidden items-center justify-center flex-wrap gap-1.5 w-full px-2 mb-2">
         {ORBIT_CARDS_CONFIG.map((cfg) => {
           const card = ROBOT_SERVICE_CARDS.find((c) => c.id === cfg.id);
@@ -239,40 +239,33 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer border ${
                 isActive
                   ? 'bg-white border-[#087BFA] text-[#087BFA] shadow-xs'
-                  : 'bg-white/90 text-slate-700 border-slate-200/80 hover:bg-white'
+                  : 'bg-white/80 border-slate-200 text-slate-600'
               }`}
             >
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  isActive ? 'bg-[#087BFA]' : 'bg-slate-300'
-                }`}
-              />
+              <span className="w-3.5 h-3.5 flex items-center justify-center text-[#087BFA]">
+                {getCardIcon(card.id)}
+              </span>
               <span>{card.shortTitle}</span>
             </button>
           );
         })}
       </div>
 
-      {/* ========================================================================= */}
-      {/* 3. CENTERED SCENE CONTROLLER (Directly Under Robot)                       */}
-      {/* Generously spaced to never overlap robot or Chat button                   */}
-      {/* ========================================================================= */}
-      <div className="relative z-20 flex justify-center w-full mt-2 sm:mt-3 mb-1">
-        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-[0_4px_16px_rgba(7,22,56,0.06)]">
-          {/* Active scene label */}
+      {/* 3. CENTERED SCENE CONTROLLER (Directly Under Robot) */}
+      <div className="relative z-20 flex justify-center w-full mt-1">
+        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-[0_4px_20px_rgba(7,22,56,0.08)]">
           <div className="flex items-center gap-1.5 min-w-0 pr-1">
             <span className="w-1.5 h-1.5 rounded-full bg-[#00C7F2] shrink-0 animate-pulse" />
-            <span className="text-xs font-bold text-[#071638] truncate max-w-[120px] sm:max-w-[160px]">
-              {activeCard.title}
+            <span className="text-xs font-bold text-[#071638] truncate max-w-[125px] sm:max-w-[155px]">
+              {matchedSceneCard.shortTitle}
             </span>
-            <span className="hidden sm:inline text-[11px] text-slate-400 font-normal truncate">
-              · {activeCard.sceneLabel}
+            <span className="hidden sm:inline text-[11px] text-slate-500 font-normal truncate">
+              · {matchedSceneCard.sceneLabel}
             </span>
           </div>
 
           <div className="w-px h-3.5 bg-slate-200 shrink-0" aria-hidden="true" />
 
-          {/* 8-Step Scene Dots */}
           <div
             className="flex items-center gap-1 shrink-0"
             role="tablist"
@@ -303,7 +296,6 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
 
           <div className="w-px h-3.5 bg-slate-200 shrink-0" aria-hidden="true" />
 
-          {/* Prev / Play-Pause / Next Controls */}
           <div className="flex items-center gap-0.5 shrink-0">
             <button
               type="button"
@@ -313,7 +305,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                   ? 'Pause auto presentation'
                   : 'Resume auto presentation'
               }
-              className="p-1 rounded-md text-slate-600 hover:text-[#087BFA] hover:bg-slate-100 transition-colors cursor-pointer"
+              className="p-1 rounded-md text-slate-600 hover:text-[#087BFA] hover:bg-blue-50 transition-colors cursor-pointer"
               title={isAutoPlaying ? 'Pause Auto-Tour' : 'Resume Auto-Tour'}
             >
               {isAutoPlaying ? (
@@ -325,8 +317,8 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
             <button
               type="button"
               onClick={handlePrev}
-              aria-label="Previous scene"
-              className="p-1 rounded-md text-slate-600 hover:text-[#087BFA] hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="Previous service scene"
+              className="p-1 rounded-md text-slate-600 hover:text-[#087BFA] hover:bg-blue-50 transition-colors cursor-pointer"
               title="Previous Scene"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
@@ -334,8 +326,8 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
             <button
               type="button"
               onClick={handleNext}
-              aria-label="Next scene"
-              className="p-1 rounded-md text-slate-600 hover:text-[#087BFA] hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="Next service scene"
+              className="p-1 rounded-md text-slate-600 hover:text-[#087BFA] hover:bg-blue-50 transition-colors cursor-pointer"
               title="Next Scene"
             >
               <ChevronRight className="w-3.5 h-3.5" />

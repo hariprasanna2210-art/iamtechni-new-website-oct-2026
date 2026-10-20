@@ -1,8 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
+import { generateSitemapXml } from './src/utils/sitemapGenerator';
 
 dotenv.config();
 
@@ -13,6 +15,29 @@ const PORT = parseInt(process.env.PORT || '3000', 10);
 
 const app = express();
 app.use(express.json());
+
+// Auto-sync /public/sitemap.xml on startup from data files
+try {
+  const sitemapPath = path.resolve(__dirname, 'public', 'sitemap.xml');
+  fs.writeFileSync(sitemapPath, generateSitemapXml(), 'utf-8');
+} catch (err) {
+  console.warn('Could not write public/sitemap.xml on startup:', err);
+}
+
+// Serve /robots.txt as real text/plain file (never index.html)
+app.get('/robots.txt', (_req, res) => {
+  const robotsPath = path.resolve(__dirname, isProduction ? 'dist' : 'public', 'robots.txt');
+  const fallbackPublicPath = path.resolve(__dirname, 'public', 'robots.txt');
+  const targetPath = fs.existsSync(robotsPath) ? robotsPath : fallbackPublicPath;
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  return res.sendFile(targetPath);
+});
+
+// Serve /sitemap.xml dynamically from data files as real application/xml (never index.html)
+app.get('/sitemap.xml', (_req, res) => {
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  return res.send(generateSitemapXml());
+});
 
 // Initialize GoogleGenAI client according to @google/genai guidelines
 const apiKey = process.env.GEMINI_API_KEY;

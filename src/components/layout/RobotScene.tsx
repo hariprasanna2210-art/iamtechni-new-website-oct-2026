@@ -2053,7 +2053,11 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
       <div className="w-full h-full min-h-[340px] flex flex-col items-center justify-center p-6 rounded-3xl bg-[#F3F8FF] border border-[#087BFA]/20 text-center">
         <img
           src="/logo-clean.png"
-          alt="IAMTECHNI"
+          alt="IAMTECHNI AI Ambassador Logo"
+          width={287}
+          height={93}
+          loading="eager"
+          decoding="async"
           className="h-12 w-auto object-contain mb-3"
         />
         <div className="text-base font-bold text-[#071638]">

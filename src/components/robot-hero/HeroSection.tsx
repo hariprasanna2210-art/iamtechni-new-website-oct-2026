@@ -20,16 +20,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const resumeTimerRef = useRef<number | null>(null);
   const prefersReducedMotion = useReducedMotion();
 
-  // Active service tracked by id
   const [activeServiceSlug, setActiveServiceSlug] = useState<string>('web-dev');
-
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [speechEnergy, setSpeechEnergy] = useState<number>(0);
   const [greetTriggerCount, setGreetTriggerCount] = useState<number>(0);
   const [isHeroVisible, setIsHeroVisible] = useState<boolean>(true);
 
-  // Mouse Parallax coordinates (-0.5 to 0.5)
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
   const handlePointerMove = useCallback(
@@ -48,7 +45,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     setParallax({ x: 0, y: 0 });
   }, []);
 
-  // Track hero viewport visibility with IntersectionObserver to pause when off-screen
   useEffect(() => {
     const el = sectionRef.current;
     if (!el || typeof IntersectionObserver === 'undefined') return;
@@ -66,7 +62,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     return () => observer.disconnect();
   }, []);
 
-  // Auto-playing scene tour every 6 seconds
   useEffect(() => {
     if (!isAutoPlaying || !isHeroVisible || isSpeaking) return;
 
@@ -83,7 +78,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     return () => window.clearInterval(interval);
   }, [isAutoPlaying, isHeroVisible, isSpeaking]);
 
-  // Trigger welcome wave on load
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setGreetTriggerCount((prev) => prev + 1);
@@ -91,7 +85,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     return () => window.clearTimeout(timer);
   }, []);
 
-  // Clean up manual interaction resume timer on unmount
   useEffect(() => {
     return () => {
       if (resumeTimerRef.current) {
@@ -100,7 +93,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     };
   }, []);
 
-  // Service selection handler from Chips, Cards, or Scene Controller
   const handleSelectService = (idOrSlug: string) => {
     setActiveServiceSlug(idOrSlug);
     setGreetTriggerCount((prev) => prev + 1);
@@ -122,7 +114,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     setGreetTriggerCount((prev) => prev + 1);
   };
 
-  // Find relevant speech script based on active service
   const matchedRobotCard =
     ROBOT_SERVICE_CARDS.find(
       (c) =>
@@ -139,7 +130,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       aria-label="IAMTECHNI Futuristic AI Ambassador Hero"
       className="relative w-full overflow-hidden bg-gradient-to-b from-[#FFFFFF] via-[#F4F8FF] to-[#FFFFFF] border-b border-slate-200/80 py-8 sm:py-10 lg:py-8 lg:min-h-[calc(100svh-var(--header-height,74px))] lg:max-h-[1020px] flex items-center"
     >
-      {/* 1. Subtle Technical Precision Grid & Pale-Blue Ambient Lighting */}
+      {/* Subtle Technical Precision Grid & Pale-Blue Ambient Lighting */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-40"
@@ -150,12 +141,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         }}
       />
 
-      {/* 2. Main Page Container (Aligned with Navbar Logo & CTA Bounds) */}
+      {/* Main Page Container */}
       <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full min-h-0 flex flex-col md:flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
-        {/* ========================================================================= */}
         {/* LEFT COLUMN: Eyebrow → Headline → Subtitle → 9 Chips → Active Card → CTAs */}
-        {/* Mobile: text first (order-1) | Desktop: left side (order-1)               */}
-        {/* ========================================================================= */}
         <div className="w-full lg:w-[48%] xl:w-[46%] min-h-0 flex flex-col justify-center order-1 md:order-2 lg:order-1 items-center lg:items-start text-center lg:text-left">
           <HeroContent
             activeServiceSlug={activeServiceSlug}
@@ -166,12 +154,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           />
         </div>
 
-        {/* ========================================================================= */}
-        {/* RIGHT COLUMN: 3D Coded Humanoid Robot Presenter Stage (Canvas)            */}
-        {/* Tablet: robot stacked above text (order-1) | Desktop: right side (order-2) */}
-        {/* ========================================================================= */}
+        {/* RIGHT COLUMN: 3D Coded Humanoid Robot Presenter Stage */}
         <div className="w-full lg:w-[52%] xl:w-[54%] min-h-0 flex flex-col justify-center items-center order-2 md:order-1 lg:order-2 relative">
-          {/* STAGE CONTAINER WITH 4 CARDS, TOP-RIGHT VOICE CONTROLS & 3D ROBOT */}
           <div className="relative w-full max-w-[620px] h-[400px] sm:h-[460px] lg:h-[500px] xl:h-[530px] flex flex-col items-center justify-between">
             {/* Top-Right Voice Note & Wave Buttons */}
             <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-30 pointer-events-auto">

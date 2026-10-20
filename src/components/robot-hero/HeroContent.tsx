@@ -17,7 +17,6 @@ export const HeroContent: React.FC<HeroContentProps> = ({
 }) => {
   const prefersReducedMotion = useReducedMotion();
 
-  // Staggered animated words for headline
   const headlineWords = [
     { text: 'Build', isHighlight: false },
     { text: 'Smarter.', isHighlight: true },
@@ -40,7 +39,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         <span className="truncate">IAMTECHNI | TECHNOLOGY THAT MOVES YOU FORWARD</span>
       </motion.div>
 
-      {/* 2. Headline with Staggered Word Reveal & Single Gradient on Highlight Words */}
+      {/* 2. Headline */}
       <h1 className="text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-extrabold tracking-tight text-[#0B1B3F] leading-[1.12]">
         {headlineWords.map((word, i) => (
           <motion.span
@@ -65,7 +64,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         ))}
       </h1>
 
-      {/* 3. Subtitle (slate #475569) */}
+      {/* 3. Subtitle */}
       <motion.p
         initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
         animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
@@ -103,7 +102,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         </button>
       </motion.div>
 
-      {/* 5. Trust Row (3 items from existing data separated by thin dividers) */}
+      {/* 5. Trust Row */}
       <motion.div
         initial={prefersReducedMotion ? {} : { opacity: 0 }}
         animate={prefersReducedMotion ? {} : { opacity: 1 }}

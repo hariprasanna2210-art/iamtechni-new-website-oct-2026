@@ -9,7 +9,7 @@
       content="Enterprise software engineering, applied AI & RAG systems, Next.js web platforms, and cloud infrastructure delivered from Puducherry & Tamil Nadu for global teams."
     />
     <link rel="canonical" href="https://www.iamtechni.in/" />
-    
+
     <!-- Open Graph Metadata -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="IAMTECHNI | Enterprise Software, AI & Cloud Engineering (Puducherry & Tamil Nadu)" />
@@ -21,7 +21,7 @@
     <meta property="og:site_name" content="IAMTECHNI" />
     <meta property="og:locale" content="en_IN" />
     <meta property="og:image" content="https://www.iamtechni.in/logo.png" />
-    
+
     <!-- Twitter Metadata -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="IAMTECHNI | Enterprise Software, AI & Cloud Engineering (Puducherry & Tamil Nadu)" />
@@ -45,7 +45,8 @@
     <link rel="apple-touch-icon" href="/iamtechni-symbol.png" />
 
     <!-- Merged Schema.org Structured Data (Organization + LocalBusiness + WebSite) -->
-    <script type="application/ld+json">
+    <!-- Synchronized with src/data/companyInfo.ts (TODO: update streetAddress and postalCode when exact physical street address is finalized) -->
+    <script type="application/ld+json" id="organization-jsonld">
       {
         "@context": "https://schema.org",
         "@graph": [
@@ -59,15 +60,16 @@
               "url": "https://www.iamtechni.in/logo.png"
             },
             "image": "https://www.iamtechni.in/logo.png",
-            "description": "Independent software engineering, applied AI & RAG systems, modern Next.js web platforms, and cloud infrastructure studio based in Puducherry and Tamil Nadu, India.",
+            "description": "Enterprise software engineering, applied AI & RAG systems, modern Next.js web platforms, and cloud infrastructure delivered from Puducherry and Tamil Nadu, India.",
             "slogan": "Technology that moves your business forward.",
-            "telephone": "+91-7598621355",
-            "email": "engineering@iamtechni.in",
+            "telephone": "+91-7418120053",
+            "email": "iamtechni.hr@outlook.com",
             "priceRange": "₹₹₹",
             "address": {
               "@type": "PostalAddress",
-              "addressLocality": "Puducherry",
-              "addressRegion": "PY",
+              "streetAddress": "Puducherry & Tamil Nadu",
+              "addressLocality": "Puducherry & Tamil Nadu",
+              "addressRegion": "PY / TN",
               "postalCode": "605001",
               "addressCountry": "IN"
             },
@@ -76,6 +78,9 @@
               "latitude": 11.9416,
               "longitude": 79.8083
             },
+            "sameAs": [
+              "https://www.linkedin.com/company/iamtechni/"
+            ],
             "areaServed": [
               { "@type": "AdministrativeArea", "name": "Puducherry" },
               { "@type": "AdministrativeArea", "name": "Tamil Nadu" },

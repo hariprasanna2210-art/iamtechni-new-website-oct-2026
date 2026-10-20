@@ -34,7 +34,9 @@ export const IamtechniLogo: React.FC<IamtechniLogoProps> = ({
     return (
       <img
         src="/logo-symbol.png"
-        alt="IAMTECHNI"
+        alt="IAMTECHNI Symbol Logo"
+        width={158}
+        height={186}
         className={`${heightClasses} w-auto aspect-[158/186] object-contain select-none shrink-0 ${className}`}
         loading="eager"
         decoding="async"
@@ -48,7 +50,9 @@ export const IamtechniLogo: React.FC<IamtechniLogoProps> = ({
       <img
         src="/logo.png"
         srcSet="/logo.png 1x, /iamtechni-logo-2x.png 2x"
-        alt="IAMTECHNI"
+        alt="IAMTECHNI — Enterprise Software, AI & Cloud Engineering"
+        width={574}
+        height={186}
         className={`${heightClasses} w-auto aspect-[574/186] object-contain select-none block`}
         loading="eager"
         decoding="async"

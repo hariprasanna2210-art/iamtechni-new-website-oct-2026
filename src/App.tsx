@@ -20,9 +20,11 @@ import { InsightsPage } from './pages/InsightsPage';
 import { ArticleDetailPage } from './pages/ArticleDetailPage';
 import { CareersPage } from './pages/CareersPage';
 import { ContactPage } from './pages/ContactPage';
+import { ConsultationPage } from './pages/ConsultationPage';
 import { FaqPage } from './pages/FaqPage';
 import { LegalPage } from './pages/LegalPages';
 import { TrainingPage } from './pages/TrainingPage';
+import { SeoHead } from './components/common/SeoHead';
 
 import { servicesData } from './data/servicesData';
 import { insightsData } from './data/insightsData';
@@ -84,58 +86,7 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Update document title and canonical URL per route
-  useEffect(() => {
-    const baseTitle = 'IAMTECHNI — Enterprise Technology & Digital Solutions';
-    const routeTitles: Record<string, string> = {
-      '/': 'IAMTECHNI — Technology That Moves Your Business Forward',
-      '/about': 'About IAMTECHNI — Digital Engineering Practice',
-      '/services': 'Services Directory — IAMTECHNI Engineering Disciplines',
-      '/services/web-development': 'Web Development Services — IAMTECHNI',
-      '/services/website-development': 'Website Design & Development — IAMTECHNI',
-      '/services/ecommerce': 'E-commerce Solutions — IAMTECHNI',
-      '/services/ecommerce-development': 'E-commerce Platform Development — IAMTECHNI',
-      '/services/custom-software': 'Custom Software Development — IAMTECHNI',
-      '/services/custom-software-development': 'Enterprise Custom Software — IAMTECHNI',
-      '/services/mobile-apps': 'Mobile App Development — IAMTECHNI',
-      '/services/mobile-app-development': 'iOS & Android Native Mobile Apps — IAMTECHNI',
-      '/services/ai-machine-learning': 'AI & Machine Learning Practice — IAMTECHNI',
-      '/services/generative-ai': 'Generative AI & LLM Systems — IAMTECHNI',
-      '/services/data-analytics': 'Data Analytics & Business Intelligence — IAMTECHNI',
-      '/services/cloud-devops': 'Cloud & DevOps Engineering — IAMTECHNI',
-      '/services/cloud-computing': 'Cloud Infrastructure Architecture — IAMTECHNI',
-      '/services/devops': 'DevOps & CI/CD Automation — IAMTECHNI',
-      '/services/cloud-migration': 'Cloud Migration Services — IAMTECHNI',
-      '/services/cybersecurity': 'Cybersecurity Hardening & Audits — IAMTECHNI',
-      '/services/digital-marketing': 'Digital Marketing & Technical SEO — IAMTECHNI',
-      '/services/seo': 'Technical SEO & Search Visibility — IAMTECHNI',
-      '/services/social-media-marketing': 'Performance Social Media Marketing — IAMTECHNI',
-      '/services/ui-ux-design': 'UI/UX Design Systems & Research — IAMTECHNI',
-      '/services/it-consulting': 'IT Consulting & Technology Roadmaps — IAMTECHNI',
-      '/services/training': 'Technical Training & Team Upskilling — IAMTECHNI',
-      '/training': 'IT Training Courses | Full Stack, AWS, AI & DevOps | IAMTECHNI',
-      '/courses': 'IT Training Courses | Full Stack, AWS, AI & DevOps | IAMTECHNI',
-      '/services/robotics': 'Robotics & Automation Systems — IAMTECHNI',
-      '/services/robotics-emerging-tech': 'Robotics & Emerging Technologies — IAMTECHNI',
-      '/industries': 'Industry Solutions & Architectures — IAMTECHNI',
-      '/solutions': 'Business Solutions & Transformation — IAMTECHNI',
-      '/portfolio': 'Portfolio & Project Showcase — IAMTECHNI',
-      '/case-studies': 'Case Studies & Architectural Blueprints — IAMTECHNI',
-      '/technology': 'Technology Ecosystem & Stack — IAMTECHNI',
-      '/insights': 'Insights & Engineering Field Notes — IAMTECHNI',
-      '/insights/modern-rag-architecture': 'Architecting Enterprise RAG Systems — IAMTECHNI',
-      '/insights/cloud-cost-optimization': 'Practical FinOps & Cloud Efficiency — IAMTECHNI',
-      '/insights/web-performance-core-vitals': 'Sub-Second Web Performance — IAMTECHNI',
-      '/careers': 'Careers & Engineering Roles — IAMTECHNI',
-      '/contact': 'Contact & Project Inquiries — IAMTECHNI',
-      '/contact/consultation': 'Request Engineering Consultation — IAMTECHNI',
-      '/faq': 'Frequently Asked Questions — IAMTECHNI',
-      '/privacy-policy': 'Privacy Policy — IAMTECHNI',
-      '/terms': 'Terms of Use — IAMTECHNI',
-    };
-
-    document.title = routeTitles[currentRoute] || baseTitle;
-  }, [currentRoute]);
+  // Route-specific SEO metadata & JSON-LD structured data are managed by <SeoHead currentRoute={currentRoute} />
 
   const handleOpenProjectModal = (serviceName?: string) => {
     if (serviceName) setModalDefaultService(serviceName);
@@ -352,7 +303,11 @@ export default function App() {
     }
 
     // 13. Contact & Consultation
-    if (currentRoute === '/contact' || currentRoute === '/contact/consultation') {
+    if (currentRoute === '/contact/consultation') {
+      return <ConsultationPage onNavigate={navigate} />;
+    }
+
+    if (currentRoute === '/contact') {
       return <ContactPage onNavigate={navigate} />;
     }
 
@@ -404,6 +359,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#141A24] w-full overflow-x-hidden">
+      {/* Dynamic Per-Page Title, Meta Description, Canonical URL, OpenGraph & JSON-LD */}
+      <SeoHead currentRoute={currentRoute} />
+
       {/* Top Global Navigation */}
       <Header
         currentRoute={currentRoute}
