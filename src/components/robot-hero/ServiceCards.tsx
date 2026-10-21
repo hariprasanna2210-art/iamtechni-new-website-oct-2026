@@ -21,7 +21,6 @@ export interface ServiceCardsProps {
   onSelectServiceCard: (card: HeroFloatingServiceCard, shouldScrollAndSpeak?: boolean) => void;
   onToggleAutoPlay: () => void;
   parallaxOffset?: { x: number; y: number };
-  forceDesktop?: boolean;
 }
 
 export const mapServiceToOrbitCardId = (idOrSlug: string): string => {
@@ -37,43 +36,23 @@ export const mapServiceToOrbitCardId = (idOrSlug: string): string => {
   return cards[0]?.slug || 'ai-machine-learning';
 };
 
-// Matches exact live-site desktop coordinates (x=631/623 on left, x=1106/1114 on right at 1366px)
-const getDesktopAndTabletPositionClasses = (
-  card: HeroFloatingServiceCard,
-  forceDesktop: boolean
-): string => {
-  if (forceDesktop) {
-    switch (card.side) {
-      case 'left-top':
-        return 'top-[13%] -left-4';
-      case 'left-mid':
-        return 'top-[43%] -left-6';
-      case 'left-bottom':
-        return 'bottom-[17%] -left-4';
-      case 'right-top':
-        return 'top-[13%] -right-4';
-      case 'right-mid':
-        return 'top-[43%] -right-6';
-      case 'right-bottom':
-      default:
-        return 'bottom-[17%] -right-4';
-    }
-  }
-
+// Tablet (md: 768-1023px) stays unchanged; Desktop (lg: 1024px+) places 3 cards on left and 3 on right,
+// shifted 16-20px outward from the robot so both raised hands and full card text are always clearly visible.
+const getDesktopAndTabletPositionClasses = (card: HeroFloatingServiceCard): string => {
   switch (card.side) {
     case 'left-top':
-      return 'top-[13%] left-0 xl:-left-4';
+      return 'top-[13%] left-0 lg:top-[12%] lg:-left-7 xl:-left-8';
     case 'left-mid':
-      return 'top-[43%] left-0 lg:-left-2 xl:-left-6';
+      return 'top-[43%] left-0 lg:top-[43%] lg:-left-10 xl:-left-11';
     case 'left-bottom':
-      return 'bottom-[17%] left-0 xl:-left-4';
+      return 'bottom-[17%] left-0 lg:bottom-[15%] lg:-left-7 xl:-left-8';
     case 'right-top':
-      return 'top-[13%] right-0 xl:-right-4';
+      return 'top-[13%] right-0 lg:top-[12%] lg:-right-7 xl:-right-8';
     case 'right-mid':
-      return 'top-[43%] right-0 lg:-right-2 xl:-right-6';
+      return 'top-[43%] right-0 lg:top-[43%] lg:-right-10 xl:-right-11';
     case 'right-bottom':
     default:
-      return 'bottom-[17%] right-0 xl:-right-4';
+      return 'bottom-[17%] right-0 lg:bottom-[15%] lg:-right-7 xl:-right-8';
   }
 };
 
@@ -103,7 +82,6 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
   onSelectServiceCard,
   onToggleAutoPlay,
   parallaxOffset = { x: 0, y: 0 },
-  forceDesktop = false,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const floatingCards = getHeroFloatingServiceCards();
@@ -149,11 +127,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
       {/* ========================================================================= */}
       <svg
         aria-hidden="true"
-        className={`pointer-events-none absolute inset-0 w-full h-full ${
-          forceDesktop
-            ? 'max-w-[520px] max-h-[460px]'
-            : 'max-w-[340px] sm:max-w-[440px] md:max-w-[560px] lg:max-w-[520px] max-h-[320px] md:max-h-[480px] lg:max-h-[460px]'
-        } m-auto z-10 overflow-visible`}
+        className="pointer-events-none absolute inset-0 w-full h-full max-w-[340px] sm:max-w-[440px] md:max-w-[560px] lg:max-w-[410px] xl:max-w-[430px] 2xl:max-w-[475px] max-h-[320px] md:max-h-[480px] lg:max-h-[345px] xl:max-h-[360px] 2xl:max-h-[395px] m-auto z-10 overflow-visible"
         viewBox="0 0 500 450"
         fill="none"
       >
@@ -223,81 +197,78 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
 
       {/* ========================================================================= */}
       {/* 3. MOBILE SURROUNDING COMPACT CHIPS (< 768px): 3 Left & 3 Right           */}
+      {/*    Unchanged: 32px tall, 11-12px text, rounded-full, shortTitle           */}
       {/* ========================================================================= */}
-      {!forceDesktop && (
-        <div className="block md:hidden pointer-events-none absolute inset-0 z-20">
-          {floatingCards.map((card, idx) => {
-            const isActive = card.slug === activeCard.slug;
-            const ServiceIcon = getServiceIcon(card.slug);
-            const mobilePos = getMobileChipPositionClasses(card);
-
-            return (
-              <motion.div
-                key={`mobile-chip-${card.slug}`}
-                data-robot-control="true"
-                className={`pointer-events-auto absolute ${mobilePos}`}
-                animate={
-                  prefersReducedMotion
-                    ? {}
-                    : {
-                        y: [0, -3, 0],
-                      }
-                }
-                transition={{
-                  duration: 4.5 + (idx % 3) * 0.35,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: idx * 0.25,
-                }}
-              >
-                <a
-                  href={card.hashHref}
-                  aria-label={`Explore ${card.title} services`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onSelectServiceCard(card, true);
-                  }}
-                  className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full text-left transition-all duration-250 cursor-pointer backdrop-blur-md max-w-[126px] sm:max-w-[144px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
-                    isActive
-                      ? 'bg-white border-2 border-[#2563EB] text-[#2563EB] shadow-[0_0_16px_rgba(37,99,235,0.28)] scale-[1.03] z-30'
-                      : 'bg-white/95 border border-[#E2E8F0] text-[#0B1B3F] shadow-[0_2px_10px_rgba(11,27,63,0.06)] hover:border-[#06B6D4]'
-                  }`}
-                >
-                  <span
-                    className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-                      isActive
-                        ? 'bg-[#2563EB] text-white'
-                        : 'bg-[#F1F5F9] text-[#2563EB]'
-                    }`}
-                  >
-                    <ServiceIcon className="w-3 h-3" />
-                  </span>
-                  <span
-                    className={`text-[11px] font-bold leading-none truncate ${
-                      isActive ? 'text-[#2563EB]' : 'text-[#0B1B3F]'
-                    }`}
-                  >
-                    {card.shortTitle}
-                  </span>
-                </a>
-              </motion.div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* ========================================================================= */}
-      {/* 4. TABLET & DESKTOP SURROUNDING FULL CARDS (768px and above): 3 Left & 3 Right */}
-      {/* ========================================================================= */}
-      <div
-        className={`${
-          forceDesktop ? 'block' : 'hidden md:block'
-        } pointer-events-none absolute inset-0 z-20`}
-      >
+      <div className="block md:hidden pointer-events-none absolute inset-0 z-20">
         {floatingCards.map((card, idx) => {
           const isActive = card.slug === activeCard.slug;
           const ServiceIcon = getServiceIcon(card.slug);
-          const posClasses = getDesktopAndTabletPositionClasses(card, forceDesktop);
+          const mobilePos = getMobileChipPositionClasses(card);
+
+          return (
+            <motion.div
+              key={`mobile-chip-${card.slug}`}
+              data-robot-control="true"
+              className={`pointer-events-auto absolute ${mobilePos}`}
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      y: [0, -3, 0],
+                    }
+              }
+              transition={{
+                duration: 4.5 + (idx % 3) * 0.35,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: idx * 0.25,
+              }}
+            >
+              <a
+                href={card.hashHref}
+                aria-label={`Explore ${card.title} services`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSelectServiceCard(card, true);
+                }}
+                className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full text-left transition-all duration-250 cursor-pointer backdrop-blur-md max-w-[126px] sm:max-w-[144px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                  isActive
+                    ? 'bg-white border-2 border-[#2563EB] text-[#2563EB] shadow-[0_0_16px_rgba(37,99,235,0.28)] scale-[1.03] z-30'
+                    : 'bg-white/95 border border-[#E2E8F0] text-[#0B1B3F] shadow-[0_2px_10px_rgba(11,27,63,0.06)] hover:border-[#06B6D4]'
+                }`}
+              >
+                <span
+                  className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                    isActive
+                      ? 'bg-[#2563EB] text-white'
+                      : 'bg-[#F1F5F9] text-[#2563EB]'
+                  }`}
+                >
+                  <ServiceIcon className="w-3 h-3" />
+                </span>
+                <span
+                  className={`text-[11px] font-bold leading-none truncate ${
+                    isActive ? 'text-[#2563EB]' : 'text-[#0B1B3F]'
+                  }`}
+                >
+                  {card.shortTitle}
+                </span>
+              </a>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 4. TABLET & DESKTOP SURROUNDING FULL CARDS (768px and above): 3 Left & 3 Right */}
+      {/*    Desktop (lg:): title 12px, subtitle 10.5px, icon box 28px,             */}
+      {/*    padding 8px 12px (py-2 px-3), max-width 180px                          */}
+      {/* ========================================================================= */}
+      <div className="hidden md:block pointer-events-none absolute inset-0 z-20">
+        {floatingCards.map((card, idx) => {
+          const isActive = card.slug === activeCard.slug;
+          const ServiceIcon = getServiceIcon(card.slug);
+          const posClasses = getDesktopAndTabletPositionClasses(card);
 
           return (
             <motion.div
@@ -305,14 +276,14 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
               data-robot-control="true"
               className={`pointer-events-auto absolute ${posClasses}`}
               style={{
-                x: prefersReducedMotion ? 0 : parallaxOffset.x * 10,
-                y: prefersReducedMotion ? 0 : parallaxOffset.y * 6,
+                x: prefersReducedMotion ? 0 : parallaxOffset.x * 8,
+                y: prefersReducedMotion ? 0 : parallaxOffset.y * 5,
               }}
               animate={
                 prefersReducedMotion
                   ? {}
                   : {
-                      y: [0, -4, 0],
+                      y: [0, -3.5, 0],
                     }
               }
               transition={{
@@ -329,16 +300,13 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                   e.preventDefault();
                   onSelectServiceCard(card, true);
                 }}
-                className={`group flex items-start gap-2.5 px-3 py-2 rounded-xl text-left transition-all duration-300 cursor-pointer backdrop-blur-md ${
-                  forceDesktop
-                    ? 'w-[215px]'
-                    : 'w-[186px] lg:w-[195px] xl:w-[215px]'
-                } min-h-[56px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                className={`group flex items-start gap-2.5 px-3 py-2 rounded-xl text-left transition-all duration-300 cursor-pointer backdrop-blur-md w-[186px] lg:w-[172px] xl:w-[180px] lg:max-w-[180px] min-h-[56px] lg:min-h-0 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
                   isActive
-                    ? 'bg-white border-2 border-[#2563EB] shadow-[0_0_24px_rgba(37,99,235,0.26)] -translate-y-0.5 scale-[1.02] z-30'
-                    : 'bg-white/95 hover:bg-white border border-[#E2E8F0] hover:border-[#06B6D4] shadow-[0_4px_16px_rgba(11,27,63,0.06)] hover:shadow-[0_0_20px_rgba(6,182,212,0.22)] hover:-translate-y-0.5'
+                    ? 'bg-white border-2 border-[#2563EB] shadow-[0_0_22px_rgba(37,99,235,0.24)] -translate-y-0.5 scale-[1.02] z-30 lg:z-20'
+                    : 'bg-white/95 hover:bg-white border border-[#E2E8F0] hover:border-[#06B6D4] shadow-[0_4px_16px_rgba(11,27,63,0.06)] hover:shadow-[0_0_18px_rgba(6,182,212,0.2)] hover:-translate-y-0.5'
                 }`}
               >
+                {/* 28px Icon Box (w-7 h-7) */}
                 <span
                   className={`mt-0.5 w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-200 ${
                     isActive
@@ -351,7 +319,8 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-1">
-                    <span className="text-[11px] font-bold text-[#0B1B3F] leading-snug line-clamp-2 group-hover:text-[#2563EB] transition-colors">
+                    {/* Title: 11px on tablet, 12px on desktop */}
+                    <span className="text-[11px] lg:text-[12px] font-bold text-[#0B1B3F] leading-snug line-clamp-2 group-hover:text-[#2563EB] transition-colors">
                       {card.title}
                     </span>
                     {isActive && (
@@ -366,12 +335,12 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                     )}
                   </div>
 
-                  {/* Badge text on default, "Explore →" revealed on hover */}
-                  <div className="relative h-[14px] overflow-hidden mt-0.5">
-                    <div className="text-[10px] text-[#475569] font-medium leading-tight truncate transition-transform duration-200 group-hover:-translate-y-full">
+                  {/* Subtitle: 10px on tablet, 10.5px on desktop; "Explore →" revealed on hover */}
+                  <div className="relative h-[14px] lg:h-[15px] overflow-hidden mt-0.5">
+                    <div className="text-[10px] lg:text-[10.5px] text-[#475569] font-medium leading-tight truncate transition-transform duration-200 group-hover:-translate-y-full">
                       {card.badgeText}
                     </div>
-                    <div className="text-[10px] text-[#2563EB] font-bold leading-tight flex items-center gap-0.5 transition-transform duration-200 translate-y-0 group-hover:-translate-y-full">
+                    <div className="text-[10px] lg:text-[10.5px] text-[#2563EB] font-bold leading-tight flex items-center gap-0.5 transition-transform duration-200 translate-y-0 group-hover:-translate-y-full">
                       <span>Explore</span>
                       <ArrowRight className="w-2.5 h-2.5" />
                     </div>
@@ -384,20 +353,24 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
       </div>
 
       {/* ========================================================================= */}
-      {/* 5. CENTERED SCENE CONTROLLER (Directly Under Robot)                       */}
+      {/* 5. CENTERED SCENE CONTROLLER (Directly Under Robot Platform)              */}
+      {/*    Desktop (lg:): height 36px (lg:h-9), font 12.5px (lg:text-[12.5px])    */}
       {/* ========================================================================= */}
-      <div data-robot-control="true" className="relative z-20 flex justify-center w-full mt-1">
-        <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-[#E2E8F0] shadow-[0_4px_20px_rgba(7,22,56,0.08)] max-w-full">
+      <div
+        data-robot-control="true"
+        className="relative z-40 flex justify-center w-full mt-1 lg:mt-0.5"
+      >
+        <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 lg:py-0 lg:h-9 rounded-full bg-white/95 backdrop-blur-md border border-[#E2E8F0] shadow-[0_4px_20px_rgba(7,22,56,0.08)] max-w-full">
           <div className="flex items-center gap-1.5 min-w-0 pr-0.5">
             <span
               className={`w-1.5 h-1.5 rounded-full bg-[#06B6D4] shrink-0 ${
                 prefersReducedMotion ? '' : 'animate-pulse'
               }`}
             />
-            <span className="text-[11px] sm:text-xs font-bold text-[#0B1B3F] truncate max-w-[125px] sm:max-w-[195px]">
+            <span className="text-[11px] sm:text-xs lg:text-[12.5px] font-bold text-[#0B1B3F] truncate max-w-[125px] sm:max-w-[195px]">
               {activeCard.title}
             </span>
-            <span className="hidden sm:inline text-[11px] text-[#475569] font-normal truncate">
+            <span className="hidden sm:inline text-[11px] lg:text-[12.5px] text-[#475569] font-normal truncate">
               · {activeCard.sceneLabel}
             </span>
           </div>

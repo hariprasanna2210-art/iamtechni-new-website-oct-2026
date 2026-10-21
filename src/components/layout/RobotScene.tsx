@@ -425,17 +425,19 @@ const ResponsiveCameraRig: React.FC = () => {
   useEffect(() => {
     if (camera instanceof THREE.PerspectiveCamera) {
       const aspect = size.width / Math.max(1, size.height);
-      if (size.width < 500) {
+      if (size.width < 320) {
+        // Mobile compact view
         camera.fov = 31;
         camera.position.set(0, 0.14, 5.95);
         camera.lookAt(0, 0.06, 0);
-      } else if (aspect > 1.35) {
-        camera.fov = 29.5;
-        camera.position.set(0, 0.14, 5.65);
-        camera.lookAt(0, 0.06, 0);
+      } else if (aspect > 1.25) {
+        // Desktop & Tablet stage: frames full robot head-to-feet, platform, and orbit rings with clear space around cards
+        camera.fov = 30.5;
+        camera.position.set(0, 0.12, 6.05);
+        camera.lookAt(0, 0.05, 0);
       } else {
         camera.fov = 30.5;
-        camera.position.set(0, 0.14, 5.8);
+        camera.position.set(0, 0.14, 5.9);
         camera.lookAt(0, 0.06, 0);
       }
       camera.updateProjectionMatrix();
@@ -628,7 +630,11 @@ const HumanoidAmbassador: React.FC<HumanoidAmbassadorProps> = ({
   // Enters primary gesture (presenting / pointing / explaining / greeting),
   // performs conversational emphasis, then blends smoothly into returnToIdle -> idle pause.
   useEffect(() => {
-    const activeCard = ROBOT_SERVICE_CARDS.find((c) => c.id === activeServiceId);
+    const activeCard = ROBOT_SERVICE_CARDS.find(
+      (c) =>
+        c.id === activeServiceId ||
+        (activeServiceId === 'custom-software' && c.id === 'software-solutions')
+    );
     if (!activeCard || animationState === 'idle') {
       internalGestureStateRef.current = 'returnToIdle';
       const idleTl = gsap.timeline({
@@ -2080,9 +2086,10 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
       onClick={onRobotClick}
       role="region"
       aria-label="Interactive 3D IAMTECHNI Humanoid AI Ambassador"
-      className="relative w-full h-full min-h-0 select-none cursor-pointer"
+      className="relative w-full h-full min-h-0 select-none cursor-pointer lg:pointer-events-none [&_canvas]:lg:!pointer-events-none"
     >
       <Canvas
+        style={{ pointerEvents: 'none' }}
         resize={{ offsetSize: true }}
         shadows={!isHeadless}
         dpr={isHeadless ? 1 : [1, 2]}

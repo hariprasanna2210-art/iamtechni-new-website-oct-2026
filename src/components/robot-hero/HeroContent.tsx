@@ -9,13 +9,11 @@ export interface HeroContentProps {
   activeServiceSlug?: string;
   onSelectService?: (serviceSlugOrId: string) => void;
   isAutoPlaying?: boolean;
-  forceDesktop?: boolean;
 }
 
 export const HeroContent: React.FC<HeroContentProps> = ({
   onNavigate,
   onOpenProjectModal,
-  forceDesktop = false,
 }) => {
   const prefersReducedMotion = useReducedMotion();
 
@@ -29,73 +27,63 @@ export const HeroContent: React.FC<HeroContentProps> = ({
   ];
 
   return (
-    <div
-      className={`w-full max-w-[580px] flex flex-col justify-center ${
-        forceDesktop
-          ? 'items-start text-left space-y-6'
-          : 'items-center lg:items-start text-center lg:text-left space-y-4 sm:space-y-5 lg:space-y-6'
-      }`}
-    >
+    <div className="w-full max-w-[580px] flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-3 sm:space-y-3.5 lg:space-y-4">
       {/* 1. Eyebrow Pill */}
       <motion.div
         initial={prefersReducedMotion ? {} : { opacity: 0, y: -6 }}
         animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: 'easeOut' }}
-        className={`inline-flex items-center gap-2 ${
-          forceDesktop ? 'self-start text-xs' : 'self-center lg:self-start text-[10px] sm:text-xs'
-        } px-3.5 py-1.5 rounded-full bg-slate-100/80 border border-[#E2E8F0] text-[#2563EB] font-bold tracking-[0.08em] uppercase shadow-2xs whitespace-nowrap shrink-0 max-w-full`}
+        className="inline-flex items-center gap-2 self-center lg:self-start h-[34px] px-4 py-0 mb-2 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[12.5px] sm:text-[13.5px] font-bold tracking-[0] leading-none whitespace-nowrap shrink-0"
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] shrink-0" />
-        <span className="truncate">IAMTECHNI | TECHNOLOGY THAT MOVES YOU FORWARD</span>
+        <span
+          className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
+          aria-hidden="true"
+        />
+        <span>IAMTECHNI | Technology that moves you forward</span>
       </motion.div>
 
-      {/* 2. Headline — Matches exact 2-line desktop break: "Build Smarter. Innovate" / "Faster. Grow Further." */}
-      <h1
-        className={`${
-          forceDesktop
-            ? 'text-[48px]'
-            : 'text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px]'
-        } font-extrabold tracking-tight text-[#0B1B3F] leading-[1.12]`}
+      {/* 2. Headline (Single dark blue color, reduced size, Outfit/Space Grotesk font, zoom-in/zoom-out ONLY on hover) */}
+      <motion.h1
+        whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+        transition={{ duration: 0.28, ease: 'easeOut' }}
+        className="mt-0! !font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-[34px] xl:text-[38px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2] origin-center lg:origin-left cursor-default"
       >
         {headlineWords.map((word, i) => (
           <React.Fragment key={`${word.text}-${i}`}>
             <motion.span
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
-              animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+              initial={prefersReducedMotion ? {} : { opacity: 0, y: 8 }}
+              animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, scale: 1 }}
+              whileHover={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      scale: 1.07,
+                      transition: { duration: 0.22, ease: 'easeOut' },
+                    }
+              }
               transition={{
-                duration: 0.45,
-                delay: prefersReducedMotion ? 0 : 0.08 * i,
+                duration: 0.4,
+                delay: prefersReducedMotion ? 0 : 0.06 * i,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className={`inline-block ${
-                word.isLast || word.lineBreakAfter ? 'mr-[0.26em] lg:mr-0' : 'mr-[0.26em]'
+              className={`inline-block text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] hover:drop-shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-shadow duration-200 ${
+                word.isLast || word.lineBreakAfter ? 'mr-[0.24em] lg:mr-0' : 'mr-[0.24em]'
               }`}
             >
-              {word.isHighlight ? (
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] to-[#06B6D4]">
-                  {word.text}
-                </span>
-              ) : (
-                <span className="text-[#0B1B3F]">{word.text}</span>
-              )}
+              {word.text}
             </motion.span>
-            {word.lineBreakAfter && (
-              <br className={forceDesktop ? 'block' : 'hidden lg:block'} />
-            )}
+            {!word.isLast && ' '}
+            {word.lineBreakAfter && <br className="hidden lg:block" />}
           </React.Fragment>
         ))}
-      </h1>
+      </motion.h1>
 
       {/* 3. Subtitle */}
       <motion.p
         initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
         animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 0.4, ease: 'easeOut' }}
-        className={`${
-          forceDesktop
-            ? 'text-base max-w-none'
-            : 'text-sm sm:text-base max-w-[540px] lg:max-w-none'
-        } text-[#475569] leading-relaxed font-normal`}
+        className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent leading-relaxed font-medium max-w-[540px] lg:max-w-none"
       >
         We transform ideas into intelligent digital solutions through AI,
         software engineering, modern web experiences, cloud technologies, and
@@ -107,60 +95,46 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
         animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 0.52, ease: 'easeOut' }}
-        className={`w-full pt-1 flex ${
-          forceDesktop
-            ? 'flex-row items-center justify-start gap-3.5'
-            : 'flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 sm:gap-3.5'
-        }`}
+        className="w-full pt-0.5 flex flex-row flex-wrap items-center justify-center lg:justify-start gap-2.5"
       >
         <button
           type="button"
           onClick={() => onNavigate('/services')}
-          className={`${
-            forceDesktop ? 'w-auto text-sm' : 'w-full sm:w-auto text-xs sm:text-sm'
-          } inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold shadow-xs hover:shadow-md transition-all duration-200 active:scale-[0.98] cursor-pointer`}
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
         >
           <span>Explore Our Services</span>
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-3.5 h-3.5 text-white" />
         </button>
 
         <button
           type="button"
           onClick={() => onOpenProjectModal('General Technology Inquiry')}
-          className={`${
-            forceDesktop ? 'w-auto text-sm' : 'w-full sm:w-auto text-xs sm:text-sm'
-          } inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-[#0B1B3F] font-semibold border border-[#E2E8F0] hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all duration-200 active:scale-[0.98] cursor-pointer`}
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
         >
-          <MessageSquare className="w-4 h-4 text-[#2563EB]" />
+          <MessageSquare className="w-3.5 h-3.5 text-white" />
           <span>Talk to Our Team</span>
         </button>
       </motion.div>
 
-      {/* 5. Trust Row */}
+      {/* 5. Trust Row (Same color palette as Eyebrow Pill, with reduced distance in between) */}
       <motion.div
         initial={prefersReducedMotion ? {} : { opacity: 0 }}
         animate={prefersReducedMotion ? {} : { opacity: 1 }}
         transition={{ duration: 0.6, delay: prefersReducedMotion ? 0 : 0.65, ease: 'easeOut' }}
-        className={`w-full pt-2 sm:pt-3 border-t border-[#E2E8F0] flex items-center ${
-          forceDesktop ? 'justify-start' : 'justify-center lg:justify-start'
-        } flex-wrap gap-x-4 gap-y-2 text-xs text-[#475569]`}
+        className="w-full pt-1.5 border-t border-[#DBEAFE]/90 flex items-center justify-center lg:justify-start flex-wrap gap-x-1.5 gap-y-1.5 text-xs text-[#2563EB] font-['Plus_Jakarta_Sans','Inter',sans-serif]"
       >
-        <div className="flex items-center gap-1.5 font-medium">
-          <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB]" />
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] font-semibold">
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
           <span>13 Core Disciplines</span>
         </div>
 
-        <div className="hidden sm:block w-px h-3.5 bg-[#E2E8F0]" aria-hidden="true" />
-
-        <div className="flex items-center gap-1.5 font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4]" />
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] font-semibold">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0" />
           <span>AI · Cloud · Web · Growth</span>
         </div>
 
-        <div className="hidden sm:block w-px h-3.5 bg-[#E2E8F0]" aria-hidden="true" />
-
-        <div className="flex items-center gap-1.5 font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]" />
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] font-semibold">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0" />
           <span>India &amp; Global Delivery</span>
         </div>
       </motion.div>

@@ -312,7 +312,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
     <>
       {/* Floating Chat Trigger Button */}
       {!isOpen && (
-        <div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 lg:bottom-6 lg:right-6 z-50 flex items-center gap-3">
+        <div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 lg:bottom-6 lg:right-6 z-40 flex items-center gap-3">
           {/* Subtle invitation tooltip on desktop only (hidden on mobile & tablet) */}
           <div className="hidden lg:flex items-center gap-2 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-full border border-slate-200/90 shadow-lg text-xs font-medium text-slate-700 pointer-events-none animate-pulse">
             <Sparkles className="w-3.5 h-3.5 text-[#0F52BA]" />
@@ -339,7 +339,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
       {/* Chat Window Panel */}
       {isOpen && (
         <div
-          className={`fixed z-50 transition-all duration-300 ease-out flex flex-col bg-white border border-slate-200/90 shadow-2xl rounded-2xl overflow-hidden ${
+          className={`fixed z-40 transition-all duration-300 ease-out flex flex-col bg-white border border-slate-200/90 shadow-2xl rounded-2xl overflow-hidden ${
             isMinimized
               ? 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-80 h-16'
               : 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-[440px] h-[640px] max-h-[calc(100vh-3rem)]'

@@ -358,7 +358,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#141A24] w-full overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#141A24] w-full overflow-x-clip">
       {/* Dynamic Per-Page Title, Meta Description, Canonical URL, OpenGraph & JSON-LD */}
       <SeoHead currentRoute={currentRoute} />
 
@@ -370,7 +370,7 @@ export default function App() {
       />
 
       {/* Main Page Content Body */}
-      <main className="flex-1 w-full overflow-x-hidden">{renderPage()}</main>
+      <main className="flex-1 w-full overflow-x-clip">{renderPage()}</main>
 
       {/* Shared Global Footer */}
       <Footer
