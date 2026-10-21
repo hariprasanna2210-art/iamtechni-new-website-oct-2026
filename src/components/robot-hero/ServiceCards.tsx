@@ -231,7 +231,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                   e.preventDefault();
                   onSelectServiceCard(card, true);
                 }}
-                className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full text-left transition-all duration-250 cursor-pointer backdrop-blur-md max-w-[126px] sm:max-w-[144px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                className={`inline-flex items-center gap-1 min-[360px]:gap-1.5 h-8 px-2 min-[360px]:px-2.5 rounded-full text-left transition-all duration-250 cursor-pointer backdrop-blur-md max-w-[106px] min-[360px]:max-w-[126px] sm:max-w-[144px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
                   isActive
                     ? 'bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border-2 border-[#2563EB] text-[#1E3A8A] shadow-[0_0_16px_rgba(37,99,235,0.28),inset_0_1px_0_rgba(255,255,255,0.95)] scale-[1.03] z-30'
                     : 'bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 text-[#2563EB] shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] hover:border-[#2563EB]'
@@ -247,7 +247,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                   <ServiceIcon className="w-3 h-3" />
                 </span>
                 <span
-                  className={`text-[11px] font-bold leading-none truncate ${
+                  className={`text-[10px] min-[360px]:text-[11px] font-bold leading-none truncate ${
                     isActive ? 'text-[#1E3A8A]' : 'text-[#2563EB]'
                   }`}
                 >
@@ -360,14 +360,14 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
         data-robot-control="true"
         className="relative z-40 flex justify-center w-full mt-1 lg:mt-0.5"
       >
-        <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 lg:py-0 lg:h-9 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] max-w-full">
+        <div className="inline-flex items-center gap-1.5 min-[360px]:gap-2 sm:gap-2.5 px-2.5 min-[360px]:px-3 sm:px-3.5 py-1.5 lg:py-0 lg:h-9 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] max-w-full">
           <div className="flex items-center gap-1.5 min-w-0 pr-0.5">
             <span
               className={`w-1.5 h-1.5 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0 ${
                 prefersReducedMotion ? '' : 'animate-pulse'
               }`}
             />
-            <span className="text-[11px] sm:text-xs lg:text-[12.5px] font-bold text-[#1E3A8A] truncate max-w-[125px] sm:max-w-[195px]">
+            <span className="text-[10.5px] min-[360px]:text-[11px] sm:text-xs lg:text-[12.5px] font-bold text-[#1E3A8A] truncate max-w-[92px] min-[360px]:max-w-[125px] sm:max-w-[195px]">
               {activeCard.title}
             </span>
             <span className="hidden sm:inline text-[11px] lg:text-[12.5px] text-[#2563EB] font-semibold truncate">

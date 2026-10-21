@@ -261,20 +261,20 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
         {/* ===================================================================== */}
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-4 mb-8 sm:mb-10">
           {/* Eyebrow Pill */}
-          <div className="inline-flex items-center gap-2 h-[32px] px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#1266E8] font-mono text-xs font-bold tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 h-[32px] px-3 sm:px-4 max-w-full rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#1266E8] font-mono text-[10.5px] min-[360px]:text-xs font-bold tracking-widest uppercase">
             <span
               className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
               aria-hidden="true"
             />
-            <span>What We Do · 13 Core Disciplines</span>
+            <span className="truncate">What We Do · 13 Core Disciplines</span>
           </div>
 
-          {/* Section Title (Plus Jakarta Sans Extrabold #090D16, tight tracking, with hover zoom-in/zoom-out) */}
+          {/* Section Title (Hero Section Heading Color #1E3A8A + drop shadow, Plus Jakarta Sans Extrabold, tight tracking, with hover zoom-in/zoom-out) */}
           <motion.h2
             id="services-section-title"
             whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
             transition={{ duration: 0.28, ease: 'easeOut' }}
-            className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-[-0.03em] text-[#090D16] leading-[1.12] origin-center cursor-default"
+            className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[26px] min-[360px]:text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-[-0.03em] text-[#1E3A8A] leading-[1.12] origin-center cursor-default"
           >
             {['Services', 'Built', 'for', 'Your', 'Next', 'Stage', 'of', 'Growth'].map(
               (word, i, arr) => {
@@ -297,7 +297,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                         delay: prefersReducedMotion ? 0 : 0.05 * i,
                         ease: [0.16, 1, 0.3, 1],
                       }}
-                      className={`inline-block text-[#090D16] transition-transform duration-200 ${
+                      className={`inline-block text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] hover:drop-shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-[transform,filter] duration-200 ${
                         isLast ? 'mr-0' : 'mr-[0.24em]'
                       }`}
                     >
@@ -311,7 +311,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
           </motion.h2>
 
           {/* Subtitle Paragraph (Clean Inter / Plus Jakarta Sans Regular #374151, matching reference image) */}
-          <p className="!font-['Inter','Plus_Jakarta_Sans',sans-serif] text-base sm:text-[17px] text-[#374151] font-normal leading-[1.65] max-w-2xl mx-auto">
+          <p className="!font-['Inter','Plus_Jakarta_Sans',sans-serif] text-sm min-[360px]:text-base sm:text-[17px] text-[#374151] font-normal leading-[1.65] max-w-2xl mx-auto">
             End-to-end engineering, AI, cloud, and growth solutions, all under one roof.
           </p>
         </div>
@@ -660,9 +660,9 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
           {/* =================================================================== */}
           {/* 4. DYNAMIC INTERACTIVE PLAYBACK & PROGRESS DOCK                     */}
           {/* =================================================================== */}
-          <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.06)] max-w-3xl mx-auto">
+          <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 px-3 sm:px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.06)] max-w-3xl mx-auto">
             {/* Left: Active Service Counter & Dynamic Title */}
-            <div className="flex items-center gap-2 min-w-0">
+            <div className="flex items-center justify-center sm:justify-start gap-2 min-w-0 max-w-full">
               <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-md bg-[#1E3A8A] text-white font-mono text-[11px] font-bold tabular-nums shrink-0">
                 {String(currentIndex + 1).padStart(2, '0')} / {String(totalServices).padStart(2, '0')}
               </span>
@@ -682,7 +682,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
 
             {/* Center: Interactive Segmented Progress Dots */}
             <div
-              className="flex items-center gap-1.5"
+              className="flex flex-wrap items-center justify-center gap-1 min-[360px]:gap-1.5 max-w-full"
               role="tablist"
               aria-label="Service carousel slide indicators"
             >
@@ -698,8 +698,8 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                     onClick={() => handleSelectService(idx, true, false)}
                     className={`relative h-2 rounded-full overflow-hidden transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
                       isActive
-                        ? 'w-7 bg-[#DBEAFE]'
-                        : 'w-2 bg-[#93C5FD]/60 hover:bg-[#2563EB]/70'
+                        ? 'w-6 min-[360px]:w-7 bg-[#DBEAFE]'
+                        : 'w-1.5 min-[360px]:w-2 bg-[#93C5FD]/60 hover:bg-[#2563EB]/70'
                     }`}
                   >
                     {isActive && (
@@ -714,7 +714,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
             </div>
 
             {/* Right: Play/Pause + Prev/Next + All Services Link */}
-            <div className="flex items-center gap-1.5 shrink-0">
+            <div className="flex items-center justify-center gap-1.5 shrink-0 max-w-full">
               <button
                 type="button"
                 onClick={() => setIsPausedByUser((p) => !p)}
@@ -752,9 +752,9 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
               <button
                 type="button"
                 onClick={() => onNavigate('/services')}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white text-[11px] font-semibold transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white text-[11px] font-semibold transition-colors cursor-pointer whitespace-nowrap"
               >
-                <Layers className="w-3 h-3" />
+                <Layers className="w-3 h-3 shrink-0" />
                 <span>All Services</span>
               </button>
             </div>

@@ -178,19 +178,19 @@ export const HomePage: React.FC<HomePageProps> = ({
 
         <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
           {/* 1. Upper Section: Eyebrow Pill (Hero Section Color Coding) */}
-          <div className="inline-flex items-center gap-2 h-[34px] px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[12px] sm:text-[13px] font-bold tracking-[0.12em] uppercase mb-5">
+          <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 max-w-full rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[11px] min-[360px]:text-[12px] sm:text-[13px] font-bold tracking-[0.12em] uppercase mb-5">
             <span
               className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
               aria-hidden="true"
             />
-            <span>Engineering Disciplines</span>
+            <span className="truncate">Engineering Disciplines</span>
           </div>
 
           {/* 2. Headline (H2) — Hero Dark Blue (#1E3A8A) + Plus Jakarta Sans 800 + Zoom-In/Zoom-Out Effect */}
           <motion.h2
             whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
             transition={{ duration: 0.28, ease: 'easeOut' }}
-            className="!font-['Plus_Jakarta_Sans','Outfit',sans-serif] font-extrabold text-[32px] sm:text-[42px] lg:text-[52px] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] tracking-[-0.03em] leading-[1.12] max-w-[900px] mx-auto origin-center cursor-default"
+            className="!font-['Plus_Jakarta_Sans','Outfit',sans-serif] font-extrabold text-[26px] min-[360px]:text-[32px] sm:text-[42px] lg:text-[52px] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] tracking-[-0.03em] leading-[1.12] max-w-[900px] mx-auto origin-center cursor-default"
           >
             {[
               'A',
@@ -272,7 +272,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             const renderToolRow = (rowTools: typeof websiteTools, rowKey: string) => (
               <div
                 key={rowKey}
-                className="flex flex-wrap items-center justify-center gap-x-7 sm:gap-x-9 lg:gap-x-11 gap-y-5 w-full"
+                className="flex flex-wrap items-center justify-center gap-x-4 min-[360px]:gap-x-6 sm:gap-x-9 lg:gap-x-11 gap-y-4 sm:gap-y-5 w-full"
               >
                 {rowTools.map((tool) => {
                   const ToolIcon = tool.icon;
@@ -285,16 +285,16 @@ export const HomePage: React.FC<HomePageProps> = ({
                       role="img"
                       aria-label={`${displayLabel} logo`}
                       title={displayLabel}
-                      className="inline-flex items-center gap-2.5 h-[32px] md:h-[38px] shrink-0 select-none transition-transform duration-200 hover:scale-108 cursor-default"
+                      className="inline-flex items-center gap-2 sm:gap-2.5 h-[30px] sm:h-[32px] md:h-[38px] shrink-0 select-none transition-transform duration-200 hover:scale-108 cursor-default"
                     >
                       <span
                         className="flex items-center justify-center shrink-0"
                         style={{ color: tool.brandColor }}
                       >
-                        <ToolIcon className="w-[24px] h-[24px] md:w-[30px] md:h-[30px]" />
+                        <ToolIcon className="w-[22px] h-[22px] sm:w-[24px] sm:h-[24px] md:w-[30px] md:h-[30px]" />
                       </span>
                       <span
-                        className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[15px] md:text-[18px] font-bold tracking-tight whitespace-nowrap"
+                        className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[14px] sm:text-[15px] md:text-[18px] font-bold tracking-tight whitespace-nowrap"
                         style={{
                           color:
                             tool.name === 'React'
@@ -962,10 +962,10 @@ export const HomePage: React.FC<HomePageProps> = ({
           {/* Interactive Engineering Terminal Visual */}
           <CtaTerminalVisual className="my-6" />
 
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
+          <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-3.5 sm:gap-4">
             <button
               onClick={() => onOpenProjectModal()}
-              className="inline-flex items-center gap-2.5 px-8 py-4 text-sm font-semibold text-white bg-gradient-to-r from-[#1266E8] to-[#5427D9] hover:opacity-95 rounded-xl transition-all shadow-lg active:scale-[0.98] cursor-pointer"
+              className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-semibold text-white bg-gradient-to-r from-[#1266E8] to-[#5427D9] hover:opacity-95 rounded-xl transition-all shadow-lg active:scale-[0.98] cursor-pointer"
             >
               <span>Discuss Your Project</span>
               <ArrowRight className="w-4 h-4" />
@@ -973,7 +973,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             <button
               onClick={() => onNavigate('/contact')}
-              className="inline-flex items-center gap-2 px-8 py-4 text-sm font-semibold text-slate-300 bg-slate-900/90 hover:bg-slate-800 border border-slate-800 rounded-xl transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-semibold text-slate-300 bg-slate-900/90 hover:bg-slate-800 border border-slate-800 rounded-xl transition-all cursor-pointer"
             >
               <span>Contact IAMTECHNI</span>
             </button>

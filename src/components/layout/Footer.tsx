@@ -35,21 +35,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3">
               {/* Direct Phone */}
               <a
                 href={COMPANY_CONTACT.phoneTel}
                 className="inline-flex items-center gap-2.5 px-4 py-2.5 bg-teal-950/70 border border-teal-500/40 hover:border-teal-400 text-teal-200 hover:text-white rounded-xl text-xs font-semibold transition-all group shadow-sm"
                 title={`Call ${COMPANY_CONTACT.phone}`}
               >
-                <div className="w-7 h-7 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-300 group-hover:scale-110 transition-transform">
+                <div className="w-7 h-7 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-300 group-hover:scale-110 transition-transform shrink-0">
                   <Phone className="w-3.5 h-3.5" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-[10px] uppercase font-mono tracking-wider text-teal-400 font-bold">
                     Call Directly
                   </div>
-                  <div className="font-mono text-xs font-bold text-white">
+                  <div className="font-mono text-xs font-bold text-white truncate">
                     {COMPANY_CONTACT.phone}
                   </div>
                 </div>
@@ -61,14 +61,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                 className="inline-flex items-center gap-2.5 px-4 py-2.5 bg-blue-950/70 border border-blue-500/40 hover:border-blue-400 text-blue-200 hover:text-white rounded-xl text-xs font-semibold transition-all group shadow-sm"
                 title={`Email ${COMPANY_CONTACT.email}`}
               >
-                <div className="w-7 h-7 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-300 group-hover:scale-110 transition-transform">
+                <div className="w-7 h-7 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-300 group-hover:scale-110 transition-transform shrink-0">
                   <Mail className="w-3.5 h-3.5" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-[10px] uppercase font-mono tracking-wider text-blue-400 font-bold">
                     Email Inquiries
                   </div>
-                  <div className="font-mono text-xs font-bold text-white">
+                  <div className="font-mono text-xs font-bold text-white truncate">
                     {COMPANY_CONTACT.email}
                   </div>
                 </div>
@@ -77,20 +77,20 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               {/* Ask AI Advisor CTA */}
               <button
                 onClick={() => window.dispatchEvent(new CustomEvent('iamtechni:open-chat'))}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600/30 hover:bg-blue-600/50 text-blue-200 hover:text-white border border-blue-400/40 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-98 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600/30 hover:bg-blue-600/50 text-blue-200 hover:text-white border border-blue-400/40 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-98 cursor-pointer"
                 title="Open IAMTECHNI AI Assistant"
               >
-                <Sparkles className="w-3.5 h-3.5 text-blue-300" />
+                <Sparkles className="w-3.5 h-3.5 text-blue-300 shrink-0" />
                 <span>Ask AI Advisor</span>
               </button>
 
               {/* Consultation CTA */}
               <button
                 onClick={onStartProject}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-slate-900 hover:bg-slate-100 rounded-xl text-xs font-bold transition-all shadow-md active:scale-98 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-slate-900 hover:bg-slate-100 rounded-xl text-xs font-bold transition-all shadow-md active:scale-98 cursor-pointer"
               >
                 <span>Start a Project</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
               </button>
             </div>
           </div>

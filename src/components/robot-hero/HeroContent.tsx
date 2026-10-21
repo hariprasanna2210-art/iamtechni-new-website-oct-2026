@@ -33,13 +33,13 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         initial={prefersReducedMotion ? {} : { opacity: 0, y: -6 }}
         animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: 'easeOut' }}
-        className="inline-flex items-center gap-2 self-center lg:self-start h-[34px] px-4 py-0 mb-2 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[12.5px] sm:text-[13.5px] font-bold tracking-[0] leading-none whitespace-nowrap shrink-0"
+        className="inline-flex items-center gap-1.5 sm:gap-2 self-center lg:self-start h-[34px] px-3 sm:px-4 py-0 mb-2 max-w-full rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[10.5px] min-[375px]:text-[12px] sm:text-[13.5px] font-bold tracking-[0] leading-none whitespace-nowrap shrink-0"
       >
         <span
           className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
           aria-hidden="true"
         />
-        <span>IAMTECHNI | Technology that moves you forward</span>
+        <span className="truncate">IAMTECHNI | Technology that moves you forward</span>
       </motion.div>
 
       {/* 2. Headline (Single dark blue color, reduced size, Outfit/Space Grotesk font, zoom-in/zoom-out ONLY on hover) */}
