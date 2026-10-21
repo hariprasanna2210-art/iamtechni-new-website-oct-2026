@@ -62,6 +62,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 }) => {
   const [activeProcessStep, setActiveProcessStep] = useState(0);
   const [selectedProjectFilter, setSelectedProjectFilter] = useState<string>('All');
+  const [selectedServiceSlug, setSelectedServiceSlug] = useState<string>('ai-machine-learning');
 
   const processStages = [
     {
@@ -135,12 +136,18 @@ export const HomePage: React.FC<HomePageProps> = ({
       <HeroSection
         onNavigate={onNavigate}
         onOpenProjectModal={onOpenProjectModal}
+        selectedServiceSlug={selectedServiceSlug}
+        onSelectServiceSlug={setSelectedServiceSlug}
       />
 
       {/* ========================================================================= */}
       {/* 2. SERVICES BUILT FOR YOUR NEXT STAGE OF GROWTH (Pill Tabs & Card Carousel)*/}
       {/* ========================================================================= */}
-      <HomeServicesSection onNavigate={onNavigate} />
+      <HomeServicesSection
+        onNavigate={onNavigate}
+        selectedServiceSlug={selectedServiceSlug}
+        onSelectServiceSlug={setSelectedServiceSlug}
+      />
 
       {/* ========================================================================= */}
       {/* 3. COLORFUL TRUST & CORE ADVANTAGES (Soft Lavender / Blue Tint Section)   */}

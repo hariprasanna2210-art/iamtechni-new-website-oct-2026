@@ -27,13 +27,13 @@ export const HeroContent: React.FC<HeroContentProps> = ({
   ];
 
   return (
-    <div className="w-full max-w-[580px] flex flex-col justify-center text-left space-y-5 sm:space-y-6">
+    <div className="w-full max-w-[580px] flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-4 sm:space-y-5 lg:space-y-6">
       {/* 1. Eyebrow Pill */}
       <motion.div
         initial={prefersReducedMotion ? {} : { opacity: 0, y: -6 }}
         animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: 'easeOut' }}
-        className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-slate-100/80 border border-[#E2E8F0] text-[#2563EB] text-[10px] sm:text-xs font-bold tracking-[0.08em] uppercase shadow-2xs whitespace-nowrap shrink-0 max-w-full"
+        className="inline-flex items-center gap-2 self-center lg:self-start px-3.5 py-1.5 rounded-full bg-slate-100/80 border border-[#E2E8F0] text-[#2563EB] text-[10px] sm:text-xs font-bold tracking-[0.08em] uppercase shadow-2xs whitespace-nowrap shrink-0 max-w-full"
       >
         <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] shrink-0" />
         <span className="truncate">IAMTECHNI | TECHNOLOGY THAT MOVES YOU FORWARD</span>
@@ -69,24 +69,24 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
         animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 0.4, ease: 'easeOut' }}
-        className="text-sm sm:text-base text-[#475569] leading-relaxed font-normal"
+        className="text-sm sm:text-base text-[#475569] leading-relaxed font-normal max-w-[540px] lg:max-w-none"
       >
         We transform ideas into intelligent digital solutions through AI,
         software engineering, modern web experiences, cloud technologies, and
         digital growth.
       </motion.p>
 
-      {/* 4. Primary & Secondary CTA Buttons */}
+      {/* 4. Primary & Secondary CTA Buttons (Mobile: full-width stacked 12px gap | Tablet: centered side-by-side | Desktop: left-aligned) */}
       <motion.div
         initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
         animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 0.52, ease: 'easeOut' }}
-        className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5"
+        className="w-full pt-1 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 sm:gap-3.5"
       >
         <button
           type="button"
           onClick={() => onNavigate('/services')}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow-md transition-all duration-200 active:scale-[0.98] cursor-pointer"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow-md transition-all duration-200 active:scale-[0.98] cursor-pointer"
         >
           <span>Explore Our Services</span>
           <ArrowRight className="w-4 h-4" />
@@ -95,19 +95,19 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         <button
           type="button"
           onClick={() => onOpenProjectModal('General Technology Inquiry')}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-[#0B1B3F] font-semibold text-xs sm:text-sm border border-[#E2E8F0] hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all duration-200 active:scale-[0.98] cursor-pointer"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-[#0B1B3F] font-semibold text-xs sm:text-sm border border-[#E2E8F0] hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all duration-200 active:scale-[0.98] cursor-pointer"
         >
           <MessageSquare className="w-4 h-4 text-[#2563EB]" />
           <span>Talk to Our Team</span>
         </button>
       </motion.div>
 
-      {/* 5. Trust Row */}
+      {/* 5. Trust Row (Centered on mobile/tablet, left-aligned on desktop) */}
       <motion.div
         initial={prefersReducedMotion ? {} : { opacity: 0 }}
         animate={prefersReducedMotion ? {} : { opacity: 1 }}
         transition={{ duration: 0.6, delay: prefersReducedMotion ? 0 : 0.65, ease: 'easeOut' }}
-        className="pt-2 sm:pt-3 border-t border-[#E2E8F0] flex items-center flex-wrap gap-x-4 gap-y-2 text-xs text-[#475569]"
+        className="w-full pt-2 sm:pt-3 border-t border-[#E2E8F0] flex items-center justify-center lg:justify-start flex-wrap gap-x-4 gap-y-2 text-xs text-[#475569]"
       >
         <div className="flex items-center gap-1.5 font-medium">
           <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB]" />

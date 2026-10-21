@@ -426,17 +426,17 @@ const ResponsiveCameraRig: React.FC = () => {
     if (camera instanceof THREE.PerspectiveCamera) {
       const aspect = size.width / Math.max(1, size.height);
       if (size.width < 500) {
-        camera.fov = 30;
-        camera.position.set(0, 0.58, 5.45);
-        camera.lookAt(0, 0.54, 0);
+        camera.fov = 31;
+        camera.position.set(0, 0.14, 5.95);
+        camera.lookAt(0, 0.06, 0);
       } else if (aspect > 1.35) {
-        camera.fov = 28;
-        camera.position.set(0, 0.58, 5.05);
-        camera.lookAt(0, 0.54, 0);
+        camera.fov = 29.5;
+        camera.position.set(0, 0.14, 5.65);
+        camera.lookAt(0, 0.06, 0);
       } else {
-        camera.fov = 29;
-        camera.position.set(0, 0.57, 5.25);
-        camera.lookAt(0, 0.54, 0);
+        camera.fov = 30.5;
+        camera.position.set(0, 0.14, 5.8);
+        camera.lookAt(0, 0.06, 0);
       }
       camera.updateProjectionMatrix();
     }
@@ -2080,12 +2080,12 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
       onClick={onRobotClick}
       role="region"
       aria-label="Interactive 3D IAMTECHNI Humanoid AI Ambassador"
-      className="relative w-full h-full min-h-[340px] sm:min-h-[420px] lg:min-h-0 select-none cursor-pointer"
+      className="relative w-full h-full min-h-0 select-none cursor-pointer"
     >
       <Canvas
         shadows={!isHeadless}
         dpr={isHeadless ? 1 : [1, 2]}
-        camera={{ position: [0, 0.58, 5.05], fov: 28, near: 0.1, far: 100 }}
+        camera={{ position: [0, 0.14, 5.65], fov: 29.5, near: 0.1, far: 100 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >
         <StudioEnvironment />

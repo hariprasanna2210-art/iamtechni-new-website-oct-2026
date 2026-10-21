@@ -13,6 +13,8 @@ import { getToolsForService } from '../../data/heroServiceTools';
 
 export interface HomeServicesSectionProps {
   onNavigate: (route: PageRoute) => void;
+  selectedServiceSlug?: string;
+  onSelectServiceSlug?: (slug: string) => void;
 }
 
 // Canonical list of services generated dynamically from servicesData (first 13 primary unique services)
@@ -20,6 +22,8 @@ const CANONICAL_SERVICES: ServiceItem[] = servicesData.slice(0, 13);
 
 export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
   onNavigate,
+  selectedServiceSlug,
+  onSelectServiceSlug,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -36,22 +40,104 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
   const totalServices = CANONICAL_SERVICES.length;
   const SLIDE_DURATION = 4000; // 4 seconds per slide as requested
 
+  // Find service index by slug or id
+  const findServiceIndexBySlug = useCallback((slugOrId: string): number => {
+    const clean = (slugOrId || '').trim().toLowerCase();
+    if (!clean) return -1;
+    return CANONICAL_SERVICES.findIndex(
+      (s) =>
+        (s.slug && s.slug.toLowerCase() === clean) ||
+        (s.id && s.id.toLowerCase() === clean)
+    );
+  }, []);
+
   // Go to specific index and scroll active tab into view
   const handleSelectService = useCallback(
-    (index: number) => {
+    (index: number, updateUrlAndParent = false) => {
       const safeIndex = (index + totalServices) % totalServices;
       setCurrentIndex(safeIndex);
       setProgress(0);
+
+      if (updateUrlAndParent) {
+        const svc = CANONICAL_SERVICES[safeIndex];
+        if (svc) {
+          const slug = svc.slug || svc.id;
+          onSelectServiceSlug?.(slug);
+          if (typeof window !== 'undefined') {
+            window.history.replaceState(null, '', `#services/${slug}`);
+          }
+        }
+      }
     },
-    [totalServices]
+    [totalServices, onSelectServiceSlug]
   );
 
+  // Sync when selectedServiceSlug prop changes from HeroSection
+  useEffect(() => {
+    if (!selectedServiceSlug) return;
+    const matchedIdx = findServiceIndexBySlug(selectedServiceSlug);
+    if (matchedIdx !== -1) {
+      setCurrentIndex(matchedIdx);
+      setProgress(0);
+    }
+  }, [selectedServiceSlug, findServiceIndexBySlug]);
+
+  // Listen for hero card selection custom event & URL hash (#services/<slug>)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const applySlugFromHash = (scrollIntoViewOnInitial = false) => {
+      const hash = window.location.hash || '';
+      if (hash.startsWith('#services/')) {
+        const slug = decodeURIComponent(hash.replace('#services/', '').trim());
+        const matchedIdx = findServiceIndexBySlug(slug);
+        if (matchedIdx !== -1) {
+          setCurrentIndex(matchedIdx);
+          setProgress(0);
+          onSelectServiceSlug?.(
+            CANONICAL_SERVICES[matchedIdx].slug || CANONICAL_SERVICES[matchedIdx].id
+          );
+          if (scrollIntoViewOnInitial) {
+            const el = document.getElementById('services');
+            el?.scrollIntoView({
+              behavior: prefersReducedMotion ? 'auto' : 'smooth',
+              block: 'start',
+            });
+          }
+        }
+      }
+    };
+
+    applySlugFromHash(true);
+
+    const handleCustomSelect = (e: Event) => {
+      const customEvent = e as CustomEvent<{ slug?: string }>;
+      const slug = customEvent.detail?.slug;
+      if (slug) {
+        const matchedIdx = findServiceIndexBySlug(slug);
+        if (matchedIdx !== -1) {
+          setCurrentIndex(matchedIdx);
+          setProgress(0);
+        }
+      }
+    };
+
+    const handleHashChange = () => applySlugFromHash(false);
+
+    window.addEventListener('iamtechni:select-service', handleCustomSelect);
+    window.addEventListener('hashchange', handleHashChange);
+    return () => {
+      window.removeEventListener('iamtechni:select-service', handleCustomSelect);
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, [findServiceIndexBySlug, onSelectServiceSlug, prefersReducedMotion]);
+
   const handlePrev = useCallback(() => {
-    handleSelectService(currentIndex - 1);
+    handleSelectService(currentIndex - 1, true);
   }, [currentIndex, handleSelectService]);
 
   const handleNext = useCallback(() => {
-    handleSelectService(currentIndex + 1);
+    handleSelectService(currentIndex + 1, true);
   }, [currentIndex, handleSelectService]);
 
   // Keep active tab smoothly scrolled into center on mobile/tablet
@@ -122,13 +208,14 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
 
   return (
     <section
-      id="services-stage"
+      id="services"
       aria-labelledby="services-section-title"
       onKeyDown={handleKeyDown}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative w-full py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-[#FFFFFF] via-[#F8FBFF] to-[#FFFFFF] border-b border-slate-200/80 overflow-hidden"
+      className="relative w-full py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-[#FFFFFF] via-[#F8FBFF] to-[#FFFFFF] border-b border-slate-200/80 overflow-hidden scroll-mt-16"
     >
+      <div id="services-stage" className="sr-only" aria-hidden="true" />
       {/* Background ambient lighting */}
       <div
         aria-hidden="true"
@@ -188,7 +275,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                   role="tab"
                   aria-selected={isActive}
                   aria-controls={`service-card-${service.slug || service.id}`}
-                  onClick={() => handleSelectService(index)}
+                  onClick={() => handleSelectService(index, true)}
                   className={`relative px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 whitespace-nowrap shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFA] ${
                     isActive
                       ? 'text-white font-bold'
@@ -389,7 +476,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                       role="tab"
                       aria-selected={isActive}
                       aria-label={`Go to ${service.title}`}
-                      onClick={() => handleSelectService(index)}
+                      onClick={() => handleSelectService(index, true)}
                       className={`h-2 rounded-full transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#087BFA] ${
                         isActive
                           ? 'w-6 bg-[#087BFA]'
