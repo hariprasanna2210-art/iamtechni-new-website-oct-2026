@@ -280,8 +280,8 @@ export const Header: React.FC<HeaderProps> = ({
         ref={headerRef}
         className={`sticky top-0 z-40 w-full transition-all duration-200 border-b ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-xs border-slate-200/90'
-            : 'bg-white border-slate-200/60'
+            ? 'bg-white/95 backdrop-blur-md border-slate-200/90 shadow-[0_6px_24px_-4px_rgba(15,23,42,0.08),0_2px_8px_-2px_rgba(15,23,42,0.04)]'
+            : 'bg-white border-slate-200/70 shadow-[0_4px_16px_-2px_rgba(15,23,42,0.06),0_2px_6px_-1px_rgba(15,23,42,0.04)]'
         }`}
       >
         {/* Main Navbar Row — Aligned with Hero Container (max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8) */}
@@ -298,14 +298,14 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </div>
 
-          {/* Zone 2: Navigation Links (Laptop 1024px+ & Desktop 1280px+) */}
+          {/* Zone 2: Navigation Links (Zero-Wrap Enforced on 1024px+ Viewports) */}
           <nav
             aria-label="Primary Navigation"
             className="hidden lg:flex items-center justify-center lg:gap-2.5 xl:gap-5 2xl:gap-6 text-[12px] xl:text-[13px] font-medium text-slate-600 shrink-0"
           >
             {/* Services with Mega Menu */}
             <div
-              className="py-1.5"
+              className="py-1"
               onMouseEnter={() => handleMouseEnter('services')}
               onMouseLeave={handleMouseLeave}
             >
@@ -318,7 +318,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setActiveMegaMenu('services');
                   }
                 }}
-                className={`inline-flex items-center gap-1 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+                className={`flex items-center gap-1 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
                   currentRoute.startsWith('/services') ? 'text-[#1266E8] font-semibold' : ''
                 }`}
                 aria-expanded={activeMegaMenu === 'services'}
@@ -326,7 +326,7 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <span>Services</span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 opacity-70 transition-transform duration-150 ${
+                  className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-150 ${
                     activeMegaMenu === 'services' ? 'rotate-180 text-[#1266E8]' : ''
                   }`}
                 />
@@ -338,12 +338,12 @@ export const Header: React.FC<HeaderProps> = ({
                   className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 pointer-events-auto before:absolute before:-top-4 before:-left-16 before:-right-16 before:h-8 before:content-['']"
                   role="menu"
                 >
-                  <div className="w-[920px] xl:w-[1040px] max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-xl border border-slate-200 p-5 xl:p-6 whitespace-normal animate-in fade-in zoom-in-95 duration-150">
+                  <div className="w-[920px] xl:w-[1040px] max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-xl border border-slate-200/90 p-5 xl:p-6 whitespace-normal animate-in fade-in zoom-in-95 duration-150">
                     <div className="grid grid-cols-3 gap-5 xl:gap-6">
                       {/* Column 1: Experiences */}
                       <div>
                         <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5 px-2">
-                          <Sparkles className="w-3.5 h-3.5 text-[#04C8E8]" /> Digital Experiences
+                          <Sparkles className="w-3.5 h-3.5 text-[#1266E8]" /> Digital Experiences
                         </div>
                         <div className="space-y-1">
                           <button
@@ -388,7 +388,7 @@ export const Header: React.FC<HeaderProps> = ({
                       {/* Column 2: Software & AI */}
                       <div>
                         <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5 px-2">
-                          <Code2 className="w-3.5 h-3.5 text-[#1266E8]" /> Software &amp; Intelligence
+                          <Code2 className="w-3.5 h-3.5 text-indigo-600" /> Software &amp; Intelligence
                         </div>
                         <div className="space-y-1">
                           <button
@@ -445,7 +445,7 @@ export const Header: React.FC<HeaderProps> = ({
                       {/* Column 3: Cloud, Security & Growth */}
                       <div>
                         <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5 px-2">
-                          <Cloud className="w-3.5 h-3.5 text-teal-600" /> Cloud, Security &amp; Growth
+                          <Cloud className="w-3.5 h-3.5 text-emerald-600" /> Cloud, Security &amp; Growth
                         </div>
                         <div className="space-y-1">
                           <button
@@ -517,7 +517,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Solutions with Mega Menu */}
             <div
-              className="py-1.5"
+              className="py-1"
               onMouseEnter={() => handleMouseEnter('solutions')}
               onMouseLeave={handleMouseLeave}
             >
@@ -530,7 +530,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setActiveMegaMenu('solutions');
                   }
                 }}
-                className={`inline-flex items-center gap-1 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+                className={`flex items-center gap-1 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
                   currentRoute === '/solutions' ? 'text-[#1266E8] font-semibold' : ''
                 }`}
                 aria-expanded={activeMegaMenu === 'solutions'}
@@ -538,7 +538,7 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <span>Solutions</span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 opacity-70 transition-transform duration-150 ${
+                  className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-150 ${
                     activeMegaMenu === 'solutions' ? 'rotate-180 text-[#1266E8]' : ''
                   }`}
                 />
@@ -550,7 +550,7 @@ export const Header: React.FC<HeaderProps> = ({
                   className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 pointer-events-auto before:absolute before:-top-4 before:-left-20 before:-right-20 before:h-8 before:content-['']"
                   role="menu"
                 >
-                  <div className="w-[580px] max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-xl border border-slate-200 p-5 xl:p-6 whitespace-normal animate-in fade-in zoom-in-95 duration-150">
+                  <div className="w-[580px] max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-xl border border-slate-200/90 p-5 xl:p-6 whitespace-normal animate-in fade-in zoom-in-95 duration-150">
                     <div className="grid grid-cols-2 gap-4">
                       <button
                         type="button"
@@ -623,7 +623,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => handleLinkClick('/training')}
-              className={`hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+              className={`hover:text-slate-900 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
                 currentRoute === '/training' || currentRoute === '/courses'
                   ? 'text-[#1266E8] font-semibold'
                   : ''
@@ -688,7 +688,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Zone 3: Action Buttons & Mobile Menu Toggle */}
           <div className="flex items-center gap-1.5 sm:gap-2 xl:gap-2.5 shrink-0">
-            {/* AI Advisor Chatbot Trigger (Visible on Laptop 1024px+ and Desktop 1280px+) */}
+            {/* AI Advisor Chatbot Trigger */}
             <button
               type="button"
               onClick={() => {
@@ -697,11 +697,11 @@ export const Header: React.FC<HeaderProps> = ({
               className="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F52BA] bg-blue-50/90 hover:bg-blue-100 hover:text-blue-800 transition-colors py-1.5 px-2.5 xl:px-3 rounded-xl border border-blue-200/90 shadow-2xs whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
               title="Chat with IAMTECHNI AI Solutions Advisor"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#0F52BA] shrink-0" />
+              <Sparkles className="w-3.5 h-3.5 text-[#1266E8] shrink-0" />
               <span>AI Advisor</span>
             </button>
 
-            {/* Direct Phone Call Pill Button — Icon-only on Laptop (1024-1279px), Icon + Number on Desktop (1280px+) */}
+            {/* Direct Phone Call Button — Icon-only on Laptop (1024-1279px), Icon + Number on Desktop (1280px+) */}
             <a
               href={COMPANY_CONTACT.phoneTel}
               className="hidden lg:inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 transition-colors py-1.5 px-2.5 xl:px-3 rounded-xl border border-slate-200/90 shadow-2xs whitespace-nowrap focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
@@ -712,31 +712,31 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="hidden xl:inline">{COMPANY_CONTACT.phone}</span>
             </a>
 
-            {/* Start a Project CTA Button — Icon-only on very small mobile (<640px), Full label on >=640px */}
+            {/* Start a Project CTA Button — Matching Hero Primary Button Layout & Lighter/Softer Hover */}
             <button
               type="button"
               onClick={onStartProject}
               aria-label="Start a Project"
               title="Start a Project"
-              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-3.5 xl:px-4 py-2 min-h-[44px] lg:min-h-0 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-all shadow-xs active:scale-[0.98] whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
+              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 min-h-[40px] lg:min-h-0 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
             >
               <span className="hidden sm:inline">Start a Project</span>
-              <ArrowRight className="w-4 h-4 sm:w-3.5 sm:h-3.5 shrink-0" />
+              <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
             </button>
 
             {/* Accessible Mobile Menu Hamburger Toggle (Below 1024px) */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden min-w-[44px] min-h-[44px] p-2 flex items-center justify-center text-slate-700 hover:text-slate-900 rounded-xl hover:bg-slate-100 border border-slate-200/60 transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
+              className="lg:hidden min-w-[40px] min-h-[40px] p-2 flex items-center justify-center text-slate-700 hover:text-slate-900 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
               aria-label={isMobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation-panel"
             >
               {isMobileMenuOpen ? (
-                <X className="w-6 h-6 text-slate-900" />
+                <X className="w-5 h-5 text-slate-800" />
               ) : (
-                <Menu className="w-6 h-6 text-slate-800" />
+                <Menu className="w-5 h-5 text-slate-800" />
               )}
             </button>
           </div>
@@ -1080,7 +1080,7 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Pinned Bottom Actions: AI Advisor, Phone (+91-7418120053), and Start a Project */}
-            <div className="p-4 sm:px-6 bg-slate-50/90 border-t border-slate-200 space-y-2.5 shrink-0">
+            <div className="p-4 sm:px-6 bg-slate-50/90 border-t border-slate-200/80 space-y-2.5 shrink-0">
               <div className="grid grid-cols-2 gap-2">
                 {/* AI Advisor Button */}
                 <button
@@ -1089,16 +1089,16 @@ export const Header: React.FC<HeaderProps> = ({
                     setIsMobileMenuOpen(false);
                     window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
                   }}
-                  className="min-h-[44px] px-3 py-2 text-xs font-semibold text-[#0F52BA] bg-blue-50 hover:bg-blue-100 rounded-xl flex items-center justify-center gap-1.5 border border-blue-200 transition-colors cursor-pointer"
+                  className="min-h-[44px] px-3 py-2 text-xs font-semibold text-[#0F52BA] bg-blue-50 hover:bg-blue-100 rounded-xl flex items-center justify-center gap-1.5 border border-blue-200/90 shadow-2xs transition-colors cursor-pointer"
                 >
-                  <Sparkles className="w-4 h-4 text-[#0F52BA] shrink-0" />
+                  <Sparkles className="w-4 h-4 text-[#1266E8] shrink-0" />
                   <span>AI Advisor</span>
                 </button>
 
                 {/* Direct Phone Button */}
                 <a
                   href={COMPANY_CONTACT.phoneTel}
-                  className="min-h-[44px] px-3 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 rounded-xl flex items-center justify-center gap-1.5 border border-slate-200 transition-colors"
+                  className="min-h-[44px] px-3 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 rounded-xl flex items-center justify-center gap-1.5 border border-slate-200/90 shadow-2xs transition-colors"
                 >
                   <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span className="truncate">{COMPANY_CONTACT.phone}</span>
@@ -1112,10 +1112,10 @@ export const Header: React.FC<HeaderProps> = ({
                   setIsMobileMenuOpen(false);
                   onStartProject();
                 }}
-                className="w-full min-h-[46px] py-2.5 text-xs sm:text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 active:scale-[0.98] rounded-xl flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
+                className="w-full min-h-[46px] py-2.5 text-xs sm:text-sm font-semibold text-white bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 active:scale-[0.98] rounded-lg flex items-center justify-center gap-2 shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 cursor-pointer"
               >
                 <span>Start a Project</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 text-white" />
               </button>
             </div>
           </div>

@@ -103,7 +103,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onNavigate }) => {
                 <h2 className="text-lg font-bold text-slate-900 mb-2">5. Data Retention & Contact</h2>
                 <p>
                   We retain inquiry records only as long as necessary to fulfill project communication or regulatory obligations. To request data deletion or review, contact our privacy officer at{' '}
-                  <span className="font-mono text-slate-900">privacy@iamtechni.in</span> or via our official website at{' '}
+                  <span className="font-mono text-slate-900">info@iamtechni.in</span> or via our official website at{' '}
                   <a href="https://iamtechni.in" className="text-[#1266E8] underline">
                     https://iamtechni.in
                   </a>.
@@ -204,7 +204,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onNavigate }) => {
                 <h2 className="text-lg font-bold text-slate-900 mb-2">5. Inquiries</h2>
                 <p>
                   If you have questions about our use of cookies or privacy practices, reach us at{' '}
-                  <span className="font-mono text-slate-900">privacy@iamtechni.in</span>.
+                  <span className="font-mono text-slate-900">info@iamtechni.in</span>.
                 </p>
               </div>
             </>

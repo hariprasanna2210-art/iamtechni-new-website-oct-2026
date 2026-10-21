@@ -158,7 +158,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
       }
 
       const data = await res.json();
-      const replyText = data.text || data.fallbackText || 'Thank you for reaching out. Please contact our engineering team directly at +91-7418120053 or iamtechni.hr@outlook.com.';
+      const replyText = data.text || data.fallbackText || 'Thank you for reaching out. Please contact our engineering team directly at +91-7418120053 or info@iamtechni.in.';
 
       const botMessage: ChatMessage = {
         id: `bot-${Date.now()}`,
@@ -178,7 +178,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
         role: 'assistant',
         content: `I am currently experiencing a temporary network delay. You can connect with our team directly:
 - 📞 Phone: **+91-7418120053**
-- ✉️ Email: **iamtechni.hr@outlook.com**
+- ✉️ Email: **info@iamtechni.in**
 - 🌐 Office: Tamil Nadu, India (Global Delivery)`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
@@ -414,7 +414,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
                     className="flex items-center gap-1 hover:text-slate-900"
                   >
                     <Mail className="w-3 h-3 text-slate-400" />
-                    <span>iamtechni.hr@outlook.com</span>
+                    <span>info@iamtechni.in</span>
                   </a>
                 </div>
                 {onOpenProjectModal && (

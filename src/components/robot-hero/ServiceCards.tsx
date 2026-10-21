@@ -233,22 +233,22 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                 }}
                 className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full text-left transition-all duration-250 cursor-pointer backdrop-blur-md max-w-[126px] sm:max-w-[144px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
                   isActive
-                    ? 'bg-white border-2 border-[#2563EB] text-[#2563EB] shadow-[0_0_16px_rgba(37,99,235,0.28)] scale-[1.03] z-30'
-                    : 'bg-white/95 border border-[#E2E8F0] text-[#0B1B3F] shadow-[0_2px_10px_rgba(11,27,63,0.06)] hover:border-[#06B6D4]'
+                    ? 'bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border-2 border-[#2563EB] text-[#1E3A8A] shadow-[0_0_16px_rgba(37,99,235,0.28),inset_0_1px_0_rgba(255,255,255,0.95)] scale-[1.03] z-30'
+                    : 'bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 text-[#2563EB] shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] hover:border-[#2563EB]'
                 }`}
               >
                 <span
                   className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-colors ${
                     isActive
-                      ? 'bg-[#2563EB] text-white'
-                      : 'bg-[#F1F5F9] text-[#2563EB]'
+                      ? 'bg-[#1E3A8A] text-white'
+                      : 'bg-[#DBEAFE]/80 text-[#1E3A8A]'
                   }`}
                 >
                   <ServiceIcon className="w-3 h-3" />
                 </span>
                 <span
                   className={`text-[11px] font-bold leading-none truncate ${
-                    isActive ? 'text-[#2563EB]' : 'text-[#0B1B3F]'
+                    isActive ? 'text-[#1E3A8A]' : 'text-[#2563EB]'
                   }`}
                 >
                   {card.shortTitle}
@@ -302,16 +302,16 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                 }}
                 className={`group flex items-start gap-2.5 px-3 py-2 rounded-xl text-left transition-all duration-300 cursor-pointer backdrop-blur-md w-[186px] lg:w-[172px] xl:w-[180px] lg:max-w-[180px] min-h-[56px] lg:min-h-0 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
                   isActive
-                    ? 'bg-white border-2 border-[#2563EB] shadow-[0_0_22px_rgba(37,99,235,0.24)] -translate-y-0.5 scale-[1.02] z-30 lg:z-20'
-                    : 'bg-white/95 hover:bg-white border border-[#E2E8F0] hover:border-[#06B6D4] shadow-[0_4px_16px_rgba(11,27,63,0.06)] hover:shadow-[0_0_18px_rgba(6,182,212,0.2)] hover:-translate-y-0.5'
+                    ? 'bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border-2 border-[#2563EB] shadow-[0_0_22px_rgba(37,99,235,0.24),inset_0_1px_0_rgba(255,255,255,0.95)] -translate-y-0.5 scale-[1.02] z-30 lg:z-20'
+                    : 'bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-[#EEF4FF] hover:to-[#ECFEFF] border border-[#DBEAFE]/90 hover:border-[#2563EB] shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] hover:shadow-[0_4px_18px_rgba(37,99,235,0.18)] hover:-translate-y-0.5'
                 }`}
               >
                 {/* 28px Icon Box (w-7 h-7) */}
                 <span
                   className={`mt-0.5 w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-200 ${
                     isActive
-                      ? 'bg-[#2563EB] text-white shadow-2xs'
-                      : 'bg-[#F1F5F9] text-[#2563EB] group-hover:bg-[#2563EB] group-hover:text-white'
+                      ? 'bg-[#1E3A8A] text-white shadow-2xs'
+                      : 'bg-[#DBEAFE]/85 text-[#1E3A8A] group-hover:bg-[#1E3A8A] group-hover:text-white'
                   }`}
                 >
                   <ServiceIcon className="w-3.5 h-3.5" />
@@ -320,7 +320,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-1">
                     {/* Title: 11px on tablet, 12px on desktop */}
-                    <span className="text-[11px] lg:text-[12px] font-bold text-[#0B1B3F] leading-snug line-clamp-2 group-hover:text-[#2563EB] transition-colors">
+                    <span className="text-[11px] lg:text-[12px] font-bold text-[#1E3A8A] leading-snug line-clamp-2 group-hover:text-[#2563EB] transition-colors">
                       {card.title}
                     </span>
                     {isActive && (
@@ -328,19 +328,19 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                         <span
                           className={`${
                             prefersReducedMotion ? '' : 'animate-ping'
-                          } absolute inline-flex h-full w-full rounded-full bg-[#06B6D4] opacity-75`}
+                          } absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-75`}
                         />
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#2563EB]" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#1E3A8A]" />
                       </span>
                     )}
                   </div>
 
                   {/* Subtitle: 10px on tablet, 10.5px on desktop; "Explore →" revealed on hover */}
                   <div className="relative h-[14px] lg:h-[15px] overflow-hidden mt-0.5">
-                    <div className="text-[10px] lg:text-[10.5px] text-[#475569] font-medium leading-tight truncate transition-transform duration-200 group-hover:-translate-y-full">
+                    <div className="text-[10px] lg:text-[10.5px] text-[#2563EB] font-semibold leading-tight truncate transition-transform duration-200 group-hover:-translate-y-full">
                       {card.badgeText}
                     </div>
-                    <div className="text-[10px] lg:text-[10.5px] text-[#2563EB] font-bold leading-tight flex items-center gap-0.5 transition-transform duration-200 translate-y-0 group-hover:-translate-y-full">
+                    <div className="text-[10px] lg:text-[10.5px] text-[#1E3A8A] font-bold leading-tight flex items-center gap-0.5 transition-transform duration-200 translate-y-0 group-hover:-translate-y-full">
                       <span>Explore</span>
                       <ArrowRight className="w-2.5 h-2.5" />
                     </div>
@@ -360,22 +360,22 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
         data-robot-control="true"
         className="relative z-40 flex justify-center w-full mt-1 lg:mt-0.5"
       >
-        <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 lg:py-0 lg:h-9 rounded-full bg-white/95 backdrop-blur-md border border-[#E2E8F0] shadow-[0_4px_20px_rgba(7,22,56,0.08)] max-w-full">
+        <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 lg:py-0 lg:h-9 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] max-w-full">
           <div className="flex items-center gap-1.5 min-w-0 pr-0.5">
             <span
-              className={`w-1.5 h-1.5 rounded-full bg-[#06B6D4] shrink-0 ${
+              className={`w-1.5 h-1.5 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0 ${
                 prefersReducedMotion ? '' : 'animate-pulse'
               }`}
             />
-            <span className="text-[11px] sm:text-xs lg:text-[12.5px] font-bold text-[#0B1B3F] truncate max-w-[125px] sm:max-w-[195px]">
+            <span className="text-[11px] sm:text-xs lg:text-[12.5px] font-bold text-[#1E3A8A] truncate max-w-[125px] sm:max-w-[195px]">
               {activeCard.title}
             </span>
-            <span className="hidden sm:inline text-[11px] lg:text-[12.5px] text-[#475569] font-normal truncate">
+            <span className="hidden sm:inline text-[11px] lg:text-[12.5px] text-[#2563EB] font-semibold truncate">
               · {activeCard.sceneLabel}
             </span>
           </div>
 
-          <div className="w-px h-3.5 bg-[#E2E8F0] shrink-0" aria-hidden="true" />
+          <div className="w-px h-3.5 bg-[#DBEAFE] shrink-0" aria-hidden="true" />
 
           <div
             className="flex items-center gap-1 shrink-0"
@@ -394,15 +394,15 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                   onClick={() => onSelectServiceCard(card, false)}
                   className={`h-1.5 rounded-full transition-all duration-200 cursor-pointer ${
                     active
-                      ? 'w-4 bg-[#2563EB]'
-                      : 'w-1.5 bg-slate-200 hover:bg-[#06B6D4]'
+                      ? 'w-4 bg-[#1E3A8A]'
+                      : 'w-1.5 bg-[#93C5FD] hover:bg-[#2563EB]'
                   }`}
                 />
               );
             })}
           </div>
 
-          <div className="w-px h-3.5 bg-[#E2E8F0] shrink-0" aria-hidden="true" />
+          <div className="w-px h-3.5 bg-[#DBEAFE] shrink-0" aria-hidden="true" />
 
           <div className="flex items-center gap-0.5 shrink-0">
             <button
@@ -413,7 +413,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                   ? 'Pause auto presentation'
                   : 'Resume auto presentation'
               }
-              className="p-1 rounded-md text-[#475569] hover:text-[#2563EB] hover:bg-blue-50 transition-colors cursor-pointer"
+              className="p-1 rounded-md text-[#2563EB] hover:text-[#1E3A8A] hover:bg-[#DBEAFE]/60 transition-colors cursor-pointer"
               title={isAutoPlaying ? 'Pause Auto-Tour' : 'Resume Auto-Tour'}
             >
               {isAutoPlaying ? (
@@ -426,7 +426,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
               type="button"
               onClick={handlePrev}
               aria-label="Previous service scene"
-              className="p-1 rounded-md text-[#475569] hover:text-[#2563EB] hover:bg-blue-50 transition-colors cursor-pointer"
+              className="p-1 rounded-md text-[#2563EB] hover:text-[#1E3A8A] hover:bg-[#DBEAFE]/60 transition-colors cursor-pointer"
               title="Previous Scene"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
@@ -435,7 +435,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
               type="button"
               onClick={handleNext}
               aria-label="Next service scene"
-              className="p-1 rounded-md text-[#475569] hover:text-[#2563EB] hover:bg-blue-50 transition-colors cursor-pointer"
+              className="p-1 rounded-md text-[#2563EB] hover:text-[#1E3A8A] hover:bg-[#DBEAFE]/60 transition-colors cursor-pointer"
               title="Next Scene"
             >
               <ChevronRight className="w-3.5 h-3.5" />

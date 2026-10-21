@@ -28,7 +28,6 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
     company: '',
     phone: '',
     serviceInterest: 'Website Design & Development',
-    budgetRange: '$10,000 – $25,000',
     timeline: 'Within 2–3 Months',
     projectOverview: '',
     preferredTime: 'Morning (9am - 12pm)',
@@ -47,14 +46,6 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
     'Cybersecurity & Hardening',
     'Digital Marketing & SEO',
     'IT Consulting & Roadmaps',
-  ];
-
-  const budgetOptions = [
-    'Under $10,000',
-    '$10,000 – $25,000',
-    '$25,000 – $50,000',
-    '$50,000+',
-    'Discovery / Advisory Only',
   ];
 
   const timelineOptions = [
@@ -109,7 +100,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-              Meet directly with an IAMTECHNI solutions architect to review your technical requirements, architectural dependencies, realistic timelines, and budget scope.
+              Meet directly with an IAMTECHNI solutions architect to review your technical requirements, architectural dependencies, and realistic timelines.
             </p>
           </div>
         </div>
@@ -172,25 +163,8 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                     </div>
                   </div>
 
-                  {/* Step 2: Scope, Budget & Timeline */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
-                    <div className="space-y-2">
-                      <label className="block text-xs font-bold text-slate-900">
-                        Estimated Budget Scope *
-                      </label>
-                      <select
-                        value={formData.budgetRange}
-                        onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
-                        className="w-full p-3 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 focus:ring-2 focus:ring-[#1266E8]"
-                      >
-                        {budgetOptions.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
+                  {/* Step 2: Target Launch Timeline */}
+                  <div className="pt-4 border-t border-slate-100">
                     <div className="space-y-2">
                       <label className="block text-xs font-bold text-slate-900">
                         Target Launch Timeline *

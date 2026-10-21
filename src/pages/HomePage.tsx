@@ -48,6 +48,8 @@ import { CompanyIntroVisual, AiNeuralPipelineVisual, CtaTerminalVisual } from '.
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
+import { getAllUniqueTools } from '../data/heroServiceTools';
+import { motion, useReducedMotion } from 'framer-motion';
 
 interface HomePageProps {
   onNavigate: (route: PageRoute) => void;
@@ -60,6 +62,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onOpenProjectModal,
   onOpenCaseStudy,
 }) => {
+  const prefersReducedMotion = useReducedMotion();
   const [activeProcessStep, setActiveProcessStep] = useState(0);
   const [selectedProjectFilter, setSelectedProjectFilter] = useState<string>('All');
   const [selectedServiceSlug, setSelectedServiceSlug] = useState<string>('ai-machine-learning');
@@ -150,46 +153,183 @@ export const HomePage: React.FC<HomePageProps> = ({
       />
 
       {/* ========================================================================= */}
-      {/* 3. COLORFUL TRUST & CORE ADVANTAGES (Soft Lavender / Blue Tint Section)   */}
+      {/* 3. ENGINEERING DISCIPLINES (Hero-Color-Coded Upper Section + 2 Horizontal Tool Rows) */}
       {/* ========================================================================= */}
-      <section className="py-20 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FE] to-[#F0FDFA] border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-16">
-            {/* Left: Company Introduction Narrative */}
-            <div className="lg:col-span-6 space-y-4">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-[#1266E8] text-xs font-mono uppercase tracking-widest font-bold">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Engineering Disciplines</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
-                A technology partner for your next stage of growth.
-              </h2>
-              <p className="text-base text-slate-600 leading-relaxed">
-                Every business faces distinct operational challenges. IAMTECHNI brings design, full-stack development, artificial intelligence, cloud infrastructure, and growth engineering together into solutions engineered for long-term reliability.
-              </p>
+      <section className="relative py-20 sm:py-24 bg-gradient-to-b from-[#F8FAFF] via-white to-[#EEF4FF]/60 border-b border-[#DBEAFE]/90 overflow-hidden">
+        {/* Subtle Dotted Pattern */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-40"
+          style={{
+            backgroundImage: 'radial-gradient(#BFDBFE 1px, transparent 1px)',
+            backgroundSize: '24px 24px',
+          }}
+        />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <div className="p-3 bg-white/80 rounded-xl border border-blue-100 text-xs text-slate-700 space-y-1">
-                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#1266E8]" /> Strongly Typed
-                  </div>
-                  <div className="text-[11px] text-slate-500">TypeScript strict mode across API &amp; client contracts.</div>
-                </div>
-                <div className="p-3 bg-white/80 rounded-xl border border-teal-100 text-xs text-slate-700 space-y-1">
-                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-teal-600" /> Multi-Cloud
-                  </div>
-                  <div className="text-[11px] text-slate-500">Zero vendor lock-in across AWS &amp; Azure runtimes.</div>
-                </div>
+        {/* Soft Hero-Matched Light-Blue Radial Glow Behind Content */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[880px] h-[460px] rounded-full blur-3xl opacity-85"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(219, 234, 254, 0.65) 0%, rgba(238, 244, 255, 0.45) 50%, rgba(255, 255, 255, 0) 75%)',
+          }}
+        />
+
+        <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+          {/* 1. Upper Section: Eyebrow Pill (Hero Section Color Coding) */}
+          <div className="inline-flex items-center gap-2 h-[34px] px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[12px] sm:text-[13px] font-bold tracking-[0.12em] uppercase mb-5">
+            <span
+              className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
+              aria-hidden="true"
+            />
+            <span>Engineering Disciplines</span>
+          </div>
+
+          {/* 2. Headline (H2) — Hero Dark Blue (#1E3A8A) + Plus Jakarta Sans 800 + Zoom-In/Zoom-Out Effect */}
+          <motion.h2
+            whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+            transition={{ duration: 0.28, ease: 'easeOut' }}
+            className="!font-['Plus_Jakarta_Sans','Outfit',sans-serif] font-extrabold text-[32px] sm:text-[42px] lg:text-[52px] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] tracking-[-0.03em] leading-[1.12] max-w-[900px] mx-auto origin-center cursor-default"
+          >
+            {[
+              'A',
+              'technology',
+              'partner',
+              'for',
+              'your',
+              'next',
+              'stage',
+              'of',
+              'growth.',
+            ].map((word, i, arr) => {
+              const isLast = i === arr.length - 1;
+              return (
+                <React.Fragment key={`${word}-${i}`}>
+                  <motion.span
+                    initial={prefersReducedMotion ? {} : { opacity: 0, y: 8 }}
+                    animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, scale: 1 }}
+                    whileHover={
+                      prefersReducedMotion
+                        ? {}
+                        : {
+                            scale: 1.07,
+                            transition: { duration: 0.22, ease: 'easeOut' },
+                          }
+                    }
+                    transition={{
+                      duration: 0.4,
+                      delay: prefersReducedMotion ? 0 : 0.05 * i,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className={`inline-block text-[#1E3A8A] hover:drop-shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 ${
+                      isLast ? 'mr-0' : 'mr-[0.24em]'
+                    }`}
+                  >
+                    {word}
+                  </motion.span>
+                  {!isLast && ' '}
+                </React.Fragment>
+              );
+            })}
+          </motion.h2>
+
+          {/* 3. Subtitle — Hero Subtitle Gradient (#100C2E -> #3A279E -> #2557D6) */}
+          <p className="mt-5 !font-['Inter',sans-serif] font-medium text-[15px] sm:text-[17px] md:text-[18.5px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent leading-[1.7] max-w-[740px] mx-auto">
+            Every business faces distinct operational challenges. IAMTECHNI brings design, full-stack development, artificial intelligence, cloud infrastructure, and growth engineering together into solutions engineered for long-term reliability.
+          </p>
+
+          {/* 4. Upper Feature Boxes: Strongly Typed & Multi-Cloud (Hero Pill/Card Color Coding) */}
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 w-full max-w-[720px] mx-auto">
+            <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE] shadow-[0_4px_16px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-left transition-all duration-200 hover:border-[#93C5FD] hover:shadow-[0_8px_24px_rgba(30,58,138,0.12)]">
+              <div className="flex items-center gap-2 text-[#1E3A8A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-sm sm:text-[15px] mb-1.5">
+                <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+                <span>Strongly Typed</span>
               </div>
+              <p className="text-xs sm:text-[13px] text-[#2563EB] font-medium leading-relaxed">
+                TypeScript strict mode across API &amp; client contracts.
+              </p>
             </div>
 
-            {/* Right: Dedicated Technology Illustration */}
-            <div className="lg:col-span-6">
-              <CompanyIntroVisual />
+            <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE] shadow-[0_4px_16px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-left transition-all duration-200 hover:border-[#93C5FD] hover:shadow-[0_8px_24px_rgba(30,58,138,0.12)]">
+              <div className="flex items-center gap-2 text-[#1E3A8A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-sm sm:text-[15px] mb-1.5">
+                <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+                <span>Multi-Cloud</span>
+              </div>
+              <p className="text-xs sm:text-[13px] text-[#2563EB] font-medium leading-relaxed">
+                Zero vendor lock-in across AWS &amp; Azure runtimes.
+              </p>
             </div>
           </div>
 
+          {/* 5. Below Tools: Two Static Horizontal Rows of Website Tools (No Carousel) */}
+          {(() => {
+            const websiteTools = getAllUniqueTools().slice(0, 18);
+            const midpoint = Math.ceil(websiteTools.length / 2);
+            const firstRowTools = websiteTools.slice(0, midpoint);
+            const secondRowTools = websiteTools.slice(midpoint);
+
+            const renderToolRow = (rowTools: typeof websiteTools, rowKey: string) => (
+              <div
+                key={rowKey}
+                className="flex flex-wrap items-center justify-center gap-x-7 sm:gap-x-9 lg:gap-x-11 gap-y-5 w-full"
+              >
+                {rowTools.map((tool) => {
+                  const ToolIcon = tool.icon;
+                  const displayLabel =
+                    tool.name === 'Azure' ? 'Microsoft Azure' : tool.name;
+
+                  return (
+                    <div
+                      key={tool.name}
+                      role="img"
+                      aria-label={`${displayLabel} logo`}
+                      title={displayLabel}
+                      className="inline-flex items-center gap-2.5 h-[32px] md:h-[38px] shrink-0 select-none transition-transform duration-200 hover:scale-108 cursor-default"
+                    >
+                      <span
+                        className="flex items-center justify-center shrink-0"
+                        style={{ color: tool.brandColor }}
+                      >
+                        <ToolIcon className="w-[24px] h-[24px] md:w-[30px] md:h-[30px]" />
+                      </span>
+                      <span
+                        className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[15px] md:text-[18px] font-bold tracking-tight whitespace-nowrap"
+                        style={{
+                          color:
+                            tool.name === 'React'
+                              ? '#00B4D8'
+                              : tool.name === 'TypeScript'
+                              ? '#3178C6'
+                              : '#1E3A8A',
+                        }}
+                      >
+                        {displayLabel}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+
+            return (
+              <div
+                className="mt-12 sm:mt-14 w-full flex flex-col items-center space-y-6 sm:space-y-8 pt-2"
+                aria-label="IAMTECHNI website technology stack"
+              >
+                {renderToolRow(firstRowTools, 'tech-row-1')}
+                {renderToolRow(secondRowTools, 'tech-row-2')}
+              </div>
+            );
+          })()}
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 3.5 CORE ADVANTAGES                                                       */}
+      {/* ========================================================================= */}
+      <section className="py-16 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FE] to-[#F0FDFA] border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.15}>
             {/* Advantage 1 - Blue (#EAF3FF) */}
             <ScrollRevealItem className="h-full">

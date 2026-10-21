@@ -58,7 +58,7 @@ IAMTECHNI is a premier enterprise digital engineering, artificial intelligence, 
 
 Key Company Facts:
 - Phone: +91-7418120053 (direct telephone line)
-- Email: iamtechni.hr@outlook.com
+- Email: info@iamtechni.in
 - Headquarters: Tamil Nadu, India
 - Delivery Coverage: Global Delivery (India, United States, EMEA, APAC)
 - Operating Hours: Monday to Saturday, 9:00 AM – 7:00 PM IST
@@ -84,7 +84,7 @@ Core Engineering Disciplines & Solutions:
 Your Persona & Behavior:
 - Professional, knowledgeable, articulate, and welcoming.
 - Provide actionable architectural guidance, technology recommendations, and scope estimations when asked.
-- Encourage users to schedule an exploratory technical consultation or contact the team directly via phone (+91-7418120053) or email (iamtechni.hr@outlook.com).
+- Encourage users to schedule an exploratory technical consultation or contact the team directly via phone (+91-7418120053) or email (info@iamtechni.in).
 - Format responses clearly using markdown: clear headings, concise bullet points, bold key terms, and code snippets when requested.
 - If asked about pricing or exact timelines, offer typical engineering ranges and suggest an exploratory discovery session.`;
 
@@ -98,7 +98,7 @@ app.post('/api/chat', async (req, res) => {
 
     if (!ai) {
       return res.json({
-        text: `### Welcome to IAMTECHNI!\n\nI am your AI Solutions Architect. While our live Gemini backend is connecting, our technical consulting team is actively available for project consultations and technical feasibility reviews.\n\n**Connect with IAMTECHNI:**\n- 📞 **Direct Phone:** [+91-7418120053](tel:+917418120053)\n- ✉️ **Direct Email:** [iamtechni.hr@outlook.com](mailto:iamtechni.hr@outlook.com)\n- 🌐 **Global Delivery:** India, US, EMEA, APAC\n\nHow can we help advance your technology roadmap today?`,
+        text: `### Welcome to IAMTECHNI!\n\nI am your AI Solutions Architect. While our live Gemini backend is connecting, our technical consulting team is actively available for project consultations and technical feasibility reviews.\n\n**Connect with IAMTECHNI:**\n- 📞 **Direct Phone:** [+91-7418120053](tel:+917418120053)\n- ✉️ **Direct Email:** [info@iamtechni.in](mailto:info@iamtechni.in)\n- 🌐 **Global Delivery:** India, US, EMEA, APAC\n\nHow can we help advance your technology roadmap today?`,
       });
     }
 
@@ -148,7 +148,7 @@ app.post('/api/chat', async (req, res) => {
     console.error('Error generating Gemini chat response:', error);
     return res.status(500).json({
       error: error?.message || 'Failed to generate response',
-      fallbackText: 'I apologize, but I encountered a temporary connection issue. You can reach our engineering team directly at +91-7418120053 or iamtechni.hr@outlook.com for immediate support.',
+      fallbackText: 'I apologize, but I encountered a temporary connection issue. You can reach our engineering team directly at +91-7418120053 or info@iamtechni.in for immediate support.',
     });
   }
 });

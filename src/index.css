@@ -181,3 +181,23 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@keyframes tech-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-tech-marquee {
+  display: flex;
+  width: max-content;
+  animation: tech-marquee 38s linear infinite;
+}
+
+.animate-tech-marquee:hover {
+  animation-play-state: paused;
+}
+

@@ -19,7 +19,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
     company: '',
     phone: '',
     service: defaultService,
-    budget: '$5,000 - $15,000',
     timeline: 'Within 1-3 months',
     description: '',
     consent: false,
@@ -75,7 +74,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
       company: '',
       phone: '',
       service: defaultService,
-      budget: '$5,000 - $15,000',
       timeline: 'Within 1-3 months',
       description: '',
       consent: false,
@@ -232,14 +230,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                           {referenceId}
                         </span>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
                         <div>
                           <span className="text-slate-400 block text-[10px] font-mono uppercase">Service Pillar</span>
                           <span className="font-semibold text-slate-800">{formData.service}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400 block text-[10px] font-mono uppercase">Scope Budget</span>
-                          <span className="font-semibold text-slate-800">{formData.budget}</span>
                         </div>
                         <div>
                           <span className="text-slate-400 block text-[10px] font-mono uppercase">Target Timeline</span>
@@ -285,8 +279,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                           <Phone className="w-3.5 h-3.5" /> +91-7418120053
                         </a>
                         <span className="text-slate-300">·</span>
-                        <a href="mailto:iamtechni.hr@outlook.com" className="text-[#1266E8] hover:underline flex items-center gap-1">
-                          <Mail className="w-3.5 h-3.5" /> iamtechni.hr@outlook.com
+                        <a href="mailto:info@iamtechni.in" className="text-[#1266E8] hover:underline flex items-center gap-1">
+                          <Mail className="w-3.5 h-3.5" /> info@iamtechni.in
                         </a>
                       </div>
                     </div>
@@ -353,7 +347,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-semibold text-slate-700 mb-1">
                           Primary Service
@@ -367,31 +361,14 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                           <option value="E-commerce Development">E-commerce</option>
                           <option value="Custom Software Development">Custom Software</option>
                           <option value="Mobile App Development">Mobile Apps</option>
-                          <option value="AI & Machine Learning">AI & Machine Learning</option>
+                          <option value="AI & Machine Learning">AI &amp; Machine Learning</option>
                           <option value="Data Analytics">Data Analytics</option>
-                          <option value="Cloud & DevOps">Cloud & DevOps</option>
+                          <option value="Cloud & DevOps">Cloud &amp; DevOps</option>
                           <option value="Cybersecurity">Cybersecurity</option>
                           <option value="Digital Marketing">Digital Marketing</option>
                           <option value="UI/UX Design">UI/UX Design</option>
                           <option value="IT Consulting">IT Consulting</option>
                           <option value="Technical Training">Technical Training</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-slate-700 mb-1">
-                          Estimated Budget
-                        </label>
-                        <select
-                          value={formData.budget}
-                          onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                          className="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden"
-                        >
-                          <option value="Under $5,000">Under $5,000</option>
-                          <option value="$5,000 - $15,000">$5,000 - $15,000</option>
-                          <option value="$15,000 - $35,000">$15,000 - $35,000</option>
-                          <option value="$35,000+">$35,000+</option>
-                          <option value="To Be Determined">To Be Determined</option>
                         </select>
                       </div>
 

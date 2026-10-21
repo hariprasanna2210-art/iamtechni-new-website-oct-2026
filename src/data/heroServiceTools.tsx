@@ -232,3 +232,60 @@ export const getToolsForService = (idOrSlug: string): HeroToolItem[] => {
 
   return HERO_SERVICE_TOOLS['ai-machine-learning'];
 };
+
+/**
+ * Dynamically collects all unique technology tools from HERO_SERVICE_TOOLS.
+ * Adding a new tool to any service in HERO_SERVICE_TOOLS automatically includes it here.
+ */
+export const getAllUniqueTools = (): HeroToolItem[] => {
+  const priorityOrder = [
+    // Row 1: Core Web, Backend, Cloud & Relational DB
+    'React',
+    'Next.js',
+    'TypeScript',
+    'Tailwind CSS',
+    'Node.js',
+    'Python',
+    'AWS',
+    'Azure',
+    'PostgreSQL',
+    // Row 2: DevOps, AI, Mobile, Design & Commerce
+    'Docker',
+    'Kubernetes',
+    'GitHub Actions',
+    'OpenAI',
+    'LangChain',
+    'TensorFlow',
+    'Flutter',
+    'Figma',
+    'Shopify',
+    'MongoDB',
+    'Firebase',
+  ];
+
+  const byName = new Map<string, HeroToolItem>();
+  Object.values(HERO_SERVICE_TOOLS).forEach((toolList) => {
+    toolList.forEach((tool) => {
+      if (!byName.has(tool.name)) {
+        byName.set(tool.name, tool);
+      }
+    });
+  });
+
+  const ordered: HeroToolItem[] = [];
+  priorityOrder.forEach((name) => {
+    const found = byName.get(name);
+    if (found) {
+      ordered.push(found);
+      byName.delete(name);
+    }
+  });
+
+  // Append all remaining unique tools from HERO_SERVICE_TOOLS
+  byName.forEach((tool) => {
+    ordered.push(tool);
+  });
+
+  return ordered;
+};
+

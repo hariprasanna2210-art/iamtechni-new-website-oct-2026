@@ -32,7 +32,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
     company: '',
     phone: '',
     service: 'Web Development',
-    budget: '$5,000 - $15,000',
     preferredContact: 'Phone Call',
     description: '',
     consent: false,
@@ -87,7 +86,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
         onPrimaryCta={() => {
           window.location.href = COMPANY_CONTACT.phoneTel;
         }}
-        secondaryCtaText="Email iamtechni.hr@outlook.com"
+        secondaryCtaText="Email info@iamtechni.in"
         onSecondaryCta={() => {
           window.location.href = COMPANY_CONTACT.emailMailto;
         }}
@@ -272,7 +271,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                       Inquiry Snapshot
                     </div>
                     <div><span className="text-slate-400">Target Service:</span> {formData.service}</div>
-                    <div><span className="text-slate-400">Estimated Budget:</span> {formData.budget}</div>
                     <div><span className="text-slate-400">Preferred Channel:</span> {formData.preferredContact}</div>
                     <div><span className="text-slate-400">Reference:</span> IAM-{Date.now().toString().slice(-6)}</div>
                   </div>
@@ -288,7 +286,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                           company: '',
                           phone: '',
                           service: 'Web Development',
-                          budget: '$5,000 - $15,000',
                           preferredContact: 'Phone Call',
                           description: '',
                           consent: false,
@@ -371,7 +368,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-700 mb-1">
                         Service Required
@@ -393,23 +390,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                         <option value="UI/UX Design">UI/UX Design</option>
                         <option value="IT Consulting">IT Consulting</option>
                         <option value="Technical Training">Technical Training</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
-                        Budget Range
-                      </label>
-                      <select
-                        value={formData.budget}
-                        onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                        className="w-full px-3 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden"
-                      >
-                        <option value="Under $5,000">Under $5,000</option>
-                        <option value="$5,000 - $15,000">$5,000 - $15,000</option>
-                        <option value="$15,000 - $35,000">$15,000 - $35,000</option>
-                        <option value="$35,000+">$35,000+</option>
-                        <option value="To Be Determined">To Be Determined</option>
                       </select>
                     </div>
 
