@@ -2083,6 +2083,7 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
       className="relative w-full h-full min-h-0 select-none cursor-pointer"
     >
       <Canvas
+        resize={{ offsetSize: true }}
         shadows={!isHeadless}
         dpr={isHeadless ? 1 : [1, 2]}
         camera={{ position: [0, 0.14, 5.65], fov: 29.5, near: 0.1, far: 100 }}

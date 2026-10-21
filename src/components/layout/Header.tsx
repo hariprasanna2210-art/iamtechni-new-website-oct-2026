@@ -25,6 +25,7 @@ import {
 import { IamtechniLogo } from '../common/IamtechniLogo';
 import { PageRoute } from '../../types';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
+import { useScaledDesktop } from '../../utils/useScaledDesktop';
 
 interface HeaderProps {
   currentRoute: PageRoute;
@@ -45,6 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
   const megaMenuTimeout = useRef<NodeJS.Timeout | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(64);
+  const { isScaledDesktop, scale } = useScaledDesktop();
 
   // Measure header height dynamically for exact mobile panel and 100svh hero alignment
   useEffect(() => {
@@ -278,6 +280,13 @@ export const Header: React.FC<HeaderProps> = ({
     <>
       <header
         ref={headerRef}
+        style={
+          isScaledDesktop
+            ? {
+                height: `${Math.round(64 * scale)}px`,
+              }
+            : undefined
+        }
         className={`sticky top-0 z-40 w-full transition-all duration-200 border-b ${
           isScrolled
             ? 'bg-white/95 backdrop-blur-md shadow-xs border-slate-200/90'
@@ -285,7 +294,23 @@ export const Header: React.FC<HeaderProps> = ({
         }`}
       >
         {/* Main Navbar Row — Aligned with Hero Container (max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8) */}
-        <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 xl:py-3 flex items-center justify-between gap-2 lg:gap-2.5 xl:gap-5 whitespace-nowrap">
+        <div
+          style={
+            isScaledDesktop
+              ? {
+                  width: '1366px',
+                  height: '64px',
+                  transform: `scale(${scale})`,
+                  transformOrigin: 'top left',
+                }
+              : undefined
+          }
+          className={`relative ${
+            isScaledDesktop
+              ? 'px-8 py-3 flex items-center justify-between gap-5 whitespace-nowrap'
+              : 'max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 xl:py-3 flex items-center justify-between gap-2 lg:gap-2.5 xl:gap-5 whitespace-nowrap'
+          }`}
+        >
           {/* Zone 1: Brand Wordmark / Logo */}
           <div className="shrink-0 flex items-center">
             <button
@@ -301,7 +326,11 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Zone 2: Navigation Links (Laptop 1024px+ & Desktop 1280px+) */}
           <nav
             aria-label="Primary Navigation"
-            className="hidden lg:flex items-center justify-center lg:gap-2.5 xl:gap-5 2xl:gap-6 text-[12px] xl:text-[13px] font-medium text-slate-600 shrink-0"
+            className={`${
+              isScaledDesktop
+                ? 'flex items-center justify-center gap-5 text-[13px]'
+                : 'hidden lg:flex items-center justify-center lg:gap-2.5 xl:gap-5 2xl:gap-6 text-[12px] xl:text-[13px]'
+            } font-medium text-slate-600 shrink-0`}
           >
             {/* Services with Mega Menu */}
             <div

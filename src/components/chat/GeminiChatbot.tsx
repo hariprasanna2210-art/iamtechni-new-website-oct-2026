@@ -312,9 +312,9 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
     <>
       {/* Floating Chat Trigger Button */}
       {!isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3">
-          {/* Subtle invitation tooltip on desktop */}
-          <div className="hidden md:flex items-center gap-2 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-full border border-slate-200/90 shadow-lg text-xs font-medium text-slate-700 pointer-events-none animate-pulse">
+        <div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 lg:bottom-6 lg:right-6 z-50 flex items-center gap-3">
+          {/* Subtle invitation tooltip on desktop only (hidden on mobile & tablet) */}
+          <div className="hidden lg:flex items-center gap-2 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-full border border-slate-200/90 shadow-lg text-xs font-medium text-slate-700 pointer-events-none animate-pulse">
             <Sparkles className="w-3.5 h-3.5 text-[#0F52BA]" />
             <span>Chat with IAMTECHNI AI</span>
           </div>
@@ -325,12 +325,12 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
               setIsMinimized(false);
             }}
             aria-label="Open IAMTECHNI AI Assistant"
-            className="relative group flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-[#0A192F] via-[#0F52BA] to-[#1266E8] text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300/50 p-2.5"
+            className="relative group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#0A192F] via-[#0F52BA] to-[#1266E8] text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300/50 p-2 sm:p-2.5"
           >
-            <IamtechniLogo size="sm" showWordmark={false} className="w-8 h-8 transition-transform group-hover:scale-110" />
-            <span className="absolute -top-1 -right-1 flex h-4 w-4">
+            <IamtechniLogo size="sm" showWordmark={false} className="w-7 h-7 sm:w-8 sm:h-8 transition-transform group-hover:scale-110" />
+            <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 flex h-3.5 w-3.5 sm:h-4 sm:w-4">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white"></span>
+              <span className="relative inline-flex rounded-full h-3.5 w-3.5 sm:h-4 sm:w-4 bg-emerald-500 border-2 border-white"></span>
             </span>
           </button>
         </div>

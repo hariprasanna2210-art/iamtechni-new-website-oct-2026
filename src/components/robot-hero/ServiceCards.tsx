@@ -21,6 +21,7 @@ export interface ServiceCardsProps {
   onSelectServiceCard: (card: HeroFloatingServiceCard, shouldScrollAndSpeak?: boolean) => void;
   onToggleAutoPlay: () => void;
   parallaxOffset?: { x: number; y: number };
+  forceDesktop?: boolean;
 }
 
 export const mapServiceToOrbitCardId = (idOrSlug: string): string => {
@@ -36,22 +37,61 @@ export const mapServiceToOrbitCardId = (idOrSlug: string): string => {
   return cards[0]?.slug || 'ai-machine-learning';
 };
 
-const getCardPositionClasses = (card: HeroFloatingServiceCard): string => {
-  const tabletVisibility = card.showOnTablet ? 'md:block' : 'hidden lg:block';
+// Matches exact live-site desktop coordinates (x=631/623 on left, x=1106/1114 on right at 1366px)
+const getDesktopAndTabletPositionClasses = (
+  card: HeroFloatingServiceCard,
+  forceDesktop: boolean
+): string => {
+  if (forceDesktop) {
+    switch (card.side) {
+      case 'left-top':
+        return 'top-[13%] -left-4';
+      case 'left-mid':
+        return 'top-[43%] -left-6';
+      case 'left-bottom':
+        return 'bottom-[17%] -left-4';
+      case 'right-top':
+        return 'top-[13%] -right-4';
+      case 'right-mid':
+        return 'top-[43%] -right-6';
+      case 'right-bottom':
+      default:
+        return 'bottom-[17%] -right-4';
+    }
+  }
+
   switch (card.side) {
     case 'left-top':
-      return `${tabletVisibility} top-[13%] left-0 sm:left-0 xl:-left-4`;
+      return 'top-[13%] left-0 xl:-left-4';
     case 'left-mid':
-      return `${tabletVisibility} top-[43%] left-0 sm:-left-1 xl:-left-6`;
+      return 'top-[43%] left-0 lg:-left-2 xl:-left-6';
     case 'left-bottom':
-      return `${tabletVisibility} bottom-[17%] left-0 sm:left-0 xl:-left-4`;
+      return 'bottom-[17%] left-0 xl:-left-4';
     case 'right-top':
-      return `${tabletVisibility} top-[13%] right-0 sm:right-0 xl:-right-4`;
+      return 'top-[13%] right-0 xl:-right-4';
     case 'right-mid':
-      return `${tabletVisibility} top-[43%] right-0 sm:-right-1 xl:-right-6`;
+      return 'top-[43%] right-0 lg:-right-2 xl:-right-6';
     case 'right-bottom':
     default:
-      return `${tabletVisibility} bottom-[17%] right-0 sm:right-0 xl:-right-4`;
+      return 'bottom-[17%] right-0 xl:-right-4';
+  }
+};
+
+const getMobileChipPositionClasses = (card: HeroFloatingServiceCard): string => {
+  switch (card.side) {
+    case 'left-top':
+      return 'top-[12%] left-0';
+    case 'left-mid':
+      return 'top-[44%] left-0';
+    case 'left-bottom':
+      return 'bottom-[14%] left-0';
+    case 'right-top':
+      return 'top-[12%] right-0';
+    case 'right-mid':
+      return 'top-[44%] right-0';
+    case 'right-bottom':
+    default:
+      return 'bottom-[14%] right-0';
   }
 };
 
@@ -63,6 +103,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
   onSelectServiceCard,
   onToggleAutoPlay,
   parallaxOffset = { x: 0, y: 0 },
+  forceDesktop = false,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const floatingCards = getHeroFloatingServiceCards();
@@ -104,21 +145,45 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
       </div>
 
       {/* ========================================================================= */}
-      {/* 2. LIGHT BEAM FROM ROBOT TO ACTIVE FLOATING SERVICE CARD                  */}
+      {/* 2. SCALED ORBIT RINGS & LIGHT BEAM FROM ROBOT TO ACTIVE CARD / CHIP       */}
       {/* ========================================================================= */}
       <svg
         aria-hidden="true"
-        className="hidden md:block pointer-events-none absolute inset-0 w-full h-full max-w-[560px] max-h-[480px] m-auto z-10 overflow-visible"
+        className={`pointer-events-none absolute inset-0 w-full h-full ${
+          forceDesktop
+            ? 'max-w-[520px] max-h-[460px]'
+            : 'max-w-[340px] sm:max-w-[440px] md:max-w-[560px] lg:max-w-[520px] max-h-[320px] md:max-h-[480px] lg:max-h-[460px]'
+        } m-auto z-10 overflow-visible`}
         viewBox="0 0 500 450"
         fill="none"
       >
         <defs>
           <linearGradient id="robot-service-beam" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#2563EB" stopOpacity={isSpeaking ? '0.65' : '0.35'} />
-            <stop offset="60%" stopColor="#06B6D4" stopOpacity={isSpeaking ? '0.85' : '0.50'} />
-            <stop offset="100%" stopColor="#06B6D4" stopOpacity="0.10" />
+            <stop offset="0%" stopColor="#2563EB" stopOpacity={isSpeaking ? '0.68' : '0.38'} />
+            <stop offset="60%" stopColor="#06B6D4" stopOpacity={isSpeaking ? '0.88' : '0.52'} />
+            <stop offset="100%" stopColor="#06B6D4" stopOpacity="0.12" />
           </linearGradient>
         </defs>
+
+        {/* Subtle Scaled Orbit Rings Around the Robot */}
+        <circle
+          cx="250"
+          cy="215"
+          r="132"
+          stroke="#2563EB"
+          strokeOpacity="0.10"
+          strokeWidth="1.2"
+          strokeDasharray="4 6"
+        />
+        <circle
+          cx="250"
+          cy="215"
+          r="178"
+          stroke="#06B6D4"
+          strokeOpacity="0.14"
+          strokeWidth="1.2"
+        />
+
         <AnimatePresence mode="wait">
           <motion.g
             key={activeCard.slug}
@@ -157,14 +222,82 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
       </svg>
 
       {/* ========================================================================= */}
-      {/* 3. SYMMETRICAL FLOATING TECHNOLOGY CARDS (6 on Desktop, 4 on Tablet)      */}
-      {/*    Full titles visible across 3 left & 3 right without overlapping        */}
+      {/* 3. MOBILE SURROUNDING COMPACT CHIPS (< 768px): 3 Left & 3 Right           */}
       {/* ========================================================================= */}
-      <div className="hidden md:block pointer-events-none absolute inset-0 z-20">
+      {!forceDesktop && (
+        <div className="block md:hidden pointer-events-none absolute inset-0 z-20">
+          {floatingCards.map((card, idx) => {
+            const isActive = card.slug === activeCard.slug;
+            const ServiceIcon = getServiceIcon(card.slug);
+            const mobilePos = getMobileChipPositionClasses(card);
+
+            return (
+              <motion.div
+                key={`mobile-chip-${card.slug}`}
+                data-robot-control="true"
+                className={`pointer-events-auto absolute ${mobilePos}`}
+                animate={
+                  prefersReducedMotion
+                    ? {}
+                    : {
+                        y: [0, -3, 0],
+                      }
+                }
+                transition={{
+                  duration: 4.5 + (idx % 3) * 0.35,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: idx * 0.25,
+                }}
+              >
+                <a
+                  href={card.hashHref}
+                  aria-label={`Explore ${card.title} services`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onSelectServiceCard(card, true);
+                  }}
+                  className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full text-left transition-all duration-250 cursor-pointer backdrop-blur-md max-w-[126px] sm:max-w-[144px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                    isActive
+                      ? 'bg-white border-2 border-[#2563EB] text-[#2563EB] shadow-[0_0_16px_rgba(37,99,235,0.28)] scale-[1.03] z-30'
+                      : 'bg-white/95 border border-[#E2E8F0] text-[#0B1B3F] shadow-[0_2px_10px_rgba(11,27,63,0.06)] hover:border-[#06B6D4]'
+                  }`}
+                >
+                  <span
+                    className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                      isActive
+                        ? 'bg-[#2563EB] text-white'
+                        : 'bg-[#F1F5F9] text-[#2563EB]'
+                    }`}
+                  >
+                    <ServiceIcon className="w-3 h-3" />
+                  </span>
+                  <span
+                    className={`text-[11px] font-bold leading-none truncate ${
+                      isActive ? 'text-[#2563EB]' : 'text-[#0B1B3F]'
+                    }`}
+                  >
+                    {card.shortTitle}
+                  </span>
+                </a>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 4. TABLET & DESKTOP SURROUNDING FULL CARDS (768px and above): 3 Left & 3 Right */}
+      {/* ========================================================================= */}
+      <div
+        className={`${
+          forceDesktop ? 'block' : 'hidden md:block'
+        } pointer-events-none absolute inset-0 z-20`}
+      >
         {floatingCards.map((card, idx) => {
           const isActive = card.slug === activeCard.slug;
           const ServiceIcon = getServiceIcon(card.slug);
-          const posClasses = getCardPositionClasses(card);
+          const posClasses = getDesktopAndTabletPositionClasses(card, forceDesktop);
 
           return (
             <motion.div
@@ -196,7 +329,11 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                   e.preventDefault();
                   onSelectServiceCard(card, true);
                 }}
-                className={`group flex items-start gap-2.5 px-3 py-2 rounded-xl text-left transition-all duration-300 cursor-pointer backdrop-blur-md w-[198px] xl:w-[216px] min-h-[56px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                className={`group flex items-start gap-2.5 px-3 py-2 rounded-xl text-left transition-all duration-300 cursor-pointer backdrop-blur-md ${
+                  forceDesktop
+                    ? 'w-[215px]'
+                    : 'w-[186px] lg:w-[195px] xl:w-[215px]'
+                } min-h-[56px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
                   isActive
                     ? 'bg-white border-2 border-[#2563EB] shadow-[0_0_24px_rgba(37,99,235,0.26)] -translate-y-0.5 scale-[1.02] z-30'
                     : 'bg-white/95 hover:bg-white border border-[#E2E8F0] hover:border-[#06B6D4] shadow-[0_4px_16px_rgba(11,27,63,0.06)] hover:shadow-[0_0_20px_rgba(6,182,212,0.22)] hover:-translate-y-0.5'
@@ -247,66 +384,17 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
       </div>
 
       {/* ========================================================================= */}
-      {/* 4. MOBILE HORIZONTAL SWIPEABLE ROW (< 768px)                              */}
-      {/* Tap = speak service summary + smooth scroll to 2nd section (#services)    */}
-      {/* ========================================================================= */}
-      <div
-        data-robot-control="true"
-        className="flex md:hidden items-center gap-2 w-full overflow-x-auto scrollbar-none px-1 py-1.5 mb-1"
-        style={{ WebkitOverflowScrolling: 'touch' }}
-      >
-        {floatingCards.map((card) => {
-          const isActive = card.slug === activeCard.slug;
-          const ServiceIcon = getServiceIcon(card.slug);
-
-          return (
-            <a
-              key={card.slug}
-              href={card.hashHref}
-              aria-label={`Explore ${card.title} services`}
-              onClick={(e) => {
-                e.preventDefault();
-                onSelectServiceCard(card, true);
-              }}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-left transition-all shrink-0 w-[188px] min-h-[54px] border cursor-pointer ${
-                isActive
-                  ? 'bg-white border-[#2563EB] shadow-[0_0_16px_rgba(37,99,235,0.22)]'
-                  : 'bg-white/95 border-[#E2E8F0]'
-              }`}
-            >
-              <span
-                className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
-                  isActive ? 'bg-[#2563EB] text-white' : 'bg-blue-50 text-[#2563EB]'
-                }`}
-              >
-                <ServiceIcon className="w-3.5 h-3.5" />
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="text-[11px] font-bold text-[#0B1B3F] leading-snug line-clamp-2">
-                  {card.title}
-                </div>
-                <div className="text-[9.5px] font-semibold text-[#2563EB] flex items-center gap-0.5 mt-0.5">
-                  <span>Explore</span>
-                  <ArrowRight className="w-2.5 h-2.5" />
-                </div>
-              </div>
-            </a>
-          );
-        })}
-      </div>
-
-      {/* ========================================================================= */}
       {/* 5. CENTERED SCENE CONTROLLER (Directly Under Robot)                       */}
       {/* ========================================================================= */}
       <div data-robot-control="true" className="relative z-20 flex justify-center w-full mt-1">
-        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-[#E2E8F0] shadow-[0_4px_20px_rgba(7,22,56,0.08)]">
-          <div className="flex items-center gap-1.5 min-w-0 pr-1">
+        <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-[#E2E8F0] shadow-[0_4px_20px_rgba(7,22,56,0.08)] max-w-full">
+          <div className="flex items-center gap-1.5 min-w-0 pr-0.5">
             <span
               className={`w-1.5 h-1.5 rounded-full bg-[#06B6D4] shrink-0 ${
                 prefersReducedMotion ? '' : 'animate-pulse'
               }`}
             />
-            <span className="text-xs font-bold text-[#0B1B3F] truncate max-w-[155px] sm:max-w-[195px]">
+            <span className="text-[11px] sm:text-xs font-bold text-[#0B1B3F] truncate max-w-[125px] sm:max-w-[195px]">
               {activeCard.title}
             </span>
             <span className="hidden sm:inline text-[11px] text-[#475569] font-normal truncate">
@@ -333,7 +421,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                   onClick={() => onSelectServiceCard(card, false)}
                   className={`h-1.5 rounded-full transition-all duration-200 cursor-pointer ${
                     active
-                      ? 'w-4.5 bg-[#2563EB]'
+                      ? 'w-4 bg-[#2563EB]'
                       : 'w-1.5 bg-slate-200 hover:bg-[#06B6D4]'
                   }`}
                 />

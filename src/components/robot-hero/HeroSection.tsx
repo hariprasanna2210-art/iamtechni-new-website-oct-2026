@@ -5,6 +5,7 @@ import { HeroContent } from './HeroContent';
 import { RobotScene } from '../layout/RobotScene';
 import { ServiceCards } from './ServiceCards';
 import { RobotSpeechControls } from './RobotSpeechControls';
+import { useScaledDesktop } from '../../utils/useScaledDesktop';
 import {
   ROBOT_SPEECH_DATA,
   getHeroFloatingServiceCards,
@@ -794,6 +795,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     floatingCards.find((c) => c.slug === activeServiceSlug) || floatingCards[0];
 
   const showTapToHearHint = !hasInteracted && !isMuted && !isVoiceSpeaking;
+  const { isScaledDesktop, scale } = useScaledDesktop();
+
+  const desktopHeroHeight = 610;
 
   return (
     <section
@@ -801,7 +805,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       aria-label="IAMTECHNI Futuristic AI Ambassador Hero"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-[#FFFFFF] via-[#F4F8FF] to-[#FFFFFF] border-b border-slate-200/80 pt-2 pb-8 sm:pt-3 sm:pb-10 lg:py-4 h-auto lg:h-[calc(100svh-var(--header-height,65px))] lg:min-h-[580px] lg:max-h-[920px] flex items-center"
+      style={
+        isScaledDesktop
+          ? {
+              height: `${Math.round(desktopHeroHeight * scale)}px`,
+            }
+          : undefined
+      }
+      className={`relative w-full overflow-hidden bg-gradient-to-b from-[#FFFFFF] via-[#F4F8FF] to-[#FFFFFF] border-b border-slate-200/80 ${
+        isScaledDesktop
+          ? 'block'
+          : 'pt-2 pb-20 sm:pt-3 sm:pb-20 lg:py-4 h-auto lg:h-[calc(100svh-var(--header-height,65px))] lg:min-h-[580px] lg:max-h-[920px] flex items-center'
+      }`}
     >
       {/* Subtle Technical Precision Grid & Pale-Blue Ambient Lighting */}
       <div
@@ -817,19 +832,54 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       {/* Main Page Container
           DOM order: Text column first (for SEO & screen readers), Robot column second.
           Visual order: Below 1024px -> Robot first (order-1), Text second (order-2).
-          Desktop (1024px+) -> Text left (lg:order-1), Robot right (lg:order-2). */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full min-h-0 flex flex-col lg:flex-row items-center justify-between gap-5 sm:gap-6 lg:gap-8">
+          Desktop (1024px+ or scaled 1366px desktop) -> Text left (order-1), Robot right (order-2). */}
+      <div
+        style={
+          isScaledDesktop
+            ? {
+                width: '1366px',
+                height: `${desktopHeroHeight}px`,
+                transform: `scale(${scale})`,
+                transformOrigin: 'top left',
+              }
+            : undefined
+        }
+        className={`relative z-10 ${
+          isScaledDesktop
+            ? 'px-8 flex flex-row items-center justify-between gap-8'
+            : 'w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full min-h-0 flex flex-col lg:flex-row items-center justify-between gap-5 sm:gap-6 lg:gap-8'
+        }`}
+      >
         {/* LEFT COLUMN (1st in HTML DOM): Eyebrow → Headline → Subtitle → CTAs → Trust Row */}
-        <div className="w-full lg:w-[45%] xl:w-[44%] min-h-0 flex flex-col justify-center order-2 lg:order-1 items-center lg:items-start text-center lg:text-left">
+        <div
+          className={`min-h-0 flex flex-col justify-center ${
+            isScaledDesktop
+              ? 'w-[44%] order-1 items-start text-left'
+              : 'w-full lg:w-[45%] xl:w-[44%] order-2 lg:order-1 items-center lg:items-start text-center lg:text-left'
+          }`}
+        >
           <HeroContent
             onNavigate={onNavigate}
             onOpenProjectModal={onOpenProjectModal}
+            forceDesktop={isScaledDesktop}
           />
         </div>
 
         {/* RIGHT COLUMN (2nd in HTML DOM): 3D Coded Humanoid Robot Presenter Stage */}
-        <div className="w-full lg:w-[55%] xl:w-[56%] h-auto lg:h-full min-h-0 flex flex-col justify-center items-center order-1 lg:order-2 relative">
-          <div className="relative w-full max-w-[660px] h-auto lg:h-[min(calc(100svh-var(--header-height,65px)-24px),570px)] flex flex-col items-center justify-between">
+        <div
+          className={`min-h-0 flex flex-col justify-center items-center relative ${
+            isScaledDesktop
+              ? 'w-[56%] h-full order-2'
+              : 'w-full lg:w-[55%] xl:w-[56%] h-auto lg:h-full order-1 lg:order-2'
+          }`}
+        >
+          <div
+            className={`relative w-full flex flex-col items-center justify-between ${
+              isScaledDesktop
+                ? 'max-w-[660px] h-[570px]'
+                : 'max-w-[calc(100vw-32px)] md:max-w-[640px] lg:max-w-[660px] h-[420px] md:h-[430px] lg:h-[min(calc(100svh-var(--header-height,65px)-24px),570px)]'
+            }`}
+          >
             {/* Centered Pill-Shaped Voice Control Toolbar Directly Above the Robot's Head */}
             <div className="relative z-30 flex justify-center w-full mb-1 pointer-events-auto">
               <RobotSpeechControls
@@ -842,22 +892,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               />
             </div>
 
-            {/* Centered 3D Coded Humanoid Robot Presenter (260px on mobile, 340px on tablet, full stage on desktop) */}
-            <div className="relative w-full h-[260px] md:h-[340px] lg:h-auto lg:flex-1 lg:min-h-0 flex items-center justify-center">
-              <div className="w-full h-full lg:max-h-[64svh] flex items-center justify-center">
-                <RobotScene
-                  activeServiceId={activeCard?.robotServiceId || 'ai-ml'}
-                  animationState={activeCard?.gestureState || 'presenting'}
-                  isSpeaking={isRobotTalkingVisual}
-                  speechEnergy={speechEnergy}
-                  greetTriggerCount={greetTriggerCount}
-                  isVisible={isHeroVisible}
-                  onRobotClick={handleRobotClick}
-                />
-              </div>
+            {/* Centered 3D Coded Humanoid Robot Presenter (230px on mobile, 320px on tablet, full stage on desktop) */}
+            <div
+              className={`relative flex items-center justify-center mx-auto min-h-0 ${
+                isScaledDesktop
+                  ? 'w-full h-full flex-1'
+                  : 'w-[172px] sm:w-[200px] md:w-full lg:w-full h-[230px] md:h-[320px] lg:h-full lg:flex-1 lg:max-h-[64svh]'
+              }`}
+            >
+              <RobotScene
+                activeServiceId={activeCard?.robotServiceId || 'ai-ml'}
+                animationState={activeCard?.gestureState || 'presenting'}
+                isSpeaking={isRobotTalkingVisual}
+                speechEnergy={speechEnergy}
+                greetTriggerCount={greetTriggerCount}
+                isVisible={isHeroVisible}
+                onRobotClick={handleRobotClick}
+              />
             </div>
 
-            {/* Symmetrical Floating Service Cards + Visually-Hidden aria-live + Centered Scene Controller */}
+            {/* Symmetrical Floating Service Cards (6 surrounding chips on mobile, 6 full cards on tablet/desktop) + Scene Controller */}
             <ServiceCards
               activeServiceSlug={activeCard?.slug || 'ai-machine-learning'}
               isAutoPlaying={isAutoPlaying}
@@ -866,6 +920,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               onSelectServiceCard={handleSelectServiceCard}
               onToggleAutoPlay={handleToggleAutoPlay}
               parallaxOffset={parallax}
+              forceDesktop={isScaledDesktop}
             />
           </div>
         </div>

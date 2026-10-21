@@ -42,6 +42,15 @@ export interface RobotTourStep {
   card?: HeroFloatingServiceCard;
 }
 
+const SHORT_TITLE_MAP: Record<string, string> = {
+  'ai-machine-learning': 'AI & ML',
+  'custom-software': 'Custom Software',
+  'web-development': 'Web Dev',
+  'cloud-devops': 'Cloud & DevOps',
+  'mobile-apps': 'Mobile Apps',
+  'digital-marketing': 'Marketing & SEO',
+};
+
 const SYMMETRIC_SLOTS: {
   side: HeroFloatingServiceCard['side'];
   showOnTablet: boolean;
@@ -58,15 +67,15 @@ const SYMMETRIC_SLOTS: {
   },
   {
     side: 'left-mid',
-    showOnTablet: false,
-    beamTarget: { x: 65, y: 210 },
+    showOnTablet: true,
+    beamTarget: { x: 65, y: 215 },
     gestureState: 'presenting',
     robotServiceId: 'custom-software',
   },
   {
     side: 'left-bottom',
     showOnTablet: true,
-    beamTarget: { x: 85, y: 342 },
+    beamTarget: { x: 85, y: 348 },
     gestureState: 'pointing',
     robotServiceId: 'web-dev',
   },
@@ -79,15 +88,15 @@ const SYMMETRIC_SLOTS: {
   },
   {
     side: 'right-mid',
-    showOnTablet: false,
-    beamTarget: { x: 435, y: 210 },
+    showOnTablet: true,
+    beamTarget: { x: 435, y: 215 },
     gestureState: 'presenting',
     robotServiceId: 'mobile-apps',
   },
   {
     side: 'right-bottom',
     showOnTablet: true,
-    beamTarget: { x: 415, y: 342 },
+    beamTarget: { x: 415, y: 348 },
     gestureState: 'pointing',
     robotServiceId: 'digital-marketing',
   },
@@ -103,6 +112,24 @@ export function buildServiceSpokenLine(service: ServiceItem): string {
       .split(/(?<=[.!?])\s+/)[0]
       .trim() || service.title;
   return `${cleanTitle}: ${firstSentence}`;
+}
+
+/**
+ * Derives a compact shortTitle for mobile chips if not explicitly mapped
+ */
+function deriveShortTitle(service: ServiceItem): string {
+  const slug = service.slug || service.id;
+  if (SHORT_TITLE_MAP[slug]) {
+    return SHORT_TITLE_MAP[slug];
+  }
+  return service.title
+    .replace('Artificial Intelligence', 'AI')
+    .replace('Machine Learning', 'ML')
+    .replace('Application Development', 'Dev')
+    .replace('Development', 'Dev')
+    .replace('Engineering', '')
+    .replace('Digital ', '')
+    .trim();
 }
 
 /**
@@ -149,7 +176,7 @@ export function getHeroFloatingServiceCards(): HeroFloatingServiceCard[] {
       sceneNumber: index + 1,
       sceneLabel: `Scene 0${index + 1} · ${service.category.split('&')[0].trim()}`,
       title: service.title,
-      shortTitle: service.title,
+      shortTitle: deriveShortTitle(service),
       badgeText,
       category: service.category,
       tagline: service.tagline,
