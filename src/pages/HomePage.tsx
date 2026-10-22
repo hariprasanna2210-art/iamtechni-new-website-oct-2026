@@ -57,6 +57,100 @@ interface HomePageProps {
   onOpenCaseStudy: (project: ProjectItem) => void;
 }
 
+// Hidden on request, set to true to show again
+const SHOW_LEGACY_SERVICES = false;
+
+const LegacyServicesSection: React.FC<{ onNavigate: (route: PageRoute) => void }> = ({
+  onNavigate,
+}) => (
+  <section className="py-24 bg-white border-b border-slate-200">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+        <div className="max-w-2xl">
+          <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-2">
+            Connected Capabilities
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
+            Technology capabilities. One connected vision.
+          </h2>
+          <p className="text-sm bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-2 leading-relaxed">
+            From high-speed web experiences to autonomous robotics, explore our 18 specialized practices built to transform complex business requirements into working software.
+          </p>
+        </div>
+
+        <button
+          onClick={() => onNavigate('/services')}
+          className="inline-flex items-center gap-2 text-xs font-bold text-[#1266E8] hover:text-[#0B5CD5] underline underline-offset-4 cursor-pointer"
+        >
+          <span>Explore All 18 Service Practices</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.1}>
+        {servicesData.slice(0, 6).map((service, idx) => {
+          const color = getCardColorToken(idx);
+          const ServiceIcon = getServiceIcon(service.slug);
+
+          return (
+            <ScrollRevealItem key={service.id} className="h-full">
+              <div
+                onClick={() => onNavigate(`/services/${service.slug}` as PageRoute)}
+                className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-5 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
+              >
+                <div>
+                  {/* Visual Service Thumbnail */}
+                  <ServiceCardThumbnail slug={service.slug} category={service.category} className="mb-4" />
+
+                  {/* Top Row with Category Badge & Icon */}
+                  <div className="flex items-center justify-between text-xs mb-4">
+                    <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
+                      {service.category.toUpperCase()}
+                    </span>
+                    <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                      <ServiceIcon className="w-4.5 h-4.5" />
+                    </div>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2.5 flex items-center justify-between">
+                    <span>{service.title}</span>
+                    <span className={`w-2 h-2 rounded-full ${color.dotBg} shrink-0 opacity-80 group-hover:scale-125 transition-transform`} />
+                  </h3>
+
+                  <p className="text-xs text-slate-700 leading-relaxed mb-6 line-clamp-3">
+                    {service.summary}
+                  </p>
+
+                  <div className="space-y-2 mb-6">
+                    <div className="text-[11px] font-bold text-slate-700 uppercase font-mono">
+                      Key Capabilities:
+                    </div>
+                    {service.capabilities.slice(0, 3).map((cap, cIdx) => (
+                      <div key={cIdx} className="flex items-center gap-2 text-xs text-slate-700">
+                        <span className={`w-1.5 h-1.5 rounded-full ${color.dotBg}`} />
+                        <span className="line-clamp-1">{cap.title}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold">
+                  <span className={`${color.accentText} flex items-center gap-1.5 group-hover:translate-x-1 transition-transform`}>
+                    View Service Details <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                  <span className="text-slate-500 font-mono text-[11px] bg-white/70 px-2 py-0.5 rounded border border-slate-200/60">
+                    {service.technologies[0]}
+                  </span>
+                </div>
+              </div>
+            </ScrollRevealItem>
+          );
+        })}
+      </ScrollReveal>
+    </div>
+  </section>
+);
+
 export const HomePage: React.FC<HomePageProps> = ({
   onNavigate,
   onOpenProjectModal,
@@ -419,94 +513,10 @@ export const HomePage: React.FC<HomePageProps> = ({
       />
 
       {/* ========================================================================= */}
-      {/* 3. CAPABILITIES DIRECTORY (Vibrant Card Grid with Staggered ScrollReveal)  */}
+      {/* 3. CAPABILITIES DIRECTORY (Legacy Services Section)                       */}
+      {/* Hidden on request, set to true to show again                              */}
       {/* ========================================================================= */}
-      <section className="py-24 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
-            <div className="max-w-2xl">
-              <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-2">
-                Connected Capabilities
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-                Technology capabilities. One connected vision.
-              </h2>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
-                From high-speed web experiences to autonomous robotics, explore our 18 specialized practices built to transform complex business requirements into working software.
-              </p>
-            </div>
-
-            <button
-              onClick={() => onNavigate('/services')}
-              className="inline-flex items-center gap-2 text-xs font-bold text-[#1266E8] hover:text-[#0B5CD5] underline underline-offset-4 cursor-pointer"
-            >
-              <span>Explore All 18 Service Practices</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.1}>
-            {servicesData.slice(0, 6).map((service, idx) => {
-              const color = getCardColorToken(idx);
-              const ServiceIcon = getServiceIcon(service.slug);
-
-              return (
-                <ScrollRevealItem key={service.id} className="h-full">
-                  <div
-                    onClick={() => onNavigate(`/services/${service.slug}` as PageRoute)}
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-5 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
-                  >
-                    <div>
-                      {/* Visual Service Thumbnail */}
-                      <ServiceCardThumbnail slug={service.slug} category={service.category} className="mb-4" />
-
-                      {/* Top Row with Category Badge & Icon */}
-                      <div className="flex items-center justify-between text-xs mb-4">
-                        <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                          {service.category.toUpperCase()}
-                        </span>
-                        <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
-                          <ServiceIcon className="w-4.5 h-4.5" />
-                        </div>
-                      </div>
-
-                      <h3 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2.5 flex items-center justify-between">
-                        <span>{service.title}</span>
-                        <span className={`w-2 h-2 rounded-full ${color.dotBg} shrink-0 opacity-80 group-hover:scale-125 transition-transform`} />
-                      </h3>
-
-                      <p className="text-xs text-slate-700 leading-relaxed mb-6 line-clamp-3">
-                        {service.summary}
-                      </p>
-
-                      <div className="space-y-2 mb-6">
-                        <div className="text-[11px] font-bold text-slate-700 uppercase font-mono">
-                          Key Capabilities:
-                        </div>
-                        {service.capabilities.slice(0, 3).map((cap, cIdx) => (
-                          <div key={cIdx} className="flex items-center gap-2 text-xs text-slate-700">
-                            <span className={`w-1.5 h-1.5 rounded-full ${color.dotBg}`} />
-                            <span className="line-clamp-1">{cap.title}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold">
-                      <span className={`${color.accentText} flex items-center gap-1.5 group-hover:translate-x-1 transition-transform`}>
-                        View Service Details <ArrowRight className="w-3.5 h-3.5" />
-                      </span>
-                      <span className="text-slate-500 font-mono text-[11px] bg-white/70 px-2 py-0.5 rounded border border-slate-200/60">
-                        {service.technologies[0]}
-                      </span>
-                    </div>
-                  </div>
-                </ScrollRevealItem>
-              );
-            })}
-          </ScrollReveal>
-        </div>
-      </section>
+      {SHOW_LEGACY_SERVICES && <LegacyServicesSection onNavigate={onNavigate} />}
 
       {/* ========================================================================= */}
       {/* 4. FEATURED PROJECTS (High-Impact Filterable Showcase with ScrollReveal)  */}
@@ -515,13 +525,13 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
             <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
                 Project Showcase
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
                 Ideas transformed into digital experiences.
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-xl">
+              <p className="text-xs sm:text-sm bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-1 max-w-xl">
                 Explore architectural concept demonstrations detailing business challenges, solution topologies, and verified outcomes.
               </p>
             </div>
@@ -617,13 +627,13 @@ export const HomePage: React.FC<HomePageProps> = ({
       <section className="py-24 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-14">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
+            <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
               Methodology
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
               A clear process. Thoughtful execution.
             </h2>
-            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+            <p className="text-sm bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-2 leading-relaxed">
               We guide projects from initial requirements discovery through validation and monitored deployment with a disciplined seven-stage methodology.
             </p>
           </div>
@@ -828,13 +838,13 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
             <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
                 Domain Solutions
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
                 Technology for different business challenges.
               </h2>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed max-w-2xl">
+              <p className="text-sm bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-2 leading-relaxed max-w-2xl">
                 We design and engineer digital systems tailored to the exact regulatory, workflow, and customer contexts of your industry.
               </p>
             </div>
@@ -906,13 +916,13 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
                 Engineering Knowledge
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
                 Ideas, knowledge and practical engineering.
               </h2>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              <p className="text-sm bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-2 leading-relaxed">
                 Technical articles, architecture reviews, and field notes written by our senior engineering team.
               </p>
             </div>

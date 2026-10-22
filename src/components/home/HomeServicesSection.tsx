@@ -317,7 +317,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
         {/* ===================================================================== */}
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-4 mb-8 sm:mb-10">
           {/* Eyebrow Pill */}
-          <div className="inline-flex items-center gap-2 h-[32px] px-3 sm:px-4 max-w-full rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#1266E8] font-mono text-[10.5px] min-[360px]:text-xs font-bold tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 h-[32px] px-3 sm:px-4 max-w-full rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-mono text-[10.5px] min-[360px]:text-xs font-bold tracking-widest uppercase">
             <span
               className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
               aria-hidden="true"
@@ -366,8 +366,8 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
             )}
           </motion.h2>
 
-          {/* Subtitle Paragraph (Clean Inter / Plus Jakarta Sans Regular #374151, matching reference image) */}
-          <p className="!font-['Inter','Plus_Jakarta_Sans',sans-serif] text-sm min-[360px]:text-base sm:text-[17px] text-[#374151] font-normal leading-[1.65] max-w-2xl mx-auto">
+          {/* Subtitle Paragraph — Hero Section Subtitle Gradient (#100C2E -> #3A279E -> #2557D6) */}
+          <p className="!font-['Inter','Plus_Jakarta_Sans',sans-serif] text-sm min-[360px]:text-base sm:text-[17px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-[1.65] max-w-2xl mx-auto">
             End-to-end engineering, AI, cloud, and growth solutions, all under one roof.
           </p>
         </div>
@@ -567,7 +567,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                           className="absolute top-0 left-0 right-0 h-1 bg-white/15 overflow-hidden"
                         >
                           <div
-                            className="h-full bg-gradient-to-r from-[#93C5FD] via-[#FFFFFF] to-[#60A5FA] transition-[width] duration-75 ease-linear"
+                            className="h-full bg-gradient-to-r from-[#2563EB] via-[#06B6D4] to-[#93C5FD] transition-[width] duration-75 ease-linear"
                             style={{ width: `${progress}%` }}
                           />
                         </div>
@@ -622,7 +622,9 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                         {/* Concise Description */}
                         <p
                           className={`text-xs leading-relaxed line-clamp-2 mb-3 transition-colors duration-[400ms] ${
-                            isCenter ? 'text-[#E2E8F0]' : 'text-slate-600'
+                            isCenter
+                              ? 'text-[#E2E8F0]'
+                              : 'bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium'
                           }`}
                         >
                           {service.summary || service.tagline}

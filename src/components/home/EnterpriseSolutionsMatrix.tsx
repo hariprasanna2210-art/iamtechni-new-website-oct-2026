@@ -383,14 +383,14 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
         
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-[#1266E8] text-xs font-mono uppercase tracking-widest font-bold">
-            <Layers className="w-3.5 h-3.5 text-[#1266E8]" />
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] text-xs font-mono uppercase tracking-widest font-bold">
+            <Layers className="w-3.5 h-3.5 text-[#2563EB]" />
             <span>Enterprise Solutions Architecture</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] leading-tight">
             Engineered solutions. Verified business outcomes.
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed max-w-2xl mx-auto">
             Explore how IAMTECHNI architectures solve critical operational bottlenecks—from private AI document search to resilient multi-cloud modernization.
           </p>
         </div>
