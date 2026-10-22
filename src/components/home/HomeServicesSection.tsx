@@ -31,6 +31,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isTouching, setIsTouching] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isPausedByUser, setIsPausedByUser] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -51,7 +52,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
   }, [onSelectServiceSlug]);
 
   const totalServices = CANONICAL_SERVICES.length;
-  const SLIDE_DURATION = 4000; // 4 seconds per slide
+  const SLIDE_DURATION = 2000; // 2 seconds per slide
 
   // Find service index by slug or id
   const findServiceIndexBySlug = useCallback((slugOrId: string): number => {
@@ -186,37 +187,55 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
     }
   }, [currentIndex, prefersReducedMotion]);
 
-  // Auto-play interval + progress bar animation (advances 1 card every 4 seconds and loops infinitely; pauses on hover, drag, user pause, or reduced motion)
+  // Single timer in useEffect: auto-slides every 2 seconds (2000ms), loops infinitely,
+  // pauses immediately on hover (cards, arrows, dots) or touch/drag, and resumes 2s after release/leave.
   useEffect(() => {
-    if (isHovered || isDragging || isPausedByUser || prefersReducedMotion || totalServices <= 1) {
+    if (
+      isHovered ||
+      isTouching ||
+      isDragging ||
+      isPausedByUser ||
+      prefersReducedMotion ||
+      totalServices <= 1
+    ) {
+      setProgress(0);
       return;
     }
 
-    const startTime = Date.now();
+    let startTime = Date.now();
     setProgress(0);
 
-    const progressInterval = window.setInterval(() => {
+    const timerId = window.setInterval(() => {
       const elapsed = Date.now() - startTime;
-      const nextProgress = Math.min(100, (elapsed / SLIDE_DURATION) * 100);
-      setProgress(nextProgress);
-    }, 50);
-
-    const advanceInterval = window.setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % totalServices);
-      setProgress(0);
-    }, SLIDE_DURATION);
+      if (elapsed >= SLIDE_DURATION) {
+        startTime = Date.now();
+        setProgress(0);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalServices);
+      } else {
+        setProgress((elapsed / SLIDE_DURATION) * 100);
+      }
+    }, 40);
 
     return () => {
-      window.clearInterval(progressInterval);
-      window.clearInterval(advanceInterval);
+      window.clearInterval(timerId);
     };
-  }, [currentIndex, isHovered, isDragging, isPausedByUser, totalServices, prefersReducedMotion]);
+  }, [
+    currentIndex,
+    isHovered,
+    isTouching,
+    isDragging,
+    isPausedByUser,
+    totalServices,
+    prefersReducedMotion,
+  ]);
 
   // Unified Drag / Swipe handlers for both desktop mouse and mobile touch
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     if (e.pointerType === 'touch') {
       isTouchInteractionRef.current = true;
+      setIsTouching(true);
+      setIsHovered(false);
     }
     dragStartXRef.current = e.clientX;
     dragCurrentXRef.current = e.clientX;
@@ -233,7 +252,6 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
   };
 
   const finishDrag = useCallback(() => {
-    if (!isDragging) return;
     if (dragStartXRef.current !== null && dragCurrentXRef.current !== null) {
       const diff = dragStartXRef.current - dragCurrentXRef.current;
       if (Math.abs(diff) > 40) {
@@ -247,25 +265,30 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
     dragStartXRef.current = null;
     dragCurrentXRef.current = null;
     setIsDragging(false);
+    setIsTouching(false);
     window.setTimeout(() => {
       didDragMoveRef.current = false;
     }, 50);
-  }, [isDragging, handleNext, handlePrev]);
+  }, [handleNext, handlePrev]);
 
   useEffect(() => {
-    if (!isDragging) return;
+    if (!isDragging && !isTouching) return;
     const handleGlobalPointerEnd = () => {
       finishDrag();
     };
     window.addEventListener('pointerup', handleGlobalPointerEnd);
     window.addEventListener('pointercancel', handleGlobalPointerEnd);
+    window.addEventListener('touchend', handleGlobalPointerEnd);
+    window.addEventListener('touchcancel', handleGlobalPointerEnd);
     window.addEventListener('blur', handleGlobalPointerEnd);
     return () => {
       window.removeEventListener('pointerup', handleGlobalPointerEnd);
       window.removeEventListener('pointercancel', handleGlobalPointerEnd);
+      window.removeEventListener('touchend', handleGlobalPointerEnd);
+      window.removeEventListener('touchcancel', handleGlobalPointerEnd);
       window.removeEventListener('blur', handleGlobalPointerEnd);
     };
-  }, [isDragging, finishDrag]);
+  }, [isDragging, isTouching, finishDrag]);
 
   // Keyboard accessibility
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -418,7 +441,30 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
         {/*    - Tablet (md): 2 compact cards                                     */}
         {/*    - Mobile (<md): 1 centered active card                             */}
         {/* ===================================================================== */}
-        <div className="relative w-full max-w-5xl mx-auto">
+        <div
+          className="relative w-full max-w-5xl mx-auto"
+          onTouchStart={() => {
+            isTouchInteractionRef.current = true;
+            setIsTouching(true);
+            setIsHovered(false);
+          }}
+          onTouchEnd={() => {
+            setIsTouching(false);
+          }}
+          onTouchCancel={() => {
+            setIsTouching(false);
+          }}
+          onMouseEnter={() => {
+            if (!isTouchInteractionRef.current) {
+              setIsHovered(true);
+            }
+          }}
+          onMouseLeave={() => {
+            isTouchInteractionRef.current = false;
+            setIsHovered(false);
+            if (isDragging) finishDrag();
+          }}
+        >
           {/* Desktop Edge Fade Gradients over the Peeking Cards */}
           <div
             aria-hidden="true"
@@ -451,19 +497,6 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
 
           {/* Draggable / Swipeable Carousel Track */}
           <div
-            onTouchStart={() => {
-              isTouchInteractionRef.current = true;
-            }}
-            onMouseEnter={() => {
-              if (!isTouchInteractionRef.current) {
-                setIsHovered(true);
-              }
-            }}
-            onMouseLeave={() => {
-              isTouchInteractionRef.current = false;
-              setIsHovered(false);
-              if (isDragging) finishDrag();
-            }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={finishDrag}
