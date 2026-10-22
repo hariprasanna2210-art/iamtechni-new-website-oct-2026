@@ -49,6 +49,7 @@ import { TrainingHeroVisual } from '../components/heroes/TrainingHeroVisual';
 import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 
 interface TrainingPageProps {
+  courseSlug?: string;
   onNavigate: (route: PageRoute) => void;
   onOpenProjectModal?: (serviceName?: string) => void;
 }
@@ -104,7 +105,7 @@ function WhatsAppIcon({ className = 'w-4 h-4' }: { className?: string }) {
   );
 }
 
-export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenProjectModal }) => {
+export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNavigate, onOpenProjectModal }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedCourseForForm, setSelectedCourseForForm] = useState<string>(coursesData[0].title);
   const [openFaq, setOpenFaq] = useState<Record<number, boolean>>({ 0: true, 1: true });
@@ -133,17 +134,24 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
   } | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  // SEO updates on mount
+  // Sync courseSlug if navigating to /training/:slug
   useEffect(() => {
-    document.title = 'IT Training Courses | Full Stack, AWS, AI & DevOps | IAMTECHNI';
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute(
-        'content',
-        'Explore technology training at IAMTECHNI, including Full Stack Development, AWS, Azure, AI, Machine Learning, Cybersecurity, Python, .NET, and DevOps. Enquire about course details and upcoming batches.'
-      );
+    if (courseSlug) {
+      const matched = coursesData.find((c) => c.id === courseSlug);
+      if (matched) {
+        setSelectedCategory('All');
+        setSelectedCourseForForm(matched.title);
+        setFormData((prev) => ({ ...prev, course: matched.title }));
+        const timer = setTimeout(() => {
+          const el = document.getElementById(`course-${matched.id}`);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 100);
+        return () => clearTimeout(timer);
+      }
     }
-  }, []);
+  }, [courseSlug]);
 
   const filteredCourses =
     selectedCategory === 'All'
@@ -371,6 +379,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate, onOpenPr
               return (
                 <ScrollRevealItem key={course.id} className="h-full">
                   <div
+                    id={`course-${course.id}`}
                     className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-5 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 shadow-2xs interactive-card-lift group`}
                   >
                     <div>

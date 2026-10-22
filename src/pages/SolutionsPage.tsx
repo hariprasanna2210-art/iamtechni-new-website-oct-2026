@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, CheckCircle2, ChevronRight, Filter, Layers, ShieldCheck, Sparkles } from 'lucide-react';
 import { PageRoute } from '../types';
 import { PageHero } from '../components/common/PageHero';
@@ -9,16 +9,31 @@ import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups'
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 
 interface SolutionsPageProps {
+  slug?: string;
   onNavigate: (route: PageRoute) => void;
   onStartProject: (serviceName?: string) => void;
 }
 
 export const SolutionsPage: React.FC<SolutionsPageProps> = ({
+  slug,
   onNavigate,
   onStartProject,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const categories = ['All', 'Operational', 'Intelligence', 'Infrastructure', 'Commerce'];
+
+  useEffect(() => {
+    if (slug) {
+      setSelectedCategory('All');
+      const timer = setTimeout(() => {
+        const el = document.getElementById(`solution-${slug}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [slug]);
 
   const filteredSolutions =
     selectedCategory === 'All'
@@ -83,6 +98,7 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
               return (
                 <ScrollRevealItem key={sol.id}>
                   <div
+                    id={`solution-${sol.id}`}
                     className={`${color.cardBg} ${color.cardBorder} border rounded-2xl p-8 shadow-sm ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 interactive-card-lift`}
                   >
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 pb-6 border-b border-slate-200/70">

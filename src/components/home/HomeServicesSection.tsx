@@ -39,9 +39,16 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
   const dragStartXRef = useRef<number | null>(null);
   const dragCurrentXRef = useRef<number | null>(null);
   const didDragMoveRef = useRef<boolean>(false);
+  const isTouchInteractionRef = useRef<boolean>(false);
 
   const tabsScrollRef = useRef<HTMLDivElement | null>(null);
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
+  const onSelectServiceSlugRef = useRef(onSelectServiceSlug);
+  const lastSyncedSlugRef = useRef<string | undefined>(selectedServiceSlug);
+
+  useEffect(() => {
+    onSelectServiceSlugRef.current = onSelectServiceSlug;
+  }, [onSelectServiceSlug]);
 
   const totalServices = CANONICAL_SERVICES.length;
   const SLIDE_DURATION = 4000; // 4 seconds per slide
@@ -60,29 +67,43 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
   // Go to specific index and scroll active tab into view
   const handleSelectService = useCallback(
     (index: number, updateUrlAndParent = false, updateHash = false) => {
-      const safeIndex = (index + totalServices) % totalServices;
+      const safeIndex = ((index % totalServices) + totalServices) % totalServices;
       setCurrentIndex(safeIndex);
       setProgress(0);
 
-      if (updateUrlAndParent) {
-        const svc = CANONICAL_SERVICES[safeIndex];
-        if (svc) {
-          const slug = svc.slug || svc.id;
-          onSelectServiceSlug?.(slug);
+      const svc = CANONICAL_SERVICES[safeIndex];
+      if (svc) {
+        const slug = svc.slug || svc.id;
+        lastSyncedSlugRef.current = slug;
+        if (updateUrlAndParent) {
+          onSelectServiceSlugRef.current?.(slug);
           if (updateHash && typeof window !== 'undefined') {
             window.history.replaceState(null, '', `#services/${slug}`);
           }
         }
       }
     },
-    [totalServices, onSelectServiceSlug]
+    [totalServices]
   );
 
-  // Sync when selectedServiceSlug prop changes from HeroSection
+  // Sync parent & hero cards whenever currentIndex changes
+  useEffect(() => {
+    const svc = CANONICAL_SERVICES[currentIndex];
+    if (!svc) return;
+    const slug = svc.slug || svc.id;
+    if (slug) {
+      lastSyncedSlugRef.current = slug;
+      onSelectServiceSlugRef.current?.(slug);
+    }
+  }, [currentIndex]);
+
+  // Sync when selectedServiceSlug prop changes externally from HeroSection
   useEffect(() => {
     if (!selectedServiceSlug) return;
+    if (selectedServiceSlug === lastSyncedSlugRef.current) return;
     const matchedIdx = findServiceIndexBySlug(selectedServiceSlug);
-    if (matchedIdx !== -1 && matchedIdx !== currentIndex) {
+    if (matchedIdx !== -1) {
+      lastSyncedSlugRef.current = selectedServiceSlug;
       setCurrentIndex(matchedIdx);
       setProgress(0);
     }
@@ -98,11 +119,12 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
         const slug = decodeURIComponent(hash.replace('#services/', '').trim());
         const matchedIdx = findServiceIndexBySlug(slug);
         if (matchedIdx !== -1) {
+          const targetSlug =
+            CANONICAL_SERVICES[matchedIdx].slug || CANONICAL_SERVICES[matchedIdx].id;
+          lastSyncedSlugRef.current = targetSlug;
           setCurrentIndex(matchedIdx);
           setProgress(0);
-          onSelectServiceSlug?.(
-            CANONICAL_SERVICES[matchedIdx].slug || CANONICAL_SERVICES[matchedIdx].id
-          );
+          onSelectServiceSlugRef.current?.(targetSlug);
           if (scrollIntoViewOnInitial) {
             const el = document.getElementById('services');
             el?.scrollIntoView({
@@ -122,6 +144,9 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
       if (slug) {
         const matchedIdx = findServiceIndexBySlug(slug);
         if (matchedIdx !== -1) {
+          const targetSlug =
+            CANONICAL_SERVICES[matchedIdx].slug || CANONICAL_SERVICES[matchedIdx].id;
+          lastSyncedSlugRef.current = targetSlug;
           setCurrentIndex(matchedIdx);
           setProgress(0);
         }
@@ -136,15 +161,17 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
       window.removeEventListener('iamtechni:select-service', handleCustomSelect);
       window.removeEventListener('hashchange', handleHashChange);
     };
-  }, [findServiceIndexBySlug, onSelectServiceSlug, prefersReducedMotion]);
+  }, [findServiceIndexBySlug, prefersReducedMotion]);
 
   const handlePrev = useCallback(() => {
-    handleSelectService(currentIndex - 1, true, false);
-  }, [currentIndex, handleSelectService]);
+    setCurrentIndex((prevIndex) => ((prevIndex - 1) % totalServices + totalServices) % totalServices);
+    setProgress(0);
+  }, [totalServices]);
 
   const handleNext = useCallback(() => {
-    handleSelectService(currentIndex + 1, true, false);
-  }, [currentIndex, handleSelectService]);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalServices);
+    setProgress(0);
+  }, [totalServices]);
 
   // Keep active tab smoothly scrolled into center on mobile/tablet/desktop
   useEffect(() => {
@@ -159,29 +186,38 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
     }
   }, [currentIndex, prefersReducedMotion]);
 
-  // Auto-play interval + progress bar animation (resets every 4 seconds, pauses on hover, drag, or user pause)
+  // Auto-play interval + progress bar animation (advances 1 card every 4 seconds and loops infinitely; pauses on hover, drag, user pause, or reduced motion)
   useEffect(() => {
-    if (isHovered || isDragging || isPausedByUser || prefersReducedMotion) return;
+    if (isHovered || isDragging || isPausedByUser || prefersReducedMotion || totalServices <= 1) {
+      return;
+    }
 
-    const stepMs = 50;
-    const progressIncrement = (stepMs / SLIDE_DURATION) * 100;
+    const startTime = Date.now();
+    setProgress(0);
 
-    const interval = window.setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          setCurrentIndex((idx) => (idx + 1) % totalServices);
-          return 0;
-        }
-        return prev + progressIncrement;
-      });
-    }, stepMs);
+    const progressInterval = window.setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const nextProgress = Math.min(100, (elapsed / SLIDE_DURATION) * 100);
+      setProgress(nextProgress);
+    }, 50);
 
-    return () => window.clearInterval(interval);
-  }, [isHovered, isDragging, isPausedByUser, totalServices, prefersReducedMotion]);
+    const advanceInterval = window.setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % totalServices);
+      setProgress(0);
+    }, SLIDE_DURATION);
+
+    return () => {
+      window.clearInterval(progressInterval);
+      window.clearInterval(advanceInterval);
+    };
+  }, [currentIndex, isHovered, isDragging, isPausedByUser, totalServices, prefersReducedMotion]);
 
   // Unified Drag / Swipe handlers for both desktop mouse and mobile touch
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (e.pointerType === 'touch') {
+      isTouchInteractionRef.current = true;
+    }
     dragStartXRef.current = e.clientX;
     dragCurrentXRef.current = e.clientX;
     didDragMoveRef.current = false;
@@ -196,7 +232,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
     }
   };
 
-  const finishDrag = () => {
+  const finishDrag = useCallback(() => {
     if (!isDragging) return;
     if (dragStartXRef.current !== null && dragCurrentXRef.current !== null) {
       const diff = dragStartXRef.current - dragCurrentXRef.current;
@@ -214,7 +250,22 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
     window.setTimeout(() => {
       didDragMoveRef.current = false;
     }, 50);
-  };
+  }, [isDragging, handleNext, handlePrev]);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const handleGlobalPointerEnd = () => {
+      finishDrag();
+    };
+    window.addEventListener('pointerup', handleGlobalPointerEnd);
+    window.addEventListener('pointercancel', handleGlobalPointerEnd);
+    window.addEventListener('blur', handleGlobalPointerEnd);
+    return () => {
+      window.removeEventListener('pointerup', handleGlobalPointerEnd);
+      window.removeEventListener('pointercancel', handleGlobalPointerEnd);
+      window.removeEventListener('blur', handleGlobalPointerEnd);
+    };
+  }, [isDragging, finishDrag]);
 
   // Keyboard accessibility
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -232,28 +283,10 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
       id="services"
       aria-labelledby="services-section-title"
       onKeyDown={handleKeyDown}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        if (isDragging) finishDrag();
-      }}
-      className="relative w-full py-14 sm:py-18 lg:py-22 bg-gradient-to-b from-[#F8FAFF] via-[#F2F7FF] to-[#FFFFFF] border-b border-[#DBEAFE]/80 overflow-hidden scroll-mt-16"
+      style={{ backgroundColor: '#FFFFFF' }}
+      className="relative w-full py-14 sm:py-18 lg:py-22 bg-white border-b border-[#DBEAFE]/80 overflow-hidden scroll-mt-16"
     >
       <div id="services-stage" className="sr-only" aria-hidden="true" />
-
-      {/* Dynamic Ambient Mesh Background */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 50% 18%, rgba(30, 58, 138, 0.07) 0%, rgba(37, 99, 235, 0.04) 42%, transparent 72%)',
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[680px] h-[260px] rounded-full bg-gradient-to-r from-[#DBEAFE]/45 via-[#E0E7FF]/35 to-[#CFFAFE]/35 blur-3xl"
-      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ===================================================================== */}
@@ -389,11 +422,11 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
           {/* Desktop Edge Fade Gradients over the Peeking Cards */}
           <div
             aria-hidden="true"
-            className="hidden lg:block pointer-events-none absolute inset-y-0 -left-44 w-48 bg-gradient-to-r from-[#F5F9FF] via-[#F5F9FF]/85 to-transparent z-20"
+            className="hidden lg:block pointer-events-none absolute inset-y-0 -left-44 w-48 bg-gradient-to-r from-white via-white/85 to-transparent z-20"
           />
           <div
             aria-hidden="true"
-            className="hidden lg:block pointer-events-none absolute inset-y-0 -right-44 w-48 bg-gradient-to-l from-[#F5F9FF] via-[#F5F9FF]/85 to-transparent z-20"
+            className="hidden lg:block pointer-events-none absolute inset-y-0 -right-44 w-48 bg-gradient-to-l from-white via-white/85 to-transparent z-20"
           />
 
           {/* Tablet & Desktop Left Round Arrow Button */}
@@ -418,6 +451,19 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
 
           {/* Draggable / Swipeable Carousel Track */}
           <div
+            onTouchStart={() => {
+              isTouchInteractionRef.current = true;
+            }}
+            onMouseEnter={() => {
+              if (!isTouchInteractionRef.current) {
+                setIsHovered(true);
+              }
+            }}
+            onMouseLeave={() => {
+              isTouchInteractionRef.current = false;
+              setIsHovered(false);
+              if (isDragging) finishDrag();
+            }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={finishDrag}

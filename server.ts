@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import { generateSitemapXml } from './src/utils/sitemapGenerator';
+import { SERVICE_SLUG_REDIRECTS } from './src/data/servicesData';
 
 dotenv.config();
 
@@ -37,6 +38,16 @@ app.get('/robots.txt', (_req, res) => {
 app.get('/sitemap.xml', (_req, res) => {
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
   return res.send(generateSitemapXml());
+});
+
+// Redirect duplicate/alias service slugs (e.g. website-development -> web-development) to canonical slugs
+app.get('/services/:slug', (req, res, next) => {
+  const rawSlug = (req.params.slug || '').trim().replace(/\/+$/, '');
+  const canonicalSlug = SERVICE_SLUG_REDIRECTS[rawSlug];
+  if (canonicalSlug && canonicalSlug !== rawSlug) {
+    return res.redirect(301, `/services/${canonicalSlug}`);
+  }
+  return next();
 });
 
 // Initialize GoogleGenAI client according to @google/genai guidelines

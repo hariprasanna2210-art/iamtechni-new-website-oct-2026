@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useReducedMotion } from 'framer-motion';
 import { PageRoute } from '../../types';
 import { HeroContent } from './HeroContent';
+import { HeroParticlesBackground } from './HeroParticlesBackground';
 import { RobotScene } from '../layout/RobotScene';
-import { ServiceCards } from './ServiceCards';
+import { ServiceCards, mapServiceToOrbitCardId } from './ServiceCards';
 import { RobotSpeechControls } from './RobotSpeechControls';
 import {
   ROBOT_SPEECH_DATA,
@@ -34,8 +35,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const floatingCards = useMemo(() => getHeroFloatingServiceCards(), []);
   const tourSteps = useMemo(() => getRobotTourSteps(floatingCards), [floatingCards]);
 
-  const [activeServiceSlug, setActiveServiceSlug] = useState<string>(
-    selectedServiceSlug || floatingCards[0]?.slug || 'ai-machine-learning'
+  const [activeServiceSlug, setActiveServiceSlug] = useState<string>(() =>
+    selectedServiceSlug
+      ? mapServiceToOrbitCardId(selectedServiceSlug)
+      : floatingCards[0]?.slug || 'ai-machine-learning'
   );
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
   const [isVoiceSpeaking, setIsVoiceSpeaking] = useState<boolean>(false);
@@ -91,8 +94,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   // Sync with external selectedServiceSlug prop if updated by parent/carousel
   useEffect(() => {
     if (selectedServiceSlug) {
+      const targetHeroSlug = mapServiceToOrbitCardId(selectedServiceSlug);
       const matched = floatingCards.find(
-        (c) => c.slug === selectedServiceSlug || c.id === selectedServiceSlug
+        (c) => c.slug === targetHeroSlug || c.id === targetHeroSlug
       );
       if (matched) {
         setActiveServiceSlug(matched.slug);
@@ -345,9 +349,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       const step = tourSteps[safeIndex];
       if (!step) return;
 
-      // Switch scene, highlight floating card, and show live caption
-      setActiveServiceSlug(step.serviceSlug);
-      onSelectServiceSlugRef.current?.(step.serviceSlug);
+      // Switch scene, highlight floating card when voice tour is active, and show live caption
+      if (voiceTourEnabledRef.current) {
+        setActiveServiceSlug(step.serviceSlug);
+      }
       setCaptionText(step.text);
       startEnergyPulse();
 
@@ -425,9 +430,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       hasInteractedRef.current = true;
       setHasInteracted(true);
 
-      // If user clicked directly on a dedicated robot control button or card, let its own onClick handle it
+      // If user clicked directly on a dedicated robot control button, card, or the services carousel section, let its own handler manage state
       const target = e.target as HTMLElement | null;
-      if (target && typeof target.closest === 'function' && target.closest('[data-robot-control="true"]')) {
+      if (
+        target &&
+        typeof target.closest === 'function' &&
+        (target.closest('[data-robot-control="true"]') || target.closest('#services'))
+      ) {
         return;
       }
 
@@ -801,18 +810,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       aria-label="IAMTECHNI Futuristic AI Ambassador Hero"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-[#FFFFFF] via-[#F4F8FF] to-[#FFFFFF] border-b border-slate-200/80 pt-2 pb-20 sm:pt-3 sm:pb-20 lg:py-6 h-auto lg:h-[calc(100svh-var(--header-height,65px))] lg:min-h-[540px] lg:max-h-[860px] flex items-center"
+      className="relative w-full overflow-hidden bg-[#FAF8F5] border-b border-slate-200/80 pt-2 pb-20 sm:pt-3 sm:pb-20 lg:py-6 h-auto lg:h-[calc(100svh-var(--header-height,65px))] lg:min-h-[540px] lg:max-h-[860px] flex items-center"
     >
-      {/* Subtle Technical Precision Grid & Pale-Blue Ambient Lighting */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-40"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 74% 45%, rgba(8, 123, 250, 0.12) 0%, rgba(0, 199, 242, 0.06) 38%, rgba(255, 255, 255, 0) 70%), linear-gradient(to right, rgba(8, 123, 250, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(8, 123, 250, 0.04) 1px, transparent 1px)',
-          backgroundSize: '100% 100%, 48px 48px, 48px 48px',
-        }}
-      />
+      {/* tsParticles Floating Circles Background (z-0, decorative) */}
+      <HeroParticlesBackground />
 
       {/* Main Page Container
           DOM order: Text column first (for SEO & screen readers), Robot column second.

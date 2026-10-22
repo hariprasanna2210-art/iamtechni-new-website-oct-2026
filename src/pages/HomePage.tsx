@@ -65,7 +65,9 @@ export const HomePage: React.FC<HomePageProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const [activeProcessStep, setActiveProcessStep] = useState(0);
   const [selectedProjectFilter, setSelectedProjectFilter] = useState<string>('All');
-  const [selectedServiceSlug, setSelectedServiceSlug] = useState<string>('ai-machine-learning');
+  const [selectedServiceSlug, setSelectedServiceSlug] = useState<string>(
+    servicesData[0]?.slug || 'web-development'
+  );
 
   const processStages = [
     {
@@ -262,63 +264,92 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
           </div>
 
-          {/* 5. Below Tools: Two Static Horizontal Rows of Website Tools (No Carousel) */}
+          {/* 5. Below Tools: Exactly Three Evenly Split Rows of Website Tools */}
           {(() => {
             const websiteTools = getAllUniqueTools().slice(0, 18);
-            const midpoint = Math.ceil(websiteTools.length / 2);
-            const firstRowTools = websiteTools.slice(0, midpoint);
-            const secondRowTools = websiteTools.slice(midpoint);
+            const perRow = Math.ceil(websiteTools.length / 3);
+            const firstRowTools = websiteTools.slice(0, perRow);
+            const secondRowTools = websiteTools.slice(perRow, perRow * 2);
+            const thirdRowTools = websiteTools.slice(perRow * 2, perRow * 3);
+            const toolRows = [firstRowTools, secondRowTools, thirdRowTools];
 
-            const renderToolRow = (rowTools: typeof websiteTools, rowKey: string) => (
-              <div
-                key={rowKey}
-                className="flex flex-wrap items-center justify-center gap-x-4 min-[360px]:gap-x-6 sm:gap-x-9 lg:gap-x-11 gap-y-4 sm:gap-y-5 w-full"
-              >
-                {rowTools.map((tool) => {
-                  const ToolIcon = tool.icon;
-                  const displayLabel =
-                    tool.name === 'Azure' ? 'Microsoft Azure' : tool.name;
+            const renderToolItem = (tool: (typeof websiteTools)[number], keySuffix = '') => {
+              const ToolIcon = tool.icon;
+              const displayLabel =
+                tool.name === 'Azure' ? 'Microsoft Azure' : tool.name;
 
-                  return (
-                    <div
-                      key={tool.name}
-                      role="img"
-                      aria-label={`${displayLabel} logo`}
-                      title={displayLabel}
-                      className="inline-flex items-center gap-2 sm:gap-2.5 h-[30px] sm:h-[32px] md:h-[38px] shrink-0 select-none transition-transform duration-200 hover:scale-108 cursor-default"
-                    >
-                      <span
-                        className="flex items-center justify-center shrink-0"
-                        style={{ color: tool.brandColor }}
-                      >
-                        <ToolIcon className="w-[22px] h-[22px] sm:w-[24px] sm:h-[24px] md:w-[30px] md:h-[30px]" />
-                      </span>
-                      <span
-                        className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[14px] sm:text-[15px] md:text-[18px] font-bold tracking-tight whitespace-nowrap"
-                        style={{
-                          color:
-                            tool.name === 'React'
-                              ? '#00B4D8'
-                              : tool.name === 'TypeScript'
-                              ? '#3178C6'
-                              : '#1E3A8A',
-                        }}
-                      >
-                        {displayLabel}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            );
+              return (
+                <div
+                  key={`${tool.name}${keySuffix}`}
+                  role="img"
+                  aria-label={`${displayLabel} logo`}
+                  title={displayLabel}
+                  className="inline-flex items-center gap-2 md:gap-2 lg:gap-2.5 h-[30px] md:h-[32px] lg:h-[38px] shrink-0 select-none transition-transform duration-200 hover:scale-108 cursor-default"
+                >
+                  <span
+                    className="flex items-center justify-center shrink-0"
+                    style={{ color: tool.brandColor }}
+                  >
+                    <ToolIcon className="w-[20px] h-[20px] md:w-[22px] md:h-[22px] lg:w-[30px] lg:h-[30px]" />
+                  </span>
+                  <span
+                    className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[13.5px] md:text-[14.5px] lg:text-[18px] font-bold tracking-tight whitespace-nowrap"
+                    style={{
+                      color:
+                        tool.name === 'React'
+                          ? '#00B4D8'
+                          : tool.name === 'TypeScript'
+                          ? '#3178C6'
+                          : '#1E3A8A',
+                    }}
+                  >
+                    {displayLabel}
+                  </span>
+                </div>
+              );
+            };
 
             return (
               <div
-                className="mt-12 sm:mt-14 w-full flex flex-col items-center space-y-6 sm:space-y-8 pt-2"
+                className="mt-12 sm:mt-14 w-full max-w-full pt-2 overflow-hidden"
                 aria-label="IAMTECHNI website technology stack"
               >
-                {renderToolRow(firstRowTools, 'tech-row-1')}
-                {renderToolRow(secondRowTools, 'tech-row-2')}
+                {/* Tablet (md) & Desktop (lg+): Exactly Three Centered Rows with Equal Spacing */}
+                <div className="hidden md:flex md:flex-col items-center justify-center md:gap-y-6 lg:gap-y-8 w-full">
+                  {toolRows.map((rowTools, rowIdx) => (
+                    <div
+                      key={`tech-desktop-row-${rowIdx + 1}`}
+                      className="flex flex-nowrap items-center justify-center md:gap-x-7 lg:gap-x-12 w-full"
+                    >
+                      {rowTools.map((tool) => renderToolItem(tool))}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Mobile (<md): Three Scrolling Marquee Rows (Alternating Left, Right, Left, Paused on Hover) */}
+                <div className="flex md:hidden flex-col gap-y-5 w-full overflow-hidden">
+                  {toolRows.map((rowTools, rowIdx) => {
+                    const isReverse = rowIdx === 1;
+                    const marqueeClass = prefersReducedMotion
+                      ? 'flex items-center justify-center flex-wrap gap-x-5 gap-y-3 w-full'
+                      : isReverse
+                      ? 'animate-tech-marquee-reverse items-center gap-x-7 pr-7'
+                      : 'animate-tech-marquee items-center gap-x-7 pr-7';
+
+                    return (
+                      <div
+                        key={`tech-mobile-row-${rowIdx + 1}`}
+                        className="relative w-full overflow-hidden"
+                      >
+                        <div className={marqueeClass}>
+                          {rowTools.map((tool) => renderToolItem(tool, '-a'))}
+                          {!prefersReducedMotion &&
+                            rowTools.map((tool) => renderToolItem(tool, '-b'))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             );
           })()}

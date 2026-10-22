@@ -23,9 +23,36 @@ export interface ServiceCardsProps {
   parallaxOffset?: { x: number; y: number };
 }
 
+const SERVICE_TO_HERO_CARD_SLUG: Record<string, string> = {
+  'web-development': 'web-development',
+  'website-development': 'web-development',
+  'ecommerce': 'web-development',
+  'ecommerce-development': 'web-development',
+  'ui-ux-design': 'web-development',
+  'custom-software': 'custom-software',
+  'custom-software-development': 'custom-software',
+  'robotics': 'custom-software',
+  'robotics-emerging-tech': 'custom-software',
+  'mobile-apps': 'mobile-apps',
+  'mobile-app-development': 'mobile-apps',
+  'ai-machine-learning': 'ai-machine-learning',
+  'generative-ai': 'ai-machine-learning',
+  'data-analytics': 'ai-machine-learning',
+  'cloud-devops': 'cloud-devops',
+  'cloud-computing': 'cloud-devops',
+  'devops': 'cloud-devops',
+  'cloud-migration': 'cloud-devops',
+  'cybersecurity': 'cloud-devops',
+  'digital-marketing': 'digital-marketing',
+  'seo': 'digital-marketing',
+  'social-media-marketing': 'digital-marketing',
+  'it-consulting': 'digital-marketing',
+  'training': 'digital-marketing',
+};
+
 export const mapServiceToOrbitCardId = (idOrSlug: string): string => {
   const cards = getHeroFloatingServiceCards();
-  const s = (idOrSlug || '').toLowerCase();
+  const s = (idOrSlug || '').trim().toLowerCase();
   const exact = cards.find(
     (c) =>
       c.slug.toLowerCase() === s ||
@@ -33,6 +60,11 @@ export const mapServiceToOrbitCardId = (idOrSlug: string): string => {
       c.robotServiceId.toLowerCase() === s
   );
   if (exact) return exact.slug;
+  const mappedSlug = SERVICE_TO_HERO_CARD_SLUG[s];
+  if (mappedSlug) {
+    const mappedCard = cards.find((c) => c.slug.toLowerCase() === mappedSlug);
+    if (mappedCard) return mappedCard.slug;
+  }
   return cards[0]?.slug || 'ai-machine-learning';
 };
 
@@ -231,10 +263,14 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                   e.preventDefault();
                   onSelectServiceCard(card, true);
                 }}
-                className={`inline-flex items-center gap-1 min-[360px]:gap-1.5 h-8 px-2 min-[360px]:px-2.5 rounded-full text-left transition-all duration-250 cursor-pointer backdrop-blur-md max-w-[106px] min-[360px]:max-w-[126px] sm:max-w-[144px] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  boxShadow: '0 4px 12px rgba(15, 23, 42, 0.06)',
+                }}
+                className={`inline-flex items-center gap-1 min-[360px]:gap-1.5 h-8 px-2 min-[360px]:px-2.5 rounded-full bg-white text-left transition-all duration-250 cursor-pointer max-w-[106px] min-[360px]:max-w-[126px] sm:max-w-[144px] focus:outline-hidden shadow-[0_4px_12px_rgba(15,23,42,0.06)] hover:-translate-y-0.5 ${
                   isActive
-                    ? 'bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border-2 border-[#2563EB] text-[#1E3A8A] shadow-[0_0_16px_rgba(37,99,235,0.28),inset_0_1px_0_rgba(255,255,255,0.95)] scale-[1.03] z-30'
-                    : 'bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 text-[#2563EB] shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] hover:border-[#2563EB]'
+                    ? 'border-[1.5px] border-solid border-[#2563EB] text-[#1E3A8A] scale-[1.03] z-30'
+                    : 'border border-[#DBEAFE]/90 text-[#2563EB] hover:border-[#2563EB]'
                 }`}
               >
                 <span
@@ -253,6 +289,16 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                 >
                   {card.shortTitle}
                 </span>
+                {isActive && (
+                  <span className="relative flex h-1.5 w-1.5 shrink-0">
+                    <span
+                      className={`${
+                        prefersReducedMotion ? '' : 'animate-ping'
+                      } absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-75`}
+                    />
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#2563EB]" />
+                  </span>
+                )}
               </a>
             </motion.div>
           );
@@ -300,10 +346,14 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                   e.preventDefault();
                   onSelectServiceCard(card, true);
                 }}
-                className={`group flex items-start gap-2.5 px-3 py-2 rounded-xl text-left transition-all duration-300 cursor-pointer backdrop-blur-md w-[186px] lg:w-[172px] xl:w-[180px] lg:max-w-[180px] min-h-[56px] lg:min-h-0 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  boxShadow: '0 4px 12px rgba(15, 23, 42, 0.06)',
+                }}
+                className={`group flex items-start gap-2.5 px-3 py-2 rounded-xl bg-white hover:bg-white text-left transition-all duration-300 cursor-pointer w-[186px] lg:w-[172px] xl:w-[180px] lg:max-w-[180px] min-h-[56px] lg:min-h-0 focus:outline-hidden shadow-[0_4px_12px_rgba(15,23,42,0.06)] ${
                   isActive
-                    ? 'bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border-2 border-[#2563EB] shadow-[0_0_22px_rgba(37,99,235,0.24),inset_0_1px_0_rgba(255,255,255,0.95)] -translate-y-0.5 scale-[1.02] z-30 lg:z-20'
-                    : 'bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-[#EEF4FF] hover:to-[#ECFEFF] border border-[#DBEAFE]/90 hover:border-[#2563EB] shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] hover:shadow-[0_4px_18px_rgba(37,99,235,0.18)] hover:-translate-y-0.5'
+                    ? 'border-[1.5px] border-solid border-[#2563EB] -translate-y-0.5 scale-[1.02] z-30 lg:z-20'
+                    : 'border border-[#DBEAFE]/90 hover:border-[#2563EB] hover:-translate-y-0.5'
                 }`}
               >
                 {/* 28px Icon Box (w-7 h-7) */}
@@ -330,7 +380,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = ({
                             prefersReducedMotion ? '' : 'animate-ping'
                           } absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-75`}
                         />
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#1E3A8A]" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#2563EB]" />
                       </span>
                     )}
                   </div>

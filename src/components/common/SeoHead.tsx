@@ -1,6 +1,15 @@
 import React, { useEffect } from 'react';
-import { PageRoute, ServiceItem, IndustryItem, ArticleItem } from '../../types';
-import { servicesData } from '../../data/servicesData';
+import { Helmet } from 'react-helmet-async';
+import {
+  PageRoute,
+  ServiceItem,
+  IndustryItem,
+  ArticleItem,
+  SolutionItem,
+  CourseItem,
+} from '../../types';
+import { servicesData, getCanonicalServiceSlug } from '../../data/servicesData';
+import { solutionsData } from '../../data/solutionsData';
 import { industriesData } from '../../data/industriesData';
 import { insightsData } from '../../data/insightsData';
 import { projectsData } from '../../data/projectsData';
@@ -9,6 +18,7 @@ import { careersData } from '../../data/careersData';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
 
 const BASE_URL = COMPANY_CONTACT.website; // https://www.iamtechni.in
+const DEFAULT_OG_IMAGE = COMPANY_CONTACT.ogImageUrl; // https://www.iamtechni.in/og-image.png
 
 export const FAQ_PAGE_ITEMS = [
   {
@@ -63,43 +73,78 @@ export const FAQ_PAGE_ITEMS = [
   },
 ];
 
-interface SeoMetadata {
+export interface SeoMetadata {
   title: string;
   description: string;
   canonicalUrl: string;
   ogType: 'website' | 'article';
   ogImage: string;
+  ogSiteName: string;
+  ogLocale: string;
+  twitterCard: 'summary_large_image';
   structuredData: Record<string, unknown>[];
 }
 
+/**
+ * Formats any page description so that it is concise and search-engine friendly (120-160 characters).
+ */
+export function formatMetaDescription(primaryText: string, extraContext?: string): string {
+  const baseSuffix = extraContext
+    ? ` ${extraContext} Partner with IAMTECHNI for custom software, AI, and cloud engineering.`
+    : ' Partner with IAMTECHNI in Puducherry & Tamil Nadu for enterprise software, AI, and cloud engineering.';
+
+  let combined = primaryText.replace(/\s+/g, ' ').trim();
+  if (combined.length < 150) {
+    if (!/[.!?]$/.test(combined)) {
+      combined += '.';
+    }
+    combined = `${combined}${baseSuffix}`.replace(/\s+/g, ' ').trim();
+  }
+  while (combined.length < 150) {
+    combined = `${combined} Explore scalable architectures at IAMTECHNI.`.replace(/\s+/g, ' ').trim();
+  }
+
+  if (combined.length >= 150 && combined.length <= 160) {
+    return combined;
+  }
+
+  const slice159 = combined.slice(0, 159);
+  const lastSpace = slice159.lastIndexOf(' ');
+  if (lastSpace >= 150) {
+    const trimmed = slice159.slice(0, lastSpace).replace(/[,;:\-–—\s]+$/, '');
+    if (trimmed.length >= 150 && trimmed.length <= 159) {
+      return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+    }
+  }
+
+  const exact = combined.slice(0, 156).replace(/[,;:\-–—.\s]+$/, '');
+  if (exact.length >= 147) {
+    return `${exact}...`;
+  }
+  return `${combined.slice(0, 157)}...`;
+}
+
+export function resolveOgImageUrl(item?: unknown): string {
+  if (item && typeof item === 'object') {
+    const record = item as Record<string, unknown>;
+    const candidate = record.ogImage || record.image || record.coverImage || record.thumbnailUrl;
+    if (typeof candidate === 'string' && candidate.trim().length > 0) {
+      const trimmed = candidate.trim();
+      if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+        return trimmed;
+      }
+      if (trimmed.startsWith('/')) {
+        return `${BASE_URL}${trimmed}`;
+      }
+      return `${BASE_URL}/${trimmed}`;
+    }
+  }
+  return DEFAULT_OG_IMAGE;
+}
+
 function findServiceBySlug(slug: string): ServiceItem | undefined {
-  const exact = servicesData.find((s) => s.slug === slug || s.id === slug);
-  if (exact) return exact;
-
-  const aliasMap: Record<string, string> = {
-    'website-development': 'web-development',
-    'web-development': 'website-development',
-    'ecommerce-development': 'ecommerce',
-    ecommerce: 'ecommerce-development',
-    'custom-software-development': 'custom-software',
-    'custom-software': 'custom-software-development',
-    'mobile-app-development': 'mobile-apps',
-    'mobile-apps': 'mobile-app-development',
-    'cloud-computing': 'cloud-devops',
-    devops: 'cloud-devops',
-    'cloud-devops': 'devops',
-    'cloud-migration': 'cloud-devops',
-    'robotics-emerging-tech': 'robotics',
-    robotics: 'robotics-emerging-tech',
-    seo: 'digital-marketing',
-    'social-media-marketing': 'digital-marketing',
-    'generative-ai': 'ai-machine-learning',
-  };
-
-  const targetSlug = aliasMap[slug];
-  return targetSlug
-    ? servicesData.find((s) => s.slug === targetSlug || s.id === targetSlug)
-    : undefined;
+  const canonicalSlug = getCanonicalServiceSlug(slug);
+  return servicesData.find((s) => s.slug === canonicalSlug || s.id === canonicalSlug);
 }
 
 function buildBreadcrumbSchema(items: { name: string; path: string }[]) {
@@ -115,47 +160,54 @@ function buildBreadcrumbSchema(items: { name: string; path: string }[]) {
   };
 }
 
-function resolveRouteSeo(route: PageRoute): SeoMetadata {
+export function resolveRouteSeo(route: PageRoute): SeoMetadata {
   const cleanPath = route === '/' ? '/' : route.replace(/\/+$/, '');
   const canonicalUrl = `${BASE_URL}${cleanPath}`;
-  const defaultImage = COMPANY_CONTACT.logoUrl;
   const structuredData: Record<string, unknown>[] = [];
+  const baseMeta = {
+    ogSiteName: 'IAMTECHNI',
+    ogLocale: 'en_IN',
+    twitterCard: 'summary_large_image' as const,
+  };
 
-  // 1. Home Page
+  // 1. Home Page (/) — Synchronized with root index.html
   if (cleanPath === '/') {
     return {
-      title: 'IAMTECHNI | Enterprise Software, AI & Cloud Engineering (Puducherry & Tamil Nadu)',
+      ...baseMeta,
+      title: 'IAMTECHNI | Digital Solutions for Businesses',
       description:
-        'Enterprise software engineering, applied AI & RAG systems, Next.js web platforms, and cloud infrastructure delivered from Puducherry & Tamil Nadu for global teams.',
-      canonicalUrl,
+        'Grow your business with IAMTECHNI. Website development, mobile apps, custom software, SEO, digital marketing and branding.',
+      canonicalUrl: 'https://www.iamtechni.in/',
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData: [],
     };
   }
 
   // 2. Individual Service Detail Page (/services/:slug)
-  if (cleanPath.startsWith('/services/') && cleanPath !== '/services/training') {
+  if (cleanPath.startsWith('/services/')) {
     const slug = cleanPath.replace('/services/', '');
     const service = findServiceBySlug(slug);
     if (service) {
+      const serviceCanonicalPath = `/services/${service.slug || service.id}`;
+      const serviceCanonicalUrl = `${BASE_URL}${serviceCanonicalPath}`;
+
       structuredData.push(
         buildBreadcrumbSchema([
           { name: 'Home', path: '/' },
           { name: 'Services', path: '/services' },
-          { name: service.title, path: cleanPath },
+          { name: service.title, path: serviceCanonicalPath },
         ])
       );
 
-      // Service Schema
       structuredData.push({
         '@context': 'https://schema.org',
         '@type': 'Service',
-        '@id': `${canonicalUrl}#service`,
+        '@id': `${serviceCanonicalUrl}#service`,
         name: service.title,
         serviceType: service.category,
         description: service.summary || service.tagline,
-        url: canonicalUrl,
+        url: serviceCanonicalUrl,
         provider: {
           '@type': 'Organization',
           '@id': `${BASE_URL}/#organization`,
@@ -183,7 +235,6 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
         },
       });
 
-      // Service FAQs if available
       if (service.faqs && service.faqs.length > 0) {
         structuredData.push({
           '@context': 'https://schema.org',
@@ -200,11 +251,15 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       }
 
       return {
-        title: `${service.title} Services | IAMTECHNI Engineering`,
-        description: `${service.tagline} ${service.summary}`.slice(0, 160),
-        canonicalUrl,
+        ...baseMeta,
+        title: `${service.title} Services | IAMTECHNI`,
+        description: formatMetaDescription(
+          `${service.title}: ${service.summary} ${service.tagline}`,
+          service.category
+        ),
+        canonicalUrl: serviceCanonicalUrl,
         ogType: 'website',
-        ogImage: defaultImage,
+        ogImage: resolveOgImageUrl(service),
         structuredData,
       };
     }
@@ -219,16 +274,81 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ])
     );
     return {
+      ...baseMeta,
       title: 'Services Directory — AI, Web, Cloud & Custom Software | IAMTECHNI',
-      description: `Explore IAMTECHNI's ${servicesData.length}+ engineering capabilities across Web Development, AI & Machine Learning, Custom Software, Cloud & DevOps, and Technical SEO.`,
+      description: formatMetaDescription(
+        `Explore IAMTECHNI's ${servicesData.length} engineering disciplines across Web Development, AI & Machine Learning, Custom Software, Cloud & DevOps, and Technical SEO.`
+      ),
       canonicalUrl,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
 
-  // 4. Individual Industry Detail Page (/industries/:slug)
+  // 4. Individual Solution Page (/solutions/:slug)
+  if (cleanPath.startsWith('/solutions/')) {
+    const slug = cleanPath.replace('/solutions/', '');
+    const solution: SolutionItem | undefined = solutionsData.find((s) => s.id === slug);
+    if (solution) {
+      structuredData.push(
+        buildBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Solutions', path: '/solutions' },
+          { name: solution.title, path: cleanPath },
+        ])
+      );
+      structuredData.push({
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        '@id': `${canonicalUrl}#solution`,
+        name: solution.title,
+        serviceType: `${solution.category} Solution`,
+        description: solution.summary,
+        url: canonicalUrl,
+        provider: {
+          '@type': 'Organization',
+          '@id': `${BASE_URL}/#organization`,
+          name: COMPANY_CONTACT.name,
+        },
+      });
+      return {
+        ...baseMeta,
+        title: `${solution.title} — Business Solution | IAMTECHNI`,
+        description: formatMetaDescription(
+          `${solution.title}: ${solution.summary} ${solution.proposedApproach}`,
+          `${solution.category} architecture by IAMTECHNI.`
+        ),
+        canonicalUrl,
+        ogType: 'website',
+        ogImage: resolveOgImageUrl(solution),
+        structuredData,
+      };
+    }
+  }
+
+  // 5. Solutions Directory (/solutions)
+  if (cleanPath === '/solutions') {
+    structuredData.push(
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Solutions', path: '/solutions' },
+      ])
+    );
+    return {
+      ...baseMeta,
+      title: 'Enterprise Digital Solutions & Business Automation | IAMTECHNI',
+      description: formatMetaDescription(
+        'End-to-end business solutions including AI document intelligence, workflow automation, cloud infrastructure modernization, and custom KPI dashboards by IAMTECHNI.'
+      ),
+      canonicalUrl,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData,
+    };
+  }
+
+  // 6. Individual Industry Detail Page (/industries/:slug)
   if (cleanPath.startsWith('/industries/')) {
     const slug = cleanPath.replace('/industries/', '');
     const industry: IndustryItem | undefined = industriesData.find((i) => i.id === slug);
@@ -241,17 +361,21 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
         ])
       );
       return {
+        ...baseMeta,
         title: `${industry.name} Technology Solutions | IAMTECHNI`,
-        description: industry.summary.slice(0, 160),
+        description: formatMetaDescription(
+          `${industry.name}: ${industry.summary}`,
+          industry.iamtechniSolutions[0]
+        ),
         canonicalUrl,
         ogType: 'website',
-        ogImage: defaultImage,
+        ogImage: resolveOgImageUrl(industry),
         structuredData,
       };
     }
   }
 
-  // 5. Industries Directory (/industries)
+  // 7. Industries Directory (/industries)
   if (cleanPath === '/industries') {
     structuredData.push(
       buildBreadcrumbSchema([
@@ -260,151 +384,58 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ])
     );
     return {
+      ...baseMeta,
       title: 'Industry Technology Solutions & Vertical Architectures | IAMTECHNI',
-      description: `Tailored digital platforms, AI automation, and cloud engineering across ${industriesData.map((i) => i.name).join(', ')}.`,
+      description: formatMetaDescription(
+        `Tailored digital platforms, AI automation, and cloud engineering across ${industriesData.map((i) => i.name).join(', ')} delivered by IAMTECHNI.`
+      ),
       canonicalUrl,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
 
-  // 6. Individual Insight Article Page (/insights/:slug)
-  if (cleanPath.startsWith('/insights/')) {
-    const slug = cleanPath.replace('/insights/', '');
-    const article: ArticleItem | undefined = insightsData.find((a) => a.slug === slug);
-    if (article) {
+  // 8. Individual Training Course Page (/training/:slug)
+  if (cleanPath.startsWith('/training/')) {
+    const slug = cleanPath.replace('/training/', '');
+    const course: CourseItem | undefined = coursesData.find((c) => c.id === slug);
+    if (course) {
       structuredData.push(
         buildBreadcrumbSchema([
           { name: 'Home', path: '/' },
-          { name: 'Insights', path: '/insights' },
-          { name: article.title, path: cleanPath },
+          { name: 'Technical Training', path: '/training' },
+          { name: course.title, path: cleanPath },
         ])
       );
       structuredData.push({
         '@context': 'https://schema.org',
-        '@type': 'TechArticle',
-        headline: article.title,
-        description: article.excerpt,
-        author: {
+        '@type': 'Course',
+        name: course.title,
+        description: course.description,
+        provider: {
           '@type': 'Organization',
-          name: article.author.name,
+          name: COMPANY_CONTACT.name,
+          sameAs: `${BASE_URL}/`,
         },
-        publisher: {
-          '@id': `${BASE_URL}/#organization`,
-        },
-        mainEntityOfPage: canonicalUrl,
       });
       return {
-        title: `${article.title} | IAMTECHNI Insights`,
-        description: article.excerpt.slice(0, 160),
+        ...baseMeta,
+        title: `${course.title} Training Course — ${course.category} | IAMTECHNI`,
+        description: formatMetaDescription(
+          `${course.title} Training: ${course.description} ${course.subtitle}`,
+          `${course.category} course at IAMTECHNI.`
+        ),
         canonicalUrl,
-        ogType: 'article',
-        ogImage: defaultImage,
+        ogType: 'website',
+        ogImage: resolveOgImageUrl(course),
         structuredData,
       };
     }
   }
 
-  // 7. Insights Directory (/insights)
-  if (cleanPath === '/insights') {
-    structuredData.push(
-      buildBreadcrumbSchema([
-        { name: 'Home', path: '/' },
-        { name: 'Insights & Research', path: '/insights' },
-      ])
-    );
-    return {
-      title: 'Engineering Insights, AI Architecture & Cloud Field Notes | IAMTECHNI',
-      description:
-        'Deep-dive technical articles on enterprise RAG architectures, cloud FinOps optimization, Core Web Vitals performance, and modern software engineering.',
-      canonicalUrl,
-      ogType: 'website',
-      ogImage: defaultImage,
-      structuredData,
-    };
-  }
-
-  // 8. Case Study Detail (/case-studies/:slug)
-  if (cleanPath.startsWith('/case-studies/')) {
-    const slug = cleanPath.replace('/case-studies/', '');
-    const project = projectsData.find((p) => p.id === slug);
-    if (project) {
-      structuredData.push(
-        buildBreadcrumbSchema([
-          { name: 'Home', path: '/' },
-          { name: 'Case Studies', path: '/case-studies' },
-          { name: project.title, path: cleanPath },
-        ])
-      );
-      return {
-        title: `${project.title} — Case Study | IAMTECHNI`,
-        description: project.tagline.slice(0, 160),
-        canonicalUrl,
-        ogType: 'article',
-        ogImage: defaultImage,
-        structuredData,
-      };
-    }
-  }
-
-  // 9. Case Studies Directory (/case-studies)
-  if (cleanPath === '/case-studies') {
-    structuredData.push(
-      buildBreadcrumbSchema([
-        { name: 'Home', path: '/' },
-        { name: 'Case Studies', path: '/case-studies' },
-      ])
-    );
-    return {
-      title: 'Engineering Case Studies & Reference Architectures | IAMTECHNI',
-      description: `Explore ${projectsData.length} technical case studies covering headless commerce, enterprise AI assistants, cloud migrations, and high-speed web platforms.`,
-      canonicalUrl,
-      ogType: 'website',
-      ogImage: defaultImage,
-      structuredData,
-    };
-  }
-
-  // 10. Portfolio (/portfolio)
-  if (cleanPath === '/portfolio') {
-    structuredData.push(
-      buildBreadcrumbSchema([
-        { name: 'Home', path: '/' },
-        { name: 'Portfolio', path: '/portfolio' },
-      ])
-    );
-    return {
-      title: 'Portfolio & Engineered Digital Products | IAMTECHNI',
-      description: `Review ${projectsData.length} production architectures and software solutions delivered by IAMTECHNI across AI, e-commerce, cloud, and enterprise portals.`,
-      canonicalUrl,
-      ogType: 'website',
-      ogImage: defaultImage,
-      structuredData,
-    };
-  }
-
-  // 11. Solutions (/solutions)
-  if (cleanPath === '/solutions') {
-    structuredData.push(
-      buildBreadcrumbSchema([
-        { name: 'Home', path: '/' },
-        { name: 'Solutions', path: '/solutions' },
-      ])
-    );
-    return {
-      title: 'Enterprise Digital Solutions & Business Automation | IAMTECHNI',
-      description:
-        'End-to-end business solutions including AI document intelligence, workflow automation, cloud infrastructure modernization, and custom KPI dashboards.',
-      canonicalUrl,
-      ogType: 'website',
-      ogImage: defaultImage,
-      structuredData,
-    };
-  }
-
-  // 12. Training (/training, /courses, /services/training)
-  if (cleanPath === '/training' || cleanPath === '/courses' || cleanPath === '/services/training') {
+  // 9. Training Directory (/training, /courses)
+  if (cleanPath === '/training' || cleanPath === '/courses') {
     const trainingCanonical = `${BASE_URL}/training`;
     structuredData.push(
       buildBreadcrumbSchema([
@@ -432,16 +463,150 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       })),
     });
     return {
+      ...baseMeta,
       title: `IT Training Courses — Full Stack, AI, Cloud & DevOps (${coursesData.length} Programs) | IAMTECHNI`,
-      description: `Hands-on technical training and corporate upskilling across ${coursesData.length} programs including Full Stack Development, AI & Machine Learning, AWS Cloud, and DevOps.`,
+      description: formatMetaDescription(
+        `Hands-on technical training and corporate upskilling across ${coursesData.length} programs including Full Stack Development, AI & Machine Learning, AWS Cloud, and DevOps.`
+      ),
       canonicalUrl: trainingCanonical,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
 
-  // 13. Technology Stack (/technology)
+  // 10. Individual Insight Article Page (/insights/:slug)
+  if (cleanPath.startsWith('/insights/')) {
+    const slug = cleanPath.replace('/insights/', '');
+    const article: ArticleItem | undefined = insightsData.find((a) => a.slug === slug);
+    if (article) {
+      structuredData.push(
+        buildBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Insights', path: '/insights' },
+          { name: article.title, path: cleanPath },
+        ])
+      );
+      structuredData.push({
+        '@context': 'https://schema.org',
+        '@type': 'TechArticle',
+        headline: article.title,
+        description: article.excerpt,
+        author: {
+          '@type': 'Organization',
+          name: article.author.name,
+        },
+        publisher: {
+          '@id': `${BASE_URL}/#organization`,
+        },
+        mainEntityOfPage: canonicalUrl,
+      });
+      return {
+        ...baseMeta,
+        title: `${article.title} | IAMTECHNI Insights`,
+        description: formatMetaDescription(
+          article.excerpt,
+          `${article.category} engineering insights by ${article.author.name}.`
+        ),
+        canonicalUrl,
+        ogType: 'article',
+        ogImage: resolveOgImageUrl(article),
+        structuredData,
+      };
+    }
+  }
+
+  // 11. Insights Directory (/insights)
+  if (cleanPath === '/insights') {
+    structuredData.push(
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Insights & Research', path: '/insights' },
+      ])
+    );
+    return {
+      ...baseMeta,
+      title: 'Engineering Insights, AI Architecture & Cloud Field Notes | IAMTECHNI',
+      description: formatMetaDescription(
+        'Deep-dive technical articles on enterprise RAG architectures, cloud FinOps optimization, Core Web Vitals performance, and modern software engineering by IAMTECHNI.'
+      ),
+      canonicalUrl,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData,
+    };
+  }
+
+  // 12. Case Study / Project Detail (/case-studies/:slug)
+  if (cleanPath.startsWith('/case-studies/')) {
+    const slug = cleanPath.replace('/case-studies/', '');
+    const project = projectsData.find((p) => p.id === slug);
+    if (project) {
+      structuredData.push(
+        buildBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Case Studies', path: '/case-studies' },
+          { name: project.title, path: cleanPath },
+        ])
+      );
+      return {
+        ...baseMeta,
+        title: `${project.title} — Case Study | IAMTECHNI`,
+        description: formatMetaDescription(
+          `${project.title}: ${project.tagline} ${project.challenge}`,
+          `${project.industry} case study.`
+        ),
+        canonicalUrl,
+        ogType: 'website',
+        ogImage: resolveOgImageUrl(project),
+        structuredData,
+      };
+    }
+  }
+
+  // 13. Case Studies Directory (/case-studies)
+  if (cleanPath === '/case-studies') {
+    structuredData.push(
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Case Studies', path: '/case-studies' },
+      ])
+    );
+    return {
+      ...baseMeta,
+      title: 'Engineering Case Studies & Reference Architectures | IAMTECHNI',
+      description: formatMetaDescription(
+        `Explore ${projectsData.length} technical case studies covering headless commerce, enterprise AI assistants, cloud migrations, and high-speed web platforms by IAMTECHNI.`
+      ),
+      canonicalUrl,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData,
+    };
+  }
+
+  // 14. Portfolio (/portfolio)
+  if (cleanPath === '/portfolio') {
+    structuredData.push(
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Portfolio', path: '/portfolio' },
+      ])
+    );
+    return {
+      ...baseMeta,
+      title: 'Portfolio & Engineered Digital Products | IAMTECHNI',
+      description: formatMetaDescription(
+        `Review ${projectsData.length} production architectures and software solutions delivered by IAMTECHNI across AI, e-commerce, cloud, and enterprise portals.`
+      ),
+      canonicalUrl,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData,
+    };
+  }
+
+  // 15. Technology Stack (/technology)
   if (cleanPath === '/technology') {
     structuredData.push(
       buildBreadcrumbSchema([
@@ -450,17 +615,19 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ])
     );
     return {
+      ...baseMeta,
       title: 'Technology Stack — React, Next.js, Python, AI & Cloud | IAMTECHNI',
-      description:
-        'Explore the production technologies powering IAMTECHNI solutions: React, Next.js, TypeScript, Python, FastAPI, LangChain, AWS, Azure, Docker, and Kubernetes.',
+      description: formatMetaDescription(
+        'Explore the production technologies powering IAMTECHNI solutions: React, Next.js, TypeScript, Python, FastAPI, LangChain, AWS, Azure, Docker, and Kubernetes.'
+      ),
       canonicalUrl,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
 
-  // 14. About (/about)
+  // 16. About (/about)
   if (cleanPath === '/about') {
     structuredData.push(
       buildBreadcrumbSchema([
@@ -469,17 +636,19 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ])
     );
     return {
+      ...baseMeta,
       title: 'About IAMTECHNI — Software, AI & Cloud Engineering Practice',
-      description:
-        'Learn about IAMTECHNI’s engineering principles, 7-stage agile delivery lifecycle, and commitment to building resilient software, AI, and cloud platforms.',
+      description: formatMetaDescription(
+        'Learn about IAMTECHNI’s engineering principles, 7-stage agile delivery lifecycle, and commitment to building resilient software, AI, and cloud platforms.'
+      ),
       canonicalUrl,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
 
-  // 15. Careers (/careers)
+  // 17. Careers (/careers)
   if (cleanPath === '/careers') {
     structuredData.push(
       buildBreadcrumbSchema([
@@ -488,16 +657,19 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ])
     );
     return {
+      ...baseMeta,
       title: `Careers & Open Engineering Roles (${careersData.length} Openings) | IAMTECHNI`,
-      description: `Join IAMTECHNI's engineering team. Explore ${careersData.length} open roles across Full-Stack Development, AI & RAG Engineering, and Cloud DevOps.`,
+      description: formatMetaDescription(
+        `Join IAMTECHNI's engineering team in Puducherry & Tamil Nadu. Explore ${careersData.length} open roles across Full-Stack Development, AI & RAG Engineering, and Cloud DevOps.`
+      ),
       canonicalUrl,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
 
-  // 16. Contact & Consultation (/contact, /contact/consultation)
+  // 18. Contact & Consultation (/contact, /contact/consultation)
   if (cleanPath === '/contact/consultation') {
     structuredData.push(
       buildBreadcrumbSchema([
@@ -507,11 +679,14 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ])
     );
     return {
+      ...baseMeta,
       title: 'Request an Architecture & Engineering Consultation | IAMTECHNI',
-      description: `Schedule a 1-on-1 technical discovery session with IAMTECHNI architects. Direct phone: ${COMPANY_CONTACT.phone} | Email: ${COMPANY_CONTACT.email}.`,
+      description: formatMetaDescription(
+        `Schedule a 1-on-1 technical discovery session with IAMTECHNI architects for software, AI, and cloud projects. Call ${COMPANY_CONTACT.phone} or email ${COMPANY_CONTACT.email}.`
+      ),
       canonicalUrl,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
@@ -524,16 +699,19 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ])
     );
     return {
+      ...baseMeta,
       title: 'Contact IAMTECHNI — Start Your Software, AI or Cloud Project',
-      description: `Get in touch with IAMTECHNI in Puducherry & Tamil Nadu. Call ${COMPANY_CONTACT.phone} or email ${COMPANY_CONTACT.email} for software, AI, and cloud inquiries.`,
+      description: formatMetaDescription(
+        `Get in touch with IAMTECHNI in Puducherry & Tamil Nadu, India. Call ${COMPANY_CONTACT.phone} or email ${COMPANY_CONTACT.email} for software, AI, and cloud inquiries.`
+      ),
       canonicalUrl,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
 
-  // 17. FAQ Page (/faq) with FAQPage Schema
+  // 19. FAQ Page (/faq)
   if (cleanPath === '/faq') {
     structuredData.push(
       buildBreadcrumbSchema([
@@ -554,17 +732,19 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       })),
     });
     return {
+      ...baseMeta,
       title: 'Frequently Asked Questions (FAQ) | IAMTECHNI Engineering',
-      description:
-        'Find transparent answers about IAMTECHNI’s software engineering services, 100% IP ownership, 7-stage delivery lifecycle, AI data privacy, and engagement models.',
+      description: formatMetaDescription(
+        'Find transparent answers about IAMTECHNI’s software engineering services, 100% IP ownership, 7-stage delivery lifecycle, AI data privacy, and engagement models.'
+      ),
       canonicalUrl,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
 
-  // 18. Legal Pages (/privacy-policy, /terms)
+  // 20. Legal Pages (/privacy-policy, /terms)
   if (cleanPath === '/privacy-policy') {
     structuredData.push(
       buildBreadcrumbSchema([
@@ -573,12 +753,14 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ])
     );
     return {
+      ...baseMeta,
       title: 'Privacy Policy & Data Protection Standards | IAMTECHNI',
-      description:
-        'Read IAMTECHNI’s Privacy Policy detailing how we handle inquiry data, cookies, security safeguards, and client confidentiality.',
+      description: formatMetaDescription(
+        'Read IAMTECHNI’s Privacy Policy detailing how we collect, protect, and process inquiry data, cookies, security safeguards, and enterprise client confidentiality.'
+      ),
       canonicalUrl,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
@@ -591,46 +773,29 @@ function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ])
     );
     return {
+      ...baseMeta,
       title: 'Terms of Use & Service Conditions | IAMTECHNI',
-      description:
-        'Review IAMTECHNI’s Terms of Use governing website access, intellectual property rights, and professional technology services.',
+      description: formatMetaDescription(
+        'Review IAMTECHNI’s Terms of Use governing website access, intellectual property ownership, software engineering deliverables, and professional technology services.'
+      ),
       canonicalUrl,
       ogType: 'website',
-      ogImage: defaultImage,
+      ogImage: DEFAULT_OG_IMAGE,
       structuredData,
     };
   }
 
   // Fallback
   return {
-    title: 'IAMTECHNI | Enterprise Software, AI & Cloud Engineering',
+    ...baseMeta,
+    title: 'IAMTECHNI | Digital Solutions for Businesses',
     description:
-      'Enterprise software engineering, applied AI & RAG systems, Next.js web platforms, and cloud infrastructure delivered by IAMTECHNI.',
+      'Grow your business with IAMTECHNI. Website development, mobile apps, custom software, SEO, digital marketing and branding.',
     canonicalUrl,
     ogType: 'website',
-    ogImage: defaultImage,
+    ogImage: DEFAULT_OG_IMAGE,
     structuredData,
   };
-}
-
-function setOrCreateMeta(attrName: 'name' | 'property', attrValue: string, content: string) {
-  let el = document.head.querySelector(`meta[${attrName}="${attrValue}"]`) as HTMLMetaElement | null;
-  if (!el) {
-    el = document.createElement('meta');
-    el.setAttribute(attrName, attrValue);
-    document.head.appendChild(el);
-  }
-  el.setAttribute('content', content);
-}
-
-function setOrCreateLink(rel: string, href: string) {
-  let el = document.head.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
-  if (!el) {
-    el = document.createElement('link');
-    el.setAttribute('rel', rel);
-    document.head.appendChild(el);
-  }
-  el.setAttribute('href', href);
 }
 
 export interface SeoHeadProps {
@@ -638,49 +803,33 @@ export interface SeoHeadProps {
 }
 
 export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
+  const seo = resolveRouteSeo(currentRoute);
+
+  // Remove initial static description/canonical tags once react-helmet-async mounts its managed tags
   useEffect(() => {
-    const seo = resolveRouteSeo(currentRoute);
-
-    // 1. Update Document Title
-    document.title = seo.title;
-
-    // 2. Update Standard Meta & Canonical Link
-    setOrCreateMeta('name', 'description', seo.description);
-    setOrCreateLink('canonical', seo.canonicalUrl);
-
-    // 3. Update Open Graph Tags
-    setOrCreateMeta('property', 'og:title', seo.title);
-    setOrCreateMeta('property', 'og:description', seo.description);
-    setOrCreateMeta('property', 'og:url', seo.canonicalUrl);
-    setOrCreateMeta('property', 'og:type', seo.ogType);
-    setOrCreateMeta('property', 'og:image', seo.ogImage);
-    setOrCreateMeta('property', 'og:site_name', COMPANY_CONTACT.name);
-
-    // 4. Update Twitter Card Tags
-    setOrCreateMeta('name', 'twitter:card', 'summary_large_image');
-    setOrCreateMeta('name', 'twitter:title', seo.title);
-    setOrCreateMeta('name', 'twitter:description', seo.description);
-    setOrCreateMeta('name', 'twitter:image', seo.ogImage);
-
-    // 5. Inject/Update Route-Specific JSON-LD (Service, FAQPage, BreadcrumbList, Article)
-    const scriptId = 'route-structured-data';
-    let scriptEl = document.getElementById(scriptId) as HTMLScriptElement | null;
-
-    if (seo.structuredData.length > 0) {
-      if (!scriptEl) {
-        scriptEl = document.createElement('script');
-        scriptEl.id = scriptId;
-        scriptEl.type = 'application/ld+json';
-        document.head.appendChild(scriptEl);
-      }
-      scriptEl.textContent = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@graph': seo.structuredData,
-      });
-    } else if (scriptEl) {
-      scriptEl.remove();
+    const descTags = document.head.querySelectorAll('meta[name="description"]:not([data-rh])');
+    if (document.head.querySelector('meta[name="description"][data-rh]') && descTags.length > 0) {
+      descTags.forEach((el) => el.remove());
+    }
+    const canonicalTags = document.head.querySelectorAll('link[rel="canonical"]:not([data-rh])');
+    if (document.head.querySelector('link[rel="canonical"][data-rh]') && canonicalTags.length > 0) {
+      canonicalTags.forEach((el) => el.remove());
     }
   }, [currentRoute]);
 
-  return null;
+  return (
+    <Helmet prioritizeSeoTags>
+      <title>{seo.title}</title>
+      <meta name="description" content={seo.description} />
+      <link rel="canonical" href={seo.canonicalUrl} />
+      {seo.structuredData.length > 0 && (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': seo.structuredData,
+          })}
+        </script>
+      )}
+    </Helmet>
+  );
 };

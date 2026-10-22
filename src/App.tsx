@@ -26,43 +26,58 @@ import { LegalPage } from './pages/LegalPages';
 import { TrainingPage } from './pages/TrainingPage';
 import { SeoHead } from './components/common/SeoHead';
 
-import { servicesData } from './data/servicesData';
+import { servicesData, getCanonicalServiceSlug } from './data/servicesData';
 import { insightsData } from './data/insightsData';
 import { industriesData } from './data/industriesData';
 
 export default function App() {
-  // Normalize initial route from browser window pathname if valid
-  const getInitialRoute = (): PageRoute => {
-    const path = window.location.pathname as PageRoute;
+  // Normalize route and redirect any duplicate/alias service slug to its canonical slug
+  const normalizeRoute = (rawPath: string, replaceBrowserUrl = false): PageRoute => {
+    const cleanPath = (rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '')) as PageRoute;
 
-    // Check dynamic path patterns
+    if (cleanPath.startsWith('/services/')) {
+      const slug = cleanPath.replace('/services/', '');
+      const canonicalSlug = getCanonicalServiceSlug(slug);
+      const canonicalRoute = `/services/${canonicalSlug}` as PageRoute;
+      if (replaceBrowserUrl && canonicalRoute !== rawPath && typeof window !== 'undefined') {
+        window.history.replaceState({}, '', canonicalRoute);
+      }
+      return canonicalRoute;
+    }
+
     if (
-      path === '/' ||
-      path === '/about' ||
-      path === '/services' ||
-      path.startsWith('/services/') ||
-      path === '/industries' ||
-      path.startsWith('/industries/') ||
-      path === '/solutions' ||
-      path === '/portfolio' ||
-      path === '/case-studies' ||
-      path.startsWith('/case-studies/') ||
-      path === '/technology' ||
-      path === '/insights' ||
-      path.startsWith('/insights/') ||
-      path === '/careers' ||
-      path === '/contact' ||
-      path === '/contact/consultation' ||
-      path === '/faq' ||
-      path === '/training' ||
-      path === '/courses' ||
-      path === '/privacy-policy' ||
-      path === '/terms'
+      cleanPath === '/' ||
+      cleanPath === '/about' ||
+      cleanPath === '/services' ||
+      cleanPath === '/industries' ||
+      cleanPath.startsWith('/industries/') ||
+      cleanPath === '/solutions' ||
+      cleanPath.startsWith('/solutions/') ||
+      cleanPath === '/portfolio' ||
+      cleanPath === '/case-studies' ||
+      cleanPath.startsWith('/case-studies/') ||
+      cleanPath === '/technology' ||
+      cleanPath === '/insights' ||
+      cleanPath.startsWith('/insights/') ||
+      cleanPath === '/careers' ||
+      cleanPath === '/contact' ||
+      cleanPath === '/contact/consultation' ||
+      cleanPath === '/faq' ||
+      cleanPath === '/training' ||
+      cleanPath.startsWith('/training/') ||
+      cleanPath === '/courses' ||
+      cleanPath === '/privacy-policy' ||
+      cleanPath === '/terms'
     ) {
-      return path;
+      return cleanPath;
     }
 
     return '/';
+  };
+
+  // Normalize initial route from browser window pathname if valid
+  const getInitialRoute = (): PageRoute => {
+    return normalizeRoute(window.location.pathname, true);
   };
 
   const [currentRoute, setCurrentRoute] = useState<PageRoute>(getInitialRoute);
@@ -70,10 +85,11 @@ export default function App() {
   const [modalDefaultService, setModalDefaultService] = useState('Web Development');
   const [activeCaseStudy, setActiveCaseStudy] = useState<ProjectItem | null>(null);
 
-  // Sync route with browser history
+  // Sync route with browser history (redirecting any alias service route to its canonical route)
   const navigate = (route: PageRoute) => {
-    setCurrentRoute(route);
-    window.history.pushState({}, '', route);
+    const canonicalRoute = normalizeRoute(route, false);
+    setCurrentRoute(canonicalRoute);
+    window.history.pushState({}, '', canonicalRoute);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -97,37 +113,10 @@ export default function App() {
     setActiveCaseStudy(project);
   };
 
-  // Helper to find specific service by slug with alias resolution
+  // Helper to find specific service by slug with canonical alias resolution
   const getServiceBySlug = (slug: string) => {
-    const exact = servicesData.find((s) => s.slug === slug || s.id === slug);
-    if (exact) return exact;
-
-    // Check alias maps
-    const aliasMap: Record<string, string> = {
-      'website-development': 'web-development',
-      'web-development': 'website-development',
-      'ecommerce-development': 'ecommerce',
-      'ecommerce': 'ecommerce-development',
-      'custom-software-development': 'custom-software',
-      'custom-software': 'custom-software-development',
-      'mobile-app-development': 'mobile-apps',
-      'mobile-apps': 'mobile-app-development',
-      'cloud-computing': 'cloud-devops',
-      'devops': 'cloud-devops',
-      'cloud-devops': 'devops',
-      'cloud-migration': 'cloud-devops',
-      'robotics-emerging-tech': 'robotics',
-      'robotics': 'robotics-emerging-tech',
-      'seo': 'digital-marketing',
-      'social-media-marketing': 'digital-marketing',
-      'generative-ai': 'ai-machine-learning',
-    };
-
-    const targetSlug = aliasMap[slug];
-    if (targetSlug) {
-      return servicesData.find((s) => s.slug === targetSlug || s.id === targetSlug);
-    }
-    return undefined;
+    const canonicalSlug = getCanonicalServiceSlug(slug);
+    return servicesData.find((s) => s.slug === canonicalSlug || s.id === canonicalSlug);
   };
 
   // Helper to find specific insight by slug
@@ -224,10 +213,21 @@ export default function App() {
       );
     }
 
-    // 6. Solutions
+    // 6. Solutions & Individual Solution Blueprints
     if (currentRoute === '/solutions') {
       return (
         <SolutionsPage
+          onNavigate={navigate}
+          onStartProject={handleOpenProjectModal}
+        />
+      );
+    }
+
+    if (currentRoute.startsWith('/solutions/')) {
+      const slug = currentRoute.replace('/solutions/', '');
+      return (
+        <SolutionsPage
+          slug={slug}
           onNavigate={navigate}
           onStartProject={handleOpenProjectModal}
         />
@@ -312,6 +312,17 @@ export default function App() {
     }
 
     // 14. Training & Professional Courses
+    if (currentRoute.startsWith('/training/')) {
+      const courseSlug = currentRoute.replace('/training/', '');
+      return (
+        <TrainingPage
+          courseSlug={courseSlug}
+          onNavigate={navigate}
+          onOpenProjectModal={handleOpenProjectModal}
+        />
+      );
+    }
+
     if (
       currentRoute === '/training' ||
       currentRoute === '/courses' ||

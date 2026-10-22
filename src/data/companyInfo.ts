@@ -10,6 +10,7 @@ export const COMPANY_CONTACT = {
   emailMailto: 'mailto:info@iamtechni.in',
   website: 'https://www.iamtechni.in',
   logoUrl: 'https://www.iamtechni.in/logo.png',
+  ogImageUrl: 'https://www.iamtechni.in/og-image.png',
   headquarters: 'Puducherry & Tamil Nadu, India',
   deliveryZones: 'Global Delivery (India, US, EMEA, APAC)',
   workingHours: 'Mon – Sat: 9:00 AM – 7:00 PM IST',
