@@ -21,6 +21,7 @@ import {
   Radio,
   FileText
 } from 'lucide-react';
+import { AIPipelineDashboard } from './AIPipelineDashboard';
 
 /* ========================================================================== */
 /* 1. COMPANY INTRODUCTION TECHNOLOGY ILLUSTRATION                            */
@@ -276,82 +277,10 @@ export const CompanyIntroVisual: React.FC<{ className?: string }> = ({ className
 /* 2. AI NEURAL RAG PIPELINE VISUAL (Dark Mode Section)                       */
 /* ========================================================================== */
 
-export const AiNeuralPipelineVisual: React.FC<{ className?: string }> = ({ className = '' }) => {
-  return (
-    <div className={`w-full rounded-2xl bg-[#0F172A] border border-slate-800 shadow-2xl p-4 sm:p-6 text-white font-mono flex flex-col justify-between ${className}`}>
-      {/* Top Status */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#04C8E8] animate-pulse shrink-0" />
-          <span className="text-[11px] sm:text-xs font-bold text-slate-200 truncate">PRIVATE_RAG_INFERENCE_PIPELINE</span>
-        </div>
-        <span className="text-[10px] text-[#04C8E8] bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800 font-bold">
-          Zero Leakage
-        </span>
-      </div>
-
-      {/* Pipeline Steps */}
-      <div className="space-y-3 my-4">
-        {/* Step 1: Query Ingest */}
-        <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded bg-cyan-500/20 text-[#04C8E8] flex items-center justify-center text-[10px] font-bold shrink-0">
-              01
-            </div>
-            <div>
-              <div className="text-slate-200 font-bold text-[11px]">Enterprise Query Embedding</div>
-              <div className="text-[10px] text-slate-400">text-embedding-3 · 1536 dims</div>
-            </div>
-          </div>
-          <span className="text-cyan-400 text-[10px] font-bold">&lt;18ms</span>
-        </div>
-
-        {/* Step 2: Vector Search */}
-        <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded bg-blue-500/20 text-[#1266E8] flex items-center justify-center text-[10px] font-bold shrink-0">
-              02
-            </div>
-            <div>
-              <div className="text-slate-200 font-bold text-[11px]">Cosine Distance Retrieval</div>
-              <div className="text-[10px] text-slate-400">pgvector · HNSW Index Matching</div>
-            </div>
-          </div>
-          <span className="text-emerald-400 text-[10px] font-bold">0.94 Similarity</span>
-        </div>
-
-        {/* Step 3: Verified Citation */}
-        <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded bg-purple-500/20 text-[#5427D9] flex items-center justify-center text-[10px] font-bold shrink-0">
-              03
-            </div>
-            <div>
-              <div className="text-slate-200 font-bold text-[11px]">Guardrailed Response Synthesizer</div>
-              <div className="text-[10px] text-slate-400">Verifiable Page &amp; Doc Citations</div>
-            </div>
-          </div>
-          <span className="text-purple-400 text-[10px] font-bold">100% Traceable</span>
-        </div>
-      </div>
-
-      {/* Metrics Row */}
-      <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-center text-xs pt-3 border-t border-slate-800">
-        <div className="p-2 bg-slate-950 rounded-lg border border-slate-850">
-          <div className="text-[9px] text-slate-400 truncate">Prompt Cache</div>
-          <div className="text-xs sm:text-sm font-bold text-emerald-400">92% Hit</div>
-        </div>
-        <div className="p-2 bg-slate-950 rounded-lg border border-slate-850">
-          <div className="text-[9px] text-slate-400 truncate">P95 Latency</div>
-          <div className="text-xs sm:text-sm font-bold text-cyan-400">340ms</div>
-        </div>
-        <div className="p-2 bg-slate-950 rounded-lg border border-slate-850">
-          <div className="text-[9px] text-slate-400 truncate">Hallucination</div>
-          <div className="text-xs sm:text-sm font-bold text-purple-400">0.00%</div>
-        </div>
-      </div>
-    </div>
-  );
+export const AiNeuralPipelineVisual: React.FC<{ className?: string }> = ({
+  className = '',
+}) => {
+  return <AIPipelineDashboard className={className} />;
 };
 
 /* ========================================================================== */

@@ -49,6 +49,7 @@ import { EnterpriseSolutionsMatrix } from '../components/home/EnterpriseSolution
 import { ProcessStageVisual, IndustryIllustration } from '../components/common/TechIllustrations';
 import { ProjectVisualThumbnail, ArticleGraphic, ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { CompanyIntroVisual, AiNeuralPipelineVisual, CtaTerminalVisual } from '../components/home/HomeSectionVisuals';
+import { AIBookSection } from '../components/home/AIBookSection';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
@@ -1130,102 +1131,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================================= */}
       {/* 6. SELECTIVE DARK NAVY SECTION: AI & High-Performance Innovation          */}
       {/* ========================================================================= */}
-      <section className="py-24 bg-[#090D1A] text-white border-b border-slate-800 relative overflow-hidden">
-        {/* Luminous Glows */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#5427D9]/20 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#04C8E8]/15 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-14">
-            <div className="lg:col-span-7 space-y-4">
-              <div className="text-xs font-mono uppercase tracking-widest text-[#04C8E8] font-bold">
-                Artificial Intelligence & Scalability
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                Put intelligent technology to practical work.
-              </h2>
-              <p className="text-base text-slate-400 leading-relaxed">
-                We help enterprises move beyond generic chatbot hype. We build grounded, domain-specific AI applications, automated knowledge assistants, and cost-controlled inference pipelines.
-              </p>
-              <div className="flex flex-wrap items-center gap-2 pt-2 text-xs font-mono text-slate-300">
-                <span className="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-cyan-400">
-                  ✓ pgvector Embeddings
-                </span>
-                <span className="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-purple-400">
-                  ✓ Verifiable Citations
-                </span>
-                <span className="bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-emerald-400">
-                  ✓ Zero Model Training Leakage
-                </span>
-              </div>
-            </div>
-
-            <div className="lg:col-span-5">
-              <AiNeuralPipelineVisual />
-            </div>
-          </div>
-
-          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" staggerChildren={0.1}>
-            <ScrollRevealItem className="h-full">
-              <div className="bg-[#10162A] h-full border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
-                <div className="w-10 h-10 rounded-xl bg-cyan-950 text-[#04C8E8] flex items-center justify-center mb-4 shadow-sm">
-                  <Search className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-white mb-2">Private Document RAG</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Query thousands of internal contracts, SOPs, and engineering manuals with verifiable source page citations.
-                </p>
-              </div>
-            </ScrollRevealItem>
-
-            <ScrollRevealItem className="h-full">
-              <div className="bg-[#10162A] h-full border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
-                <div className="w-10 h-10 rounded-xl bg-blue-950 text-[#1266E8] flex items-center justify-center mb-4 shadow-sm">
-                  <Cpu className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-white mb-2">Knowledge Assistants</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Domain-specific assistants trained on your proprietary processes without leaking data to public training sets.
-                </p>
-              </div>
-            </ScrollRevealItem>
-
-            <ScrollRevealItem className="h-full">
-              <div className="bg-[#10162A] h-full border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
-                <div className="w-10 h-10 rounded-xl bg-purple-950 text-[#5427D9] flex items-center justify-center mb-4 shadow-sm">
-                  <Workflow className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-white mb-2">Workflow Automation</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Automated document extraction, invoice classification, and human-in-the-loop review queues.
-                </p>
-              </div>
-            </ScrollRevealItem>
-
-            <ScrollRevealItem className="h-full">
-              <div className="bg-[#10162A] h-full border border-slate-800/90 rounded-2xl p-6 hover:border-slate-700 transition-colors interactive-card-lift">
-                <div className="w-10 h-10 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center mb-4 shadow-sm">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-white mb-2">Guardrails & Cost FinOps</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Cost-aware token budgeting, prompt caching, and defensive filters against prompt injection attacks.
-                </p>
-              </div>
-            </ScrollRevealItem>
-          </ScrollReveal>
-
-          <div className="mt-10 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-            <span>Every AI deployment is backed by privacy compliance, rate-limiting, and evaluation benchmarks.</span>
-            <button
-              onClick={() => onNavigate('/services/ai-machine-learning')}
-              className="text-[#04C8E8] hover:underline font-semibold flex items-center gap-1 shrink-0 cursor-pointer"
-            >
-              Explore AI & Machine Learning Practice <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </section>
+      <AIBookSection onNavigate={onNavigate} />
 
       {/* ========================================================================= */}
       {/* 7. INDUSTRIES SERVED (Staggered ScrollReveal)                             */}
