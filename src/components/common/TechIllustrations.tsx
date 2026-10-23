@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import {
   Code2,
   Cpu,
@@ -326,167 +327,425 @@ interface ProcessStageVisualProps {
   stageIndex: number;
 }
 
+const useCountUpOnFirstView = (
+  target: number,
+  isInView: boolean,
+  prefersReducedMotion: boolean
+) => {
+  const [value, setValue] = useState(prefersReducedMotion ? target : 0);
+  const hasAnimatedRef = useRef(false);
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setValue(target);
+      return;
+    }
+    if (!isInView) return;
+    if (hasAnimatedRef.current) {
+      setValue(target);
+      return;
+    }
+    hasAnimatedRef.current = true;
+
+    const duration = 900;
+    const start = performance.now();
+    let rafId = 0;
+
+    const step = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.round(target * eased));
+      if (progress < 1) {
+        rafId = requestAnimationFrame(step);
+      } else {
+        setValue(target);
+      }
+    };
+
+    rafId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafId);
+  }, [target, isInView, prefersReducedMotion]);
+
+  return value;
+};
+
 export const ProcessStageVisual: React.FC<ProcessStageVisualProps> = ({ stageIndex }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, amount: 0.35 });
+  const prefersReducedMotion = Boolean(useReducedMotion());
+
+  const stakeholderCount = useCountUpOnFirstView(14, isInView, prefersReducedMotion);
+  const enterpriseUserCount = useCountUpOnFirstView(15, isInView, prefersReducedMotion);
+  const passingTestsCount = useCountUpOnFirstView(142, isInView, prefersReducedMotion);
+  const auditScoreCount = useCountUpOnFirstView(100, isInView, prefersReducedMotion);
+  const podCount = useCountUpOnFirstView(12, isInView, prefersReducedMotion);
+  const costReductionCount = useCountUpOnFirstView(26, isInView, prefersReducedMotion);
+
+  const rowInitial = prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 };
+  const rowAnimate = { opacity: 1, y: 0 };
+  const chipInitial = prefersReducedMotion
+    ? { opacity: 1, scale: 1 }
+    : { opacity: 0, scale: 0.78 };
+  const chipAnimate = { opacity: 1, scale: 1 };
+
   switch (stageIndex) {
     case 0: // 01 Discover
       return (
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-md space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <span className="text-[10px] font-mono font-bold text-[#1266E8] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+        <div
+          ref={containerRef}
+          className="h-full bg-white rounded-2xl p-5 sm:p-6 border border-[#DBEAFE]/90 shadow-[0_8px_24px_rgba(15,23,42,0.05)] flex flex-col justify-between space-y-4"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <span className="text-[10.5px] font-mono font-bold text-[#1E3A8A] bg-[#EEF4FF] px-2.5 py-1 rounded-full border border-[#DBEAFE]">
               AUDIT SCANNER
             </span>
-            <span className="text-xs font-mono text-emerald-600 font-bold">14 Stakeholder Interviews</span>
+            <span className="text-xs font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80 font-bold">
+              {stakeholderCount} Stakeholder Interviews
+            </span>
           </div>
-          <div className="space-y-2">
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs flex items-center justify-between">
-              <span className="text-slate-700 font-medium">Architecture Bottleneck Audit</span>
-              <span className="text-emerald-600 font-bold">✓ Identified</span>
-            </div>
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs flex items-center justify-between">
-              <span className="text-slate-700 font-medium">Data Model &amp; Compliance Check</span>
-              <span className="text-emerald-600 font-bold">✓ Validated</span>
-            </div>
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs flex items-center justify-between">
-              <span className="text-slate-700 font-medium">ROI &amp; Delivery Milestones</span>
-              <span className="text-blue-600 font-bold">Scope Finalized</span>
-            </div>
+          <div className="space-y-2.5">
+            {[
+              {
+                label: 'Architecture Bottleneck Audit',
+                status: '✓ Identified',
+                chipClass:
+                  'text-emerald-700 bg-emerald-50 border-emerald-200/90',
+              },
+              {
+                label: 'Data Model & Compliance Check',
+                status: '✓ Validated',
+                chipClass:
+                  'text-emerald-700 bg-emerald-50 border-emerald-200/90',
+              },
+              {
+                label: 'ROI & Delivery Milestones',
+                status: 'Scope Finalized',
+                chipClass: 'text-[#1E3A8A] bg-[#EEF4FF] border-[#DBEAFE]',
+              },
+            ].map((row, i) => (
+              <motion.div
+                key={row.label}
+                initial={rowInitial}
+                animate={rowAnimate}
+                transition={{
+                  duration: 0.32,
+                  delay: prefersReducedMotion ? 0 : 0.08 * (i + 1),
+                  ease: 'easeOut',
+                }}
+                className="p-3 rounded-xl bg-[#F8FAFC] hover:bg-[#EEF4FF]/50 border border-slate-200/80 text-xs flex items-center justify-between gap-2 transition-colors"
+              >
+                <span className="text-slate-800 font-semibold">{row.label}</span>
+                <motion.span
+                  initial={chipInitial}
+                  animate={chipAnimate}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 260,
+                    damping: 18,
+                    delay: prefersReducedMotion ? 0 : 0.14 + 0.08 * i,
+                  }}
+                  className={`px-2.5 py-0.5 rounded-full border font-bold shrink-0 ${row.chipClass}`}
+                >
+                  {row.status}
+                </motion.span>
+              </motion.div>
+            ))}
           </div>
         </div>
       );
 
     case 1: // 02 Define
       return (
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-md space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <span className="text-[10px] font-mono font-bold text-[#7C3AED] bg-violet-50 px-2 py-0.5 rounded border border-violet-200">
+        <div
+          ref={containerRef}
+          className="h-full bg-white rounded-2xl p-5 sm:p-6 border border-[#DBEAFE]/90 shadow-[0_8px_24px_rgba(15,23,42,0.05)] flex flex-col justify-between space-y-4"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <span className="text-[10.5px] font-mono font-bold text-[#1E3A8A] bg-[#EEF4FF] px-2.5 py-1 rounded-full border border-[#DBEAFE]">
               TECHNICAL BLUEPRINT
             </span>
-            <span className="text-xs font-mono text-violet-700 font-bold">API Contracts &amp; Schemas</span>
+            <motion.span
+              initial={chipInitial}
+              animate={chipAnimate}
+              transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.1 }}
+              className="text-xs font-mono text-[#2563EB] bg-[#F8FAFF] px-2.5 py-1 rounded-full border border-[#DBEAFE] font-bold"
+            >
+              API Contracts &amp; Schemas
+            </motion.span>
           </div>
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 bg-violet-50/60 rounded-xl border border-violet-100">
-              <div className="font-bold text-violet-900 mb-1">Database Schema</div>
-              <p className="text-[11px] text-slate-600">PostgreSQL with strict foreign keys &amp; pgvector embeddings</p>
-            </div>
-            <div className="p-3 bg-blue-50/60 rounded-xl border border-blue-100">
-              <div className="font-bold text-blue-900 mb-1">State &amp; APIs</div>
-              <p className="text-[11px] text-slate-600">Typed tRPC / OpenAPI contracts for zero runtime mismatch</p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs my-auto">
+            <motion.div
+              initial={rowInitial}
+              animate={rowAnimate}
+              transition={{ duration: 0.32, delay: prefersReducedMotion ? 0 : 0.08 }}
+              className="p-3.5 bg-[#F8FAFF] rounded-xl border border-[#DBEAFE]"
+            >
+              <div className="font-bold text-[#1E3A8A] mb-1">Database Schema</div>
+              <p className="text-[11.5px] text-slate-600 leading-relaxed">
+                PostgreSQL with strict foreign keys &amp; pgvector embeddings
+              </p>
+            </motion.div>
+            <motion.div
+              initial={rowInitial}
+              animate={rowAnimate}
+              transition={{ duration: 0.32, delay: prefersReducedMotion ? 0 : 0.16 }}
+              className="p-3.5 bg-[#EEF4FF]/70 rounded-xl border border-[#DBEAFE]"
+            >
+              <div className="font-bold text-[#1E3A8A] mb-1">State &amp; APIs</div>
+              <p className="text-[11.5px] text-slate-600 leading-relaxed">
+                Typed tRPC / OpenAPI contracts for zero runtime mismatch
+              </p>
+            </motion.div>
           </div>
         </div>
       );
 
     case 2: // 03 Design
       return (
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-md space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <span className="text-[10px] font-mono font-bold text-[#0D9488] bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
+        <div
+          ref={containerRef}
+          className="h-full bg-white rounded-2xl p-5 sm:p-6 border border-[#DBEAFE]/90 shadow-[0_8px_24px_rgba(15,23,42,0.05)] flex flex-col justify-between space-y-4"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <span className="text-[10.5px] font-mono font-bold text-[#1E3A8A] bg-[#EEF4FF] px-2.5 py-1 rounded-full border border-[#DBEAFE]">
               DESIGN SYSTEM
             </span>
-            <span className="text-xs font-mono text-emerald-600 font-bold">WCAG 2.2 AA Verified</span>
+            <motion.span
+              initial={chipInitial}
+              animate={chipAnimate}
+              transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.1 }}
+              className="text-xs font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80 font-bold"
+            >
+              WCAG 2.2 AA Verified
+            </motion.span>
           </div>
-          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+          <motion.div
+            initial={rowInitial}
+            animate={rowAnimate}
+            transition={{ duration: 0.32, delay: prefersReducedMotion ? 0 : 0.1 }}
+            className="p-4 bg-[#F8FAFF] rounded-xl border border-[#DBEAFE] space-y-3 my-auto"
+          >
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-[#1266E8]" />
+              <div className="w-4 h-4 rounded-full bg-[#1E3A8A]" />
+              <div className="w-4 h-4 rounded-full bg-[#2563EB]" />
               <div className="w-4 h-4 rounded-full bg-[#04C8E8]" />
-              <div className="w-4 h-4 rounded-full bg-[#5427D9]" />
               <div className="w-4 h-4 rounded-full bg-[#0D9488]" />
-              <span className="text-[10px] font-mono text-slate-500 ml-auto">Figma UI Kit v3.4</span>
+              <span className="text-[10.5px] font-mono font-semibold text-[#2563EB] bg-white px-2 py-0.5 rounded-full border border-[#DBEAFE] ml-auto">
+                Figma UI Kit v3.4
+              </span>
             </div>
-            <div className="text-xs text-slate-700 font-medium">Interactive Prototype Tested with 15 Enterprise Users</div>
-          </div>
+            <div className="text-xs text-slate-800 font-semibold">
+              Interactive Prototype Tested with {enterpriseUserCount} Enterprise Users
+            </div>
+          </motion.div>
         </div>
       );
 
     case 3: // 04 Build
       return (
-        <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-md text-white space-y-3 font-mono text-xs">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+        <div
+          ref={containerRef}
+          className="h-full bg-gradient-to-br from-[#0B1536] via-[#0F1E4A] to-[#1E3A8A] rounded-2xl p-5 sm:p-6 border border-[#1E3A8A] shadow-[0_10px_28px_rgba(15,30,74,0.18)] text-white flex flex-col justify-between space-y-3 font-mono text-xs"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 pb-3">
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-              <span className="text-[11px] text-slate-400 ml-2">iamtechni-engine // compile</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+              <span className="text-[11px] text-blue-200 ml-2">iamtechni-engine // compile</span>
             </div>
-            <span className="text-emerald-400 text-[10px]">TypeScript Strict: Pass</span>
+            <motion.span
+              initial={chipInitial}
+              animate={chipAnimate}
+              transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.1 }}
+              className="text-emerald-300 bg-emerald-500/15 border border-emerald-400/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold"
+            >
+              TypeScript Strict: Pass
+            </motion.span>
           </div>
-          <div className="space-y-1 text-slate-300 text-[11px]">
-            <div>$ npm run test:unit --coverage</div>
-            <div className="text-emerald-400">✓ 142 passing tests (98.4% coverage)</div>
-            <div>$ vite build --mode production</div>
-            <div className="text-cyan-400">✓ dist/assets/index.js (38.2 kB gzipped)</div>
+          <div className="space-y-2 text-blue-100 text-[11px] my-auto">
+            <motion.div
+              initial={rowInitial}
+              animate={rowAnimate}
+              transition={{ duration: 0.28, delay: prefersReducedMotion ? 0 : 0.06 }}
+              className="p-2 rounded-lg bg-white/5 border border-white/10"
+            >
+              <div>$ npm run test:unit --coverage</div>
+              <motion.div
+                initial={chipInitial}
+                animate={chipAnimate}
+                transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.14 }}
+                className="text-emerald-300 font-bold mt-0.5"
+              >
+                ✓ {passingTestsCount} passing tests (98.4% coverage)
+              </motion.div>
+            </motion.div>
+            <motion.div
+              initial={rowInitial}
+              animate={rowAnimate}
+              transition={{ duration: 0.28, delay: prefersReducedMotion ? 0 : 0.14 }}
+              className="p-2 rounded-lg bg-white/5 border border-white/10"
+            >
+              <div>$ vite build --mode production</div>
+              <motion.div
+                initial={chipInitial}
+                animate={chipAnimate}
+                transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.22 }}
+                className="text-cyan-300 font-bold mt-0.5"
+              >
+                ✓ dist/assets/index.js (38.2 kB gzipped)
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       );
 
     case 4: // 05 Validate
       return (
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-md space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+        <div
+          ref={containerRef}
+          className="h-full bg-white rounded-2xl p-5 sm:p-6 border border-[#DBEAFE]/90 shadow-[0_8px_24px_rgba(15,23,42,0.05)] flex flex-col justify-between space-y-4"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <span className="text-[10.5px] font-mono font-bold text-[#1E3A8A] bg-[#EEF4FF] px-2.5 py-1 rounded-full border border-[#DBEAFE]">
               PERFORMANCE AUDIT
             </span>
-            <span className="text-xs font-mono text-emerald-600 font-bold">Score: 100/100</span>
+            <motion.span
+              initial={chipInitial}
+              animate={chipAnimate}
+              transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.1 }}
+              className="text-xs font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80 font-bold"
+            >
+              Score: {auditScoreCount}/100
+            </motion.span>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center">
-            <div className="p-2.5 bg-emerald-50 rounded-xl border border-emerald-200">
-              <div className="text-[10px] font-mono text-slate-500">LCP</div>
-              <div className="text-base font-extrabold text-emerald-700">0.6s</div>
-            </div>
-            <div className="p-2.5 bg-emerald-50 rounded-xl border border-emerald-200">
-              <div className="text-[10px] font-mono text-slate-500">FID</div>
-              <div className="text-base font-extrabold text-emerald-700">8ms</div>
-            </div>
-            <div className="p-2.5 bg-emerald-50 rounded-xl border border-emerald-200">
-              <div className="text-[10px] font-mono text-slate-500">CLS</div>
-              <div className="text-base font-extrabold text-emerald-700">0.00</div>
-            </div>
+          <div className="grid grid-cols-3 gap-2.5 text-center my-auto">
+            {[
+              { label: 'LCP', val: '0.6s' },
+              { label: 'FID', val: '8ms' },
+              { label: 'CLS', val: '0.00' },
+            ].map((item, idx) => (
+              <motion.div
+                key={item.label}
+                initial={rowInitial}
+                animate={rowAnimate}
+                transition={{
+                  duration: 0.3,
+                  delay: prefersReducedMotion ? 0 : 0.08 * (idx + 1),
+                }}
+                className="p-3 bg-[#F8FAFF] rounded-xl border border-[#DBEAFE]"
+              >
+                <div className="text-[10px] font-mono text-slate-500 font-semibold">
+                  {item.label}
+                </div>
+                <div className="text-base font-extrabold text-[#1E3A8A] mt-0.5">
+                  {item.val}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       );
 
     case 5: // 06 Deploy
       return (
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-md space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <span className="text-[10px] font-mono font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
+        <div
+          ref={containerRef}
+          className="h-full bg-white rounded-2xl p-5 sm:p-6 border border-[#DBEAFE]/90 shadow-[0_8px_24px_rgba(15,23,42,0.05)] flex flex-col justify-between space-y-4"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <span className="text-[10.5px] font-mono font-bold text-[#1E3A8A] bg-[#EEF4FF] px-2.5 py-1 rounded-full border border-[#DBEAFE]">
               CI/CD DEPLOYMENT
             </span>
-            <span className="text-xs font-mono text-emerald-600 font-bold">Zero-Downtime Rollout</span>
+            <motion.span
+              initial={chipInitial}
+              animate={chipAnimate}
+              transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.1 }}
+              className="text-xs font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80 font-bold"
+            >
+              Zero-Downtime Rollout
+            </motion.span>
           </div>
-          <div className="space-y-2 text-xs">
-            <div className="p-2 rounded-lg bg-sky-50 border border-sky-200 flex items-center justify-between">
-              <span className="text-slate-800 font-medium">Kubernetes Rolling Update</span>
-              <span className="text-emerald-600 font-bold">Pod 12/12 Live</span>
-            </div>
-            <div className="p-2 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
-              <span className="text-slate-800 font-medium">SSL / Cloudflare Edge DNS</span>
-              <span className="text-slate-600 font-mono">TLS 1.3 Active</span>
-            </div>
+          <div className="space-y-2.5 text-xs my-auto">
+            <motion.div
+              initial={rowInitial}
+              animate={rowAnimate}
+              transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.08 }}
+              className="p-3 rounded-xl bg-[#F8FAFF] border border-[#DBEAFE] flex items-center justify-between gap-2"
+            >
+              <span className="text-slate-800 font-semibold">Kubernetes Rolling Update</span>
+              <motion.span
+                initial={chipInitial}
+                animate={chipAnimate}
+                transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.16 }}
+                className="text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full font-bold shrink-0"
+              >
+                Pod {podCount}/12 Live
+              </motion.span>
+            </motion.div>
+            <motion.div
+              initial={rowInitial}
+              animate={rowAnimate}
+              transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.16 }}
+              className="p-3 rounded-xl bg-[#F8FAFC] border border-slate-200/80 flex items-center justify-between gap-2"
+            >
+              <span className="text-slate-800 font-semibold">SSL / Cloudflare Edge DNS</span>
+              <motion.span
+                initial={chipInitial}
+                animate={chipAnimate}
+                transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.24 }}
+                className="text-[#1E3A8A] bg-[#EEF4FF] border border-[#DBEAFE] px-2.5 py-0.5 rounded-full font-mono font-semibold shrink-0"
+              >
+                TLS 1.3 Active
+              </motion.span>
+            </motion.div>
           </div>
         </div>
       );
 
     default: // 07 Improve
       return (
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-md space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <span className="text-[10px] font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+        <div
+          ref={containerRef}
+          className="h-full bg-white rounded-2xl p-5 sm:p-6 border border-[#DBEAFE]/90 shadow-[0_8px_24px_rgba(15,23,42,0.05)] flex flex-col justify-between space-y-4"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <span className="text-[10.5px] font-mono font-bold text-[#1E3A8A] bg-[#EEF4FF] px-2.5 py-1 rounded-full border border-[#DBEAFE]">
               CONTINUOUS TELEMETRY
             </span>
-            <span className="text-xs font-mono text-amber-600 font-bold">24/7 Monitoring</span>
+            <motion.span
+              initial={chipInitial}
+              animate={chipAnimate}
+              transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.1 }}
+              className="text-xs font-mono text-[#2563EB] bg-[#F8FAFF] px-2.5 py-1 rounded-full border border-[#DBEAFE] font-bold"
+            >
+              24/7 Monitoring
+            </motion.span>
           </div>
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-2.5 bg-amber-50/60 rounded-xl border border-amber-200">
-              <div className="text-slate-500 text-[10px]">Cloud FinOps</div>
-              <div className="text-sm font-bold text-slate-900">-26% Server Cost</div>
-            </div>
-            <div className="p-2.5 bg-teal-50/60 rounded-xl border border-teal-200">
-              <div className="text-slate-500 text-[10px]">Error Rate</div>
-              <div className="text-sm font-bold text-emerald-700">0.001% P99</div>
-            </div>
+          <div className="grid grid-cols-2 gap-3 text-xs my-auto">
+            <motion.div
+              initial={rowInitial}
+              animate={rowAnimate}
+              transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.08 }}
+              className="p-3.5 bg-[#F8FAFF] rounded-xl border border-[#DBEAFE]"
+            >
+              <div className="text-slate-500 text-[10px] font-semibold">Cloud FinOps</div>
+              <div className="text-sm font-bold text-[#1E3A8A] mt-0.5">
+                -{costReductionCount}% Server Cost
+              </div>
+            </motion.div>
+            <motion.div
+              initial={rowInitial}
+              animate={rowAnimate}
+              transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : 0.16 }}
+              className="p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200/80"
+            >
+              <div className="text-slate-500 text-[10px] font-semibold">Error Rate</div>
+              <div className="text-sm font-bold text-emerald-700 mt-0.5">0.001% P99</div>
+            </motion.div>
           </div>
         </div>
       );
   }
 };
+

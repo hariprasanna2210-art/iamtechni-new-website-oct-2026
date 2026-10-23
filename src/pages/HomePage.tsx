@@ -53,7 +53,7 @@ import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../componen
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
 import { getAllUniqueTools } from '../data/heroServiceTools';
-import { motion, useReducedMotion, useInView, useScroll, useTransform, useSpring } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion, useInView, useScroll, useTransform, useSpring } from 'framer-motion';
 
 interface HomePageProps {
   onNavigate: (route: PageRoute) => void;
@@ -162,6 +162,12 @@ export const HomePage: React.FC<HomePageProps> = ({
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const [activeProcessStep, setActiveProcessStep] = useState(0);
+  const [processAutoPlayStopped, setProcessAutoPlayStopped] = useState(false);
+  const [processHovered, setProcessHovered] = useState(false);
+  const [processProgress, setProcessProgress] = useState(0);
+  const processStageButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const processMobileChipRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const processTimelineButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [selectedProjectFilter, setSelectedProjectFilter] = useState<string>('All');
   const [selectedServiceSlug, setSelectedServiceSlug] = useState<string>(
     servicesData[0]?.slug || 'web-development'
@@ -225,6 +231,60 @@ export const HomePage: React.FC<HomePageProps> = ({
       color: 'from-[#0EA5E9] to-[#10B981]',
     },
   ];
+
+  const handleSelectProcessStage = (index: number) => {
+    setProcessAutoPlayStopped(true);
+    setProcessProgress(0);
+    setActiveProcessStep(index);
+  };
+
+  const handleProcessKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    currentIndex: number,
+    refsArray: React.MutableRefObject<(HTMLButtonElement | null)[]>
+  ) => {
+    const total = processStages.length;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      const nextIndex = (currentIndex + 1) % total;
+      handleSelectProcessStage(nextIndex);
+      refsArray.current[nextIndex]?.focus();
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prevIndex = (currentIndex - 1 + total) % total;
+      handleSelectProcessStage(prevIndex);
+      refsArray.current[prevIndex]?.focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      handleSelectProcessStage(0);
+      refsArray.current[0]?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      handleSelectProcessStage(total - 1);
+      refsArray.current[total - 1]?.focus();
+    }
+  };
+
+  useEffect(() => {
+    if (prefersReducedMotion || processAutoPlayStopped || processHovered) {
+      return;
+    }
+    const tickMs = 60;
+    const durationMs = 6000;
+    const stepIncrement = (tickMs / durationMs) * 100;
+
+    const timer = window.setInterval(() => {
+      setProcessProgress((prev) => {
+        if (prev + stepIncrement >= 100) {
+          setActiveProcessStep((curr) => (curr + 1) % processStages.length);
+          return 0;
+        }
+        return prev + stepIncrement;
+      });
+    }, tickMs);
+
+    return () => window.clearInterval(timer);
+  }, [prefersReducedMotion, processAutoPlayStopped, processHovered, processStages.length]);
 
   const filteredProjects =
     selectedProjectFilter === 'All'
@@ -523,109 +583,546 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================================= */}
       {/* 5. ENGINEERING APPROACH: 7-Stage Interactive Process Timeline             */}
       {/* ========================================================================= */}
-      <section className="py-24 bg-white border-b border-slate-200">
+      <section
+        className="py-24 bg-[#F4F7FE]/70 border-b border-slate-200 overflow-hidden"
+        onMouseEnter={() => setProcessHovered(true)}
+        onMouseLeave={() => setProcessHovered(false)}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-14">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
-              Methodology
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-3xl mb-12"
+          >
+            <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 mb-3 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
+              <span
+                className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
+                aria-hidden="true"
+              />
+              <span>Methodology</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
-              A clear process. Thoughtful execution.
-            </h2>
-            <p className="text-sm bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-2 leading-relaxed">
+
+            <motion.h2
+              whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+              transition={{ duration: 0.28, ease: 'easeOut' }}
+              className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-[36px] xl:text-[40px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2] origin-left cursor-default"
+            >
+              {['A', 'clear', 'process.', 'Thoughtful', 'execution.'].map((word, i, arr) => {
+                const isLast = i === arr.length - 1;
+                return (
+                  <React.Fragment key={`${word}-${i}`}>
+                    <motion.span
+                      initial={prefersReducedMotion ? {} : { opacity: 0, y: 8 }}
+                      whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true }}
+                      whileHover={
+                        prefersReducedMotion
+                          ? {}
+                          : {
+                              scale: 1.07,
+                              transition: { duration: 0.22, ease: 'easeOut' },
+                            }
+                      }
+                      transition={{
+                        duration: 0.4,
+                        delay: prefersReducedMotion ? 0 : 0.06 * i,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
+                      className={`inline-block text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] hover:drop-shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-shadow duration-200 ${
+                        isLast ? 'mr-0' : 'mr-[0.24em]'
+                      }`}
+                    >
+                      {word}
+                    </motion.span>
+                    {!isLast && ' '}
+                  </React.Fragment>
+                );
+              })}
+            </motion.h2>
+
+            <p className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-3 leading-relaxed">
               We guide projects from initial requirements discovery through validation and monitored deployment with a disciplined seven-stage methodology.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Step Selector List with Icons */}
-            <div className="lg:col-span-5 space-y-2">
+          {/* Mobile / Tablet Horizontally Scrollable Stage Chip Row */}
+          <div
+            className="lg:hidden -mx-4 px-4 mb-6 overflow-x-auto no-scrollbar"
+            role="tablist"
+            aria-label="Methodology stages"
+          >
+            <div className="flex items-center gap-2.5 min-w-max pb-1">
               {processStages.map((stg, idx) => {
                 const StepIcon = getProcessStepIcon(stg.step);
+                const isActive = activeProcessStep === idx;
                 return (
                   <button
                     key={stg.step}
-                    onClick={() => setActiveProcessStep(idx)}
-                    className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-center gap-3 cursor-pointer ${
-                      activeProcessStep === idx
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-md'
-                        : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700'
+                    ref={(el) => {
+                      processMobileChipRefs.current[idx] = el;
+                    }}
+                    type="button"
+                    onClick={() => handleSelectProcessStage(idx)}
+                    onKeyDown={(e) => handleProcessKeyDown(e, idx, processMobileChipRefs)}
+                    aria-label={`${stg.step}. ${stg.title} — ${stg.tagline}`}
+                    aria-current={isActive ? 'step' : undefined}
+                    className={`group relative px-3.5 py-2.5 rounded-2xl border text-left transition-all duration-200 flex items-center gap-2.5 cursor-pointer shrink-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                      isActive
+                        ? 'text-white border-[#1E3A8A] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)]'
+                        : 'bg-white hover:bg-[#EEF4FF]/80 border-slate-200/90 text-[#1E3A8A] hover:border-[#93C5FD]'
                     }`}
                   >
+                    {isActive && (
+                      <motion.div
+                        layoutId="process-active-stage-mobile-chip"
+                        className="absolute inset-0 rounded-2xl bg-[#1E3A8A] group-hover:bg-[#1E3A8A]/80 transition-colors duration-200"
+                        transition={{ type: 'spring', stiffness: 360, damping: 32 }}
+                      />
+                    )}
                     <span
-                      className={`text-xs font-mono font-bold w-7 h-7 flex items-center justify-center rounded-lg shrink-0 ${
-                        activeProcessStep === idx
-                          ? 'bg-[#04C8E8] text-slate-950'
-                          : 'bg-slate-100 text-slate-600'
+                      className={`relative z-10 w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
+                        isActive
+                          ? 'bg-white/15 text-white border border-white/20'
+                          : 'bg-[#EEF4FF] text-[#1E3A8A]'
                       }`}
                     >
-                      <StepIcon className="w-4 h-4" />
+                      <StepIcon className="w-3.5 h-3.5" />
                     </span>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-bold flex items-center gap-2">
-                        <span>{stg.step}. {stg.title}</span>
-                      </div>
-                      <div
-                        className={`text-[11px] truncate ${
-                          activeProcessStep === idx ? 'text-slate-300' : 'text-slate-500'
-                        }`}
-                      >
-                        {stg.tagline}
-                      </div>
+                    <div className="relative z-10 text-xs font-bold whitespace-nowrap">
+                      {stg.step}. {stg.title}
                     </div>
-                    <ChevronRight
-                      className={`w-4 h-4 shrink-0 ${
-                        activeProcessStep === idx ? 'text-[#04C8E8]' : 'text-slate-300'
-                      }`}
-                    />
                   </button>
                 );
               })}
             </div>
+          </div>
 
-            {/* Stage Detail Display Card with Visual Illustration */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="bg-white rounded-2xl p-5 sm:p-8 lg:p-10 border border-slate-200 shadow-xl flex flex-col justify-between">
-                <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-500 pb-4 border-b border-slate-200">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#1266E8] animate-pulse" />
-                      <span className="font-bold text-slate-800">STAGE {processStages[activeProcessStep].step} OF 07</span>
-                    </div>
-                    <span className="text-[#1266E8] font-bold bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
-                      IAMTECHNI_STANDARD
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-7 items-stretch">
+            {/* Desktop Left Column: 7-Stage Compact Dashboard Card List */}
+            <motion.div
+              initial={prefersReducedMotion ? false : 'hidden'}
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: { staggerChildren: 0.06 },
+                },
+              }}
+              className="hidden lg:flex lg:col-span-4 flex-col justify-between gap-2.5"
+              role="navigation"
+              aria-label="7-stage engineering methodology"
+            >
+              {processStages.map((stg, idx) => {
+                const StepIcon = getProcessStepIcon(stg.step);
+                const isActive = activeProcessStep === idx;
+                return (
+                  <motion.div
+                    key={stg.step}
+                    variants={{
+                      hidden: { opacity: 0, y: 16 },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+                      },
+                    }}
+                    whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 26 }}
+                  >
+                    <button
+                      ref={(el) => {
+                        processStageButtonRefs.current[idx] = el;
+                      }}
+                      type="button"
+                      onClick={() => handleSelectProcessStage(idx)}
+                      onKeyDown={(e) => handleProcessKeyDown(e, idx, processStageButtonRefs)}
+                      aria-label={`${stg.step}. ${stg.title}: ${stg.tagline}`}
+                      aria-current={isActive ? 'step' : undefined}
+                      className={`group relative w-full text-left p-3.5 rounded-2xl border transition-all duration-200 flex items-center gap-3.5 cursor-pointer overflow-hidden active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                        isActive
+                          ? 'text-white border-[#1E3A8A] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)]'
+                          : 'bg-white hover:bg-[#EEF4FF]/70 border-slate-200/80 text-[#1E3A8A] shadow-[0_4px_16px_-6px_rgba(15,23,42,0.06)] hover:shadow-[0_12px_24px_-8px_rgba(30,58,138,0.12)] hover:border-[#93C5FD]'
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="process-active-stage-card"
+                          className="absolute inset-0 rounded-2xl bg-[#1E3A8A] group-hover:bg-[#1E3A8A]/80 transition-colors duration-200"
+                          transition={{ type: 'spring', stiffness: 340, damping: 30 }}
+                        />
+                      )}
+                      {isActive && (
+                        <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-[#3B82F6]/20 blur-xl pointer-events-none" />
+                      )}
+
+                      <span
+                        className={`relative z-10 w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                          isActive
+                            ? 'bg-white/15 text-white border border-white/20 shadow-inner'
+                            : 'bg-[#EEF4FF] text-[#1E3A8A] border border-blue-100/80'
+                        }`}
+                      >
+                        <StepIcon className="w-4 h-4" />
+                      </span>
+
+                      <div className="relative z-10 flex-1 min-w-0">
+                        <div
+                          className={`text-sm font-bold flex items-center gap-2 ${
+                            isActive ? 'text-white' : 'text-[#1E3A8A]'
+                          }`}
+                        >
+                          <span>
+                            {stg.step}. {stg.title}
+                          </span>
+                        </div>
+                        <div
+                          className={`text-[11px] truncate mt-0.5 ${
+                            isActive ? 'text-blue-100/90' : 'text-slate-500'
+                          }`}
+                        >
+                          {stg.tagline}
+                        </div>
+                      </div>
+
+                      <ChevronRight
+                        className={`relative z-10 w-4 h-4 shrink-0 transition-transform ${
+                          isActive ? 'text-white translate-x-0.5' : 'text-slate-300'
+                        }`}
+                      />
+                    </button>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+
+            {/* Right Column: Bento Grid Dashboard for Active Stage */}
+            <motion.div
+              initial={prefersReducedMotion ? false : 'hidden'}
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: { staggerChildren: 0.06, delayChildren: 0.08 },
+                },
+              }}
+              className="lg:col-span-8 flex flex-col gap-5"
+            >
+              {/* Top Row: Wide Dark Navy Hero Card (a) */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 18 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+                whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+                className="relative rounded-[26px] bg-gradient-to-br from-[#0F1E4A] via-[#162C6B] to-[#1E3A8A] text-white p-6 sm:p-8 shadow-[0_20px_45px_-15px_rgba(15,30,74,0.42)] border border-[#2563EB]/30 overflow-hidden"
+              >
+                {/* Subtle ambient glow accents inside hero bento card */}
+                <div className="absolute -top-20 -right-16 w-64 h-64 rounded-full bg-[#3B82F6]/25 blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-24 -left-16 w-64 h-64 rounded-full bg-[#04C8E8]/15 blur-3xl pointer-events-none" />
+
+                {/* Top chips row */}
+                <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-white/10">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 backdrop-blur-md text-xs font-mono">
+                    <span className="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse" />
+                    <span className="font-bold text-white tracking-wide">
+                      STAGE {processStages[activeProcessStep].step} OF 07
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono font-bold text-[#DBEAFE] bg-[#2563EB]/35 px-3 py-1 rounded-full border border-[#60A5FA]/40">
+                    IAMTECHNI_STANDARD
+                  </span>
+                </div>
+
+                {/* Animated Stage Hero Copy */}
+                <div className="relative z-10 mt-5">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={processStages[activeProcessStep].step}
+                      initial={
+                        prefersReducedMotion
+                          ? { opacity: 1 }
+                          : { opacity: 0, y: 10, scale: 0.99 }
+                      }
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={
+                        prefersReducedMotion
+                          ? { opacity: 0 }
+                          : { opacity: 0, y: -8, scale: 0.99 }
+                      }
+                      transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <motion.h3
+                        whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
+                        transition={{ duration: 0.24, ease: 'easeOut' }}
+                        className="inline-block !font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-2 origin-left cursor-default"
+                      >
+                        {processStages[activeProcessStep].title}
+                      </motion.h3>
+                      <div className="text-sm font-semibold text-[#93C5FD] mb-3">
+                        {processStages[activeProcessStep].tagline}
+                      </div>
+                      <p className="text-sm text-blue-100/90 leading-relaxed max-w-2xl">
+                        {processStages[activeProcessStep].details}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                {/* Auto-advance subtle progress bar at bottom of hero card */}
+                {!processAutoPlayStopped && !prefersReducedMotion && (
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-1 bg-white/10 overflow-hidden"
+                    aria-hidden="true"
+                  >
+                    <div
+                      className="h-full bg-gradient-to-r from-[#38BDF8] to-[#93C5FD] transition-[width] duration-75 ease-linear"
+                      style={{ width: `${processProgress}%` }}
+                    />
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Middle Row: Timeline Card (b) + Progress Ring Card (c) */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+                {/* b) Timeline Card: 7-Stage Horizontal Track */}
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, y: 18 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                    },
+                  }}
+                  whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+                  className="md:col-span-8 bg-white rounded-[24px] p-5 border border-slate-200/80 shadow-[0_12px_32px_-12px_rgba(15,30,74,0.08)] flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-[#1E3A8A]">
+                      Methodology
+                    </span>
+                    <span className="text-[11px] font-mono font-bold text-[#2563EB] bg-[#EEF4FF] px-2.5 py-0.5 rounded-full border border-blue-200/70">
+                      STAGE {processStages[activeProcessStep].step} OF 07
                     </span>
                   </div>
 
-                  <div className="mt-6 mb-6">
-                    <h3 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">
-                      {processStages[activeProcessStep].title}
-                    </h3>
-                    <div className="text-sm font-semibold text-[#1266E8] mb-4">
-                      {processStages[activeProcessStep].tagline}
-                    </div>
-                    <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                      {processStages[activeProcessStep].details}
-                    </p>
-
-                    {/* Integrated Interactive Visual for the Stage */}
-                    <ProcessStageVisual stageIndex={activeProcessStep} />
+                  <div
+                    className="grid grid-cols-7 gap-1.5 sm:gap-2 my-auto"
+                    role="group"
+                    aria-label="Stage timeline blocks"
+                  >
+                    {processStages.map((stg, idx) => {
+                      const isCompleted = idx < activeProcessStep;
+                      const isCurrent = idx === activeProcessStep;
+                      return (
+                        <button
+                          key={stg.step}
+                          ref={(el) => {
+                            processTimelineButtonRefs.current[idx] = el;
+                          }}
+                          type="button"
+                          onClick={() => handleSelectProcessStage(idx)}
+                          onKeyDown={(e) =>
+                            handleProcessKeyDown(e, idx, processTimelineButtonRefs)
+                          }
+                          aria-label={`${stg.step}. ${stg.title}`}
+                          aria-current={isCurrent ? 'step' : undefined}
+                          className={`relative group rounded-xl p-2 sm:p-2.5 border text-center transition-all duration-200 cursor-pointer flex flex-col items-center justify-center gap-1 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                            isCurrent
+                              ? 'text-white border-[#1E3A8A] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)]'
+                              : isCompleted
+                              ? 'bg-[#DBEAFE]/75 border-[#93C5FD] text-[#1E3A8A] hover:bg-[#DBEAFE]'
+                              : 'bg-slate-50/70 border-slate-200 text-slate-400 hover:border-[#93C5FD] hover:text-[#1E3A8A]'
+                          }`}
+                        >
+                          {isCurrent && (
+                            <motion.div
+                              layoutId="process-timeline-active-block"
+                              className="absolute inset-0 rounded-xl bg-[#1E3A8A] group-hover:bg-[#1E3A8A]/80 transition-colors duration-200"
+                              transition={{ type: 'spring', stiffness: 360, damping: 30 }}
+                            />
+                          )}
+                          <span
+                            className={`relative z-10 text-xs font-mono font-bold ${
+                              isCurrent
+                                ? 'text-white'
+                                : isCompleted
+                                ? 'text-[#1E3A8A]'
+                                : 'text-slate-400'
+                            }`}
+                          >
+                            {stg.step}
+                          </span>
+                          <span
+                            className={`relative z-10 text-[10px] font-semibold truncate max-w-full ${
+                              isCurrent
+                                ? 'text-blue-100'
+                                : isCompleted
+                                ? 'text-[#1E3A8A]/85'
+                                : 'text-slate-400'
+                            }`}
+                          >
+                            {stg.title}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                {/* c) Progress Ring Card: Current Stage out of 7 */}
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, y: 18 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                    },
+                  }}
+                  whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+                  className="md:col-span-4 bg-white rounded-[24px] p-5 border border-slate-200/80 shadow-[0_12px_32px_-12px_rgba(15,30,74,0.08)] flex items-center justify-center"
+                >
+                  {(() => {
+                    const radius = 44;
+                    const circumference = 2 * Math.PI * radius;
+                    const fraction = (activeProcessStep + 1) / processStages.length;
+                    const strokeDashoffset = circumference * (1 - fraction);
+
+                    return (
+                      <div className="flex items-center gap-4">
+                        <div className="relative w-24 h-24 shrink-0 flex items-center justify-center">
+                          <svg
+                            className="w-24 h-24 -rotate-90"
+                            viewBox="0 0 104 104"
+                            aria-hidden="true"
+                          >
+                            <circle
+                              cx="52"
+                              cy="52"
+                              r={radius}
+                              fill="none"
+                              stroke="#E2E8F0"
+                              strokeWidth="8"
+                            />
+                            <motion.circle
+                              cx="52"
+                              cy="52"
+                              r={radius}
+                              fill="none"
+                              stroke="url(#processRingGrad)"
+                              strokeWidth="8"
+                              strokeLinecap="round"
+                              strokeDasharray={circumference}
+                              initial={false}
+                              animate={{ strokeDashoffset }}
+                              transition={
+                                prefersReducedMotion
+                                  ? { duration: 0 }
+                                  : { duration: 0.55, ease: [0.22, 1, 0.36, 1] }
+                              }
+                            />
+                            <defs>
+                              <linearGradient
+                                id="processRingGrad"
+                                x1="0%"
+                                y1="0%"
+                                x2="100%"
+                                y2="100%"
+                              >
+                                <stop offset="0%" stopColor="#0F1E4A" />
+                                <stop offset="50%" stopColor="#1E3A8A" />
+                                <stop offset="100%" stopColor="#2563EB" />
+                              </linearGradient>
+                            </defs>
+                          </svg>
+                          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-2">
+                            <span className="text-sm font-mono font-extrabold text-[#1E3A8A] leading-none">
+                              {activeProcessStep + 1}/{processStages.length}
+                            </span>
+                            <span className="text-[10px] font-bold text-[#2563EB] mt-1 truncate max-w-[68px]">
+                              {processStages[activeProcessStep].title}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="min-w-0">
+                          <div className="text-[11px] font-mono font-bold text-[#2563EB]">
+                            {processStages[activeProcessStep].step} / 07
+                          </div>
+                          <div className="text-base font-extrabold text-[#1E3A8A] truncate">
+                            {processStages[activeProcessStep].title}
+                          </div>
+                          <div className="text-[11px] font-mono text-slate-500 mt-0.5">
+                            IAMTECHNI_STANDARD
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </motion.div>
+              </div>
+
+              {/* Bottom Row: Detail Card (d) with Stage Visual & Footer Action */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 18 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+                whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+                className="bg-white rounded-[26px] p-5 sm:p-7 border border-slate-200/80 shadow-[0_14px_36px_-12px_rgba(15,30,74,0.08)] flex flex-col justify-between"
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeProcessStep}
+                    initial={
+                      prefersReducedMotion
+                        ? { opacity: 1 }
+                        : { opacity: 0, y: 10, scale: 0.99 }
+                    }
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={
+                      prefersReducedMotion
+                        ? { opacity: 0 }
+                        : { opacity: 0, y: -8, scale: 0.99 }
+                    }
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <ProcessStageVisual stageIndex={activeProcessStep} />
+                  </motion.div>
+                </AnimatePresence>
+
+                <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="text-xs text-slate-500">
                     Continuous CI/CD quality gates &amp; peer reviews at every milestone.
                   </div>
                   <button
-                    onClick={() => onOpenProjectModal(`Process Discussion: Stage ${processStages[activeProcessStep].title}`)}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1266E8] hover:underline cursor-pointer"
+                    type="button"
+                    onClick={() =>
+                      onOpenProjectModal(
+                        `Process Discussion: Stage ${processStages[activeProcessStep].title}`
+                      )
+                    }
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start sm:self-auto"
                   >
-                    Discuss Your Workflow <ArrowRight className="w-3.5 h-3.5" />
+                    <span>Discuss Your Workflow</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-white" />
                   </button>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
