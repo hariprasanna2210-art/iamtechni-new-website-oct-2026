@@ -19,7 +19,6 @@ import {
   Play,
 } from 'lucide-react';
 import { PageRoute } from '../../types';
-import { HeroShardsBackground } from '../HeroShardsBackground';
 
 interface SolutionPillar {
   id: string;
@@ -692,14 +691,6 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="relative rounded-[28px] bg-gradient-to-br from-[#0A1A2F] via-[#0B2233] to-[#040B14] border border-slate-800/90 shadow-[0_24px_60px_-15px_rgba(4,11,20,0.55)] p-6 sm:p-10 lg:p-12 overflow-hidden"
         >
-          {/* Faint shard/particle texture reused from homepage hero background */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 opacity-35 pointer-events-none overflow-hidden rounded-[28px]"
-          >
-            <HeroShardsBackground />
-          </div>
-
           {/* Soft radial cyan glow */}
           <div
             aria-hidden="true"
