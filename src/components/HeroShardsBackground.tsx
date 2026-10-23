@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface Vec3 {
   x: number;
@@ -75,53 +75,6 @@ interface BokehOrb {
   baseAlpha: number;
 }
 
-interface NeuralNode {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  radius: number;
-  r: number;
-  g: number;
-  b: number;
-  pulsePhase: number;
-}
-
-interface NeuralPulse {
-  fromIdx: number;
-  toIdx: number;
-  progress: number;
-  speed: number;
-}
-
-interface AuroraSpec {
-  yRatio: number;
-  amplitude: number;
-  thickness: number;
-  freq1: number;
-  freq2: number;
-  speed1: number;
-  speed2: number;
-  phase: number;
-  r: number;
-  g: number;
-  b: number;
-  alpha: number;
-}
-
-interface WaveMote {
-  x: number;
-  y: number;
-  vy: number;
-  vx: number;
-  radius: number;
-  alpha: number;
-  r: number;
-  g: number;
-  b: number;
-}
-
-// Background 1: Glass Shards palettes
 const SHARD_PALETTES: ShardPalette[] = [
   {
     fillR: 224, fillG: 242, fillB: 254,
@@ -153,65 +106,9 @@ const BOKEH_COLORS = [
   { r: 224, g: 242, b: 254 },
 ];
 
-// Background 4: Aurora Flow bands
-const AURORA_BANDS: AuroraSpec[] = [
-  {
-    yRatio: 0.32,
-    amplitude: 58,
-    thickness: 190,
-    freq1: 0.0024,
-    freq2: 0.0052,
-    speed1: 0.0014,
-    speed2: -0.0021,
-    phase: 0.4,
-    r: 34, g: 211, b: 238, // #22D3EE Cyan
-    alpha: 0.24,
-  },
-  {
-    yRatio: 0.52,
-    amplitude: 68,
-    thickness: 210,
-    freq1: 0.002,
-    freq2: 0.0044,
-    speed1: -0.0012,
-    speed2: 0.0018,
-    phase: 2.1,
-    r: 20, g: 184, b: 166, // #14B8A6 Emerald-Teal
-    alpha: 0.22,
-  },
-  {
-    yRatio: 0.68,
-    amplitude: 50,
-    thickness: 175,
-    freq1: 0.0028,
-    freq2: 0.006,
-    speed1: 0.0016,
-    speed2: 0.0011,
-    phase: 4.0,
-    r: 37, g: 99, b: 235, // #2563EB Blue
-    alpha: 0.24,
-  },
-  {
-    yRatio: 0.42,
-    amplitude: 45,
-    thickness: 160,
-    freq1: 0.0031,
-    freq2: 0.0048,
-    speed1: -0.0015,
-    speed2: -0.0013,
-    phase: 5.2,
-    r: 99, g: 102, b: 241, // #6366F1 Indigo
-    alpha: 0.16,
-  },
-];
-
 const Z_NEAR = 55;
 const Z_FAR = 1150;
 const FOV = 500;
-
-const TOTAL_BACKGROUNDS = 5;
-const SCENE_DURATION_MS = 6500;
-const TRANSITION_DURATION_MS = 1000;
 
 function randomRange(min: number, max: number): number {
   return min + Math.random() * (max - min);
@@ -252,30 +149,9 @@ function rotateVertex(v: Vec3, rx: number, ry: number, rz: number): Vec3 {
   return { x: x3, y: y3, z: z2 };
 }
 
-function drawRoundedRectPath(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  r: number
-) {
-  const radius = Math.min(r, w * 0.5, h * 0.5);
-  ctx.beginPath();
-  ctx.moveTo(x + radius, y);
-  ctx.lineTo(x + w - radius, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
-  ctx.lineTo(x + w, y + h - radius);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
-  ctx.lineTo(x + radius, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
-  ctx.lineTo(x, y + radius);
-  ctx.quadraticCurveTo(x, y, x + radius, y);
-  ctx.closePath();
-}
-
 export const HeroShardsBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -289,19 +165,12 @@ export const HeroShardsBackground: React.FC = () => {
     let height = 0;
     let dpr = 1;
 
-    // Scene 1 state (Glass Shards)
     let shards: Shard[] = [];
     let microParticles: MicroParticle[] = [];
     let bokehOrbs: BokehOrb[] = [];
 
-    // Scene 3 state (Neural Network)
-    let neuralNodes: NeuralNode[] = [];
-    let neuralPulses: NeuralPulse[] = [];
-
-    // Scene 4 & 5 state (Wave Motes)
-    let waveMotes: WaveMote[] = [];
-
     let rafId: number | null = null;
+    let initRafId: number | null = null;
     let isHeroVisible = true;
     let isTabVisible = !document.hidden;
     let resizeTimer: number | null = null;
@@ -310,12 +179,6 @@ export const HeroShardsBackground: React.FC = () => {
     let targetParallaxY = 0;
     let currentParallaxX = 0;
     let currentParallaxY = 0;
-
-    // Carousel state (0..4)
-    let activeScene = 0;
-    let prevScene: number | null = null;
-    let sceneStartTime = performance.now();
-    let transitionStartTime = 0;
 
     const spawnShard = (randomZ: boolean): Shard => {
       const spreadX = Math.max(width, 1000) * 1.25;
@@ -349,18 +212,18 @@ export const HeroShardsBackground: React.FC = () => {
         x: randomRange(-spreadX * 0.5, spreadX * 0.5),
         y: randomRange(-spreadY * 0.5, spreadY * 0.5),
         z: randomZ ? randomRange(Z_NEAR + 20, Z_FAR) : randomRange(Z_FAR * 0.85, Z_FAR),
-        vx: randomRange(-1.5, 2.1),
-        vy: randomRange(-1.2, 1.2),
-        vz: -randomRange(3.6, 7.8),
+        vx: randomRange(-0.85, 1.15),
+        vy: randomRange(-0.65, 0.65),
+        vz: -randomRange(2.1, 4.5),
         wavePhase: randomRange(0, Math.PI * 2),
-        waveSpeed: randomRange(0.0028, 0.006),
-        waveAmp: randomRange(0.45, 1.35),
+        waveSpeed: randomRange(0.0018, 0.0038),
+        waveAmp: randomRange(0.3, 0.85),
         rotX: randomRange(0, Math.PI * 2),
         rotY: randomRange(0, Math.PI * 2),
         rotZ: randomRange(0, Math.PI * 2),
-        vRotX: rotDirX * randomRange(0.028, 0.072),
-        vRotY: rotDirY * randomRange(0.028, 0.072),
-        vRotZ: rotDirZ * randomRange(0.018, 0.048),
+        vRotX: rotDirX * randomRange(0.015, 0.038),
+        vRotY: rotDirY * randomRange(0.015, 0.038),
+        vRotZ: rotDirZ * randomRange(0.01, 0.026),
         verts,
         clusterVert,
         palette,
@@ -388,11 +251,11 @@ export const HeroShardsBackground: React.FC = () => {
         x: randomRange(-spreadX * 0.5, spreadX * 0.5),
         y: randomRange(-spreadY * 0.5, spreadY * 0.5),
         z: randomZ ? randomRange(Z_NEAR, Z_FAR) : randomRange(Z_FAR * 0.88, Z_FAR),
-        vx: randomRange(-1.3, 1.7),
-        vy: randomRange(-1.0, 1.0),
-        vz: -randomRange(3.2, 6.8),
+        vx: randomRange(-0.75, 0.95),
+        vy: randomRange(-0.55, 0.55),
+        vz: -randomRange(1.8, 3.8),
         rot: randomRange(0, Math.PI * 2),
-        vRot: (Math.random() < 0.5 ? 1 : -1) * randomRange(0.045, 0.11),
+        vRot: (Math.random() < 0.5 ? 1 : -1) * randomRange(0.025, 0.06),
         size: isMiniTriangle ? randomRange(3.2, 8.2) : randomRange(1.0, 2.6),
         isMiniTriangle,
         r: c.r,
@@ -411,9 +274,9 @@ export const HeroShardsBackground: React.FC = () => {
         x: randomRange(-spreadX * 0.5, spreadX * 0.5),
         y: randomRange(-spreadY * 0.5, spreadY * 0.5),
         z: randomZ ? randomRange(Z_NEAR + 70, Z_FAR) : randomRange(Z_FAR * 0.88, Z_FAR),
-        vx: randomRange(-0.85, 1.25),
-        vy: randomRange(-0.7, 0.7),
-        vz: -randomRange(2.0, 4.6),
+        vx: randomRange(-0.5, 0.75),
+        vy: randomRange(-0.4, 0.4),
+        vz: -randomRange(1.2, 2.6),
         radius: randomRange(6, 24),
         r: c.r,
         g: c.g,
@@ -422,87 +285,48 @@ export const HeroShardsBackground: React.FC = () => {
       };
     };
 
-    const initNeuralNetwork = () => {
-      const nodeCount = width < 768 ? 44 : 72;
-      const colors = [
-        { r: 34, g: 211, b: 238 },  // #22D3EE Cyan
-        { r: 56, g: 189, b: 248 },  // #38BDF8 Sky Blue
-        { r: 37, g: 99, b: 235 },   // #2563EB Royal Blue
-        { r: 45, g: 212, b: 191 },  // #2DD4BF Teal
-      ];
-      neuralNodes = Array.from({ length: nodeCount }, () => {
-        const c = colors[Math.floor(Math.random() * colors.length)];
-        const angle = randomRange(0, Math.PI * 2);
-        const speed = randomRange(0.28, 0.72);
-        return {
-          x: randomRange(0, width),
-          y: randomRange(0, height),
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          radius: randomRange(1.8, 3.6),
-          r: c.r,
-          g: c.g,
-          b: c.b,
-          pulsePhase: randomRange(0, Math.PI * 2),
-        };
-      });
-      neuralPulses = [];
-    };
-
-    const initWaveMotes = () => {
-      const count = width < 768 ? 38 : 68;
-      waveMotes = Array.from({ length: count }, () => {
-        const c = BOKEH_COLORS[Math.floor(Math.random() * BOKEH_COLORS.length)];
-        return {
-          x: randomRange(0, width),
-          y: randomRange(0, height),
-          vx: randomRange(-0.35, 0.35),
-          vy: -randomRange(0.4, 1.15),
-          radius: randomRange(1.2, 3.2),
-          alpha: randomRange(0.3, 0.8),
-          r: c.r,
-          g: c.g,
-          b: c.b,
-        };
-      });
-    };
-
     const initScene = () => {
       const rect = canvas.parentElement?.getBoundingClientRect();
       width = rect ? rect.width : window.innerWidth;
       height = rect ? rect.height : window.innerHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
       canvas.width = Math.max(1, Math.floor(width * dpr));
       canvas.height = Math.max(1, Math.floor(height * dpr));
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
-      const targetShardCount = width < 768 ? 48 : 98;
-      const targetMicroCount = width < 768 ? 95 : 185;
-      const targetBokehCount = width < 768 ? 22 : 44;
+      // ~40% reduction from previous counts (48/98 -> 29/59, 95/185 -> 57/111, 22/44 -> 13/26)
+      const targetShardCount = width < 768 ? 29 : 59;
+      const targetMicroCount = width < 768 ? 57 : 111;
+      const targetBokehCount = width < 768 ? 13 : 26;
 
       shards = Array.from({ length: targetShardCount }, () => spawnShard(true));
       microParticles = Array.from({ length: targetMicroCount }, () => spawnMicroParticle(true));
       bokehOrbs = Array.from({ length: targetBokehCount }, () => spawnBokehOrb(true));
-
-      initNeuralNetwork();
-      initWaveMotes();
     };
 
-    // =========================================================================
-    // SCENE 1: Glass Shards (Existing background, unchanged)
-    // =========================================================================
-    const drawScene1GlassShards = (now: number, stepPhysics: boolean, sceneAlpha: number) => {
+    const drawFrame = (now: number, stepPhysics: boolean) => {
       ctx.save();
-      ctx.globalAlpha = sceneAlpha;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      currentParallaxX += (targetParallaxX - currentParallaxX) * 0.08;
+      currentParallaxY += (targetParallaxY - currentParallaxY) * 0.08;
+
+      // Dark navy base (#0A1A2F -> #0B2233)
+      const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+      bgGrad.addColorStop(0, '#0A1A2F');
+      bgGrad.addColorStop(0.55, '#091E32');
+      bgGrad.addColorStop(1, '#0B2233');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
 
       const maxDim = Math.max(width, height);
-      const tCloud = now * 0.0006;
+      const tCloud = now * 0.00045;
 
       // Right-center emerald/cyan nebula cloud
-      const cloud1X = width * 0.66 + Math.cos(tCloud) * 35 + currentParallaxX * 0.4;
-      const cloud1Y = height * 0.56 + Math.sin(tCloud * 0.8) * 25 + currentParallaxY * 0.4;
+      const cloud1X = width * 0.66 + Math.cos(tCloud) * 30 + currentParallaxX * 0.4;
+      const cloud1Y = height * 0.56 + Math.sin(tCloud * 0.8) * 20 + currentParallaxY * 0.4;
       const cloud1 = ctx.createRadialGradient(cloud1X, cloud1Y, 0, cloud1X, cloud1Y, maxDim * 0.44);
       cloud1.addColorStop(0, 'rgba(16, 185, 145, 0.25)');
       cloud1.addColorStop(0.42, 'rgba(6, 182, 212, 0.15)');
@@ -512,8 +336,8 @@ export const HeroShardsBackground: React.FC = () => {
       ctx.fillRect(0, 0, width, height);
 
       // Left-bottom cyan/teal nebula cloud
-      const cloud2X = width * 0.18 + Math.sin(tCloud * 1.1) * 30 + currentParallaxX * 0.4;
-      const cloud2Y = height * 0.68 + Math.cos(tCloud * 0.9) * 25 + currentParallaxY * 0.4;
+      const cloud2X = width * 0.18 + Math.sin(tCloud * 1.1) * 25 + currentParallaxX * 0.4;
+      const cloud2Y = height * 0.68 + Math.cos(tCloud * 0.9) * 20 + currentParallaxY * 0.4;
       const cloud2 = ctx.createRadialGradient(cloud2X, cloud2Y, 0, cloud2X, cloud2Y, maxDim * 0.38);
       cloud2.addColorStop(0, 'rgba(6, 182, 212, 0.22)');
       cloud2.addColorStop(0.45, 'rgba(20, 184, 166, 0.12)');
@@ -576,7 +400,7 @@ export const HeroShardsBackground: React.FC = () => {
         ctx.fill();
       }
 
-      // Fast-Streaming Micro-Triangles & Sparkling Star Specks
+      // Micro-Triangles & Sparkling Star Specks
       for (let i = 0; i < microParticles.length; i++) {
         const p = microParticles[i];
         if (stepPhysics) {
@@ -629,13 +453,13 @@ export const HeroShardsBackground: React.FC = () => {
         }
       }
 
-      // Fast-Tumbling 3D Cyan/White/Aqua Triangular Shards & Connected Wireframe Clusters
+      // 3D Floating Glass Shards & Connected Wireframe Clusters
       for (let i = 0; i < shards.length; i++) {
         const s = shards[i];
         if (stepPhysics) {
           const waveOffset = Math.sin(now * s.waveSpeed + s.wavePhase) * s.waveAmp;
-          s.x += s.vx + waveOffset * 0.38;
-          s.y += s.vy + Math.cos(now * s.waveSpeed + s.wavePhase) * s.waveAmp * 0.38;
+          s.x += s.vx + waveOffset * 0.28;
+          s.y += s.vy + Math.cos(now * s.waveSpeed + s.wavePhase) * s.waveAmp * 0.28;
           s.z += s.vz;
           s.rotX += s.vRotX;
           s.rotY += s.vRotY;
@@ -771,422 +595,6 @@ export const HeroShardsBackground: React.FC = () => {
       ctx.restore();
     };
 
-    // =========================================================================
-    // SCENE 2: Squircle Shift (~40px squircles, 8px gap, diagonal wave, max 0.35 alpha)
-    // =========================================================================
-    const drawScene2SquircleShift = (now: number, sceneAlpha: number) => {
-      ctx.save();
-      ctx.globalAlpha = sceneAlpha;
-
-      const squircleSize = 40;
-      const gap = 8;
-      const cell = squircleSize + gap;
-      const cols = Math.ceil(width / cell) + 2;
-      const rows = Math.ceil(height / cell) + 2;
-      const t = now * 0.0022;
-
-      for (let r = -1; r < rows; r++) {
-        for (let c = -1; c < cols; c++) {
-          const centerX = c * cell + squircleSize * 0.5 + currentParallaxX * 0.35;
-          const centerY = r * cell + squircleSize * 0.5 + currentParallaxY * 0.35;
-
-          // Diagonal wave passing across the grid + secondary harmonic
-          const diagPhase = (c * 0.26 + r * 0.26) - t;
-          const secondaryPhase = (c * 0.14 - r * 0.19) + t * 0.65;
-          const rawWave = Math.sin(diagPhase) * 0.72 + Math.cos(secondaryPhase) * 0.28;
-          const wave = (rawWave + 1) * 0.5; // 0..1
-          const highlight = Math.pow(wave, 2.2);
-
-          // Scale 0.85 -> 1.0 and slight rotation
-          const scale = 0.85 + wave * 0.15;
-          const rot = Math.sin(diagPhase) * 0.11;
-
-          // Color shifts from dark navy (#0F2744) to teal/cyan (#22D3EE)
-          const red = Math.round(15 + (34 - 15) * highlight);
-          const green = Math.round(39 + (211 - 39) * highlight);
-          const blue = Math.round(68 + (238 - 68) * highlight);
-
-          // Low opacity (max 0.35) so it stays subtle and readable
-          const fillAlpha = 0.06 + highlight * 0.26;
-          const strokeAlpha = 0.1 + highlight * 0.25;
-
-          ctx.save();
-          ctx.translate(centerX, centerY);
-          ctx.rotate(rot);
-          ctx.scale(scale, scale);
-
-          drawRoundedRectPath(
-            ctx,
-            -squircleSize * 0.5,
-            -squircleSize * 0.5,
-            squircleSize,
-            squircleSize,
-            11
-          );
-
-          ctx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${fillAlpha.toFixed(3)})`;
-          ctx.fill();
-
-          ctx.lineWidth = 1;
-          ctx.strokeStyle = `rgba(${red}, ${green}, ${blue}, ${strokeAlpha.toFixed(3)})`;
-          ctx.stroke();
-
-          ctx.restore();
-        }
-      }
-
-      ctx.restore();
-    };
-
-    // =========================================================================
-    // SCENE 3: Neural Network (~70 glowing nodes, distance-faded lines, light pulses)
-    // =========================================================================
-    const drawScene3NeuralNetwork = (now: number, stepPhysics: boolean, sceneAlpha: number) => {
-      ctx.save();
-      ctx.globalAlpha = sceneAlpha;
-
-      const maxDist = 175;
-      const maxDistSq = maxDist * maxDist;
-
-      // Update nodes
-      if (stepPhysics) {
-        for (let i = 0; i < neuralNodes.length; i++) {
-          const n = neuralNodes[i];
-          n.x += n.vx;
-          n.y += n.vy;
-
-          if (n.x < -30) n.x = width + 30;
-          else if (n.x > width + 30) n.x = -30;
-          if (n.y < -30) n.y = height + 30;
-          else if (n.y > height + 30) n.y = -30;
-        }
-      }
-
-      // Draw connecting lines and collect valid edges for light pulses
-      const validPairs: [number, number][] = [];
-      ctx.lineWidth = 1.0;
-
-      for (let i = 0; i < neuralNodes.length; i++) {
-        const a = neuralNodes[i];
-        const ax = a.x + currentParallaxX * 0.5;
-        const ay = a.y + currentParallaxY * 0.5;
-
-        for (let j = i + 1; j < neuralNodes.length; j++) {
-          const b = neuralNodes[j];
-          const bx = b.x + currentParallaxX * 0.5;
-          const by = b.y + currentParallaxY * 0.5;
-
-          const dx = ax - bx;
-          const dy = ay - by;
-          const distSq = dx * dx + dy * dy;
-
-          if (distSq < maxDistSq) {
-            const dist = Math.sqrt(distSq);
-            const fade = Math.pow(1 - dist / maxDist, 1.45);
-            const lineAlpha = fade * 0.42;
-
-            ctx.beginPath();
-            ctx.moveTo(ax, ay);
-            ctx.lineTo(bx, by);
-            ctx.strokeStyle = `rgba(34, 211, 238, ${lineAlpha.toFixed(3)})`;
-            ctx.stroke();
-
-            if (dist < maxDist * 0.85) {
-              validPairs.push([i, j]);
-            }
-          }
-        }
-      }
-
-      // Spawn & advance synaptic light pulses along connected lines
-      if (stepPhysics && validPairs.length > 0 && neuralPulses.length < 18 && Math.random() < 0.25) {
-        const pair = validPairs[Math.floor(Math.random() * validPairs.length)];
-        const flip = Math.random() < 0.5;
-        neuralPulses.push({
-          fromIdx: flip ? pair[0] : pair[1],
-          toIdx: flip ? pair[1] : pair[0],
-          progress: 0,
-          speed: randomRange(0.016, 0.034),
-        });
-      }
-
-      for (let i = neuralPulses.length - 1; i >= 0; i--) {
-        const pulse = neuralPulses[i];
-        if (stepPhysics) {
-          pulse.progress += pulse.speed;
-          if (pulse.progress >= 1) {
-            neuralPulses.splice(i, 1);
-            continue;
-          }
-        }
-
-        const fromNode = neuralNodes[pulse.fromIdx];
-        const toNode = neuralNodes[pulse.toIdx];
-        if (!fromNode || !toNode) {
-          neuralPulses.splice(i, 1);
-          continue;
-        }
-
-        const ax = fromNode.x + currentParallaxX * 0.5;
-        const ay = fromNode.y + currentParallaxY * 0.5;
-        const bx = toNode.x + currentParallaxX * 0.5;
-        const by = toNode.y + currentParallaxY * 0.5;
-
-        const distSq = (ax - bx) * (ax - bx) + (ay - by) * (ay - by);
-        if (distSq > maxDistSq * 1.2) {
-          neuralPulses.splice(i, 1);
-          continue;
-        }
-
-        const px = ax + (bx - ax) * pulse.progress;
-        const py = ay + (by - ay) * pulse.progress;
-        const pulseAlpha = Math.sin(pulse.progress * Math.PI) * 0.95;
-
-        const glow = ctx.createRadialGradient(px, py, 0, px, py, 9);
-        glow.addColorStop(0, `rgba(224, 242, 254, ${pulseAlpha.toFixed(3)})`);
-        glow.addColorStop(0.45, `rgba(34, 211, 238, ${(pulseAlpha * 0.65).toFixed(3)})`);
-        glow.addColorStop(1, 'rgba(34, 211, 238, 0)');
-        ctx.beginPath();
-        ctx.arc(px, py, 9, 0, Math.PI * 2);
-        ctx.fillStyle = glow;
-        ctx.fill();
-      }
-
-      // Draw glowing nodes
-      for (let i = 0; i < neuralNodes.length; i++) {
-        const n = neuralNodes[i];
-        const nx = n.x + currentParallaxX * 0.5;
-        const ny = n.y + currentParallaxY * 0.5;
-        const breathe = 0.75 + 0.25 * Math.sin(now * 0.003 + n.pulsePhase);
-
-        const halo = ctx.createRadialGradient(nx, ny, 0, nx, ny, n.radius * 4.2);
-        halo.addColorStop(0, `rgba(${n.r}, ${n.g}, ${n.b}, ${(0.55 * breathe).toFixed(3)})`);
-        halo.addColorStop(1, `rgba(${n.r}, ${n.g}, ${n.b}, 0)`);
-        ctx.beginPath();
-        ctx.arc(nx, ny, n.radius * 4.2, 0, Math.PI * 2);
-        ctx.fillStyle = halo;
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(nx, ny, n.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(224, 242, 254, ${(0.88 * breathe).toFixed(3)})`;
-        ctx.fill();
-      }
-
-      ctx.restore();
-    };
-
-    // =========================================================================
-    // SCENE 4: Aurora Flow (3-4 large soft flowing cyan/teal/blue/indigo aurora ribbons)
-    // =========================================================================
-    const drawScene4AuroraFlow = (now: number, stepPhysics: boolean, sceneAlpha: number) => {
-      ctx.save();
-      ctx.globalAlpha = sceneAlpha;
-
-      const stepX = 28;
-      for (let bIdx = 0; bIdx < AURORA_BANDS.length; bIdx++) {
-        const band = AURORA_BANDS[bIdx];
-        const baseY = height * band.yRatio + currentParallaxY * (0.3 + bIdx * 0.12);
-
-        ctx.beginPath();
-        const topPoints: { x: number; y: number }[] = [];
-        for (let x = -stepX; x <= width + stepX; x += stepX) {
-          const yOffset =
-            Math.sin(x * band.freq1 + now * band.speed1 + band.phase) * band.amplitude +
-            Math.cos(x * band.freq2 + now * band.speed2) * (band.amplitude * 0.55);
-          const py = baseY + yOffset;
-          topPoints.push({ x, y: py });
-          if (x === -stepX) ctx.moveTo(x, py - band.thickness * 0.5);
-          else ctx.lineTo(x, py - band.thickness * 0.5);
-        }
-
-        for (let i = topPoints.length - 1; i >= 0; i--) {
-          const pt = topPoints[i];
-          ctx.lineTo(pt.x, pt.y + band.thickness * 0.5);
-        }
-        ctx.closePath();
-
-        const grad = ctx.createLinearGradient(
-          0,
-          baseY - band.thickness * 0.7,
-          0,
-          baseY + band.thickness * 0.7
-        );
-        grad.addColorStop(0, `rgba(${band.r}, ${band.g}, ${band.b}, 0)`);
-        grad.addColorStop(0.5, `rgba(${band.r}, ${band.g}, ${band.b}, ${band.alpha.toFixed(3)})`);
-        grad.addColorStop(1, `rgba(${band.r}, ${band.g}, ${band.b}, 0)`);
-
-        ctx.fillStyle = grad;
-        ctx.fill();
-      }
-
-      // Subtle rising luminous starlight specks inside the aurora
-      for (let i = 0; i < waveMotes.length; i++) {
-        const m = waveMotes[i];
-        if (stepPhysics) {
-          m.x += m.vx;
-          m.y += m.vy * 0.6;
-          if (m.y < -10) {
-            m.y = height + 10;
-            m.x = randomRange(0, width);
-          }
-        }
-        const mx = m.x + currentParallaxX * 0.4;
-        const my = m.y + currentParallaxY * 0.4;
-        ctx.beginPath();
-        ctx.arc(mx, my, m.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${m.r}, ${m.g}, ${m.b}, ${(m.alpha * 0.55).toFixed(3)})`;
-        ctx.fill();
-      }
-
-      ctx.restore();
-    };
-
-    // =========================================================================
-    // SCENE 5: Quantum Cyber Wave (3D undulating particle wave & luminous streams)
-    // =========================================================================
-    const drawScene5QuantumWave = (now: number, stepPhysics: boolean, sceneAlpha: number) => {
-      ctx.save();
-      ctx.globalAlpha = sceneAlpha;
-
-      const rows = 14;
-      const cols = width < 768 ? 28 : 48;
-      const t = now * 0.002;
-
-      for (let r = 0; r < rows; r++) {
-        const rowProgress = r / (rows - 1); // 0 (far) -> 1 (near)
-        const baseY = height * (0.22 + rowProgress * 0.68) + currentParallaxY * (0.2 + rowProgress * 0.6);
-        const amp = 14 + rowProgress * 34;
-        const lineAlpha = 0.08 + rowProgress * 0.26;
-
-        ctx.beginPath();
-        for (let c = 0; c <= cols; c++) {
-          const colProgress = c / cols;
-          const px = colProgress * width + currentParallaxX * (0.2 + rowProgress * 0.5);
-          const waveY =
-            Math.sin(c * 0.24 + r * 0.45 - t) * amp +
-            Math.cos(c * 0.15 - r * 0.3 + t * 0.7) * (amp * 0.45);
-          const py = baseY + waveY;
-
-          if (c === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-
-        ctx.lineWidth = 0.8 + rowProgress * 0.9;
-        ctx.strokeStyle =
-          r % 2 === 0
-            ? `rgba(34, 211, 238, ${lineAlpha.toFixed(3)})`
-            : `rgba(45, 212, 191, ${(lineAlpha * 0.85).toFixed(3)})`;
-        ctx.stroke();
-
-        // Glowing wave crest nodes along the ribbons
-        for (let c = 0; c <= cols; c += 2) {
-          const colProgress = c / cols;
-          const px = colProgress * width + currentParallaxX * (0.2 + rowProgress * 0.5);
-          const waveY =
-            Math.sin(c * 0.24 + r * 0.45 - t) * amp +
-            Math.cos(c * 0.15 - r * 0.3 + t * 0.7) * (amp * 0.45);
-          const py = baseY + waveY;
-
-          ctx.beginPath();
-          ctx.arc(px, py, 1.1 + rowProgress * 1.4, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(165, 243, 252, ${(lineAlpha * 1.45).toFixed(3)})`;
-          ctx.fill();
-        }
-      }
-
-      // Rising light motes
-      for (let i = 0; i < waveMotes.length; i++) {
-        const m = waveMotes[i];
-        if (stepPhysics) {
-          m.x += m.vx;
-          m.y += m.vy;
-          if (m.y < -10) {
-            m.y = height + 10;
-            m.x = randomRange(0, width);
-          }
-        }
-        const mx = m.x + currentParallaxX * 0.45;
-        const my = m.y + currentParallaxY * 0.45;
-        ctx.beginPath();
-        ctx.arc(mx, my, m.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${m.r}, ${m.g}, ${m.b}, ${(m.alpha * 0.65).toFixed(3)})`;
-        ctx.fill();
-      }
-
-      ctx.restore();
-    };
-
-    const renderSceneByIndex = (
-      sceneIdx: number,
-      now: number,
-      stepPhysics: boolean,
-      alpha: number
-    ) => {
-      switch (sceneIdx) {
-        case 0:
-          drawScene1GlassShards(now, stepPhysics, alpha);
-          break;
-        case 1:
-          drawScene2SquircleShift(now, alpha);
-          break;
-        case 2:
-          drawScene3NeuralNetwork(now, stepPhysics, alpha);
-          break;
-        case 3:
-          drawScene4AuroraFlow(now, stepPhysics, alpha);
-          break;
-        case 4:
-        default:
-          drawScene5QuantumWave(now, stepPhysics, alpha);
-          break;
-      }
-    };
-
-    const drawFrame = (now: number, stepPhysics: boolean) => {
-      ctx.save();
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      currentParallaxX += (targetParallaxX - currentParallaxX) * 0.1;
-      currentParallaxY += (targetParallaxY - currentParallaxY) * 0.1;
-
-      // Shared dark navy base (#0A1A2F -> #0B2233) across all 5 backgrounds so text stays readable
-      const bgGrad = ctx.createLinearGradient(0, 0, width, height);
-      bgGrad.addColorStop(0, '#0A1A2F');
-      bgGrad.addColorStop(0.55, '#091E32');
-      bgGrad.addColorStop(1, '#0B2233');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, width, height);
-
-      // Automatic 5-background carousel rotation
-      if (!prefersReducedMotion && stepPhysics) {
-        if (prevScene === null && now - sceneStartTime >= SCENE_DURATION_MS) {
-          prevScene = activeScene;
-          activeScene = (activeScene + 1) % TOTAL_BACKGROUNDS;
-          transitionStartTime = now;
-          sceneStartTime = now;
-        }
-      }
-
-      if (prevScene !== null) {
-        const elapsed = now - transitionStartTime;
-        const t = Math.min(1, Math.max(0, elapsed / TRANSITION_DURATION_MS));
-        // Smooth cosine crossfade
-        const easeT = 0.5 - 0.5 * Math.cos(t * Math.PI);
-
-        renderSceneByIndex(prevScene, now, stepPhysics, 1 - easeT);
-        renderSceneByIndex(activeScene, now, stepPhysics, easeT);
-
-        if (t >= 1) {
-          prevScene = null;
-        }
-      } else {
-        renderSceneByIndex(activeScene, now, stepPhysics, 1);
-      }
-
-      ctx.restore();
-    };
-
     const startLoop = () => {
       if (prefersReducedMotion || rafId !== null || !isHeroVisible || !isTabVisible) return;
       const tick = (now: number) => {
@@ -1207,20 +615,24 @@ export const HeroShardsBackground: React.FC = () => {
       }
     };
 
-    initScene();
+    // Defer canvas setup by one animation frame so hero foreground content renders immediately,
+    // then draw initial frame and fade the background in without layout shift or flashing.
+    initRafId = window.requestAnimationFrame((now) => {
+      initScene();
+      drawFrame(now, false);
+      setIsReady(true);
 
-    if (prefersReducedMotion) {
-      drawFrame(performance.now(), false);
-    } else {
-      startLoop();
-    }
+      if (!prefersReducedMotion) {
+        startLoop();
+      }
+    });
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!width || !height) return;
       const normX = (e.clientX / window.innerWidth - 0.5) * 2;
       const normY = (e.clientY / window.innerHeight - 0.5) * 2;
-      targetParallaxX = -normX * 22;
-      targetParallaxY = -normY * 22;
+      targetParallaxX = -normX * 16;
+      targetParallaxY = -normY * 16;
     };
 
     const handleResize = () => {
@@ -1238,7 +650,6 @@ export const HeroShardsBackground: React.FC = () => {
     const handleVisibilityChange = () => {
       isTabVisible = !document.hidden;
       if (isTabVisible && isHeroVisible) {
-        sceneStartTime = performance.now();
         startLoop();
       } else {
         stopLoop();
@@ -1251,7 +662,6 @@ export const HeroShardsBackground: React.FC = () => {
         if (!entry) return;
         isHeroVisible = entry.isIntersecting;
         if (isHeroVisible && isTabVisible) {
-          sceneStartTime = performance.now();
           startLoop();
         } else {
           stopLoop();
@@ -1266,6 +676,9 @@ export const HeroShardsBackground: React.FC = () => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
+      if (initRafId !== null) {
+        window.cancelAnimationFrame(initRafId);
+      }
       stopLoop();
       if (resizeTimer !== null) {
         window.clearTimeout(resizeTimer);
@@ -1281,7 +694,9 @@ export const HeroShardsBackground: React.FC = () => {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full"
+      className={`pointer-events-none absolute inset-0 z-0 h-full w-full transition-opacity duration-700 ease-out ${
+        isReady ? 'opacity-100' : 'opacity-0'
+      }`}
     />
   );
 };

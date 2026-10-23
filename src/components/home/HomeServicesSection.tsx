@@ -346,8 +346,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
       id={sectionId}
       aria-labelledby={`${sectionId}-section-title`}
       onKeyDown={handleKeyDown}
-      style={{ backgroundColor: '#FFFFFF' }}
-      className="relative w-full py-14 sm:py-18 lg:py-22 bg-white border-b border-[#DBEAFE]/80 overflow-hidden scroll-mt-16"
+      className="relative w-full py-14 sm:py-18 lg:py-22 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-[#DBEAFE]/80 overflow-hidden scroll-mt-16"
     >
       {stageAnchorId && <div id={stageAnchorId} className="sr-only" aria-hidden="true" />}
 
@@ -455,7 +454,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                     )}
                     <span
                       className={`relative z-10 text-[10px] font-mono tabular-nums ${
-                        isActive ? 'text-[#93C5FD]' : 'text-[#2563EB]/70'
+                        isActive ? 'text-[#93C5FD]' : 'text-[#1D4ED8]'
                       }`}
                     >
                       {formattedIdx}
@@ -506,11 +505,11 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
           {/* Desktop Edge Fade Gradients over the Peeking Cards */}
           <div
             aria-hidden="true"
-            className="hidden lg:block pointer-events-none absolute inset-y-0 -left-44 w-48 bg-gradient-to-r from-white via-white/85 to-transparent z-20"
+            className="hidden lg:block pointer-events-none absolute inset-y-0 -left-44 w-48 bg-gradient-to-r from-[#F8FAFD] via-[#F8FAFD]/85 to-transparent z-20"
           />
           <div
             aria-hidden="true"
-            className="hidden lg:block pointer-events-none absolute inset-y-0 -right-44 w-48 bg-gradient-to-l from-white via-white/85 to-transparent z-20"
+            className="hidden lg:block pointer-events-none absolute inset-y-0 -right-44 w-48 bg-gradient-to-l from-[#F8FAFD] via-[#F8FAFD]/85 to-transparent z-20"
           />
 
           {/* Tablet & Desktop Left Round Arrow Button */}

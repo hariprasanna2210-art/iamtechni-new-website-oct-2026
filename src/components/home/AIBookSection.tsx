@@ -116,7 +116,9 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
     }
   }, [autoProgress, turnState, isAutoPlaying, isBookHovered, handleNextSpread]);
 
-  // Keyboard support: ArrowLeft / ArrowRight when focused inside the book section
+  // Keyboard support: ArrowLeft / ArrowRight when focused inside the book section or when the book section is visible on screen
+  const isSectionVisibleRef = useRef(true);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === 'ArrowRight') {
       e.preventDefault();
@@ -126,6 +128,51 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
       handlePrevSpread();
     }
   };
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry) {
+          isSectionVisibleRef.current = entry.isIntersecting;
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const onWindowKeyDown = (e: KeyboardEvent) => {
+      if (e.defaultPrevented || !isSectionVisibleRef.current) return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        handleNextSpread();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        handlePrevSpread();
+      }
+    };
+
+    window.addEventListener('keydown', onWindowKeyDown);
+    return () => window.removeEventListener('keydown', onWindowKeyDown);
+  }, [handleNextSpread, handlePrevSpread]);
 
   const renderHeroZoomHeading = (
     words: string[],
@@ -583,7 +630,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
                   aria-selected={isActive}
                   aria-label={`Open pages ${sp.label}`}
                   onClick={() => triggerTurn(sp.idx)}
-                  className={`relative overflow-hidden px-3 py-1 rounded-lg transition-all duration-200 cursor-pointer active:scale-[0.98] ${
+                  className={`relative overflow-hidden min-h-[40px] px-3.5 py-2 rounded-lg transition-all duration-200 cursor-pointer active:scale-[0.98] flex items-center justify-center ${
                     isActive
                       ? 'bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-bold shadow-xs'
                       : 'text-[#1E3A8A]/80 hover:text-[#1E3A8A] hover:bg-[#EEF4FF]'
@@ -608,7 +655,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
               onClick={() => setIsAutoPlaying((prev) => !prev)}
               aria-label={isAutoPlaying ? 'Pause auto page turn' : 'Resume auto page turn'}
               title={isAutoPlaying ? 'Pause auto page turn' : 'Resume auto page turn'}
-              className="w-9 h-9 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              className="w-10 h-10 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer"
             >
               {isAutoPlaying ? (
                 <Pause className="w-3.5 h-3.5 text-white" />
@@ -621,7 +668,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
               onClick={() => handlePrevSpread()}
               disabled={Boolean(turnState?.isTurning)}
               aria-label="Previous page spread"
-              className="w-9 h-9 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+              className="w-10 h-10 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
             >
               <ChevronLeft className="w-4 h-4 text-white" />
             </button>
@@ -630,7 +677,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
               onClick={() => handleNextSpread()}
               disabled={Boolean(turnState?.isTurning)}
               aria-label="Next page spread"
-              className="w-9 h-9 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+              className="w-10 h-10 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
             >
               <ChevronRight className="w-4 h-4 text-white" />
             </button>
@@ -904,34 +951,108 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
             <div>{renderLeftPage(currentSpread, true)}</div>
             <div>{renderRightPage(currentSpread, true)}</div>
           </motion.div>
-
-          {/* Mobile Spread Dots */}
-          <div className="flex items-center justify-center gap-2 mt-4">
-            {[0, 1, 2].map((idx) => (
-              <button
-                key={idx}
-                type="button"
-                aria-label={`Go to spread ${idx + 1}`}
-                onClick={() => triggerTurn(idx)}
-                className={`h-2 rounded-full transition-all cursor-pointer ${
-                  currentSpread === idx ? 'w-7 bg-[#1E3A8A]' : 'w-2 bg-[#93C5FD]'
-                }`}
-              />
-            ))}
-          </div>
         </div>
+
+        {/* ================================================================= */}
+        {/* PAGE NAVIGATION CONTROLS BELOW THE BOOK (Prev / Dots+Chapters / Next) */}
+        {/* ================================================================= */}
+        <nav
+          aria-label="Book page navigation"
+          onMouseEnter={() => setIsBookHovered(true)}
+          onMouseLeave={() => setIsBookHovered(false)}
+          className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3"
+        >
+          <button
+            type="button"
+            onClick={() => handlePrevSpread()}
+            disabled={Boolean(turnState?.isTurning)}
+            aria-label="Previous book page"
+            className="min-h-[40px] h-10 px-3.5 rounded-xl bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] shadow-2xs flex items-center justify-center gap-1.5 text-xs font-semibold transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
+          >
+            <ChevronLeft className="w-4 h-4 text-[#2563EB]" />
+            <span>Prev</span>
+          </button>
+
+          <div
+            className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2"
+            role="group"
+            aria-label="Book pages and chapters"
+          >
+            {[
+              {
+                idx: 0,
+                num: '01–02',
+                title: 'Private RAG Pipeline',
+                ariaLabel:
+                  'Go to page 1 (01–02): Put intelligent technology to practical work & Private RAG Inference Pipeline',
+              },
+              {
+                idx: 1,
+                num: '03–04',
+                title: 'Private Document RAG & Knowledge Assistants',
+                ariaLabel:
+                  'Go to page 2 (03–04): Private Document RAG & Knowledge Assistants',
+              },
+              {
+                idx: 2,
+                num: '05–06',
+                title: 'Workflow Automation & Cost FinOps',
+                ariaLabel:
+                  'Go to page 3 (05–06): Workflow Automation & Guardrails & Cost FinOps',
+              },
+            ].map((page) => {
+              const isActive = currentSpread === page.idx;
+              return (
+                <button
+                  key={page.idx}
+                  type="button"
+                  onClick={() => triggerTurn(page.idx)}
+                  aria-label={page.ariaLabel}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`min-h-[40px] h-10 px-3 sm:px-3.5 rounded-xl border text-xs transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB] ${
+                    isActive
+                      ? 'bg-[#1E3A8A] text-white border-[#1E3A8A] font-bold shadow-[0_4px_14px_rgba(30,58,138,0.22)]'
+                      : 'bg-[#F8FAFF] text-[#1E3A8A]/85 hover:text-[#1E3A8A] hover:bg-[#EEF4FF] border-[#DBEAFE] font-medium'
+                  }`}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`w-2 h-2 rounded-full shrink-0 transition-all ${
+                      isActive ? 'bg-[#60A5FA] scale-110' : 'bg-[#93C5FD]'
+                    }`}
+                  />
+                  <span className="font-mono text-[11px] font-bold">{page.num}</span>
+                  <span className="hidden md:inline truncate max-w-[230px]">
+                    {page.title}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => handleNextSpread()}
+            disabled={Boolean(turnState?.isTurning)}
+            aria-label="Next book page"
+            className="min-h-[40px] h-10 px-3.5 rounded-xl bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] shadow-2xs flex items-center justify-center gap-1.5 text-xs font-semibold transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
+          >
+            <span>Next</span>
+            <ChevronRight className="w-4 h-4 text-[#2563EB]" />
+          </button>
+        </nav>
 
         {/* ================================================================= */}
         {/* BOTTOM LINE + HERO-MATCHED CTA BUTTON (Always Visible Below Book) */}
         {/* ================================================================= */}
-        <div className="mt-10 pt-6 border-t border-[#DBEAFE] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+        <div className="mt-8 pt-6 border-t border-[#DBEAFE] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <span className="bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium">
             Every AI deployment is backed by privacy compliance, rate-limiting, and evaluation benchmarks.
           </span>
           <button
             type="button"
             onClick={() => onNavigate('/services/ai-machine-learning')}
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] shrink-0 cursor-pointer"
+            className="min-h-[40px] inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] shrink-0 cursor-pointer"
           >
             <span>Explore AI &amp; Machine Learning Practice</span>
             <ArrowRight className="w-3.5 h-3.5 text-white" />

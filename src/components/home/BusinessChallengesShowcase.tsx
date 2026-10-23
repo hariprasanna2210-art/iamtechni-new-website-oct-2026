@@ -276,7 +276,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
   };
 
   return (
-    <section className="py-24 bg-white border-b border-slate-200 overflow-hidden">
+    <section className="py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200 overflow-hidden">
       {/* Full SEO DOM Content for all 6 items so search engines index every item */}
       <div className="sr-only" aria-hidden="false">
         {items.map((ind, idx) => (
@@ -655,7 +655,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                           <ShieldCheck className="w-4 h-4" />
                         </div>
                         <div className="min-w-0">
-                          <div className="text-[9px] font-mono uppercase tracking-wider text-slate-400 font-bold">
+                          <div className="text-[9px] font-mono uppercase tracking-wider text-slate-600 font-bold">
                             OPPORTUNITY
                           </div>
                           <div className="text-[11px] font-semibold text-slate-800 truncate">
@@ -737,7 +737,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                     <NextIcon className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-slate-600 font-bold">
                       UP NEXT · SECTOR 0{nextIndex + 1}
                     </div>
                     <div className="!font-['Outfit','Space_Grotesk',sans-serif] text-sm sm:text-base font-bold text-slate-900">

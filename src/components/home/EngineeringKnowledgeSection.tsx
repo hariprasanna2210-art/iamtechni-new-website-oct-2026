@@ -165,27 +165,27 @@ const ArticleBenchmarkPanel: React.FC<BenchmarkPanelProps> = ({
         {/* 3 Metric Boxes — Full Values Visible Without "..." */}
         <div className="grid grid-cols-3 gap-2 my-auto py-1 text-center font-mono">
           <div className="p-2.5 bg-[#F8FAFF] rounded-xl border border-[#DBEAFE] flex flex-col justify-between">
-            <div className="text-[9.5px] text-slate-500 leading-tight">Lexical</div>
+            <div className="text-[9.5px] text-slate-600 leading-tight">Lexical</div>
             <div className="text-xs sm:text-sm font-extrabold text-amber-700 my-1 leading-tight tabular-nums">
               BM{bmVal}
             </div>
-            <div className="text-[8.5px] text-slate-500 leading-tight">Exact Match</div>
+            <div className="text-[8.5px] text-slate-600 leading-tight">Exact Match</div>
           </div>
 
           <div className="p-2.5 bg-[#F8FAFF] rounded-xl border border-[#DBEAFE] flex flex-col justify-between">
-            <div className="text-[9.5px] text-slate-500 leading-tight">Embedding</div>
+            <div className="text-[9.5px] text-slate-600 leading-tight">Embedding</div>
             <div className="text-xs sm:text-sm font-extrabold text-[#2563EB] my-1 leading-tight tabular-nums">
               {dimVal}d
             </div>
-            <div className="text-[8.5px] text-slate-500 leading-tight">Semantic</div>
+            <div className="text-[8.5px] text-slate-600 leading-tight">Semantic</div>
           </div>
 
           <div className="p-2.5 bg-[#F8FAFF] rounded-xl border border-[#DBEAFE] flex flex-col justify-between">
-            <div className="text-[9.5px] text-slate-500 leading-tight">Rank Fusion</div>
+            <div className="text-[9.5px] text-slate-600 leading-tight">Rank Fusion</div>
             <div className="text-xs sm:text-sm font-extrabold text-emerald-700 my-1 leading-tight tabular-nums">
               RRF Top-{rrfVal}
             </div>
-            <div className="text-[8.5px] text-slate-500 leading-tight">Verified</div>
+            <div className="text-[8.5px] text-slate-600 leading-tight">Verified</div>
           </div>
         </div>
 
@@ -217,27 +217,27 @@ const ArticleBenchmarkPanel: React.FC<BenchmarkPanelProps> = ({
       {/* 3 Metric Boxes — Full Values Visible Without "..." */}
       <div className="grid grid-cols-3 gap-2 my-auto py-1 text-center font-mono">
         <div className="p-2.5 bg-[#F8FAFF] rounded-xl border border-[#DBEAFE] flex flex-col justify-between">
-          <div className="text-[9.5px] text-slate-500 leading-tight">Availability</div>
+          <div className="text-[9.5px] text-slate-600 leading-tight">Availability</div>
           <div className="text-xs sm:text-sm font-extrabold text-[#1E3A8A] my-1 leading-tight tabular-nums">
             {availVal}%
           </div>
-          <div className="text-[8.5px] text-slate-500 leading-tight">Multi-AZ SLA</div>
+          <div className="text-[8.5px] text-slate-600 leading-tight">Multi-AZ SLA</div>
         </div>
 
         <div className="p-2.5 bg-[#F8FAFF] rounded-xl border border-[#DBEAFE] flex flex-col justify-between">
-          <div className="text-[9.5px] text-slate-500 leading-tight">P99 Latency</div>
+          <div className="text-[9.5px] text-slate-600 leading-tight">P99 Latency</div>
           <div className="text-xs sm:text-sm font-extrabold text-[#2563EB] my-1 leading-tight tabular-nums">
             &lt;{latVal}ms
           </div>
-          <div className="text-[8.5px] text-slate-500 leading-tight">Edge CDN</div>
+          <div className="text-[8.5px] text-slate-600 leading-tight">Edge CDN</div>
         </div>
 
         <div className="p-2.5 bg-[#F8FAFF] rounded-xl border border-[#DBEAFE] flex flex-col justify-between">
-          <div className="text-[9.5px] text-slate-500 leading-tight">Orchestration</div>
+          <div className="text-[9.5px] text-slate-600 leading-tight">Orchestration</div>
           <div className="text-xs sm:text-sm font-extrabold text-emerald-700 my-1 leading-tight tabular-nums">
             K{k8sVal}s / ECS
           </div>
-          <div className="text-[8.5px] text-slate-500 leading-tight">GitOps</div>
+          <div className="text-[8.5px] text-slate-600 leading-tight">GitOps</div>
         </div>
       </div>
 
@@ -413,7 +413,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
 
           {/* Bottom Row: Published Date + Title Preview Hint */}
           <div className="relative z-10 pt-3 border-t border-slate-200/80 flex items-center justify-between gap-3 text-xs">
-            <span className="font-mono text-[11px] text-slate-500 shrink-0">
+            <span className="font-mono text-[11px] text-slate-600 shrink-0">
               {currentArticle.publishedDate}
             </span>
             <span className="text-[11px] font-bold text-[#1E3A8A] truncate">
@@ -478,7 +478,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
 
           {/* Bottom Full-Width Tinted Button + Published Date */}
           <div className="relative z-10 pt-3 border-t border-slate-200/80 space-y-2.5">
-            <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
+            <div className="flex items-center justify-between text-[11px] font-mono text-slate-600">
               <span>{currentArticle.publishedDate}</span>
               <span className={`font-semibold ${theme.chipText}`}>
                 {currentArticle.author.role}
@@ -513,15 +513,15 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
   );
 
   return (
-    <section className="relative py-24 bg-white border-b border-slate-200 overflow-hidden">
-      {/* Subtle Ambient Background Accents for Glass Depth on White */}
+    <section className="relative py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200 overflow-hidden">
+      {/* Subtle Ambient Background Accents for Glass Depth */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 left-1/4 w-96 h-96 bg-[#DBEAFE]/45 rounded-full blur-[130px]"
+        className="pointer-events-none absolute -top-24 left-1/4 w-96 h-96 bg-[#DBEAFE]/40 rounded-full blur-[130px]"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-24 right-1/4 w-96 h-96 bg-[#EEF4FF]/70 rounded-full blur-[130px]"
+        className="pointer-events-none absolute -bottom-24 right-1/4 w-96 h-96 bg-[#EEF4FF]/60 rounded-full blur-[130px]"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

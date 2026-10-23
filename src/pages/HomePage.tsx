@@ -1332,32 +1332,22 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
   return (
     <section
       ref={sectionRef}
-      className="relative py-14 sm:py-24 px-3 sm:px-6 lg:px-8 border-b border-slate-200/70 overflow-hidden"
+      className="relative py-14 sm:py-24 px-3 sm:px-6 lg:px-8 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200/70 overflow-hidden"
     >
-      {/* Pastel Rainbow Gradient Background Layer (hue shifts smoothly on scroll) */}
-      <motion.div
+      {/* Clean Top-to-Bottom Gradient Layer (#F5F8FC -> #FFFFFF) */}
+      <div
         aria-hidden="true"
-        style={{
-          filter: bgHueFilter,
-          backgroundImage: [
-            'radial-gradient(circle at 8% 22%, #BFE3F7 0%, rgba(191, 227, 247, 0) 58%)',
-            'radial-gradient(circle at 92% 14%, #F6F1C7 0%, rgba(246, 241, 199, 0) 54%)',
-            'radial-gradient(circle at 94% 84%, #CDEFC6 0%, rgba(205, 239, 198, 0) 58%)',
-            'radial-gradient(circle at 12% 90%, #E3D6F7 0%, rgba(227, 214, 247, 0) 56%)',
-            'linear-gradient(125deg, #BFE3F7 0%, #F6F1C7 38%, #CDEFC6 72%, #E3D6F7 100%)',
-          ].join(', '),
-        }}
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]"
       />
 
-      {/* Huge Faded "IAMTECHNI" Wordmark in White at 25% Opacity Behind the Frame at the Bottom */}
+      {/* Huge Faded "IAMTECHNI" Wordmark Behind the Frame at the Bottom */}
       <div
         aria-hidden="true"
         className="pointer-events-none select-none absolute inset-x-0 bottom-[-18px] sm:bottom-[-32px] flex justify-center overflow-hidden z-0"
       >
         <motion.div
           style={{ x: wordmarkX }}
-          className="!font-['Plus_Jakarta_Sans','Outfit',sans-serif] font-black text-[76px] sm:text-[138px] lg:text-[196px] tracking-[-0.04em] leading-none text-white/25 uppercase whitespace-nowrap"
+          className="!font-['Plus_Jakarta_Sans','Outfit',sans-serif] font-black text-[76px] sm:text-[138px] lg:text-[196px] tracking-[-0.04em] leading-none text-[#1E3A8A]/[0.05] uppercase whitespace-nowrap"
         >
           IAMTECHNI
         </motion.div>
