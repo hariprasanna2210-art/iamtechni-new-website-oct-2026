@@ -40,7 +40,11 @@ import { insightsData } from '../data/insightsData';
 import { industriesData } from '../data/industriesData';
 import { ColorfulMultiServiceHero } from '../components/home/ColorfulMultiServiceHero';
 import { HeroSection } from '../components/robot-hero/HeroSection';
-import { HomeServicesSection } from '../components/home/HomeServicesSection';
+import {
+  HomeServicesSection,
+  ShowcaseCardCarouselSection,
+  ShowcaseCarouselItem,
+} from '../components/home/HomeServicesSection';
 import { EnterpriseSolutionsMatrix } from '../components/home/EnterpriseSolutionsMatrix';
 import { ProcessStageVisual, IndustryIllustration } from '../components/common/TechIllustrations';
 import { ProjectVisualThumbnail, ArticleGraphic, ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
@@ -473,107 +477,48 @@ export const HomePage: React.FC<HomePageProps> = ({
       {SHOW_LEGACY_SERVICES && <LegacyServicesSection onNavigate={onNavigate} />}
 
       {/* ========================================================================= */}
-      {/* 4. FEATURED PROJECTS (High-Impact Filterable Showcase with ScrollReveal)  */}
+      {/* 4. FEATURED PROJECTS (Same Carousel Component as Services Section)        */}
       {/* ========================================================================= */}
-      <section className="py-24 bg-[#F5F8FC] border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-            <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
-                Project Showcase
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
-                Ideas transformed into digital experiences.
-              </h2>
-              <p className="text-xs sm:text-sm bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-1 max-w-xl">
-                Explore architectural concept demonstrations detailing business challenges, solution topologies, and verified outcomes.
-              </p>
-            </div>
-
-            {/* Filter Tabs */}
-            <div className="flex flex-nowrap sm:flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs w-full md:w-auto overflow-x-auto">
-              {['All', 'E-commerce', 'AI & ML', 'Custom Software', 'Cloud & DevOps'].map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedProjectFilter(cat)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer shrink-0 ${
-                    selectedProjectFilter === cat
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.12}>
-            {filteredProjects.map((project, idx) => {
-              const color = getCardColorToken(idx + 1);
-
-              return (
-                <ScrollRevealItem key={project.id} className="h-full">
-                  <div
-                    onClick={() => onOpenCaseStudy(project)}
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-5 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
-                  >
-                    <div>
-                      {/* Interactive Visual Thumbnail */}
-                      <ProjectVisualThumbnail projectId={project.id} className="mb-4" />
-
-                      <div className="flex items-center justify-between text-xs mb-3.5">
-                        <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                          {project.category}
-                        </span>
-                        <span className="text-[11px] font-mono bg-white/80 text-slate-700 px-2.5 py-0.5 rounded-md border border-slate-200/80 font-medium">
-                          {project.clientBadge}
-                        </span>
-                      </div>
-
-                      <h3 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-2">
-                        {project.title}
-                      </h3>
-
-                      <p className="text-xs text-slate-700 leading-relaxed mb-4 line-clamp-3">
-                        {project.tagline}
-                      </p>
-
-                      <div className="flex flex-wrap gap-1.5 mb-6">
-                        {project.techStack.slice(0, 4).map((tech, i) => (
-                          <span
-                            key={i}
-                            className="px-2 py-0.5 text-[11px] font-mono bg-white/90 text-slate-700 rounded-md border border-slate-200/90"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs">
-                      <span className="text-slate-600 font-medium text-[11px]">{project.industry}</span>
-                      <span className={`${color.accentText} font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform`}>
-                        View Case Study <ArrowRight className="w-3.5 h-3.5" />
-                      </span>
-                    </div>
-                  </div>
-                </ScrollRevealItem>
-              );
-            })}
-          </ScrollReveal>
-
-          <div className="mt-12 text-center">
-            <button
-              onClick={() => onNavigate('/portfolio')}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 hover:border-slate-300 text-slate-800 text-xs font-semibold rounded-xl transition-all shadow-xs cursor-pointer active:scale-98"
-            >
-              <span>Explore Complete Portfolio Directory</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </section>
+      <ShowcaseCardCarouselSection
+        sectionId="projects"
+        eyebrow="Project Showcase"
+        heading="Ideas transformed into digital experiences."
+        subtitle="Explore architectural concept demonstrations detailing business challenges, solution topologies, and verified outcomes."
+        items={(() => {
+          const allUniqueTools = getAllUniqueTools();
+          return projectsData.map((project): ShowcaseCarouselItem => {
+            const primaryServiceSlug =
+              project.relatedServices?.[0]?.route.replace('/services/', '') ||
+              project.category;
+            return {
+              id: project.id,
+              slug: project.id,
+              title: project.title,
+              category: `${project.category} · ${project.industry}`,
+              summary: project.tagline,
+              icon: getServiceIcon(primaryServiceSlug),
+              highlights: (project.verifiedOutcomes || project.keyFeatures || []).slice(0, 2),
+              stackLabel: 'Key Stack & Tools',
+              tools: project.techStack.slice(0, 4).map((techName) => {
+                const matchedTool = allUniqueTools.find(
+                  (t) =>
+                    t.name.toLowerCase() === techName.toLowerCase() ||
+                    techName.toLowerCase().includes(t.name.toLowerCase())
+                );
+                return {
+                  name: techName,
+                  icon: matchedTool?.icon,
+                  brandColor: matchedTool?.brandColor,
+                };
+              }),
+              ctaLabel: 'View Case Study',
+              onCtaClick: () => onOpenCaseStudy(project),
+            };
+          });
+        })()}
+        allItemsLabel="All Projects"
+        onAllItemsClick={() => onNavigate('/portfolio')}
+      />
 
       {/* ========================================================================= */}
       {/* 5. ENGINEERING APPROACH: 7-Stage Interactive Process Timeline             */}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -14,19 +14,52 @@ import { servicesData } from '../../data/servicesData';
 import { getServiceIcon } from '../../utils/serviceIcons';
 import { getToolsForService } from '../../data/heroServiceTools';
 
-export interface HomeServicesSectionProps {
-  onNavigate: (route: PageRoute) => void;
-  selectedServiceSlug?: string;
-  onSelectServiceSlug?: (slug: string) => void;
+export interface ShowcaseCarouselToolBadge {
+  name: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  brandColor?: string;
 }
 
-// Canonical list of services generated dynamically from servicesData (first 13 primary unique services)
-const CANONICAL_SERVICES: ServiceItem[] = servicesData.slice(0, 13);
+export interface ShowcaseCarouselItem {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  summary: string;
+  icon: React.ComponentType<{ className?: string }>;
+  highlights: string[];
+  stackLabel?: string;
+  tools: ShowcaseCarouselToolBadge[];
+  ctaLabel: string;
+  onCtaClick: () => void;
+}
 
-export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
-  onNavigate,
-  selectedServiceSlug,
-  onSelectServiceSlug,
+export interface ShowcaseCardCarouselSectionProps {
+  sectionId: string;
+  stageAnchorId?: string;
+  eyebrow: string;
+  heading: string;
+  subtitle: string;
+  items: ShowcaseCarouselItem[];
+  allItemsLabel: string;
+  onAllItemsClick: () => void;
+  selectedSlug?: string;
+  onSelectSlug?: (slug: string) => void;
+  enableServiceHashSync?: boolean;
+}
+
+export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionProps> = ({
+  sectionId,
+  stageAnchorId,
+  eyebrow,
+  heading,
+  subtitle,
+  items,
+  allItemsLabel,
+  onAllItemsClick,
+  selectedSlug,
+  onSelectSlug,
+  enableServiceHashSync = false,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -44,90 +77,93 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
 
   const tabsScrollRef = useRef<HTMLDivElement | null>(null);
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
-  const onSelectServiceSlugRef = useRef(onSelectServiceSlug);
-  const lastSyncedSlugRef = useRef<string | undefined>(selectedServiceSlug);
+  const onSelectSlugRef = useRef(onSelectSlug);
+  const lastSyncedSlugRef = useRef<string | undefined>(selectedSlug);
 
   useEffect(() => {
-    onSelectServiceSlugRef.current = onSelectServiceSlug;
-  }, [onSelectServiceSlug]);
+    onSelectSlugRef.current = onSelectSlug;
+  }, [onSelectSlug]);
 
-  const totalServices = CANONICAL_SERVICES.length;
+  const totalItems = items.length;
   const SLIDE_DURATION = 2000; // 2 seconds per slide
 
-  // Find service index by slug or id
-  const findServiceIndexBySlug = useCallback((slugOrId: string): number => {
-    const clean = (slugOrId || '').trim().toLowerCase();
-    if (!clean) return -1;
-    return CANONICAL_SERVICES.findIndex(
-      (s) =>
-        (s.slug && s.slug.toLowerCase() === clean) ||
-        (s.id && s.id.toLowerCase() === clean)
-    );
-  }, []);
+  // Find item index by slug or id
+  const findItemIndexBySlug = useCallback(
+    (slugOrId: string): number => {
+      const clean = (slugOrId || '').trim().toLowerCase();
+      if (!clean) return -1;
+      return items.findIndex(
+        (s) =>
+          (s.slug && s.slug.toLowerCase() === clean) ||
+          (s.id && s.id.toLowerCase() === clean)
+      );
+    },
+    [items]
+  );
 
   // Go to specific index and scroll active tab into view
-  const handleSelectService = useCallback(
+  const handleSelectItem = useCallback(
     (index: number, updateUrlAndParent = false, updateHash = false) => {
-      const safeIndex = ((index % totalServices) + totalServices) % totalServices;
+      if (totalItems === 0) return;
+      const safeIndex = ((index % totalItems) + totalItems) % totalItems;
       setCurrentIndex(safeIndex);
       setProgress(0);
 
-      const svc = CANONICAL_SERVICES[safeIndex];
-      if (svc) {
-        const slug = svc.slug || svc.id;
+      const item = items[safeIndex];
+      if (item) {
+        const slug = item.slug || item.id;
         lastSyncedSlugRef.current = slug;
         if (updateUrlAndParent) {
-          onSelectServiceSlugRef.current?.(slug);
-          if (updateHash && typeof window !== 'undefined') {
+          onSelectSlugRef.current?.(slug);
+          if (enableServiceHashSync && updateHash && typeof window !== 'undefined') {
             window.history.replaceState(null, '', `#services/${slug}`);
           }
         }
       }
     },
-    [totalServices]
+    [totalItems, items, enableServiceHashSync]
   );
 
-  // Sync parent & hero cards whenever currentIndex changes
+  // Sync parent whenever currentIndex changes
   useEffect(() => {
-    const svc = CANONICAL_SERVICES[currentIndex];
-    if (!svc) return;
-    const slug = svc.slug || svc.id;
+    const item = items[currentIndex];
+    if (!item) return;
+    const slug = item.slug || item.id;
     if (slug) {
       lastSyncedSlugRef.current = slug;
-      onSelectServiceSlugRef.current?.(slug);
+      onSelectSlugRef.current?.(slug);
     }
-  }, [currentIndex]);
+  }, [currentIndex, items]);
 
-  // Sync when selectedServiceSlug prop changes externally from HeroSection
+  // Sync when selectedSlug prop changes externally
   useEffect(() => {
-    if (!selectedServiceSlug) return;
-    if (selectedServiceSlug === lastSyncedSlugRef.current) return;
-    const matchedIdx = findServiceIndexBySlug(selectedServiceSlug);
+    if (!selectedSlug) return;
+    if (selectedSlug === lastSyncedSlugRef.current) return;
+    const matchedIdx = findItemIndexBySlug(selectedSlug);
     if (matchedIdx !== -1) {
-      lastSyncedSlugRef.current = selectedServiceSlug;
+      lastSyncedSlugRef.current = selectedSlug;
       setCurrentIndex(matchedIdx);
       setProgress(0);
     }
-  }, [selectedServiceSlug, findServiceIndexBySlug]);
+  }, [selectedSlug, findItemIndexBySlug]);
 
-  // Listen for hero card selection custom event & URL hash (#services/<slug>)
+  // Listen for hero card selection custom event & URL hash (#services/<slug>) when enabled
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (!enableServiceHashSync || typeof window === 'undefined') return;
 
     const applySlugFromHash = (scrollIntoViewOnInitial = false) => {
       const hash = window.location.hash || '';
       if (hash.startsWith('#services/')) {
         const slug = decodeURIComponent(hash.replace('#services/', '').trim());
-        const matchedIdx = findServiceIndexBySlug(slug);
+        const matchedIdx = findItemIndexBySlug(slug);
         if (matchedIdx !== -1) {
-          const targetSlug =
-            CANONICAL_SERVICES[matchedIdx].slug || CANONICAL_SERVICES[matchedIdx].id;
+          const targetSlug = items[matchedIdx].slug || items[matchedIdx].id;
           lastSyncedSlugRef.current = targetSlug;
           setCurrentIndex(matchedIdx);
           setProgress(0);
-          onSelectServiceSlugRef.current?.(targetSlug);
+          onSelectSlugRef.current?.(targetSlug);
           if (scrollIntoViewOnInitial) {
-            const el = document.getElementById('services');
+            const el = document.getElementById(sectionId);
             el?.scrollIntoView({
               behavior: prefersReducedMotion ? 'auto' : 'smooth',
               block: 'start',
@@ -143,10 +179,9 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
       const customEvent = e as CustomEvent<{ slug?: string }>;
       const slug = customEvent.detail?.slug;
       if (slug) {
-        const matchedIdx = findServiceIndexBySlug(slug);
+        const matchedIdx = findItemIndexBySlug(slug);
         if (matchedIdx !== -1) {
-          const targetSlug =
-            CANONICAL_SERVICES[matchedIdx].slug || CANONICAL_SERVICES[matchedIdx].id;
+          const targetSlug = items[matchedIdx].slug || items[matchedIdx].id;
           lastSyncedSlugRef.current = targetSlug;
           setCurrentIndex(matchedIdx);
           setProgress(0);
@@ -162,17 +197,19 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
       window.removeEventListener('iamtechni:select-service', handleCustomSelect);
       window.removeEventListener('hashchange', handleHashChange);
     };
-  }, [findServiceIndexBySlug, prefersReducedMotion]);
+  }, [enableServiceHashSync, findItemIndexBySlug, items, prefersReducedMotion, sectionId]);
 
   const handlePrev = useCallback(() => {
-    setCurrentIndex((prevIndex) => ((prevIndex - 1) % totalServices + totalServices) % totalServices);
+    if (totalItems === 0) return;
+    setCurrentIndex((prevIndex) => ((prevIndex - 1) % totalItems + totalItems) % totalItems);
     setProgress(0);
-  }, [totalServices]);
+  }, [totalItems]);
 
   const handleNext = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalServices);
+    if (totalItems === 0) return;
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
     setProgress(0);
-  }, [totalServices]);
+  }, [totalItems]);
 
   // Keep active tab smoothly scrolled into center on mobile/tablet/desktop
   useEffect(() => {
@@ -196,7 +233,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
       isDragging ||
       isPausedByUser ||
       prefersReducedMotion ||
-      totalServices <= 1
+      totalItems <= 1
     ) {
       setProgress(0);
       return;
@@ -210,7 +247,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
       if (elapsed >= SLIDE_DURATION) {
         startTime = Date.now();
         setProgress(0);
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalServices);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
       } else {
         setProgress((elapsed / SLIDE_DURATION) * 100);
       }
@@ -225,7 +262,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
     isTouching,
     isDragging,
     isPausedByUser,
-    totalServices,
+    totalItems,
     prefersReducedMotion,
   ]);
 
@@ -299,21 +336,24 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
     }
   };
 
-  const activeService = CANONICAL_SERVICES[currentIndex] || CANONICAL_SERVICES[0];
+  const activeItem = items[currentIndex] || items[0];
+  const headingWords = useMemo(() => heading.trim().split(/\s+/), [heading]);
+
+  if (!activeItem) return null;
 
   return (
     <section
-      id="services"
-      aria-labelledby="services-section-title"
+      id={sectionId}
+      aria-labelledby={`${sectionId}-section-title`}
       onKeyDown={handleKeyDown}
       style={{ backgroundColor: '#FFFFFF' }}
       className="relative w-full py-14 sm:py-18 lg:py-22 bg-white border-b border-[#DBEAFE]/80 overflow-hidden scroll-mt-16"
     >
-      <div id="services-stage" className="sr-only" aria-hidden="true" />
+      {stageAnchorId && <div id={stageAnchorId} className="sr-only" aria-hidden="true" />}
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ===================================================================== */}
-        {/* 1. MODERN SECTION HEADER (Exact Font Design from Reference Image)     */}
+        {/* 1. MODERN SECTION HEADER                                              */}
         {/* ===================================================================== */}
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-4 mb-8 sm:mb-10">
           {/* Eyebrow Pill */}
@@ -322,53 +362,51 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
               className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
               aria-hidden="true"
             />
-            <span className="truncate">What We Do · 13 Core Disciplines</span>
+            <span className="truncate">{eyebrow}</span>
           </div>
 
           {/* Section Title (Hero Section Heading Color #1E3A8A + drop shadow, Plus Jakarta Sans Extrabold, tight tracking, with hover zoom-in/zoom-out) */}
           <motion.h2
-            id="services-section-title"
+            id={`${sectionId}-section-title`}
             whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
             transition={{ duration: 0.28, ease: 'easeOut' }}
             className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[26px] min-[360px]:text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-[-0.03em] text-[#1E3A8A] leading-[1.12] origin-center cursor-default"
           >
-            {['Services', 'Built', 'for', 'Your', 'Next', 'Stage', 'of', 'Growth'].map(
-              (word, i, arr) => {
-                const isLast = i === arr.length - 1;
-                return (
-                  <React.Fragment key={`${word}-${i}`}>
-                    <motion.span
-                      initial={prefersReducedMotion ? {} : { opacity: 0, y: 8 }}
-                      animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, scale: 1 }}
-                      whileHover={
-                        prefersReducedMotion
-                          ? {}
-                          : {
-                              scale: 1.06,
-                              transition: { duration: 0.22, ease: 'easeOut' },
-                            }
-                      }
-                      transition={{
-                        duration: 0.4,
-                        delay: prefersReducedMotion ? 0 : 0.05 * i,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
-                      className={`inline-block text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] hover:drop-shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-[transform,filter] duration-200 ${
-                        isLast ? 'mr-0' : 'mr-[0.24em]'
-                      }`}
-                    >
-                      {word}
-                    </motion.span>
-                    {!isLast && ' '}
-                  </React.Fragment>
-                );
-              }
-            )}
+            {headingWords.map((word, i, arr) => {
+              const isLast = i === arr.length - 1;
+              return (
+                <React.Fragment key={`${word}-${i}`}>
+                  <motion.span
+                    initial={prefersReducedMotion ? {} : { opacity: 0, y: 8 }}
+                    animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, scale: 1 }}
+                    whileHover={
+                      prefersReducedMotion
+                        ? {}
+                        : {
+                            scale: 1.06,
+                            transition: { duration: 0.22, ease: 'easeOut' },
+                          }
+                    }
+                    transition={{
+                      duration: 0.4,
+                      delay: prefersReducedMotion ? 0 : 0.05 * i,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className={`inline-block text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] hover:drop-shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-[transform,filter] duration-200 ${
+                      isLast ? 'mr-0' : 'mr-[0.24em]'
+                    }`}
+                  >
+                    {word}
+                  </motion.span>
+                  {!isLast && ' '}
+                </React.Fragment>
+              );
+            })}
           </motion.h2>
 
           {/* Subtitle Paragraph — Hero Section Subtitle Gradient (#100C2E -> #3A279E -> #2557D6) */}
           <p className="!font-['Inter','Plus_Jakarta_Sans',sans-serif] text-sm min-[360px]:text-base sm:text-[17px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-[1.65] max-w-2xl mx-auto">
-            End-to-end engineering, AI, cloud, and growth solutions, all under one roof.
+            {subtitle}
           </p>
         </div>
 
@@ -380,24 +418,24 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
             <div
               ref={tabsScrollRef}
               role="tablist"
-              aria-label="Filter service by category"
+              aria-label={`Filter ${sectionId} item`}
               className="flex items-center justify-start gap-1.5 overflow-x-auto scrollbar-none py-1 px-1 max-w-full"
               style={{ WebkitOverflowScrolling: 'touch' }}
             >
-              {CANONICAL_SERVICES.map((service, index) => {
+              {items.map((item, index) => {
                 const isActive = index === currentIndex;
-                const TabIcon = getServiceIcon(service.slug || service.id);
+                const TabIcon = item.icon;
                 const formattedIdx = String(index + 1).padStart(2, '0');
 
                 return (
                   <button
-                    key={service.slug || service.id}
+                    key={item.slug || item.id}
                     ref={isActive ? activeTabRef : null}
                     type="button"
                     role="tab"
                     aria-selected={isActive}
-                    aria-controls={`service-card-${service.slug || service.id}`}
-                    onClick={() => handleSelectService(index, true, true)}
+                    aria-controls={`${sectionId}-card-${item.slug || item.id}`}
+                    onClick={() => handleSelectItem(index, true, true)}
                     className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors duration-200 whitespace-nowrap shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
                       isActive
                         ? 'text-white font-bold'
@@ -406,7 +444,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                   >
                     {isActive && (
                       <motion.span
-                        layoutId="activeServiceTabPill"
+                        layoutId={`${sectionId}-activeTabPill`}
                         className="absolute inset-0 rounded-xl bg-[#1E3A8A] shadow-[0_4px_12px_rgba(30,58,138,0.25)] z-0"
                         transition={{
                           type: 'spring',
@@ -427,7 +465,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                         isActive ? 'text-white' : 'text-[#2563EB]'
                       }`}
                     />
-                    <span className="relative z-10">{service.title}</span>
+                    <span className="relative z-10">{item.title}</span>
                   </button>
                 );
               })}
@@ -479,7 +517,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
           <button
             type="button"
             onClick={handlePrev}
-            aria-label="Previous service"
+            aria-label="Previous slide"
             className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white hover:bg-[#1E3A8A] border border-[#DBEAFE] hover:border-[#1E3A8A] text-[#1E3A8A] hover:text-white shadow-[0_6px_20px_rgba(30,58,138,0.14)] transition-all duration-200 cursor-pointer absolute -left-3 lg:-left-6 top-1/2 -translate-y-1/2 z-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A]"
           >
             <ChevronLeft className="w-4.5 h-4.5" />
@@ -489,7 +527,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
           <button
             type="button"
             onClick={handleNext}
-            aria-label="Next service"
+            aria-label="Next slide"
             className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white hover:bg-[#1E3A8A] border border-[#DBEAFE] hover:border-[#1E3A8A] text-[#1E3A8A] hover:text-white shadow-[0_6px_20px_rgba(30,58,138,0.14)] transition-all duration-200 cursor-pointer absolute -right-3 lg:-right-6 top-1/2 -translate-y-1/2 z-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A]"
           >
             <ChevronRight className="w-4.5 h-4.5" />
@@ -507,16 +545,15 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 items-stretch lg:w-[152%] xl:w-[156%] lg:relative lg:left-1/2 lg:-translate-x-1/2">
               {[-2, -1, 0, 1, 2].map((offset) => {
-                const targetIndex =
-                  (currentIndex + offset + totalServices) % totalServices;
-                const service = CANONICAL_SERVICES[targetIndex];
-                if (!service) return null;
+                const targetIndex = (currentIndex + offset + totalItems) % totalItems;
+                const item = items[targetIndex];
+                if (!item) return null;
 
                 const isCenter = offset === 0;
                 const isPeek = offset === -2 || offset === 2;
-                const ServiceIcon = getServiceIcon(service.slug || service.id);
-                const tools = getToolsForService(service.slug || service.id).slice(0, 4);
-                const keyCapabilities = (service.capabilities || []).slice(0, 2);
+                const ItemIcon = item.icon;
+                const tools = (item.tools || []).slice(0, 4);
+                const keyHighlights = (item.highlights || []).slice(0, 2);
                 const formattedNumber = String(targetIndex + 1).padStart(2, '0');
 
                 const visibilityClasses =
@@ -537,12 +574,12 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                         ease: [0.22, 1, 0.36, 1],
                       },
                     }}
-                    key={service.slug || service.id}
-                    id={isCenter ? `service-card-${service.slug || service.id}` : undefined}
+                    key={`${item.slug || item.id}-${offset}`}
+                    id={isCenter ? `${sectionId}-card-${item.slug || item.id}` : undefined}
                     onClick={() => {
                       if (didDragMoveRef.current) return;
                       if (!isCenter) {
-                        handleSelectService(targetIndex, true, false);
+                        handleSelectItem(targetIndex, true, false);
                       }
                     }}
                     className={`h-full w-full max-w-[305px] sm:max-w-[315px] mx-auto flex flex-col transition-[transform,opacity] duration-[400ms] ease-out ${visibilityClasses} ${
@@ -592,7 +629,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                                 : 'bg-gradient-to-br from-[#EEF4FF] to-[#DBEAFE]/80 text-[#1E3A8A] border border-[#DBEAFE]'
                             }`}
                           >
-                            <ServiceIcon className="w-4.5 h-4.5" />
+                            <ItemIcon className="w-4.5 h-4.5" />
                           </div>
 
                           <div
@@ -604,7 +641,9 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                               {formattedNumber}
                             </span>
                             <span aria-hidden="true">·</span>
-                            <span>{service.category || 'Engineering'}</span>
+                            <span className="truncate max-w-[165px]">
+                              {item.category || 'Engineering'}
+                            </span>
                           </div>
                         </div>
 
@@ -616,7 +655,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                               : 'text-[#1E3A8A] group-hover:text-[#2563EB]'
                           }`}
                         >
-                          {service.title}
+                          {item.title}
                         </h3>
 
                         {/* Concise Description */}
@@ -627,19 +666,19 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                               : 'bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium'
                           }`}
                         >
-                          {service.summary || service.tagline}
+                          {item.summary}
                         </p>
 
-                        {/* Dynamic Core Capabilities List (2 key capabilities) */}
-                        {keyCapabilities.length > 0 && (
+                        {/* Dynamic Core Highlights List (2 key items) */}
+                        {keyHighlights.length > 0 && (
                           <div
                             className={`space-y-1.5 mb-3 pt-2.5 border-t transition-colors duration-[400ms] ${
                               isCenter ? 'border-white/12' : 'border-[#DBEAFE]/70'
                             }`}
                           >
-                            {keyCapabilities.map((cap) => (
+                            {keyHighlights.map((highlight) => (
                               <div
-                                key={cap.title}
+                                key={highlight}
                                 className="flex items-center gap-1.5 text-[11px] leading-tight"
                               >
                                 <CheckCircle2
@@ -652,7 +691,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                                     isCenter ? 'text-white/95' : 'text-[#1E3A8A]/90'
                                   }`}
                                 >
-                                  {cap.title}
+                                  {highlight}
                                 </span>
                               </div>
                             ))}
@@ -673,7 +712,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                                 isCenter ? 'text-[#BFDBFE]' : 'text-[#2563EB]/85'
                               }`}
                             >
-                              Key Stack &amp; Tools
+                              {item.stackLabel || 'Key Stack & Tools'}
                             </div>
                             <div className="flex items-center flex-wrap gap-1">
                               {tools.map((tool) => {
@@ -688,13 +727,15 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                                         : 'bg-white border border-[#DBEAFE] text-[#1E3A8A] shadow-2xs'
                                     }`}
                                   >
-                                    <span
-                                      style={{
-                                        color: isCenter ? '#93C5FD' : tool.brandColor,
-                                      }}
-                                    >
-                                      <ToolIcon className="w-3 h-3" />
-                                    </span>
+                                    {ToolIcon && (
+                                      <span
+                                        style={{
+                                          color: isCenter ? '#93C5FD' : tool.brandColor || '#2563EB',
+                                        }}
+                                      >
+                                        <ToolIcon className="w-3 h-3" />
+                                      </span>
+                                    )}
                                     <span>{tool.name}</span>
                                   </div>
                                 );
@@ -710,9 +751,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                             onClick={(e) => {
                               e.stopPropagation();
                               if (didDragMoveRef.current) return;
-                              onNavigate(
-                                `/services/${service.slug || service.id}` as PageRoute
-                              );
+                              item.onCtaClick();
                             }}
                             className={`inline-flex items-center gap-1.5 text-xs font-bold transition-all duration-200 group/link cursor-pointer ${
                               isCenter
@@ -720,7 +759,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
                                 : 'text-[#1E3A8A] hover:text-[#2563EB]'
                             }`}
                           >
-                            <span>Explore Details</span>
+                            <span>{item.ctaLabel}</span>
                             <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5" />
                           </button>
 
@@ -742,21 +781,21 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
           {/* 4. DYNAMIC INTERACTIVE PLAYBACK & PROGRESS DOCK                     */}
           {/* =================================================================== */}
           <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 px-3 sm:px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.06)] max-w-3xl mx-auto">
-            {/* Left: Active Service Counter & Dynamic Title */}
+            {/* Left: Active Item Counter & Dynamic Title */}
             <div className="flex items-center justify-center sm:justify-start gap-2 min-w-0 max-w-full">
               <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-md bg-[#1E3A8A] text-white font-mono text-[11px] font-bold tabular-nums shrink-0">
-                {String(currentIndex + 1).padStart(2, '0')} / {String(totalServices).padStart(2, '0')}
+                {String(currentIndex + 1).padStart(2, '0')} / {String(totalItems).padStart(2, '0')}
               </span>
               <AnimatePresence mode="wait">
                 <motion.span
-                  key={activeService.slug || activeService.id}
+                  key={activeItem.slug || activeItem.id}
                   initial={prefersReducedMotion ? {} : { opacity: 0, y: 4 }}
                   animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
                   exit={prefersReducedMotion ? {} : { opacity: 0, y: -4 }}
                   transition={{ duration: 0.2 }}
                   className="text-xs font-bold text-[#1E3A8A] truncate"
                 >
-                  {activeService.title}
+                  {activeItem.title}
                 </motion.span>
               </AnimatePresence>
             </div>
@@ -765,18 +804,18 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
             <div
               className="flex flex-wrap items-center justify-center gap-1 min-[360px]:gap-1.5 max-w-full"
               role="tablist"
-              aria-label="Service carousel slide indicators"
+              aria-label={`${sectionId} carousel slide indicators`}
             >
-              {CANONICAL_SERVICES.map((svc, idx) => {
+              {items.map((it, idx) => {
                 const isActive = idx === currentIndex;
                 return (
                   <button
-                    key={svc.slug || svc.id}
+                    key={it.slug || it.id}
                     type="button"
                     role="tab"
                     aria-selected={isActive}
-                    aria-label={`Jump to ${svc.title}`}
-                    onClick={() => handleSelectService(idx, true, false)}
+                    aria-label={`Jump to ${it.title}`}
+                    onClick={() => handleSelectItem(idx, true, false)}
                     className={`relative h-2 rounded-full overflow-hidden transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
                       isActive
                         ? 'w-6 min-[360px]:w-7 bg-[#DBEAFE]'
@@ -794,7 +833,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
               })}
             </div>
 
-            {/* Right: Play/Pause + Prev/Next + All Services Link */}
+            {/* Right: Play/Pause + Prev/Next + All Items Link */}
             <div className="flex items-center justify-center gap-1.5 shrink-0 max-w-full">
               <button
                 type="button"
@@ -813,7 +852,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
               <button
                 type="button"
                 onClick={handlePrev}
-                aria-label="Previous service"
+                aria-label="Previous slide"
                 className="w-7 h-7 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
@@ -822,7 +861,7 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
               <button
                 type="button"
                 onClick={handleNext}
-                aria-label="Next service"
+                aria-label="Next slide"
                 className="w-7 h-7 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -832,11 +871,11 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
 
               <button
                 type="button"
-                onClick={() => onNavigate('/services')}
+                onClick={onAllItemsClick}
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white text-[11px] font-semibold transition-colors cursor-pointer whitespace-nowrap"
               >
                 <Layers className="w-3 h-3 shrink-0" />
-                <span>All Services</span>
+                <span>{allItemsLabel}</span>
               </button>
             </div>
           </div>
@@ -845,4 +884,61 @@ export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
     </section>
   );
 };
+
+export interface HomeServicesSectionProps {
+  onNavigate: (route: PageRoute) => void;
+  selectedServiceSlug?: string;
+  onSelectServiceSlug?: (slug: string) => void;
+}
+
+// Canonical list of services generated dynamically from servicesData (first 13 primary unique services)
+const CANONICAL_SERVICES: ServiceItem[] = servicesData.slice(0, 13);
+
+export const HomeServicesSection: React.FC<HomeServicesSectionProps> = ({
+  onNavigate,
+  selectedServiceSlug,
+  onSelectServiceSlug,
+}) => {
+  const serviceCarouselItems = useMemo<ShowcaseCarouselItem[]>(
+    () =>
+      CANONICAL_SERVICES.map((service) => ({
+        id: service.id,
+        slug: service.slug || service.id,
+        title: service.title,
+        category: service.category || 'Engineering',
+        summary: service.summary || service.tagline,
+        icon: getServiceIcon(service.slug || service.id),
+        highlights: (service.capabilities || []).slice(0, 2).map((cap) => cap.title),
+        stackLabel: 'Key Stack & Tools',
+        tools: getToolsForService(service.slug || service.id)
+          .slice(0, 4)
+          .map((t) => ({
+            name: t.name,
+            icon: t.icon,
+            brandColor: t.brandColor,
+          })),
+        ctaLabel: 'Explore Details',
+        onCtaClick: () =>
+          onNavigate(`/services/${service.slug || service.id}` as PageRoute),
+      })),
+    [onNavigate]
+  );
+
+  return (
+    <ShowcaseCardCarouselSection
+      sectionId="services"
+      stageAnchorId="services-stage"
+      eyebrow="What We Do · 13 Core Disciplines"
+      heading="Services Built for Your Next Stage of Growth"
+      subtitle="End-to-end engineering, AI, cloud, and growth solutions, all under one roof."
+      items={serviceCarouselItems}
+      allItemsLabel="All Services"
+      onAllItemsClick={() => onNavigate('/services')}
+      selectedSlug={selectedServiceSlug}
+      onSelectSlug={onSelectServiceSlug}
+      enableServiceHashSync={true}
+    />
+  );
+};
+
 
