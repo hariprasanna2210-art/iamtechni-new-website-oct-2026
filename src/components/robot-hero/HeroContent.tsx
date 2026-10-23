@@ -42,11 +42,11 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         <span className="truncate">IAMTECHNI | Technology that moves you forward</span>
       </motion.div>
 
-      {/* 2. Headline (Single dark blue color, reduced size, Outfit/Space Grotesk font, zoom-in/zoom-out ONLY on hover) */}
+      {/* 2. Headline (Crisp white on dark hero background, Outfit/Space Grotesk font, zoom-in/zoom-out ONLY on hover) */}
       <motion.h1
         whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
         transition={{ duration: 0.28, ease: 'easeOut' }}
-        className="mt-0! !font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-[34px] xl:text-[38px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2] origin-center lg:origin-left cursor-default"
+        className="mt-0! !font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-[34px] xl:text-[38px] font-bold tracking-[-0.015em] text-white leading-[1.2] origin-center lg:origin-left cursor-default"
       >
         {headlineWords.map((word, i) => (
           <React.Fragment key={`${word.text}-${i}`}>
@@ -66,7 +66,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
                 delay: prefersReducedMotion ? 0 : 0.06 * i,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className={`inline-block text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] hover:drop-shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-shadow duration-200 ${
+              className={`inline-block text-white drop-shadow-[0_2px_10px_rgba(34,211,238,0.18)] hover:drop-shadow-[0_4px_16px_rgba(34,211,238,0.35)] transition-shadow duration-200 ${
                 word.isLast || word.lineBreakAfter ? 'mr-[0.24em] lg:mr-0' : 'mr-[0.24em]'
               }`}
             >
@@ -83,7 +83,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
         animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 0.4, ease: 'easeOut' }}
-        className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent leading-relaxed font-medium max-w-[540px] lg:max-w-none"
+        className="text-sm sm:text-base text-slate-200 leading-relaxed font-medium max-w-[540px] lg:max-w-none"
       >
         We transform ideas into intelligent digital solutions through AI,
         software engineering, modern web experiences, cloud technologies, and

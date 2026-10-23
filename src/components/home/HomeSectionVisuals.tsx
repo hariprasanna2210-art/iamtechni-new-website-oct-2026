@@ -22,6 +22,7 @@ import {
   FileText
 } from 'lucide-react';
 import { AIPipelineDashboard } from './AIPipelineDashboard';
+import { RotatingFrame } from '../common/RotatingFrame';
 
 /* ========================================================================== */
 /* 1. COMPANY INTRODUCTION TECHNOLOGY ILLUSTRATION                            */
@@ -284,44 +285,14 @@ export const AiNeuralPipelineVisual: React.FC<{ className?: string }> = ({
 };
 
 /* ========================================================================== */
-/* 3. CTA TERMINAL VISUAL (Collaborative Engineering Terminal)                */
+/* 3. CTA ROTATING PRODUCT FRAME (Replaces legacy dark terminal)              */
 /* ========================================================================== */
 
 export const CtaTerminalVisual: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className={`w-full max-w-2xl mx-auto rounded-2xl bg-slate-900/90 border border-slate-800 p-4 sm:p-5 text-left font-mono text-xs shadow-2xl backdrop-blur-md ${className}`}>
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 text-[11px]">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-          <span className="text-slate-200 font-bold truncate">IAMTECHNI // ENGINEERING_ENGAGEMENT</span>
-        </div>
-        <span className="text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800">
-          1 Business Day SLA
-        </span>
-      </div>
-
-      <div className="py-3.5 space-y-2 text-[11px] text-slate-300">
-        <div className="text-slate-400">// Direct collaboration with senior software architects</div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-          <div className="p-2 rounded bg-slate-950 border border-slate-800 text-emerald-400 flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-            <span>Mutual NDA Executed</span>
-          </div>
-          <div className="p-2 rounded bg-slate-950 border border-slate-800 text-cyan-400 flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-            <span>Phased Sprints</span>
-          </div>
-          <div className="p-2 rounded bg-slate-950 border border-slate-800 text-purple-400 flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-            <span>Full IP Ownership</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-500">
-        <span>STATUS: ACCEPTING NEW PROJECTS</span>
-        <span className="text-cyan-400 font-bold">READY TO ARCHITECT</span>
-      </div>
+    <div className={className}>
+      <RotatingFrame variant="cta" />
     </div>
   );
 };
+

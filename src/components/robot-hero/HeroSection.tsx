@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useReducedMotion } from 'framer-motion';
 import { PageRoute } from '../../types';
 import { HeroContent } from './HeroContent';
-import { HeroParticlesBackground } from './HeroParticlesBackground';
+import { HeroShardsBackground } from '../HeroShardsBackground';
 import { RobotScene } from '../layout/RobotScene';
 import { ServiceCards, mapServiceToOrbitCardId } from './ServiceCards';
 import { RobotSpeechControls } from './RobotSpeechControls';
@@ -810,10 +810,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       aria-label="IAMTECHNI Futuristic AI Ambassador Hero"
-      className="relative w-full overflow-hidden bg-[#FAF8F5] border-b border-slate-200/80 pt-2 pb-20 sm:pt-3 sm:pb-20 lg:py-6 h-auto lg:h-[calc(100svh-var(--header-height,65px))] lg:min-h-[540px] lg:max-h-[860px] flex items-center"
+      className="relative w-full overflow-hidden bg-[#040B14] border-b border-slate-800/80 pt-2 pb-20 sm:pt-3 sm:pb-20 lg:py-6 h-auto lg:h-[calc(100svh-var(--header-height,65px))] lg:min-h-[540px] lg:max-h-[860px] flex items-center"
     >
-      {/* tsParticles Floating Circles Background (z-0, decorative) */}
-      <HeroParticlesBackground />
+      {/* 3D Floating Glass Shards & Depth Particles Background (z-0, pointer-events-none) */}
+      <HeroShardsBackground />
 
       {/* Main Page Container
           DOM order: Text column first (for SEO & screen readers), Robot column second.

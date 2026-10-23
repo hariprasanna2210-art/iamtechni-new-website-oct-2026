@@ -48,14 +48,27 @@ import {
 import { EnterpriseSolutionsMatrix } from '../components/home/EnterpriseSolutionsMatrix';
 import { ProcessStageVisual, IndustryIllustration } from '../components/common/TechIllustrations';
 import { ProjectVisualThumbnail, ArticleGraphic, ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
-import { CompanyIntroVisual, AiNeuralPipelineVisual, CtaTerminalVisual } from '../components/home/HomeSectionVisuals';
+import { CompanyIntroVisual, AiNeuralPipelineVisual } from '../components/home/HomeSectionVisuals';
 import { AIBookSection } from '../components/home/AIBookSection';
 import { BusinessChallengesShowcase } from '../components/home/BusinessChallengesShowcase';
 import { EngineeringKnowledgeSection } from '../components/home/EngineeringKnowledgeSection';
+import { CollaborateSection } from '../components/home/CollaborateSection';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
 import { getAllUniqueTools } from '../data/heroServiceTools';
+import {
+  SiPython,
+  SiTensorflow,
+  SiPytorch,
+  SiLangchain,
+  SiPostgresql,
+  SiMeta,
+  SiDocker,
+  SiKubernetes,
+} from 'react-icons/si';
+import { FaAws } from 'react-icons/fa';
+import { TbBrandAzure, TbBrandOpenai } from 'react-icons/tb';
 import { AnimatePresence, motion, useReducedMotion, useInView, useScroll, useTransform, useSpring } from 'framer-motion';
 
 interface HomePageProps {
@@ -1146,50 +1159,12 @@ export const HomePage: React.FC<HomePageProps> = ({
       <EngineeringKnowledgeSection onNavigate={onNavigate} />
 
       {/* ========================================================================= */}
-      {/* 9. STRIKING FINAL CALL TO ACTION (Luminous Gradient Section)               */}
+      {/* 9. UNIFIED COLLABORATE & DIRECT INQUIRIES SECTION                         */}
       {/* ========================================================================= */}
-      <section className="py-24 bg-[#090D1A] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1266E8]/15 via-transparent to-[#5427D9]/15 pointer-events-none" />
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-slate-900 border border-slate-800 rounded-full text-xs font-mono text-[#04C8E8]">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>READY TO COLLABORATE</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            Have a challenge? Let’s engineer the solution.
-          </h2>
-
-          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Tell us what you want to build, improve or transform. Let’s explore the right technology and a practical path forward.
-          </p>
-
-          {/* Interactive Engineering Terminal Visual */}
-          <CtaTerminalVisual className="my-6" />
-
-          <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-3.5 sm:gap-4">
-            <button
-              onClick={() => onOpenProjectModal()}
-              className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-semibold text-white bg-gradient-to-r from-[#1266E8] to-[#5427D9] hover:opacity-95 rounded-xl transition-all shadow-lg active:scale-[0.98] cursor-pointer"
-            >
-              <span>Discuss Your Project</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={() => onNavigate('/contact')}
-              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-semibold text-slate-300 bg-slate-900/90 hover:bg-slate-800 border border-slate-800 rounded-xl transition-all cursor-pointer"
-            >
-              <span>Contact IAMTECHNI</span>
-            </button>
-          </div>
-
-          <div className="pt-8 text-xs text-slate-500 font-mono">
-            IAMTECHNI // https://iamtechni.in
-          </div>
-        </div>
-      </section>
+      <CollaborateSection
+        onNavigate={onNavigate}
+        onOpenProjectModal={onOpenProjectModal}
+      />
     </div>
   );
 };
@@ -1639,20 +1614,39 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
                     </span>
                   </div>
 
-                  {/* 4x3 Grid of Squares (8 filled, 4 empty) */}
+                  {/* 4x3 Grid of AI Tool Icons (No '••' dots) */}
                   <div className="grid grid-cols-4 gap-1.5 flex-1 max-w-[116px]">
-                    {Array.from({ length: 12 }).map((_, idx) => {
+                    {[
+                      { name: 'OpenAI', Icon: TbBrandOpenai, color: '#10A37F' },
+                      { name: 'Python', Icon: SiPython, color: '#3776AB' },
+                      { name: 'TensorFlow', Icon: SiTensorflow, color: '#FF6F00' },
+                      { name: 'PyTorch', Icon: SiPytorch, color: '#EE4C2C' },
+                      { name: 'LangChain', Icon: SiLangchain, color: '#1C3C3C' },
+                      { name: 'pgvector', Icon: SiPostgresql, color: '#4169E1' },
+                      { name: 'Llama / Meta AI', Icon: SiMeta, color: '#0668E1' },
+                      { name: 'Azure OpenAI', Icon: TbBrandAzure, color: '#0078D4' },
+                      { name: 'AWS Bedrock', Icon: FaAws, color: '#FF9900' },
+                      { name: 'Docker Runtime', Icon: SiDocker, color: '#2496ED' },
+                      { name: 'Kubernetes Cluster', Icon: SiKubernetes, color: '#326CE5' },
+                      { name: 'Generative AI', Icon: Sparkles, color: '#2563EB' },
+                    ].map((tool, idx) => {
                       const isFilled = idx < 8 && idx < litDocs;
+                      const ToolIcon = tool.Icon;
                       return (
                         <div
-                          key={idx}
-                          className={`h-5 rounded-[5px] flex items-center justify-center text-[8px] font-semibold transition-all duration-300 ${
+                          key={tool.name}
+                          title={tool.name}
+                          aria-label={tool.name}
+                          className={`h-5 rounded-[5px] flex items-center justify-center transition-all duration-300 ${
                             isFilled
-                              ? 'bg-[#DBEAFE] text-[#1E3A8A]'
-                              : 'bg-slate-100 text-slate-400'
+                              ? 'bg-[#DBEAFE] text-[#1E3A8A] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]'
+                              : 'bg-[#EEF4FF]/90 text-slate-500'
                           }`}
                         >
-                          ••
+                          <ToolIcon
+                            className="w-3 h-3 shrink-0"
+                            style={{ color: isFilled ? tool.color : undefined }}
+                          />
                         </div>
                       );
                     })}

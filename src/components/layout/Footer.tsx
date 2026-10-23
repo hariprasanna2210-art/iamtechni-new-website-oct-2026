@@ -1,190 +1,135 @@
 import React from 'react';
-import { ArrowUpRight, ShieldCheck, Mail, Globe, Phone, Clock, MessageSquare, ArrowRight, Sparkles } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowUpRight, Mail, Globe, Phone, Sparkles } from 'lucide-react';
 import { IamtechniLogo } from '../common/IamtechniLogo';
 import { PageRoute } from '../../types';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
 
+export const GOOGLE_REVIEWS_URL = "https://share.google/rJ0Tl7uoJfXLnIPi7";
+
 interface FooterProps {
   onNavigate: (route: PageRoute) => void;
-  onStartProject: () => void;
+  onStartProject?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) => {
-  const currentYear = new Date().getFullYear();
+  const prefersReducedMotion = useReducedMotion();
+
+  const columnVariants = {
+    hidden: { opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 16 },
+    visible: (index: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: prefersReducedMotion ? 0 : 0.4,
+        delay: prefersReducedMotion ? 0 : index * 0.06,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    }),
+  };
 
   return (
-    <footer className="bg-[#080B11] text-white border-t border-slate-800/80 pt-16 pb-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Prominent Direct Contact Highlight Bar */}
-        <div className="mb-14 p-4 sm:p-8 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-[#0e1628] border border-slate-800 shadow-xl overflow-hidden">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="space-y-1.5">
-              <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                <span className="text-[#04C8E8] font-bold uppercase tracking-wider">
-                  Direct Inquiries & Project Discovery
-                </span>
-                <span className="text-slate-500 hidden sm:inline">·</span>
-                <span className="text-slate-400 block sm:inline">Response within 24 hours</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-white">
-                Have a project or technology requirement in mind?
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-400 max-w-xl">
-                Reach out to our engineering and consulting team directly by phone or email.
-              </p>
+    <footer className="bg-[#13243D] text-white">
+      {/* Main Footer Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[56px] pb-[40px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-[1.3fr_1fr_0.9fr_1.3fr] gap-10 md:gap-10 lg:gap-[44px] items-start">
+          {/* COLUMN 1 – Brand */}
+          <motion.div
+            custom={0}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={columnVariants}
+            className="md:col-span-3 lg:col-span-1 space-y-4"
+          >
+            <div className="flex items-start">
+              <IamtechniLogo size="md" variant="dark" />
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3">
-              {/* Direct Phone */}
+            {/* Google Reviews Badge */}
+            <div>
               <a
-                href={COMPANY_CONTACT.phoneTel}
-                className="inline-flex items-center gap-2.5 px-4 py-2.5 bg-teal-950/70 border border-teal-500/40 hover:border-teal-400 text-teal-200 hover:text-white rounded-xl text-xs font-semibold transition-all group shadow-sm"
-                title={`Call ${COMPANY_CONTACT.phone}`}
-              >
-                <div className="w-7 h-7 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-300 group-hover:scale-110 transition-transform shrink-0">
-                  <Phone className="w-3.5 h-3.5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[10px] uppercase font-mono tracking-wider text-teal-400 font-bold">
-                    Call Directly
-                  </div>
-                  <div className="font-mono text-xs font-bold text-white truncate">
-                    {COMPANY_CONTACT.phone}
-                  </div>
-                </div>
-              </a>
-
-              {/* Direct Email */}
-              <a
-                href={COMPANY_CONTACT.emailMailto}
-                className="inline-flex items-center gap-2.5 px-4 py-2.5 bg-blue-950/70 border border-blue-500/40 hover:border-blue-400 text-blue-200 hover:text-white rounded-xl text-xs font-semibold transition-all group shadow-sm"
-                title={`Email ${COMPANY_CONTACT.email}`}
-              >
-                <div className="w-7 h-7 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-300 group-hover:scale-110 transition-transform shrink-0">
-                  <Mail className="w-3.5 h-3.5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[10px] uppercase font-mono tracking-wider text-blue-400 font-bold">
-                    Email Inquiries
-                  </div>
-                  <div className="font-mono text-xs font-bold text-white truncate">
-                    {COMPANY_CONTACT.email}
-                  </div>
-                </div>
-              </a>
-
-              {/* Ask AI Advisor CTA */}
-              <button
-                onClick={() => window.dispatchEvent(new CustomEvent('iamtechni:open-chat'))}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600/30 hover:bg-blue-600/50 text-blue-200 hover:text-white border border-blue-400/40 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-98 cursor-pointer"
-                title="Open IAMTECHNI AI Assistant"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-blue-300 shrink-0" />
-                <span>Ask AI Advisor</span>
-              </button>
-
-              {/* Consultation CTA */}
-              <button
-                onClick={onStartProject}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-slate-900 hover:bg-slate-100 rounded-xl text-xs font-bold transition-all shadow-md active:scale-98 cursor-pointer"
-              >
-                <span>Start a Project</span>
-                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-14 border-b border-slate-800/80">
-          {/* Brand Column */}
-          <div className="lg:col-span-2 space-y-4">
-            <IamtechniLogo size="md" variant="dark" />
-            <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
-              IAMTECHNI combines software engineering, artificial intelligence, cloud technologies, and digital growth services to help businesses transform ideas into practical digital solutions.
-            </p>
-            <div className="pt-2 text-xs font-mono text-slate-400">
-              Technology that moves your business forward.
-            </div>
-
-            <div className="pt-3 flex items-center gap-3">
-              <button
-                onClick={onStartProject}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[#1266E8] to-[#5427D9] text-white text-xs font-semibold rounded-xl hover:opacity-95 transition-opacity cursor-pointer shadow-sm active:scale-98"
-              >
-                <span>Start a Project</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={() => onNavigate('/contact')}
-                className="px-4 py-2 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 text-xs font-medium rounded-xl transition-colors cursor-pointer"
-              >
-                Contact IAMTECHNI
-              </button>
-            </div>
-
-            {/* Social & Channel Icons */}
-            <div className="pt-4 flex items-center gap-2">
-              <a
-                href="https://iamtechni.in"
+                href={GOOGLE_REVIEWS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-[#04C8E8] text-slate-400 hover:text-[#04C8E8] flex items-center justify-center transition-all hover:scale-105"
-                title="IAMTECHNI Website"
+                aria-label="IAMTECHNI Google Reviews"
+                className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#1B3152] border border-white/15 hover:border-[#5CE1E6]/60 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] transition-all duration-200 whitespace-nowrap"
               >
-                <Globe className="w-4 h-4" />
-              </a>
-              <a
-                href={COMPANY_CONTACT.emailMailto}
-                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-[#1266E8] text-slate-400 hover:text-[#1266E8] flex items-center justify-center transition-all hover:scale-105"
-                title="Email Inquiries"
-              >
-                <Mail className="w-4 h-4" />
-              </a>
-              <a
-                href={COMPANY_CONTACT.phoneTel}
-                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-teal-400 text-slate-400 hover:text-teal-400 flex items-center justify-center transition-all hover:scale-105"
-                title="Phone Line"
-              >
-                <Phone className="w-4 h-4" />
-              </a>
-              <button
-                onClick={() => window.dispatchEvent(new CustomEvent('iamtechni:open-chat'))}
-                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-violet-400 text-slate-400 hover:text-violet-400 flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
-                title="AI Architecture Advisor"
-              >
-                <Sparkles className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+                {/* Multicolour Google "G" Icon */}
+                <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    fill="#4285F4"
+                    d="M23.49 12.275c0-.85-.075-1.665-.215-2.45H12v4.635h6.445c-.28 1.495-1.12 2.76-2.385 3.61v3.005h3.86c2.26-2.08 3.57-5.145 3.57-8.8z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 24c3.24 0 5.955-1.075 7.94-2.925l-3.86-3.005c-1.075.72-2.45 1.145-4.08 1.145-3.135 0-5.79-2.115-6.74-4.96H1.27v3.1C3.245 21.28 7.31 24 12 24z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.26 14.255A7.21 7.21 0 0 1 4.88 12c0-.785.135-1.545.38-2.255v-3.1H1.27A11.985 11.985 0 0 0 0 12c0 1.935.465 3.765 1.27 5.355l3.99-3.1z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 4.785c1.76 0 3.34.605 4.585 1.795l3.435-3.435C17.95 1.19 15.235 0 12 0 7.31 0 3.245 2.72 1.27 6.645l3.99 3.1c.95-2.845 3.605-4.96 6.74-4.96z"
+                  />
+                </svg>
 
-          {/* Services Column */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4 font-mono">
-              Services
+                <span className="text-white font-bold text-sm tracking-tight">Google</span>
+
+                {/* 5 Gold Stars */}
+                <span className="inline-flex items-center gap-0.5" aria-hidden="true">
+                  {[0, 1, 2, 3, 4].map((starIndex) => (
+                    <motion.svg
+                      key={starIndex}
+                      initial={{ scale: prefersReducedMotion ? 1 : 0 }}
+                      whileInView={{ scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 320,
+                        damping: 18,
+                        delay: prefersReducedMotion ? 0 : starIndex * 0.08,
+                      }}
+                      className="w-3.5 h-3.5 text-[#FBBC04] fill-[#FBBC04]"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </motion.svg>
+                  ))}
+                </span>
+              </a>
+            </div>
+
+            <p className="text-[14px] text-white/70 font-sans font-normal leading-normal">
+              Technology that moves your business forward.
+            </p>
+          </motion.div>
+
+          {/* COLUMN 2 – SERVICES */}
+          <motion.div
+            custom={1}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={columnVariants}
+          >
+            <h4 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#5CE1E6] mb-[20px] leading-none whitespace-nowrap">
+              SERVICES
             </h4>
-            <ul className="space-y-2.5 text-xs text-slate-400">
+            <ul className="space-y-[12px] text-[14px] text-white/85">
               <li>
                 <button
                   onClick={() => onNavigate('/services/web-development')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Web Development
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate('/services/ecommerce')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
-                >
-                  E-commerce Development
-                </button>
-              </li>
-              <li>
-                <button
                   onClick={() => onNavigate('/services/custom-software')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Custom Software
                 </button>
@@ -192,7 +137,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/services/mobile-apps')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Mobile Applications
                 </button>
@@ -200,113 +145,54 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/services/ai-machine-learning')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
-                  AI & Machine Learning
+                  AI &amp; Machine Learning
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onNavigate('/services/cloud-devops')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
-                  Cloud & DevOps
+                  Cloud &amp; DevOps
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate('/services/robotics')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  onClick={() => onNavigate('/services/ecommerce')}
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
-                  Robotics & Emerging Tech
+                  E-commerce Development
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onNavigate('/services')}
-                  className="text-[#04C8E8] hover:underline font-semibold text-left pt-1 block cursor-pointer"
+                  className="inline-block whitespace-nowrap text-[#5CE1E6] font-semibold hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   All 13 Practices →
                 </button>
               </li>
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Solutions & Industries Column */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4 font-mono">
-              Solutions & Focus
+          {/* COLUMN 3 – COMPANY */}
+          <motion.div
+            custom={2}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={columnVariants}
+          >
+            <h4 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#5CE1E6] mb-[20px] leading-none whitespace-nowrap">
+              COMPANY
             </h4>
-            <ul className="space-y-2.5 text-xs text-slate-400">
-              <li>
-                <button
-                  onClick={() => onNavigate('/solutions')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
-                >
-                  Process Automation
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('/solutions')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
-                >
-                  Enterprise Document RAG
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('/solutions')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
-                >
-                  Executive Dashboards
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('/industries')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
-                >
-                  Education & Training
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('/industries')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
-                >
-                  Retail & E-commerce
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('/industries')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
-                >
-                  Healthcare Administration
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('/industries')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
-                >
-                  Manufacturing & Operations
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Organization & Direct Contact Column */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4 font-mono">
-              Company & Inquiries
-            </h4>
-            <ul className="space-y-2.5 text-xs text-slate-400">
+            <ul className="space-y-[12px] text-[14px] text-white/85">
               <li>
                 <button
                   onClick={() => onNavigate('/about')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   About IAMTECHNI
                 </button>
@@ -314,34 +200,26 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/portfolio')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
-                  Portfolio & Concept Work
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('/technology')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
-                >
-                  Technology Ecosystem
+                  Portfolio
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onNavigate('/insights')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
-                  Insights & Engineering Articles
+                  Insights
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onNavigate('/training')}
-                  className="hover:text-white transition-colors text-left cursor-pointer flex items-center gap-1.5 text-cyan-300"
+                  className="inline-flex items-center gap-2 whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
-                  <span>Technology Training &amp; Courses</span>
-                  <span className="text-[9px] font-mono px-1 py-0.5 rounded-sm bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold leading-none">
+                  <span>Training</span>
+                  <span className="inline-flex items-center text-[9px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold leading-none">
                     NEW
                   </span>
                 </button>
@@ -349,102 +227,170 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/careers')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
-                  Careers & Open Roles
+                  Careers
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onNavigate('/contact')}
-                  className="hover:text-white transition-colors text-left cursor-pointer"
+                  className="inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
-                  Contact & Inquiries
+                  Contact
                 </button>
               </li>
             </ul>
+          </motion.div>
 
-            <div className="pt-4 mt-4 border-t border-slate-800/60 text-xs space-y-3">
-              <div className="text-[11px] font-mono uppercase text-slate-400 font-bold tracking-wider">
-                Direct Contact
+          {/* COLUMN 4 – GET IN TOUCH */}
+          <motion.div
+            custom={3}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={columnVariants}
+          >
+            <h4 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#5CE1E6] mb-[20px] leading-none whitespace-nowrap">
+              GET IN TOUCH
+            </h4>
+
+            <div className="space-y-[12px] text-[14px]">
+              <div>
+                <a
+                  href={COMPANY_CONTACT.phoneTel}
+                  className="inline-block whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
+                >
+                  {COMPANY_CONTACT.phone}
+                </a>
               </div>
-              
-              {/* Phone Link */}
-              <a
-                href={COMPANY_CONTACT.phoneTel}
-                className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors group p-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50"
-                title={`Call ${COMPANY_CONTACT.phone}`}
-              >
-                <div className="w-7 h-7 rounded-lg bg-teal-950 border border-teal-800/80 flex items-center justify-center text-teal-400 group-hover:bg-teal-500 group-hover:text-white transition-colors shrink-0">
-                  <Phone className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-400 font-mono">Telephone</div>
-                  <div className="font-mono text-xs font-bold text-white group-hover:text-teal-300 transition-colors">
-                    {COMPANY_CONTACT.phone}
-                  </div>
-                </div>
-              </a>
 
-              {/* Email Link */}
-              <a
-                href={COMPANY_CONTACT.emailMailto}
-                className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors group p-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/50"
-                title={`Email ${COMPANY_CONTACT.email}`}
-              >
-                <div className="w-7 h-7 rounded-lg bg-blue-950 border border-blue-800/80 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-colors shrink-0">
-                  <Mail className="w-3.5 h-3.5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[10px] text-slate-400 font-mono">Email Inquiries</div>
-                  <div className="font-mono text-xs font-semibold text-white group-hover:text-blue-300 transition-colors truncate">
-                    {COMPANY_CONTACT.email}
-                  </div>
-                </div>
-              </a>
+              <div>
+                <a
+                  href={COMPANY_CONTACT.emailMailto}
+                  className="inline-block whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
+                >
+                  {COMPANY_CONTACT.email}
+                </a>
+              </div>
 
-              {/* Website */}
-              <div className="flex items-center gap-2 text-slate-400 pt-1 text-xs">
-                <Globe className="w-3.5 h-3.5 text-[#04C8E8] shrink-0" />
+              <div>
+                <button
+                  onClick={() => onNavigate('/contact')}
+                  className="inline-flex items-center gap-1 whitespace-nowrap text-white/85 font-semibold hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 cursor-pointer"
+                >
+                  <span>Let&apos;s talk</span>
+                  <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+
+              {/* 4 Round Icon Buttons in ONE row */}
+              <div className="pt-2 flex items-center gap-2.5 flex-nowrap">
                 <a
                   href="https://iamtechni.in"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors font-mono"
+                  aria-label="IAMTECHNI Website"
+                  title="IAMTECHNI Website"
+                  className="w-9 h-9 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200"
                 >
-                  iamtechni.in
+                  <Globe className="w-4 h-4" />
                 </a>
+                <a
+                  href={COMPANY_CONTACT.emailMailto}
+                  aria-label="Email Inquiries"
+                  title="Email Inquiries"
+                  className="w-9 h-9 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200"
+                >
+                  <Mail className="w-4 h-4" />
+                </a>
+                <a
+                  href={COMPANY_CONTACT.phoneTel}
+                  aria-label="Call IAMTECHNI"
+                  title="Phone Line"
+                  className="w-9 h-9 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200"
+                >
+                  <Phone className="w-4 h-4" />
+                </a>
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('iamtechni:open-chat'))}
+                  aria-label="AI Architecture Advisor"
+                  title="AI Architecture Advisor"
+                  className="w-9 h-9 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200 cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* 2 Action Buttons under Social Icons (Lighter/Softer Hero Section Reference) */}
+              <div className="pt-2.5 flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => (onStartProject ? onStartProject() : onNavigate('/consultation'))}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#3B82F6] via-[#4F7BF7] to-[#6366F1] hover:from-[#60A5FA] hover:via-[#6366F1] hover:to-[#818CF8] text-white text-xs font-semibold border border-[#93C5FD]/40 shadow-[0_4px_14px_rgba(59,130,246,0.25)] hover:-translate-y-0.5 transition-all duration-200 whitespace-nowrap cursor-pointer active:scale-[0.98]"
+                >
+                  <span>Start a Project</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('/contact')}
+                  className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs font-semibold border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] hover:-translate-y-0.5 transition-all duration-200 whitespace-nowrap cursor-pointer active:scale-[0.98]"
+                >
+                  <span>Contact IAMTECHNI</span>
+                </button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
+      </div>
 
-        {/* Bottom Legal Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div>
-            © {currentYear} IAMTECHNI. All rights reserved. Technology that moves your business forward.
+      {/* Bottom Bar – Full Width Darker Navy #0B1626 */}
+      <div className="bg-[#0B1626] w-full border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20 lg:pb-4 lg:pr-56 flex flex-col lg:flex-row items-center justify-between gap-3 text-[13px] text-white/85 text-center lg:text-left">
+          {/* Left: Phone & Email */}
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2">
+            <a
+              href={COMPANY_CONTACT.phoneTel}
+              className="inline-flex items-center gap-1.5 hover:text-[#5CE1E6] transition-colors whitespace-nowrap"
+            >
+              <Phone className="w-3.5 h-3.5 text-[#5CE1E6]" />
+              <span>{COMPANY_CONTACT.phone}</span>
+            </a>
+            <a
+              href={COMPANY_CONTACT.emailMailto}
+              className="inline-flex items-center gap-1.5 hover:text-[#5CE1E6] transition-colors whitespace-nowrap"
+            >
+              <Mail className="w-3.5 h-3.5 text-[#5CE1E6]" />
+              <span>{COMPANY_CONTACT.email}</span>
+            </a>
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          {/* Centre: Copyright */}
+          <div className="text-white/85">
+            © 2026 IAMTECHNI. All rights reserved.
+          </div>
+
+          {/* Right: Legal Links */}
+          <div className="flex items-center justify-center lg:justify-end gap-x-2.5 whitespace-nowrap">
             <button
               onClick={() => onNavigate('/privacy-policy')}
-              className="hover:text-slate-300 transition-colors cursor-pointer"
+              className="hover:text-[#5CE1E6] transition-colors cursor-pointer"
             >
               Privacy Policy
             </button>
+            <span className="text-white/30" aria-hidden="true">|</span>
             <button
               onClick={() => onNavigate('/terms')}
-              className="hover:text-slate-300 transition-colors cursor-pointer"
+              className="hover:text-[#5CE1E6] transition-colors cursor-pointer"
             >
               Terms of Use
             </button>
-            <span className="text-slate-700 hidden sm:inline">·</span>
-            <span className="text-slate-500 font-mono">+91-7418120053</span>
-            <span className="text-slate-700 hidden sm:inline">·</span>
-            <span className="text-slate-500 font-mono">iamtechni.in</span>
           </div>
         </div>
       </div>
     </footer>
   );
 };
+

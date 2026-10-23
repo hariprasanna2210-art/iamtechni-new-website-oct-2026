@@ -272,9 +272,9 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
   const theme = getThemeForCategory(currentArticle.category, slotIndex);
   const CategoryIcon = getCategoryIcon(currentArticle.category);
 
-  // Auto-flip every 2.5 seconds in a staggered wave from left to right (0.3s delay between cards)
+  // Fast auto-flip every 1.4 seconds in a staggered wave from left to right (0.2s delay between cards)
   useEffect(() => {
-    const staggerDelayMs = slotIndex * 300;
+    const staggerDelayMs = slotIndex * 200;
     let intervalId: number | undefined;
 
     const startTimeout = window.setTimeout(() => {
@@ -294,7 +294,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
       };
 
       triggerFlip();
-      intervalId = window.setInterval(triggerFlip, 2500);
+      intervalId = window.setInterval(triggerFlip, 1400);
     }, staggerDelayMs);
 
     return () => {
@@ -355,7 +355,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
       <motion.div
         animate={{ rotateY: effectiveRotateY }}
         transition={{
-          duration: 0.6,
+          duration: 0.45,
           ease: [0.4, 0, 0.2, 1],
         }}
         style={{ transformStyle: 'preserve-3d' }}
@@ -537,8 +537,15 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
             </div>
 
             <motion.h2
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.28, ease: 'easeOut' }}
+              animate={{ scale: [1, 1.02, 1] }}
+              whileHover={{ scale: 1.03 }}
+              transition={{
+                scale: {
+                  duration: 2.8,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                },
+              }}
               className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-[36px] xl:text-[40px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2] origin-left cursor-default"
             >
               {['Ideas,', 'knowledge', 'and', 'practical', 'engineering.'].map(
@@ -548,16 +555,20 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
                     <React.Fragment key={`${word}-${i}`}>
                       <motion.span
                         initial={{ opacity: 0, y: 8 }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                        viewport={{ once: true }}
+                        animate={{ opacity: 1, y: 0, scale: [1, 1.04, 1] }}
                         whileHover={{
-                          scale: 1.07,
+                          scale: 1.09,
                           transition: { duration: 0.22, ease: 'easeOut' },
                         }}
                         transition={{
-                          duration: 0.4,
-                          delay: 0.05 * i,
-                          ease: [0.16, 1, 0.3, 1],
+                          opacity: { duration: 0.4, delay: 0.05 * i },
+                          y: { duration: 0.4, delay: 0.05 * i },
+                          scale: {
+                            duration: 2.4,
+                            repeat: Infinity,
+                            ease: 'easeInOut',
+                            delay: 0.15 * i,
+                          },
                         }}
                         className={`inline-block text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] hover:drop-shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-shadow duration-200 ${
                           isLast ? 'mr-0' : 'mr-[0.24em]'
