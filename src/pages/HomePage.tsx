@@ -1559,24 +1559,12 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             }}
             className="group/card md:order-2 lg:order-1 lg:w-[29.5%] shrink-0 flex flex-col items-center"
           >
-            {/* Photo Card */}
-            <div className="group w-full h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
-              {/* Sharp Meadow Photo with Scroll Parallax */}
+            {/* Card Container (Grass removed, clean soft sky gradient preserved) */}
+            <div className="group w-full h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
               <motion.div
                 style={{ y: photoParallaxY }}
-                className="absolute -inset-y-5 inset-x-0"
-              >
-                <picture>
-                  <source srcSet="/images/meadow-1.webp" type="image/webp" />
-                  <img
-                    src="/images/meadow-1.jpg"
-                    alt="Bright green rolling hills with purple and white wildflowers under a sunlit sky"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
-                  />
-                </picture>
-              </motion.div>
+                className="absolute -inset-y-5 inset-x-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.9)_0%,rgba(219,234,254,0.45)_60%,rgba(239,246,255,0.8)_100%)] pointer-events-none"
+              />
 
               {/* Compact White Widget (Hero Section Color Coding) */}
               <motion.div
@@ -1649,24 +1637,12 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             }}
             className="group/card md:col-span-2 md:order-1 lg:order-2 lg:w-[41%] shrink-0 flex flex-col items-center"
           >
-            {/* Photo Card (300px tall on desktop, extending lower than side cards) */}
-            <div className="group w-full h-[220px] sm:h-[260px] lg:h-[300px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 shadow-[0_16px_38px_rgba(30,58,138,0.10)] hover:shadow-[0_24px_50px_rgba(30,58,138,0.18)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
-              {/* Sharp Meadow Photo with Scroll Parallax */}
+            {/* Card Container (300px tall on desktop, grass removed, clean soft sky gradient preserved) */}
+            <div className="group w-full h-[220px] sm:h-[260px] lg:h-[300px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_16px_38px_rgba(30,58,138,0.10)] hover:shadow-[0_24px_50px_rgba(30,58,138,0.18)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
               <motion.div
                 style={{ y: photoParallaxY }}
-                className="absolute -inset-y-5 inset-x-0"
-              >
-                <picture>
-                  <source srcSet="/images/meadow-2.webp" type="image/webp" />
-                  <img
-                    src="/images/meadow-2.jpg"
-                    alt="Sunlit green valley and meadow carpeted with colorful wildflowers"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
-                  />
-                </picture>
-              </motion.div>
+                className="absolute -inset-y-5 inset-x-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.92)_0%,rgba(219,234,254,0.45)_60%,rgba(239,246,255,0.8)_100%)] pointer-events-none"
+              />
 
               {/* Compact White Widget (Hero Section Color Coding) */}
               <motion.div
@@ -1779,24 +1755,12 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             }}
             className="group/card md:order-3 lg:order-3 lg:w-[29.5%] shrink-0 flex flex-col items-center"
           >
-            {/* Photo Card */}
-            <div className="group w-full h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
-              {/* Sharp Meadow Photo with Scroll Parallax */}
+            {/* Card Container (Grass removed, clean soft sky gradient preserved) */}
+            <div className="group w-full h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
               <motion.div
                 style={{ y: photoParallaxY }}
-                className="absolute -inset-y-5 inset-x-0"
-              >
-                <picture>
-                  <source srcSet="/images/meadow-3.webp" type="image/webp" />
-                  <img
-                    src="/images/meadow-3.jpg"
-                    alt="Rolling emerald hills with sunlit wildflower meadow in full bloom"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
-                  />
-                </picture>
-              </motion.div>
+                className="absolute -inset-y-5 inset-x-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.9)_0%,rgba(219,234,254,0.45)_60%,rgba(239,246,255,0.8)_100%)] pointer-events-none"
+              />
 
               {/* Compact White Widget (Hero Section Color Coding) */}
               <motion.div
