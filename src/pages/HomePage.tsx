@@ -50,6 +50,7 @@ import { ProcessStageVisual, IndustryIllustration } from '../components/common/T
 import { ProjectVisualThumbnail, ArticleGraphic, ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { CompanyIntroVisual, AiNeuralPipelineVisual, CtaTerminalVisual } from '../components/home/HomeSectionVisuals';
 import { AIBookSection } from '../components/home/AIBookSection';
+import { BusinessChallengesShowcase } from '../components/home/BusinessChallengesShowcase';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
@@ -1134,82 +1135,9 @@ export const HomePage: React.FC<HomePageProps> = ({
       <AIBookSection onNavigate={onNavigate} />
 
       {/* ========================================================================= */}
-      {/* 7. INDUSTRIES SERVED (Staggered ScrollReveal)                             */}
+      {/* 7. INDUSTRIES SERVED (Auto-Changing Stacked Card Showcase)                */}
       {/* ========================================================================= */}
-      <section className="py-24 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
-            <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
-                Domain Solutions
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
-                Technology for different business challenges.
-              </h2>
-              <p className="text-sm bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-2 leading-relaxed max-w-2xl">
-                We design and engineer digital systems tailored to the exact regulatory, workflow, and customer contexts of your industry.
-              </p>
-            </div>
-
-            <button
-              onClick={() => onNavigate('/industries')}
-              className="text-xs font-bold text-[#1266E8] hover:underline flex items-center gap-1 cursor-pointer"
-            >
-              View All Industries <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.1}>
-            {industriesData.slice(0, 6).map((ind, idx) => {
-              const color = getCardColorToken(idx + 2);
-              const IndIcon = getIndustryIcon(ind.name);
-
-              return (
-                <ScrollRevealItem key={ind.id} className="h-full">
-                  <div
-                    onClick={() => onNavigate('/industries')}
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between shadow-2xs interactive-card-lift`}
-                  >
-                    <div>
-                      <IndustryIllustration industryId={ind.name} className="mb-4" />
-
-                      <div className="flex items-center justify-between text-xs mb-3.5">
-                        <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                          SECTOR 0{idx + 1}
-                        </span>
-                        <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
-                          <IndIcon className="w-4.5 h-4.5" />
-                        </div>
-                      </div>
-
-                      <h3 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2">
-                        {ind.name}
-                      </h3>
-                      <p className="text-xs text-slate-700 leading-relaxed mb-4">
-                        {ind.summary}
-                      </p>
-
-                      <div className="space-y-1.5 text-xs text-slate-700">
-                        <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wide">
-                          Core Challenge Addressed:
-                        </div>
-                        <div className="text-[11px] text-slate-600 line-clamp-2">
-                          {ind.coreChallenges[0]}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={`pt-4 mt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold ${color.accentText}`}>
-                      <span>Explore Industry Solutions</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </div>
-                </ScrollRevealItem>
-              );
-            })}
-          </ScrollReveal>
-        </div>
-      </section>
+      <BusinessChallengesShowcase onNavigate={onNavigate} />
 
       {/* ========================================================================= */}
       {/* 8. LATEST ENGINEERING INSIGHTS (Staggered ScrollReveal)                   */}
