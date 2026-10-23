@@ -1231,19 +1231,19 @@ export const ArticleGraphic: React.FC<{ slug: string; className?: string }> = ({
         </div>
         <div className="grid grid-cols-3 gap-2 sm:gap-3 my-auto py-1.5 text-center text-xs font-mono">
           <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-            <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">Lexical</div>
-            <div className="text-xs sm:text-base font-bold text-amber-300 truncate">BM25</div>
-            <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">Exact Match</div>
+            <div className="text-[9px] sm:text-[10px] text-slate-400 leading-tight">Lexical</div>
+            <div className="text-xs sm:text-sm font-bold text-amber-300 leading-tight my-0.5">BM25</div>
+            <div className="text-[8px] sm:text-[9px] text-slate-400 leading-tight">Exact Match</div>
           </div>
           <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-            <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">Embedding</div>
-            <div className="text-xs sm:text-base font-bold text-cyan-400 truncate">1536d</div>
-            <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">Semantic</div>
+            <div className="text-[9px] sm:text-[10px] text-slate-400 leading-tight">Embedding</div>
+            <div className="text-xs sm:text-sm font-bold text-cyan-400 leading-tight my-0.5">1536d</div>
+            <div className="text-[8px] sm:text-[9px] text-slate-400 leading-tight">Semantic</div>
           </div>
           <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-            <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">Rank Fusion</div>
-            <div className="text-xs sm:text-base font-bold text-emerald-400 truncate">RRF Top-5</div>
-            <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">Verified</div>
+            <div className="text-[9px] sm:text-[10px] text-slate-400 leading-tight">Rank Fusion</div>
+            <div className="text-xs sm:text-sm font-bold text-emerald-400 leading-tight my-0.5">RRF Top-5</div>
+            <div className="text-[8px] sm:text-[9px] text-slate-400 leading-tight">Verified</div>
           </div>
         </div>
         <div className="pt-2 border-t border-slate-800/80 text-[10px] sm:text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2">
@@ -1266,19 +1266,19 @@ export const ArticleGraphic: React.FC<{ slug: string; className?: string }> = ({
       </div>
       <div className="grid grid-cols-3 gap-2 sm:gap-3 my-auto py-1.5 text-center text-xs font-mono">
         <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-          <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">Availability</div>
-          <div className="text-xs sm:text-base font-bold text-[#1266E8]">99.99%</div>
-          <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">Multi-AZ SLA</div>
+          <div className="text-[9px] sm:text-[10px] text-slate-400 leading-tight">Availability</div>
+          <div className="text-xs sm:text-sm font-bold text-[#1266E8] leading-tight my-0.5">99.99%</div>
+          <div className="text-[8px] sm:text-[9px] text-slate-400 leading-tight">Multi-AZ SLA</div>
         </div>
         <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-          <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">P99 Latency</div>
-          <div className="text-xs sm:text-base font-bold text-cyan-400">&lt;85ms</div>
-          <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">Edge CDN</div>
+          <div className="text-[9px] sm:text-[10px] text-slate-400 leading-tight">P99 Latency</div>
+          <div className="text-xs sm:text-sm font-bold text-cyan-400 leading-tight my-0.5">&lt;85ms</div>
+          <div className="text-[8px] sm:text-[9px] text-slate-400 leading-tight">Edge CDN</div>
         </div>
         <div className="p-2 sm:p-3 bg-slate-900/80 rounded-xl border border-slate-700">
-          <div className="text-[9px] sm:text-[10px] text-slate-400 truncate">Orchestration</div>
-          <div className="text-xs sm:text-base font-bold text-emerald-400 truncate">K8s / ECS</div>
-          <div className="text-[8px] sm:text-[9px] text-slate-400 truncate">GitOps</div>
+          <div className="text-[9px] sm:text-[10px] text-slate-400 leading-tight">Orchestration</div>
+          <div className="text-xs sm:text-sm font-bold text-emerald-400 leading-tight my-0.5">K8s / ECS</div>
+          <div className="text-[8px] sm:text-[9px] text-slate-400 leading-tight">GitOps</div>
         </div>
       </div>
       <div className="pt-2 border-t border-slate-800/80 text-[10px] sm:text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2">

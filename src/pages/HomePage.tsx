@@ -51,6 +51,7 @@ import { ProjectVisualThumbnail, ArticleGraphic, ServiceCardThumbnail } from '..
 import { CompanyIntroVisual, AiNeuralPipelineVisual, CtaTerminalVisual } from '../components/home/HomeSectionVisuals';
 import { AIBookSection } from '../components/home/AIBookSection';
 import { BusinessChallengesShowcase } from '../components/home/BusinessChallengesShowcase';
+import { EngineeringKnowledgeSection } from '../components/home/EngineeringKnowledgeSection';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
@@ -1140,75 +1141,9 @@ export const HomePage: React.FC<HomePageProps> = ({
       <BusinessChallengesShowcase onNavigate={onNavigate} />
 
       {/* ========================================================================= */}
-      {/* 8. LATEST ENGINEERING INSIGHTS (Staggered ScrollReveal)                   */}
+      {/* 8. LATEST ENGINEERING INSIGHTS (Dark Glass 3D Flip Cards)                 */}
       {/* ========================================================================= */}
-      <section className="py-24 bg-[#F5F8FC] border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-            <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
-                Engineering Knowledge
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
-                Ideas, knowledge and practical engineering.
-              </h2>
-              <p className="text-sm bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-2 leading-relaxed">
-                Technical articles, architecture reviews, and field notes written by our senior engineering team.
-              </p>
-            </div>
-
-            <button
-              onClick={() => onNavigate('/insights')}
-              className="text-xs font-bold text-[#1266E8] hover:underline flex items-center gap-1 cursor-pointer"
-            >
-              Browse All Articles <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.15}>
-            {insightsData.map((art, idx) => {
-              const color = getCardColorToken(idx + 3);
-
-              return (
-                <ScrollRevealItem key={art.slug} className="h-full">
-                  <article
-                    onClick={() => onNavigate(`/insights/${art.slug}` as PageRoute)}
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all cursor-pointer group shadow-2xs interactive-card-lift`}
-                  >
-                    <div>
-                      {/* Interactive Article Graphic Header */}
-                      <ArticleGraphic slug={art.slug} className="mb-4" />
-
-                      <div className="flex items-center gap-2 text-xs mb-3">
-                        <span className={`font-mono font-bold px-2 py-0.5 rounded text-[11px] ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
-                          {art.category}
-                        </span>
-                        <span className="text-slate-400" aria-hidden="true">·</span>
-                        <span className="text-slate-500 font-mono text-[11px]">{art.readTime}</span>
-                      </div>
-
-                      <h3 className="text-base font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-3">
-                        {art.title}
-                      </h3>
-
-                      <p className="text-xs text-slate-700 leading-relaxed mb-6 line-clamp-3">
-                        {art.excerpt}
-                      </p>
-                    </div>
-
-                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
-                      <span className="font-mono text-[11px]">{art.publishedDate}</span>
-                      <span className={`${color.accentText} font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform`}>
-                        Read Article <ArrowRight className="w-3.5 h-3.5" />
-                      </span>
-                    </div>
-                  </article>
-                </ScrollRevealItem>
-              );
-            })}
-          </ScrollReveal>
-        </div>
-      </section>
+      <EngineeringKnowledgeSection onNavigate={onNavigate} />
 
       {/* ========================================================================= */}
       {/* 9. STRIKING FINAL CALL TO ACTION (Luminous Gradient Section)               */}
