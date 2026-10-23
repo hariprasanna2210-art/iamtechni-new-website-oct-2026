@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ArrowRight,
   Sparkles,
@@ -49,7 +49,7 @@ import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../componen
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
 import { getAllUniqueTools } from '../data/heroServiceTools';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, useInView, useScroll, useTransform, useSpring } from 'framer-motion';
 
 interface HomePageProps {
   onNavigate: (route: PageRoute) => void;
@@ -251,7 +251,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================================= */}
       {/* 3. ENGINEERING DISCIPLINES (Hero-Color-Coded Upper Section + 2 Horizontal Tool Rows) */}
       {/* ========================================================================= */}
-      <section className="relative py-20 sm:py-24 bg-gradient-to-b from-[#F8FAFF] via-white to-[#EEF4FF]/60 border-b border-[#DBEAFE]/90 overflow-hidden">
+      <section className="relative pt-20 pb-8 sm:pt-24 sm:pb-10 bg-gradient-to-b from-[#F8FAFF] via-white to-[#EEF4FF]/60 border-b border-[#DBEAFE]/90 overflow-hidden">
         {/* Subtle Dotted Pattern */}
         <div
           aria-hidden="true"
@@ -451,58 +451,12 @@ export const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       {/* ========================================================================= */}
-      {/* 3.5 CORE ADVANTAGES                                                       */}
+      {/* 3.5 CORE ADVANTAGES (Scroll-Animated Pastel Frame + Meadow Cards + Original Content) */}
       {/* ========================================================================= */}
-      <section className="py-16 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FE] to-[#F0FDFA] border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.15}>
-            {/* Advantage 1 - Blue (#EAF3FF) */}
-            <ScrollRevealItem className="h-full">
-              <div className="bg-[#EAF3FF] h-full rounded-2xl p-6 sm:p-8 border border-blue-200/90 shadow-xs hover:shadow-md hover:border-blue-300 transition-all relative overflow-hidden group interactive-card-lift">
-                <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                  <Code2 className="w-6 h-6" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">
-                  Modern Software Craftsmanship
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  We write clean, strongly-typed TypeScript and Python code, enforce component modularity, and create architectures designed for maintainability and rapid onboarding.
-                </p>
-              </div>
-            </ScrollRevealItem>
-
-            {/* Advantage 2 - Violet (#F0EAFF) */}
-            <ScrollRevealItem className="h-full">
-              <div className="bg-[#F0EAFF] h-full rounded-2xl p-6 sm:p-8 border border-violet-200/90 shadow-xs hover:shadow-md hover:border-violet-300 transition-all relative overflow-hidden group interactive-card-lift">
-                <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                  <Cpu className="w-6 h-6" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">
-                  Practical, Grounded Intelligence
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  We deploy Retrieval-Augmented Generation (RAG) and private document search with strict citation traceability, ensuring your proprietary data never leaks into public models.
-                </p>
-              </div>
-            </ScrollRevealItem>
-
-            {/* Advantage 3 - Teal (#E1F8F2) */}
-            <ScrollRevealItem className="h-full">
-              <div className="bg-[#E1F8F2] h-full rounded-2xl p-6 sm:p-8 border border-teal-200/90 shadow-xs hover:shadow-md hover:border-teal-300 transition-all relative overflow-hidden group interactive-card-lift">
-                <div className="w-12 h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                  <ShieldCheck className="w-6 h-6" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">
-                  Enterprise Reliability &amp; Security
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  Automated CI/CD deployment pipelines, defensive hardening, OWASP security best practices, and proactive cloud FinOps governance that prevent budget surprises.
-                </p>
-              </div>
-            </ScrollRevealItem>
-          </ScrollReveal>
-        </div>
-      </section>
+      <PrinciplesScrollSection
+        onNavigate={onNavigate}
+        prefersReducedMotion={Boolean(prefersReducedMotion)}
+      />
 
       {/* ========================================================================= */}
       {/* 2.5 ENTERPRISE SOLUTIONS & ARCHITECTURE MATRIX (Relevant to IAMTECHNI)     */}
@@ -1028,3 +982,626 @@ export const HomePage: React.FC<HomePageProps> = ({
     </div>
   );
 };
+
+interface PrinciplesScrollSectionProps {
+  onNavigate: (route: PageRoute) => void;
+  prefersReducedMotion: boolean;
+}
+
+const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
+  onNavigate,
+  prefersReducedMotion,
+}) => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardsRowRef = useRef<HTMLDivElement>(null);
+
+  // Trigger widget count-up & inner animations when cards are ~60% visible
+  const widgetsVisible = useInView(cardsRowRef, { once: true, amount: 0.55 });
+
+  // Scroll-linked progress across the section with smooth spring physics
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 85,
+    damping: 24,
+    mass: 0.35,
+  });
+
+  // 1. Background gradient slowly shifts hue as user scrolls
+  const bgHueFilter = useTransform(
+    smoothProgress,
+    [0, 0.5, 1],
+    prefersReducedMotion
+      ? ['hue-rotate(0deg)', 'hue-rotate(0deg)', 'hue-rotate(0deg)']
+      : ['hue-rotate(-12deg)', 'hue-rotate(0deg)', 'hue-rotate(18deg)']
+  );
+
+  // 2. Huge faded "IAMTECHNI" wordmark slides horizontally at the bottom
+  const wordmarkX = useTransform(
+    smoothProgress,
+    [0, 1],
+    prefersReducedMotion ? ['0%', '0%'] : ['12%', '-12%']
+  );
+
+  // 3. White frame rises from 80px and scales from 0.94 to 1
+  const frameY = useTransform(
+    smoothProgress,
+    [0.02, 0.32],
+    prefersReducedMotion ? [0, 0] : [80, 0]
+  );
+  const frameScale = useTransform(
+    smoothProgress,
+    [0.02, 0.32],
+    prefersReducedMotion ? [1, 1] : [0.94, 1]
+  );
+  const frameOpacity = useTransform(
+    smoothProgress,
+    [0.0, 0.2],
+    prefersReducedMotion ? [1, 1] : [0.35, 1]
+  );
+
+  // 4. Headline and buttons fade up
+  const headerY = useTransform(
+    smoothProgress,
+    [0.05, 0.3],
+    prefersReducedMotion ? [0, 0] : [36, 0]
+  );
+  const headerOpacity = useTransform(
+    smoothProgress,
+    [0.05, 0.26],
+    prefersReducedMotion ? [1, 1] : [0, 1]
+  );
+
+  // 5. Photo cards rise from 120px below (center card first, side cards slightly delayed)
+  //    While scrolling through, side cards drift slightly outward, center card slightly upward
+  const centerCardY = useTransform(
+    smoothProgress,
+    [0.08, 0.36, 0.85],
+    prefersReducedMotion ? [0, 0, 0] : [120, 0, -14]
+  );
+  const centerCardOpacity = useTransform(
+    smoothProgress,
+    [0.07, 0.28],
+    prefersReducedMotion ? [1, 1] : [0, 1]
+  );
+
+  const sideCardY = useTransform(
+    smoothProgress,
+    [0.14, 0.42, 0.85],
+    prefersReducedMotion ? [0, 0, 0] : [120, 0, 6]
+  );
+  const sideCardOpacity = useTransform(
+    smoothProgress,
+    [0.12, 0.34],
+    prefersReducedMotion ? [1, 1] : [0, 1]
+  );
+
+  const leftCardX = useTransform(
+    smoothProgress,
+    [0.28, 0.82],
+    prefersReducedMotion ? [0, 0] : [8, -10]
+  );
+  const rightCardX = useTransform(
+    smoothProgress,
+    [0.28, 0.82],
+    prefersReducedMotion ? [0, 0] : [-8, 10]
+  );
+
+  // 6. Each photo moves slower than the page (scroll parallax)
+  const photoParallaxY = useTransform(
+    smoothProgress,
+    [0, 1],
+    prefersReducedMotion ? ['0%', '0%'] : ['-8%', '8%']
+  );
+
+  // Count-up metrics triggered when cards are ~60% visible
+  const [beforeQuality, setBeforeQuality] = useState(prefersReducedMotion ? 72 : 0);
+  const [afterQuality, setAfterQuality] = useState(prefersReducedMotion ? 98 : 0);
+  const [privateAiPct, setPrivateAiPct] = useState(prefersReducedMotion ? 100 : 0);
+  const [litDocs, setLitDocs] = useState(prefersReducedMotion ? 8 : 0);
+  const [uptimeVal, setUptimeVal] = useState(prefersReducedMotion ? 99.99 : 0);
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setBeforeQuality(72);
+      setAfterQuality(98);
+      setPrivateAiPct(100);
+      setLitDocs(8);
+      setUptimeVal(99.99);
+      return;
+    }
+    if (!widgetsVisible) return;
+
+    const duration = 1400;
+    let rafId: number;
+    const startTime = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+
+      setBeforeQuality(Math.round(72 * eased));
+      setAfterQuality(Math.round(98 * eased));
+      setPrivateAiPct(Math.round(100 * eased));
+      setLitDocs(Math.min(8, Math.floor(eased * 8.99)));
+      setUptimeVal(Number((99.99 * eased).toFixed(2)));
+
+      if (progress < 1) {
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [widgetsVisible, prefersReducedMotion]);
+
+  const active = prefersReducedMotion || widgetsVisible;
+  const ringCircumference = 2 * Math.PI * 19;
+  const ringOffset = ringCircumference * (1 - (active ? 1 : 0));
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative py-14 sm:py-24 px-3 sm:px-6 lg:px-8 border-b border-slate-200/70 overflow-hidden"
+    >
+      {/* Pastel Rainbow Gradient Background Layer (hue shifts smoothly on scroll) */}
+      <motion.div
+        aria-hidden="true"
+        style={{
+          filter: bgHueFilter,
+          backgroundImage: [
+            'radial-gradient(circle at 8% 22%, #BFE3F7 0%, rgba(191, 227, 247, 0) 58%)',
+            'radial-gradient(circle at 92% 14%, #F6F1C7 0%, rgba(246, 241, 199, 0) 54%)',
+            'radial-gradient(circle at 94% 84%, #CDEFC6 0%, rgba(205, 239, 198, 0) 58%)',
+            'radial-gradient(circle at 12% 90%, #E3D6F7 0%, rgba(227, 214, 247, 0) 56%)',
+            'linear-gradient(125deg, #BFE3F7 0%, #F6F1C7 38%, #CDEFC6 72%, #E3D6F7 100%)',
+          ].join(', '),
+        }}
+        className="pointer-events-none absolute inset-0"
+      />
+
+      {/* Huge Faded "IAMTECHNI" Wordmark in White at 25% Opacity Behind the Frame at the Bottom */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none select-none absolute inset-x-0 bottom-[-18px] sm:bottom-[-32px] flex justify-center overflow-hidden z-0"
+      >
+        <motion.div
+          style={{ x: wordmarkX }}
+          className="!font-['Plus_Jakarta_Sans','Outfit',sans-serif] font-black text-[76px] sm:text-[138px] lg:text-[196px] tracking-[-0.04em] leading-none text-white/25 uppercase whitespace-nowrap"
+        >
+          IAMTECHNI
+        </motion.div>
+      </div>
+
+      {/* Large White Rounded Card Holding Everything */}
+      <motion.div
+        style={{
+          y: frameY,
+          scale: frameScale,
+          opacity: frameOpacity,
+        }}
+        className="relative z-10 max-w-[1100px] mx-auto bg-white rounded-[32px] py-[28px] px-[16px] sm:pt-[56px] sm:px-[40px] sm:pb-[48px] shadow-[0_24px_64px_rgba(15,23,42,0.08)] border border-white/90"
+      >
+        {/* 2. HEADER (inside the white card, centered) */}
+        <motion.div
+          style={{
+            y: headerY,
+            opacity: headerOpacity,
+          }}
+          className="flex flex-col items-center text-center mb-9 sm:mb-12"
+        >
+          {/* Headline — Exact Hero Section Font Family, Pure Dark Blue (#1E3A8A), No Hover Color Change, Zoom-In/Zoom-Out on Hover */}
+          <motion.h2
+            whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+            transition={{ duration: 0.28, ease: 'easeOut' }}
+            className="!font-['Outfit','Space_Grotesk',sans-serif] font-bold text-2xl sm:text-3xl lg:text-[36px] xl:text-[40px] text-[#1E3A8A] tracking-[-0.015em] leading-[1.2] origin-center cursor-default"
+          >
+            {['Built', 'Right.', 'Built', 'Smart.', 'Built', 'Secure.'].map((word, i, arr) => {
+              const isLast = i === arr.length - 1;
+              return (
+                <React.Fragment key={`${word}-${i}`}>
+                  <motion.span
+                    initial={prefersReducedMotion ? {} : { opacity: 0, y: 8 }}
+                    animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, scale: 1 }}
+                    whileHover={
+                      prefersReducedMotion
+                        ? {}
+                        : {
+                            scale: 1.07,
+                            transition: { duration: 0.22, ease: 'easeOut' },
+                          }
+                    }
+                    transition={{
+                      duration: 0.4,
+                      delay: prefersReducedMotion ? 0 : 0.06 * i,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className={`inline-block text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] hover:drop-shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-shadow duration-200 ${
+                      isLast ? 'mr-0' : 'mr-[0.24em]'
+                    }`}
+                  >
+                    {word}
+                  </motion.span>
+                  {!isLast && ' '}
+                </React.Fragment>
+              );
+            })}
+          </motion.h2>
+
+          {/* Subtitle — Hero Section Subtitle Gradient (#100C2E -> #3A279E -> #2557D6) */}
+          <p className="mt-3 text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed max-w-[540px] mx-auto">
+            Clean engineering, private AI, and enterprise security, working together so your product grows without surprises.
+          </p>
+
+          {/* Buttons — Dark Blue (#1E3A8A) with Softer Hover (#1E3A8A/80) Exactly as per Hero Section */}
+          <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 w-full sm:w-auto max-w-[260px] sm:max-w-none">
+            <a
+              href="/contact"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('/contact');
+              }}
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+            >
+              <span>Start a Project</span>
+            </a>
+            <a
+              href="#services"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('services');
+                if (el) {
+                  el.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                } else {
+                  onNavigate('/services');
+                }
+              }}
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+            >
+              <span>Explore Services</span>
+            </a>
+          </div>
+        </motion.div>
+
+        {/* 3. PHOTO CARDS + ORIGINAL ICON, TITLE, AND PARAGRAPH DIRECTLY BELOW EACH */}
+        <div
+          ref={cardsRowRef}
+          className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-row lg:items-start gap-6 lg:gap-[18px]"
+        >
+          {/* --------------------------------------------------------------- */}
+          {/* LEFT CARD: Modern Software Craftsmanship                        */}
+          {/* --------------------------------------------------------------- */}
+          <motion.div
+            style={{
+              y: sideCardY,
+              x: leftCardX,
+              opacity: sideCardOpacity,
+            }}
+            className="group/card md:order-2 lg:order-1 lg:w-[29.5%] shrink-0 flex flex-col items-center"
+          >
+            {/* Photo Card */}
+            <div className="group w-full h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
+              {/* Sharp Meadow Photo with Scroll Parallax */}
+              <motion.div
+                style={{ y: photoParallaxY }}
+                className="absolute -inset-y-5 inset-x-0"
+              >
+                <picture>
+                  <source srcSet="/images/meadow-1.webp" type="image/webp" />
+                  <img
+                    src="/images/meadow-1.jpg"
+                    alt="Bright green rolling hills with purple and white wildflowers under a sunlit sky"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+                  />
+                </picture>
+              </motion.div>
+
+              {/* Compact White Widget (Hero Section Color Coding) */}
+              <motion.div
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+                animate={
+                  prefersReducedMotion
+                    ? { opacity: 1, y: 0 }
+                    : widgetsVisible
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 20 }
+                }
+                transition={{
+                  type: 'spring',
+                  stiffness: 120,
+                  damping: 18,
+                  delay: prefersReducedMotion ? 0 : 0.12,
+                }}
+                className="relative z-10 w-[68%] sm:w-[60%] lg:w-[68%] max-w-[210px] bg-white rounded-xl p-[12px] border border-[#DBEAFE]/90 shadow-[0_10px_28px_rgba(30,58,138,0.14)] text-[11px] leading-tight text-left transition-transform duration-300 ease-out group-hover:-translate-y-[4px]"
+              >
+                <div className="flex items-center justify-between gap-1.5 mb-2">
+                  <span className="font-bold text-[#1E3A8A] truncate">Code quality</span>
+                  <span className="px-1.5 py-0.5 rounded bg-[#EEF4FF] text-[#2563EB] border border-[#DBEAFE]/80 text-[9.5px] font-semibold shrink-0">
+                    Recommended
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-1.5 mb-2">
+                  <div className="rounded-lg bg-[#F8FAFF] border border-[#DBEAFE]/80 px-2 py-1.5">
+                    <div className="text-[10px] text-[#2563EB] font-medium mb-0.5">Before</div>
+                    <div className="text-[13px] font-bold text-[#1E3A8A] tabular-nums">
+                      {beforeQuality}%
+                    </div>
+                  </div>
+                  <div className="rounded-lg bg-[#F8FAFF] border border-[#DBEAFE]/80 px-2 py-1.5">
+                    <div className="text-[10px] text-[#2563EB] font-medium mb-0.5">After</div>
+                    <div className="text-[13px] font-bold text-[#1E3A8A] tabular-nums">
+                      {afterQuality}%
+                    </div>
+                  </div>
+                </div>
+
+                <div className="w-full rounded-md bg-gradient-to-r from-[#EEF4FF] to-[#ECFEFF] border border-[#DBEAFE] px-2 py-1 flex items-center justify-center gap-1 text-[10px] font-semibold text-[#1E3A8A]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] shadow-[0_0_6px_rgba(37,99,235,0.4)]" />
+                  <span>Clean &amp; typed</span>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Original Icon, Title, and Paragraph Directly Below Photo Card (Hero Section Colors & Font) */}
+            <div className="mt-5 flex flex-col items-center text-center px-1">
+              <div className="w-9 h-9 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
+                <Code2 className="w-[18px] h-[18px]" />
+              </div>
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
+                Modern Software Craftsmanship
+              </h3>
+              <p className="text-[14.5px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed">
+                We write clean, strongly-typed TypeScript and Python code, enforce component modularity, and create architectures designed for maintainability and rapid onboarding.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* --------------------------------------------------------------- */}
+          {/* CENTER CARD (Wider & Taller 300px): Practical, Grounded Intelligence */}
+          {/* --------------------------------------------------------------- */}
+          <motion.div
+            style={{
+              y: centerCardY,
+              opacity: centerCardOpacity,
+            }}
+            className="group/card md:col-span-2 md:order-1 lg:order-2 lg:w-[41%] shrink-0 flex flex-col items-center"
+          >
+            {/* Photo Card (300px tall on desktop, extending lower than side cards) */}
+            <div className="group w-full h-[220px] sm:h-[260px] lg:h-[300px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 shadow-[0_16px_38px_rgba(30,58,138,0.10)] hover:shadow-[0_24px_50px_rgba(30,58,138,0.18)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
+              {/* Sharp Meadow Photo with Scroll Parallax */}
+              <motion.div
+                style={{ y: photoParallaxY }}
+                className="absolute -inset-y-5 inset-x-0"
+              >
+                <picture>
+                  <source srcSet="/images/meadow-2.webp" type="image/webp" />
+                  <img
+                    src="/images/meadow-2.jpg"
+                    alt="Sunlit green valley and meadow carpeted with colorful wildflowers"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+                  />
+                </picture>
+              </motion.div>
+
+              {/* Compact White Widget (Hero Section Color Coding) */}
+              <motion.div
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+                animate={
+                  prefersReducedMotion
+                    ? { opacity: 1, y: 0 }
+                    : widgetsVisible
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 20 }
+                }
+                transition={{
+                  type: 'spring',
+                  stiffness: 120,
+                  damping: 18,
+                  delay: 0,
+                }}
+                className="relative z-10 w-[70%] sm:w-[56%] lg:w-[64%] max-w-[245px] bg-white rounded-xl p-[12px] border border-[#DBEAFE]/90 shadow-[0_10px_28px_rgba(30,58,138,0.14)] text-[11px] leading-tight text-left transition-transform duration-300 ease-out group-hover:-translate-y-[4px]"
+              >
+                <div className="flex items-center justify-between gap-2 mb-2.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-[12px] text-[#1E3A8A]">Private AI</span>
+                    <span className="text-[10px] font-semibold text-[#2563EB]">• Live</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-3">
+                  {/* 100% Progress Ring */}
+                  <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
+                    <svg className="w-12 h-12 -rotate-90" viewBox="0 0 46 46">
+                      <circle
+                        cx="23"
+                        cy="23"
+                        r="19"
+                        fill="none"
+                        stroke="#DBEAFE"
+                        strokeWidth="3.8"
+                      />
+                      <motion.circle
+                        cx="23"
+                        cy="23"
+                        r="19"
+                        fill="none"
+                        stroke="#2563EB"
+                        strokeWidth="3.8"
+                        strokeLinecap="round"
+                        strokeDasharray={ringCircumference}
+                        initial={{
+                          strokeDashoffset: prefersReducedMotion ? ringOffset : ringCircumference,
+                        }}
+                        animate={{
+                          strokeDashoffset: active ? ringOffset : ringCircumference,
+                        }}
+                        transition={{ duration: 1.25, delay: 0.15, ease: 'easeOut' }}
+                      />
+                    </svg>
+                    <span className="absolute text-[11px] font-bold text-[#1E3A8A] tabular-nums">
+                      {privateAiPct}%
+                    </span>
+                  </div>
+
+                  {/* 4x3 Grid of Squares (8 filled, 4 empty) */}
+                  <div className="grid grid-cols-4 gap-1.5 flex-1 max-w-[116px]">
+                    {Array.from({ length: 12 }).map((_, idx) => {
+                      const isFilled = idx < 8 && idx < litDocs;
+                      return (
+                        <div
+                          key={idx}
+                          className={`h-5 rounded-[5px] flex items-center justify-center text-[8px] font-semibold transition-all duration-300 ${
+                            isFilled
+                              ? 'bg-[#DBEAFE] text-[#1E3A8A]'
+                              : 'bg-slate-100 text-slate-400'
+                          }`}
+                        >
+                          ••
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="mt-2.5 pt-1.5 border-t border-[#DBEAFE]/70 text-[10px] text-[#2563EB] font-semibold text-center">
+                  8 docs indexed · 0 leaks
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Original Icon, Title, and Paragraph Directly Below Photo Card (Hero Section Colors & Font) */}
+            <div className="mt-5 flex flex-col items-center text-center px-2 max-w-[400px]">
+              <div className="w-9 h-9 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
+                <Cpu className="w-[18px] h-[18px]" />
+              </div>
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
+                Practical, Grounded Intelligence
+              </h3>
+              <p className="text-[14.5px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed">
+                We deploy Retrieval-Augmented Generation (RAG) and private document search with strict citation traceability, ensuring your proprietary data never leaks into public models.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* --------------------------------------------------------------- */}
+          {/* RIGHT CARD: Enterprise Reliability & Security                   */}
+          {/* --------------------------------------------------------------- */}
+          <motion.div
+            style={{
+              y: sideCardY,
+              x: rightCardX,
+              opacity: sideCardOpacity,
+            }}
+            className="group/card md:order-3 lg:order-3 lg:w-[29.5%] shrink-0 flex flex-col items-center"
+          >
+            {/* Photo Card */}
+            <div className="group w-full h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
+              {/* Sharp Meadow Photo with Scroll Parallax */}
+              <motion.div
+                style={{ y: photoParallaxY }}
+                className="absolute -inset-y-5 inset-x-0"
+              >
+                <picture>
+                  <source srcSet="/images/meadow-3.webp" type="image/webp" />
+                  <img
+                    src="/images/meadow-3.jpg"
+                    alt="Rolling emerald hills with sunlit wildflower meadow in full bloom"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+                  />
+                </picture>
+              </motion.div>
+
+              {/* Compact White Widget (Hero Section Color Coding) */}
+              <motion.div
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+                animate={
+                  prefersReducedMotion
+                    ? { opacity: 1, y: 0 }
+                    : widgetsVisible
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 20 }
+                }
+                transition={{
+                  type: 'spring',
+                  stiffness: 120,
+                  damping: 18,
+                  delay: prefersReducedMotion ? 0 : 0.24,
+                }}
+                className="relative z-10 w-[68%] sm:w-[60%] lg:w-[68%] max-w-[210px] bg-white rounded-xl p-[12px] border border-[#DBEAFE]/90 shadow-[0_10px_28px_rgba(30,58,138,0.14)] text-[11px] leading-tight text-left transition-transform duration-300 ease-out group-hover:-translate-y-[4px]"
+              >
+                <div className="flex items-center justify-between gap-1 mb-1">
+                  <span className="text-[10.5px] font-bold text-[#1E3A8A]">Uptime</span>
+                  <span className="text-[12.5px] font-bold text-[#2563EB] tabular-nums">
+                    {uptimeVal.toFixed(2)}%
+                  </span>
+                </div>
+
+                {/* Small Hero-Blue Area Chart */}
+                <div className="h-7 w-full my-1">
+                  <svg viewBox="0 0 180 32" className="w-full h-7 overflow-visible">
+                    <defs>
+                      <linearGradient id="purpleReliabilityArea" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#2563EB" stopOpacity="0.32" />
+                        <stop offset="100%" stopColor="#2563EB" stopOpacity="0.02" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M2,24 C28,22 44,14 68,18 C92,22 114,8 140,12 C156,14 168,6 178,5 L178,30 L2,30 Z"
+                      fill="url(#purpleReliabilityArea)"
+                    />
+                    <motion.path
+                      d="M2,24 C28,22 44,14 68,18 C92,22 114,8 140,12 C156,14 168,6 178,5"
+                      fill="none"
+                      stroke="#2563EB"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      initial={{ pathLength: prefersReducedMotion ? 1 : 0 }}
+                      animate={{ pathLength: active ? 1 : 0 }}
+                      transition={{ duration: 1.25, delay: 0.2, ease: 'easeOut' }}
+                    />
+                  </svg>
+                </div>
+
+                <div className="flex items-center justify-between gap-1 pt-1.5 border-t border-[#DBEAFE]/70 text-[9.5px] text-[#2563EB] font-medium">
+                  <div>
+                    <div>Last month</div>
+                    <div className="font-bold text-[#1E3A8A] text-[10.5px]">99.97%</div>
+                  </div>
+                  <div className="text-right">
+                    <div>This month</div>
+                    <div className="font-bold text-[#1E3A8A] text-[10.5px]">99.99%</div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Original Icon, Title, and Paragraph Directly Below Photo Card (Hero Section Colors & Font) */}
+            <div className="mt-5 flex flex-col items-center text-center px-1">
+              <div className="w-9 h-9 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
+                <ShieldCheck className="w-[18px] h-[18px]" />
+              </div>
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
+                Enterprise Reliability &amp; Security
+              </h3>
+              <p className="text-[14.5px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed">
+                Automated CI/CD deployment pipelines, defensive hardening, OWASP security best practices, and proactive cloud FinOps governance that prevent budget surprises.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
