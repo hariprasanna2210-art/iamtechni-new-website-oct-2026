@@ -322,23 +322,23 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                 </button>
               </div>
 
-              {/* 2 Action Buttons under Social Icons (Unified Hero Button Style) */}
-              <div className="pt-2.5 flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+              {/* 2 Action Buttons under Social Icons (Matched to Google Review Badge Style) */}
+              <div className="pt-2.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <button
                   type="button"
                   onClick={() => (onStartProject ? onStartProject() : onNavigate('/consultation'))}
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#2563EB] text-white text-xs sm:text-[13px] font-semibold border border-white/15 shadow-xs hover:shadow-[0_4px_14px_rgba(37,99,235,0.28)] transition-all duration-200 whitespace-nowrap cursor-pointer active:scale-[0.98]"
+                  className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-4 py-2 rounded-full bg-[#1B3152] border border-white/15 hover:border-[#5CE1E6]/60 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] text-white font-bold text-sm tracking-tight transition-all duration-200 whitespace-nowrap cursor-pointer"
                 >
-                  <span>Start a Project</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
+                  <span className="text-white font-bold text-sm tracking-tight">Start a Project</span>
+                  <ArrowUpRight className="w-4 h-4 shrink-0 text-white transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </button>
 
                 <button
                   type="button"
                   onClick={() => onNavigate('/contact')}
-                  className="inline-flex items-center justify-center px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 whitespace-nowrap cursor-pointer active:scale-[0.98]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-4 py-2 rounded-full bg-[#1B3152] border border-white/15 hover:border-[#5CE1E6]/60 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] text-white font-bold text-sm tracking-tight transition-all duration-200 whitespace-nowrap cursor-pointer"
                 >
-                  <span>Contact IAMTECHNI</span>
+                  <span className="text-white font-bold text-sm tracking-tight">Contact IAMTECHNI</span>
                 </button>
               </div>
             </div>
