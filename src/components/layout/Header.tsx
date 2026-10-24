@@ -688,23 +688,23 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Zone 3: Action Buttons & Mobile Menu Toggle */}
           <div className="flex items-center gap-1.5 sm:gap-2 xl:gap-2.5 shrink-0">
-            {/* AI Advisor Chatbot Trigger */}
+            {/* AI Advisor Chatbot Trigger — Unified Soft Pastel Secondary Button */}
             <button
               type="button"
               onClick={() => {
                 window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
               }}
-              className="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F52BA] bg-blue-50/90 hover:bg-blue-100 hover:text-blue-800 transition-colors py-1.5 px-2.5 xl:px-3 rounded-xl border border-blue-200/90 shadow-2xs whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
+              className="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] transition-all py-2 px-3 rounded-lg border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] whitespace-nowrap cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
               title="Chat with IAMTECHNI AI Solutions Advisor"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#1266E8] shrink-0" />
+              <Sparkles className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
               <span>AI Advisor</span>
             </button>
 
-            {/* Direct Phone Call Button — Icon-only on Laptop (1024-1279px), Icon + Number on Desktop (1280px+) */}
+            {/* Direct Phone Call Button — Unified Soft Secondary Button */}
             <a
               href={COMPANY_CONTACT.phoneTel}
-              className="hidden lg:inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 transition-colors py-1.5 px-2.5 xl:px-3 rounded-xl border border-slate-200/90 shadow-2xs whitespace-nowrap focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
+              className="hidden lg:inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-white hover:bg-[#F5F8FC] transition-all py-2 px-3 rounded-lg border border-[#DBEAFE]/90 shadow-2xs whitespace-nowrap active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
               title={`Call ${COMPANY_CONTACT.phone}`}
               aria-label={`Call ${COMPANY_CONTACT.phone}`}
             >
@@ -718,7 +718,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onStartProject}
               aria-label="Start a Project"
               title="Start a Project"
-              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 min-h-[40px] lg:min-h-0 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 min-h-[40px] lg:min-h-0 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
             >
               <span className="hidden sm:inline">Start a Project</span>
               <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />

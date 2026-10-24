@@ -70,31 +70,31 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-[#1266E8]">
+              <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-bold text-[#2563EB]">
                 <span>Industry Solutions</span>
                 <span className="text-slate-300">•</span>
                 <span>Specialized Domain Practice</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-[#1E3A8A] tracking-[-0.015em] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 {industry.name} Technology Solutions
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
                 {industry.summary}
               </p>
 
-              <div className="pt-2 flex flex-wrap items-center gap-4">
+              <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
                   onClick={() => onStartProject(`${industry.name} Consultation`)}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-all shadow-md active:scale-[0.98]"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                 >
                   <span>Discuss Industry Requirements</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => onNavigate('/contact/consultation')}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-all shadow-xs"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] font-semibold text-xs sm:text-[13px] border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                 >
                   <span>Request Strategy Consultation</span>
                 </button>
@@ -227,28 +227,30 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
       </section>
 
       {/* Industry Call to Action Banner */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-950 to-blue-950 text-white relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            Ready to engineer your {industry.name} digital transformation?
-          </h2>
-          <p className="text-base text-slate-300 max-w-2xl mx-auto">
-            Schedule an architectural discovery session with our senior engineering team to scope timelines, system integrations, and business impact.
-          </p>
-          <div className="pt-2 flex flex-wrap justify-center gap-4">
-            <button
-              onClick={() => onStartProject(`${industry.name} Project Discovery`)}
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#04C8E8] to-[#1266E8] hover:opacity-95 text-white font-bold rounded-xl shadow-lg transition-all"
-            >
-              <span>Schedule Architecture Review</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => onNavigate('/industries')}
-              className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-700 transition-all"
-            >
-              <span>View All Industries</span>
-            </button>
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-8 sm:p-12 text-center space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              Ready to engineer your {industry.name} digital transformation?
+            </h2>
+            <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-2xl mx-auto">
+              Schedule an architectural discovery session with our senior engineering team to scope timelines, system integrations, and business impact.
+            </p>
+            <div className="pt-2 flex flex-wrap justify-center gap-3">
+              <button
+                onClick={() => onStartProject(`${industry.name} Project Discovery`)}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              >
+                <span>Schedule Architecture Review</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => onNavigate('/industries')}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-white hover:bg-[#F5F9FF] text-[#1E3A8A] hover:text-[#2563EB] font-semibold text-xs sm:text-[13px] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.06)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              >
+                <span>View All Industries</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>

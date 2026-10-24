@@ -263,42 +263,42 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: Typography & Learning Value Proposition */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-xs border border-blue-200/90 shadow-2xs text-xs font-mono font-semibold text-slate-800">
-                <span className="w-2 h-2 rounded-full bg-[#1266E8] animate-pulse" />
-                <span className="text-[#1266E8] font-bold">PROFESSIONAL SKILL DEVELOPMENT</span>
+              <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono font-semibold text-slate-800">
+                <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse" />
+                <span className="text-[#2563EB] font-bold">PROFESSIONAL SKILL DEVELOPMENT</span>
                 <span className="text-slate-300">|</span>
-                <span className="text-slate-700">HANDS-ON LABS</span>
+                <span className="text-[#1E3A8A]">HANDS-ON LABS</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.12] text-balance">
+              <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] text-balance">
                 Learn Tomorrow's Technology.{' '}
-                <span className="bg-gradient-to-r from-[#1266E8] via-[#04C8E8] to-[#5427D9] bg-clip-text text-transparent block sm:inline">
+                <span className="bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent block sm:inline">
                   Build Your Future.
                 </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
                 Upgrade your skills with practical technology training in software development, cloud computing, artificial intelligence, cybersecurity, and DevOps. Explore your interests and connect with IAMTECHNI to find the right learning path.
               </p>
 
               {/* Action Buttons: Explore Courses + Direct WhatsApp */}
-              <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3.5 sm:gap-4">
+              <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
                   onClick={scrollToCatalog}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-[#1266E8] via-[#0B5CD5] to-[#5427D9] hover:opacity-95 rounded-xl transition-all shadow-md active:scale-[0.98] cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                 >
                   <span>Explore Courses</span>
-                  <ArrowRight className="w-4 h-4 shrink-0" />
+                  <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                 </button>
 
                 <a
                   href={getCourseWhatsAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-all border border-emerald-300 shadow-2xs cursor-pointer group"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-semibold text-xs sm:text-[13px] transition-all border border-emerald-200 shadow-2xs cursor-pointer group"
                   title="Enquire directly on WhatsApp"
                 >
-                  <WhatsAppIcon className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform shrink-0" />
+                  <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform shrink-0" />
                   <span>Enquire on WhatsApp</span>
                 </a>
               </div>
@@ -336,10 +336,10 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
           {/* Header & Filter Bar */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-4 border-b border-slate-200">
             <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
                 Technology Curriculum
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 Explore Our Courses
               </h2>
               <p className="text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
@@ -355,8 +355,8 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer shrink-0 ${
                     selectedCategory === cat
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-[#1E3A8A] text-white shadow-xs'
+                      : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
                   }`}
                 >
                   {cat}
@@ -400,11 +400,11 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                         </div>
                       </div>
 
-                      <h3 className="text-xl font-bold text-slate-900 mb-2 leading-snug">
+                      <h3 className="text-xl font-bold text-[#1E3A8A] mb-2 leading-snug">
                         {course.title}
                       </h3>
 
-                      <p className="text-xs text-slate-700 leading-relaxed mb-4">
+                      <p className="text-xs text-slate-600 leading-relaxed mb-4">
                         {course.subtitle}
                       </p>
 
@@ -426,13 +426,13 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                     <div className="pt-4 border-t border-slate-200/70 space-y-2.5">
                       <div className="text-[11px] font-mono text-slate-500 flex items-center justify-between">
                         <span>Mode: Classroom / Online</span>
-                        <span className="text-[#1266E8] font-bold">Batches Open</span>
+                        <span className="text-[#2563EB] font-bold">Batches Open</span>
                       </div>
 
                       <div className="grid grid-cols-2 gap-2">
                         <button
                           onClick={() => handleSelectCourseForEnquiry(course.title)}
-                          className={`w-full py-2.5 px-3 bg-white border border-slate-300 hover:border-slate-400 text-slate-900 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs hover:bg-slate-50 cursor-pointer active:scale-98`}
+                          className="w-full py-2 px-3 min-h-[38px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
                         >
                           <span>Enquire Now</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -442,7 +442,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                           href={getCourseWhatsAppUrl(course.title)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-full py-2.5 px-3 bg-emerald-50 border border-emerald-300 hover:bg-emerald-100 text-emerald-900 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
+                          className="w-full py-2 px-3 min-h-[38px] bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-900 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
                           title={`Enquire about ${course.title} on WhatsApp`}
                         >
                           <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
@@ -1046,7 +1046,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-3.5 px-6 bg-gradient-to-r from-[#1266E8] via-[#0B5CD5] to-[#5427D9] hover:opacity-95 text-white rounded-xl text-sm font-bold transition-all shadow-md active:scale-98 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-70"
+                      className="w-full py-3 px-5 min-h-[42px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs sm:text-[13px] font-semibold transition-all shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] active:scale-98 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-70"
                     >
                       {isSubmitting ? (
                         <>
@@ -1056,7 +1056,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       ) : (
                         <>
                           <span>Submit Course Enquiry</span>
-                          <Send className="w-4 h-4" />
+                          <Send className="w-3.5 h-3.5" />
                         </>
                       )}
                     </button>
@@ -1074,10 +1074,10 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
       <section className="py-14 sm:py-16 lg:py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-10">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
+            <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
               Admission Workflow
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               How Enquiry &amp; Enrollment Works
             </h2>
             <p className="text-sm text-slate-600 mt-2 leading-relaxed">
@@ -1086,42 +1086,42 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl bg-[#EAF3FF] border border-blue-200/90 space-y-2.5">
-              <span className="text-xs font-mono font-bold text-[#1266E8] bg-blue-100 px-2.5 py-0.5 rounded border border-blue-300">
+            <div className="p-6 rounded-2xl bg-[#F4F8FF] border border-blue-200/80 space-y-2.5">
+              <span className="text-xs font-mono font-bold text-[#2563EB] bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
                 STEP 01
               </span>
-              <h3 className="text-base font-bold text-slate-900">Select a Course</h3>
-              <p className="text-xs text-slate-700 leading-relaxed">
+              <h3 className="text-base font-bold text-[#1E3A8A]">Select a Course</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
                 Browse our 13 technology programs across software engineering, cloud, AI, and DevOps.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-[#E4FAFF] border border-cyan-200/90 space-y-2.5">
-              <span className="text-xs font-mono font-bold text-[#0284C7] bg-cyan-100 px-2.5 py-0.5 rounded border border-cyan-300">
+            <div className="p-6 rounded-2xl bg-[#F2FAFD] border border-cyan-200/80 space-y-2.5">
+              <span className="text-xs font-mono font-bold text-[#0284C7] bg-cyan-50 px-2.5 py-0.5 rounded border border-cyan-200">
                 STEP 02
               </span>
-              <h3 className="text-base font-bold text-slate-900">Submit Details</h3>
-              <p className="text-xs text-slate-700 leading-relaxed">
+              <h3 className="text-base font-bold text-[#1E3A8A]">Submit Details</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
                 Fill the enquiry form or message us on WhatsApp with your preferred schedule and learning mode.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-[#F0EAFF] border border-violet-200/90 space-y-2.5">
-              <span className="text-xs font-mono font-bold text-[#7C3AED] bg-violet-100 px-2.5 py-0.5 rounded border border-violet-300">
+            <div className="p-6 rounded-2xl bg-[#F6F4FF] border border-violet-200/80 space-y-2.5">
+              <span className="text-xs font-mono font-bold text-[#7C3AED] bg-violet-50 px-2.5 py-0.5 rounded border border-violet-200">
                 STEP 03
               </span>
-              <h3 className="text-base font-bold text-slate-900">Receive Syllabus &amp; Fee</h3>
-              <p className="text-xs text-slate-700 leading-relaxed">
+              <h3 className="text-base font-bold text-[#1E3A8A]">Receive Syllabus &amp; Fee</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
                 Our academic advisor shares the complete syllabus breakdown, upcoming batch timings, and fee structure.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-[#E1F8F2] border border-teal-200/90 space-y-2.5">
-              <span className="text-xs font-mono font-bold text-[#0D9488] bg-teal-100 px-2.5 py-0.5 rounded border border-teal-300">
+            <div className="p-6 rounded-2xl bg-[#F1FBF8] border border-teal-200/80 space-y-2.5">
+              <span className="text-xs font-mono font-bold text-[#0D9488] bg-teal-50 px-2.5 py-0.5 rounded border border-teal-200">
                 STEP 04
               </span>
-              <h3 className="text-base font-bold text-slate-900">Confirm &amp; Start Labs</h3>
-              <p className="text-xs text-slate-700 leading-relaxed">
+              <h3 className="text-base font-bold text-[#1E3A8A]">Confirm &amp; Start Labs</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
                 Join your batch cohort, access our code repos, and begin hands-on practical lab sessions.
               </p>
             </div>
@@ -1132,13 +1132,13 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
       {/* ======================================================================= */}
       {/* 8. FREQUENTLY ASKED QUESTIONS                                           */}
       {/* ======================================================================= */}
-      <section className="py-14 sm:py-16 lg:py-20 bg-[#F4F7FC] border-b border-slate-200">
+      <section className="py-14 sm:py-16 lg:py-20 bg-[#F5F8FC] border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-2">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold">
+            <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
               Got Questions?
             </div>
-            <h2 className="text-3xl font-extrabold text-slate-900">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Training Frequently Asked Questions
             </h2>
             <p className="text-sm text-slate-600">
@@ -1163,12 +1163,12 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                     className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors cursor-pointer"
                     aria-expanded={isOpen}
                   >
-                    <span className="text-sm sm:text-base font-bold text-slate-900">
+                    <span className="text-sm sm:text-base font-bold text-[#1E3A8A]">
                       {faq.question}
                     </span>
                     <ChevronDown
                       className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
-                        isOpen ? 'rotate-180 text-[#1266E8]' : ''
+                        isOpen ? 'rotate-180 text-[#2563EB]' : ''
                       }`}
                     />
                   </button>
@@ -1185,52 +1185,52 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
       </section>
 
       {/* ======================================================================= */}
-      {/* 9. FINAL CALL TO ACTION (Luminous Section with WhatsApp & Enquiry)       */}
+      {/* 9. FINAL CALL TO ACTION (Softer Unified Banner)                          */}
       {/* ======================================================================= */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-[#090D1A] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1266E8]/20 via-transparent to-[#5427D9]/20 pointer-events-none" />
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-8 sm:p-12 text-center space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
+            <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 bg-white border border-[#DBEAFE] rounded-full text-xs font-mono font-bold text-[#2563EB]">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>ADMISSIONS OPEN FOR UPCOMING BATCHES</span>
+            </div>
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-slate-900 border border-slate-800 rounded-full text-xs font-mono text-[#04C8E8]">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>ADMISSIONS OPEN FOR UPCOMING BATCHES</span>
-          </div>
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-tight drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              Ready to Start Learning?
+            </h2>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            Ready to Start Learning?
-          </h2>
+            <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-2xl mx-auto leading-relaxed">
+              Connect with IAMTECHNI to explore upcoming batch dates, detailed syllabus breakdowns, and practical technology learning roadmaps.
+            </p>
 
-          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Connect with IAMTECHNI to explore upcoming batch dates, detailed syllabus breakdowns, and practical technology learning roadmaps.
-          </p>
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+              <button
+                onClick={() => {
+                  if (enquiryFormRef.current) {
+                    enquiryFormRef.current.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              >
+                <span>Enquire for Next Batch</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
 
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
-            <button
-              onClick={() => {
-                if (enquiryFormRef.current) {
-                  enquiryFormRef.current.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-              className="inline-flex items-center gap-2.5 px-8 py-4 text-sm font-semibold text-white bg-gradient-to-r from-[#1266E8] to-[#5427D9] hover:opacity-95 rounded-xl transition-all shadow-lg active:scale-[0.98] cursor-pointer"
-            >
-              <span>Enquire for Next Batch</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+              <a
+                href={getCourseWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 font-semibold text-xs sm:text-[13px] transition-all cursor-pointer shadow-2xs"
+                title="Message our admissions desk on WhatsApp"
+              >
+                <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Chat on WhatsApp (+91-7418120053)</span>
+              </a>
+            </div>
 
-            <a
-              href={getCourseWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 text-sm font-semibold text-emerald-300 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 rounded-xl transition-all cursor-pointer shadow-sm"
-              title="Message our admissions desk on WhatsApp"
-            >
-              <WhatsAppIcon className="w-4 h-4 text-emerald-400" />
-              <span>Chat on WhatsApp (+91-7418120053)</span>
-            </a>
-          </div>
-
-          <div className="pt-8 text-xs text-slate-500 font-mono">
-            IAMTECHNI TECHNOLOGY TRAINING // https://iamtechni.in/training
+            <div className="pt-4 text-xs text-slate-500 font-mono">
+              IAMTECHNI TECHNOLOGY TRAINING // https://iamtechni.in/training
+            </div>
           </div>
         </div>
       </section>

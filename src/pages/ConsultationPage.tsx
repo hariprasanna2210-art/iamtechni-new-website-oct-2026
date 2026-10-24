@@ -87,19 +87,19 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
       </div>
 
       {/* Consultation Hero */}
-      <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-20 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-[#FFFFFF] border-b border-slate-200">
+      <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-20 bg-gradient-to-b from-[#F5F8FC] via-[#F8FAFF] to-[#FFFFFF] border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-[#1266E8]">
+            <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-bold text-[#2563EB]">
               <Calendar className="w-3.5 h-3.5" />
               <span>Technical Discovery</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-[#1E3A8A] tracking-[-0.015em] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Request a Technical Architecture Consultation
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
               Meet directly with an IAMTECHNI solutions architect to review your technical requirements, architectural dependencies, and realistic timelines.
             </p>
           </div>
@@ -142,7 +142,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                 <form onSubmit={handleSubmit} className="space-y-8">
                   {/* Step 1: Service Selection */}
                   <div className="space-y-3">
-                    <label className="block text-sm font-bold text-slate-900">
+                    <label className="block text-sm font-bold text-[#1E3A8A]">
                       1. Which technology discipline are you seeking advisory on? *
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -151,10 +151,10 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                           type="button"
                           key={service}
                           onClick={() => setFormData({ ...formData, serviceInterest: service })}
-                          className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                          className={`p-3 rounded-lg border text-left text-xs font-semibold transition-all cursor-pointer ${
                             formData.serviceInterest === service
-                              ? 'bg-[#1266E8] text-white border-[#1266E8] shadow-xs'
-                              : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                              ? 'bg-[#1E3A8A] text-white border-[#1E3A8A] shadow-xs'
+                              : 'bg-[#F5F8FC] hover:bg-[#EEF4FF] text-slate-700 border-slate-200'
                           }`}
                         >
                           {service}
@@ -269,10 +269,10 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                   <div className="pt-4">
                     <button
                       type="submit"
-                      className="w-full py-4 rounded-xl bg-gradient-to-r from-[#1266E8] via-[#0B5CD5] to-[#5427D9] text-white font-bold text-sm shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2"
+                      className="w-full py-3 min-h-[42px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <span>Submit Architecture Brief & Schedule Session</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                     <p className="text-[11px] text-slate-400 text-center mt-2.5">
                       Protected under standard mutual non-disclosure (NDA). We never sell or share contact details.
@@ -285,7 +285,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
             {/* Right 4 Columns: Trust & Consultation Benefits */}
             <div className="lg:col-span-4 space-y-6">
               <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <h3 className="text-base font-bold text-slate-900">What to expect on your call</h3>
+                <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base font-bold text-[#1E3A8A]">What to expect on your call</h3>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
@@ -308,15 +308,15 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl text-white space-y-4">
-                <div className="flex items-center gap-2 text-xs font-bold text-cyan-400">
+              <div className="bg-gradient-to-br from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] p-6 rounded-2xl text-[#1E3A8A] space-y-4 shadow-[0_4px_20px_rgba(37,99,235,0.06)]">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#2563EB]">
                   <ShieldCheck className="w-4 h-4" />
                   <span>Confidentiality Guaranteed</span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-600 leading-relaxed">
                   All architecture reviews and technical documentation shared with IAMTECHNI are treated as strictly confidential.
                 </p>
-                <div className="pt-2 text-xs font-mono text-slate-400">
+                <div className="pt-2 text-xs font-mono text-slate-500">
                   Standard mutual NDA executed upon request.
                 </div>
               </div>

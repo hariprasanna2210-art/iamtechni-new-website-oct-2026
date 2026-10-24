@@ -322,12 +322,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                 </button>
               </div>
 
-              {/* 2 Action Buttons under Social Icons (Lighter/Softer Hero Section Reference) */}
+              {/* 2 Action Buttons under Social Icons (Unified Hero Button Style) */}
               <div className="pt-2.5 flex flex-wrap sm:flex-nowrap items-center gap-2.5">
                 <button
                   type="button"
                   onClick={() => (onStartProject ? onStartProject() : onNavigate('/consultation'))}
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#3B82F6] via-[#4F7BF7] to-[#6366F1] hover:from-[#60A5FA] hover:via-[#6366F1] hover:to-[#818CF8] text-white text-xs font-semibold border border-[#93C5FD]/40 shadow-[0_4px_14px_rgba(59,130,246,0.25)] hover:-translate-y-0.5 transition-all duration-200 whitespace-nowrap cursor-pointer active:scale-[0.98]"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#2563EB] text-white text-xs sm:text-[13px] font-semibold border border-white/15 shadow-xs hover:shadow-[0_4px_14px_rgba(37,99,235,0.28)] transition-all duration-200 whitespace-nowrap cursor-pointer active:scale-[0.98]"
                 >
                   <span>Start a Project</span>
                   <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
@@ -336,7 +336,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                 <button
                   type="button"
                   onClick={() => onNavigate('/contact')}
-                  className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs font-semibold border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] hover:-translate-y-0.5 transition-all duration-200 whitespace-nowrap cursor-pointer active:scale-[0.98]"
+                  className="inline-flex items-center justify-center px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 whitespace-nowrap cursor-pointer active:scale-[0.98]"
                 >
                   <span>Contact IAMTECHNI</span>
                 </button>
@@ -346,8 +346,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
         </div>
       </div>
 
-      {/* Bottom Bar – Full Width Darker Navy #0B1626 */}
-      <div className="bg-[#0B1626] w-full border-t border-white/10">
+      {/* Bottom Bar – Full Width Softer Navy #101F36 */}
+      <div className="bg-[#101F36] w-full border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20 lg:pb-4 lg:pr-56 flex flex-col lg:flex-row items-center justify-between gap-3 text-[13px] text-white/85 text-center lg:text-left">
           {/* Left: Phone & Email */}
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2">

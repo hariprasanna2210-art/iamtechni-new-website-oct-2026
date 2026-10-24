@@ -46,15 +46,15 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
       />
 
       {/* Projects Grid Section */}
-      <section className="py-20 bg-[#F4F7FC]">
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           {/* Filter Bar */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
             <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
                 Project Showcase
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 mt-1">
+              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl font-bold text-[#1E3A8A] mt-1 drop-shadow-[0_2px_8px_rgba(30,58,138,0.08)]">
                 Filter by Engineering Domain
               </h2>
             </div>
@@ -64,10 +64,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
                 <button
                   key={flt}
                   onClick={() => setSelectedFilter(flt)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                     selectedFilter === flt
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-[#1E3A8A] text-white shadow-xs'
+                      : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
                   }`}
                 >
                   {flt}
@@ -100,7 +100,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
                         </div>
                       </div>
 
-                      <h2 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-2 flex items-center justify-between">
+                      <h2 className="text-lg font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors leading-snug mb-2 flex items-center justify-between">
                         <span>{project.title}</span>
                         <span className={`w-2 h-2 rounded-full ${color.dotBg} shrink-0 opacity-80 group-hover:scale-125 transition-transform`} />
                       </h2>
@@ -141,19 +141,24 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
       </section>
 
       {/* Footer CTA */}
-      <section className="py-20 bg-gradient-to-br from-[#1266E8] via-[#0B5CD5] to-[#5427D9] text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Have a custom software or web architecture in mind?</h2>
-          <p className="text-sm text-blue-100 max-w-xl mx-auto">
-            Our engineers can review your business workflow and prepare a detailed architecture plan.
-          </p>
-          <div className="pt-2">
-            <button
-              onClick={() => onStartProject('Custom Project Scoping')}
-              className="px-8 py-3.5 text-xs font-bold text-[#1266E8] bg-white rounded-xl hover:bg-blue-50 transition-all shadow-md active:scale-98 cursor-pointer"
-            >
-              Discuss Your Project
-            </button>
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-8 sm:p-12 text-center space-y-4 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              Have a custom software or web architecture in mind?
+            </h2>
+            <p className="text-sm bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-xl mx-auto">
+              Our engineers can review your business workflow and prepare a detailed architecture plan.
+            </p>
+            <div className="pt-2">
+              <button
+                onClick={() => onStartProject('Custom Project Scoping')}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              >
+                <span>Discuss Your Project</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
       </section>

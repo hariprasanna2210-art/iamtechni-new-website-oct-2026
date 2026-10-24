@@ -216,16 +216,16 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
       </section>
 
       {/* Digital Transformation & Engineering Excellence Visual Showcase */}
-      <section className="py-20 bg-white border-b border-slate-200 overflow-hidden">
+      <section className="py-16 sm:py-20 bg-white border-b border-slate-200 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left: Engineering Strategy & Governance */}
             <div className="lg:col-span-6 space-y-6">
-              <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#1266E8]" />
+              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#2563EB]" />
                 <span>Modern Software Delivery</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-tight drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 Architected for resilience, precision, and longevity.
               </h2>
               <p className="text-sm text-slate-600 leading-relaxed">
@@ -233,15 +233,15 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
-                    <CheckCircle2 className="w-4 h-4 text-[#1266E8]" />
+                <div className="p-4 rounded-xl bg-[#F5F8FC] border border-slate-200 space-y-1.5">
+                  <div className="flex items-center gap-2 text-xs font-bold text-[#1E3A8A]">
+                    <CheckCircle2 className="w-4 h-4 text-[#2563EB]" />
                     <span>Typed Contracts</span>
                   </div>
                   <p className="text-[11px] text-slate-600">TypeScript strict mode and end-to-end schema validation eliminating runtime bugs.</p>
                 </div>
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
+                <div className="p-4 rounded-xl bg-[#F5F8FC] border border-slate-200 space-y-1.5">
+                  <div className="flex items-center gap-2 text-xs font-bold text-[#1E3A8A]">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     <span>Cloud Native</span>
                   </div>
@@ -252,40 +252,40 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
 
             {/* Right: Rich Interactive Engineering Topology Visual */}
             <div className="lg:col-span-6 w-full">
-              <div className="bg-[#0B1120] rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-xl text-white space-y-4 font-mono">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] rounded-3xl p-6 sm:p-7 border border-[#60A5FA]/35 shadow-xl text-white space-y-4 font-mono">
+                <div className="flex items-center justify-between border-b border-white/15 pb-3">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-xs font-bold text-slate-200">IAMTECHNI // INFRASTRUCTURE TOPO</span>
+                    <span className="text-xs font-bold text-white">IAMTECHNI // INFRASTRUCTURE TOPO</span>
                   </div>
-                  <span className="text-[10px] text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
+                  <span className="text-[10px] text-[#67E8F9] bg-white/10 px-2 py-0.5 rounded border border-[#67E8F9]/30">
                     Active Deployments
                   </span>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                  <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
-                    <div className="text-[10px] text-slate-400">CI/CD Gate</div>
-                    <div className="text-sm font-bold text-emerald-400">100% Pass</div>
-                    <div className="text-[9px] text-slate-500">Unit + Integration</div>
+                  <div className="p-3 bg-white/10 rounded-xl border border-white/15">
+                    <div className="text-[10px] text-blue-100/80">CI/CD Gate</div>
+                    <div className="text-sm font-bold text-emerald-300">100% Pass</div>
+                    <div className="text-[9px] text-blue-200/70">Unit + Integration</div>
                   </div>
-                  <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
-                    <div className="text-[10px] text-slate-400">Global P99</div>
-                    <div className="text-sm font-bold text-cyan-400">&lt;65ms</div>
-                    <div className="text-[9px] text-slate-500">Edge CDN Ingest</div>
+                  <div className="p-3 bg-white/10 rounded-xl border border-white/15">
+                    <div className="text-[10px] text-blue-100/80">Global P99</div>
+                    <div className="text-sm font-bold text-[#67E8F9]">&lt;65ms</div>
+                    <div className="text-[9px] text-blue-200/70">Edge CDN Ingest</div>
                   </div>
-                  <div className="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
-                    <div className="text-[10px] text-slate-400">Vulnerability</div>
-                    <div className="text-sm font-bold text-purple-400">0 Critical</div>
-                    <div className="text-[9px] text-slate-500">Continuous Snyk</div>
+                  <div className="p-3 bg-white/10 rounded-xl border border-white/15">
+                    <div className="text-[10px] text-blue-100/80">Vulnerability</div>
+                    <div className="text-sm font-bold text-indigo-200">0 Critical</div>
+                    <div className="text-[9px] text-blue-200/70">Continuous Snyk</div>
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-850 text-[11px] text-slate-300 space-y-1">
-                  <div className="text-slate-500">// Multi-Region Edge Mesh Active</div>
+                <div className="p-3 bg-[#10234A]/80 rounded-xl border border-white/15 text-[11px] text-blue-100 space-y-1">
+                  <div className="text-blue-200/70">// Multi-Region Edge Mesh Active</div>
                   <div className="flex items-center justify-between">
-                    <span className="text-cyan-400">US-East · EU-Central · AP-South</span>
-                    <span className="text-emerald-400 font-bold">Encrypted TLS 1.3</span>
+                    <span className="text-[#67E8F9]">US-East · EU-Central · AP-South</span>
+                    <span className="text-emerald-300 font-bold">Encrypted TLS 1.3</span>
                   </div>
                 </div>
               </div>
@@ -337,22 +337,24 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
       </section>
 
       {/* Bottom CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#1266E8] via-[#0B5CD5] to-[#5427D9] text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            Ready to discuss your technology requirements?
-          </h2>
-          <p className="text-sm text-blue-100 max-w-xl mx-auto">
-            Let’s review what you want to build and explore how our engineering team can help.
-          </p>
-          <div className="pt-2">
-            <button
-              onClick={onStartProject}
-              className="inline-flex items-center gap-2 px-8 py-3.5 text-sm font-bold text-[#1266E8] bg-white rounded-xl hover:bg-blue-50 transition-all shadow-md active:scale-98 cursor-pointer"
-            >
-              <span>Start a Project</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-8 sm:p-12 text-center space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              Ready to discuss your technology requirements?
+            </h2>
+            <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-xl mx-auto">
+              Let’s review what you want to build and explore how our engineering team can help.
+            </p>
+            <div className="pt-2">
+              <button
+                onClick={onStartProject}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              >
+                <span>Start a Project</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
       </section>

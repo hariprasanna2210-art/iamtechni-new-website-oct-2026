@@ -352,7 +352,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           }}
         />
 
-        <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
           {/* 1. Upper Section: Eyebrow Pill (Hero Section Color Coding) */}
           <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 max-w-full rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[11px] min-[360px]:text-[12px] sm:text-[13px] font-bold tracking-[0.12em] uppercase mb-5">
             <span
@@ -410,8 +410,8 @@ export const HomePage: React.FC<HomePageProps> = ({
             })}
           </motion.h2>
 
-          {/* 3. Subtitle — Hero Subtitle Gradient (#100C2E -> #3A279E -> #2557D6) */}
-          <p className="mt-5 !font-['Inter',sans-serif] font-medium text-[15px] sm:text-[17px] md:text-[18.5px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent leading-[1.7] max-w-[740px] mx-auto">
+          {/* 3. Subtitle — Softer Hero Blue Gradient (#1E3A8A -> #2563EB -> #3B82F6) */}
+          <p className="mt-5 !font-['Inter',sans-serif] font-medium text-[15px] sm:text-[17px] md:text-[18.5px] bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent leading-[1.7] max-w-[740px] mx-auto">
             Every business faces distinct operational challenges. IAMTECHNI brings design, full-stack development, artificial intelligence, cloud infrastructure, and growth engineering together into solutions engineered for long-term reliability.
           </p>
 
@@ -658,7 +658,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               })}
             </motion.h2>
 
-            <p className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-3 leading-relaxed">
+            <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium mt-3 leading-relaxed">
               We guide projects from initial requirements discovery through validation and monitored deployment with a disciplined seven-stage methodology.
             </p>
           </motion.div>
@@ -827,7 +827,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="lg:col-span-8 flex flex-col gap-5"
             >
-              {/* Top Row: Wide Dark Navy Hero Card (a) */}
+              {/* Top Row: Wide Softer Royal Navy Hero Card (a) */}
               <motion.div
                 variants={{
                   hidden: { opacity: 0, y: 18 },
@@ -838,7 +838,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   },
                 }}
                 whileHover={prefersReducedMotion ? undefined : { y: -4 }}
-                className="relative rounded-[26px] bg-gradient-to-br from-[#0F1E4A] via-[#162C6B] to-[#1E3A8A] text-white p-6 sm:p-8 shadow-[0_20px_45px_-15px_rgba(15,30,74,0.42)] border border-[#2563EB]/30 overflow-hidden"
+                className="relative rounded-[26px] bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] text-white p-6 sm:p-8 shadow-[0_18px_42px_-15px_rgba(30,58,138,0.28)] border border-[#60A5FA]/35 overflow-hidden"
               >
                 {/* Subtle ambient glow accents inside hero bento card */}
                 <div className="absolute -top-20 -right-16 w-64 h-64 rounded-full bg-[#3B82F6]/25 blur-3xl pointer-events-none" />
@@ -1360,7 +1360,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
           scale: frameScale,
           opacity: frameOpacity,
         }}
-        className="relative z-10 max-w-[1100px] mx-auto bg-white rounded-[32px] py-[28px] px-[16px] sm:pt-[56px] sm:px-[40px] sm:pb-[48px] shadow-[0_24px_64px_rgba(15,23,42,0.08)] border border-white/90"
+        className="relative z-10 max-w-7xl mx-auto bg-white rounded-[32px] py-[28px] px-[16px] sm:pt-[56px] sm:px-[40px] sm:pb-[48px] shadow-[0_24px_64px_rgba(15,23,42,0.08)] border border-white/90"
       >
         {/* 2. HEADER (inside the white card, centered) */}
         <motion.div
@@ -1408,8 +1408,8 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             })}
           </motion.h2>
 
-          {/* Subtitle — Hero Section Subtitle Gradient (#100C2E -> #3A279E -> #2557D6) */}
-          <p className="mt-3 text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed max-w-[540px] mx-auto">
+          {/* Subtitle — Softer Hero Section Subtitle Gradient (#1E3A8A -> #2563EB -> #3B82F6) */}
+          <p className="mt-3 text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium leading-relaxed max-w-[540px] mx-auto">
             Clean engineering, private AI, and enterprise security, working together so your product grows without surprises.
           </p>
 

@@ -97,7 +97,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
       />
 
       {/* Services Grid Section */}
-      <section className="py-20 bg-[#F4F7FC]">
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Search & Category Filter Bar */}
           <div className="mb-12 pb-8 border-b border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-4">
@@ -108,7 +108,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search practices or technologies (e.g. Next.js, RAG, AWS, ROS2)..."
-                className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-[#1266E8] focus:outline-hidden bg-white shadow-2xs"
+                className="w-full pl-10 pr-4 py-2.5 text-xs rounded-lg border border-slate-200 focus:border-[#2563EB] focus:outline-hidden bg-white shadow-2xs"
               />
             </div>
 
@@ -117,10 +117,10 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
                     selectedCategory === cat
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-[#1E3A8A] text-white shadow-xs'
+                      : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
                   }`}
                 >
                   {cat}
@@ -137,7 +137,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                   setSearchQuery('');
                   setSelectedCategory('All');
                 }}
-                className="mt-3 text-xs font-semibold text-[#1266E8] underline cursor-pointer"
+                className="mt-3 text-xs font-semibold text-[#2563EB] underline cursor-pointer"
               >
                 Reset filters
               </button>
@@ -169,7 +169,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                           </div>
                         </div>
 
-                        <h2 className="text-xl font-bold text-slate-900 group-hover:text-slate-950 transition-colors mb-2.5 flex items-center justify-between">
+                        <h2 className="text-xl font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors mb-2.5 flex items-center justify-between">
                           <span>{service.title}</span>
                           <span className={`w-2 h-2 rounded-full ${color.dotBg} shrink-0 opacity-80 group-hover:scale-125 transition-transform`} />
                         </h2>

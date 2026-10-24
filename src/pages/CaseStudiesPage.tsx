@@ -84,25 +84,25 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
                   )}
                 </div>
 
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-[#1E3A8A] tracking-[-0.015em] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                   {project.title}
                 </h1>
 
-                <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                   {project.tagline}
                 </p>
 
-                <div className="pt-2 flex flex-wrap gap-4">
+                <div className="pt-2 flex flex-wrap gap-3">
                   <button
                     onClick={() => onStartProject(`Architecture: ${project.title}`)}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl shadow-md transition-all cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                   >
                     <span>Discuss Similar Architecture</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => onNavigate('/case-studies')}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-800 text-sm font-semibold rounded-xl border border-slate-200 transition-all shadow-xs cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] font-semibold text-xs sm:text-[13px] border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                   >
                     <span>All Case Studies</span>
                   </button>
@@ -153,26 +153,26 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
             </div>
 
             {/* Architecture Solution */}
-            <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-950 text-white space-y-6">
-              <div className="flex items-center gap-2 text-cyan-400 text-xs font-mono uppercase tracking-wider">
+            <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] text-white space-y-6 border border-[#60A5FA]/35 shadow-lg">
+              <div className="flex items-center gap-2 text-[#67E8F9] text-xs font-mono uppercase tracking-wider">
                 <Cpu className="w-4 h-4" /> 03 // Solution Architecture
               </div>
-              <h3 className="text-2xl font-bold text-white">
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl font-bold text-white">
                 Technical Blueprint & System Design
               </h3>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-4xl">
+              <p className="text-blue-100/90 text-sm sm:text-base leading-relaxed max-w-4xl">
                 {project.solutionArchitecture}
               </p>
 
-              <div className="pt-4 border-t border-slate-800 space-y-3">
-                <div className="text-xs font-mono uppercase tracking-wider text-slate-400">
+              <div className="pt-4 border-t border-white/15 space-y-3">
+                <div className="text-xs font-mono uppercase tracking-wider text-blue-200">
                   Production Tech Stack
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {project.techStack.map((tech, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 rounded-md bg-slate-800 text-slate-200 text-xs font-mono border border-slate-700"
+                      className="px-3 py-1 rounded-md bg-white/10 text-white text-xs font-mono border border-white/20"
                     >
                       {tech}
                     </span>
@@ -229,18 +229,18 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
       </div>
 
       {/* Case Studies Header */}
-      <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-20 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-[#FFFFFF] border-b border-slate-200">
+      <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-20 bg-gradient-to-b from-[#F5F8FC] via-[#F8FAFF] to-[#FFFFFF] border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-[#1266E8]">
+          <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-bold text-[#2563EB]">
             <Compass className="w-3.5 h-3.5" />
             <span>Architecture Field Notes</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight max-w-3xl">
+          <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-[#1E3A8A] tracking-[-0.015em] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] max-w-3xl">
             Case Studies & Implementation Blueprints
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed">
             Examine in-depth technical breakdowns of business challenges, solution architectures, tech stacks, and verified measurable outcomes.
           </p>
 
@@ -253,7 +253,7 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
                 placeholder="Search case studies by keyword or industry..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#1266E8]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 bg-white text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#2563EB]"
               />
             </div>
 
@@ -262,10 +262,10 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                     selectedCategory === cat
-                      ? 'bg-slate-900 text-white shadow-xs'
-                      : 'bg-white hover:bg-slate-100 text-slate-600 border border-slate-200'
+                      ? 'bg-[#1E3A8A] text-white shadow-xs'
+                      : 'bg-white hover:bg-[#F5F8FC] text-slate-600 hover:text-[#1E3A8A] border border-slate-200'
                   }`}
                 >
                   {cat}

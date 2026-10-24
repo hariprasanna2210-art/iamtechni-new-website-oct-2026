@@ -514,17 +514,17 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
   const progressFillPercent =
     stageCount > 1 ? (activeStageIndex / (stageCount - 1)) * 100 : 100;
 
-  // Reusable dark detail card for Block 4 (shown on right column on tablet/desktop, and below active stage on mobile)
+  // Reusable softer royal-navy detail card for Block 4 (shown on right column on tablet/desktop, and below active stage on mobile)
   const renderStageDetailCard = (keyPrefix: string) => (
-    <div className="relative rounded-[24px] bg-gradient-to-br from-[#0A1A2F] via-[#0B2233] to-[#040B14] border border-slate-800/90 shadow-[0_24px_60px_-15px_rgba(4,11,20,0.65)] p-6 sm:p-8 text-white overflow-hidden flex flex-col justify-between min-h-[340px]">
+    <div className="relative rounded-[24px] bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] border border-[#60A5FA]/35 shadow-[0_20px_48px_-15px_rgba(30,58,138,0.28)] p-6 sm:p-8 text-white overflow-hidden flex flex-col justify-between min-h-[340px]">
       {/* Soft radial cyan/blue glow matching homepage hero */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 -right-20 w-72 h-72 rounded-full bg-[#22D3EE]/15 blur-3xl"
+        className="pointer-events-none absolute -top-24 -right-20 w-72 h-72 rounded-full bg-[#38BDF8]/18 blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-24 -left-20 w-72 h-72 rounded-full bg-[#1E3A8A]/35 blur-3xl"
+        className="pointer-events-none absolute -bottom-24 -left-20 w-72 h-72 rounded-full bg-[#60A5FA]/20 blur-3xl"
       />
 
       <AnimatePresence mode="wait">
@@ -610,7 +610,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
   );
 
   return (
-    <section className="py-20 sm:py-24 bg-[#F6F8FB] border-b border-slate-200/90 overflow-hidden">
+    <section className="py-20 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-[#DBEAFE]/80 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
         {/* Section Header */}
         <motion.div
@@ -680,7 +680,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
         </div>
 
         {/* =================================================================== */}
-        {/* BLOCK 1 – Header Card (Hero Dark Gradient + Floating Mini Pipeline) */}
+        {/* BLOCK 1 – Header Card (Softer Royal Navy Gradient + Mini Pipeline)  */}
         {/* =================================================================== */}
         <motion.div
           initial="hidden"
@@ -689,12 +689,12 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
           variants={blockVariants}
           whileHover={prefersReducedMotion ? undefined : { y: -4 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="relative rounded-[28px] bg-gradient-to-br from-[#0A1A2F] via-[#0B2233] to-[#040B14] border border-slate-800/90 shadow-[0_24px_60px_-15px_rgba(4,11,20,0.55)] p-6 sm:p-10 lg:p-12 overflow-hidden"
+          className="relative rounded-[28px] bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] border border-[#60A5FA]/35 shadow-[0_20px_48px_-15px_rgba(30,58,138,0.26)] p-6 sm:p-10 lg:p-12 overflow-hidden"
         >
-          {/* Soft radial cyan glow */}
+          {/* Soft radial cyan/blue glow */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[#22D3EE]/15 blur-3xl"
+            className="pointer-events-none absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[#38BDF8]/18 blur-3xl"
           />
 
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-center">
@@ -907,7 +907,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                   transition={{ duration: 0.25, ease: 'easeOut' }}
                   className={
                     isHighlighted
-                      ? 'md:col-span-6 rounded-[24px] bg-gradient-to-br from-[#22D3EE] via-[#04C8E8] to-[#14B8A6] text-[#0A1A2F] p-6 sm:p-8 shadow-[0_18px_40px_-12px_rgba(34,211,238,0.35)] border border-[#22D3EE] flex flex-col justify-between'
+                      ? 'md:col-span-6 rounded-[24px] bg-gradient-to-br from-[#E0F2FE] via-[#ECFEFF] to-[#EEF4FF] text-[#1E3A8A] p-6 sm:p-8 shadow-[0_14px_34px_-12px_rgba(37,99,235,0.14)] border border-[#BAE6FD] flex flex-col justify-between'
                       : 'md:col-span-3 rounded-[24px] bg-white border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_30px_-12px_rgba(15,23,42,0.06)] hover:shadow-[0_18px_36px_-12px_rgba(30,58,138,0.12)] transition-shadow flex flex-col justify-between'
                   }
                 >
@@ -915,7 +915,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                     <div
                       className={
                         isHighlighted
-                          ? "!font-['Outfit','Space_Grotesk',sans-serif] text-4xl sm:text-5xl font-extrabold tracking-tight text-[#0A1A2F]"
+                          ? "!font-['Outfit','Space_Grotesk',sans-serif] text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1E3A8A]"
                           : "!font-['Outfit','Space_Grotesk',sans-serif] text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A]"
                       }
                     >
@@ -927,7 +927,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                     <div
                       className={
                         isHighlighted
-                          ? 'text-sm sm:text-base font-bold text-[#0A1A2F] mt-2'
+                          ? 'text-sm sm:text-base font-bold text-[#1E3A8A] mt-2'
                           : 'text-sm font-bold text-[#1E3A8A] mt-2'
                       }
                     >
@@ -938,7 +938,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                   <div
                     className={
                       isHighlighted
-                        ? 'text-xs sm:text-sm font-semibold text-[#0A1A2F]/80 mt-3 leading-snug'
+                        ? 'text-xs sm:text-sm font-semibold text-[#2563EB] mt-3 leading-snug'
                         : 'text-xs text-slate-500 mt-3 leading-snug'
                     }
                   >

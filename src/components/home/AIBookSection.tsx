@@ -539,7 +539,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
       ref={sectionRef}
       onKeyDown={handleKeyDown}
       aria-label="Artificial Intelligence & Scalability"
-      className="py-24 bg-white text-[#1E3A8A] border-b border-slate-200 relative overflow-hidden"
+      className="py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] text-[#1E3A8A] border-b border-[#DBEAFE]/80 relative overflow-hidden"
     >
       {/* Subtle Light-Blue Ambient Glows Matching Hero Palette */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#DBEAFE]/45 rounded-full blur-[120px] pointer-events-none" />
@@ -591,7 +591,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
         )}
       </div>
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Always-Visible Section Header + Book Page-Turn Controls */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <div className="max-w-2xl">

@@ -42,7 +42,7 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
       />
 
       {/* Categories Stack Section */}
-      <section className="py-20 bg-[#F4F7FC]">
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           {/* Category Filter Tabs */}
           <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl max-w-2xl shadow-2xs">
@@ -50,8 +50,8 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
               onClick={() => setActiveCategory('all')}
               className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 activeCategory === 'all'
-                  ? 'bg-slate-900 text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-[#1E3A8A] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
               }`}
             >
               All Disciplines
@@ -64,8 +64,8 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
                   onClick={() => setActiveCategory(cat.id)}
                   className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
                     activeCategory === cat.id
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-[#1E3A8A] text-white shadow-xs'
+                      : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
                   }`}
                 >
                   <CatIcon className="w-3.5 h-3.5" />
@@ -89,7 +89,7 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
                     <CatHeaderIcon className="w-4 h-4" />
                     <span>PRACTICE ECOSYSTEM // {group.category.toUpperCase()}</span>
                   </div>
-                  <h2 className="text-2xl font-bold text-slate-900">{group.category}</h2>
+                  <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl font-bold text-[#1E3A8A]">{group.category}</h2>
                   <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
                     {group.description}
                   </p>
@@ -134,19 +134,24 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
       </section>
 
       {/* Call to Action Banner */}
-      <section className="py-20 bg-gradient-to-br from-[#1266E8] via-[#0B5CD5] to-[#5427D9] text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Have an existing stack that needs modernization?</h2>
-          <p className="text-sm text-blue-100 max-w-xl mx-auto leading-relaxed">
-            We review existing codebases and plan phased migrations with zero downtime and guaranteed business continuity.
-          </p>
-          <div className="pt-2">
-            <button
-              onClick={() => onStartProject('IT Consulting & Modernization')}
-              className="px-8 py-3.5 text-xs font-bold text-[#1266E8] bg-white rounded-xl hover:bg-blue-50 transition-all shadow-md active:scale-98 cursor-pointer"
-            >
-              Request Stack Audit
-            </button>
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-8 sm:p-12 text-center space-y-4 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              Have an existing stack that needs modernization?
+            </h2>
+            <p className="text-sm bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-xl mx-auto leading-relaxed">
+              We review existing codebases and plan phased migrations with zero downtime and guaranteed business continuity.
+            </p>
+            <div className="pt-2">
+              <button
+                onClick={() => onStartProject('IT Consulting & Modernization')}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              >
+                <span>Request Stack Audit</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
       </section>

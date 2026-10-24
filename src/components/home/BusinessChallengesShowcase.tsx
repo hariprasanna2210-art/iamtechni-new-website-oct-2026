@@ -344,7 +344,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
               )}
             </motion.h2>
 
-            <p className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-3 leading-relaxed max-w-2xl">
+            <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium mt-3 leading-relaxed max-w-2xl">
               We design and engineer digital systems tailored to the exact regulatory, workflow, and customer contexts of your industry.
             </p>
           </div>
@@ -352,7 +352,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
           <button
             type="button"
             onClick={() => onNavigate('/industries')}
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start md:self-auto shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start md:self-auto shrink-0"
           >
             <span>View All Industries</span>
             <ArrowRight className="w-3.5 h-3.5 text-white" />
@@ -360,7 +360,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
         </div>
 
         {/* ================================================================= */}
-        {/* MAIN STACKED SHOWCASE CARD (~1100px wide, ~420px+ tall, r-28px)   */}
+        {/* MAIN STACKED SHOWCASE CARD                                        */}
         {/* ================================================================= */}
         <div
           onMouseEnter={() => setIsPausedByHoverOrFocus(true)}
@@ -370,7 +370,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           aria-live="polite"
-          className="relative max-w-[1100px] mx-auto"
+          className="relative max-w-7xl mx-auto"
         >
           {/* Outer Showcase Card Shell with Crossfading Soft Tinted Gradient */}
           <div
@@ -456,7 +456,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                       </span>
                     </div>
 
-                    {/* Item Title (Slight delay after background change, like the video) */}
+                    {/* Item Title (Unified Hero Heading Color & Font) */}
                     <motion.h3
                       initial={
                         prefersReducedMotion
@@ -469,7 +469,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                         delay: prefersReducedMotion ? 0 : 0.08,
                         ease: CARD_TRANSITION_EASE,
                       }}
-                      className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight"
+                      className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] tracking-[-0.015em] leading-tight"
                     >
                       {currentItem.name}
                     </motion.h3>
@@ -487,7 +487,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                         delay: prefersReducedMotion ? 0 : 0.14,
                         ease: CARD_TRANSITION_EASE,
                       }}
-                      className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-xl"
+                      className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed max-w-xl"
                     >
                       {currentItem.summary}
                     </motion.p>
@@ -505,9 +505,9 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                         delay: prefersReducedMotion ? 0 : 0.18,
                         ease: CARD_TRANSITION_EASE,
                       }}
-                      className="p-3.5 rounded-2xl bg-white/80 backdrop-blur-xs border border-slate-200/80 shadow-2xs space-y-1 max-w-xl"
+                      className="p-3.5 rounded-2xl bg-white/85 backdrop-blur-xs border border-[#DBEAFE] shadow-2xs space-y-1 max-w-xl"
                     >
-                      <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wide">
+                      <div className="font-bold text-[#1E3A8A] text-[11px] uppercase tracking-wide">
                         Core Challenge Addressed:
                       </div>
                       <div className="text-xs text-slate-600 leading-relaxed">
@@ -515,7 +515,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                       </div>
                     </motion.div>
 
-                    {/* Existing Link ("Explore Industry Solutions →") */}
+                    {/* Existing Link ("Explore Industry Solutions →") — Unified Hero Button */}
                     <motion.div
                       initial={
                         prefersReducedMotion
@@ -533,10 +533,10 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                       <button
                         type="button"
                         onClick={() => onNavigate('/industries')}
-                        className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/90 ${currentTheme.buttonHoverBg} border ${currentTheme.buttonBorder} ${currentTheme.buttonText} text-xs sm:text-sm font-bold shadow-2xs transition-all duration-200 active:scale-[0.98] cursor-pointer group`}
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer group"
                       >
                         <span>Explore Industry Solutions</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="w-3.5 h-3.5 text-white group-hover:translate-x-0.5 transition-transform" />
                       </button>
                     </motion.div>
                   </div>

@@ -57,19 +57,19 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
       />
 
       {/* Problem Statement Section with Rich Service Visual Mockup */}
-      <section className="py-16 bg-[#F4F7FC] border-b border-slate-200">
+      <section className="py-16 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Column: Problem Statement Narrative */}
             <div className="lg:col-span-6 bg-white border border-slate-200/90 rounded-2xl p-7 sm:p-9 shadow-2xs space-y-4">
-              <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold flex items-center gap-2">
-                <Compass className="w-4 h-4 text-[#1266E8]" />
+              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold flex items-center gap-2">
+                <Compass className="w-4 h-4 text-[#2563EB]" />
                 <span>The Core Challenge</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">
+              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A] leading-snug drop-shadow-[0_2px_8px_rgba(30,58,138,0.08)]">
                 Why traditional approaches fail in {service.title}
               </h2>
-              <p className="text-sm text-slate-700 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 {service.problemStatement}
               </p>
               <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-4 text-xs font-mono text-slate-500">
@@ -78,7 +78,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
                   IAMTECHNI Engineering Solution
                 </span>
                 <span>·</span>
-                <span className="text-[#1266E8] font-bold">100% Production Rigor</span>
+                <span className="text-[#2563EB] font-bold">100% Production Rigor</span>
               </div>
             </div>
 
@@ -91,13 +91,13 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
       </section>
 
       {/* Capabilities Section with Distinct Colorful Cards */}
-      <section className="py-20 bg-white border-b border-slate-200">
+      <section className="py-16 sm:py-20 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-14">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
+            <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
               Engineering Disciplines
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Technical Capabilities &amp; Architecture
             </h2>
             <p className="text-sm text-slate-600 mt-2 leading-relaxed">
@@ -278,27 +278,30 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
       </section>
 
       {/* Bottom CTA Banner */}
-      <section className="py-20 bg-gradient-to-br from-[#1266E8] via-[#0B5CD5] to-[#5427D9] text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            Ready to build with IAMTECHNI?
-          </h2>
-          <p className="text-base text-blue-100 max-w-2xl mx-auto leading-relaxed">
-            Schedule an exploratory engineering consultation to evaluate project scope, architecture, budget, and implementation timelines.
-          </p>
-          <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-3.5 sm:gap-4">
-            <button
-              onClick={() => onStartProject(service.title)}
-              className="px-8 py-3.5 bg-white text-[#1266E8] hover:bg-blue-50 rounded-xl font-bold text-sm transition-all shadow-md active:scale-[0.98] cursor-pointer text-center"
-            >
-              Discuss Your Project
-            </button>
-            <button
-              onClick={() => onNavigate('/contact')}
-              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white rounded-xl font-semibold text-sm transition-all border border-white/30 cursor-pointer text-center"
-            >
-              Contact Engineering
-            </button>
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-8 sm:p-12 text-center space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              Ready to build with IAMTECHNI?
+            </h2>
+            <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-2xl mx-auto leading-relaxed">
+              Schedule an exploratory engineering consultation to evaluate project scope, architecture, budget, and implementation timelines.
+            </p>
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+              <button
+                onClick={() => onStartProject(service.title)}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              >
+                <span>Discuss Your Project</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => onNavigate('/contact')}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-white hover:bg-[#F5F9FF] text-[#1E3A8A] hover:text-[#2563EB] font-semibold text-xs sm:text-[13px] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.06)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              >
+                <span>Contact Engineering</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>

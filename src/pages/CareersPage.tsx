@@ -38,14 +38,14 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs font-mono font-semibold text-[#1266E8]">
-                <span className="w-2 h-2 rounded-full bg-[#1266E8]" />
+              <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] rounded-full text-xs font-mono font-semibold text-[#2563EB]">
+                <span className="w-2 h-2 rounded-full bg-[#2563EB]" />
                 <span>JOIN THE ENGINEERING PRACTICE</span>
               </div>
-              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+              <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 Build Purposeful Technology with IAMTECHNI
               </h1>
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                 We look for curious, disciplined software engineers, UI specialists, and AI practitioners who take pride in craftsmanship, readability, and real business impact.
               </p>
             </div>
@@ -171,7 +171,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
                 <div className="shrink-0 flex items-center gap-3">
                   <button
                     onClick={() => handleApply(role)}
-                    className="w-full lg:w-auto px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                    className="w-full lg:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold rounded-lg shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all cursor-pointer"
                   >
                     <span>View Role & Apply</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -188,21 +188,21 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6"
         >
           <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden my-8">
-            <div className="bg-[#0A0D14] px-6 py-5 text-white flex items-center justify-between border-b border-slate-800">
+            <div className="bg-gradient-to-r from-[#162D5E] via-[#1C3873] to-[#1E3A8A] px-6 py-5 text-white flex items-center justify-between border-b border-[#60A5FA]/30">
               <div>
-                <span className="text-xs font-mono text-[#04C8E8] uppercase">
+                <span className="text-xs font-mono text-[#67E8F9] uppercase">
                   {selectedRole.department}
                 </span>
-                <h3 className="text-xl font-bold tracking-tight text-white mt-1">
+                <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold tracking-tight text-white mt-1">
                   Apply for {selectedRole.title}
                 </h3>
               </div>
               <button
                 onClick={() => setIsApplying(false)}
-                className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
+                className="p-1.5 text-blue-200 hover:text-white rounded-lg hover:bg-white/10"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -303,13 +303,13 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
                     <button
                       type="button"
                       onClick={() => setIsApplying(false)}
-                      className="px-4 py-2 text-xs text-slate-600 hover:text-slate-900"
+                      className="px-4 py-2 text-xs text-slate-600 hover:text-slate-900 cursor-pointer"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800"
+                      className="px-4.5 py-2.5 min-h-[40px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs font-semibold shadow-xs transition-all cursor-pointer"
                     >
                       Submit Candidate Profile
                     </button>

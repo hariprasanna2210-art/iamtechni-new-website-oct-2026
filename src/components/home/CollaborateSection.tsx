@@ -78,7 +78,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
     <section
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative py-16 sm:py-20 bg-[#FFFFFF] text-[#0F1B3D] overflow-hidden border-t border-[#EEF1F5]"
+      className="relative py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] text-[#1E3A8A] overflow-hidden border-t border-[#DBEAFE]/80"
     >
       {/* Soft, large blurred gradient glows behind the single sliding row */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -94,9 +94,9 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
           }
           transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut' }}
           style={{
-            background: '#CFF3F0',
+            background: '#DCE8FF',
             filter: 'blur(120px)',
-            opacity: 0.6,
+            opacity: 0.55,
           }}
           className="absolute -top-16 right-[8%] w-[420px] h-[420px] rounded-full"
         />
@@ -113,15 +113,15 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
           }
           transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
           style={{
-            background: '#DCE8FF',
+            background: '#E0F2FE',
             filter: 'blur(120px)',
-            opacity: 0.6,
+            opacity: 0.55,
           }}
           className="absolute bottom-0 -left-16 w-[440px] h-[440px] rounded-full"
         />
       </div>
 
-      <div className="relative z-10 max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Top Row Controls: Slide Indicator Pills + Prev/Next Buttons */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
@@ -205,46 +205,38 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
               <div className="h-full rounded-[20px] bg-white/95 border border-[#EEF1F5] shadow-[0_20px_50px_rgba(15,27,61,0.08)] p-6 sm:p-8 lg:p-10">
                 <div className="grid grid-cols-1 min-[900px]:grid-cols-12 gap-8 lg:gap-10 items-center h-full">
                   {/* LEFT COLUMN */}
-                  <div className="min-[900px]:col-span-6 space-y-5 text-left">
-                    <div className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-[0.16em] text-[#0891B2]">
-                      <span className="w-2 h-2 rounded-full bg-[#04C8E8]" />
+                  <div className="min-[900px]:col-span-6 space-y-4 text-left">
+                    <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono font-bold uppercase tracking-widest text-[#2563EB]">
+                      <span className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0" />
                       <span>READY TO COLLABORATE</span>
                     </div>
 
-                    <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#0F1B3D] leading-[1.15]">
+                    <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-[38px] font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] leading-[1.18]">
                       Have a challenge? Let’s engineer the solution.
                     </h2>
 
-                    <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
+                    <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium leading-relaxed max-w-xl">
                       Tell us what you want to build, improve or transform. Let’s explore the right technology and a practical path forward.
                     </p>
 
-                    <div className="pt-2 flex flex-col min-[560px]:flex-row items-stretch min-[560px]:items-center gap-3">
-                      <motion.button
+                    <div className="pt-2 flex flex-row flex-wrap items-center gap-2.5">
+                      <button
                         type="button"
-                        whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                        whileTap={{ scale: 0.98 }}
                         onClick={() => onOpenProjectModal()}
-                        className="group inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full bg-[#0F1B3D] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(15,27,61,0.18)] hover:bg-[#162654] transition-colors cursor-pointer"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                       >
                         <span>Discuss Your Project</span>
-                        <span className="inline-flex items-center transition-transform duration-200 group-hover:translate-x-1">
-                          <ArrowRight className="w-4 h-4" />
-                        </span>
-                      </motion.button>
+                        <ArrowRight className="w-3.5 h-3.5 text-white" />
+                      </button>
 
-                      <motion.button
+                      <button
                         type="button"
-                        whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                        whileTap={{ scale: 0.98 }}
                         onClick={() => onNavigate('/contact')}
-                        className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full bg-white text-[#0F1B3D] text-sm font-semibold border border-[#E2E8F0] shadow-[0_10px_25px_rgba(15,27,61,0.06)] hover:border-slate-300 transition-all cursor-pointer"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                       >
-                        <span className="w-6 h-6 rounded-full bg-[#EEF4FF] text-[#1266E8] flex items-center justify-center shrink-0">
-                          <Mail className="w-3.5 h-3.5" />
-                        </span>
+                        <Mail className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
                         <span>Contact IAMTECHNI</span>
-                      </motion.button>
+                      </button>
                     </div>
                   </div>
 
@@ -568,7 +560,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       </span>
                     </div>
 
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0F1B3D] leading-snug">
+                    <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] leading-snug">
                       Have a project or technology requirement in mind?
                     </h3>
 
@@ -580,7 +572,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       <motion.a
                         href={COMPANY_CONTACT.phoneTel}
                         whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                        className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-[#E2E8F0] shadow-[0_8px_20px_rgba(15,27,61,0.05)] hover:border-teal-400 transition-all group"
+                        className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-[#DBEAFE] shadow-[0_8px_20px_rgba(30,58,138,0.05)] hover:border-[#93C5FD] transition-all group"
                         title={`Call ${COMPANY_CONTACT.phone}`}
                       >
                         <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -590,7 +582,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                           <div className="text-[10px] uppercase font-mono tracking-wider text-teal-600 font-bold">
                             CALL DIRECTLY
                           </div>
-                          <div className="font-mono text-xs sm:text-sm font-bold text-[#0F1B3D] truncate">
+                          <div className="font-mono text-xs sm:text-sm font-bold text-[#1E3A8A] truncate">
                             {COMPANY_CONTACT.phone}
                           </div>
                         </div>
@@ -599,17 +591,17 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       <motion.a
                         href={COMPANY_CONTACT.emailMailto}
                         whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                        className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-[#E2E8F0] shadow-[0_8px_20px_rgba(15,27,61,0.05)] hover:border-[#1266E8] transition-all group"
+                        className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-[#DBEAFE] shadow-[0_8px_20px_rgba(30,58,138,0.05)] hover:border-[#93C5FD] transition-all group"
                         title={`Email ${COMPANY_CONTACT.email}`}
                       >
-                        <div className="w-9 h-9 rounded-xl bg-[#EEF4FF] text-[#1266E8] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <div className="w-9 h-9 rounded-xl bg-[#EEF4FF] text-[#2563EB] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                           <Mail className="w-4 h-4" />
                         </div>
                         <div className="min-w-0 text-left">
-                          <div className="text-[10px] uppercase font-mono tracking-wider text-[#1266E8] font-bold">
+                          <div className="text-[10px] uppercase font-mono tracking-wider text-[#2563EB] font-bold">
                             EMAIL INQUIRIES
                           </div>
-                          <div className="font-mono text-xs sm:text-sm font-bold text-[#0F1B3D] truncate">
+                          <div className="font-mono text-xs sm:text-sm font-bold text-[#1E3A8A] truncate">
                             {COMPANY_CONTACT.email}
                           </div>
                         </div>
@@ -622,29 +614,25 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                         onClick={() =>
                           window.dispatchEvent(new CustomEvent('iamtechni:open-chat'))
                         }
-                        className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-[#E2E8F0] shadow-[0_8px_20px_rgba(15,27,61,0.05)] hover:border-indigo-400 transition-all cursor-pointer group"
+                        className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-[#DBEAFE] shadow-[0_8px_20px_rgba(30,58,138,0.05)] hover:border-[#93C5FD] transition-all cursor-pointer group"
                         title="Open IAMTECHNI AI Assistant"
                       >
-                        <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <div className="w-9 h-9 rounded-xl bg-[#EEF4FF] text-[#2563EB] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                           <Sparkles className="w-4 h-4" />
                         </div>
-                        <span className="text-sm font-bold text-[#0F1B3D]">
+                        <span className="text-sm font-bold text-[#1E3A8A]">
                           Ask AI Advisor
                         </span>
                       </motion.button>
 
-                      <motion.button
+                      <button
                         type="button"
-                        whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                        whileTap={{ scale: 0.98 }}
                         onClick={() => onOpenProjectModal()}
-                        className="group inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-full bg-[#0F1B3D] text-white text-sm font-semibold shadow-[0_12px_28px_rgba(15,27,61,0.18)] hover:bg-[#162654] transition-colors cursor-pointer"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[48px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                       >
                         <span>Start a Project</span>
-                        <span className="inline-flex items-center transition-transform duration-200 group-hover:translate-x-1">
-                          <ArrowRight className="w-4 h-4" />
-                        </span>
-                      </motion.button>
+                        <ArrowRight className="w-3.5 h-3.5 text-white" />
+                      </button>
                     </div>
                   </div>
 

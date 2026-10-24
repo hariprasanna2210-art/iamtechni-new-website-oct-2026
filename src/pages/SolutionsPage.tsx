@@ -59,15 +59,15 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
       />
 
       {/* Solutions Section */}
-      <section className="py-20 bg-[#F4F7FC]">
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           {/* Filter Bar */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
             <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
                 Categorized Solutions
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 mt-1">
+              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl font-bold text-[#1E3A8A] mt-1 drop-shadow-[0_2px_8px_rgba(30,58,138,0.08)]">
                 Explore Implementation Blueprints
               </h2>
             </div>
@@ -77,10 +77,10 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                     selectedCategory === cat
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                      ? 'bg-[#1E3A8A] text-white shadow-xs'
+                      : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
                   }`}
                 >
                   {cat}
@@ -113,15 +113,15 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
                           <span className="text-slate-400 hidden sm:inline">·</span>
                           <span className="text-slate-600 font-semibold">CUSTOM IMPLEMENTATION</span>
                         </div>
-                        <h3 className="text-2xl font-bold text-slate-900">{sol.title}</h3>
-                        <p className="text-sm text-slate-700 max-w-2xl leading-relaxed">
+                        <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl font-bold text-[#1E3A8A]">{sol.title}</h3>
+                        <p className="text-sm text-slate-600 max-w-2xl leading-relaxed">
                           {sol.summary}
                         </p>
                       </div>
 
                       <button
                         onClick={() => onStartProject(sol.title)}
-                        className={`px-5 py-2.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-900 hover:bg-slate-50 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-2xs cursor-pointer active:scale-98`}
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer shrink-0"
                       >
                         <span>Consult on this Solution</span>
                         <ArrowRight className="w-3.5 h-3.5" />

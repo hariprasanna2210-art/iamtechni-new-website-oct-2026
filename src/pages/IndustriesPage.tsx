@@ -36,7 +36,7 @@ export const IndustriesPage: React.FC<IndustriesPageProps> = ({
       />
 
       {/* Industries Grid */}
-      <section className="py-20 bg-[#F4F7FC]">
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="space-y-12" staggerChildren={0.15}>
             {industriesData.map((ind, idx) => {
@@ -60,8 +60,8 @@ export const IndustriesPage: React.FC<IndustriesPageProps> = ({
                           <span className="text-slate-400 hidden sm:inline">·</span>
                           <span className="text-slate-600 font-semibold">{ind.name.toUpperCase()}</span>
                         </div>
-                        <h2 className="text-2xl font-bold text-slate-900 pt-1">{ind.name}</h2>
-                        <p className="text-sm text-slate-700 max-w-2xl leading-relaxed">
+                        <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl font-bold text-[#1E3A8A] pt-1">{ind.name}</h2>
+                        <p className="text-sm text-slate-600 max-w-2xl leading-relaxed">
                           {ind.summary}
                         </p>
                       </div>
@@ -69,7 +69,7 @@ export const IndustriesPage: React.FC<IndustriesPageProps> = ({
                       <div className="flex items-center gap-2 shrink-0">
                         <button
                           onClick={() => onStartProject(`${ind.name} Solutions`)}
-                          className="px-5 py-2.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-900 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs hover:bg-slate-50 cursor-pointer active:scale-98"
+                          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                         >
                           <span>Discuss Sector Project</span>
                           <ArrowRight className="w-3.5 h-3.5" />

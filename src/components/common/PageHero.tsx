@@ -57,18 +57,14 @@ export const PageHero: React.FC<PageHeroProps> = ({
   // Deterministically get coordinated accent token for this service
   const token = getCardColorTokenBySlug(slug);
 
-  // Background gradient with gentle pastel tint corresponding to the service
+  // Soft, light background gradient matching the sitewide IAMTECHNI palette
   const bgGradient =
     themeOverride?.bgGradient ||
-    `bg-gradient-to-b from-[${token.hexBg}] via-[#F8FAFD] to-white`;
+    'bg-gradient-to-b from-[#F5F8FC] via-[#F9FBFF] to-[#FFFFFF]';
 
   const ambientGlow =
     themeOverride?.ambientGlow ||
-    `from-[${token.hexPrimary}]/15 via-[#1266E8]/10 to-[#5427D9]/15`;
-
-  const buttonGradient =
-    themeOverride?.buttonGradient ||
-    'bg-gradient-to-r from-[#1266E8] via-[#0B5CD5] to-[#5427D9]';
+    'from-[#DBEAFE]/45 via-[#EEF4FF]/40 to-[#ECFEFF]/35';
 
   return (
     <div className="w-full">
@@ -77,67 +73,69 @@ export const PageHero: React.FC<PageHeroProps> = ({
       )}
 
       <section
-        className={`relative overflow-hidden border-b border-slate-200 py-16 lg:py-24 ${bgGradient}`}
+        className={`relative overflow-hidden border-b border-[#DBEAFE]/80 py-14 sm:py-18 lg:py-22 ${bgGradient}`}
       >
-        {/* Layered Ambient Glows for Visual Depth */}
+        {/* Layered Soft Ambient Glows for Visual Depth */}
         <div
-          className={`absolute top-0 right-1/4 w-[500px] h-[350px] bg-gradient-to-tr ${ambientGlow} rounded-full blur-[100px] pointer-events-none`}
+          className={`absolute top-0 right-1/4 w-[480px] h-[320px] bg-gradient-to-tr ${ambientGlow} rounded-full blur-[100px] pointer-events-none`}
         />
         <div
-          className="absolute -bottom-10 left-10 w-[300px] h-[250px] bg-gradient-to-tr from-[#04C8E8]/10 to-transparent rounded-full blur-[80px] pointer-events-none"
+          className="absolute -bottom-10 left-10 w-[300px] h-[240px] bg-gradient-to-tr from-[#DBEAFE]/35 to-transparent rounded-full blur-[80px] pointer-events-none"
         />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left Column: Typography, Value Proposition & Actions */}
-            <div className="lg:col-span-7 space-y-6">
-              {/* Top Kicker Pill */}
-              <div className="inline-flex flex-wrap items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-2xl sm:rounded-full bg-white/90 backdrop-blur-xs border border-slate-200 shadow-2xs text-xs font-mono font-semibold text-slate-800 max-w-full">
-                <span className={`w-2 h-2 rounded-full shrink-0 ${token.dotBg}`} />
+            <div className="lg:col-span-7 space-y-4 sm:space-y-5">
+              {/* Top Kicker Pill — Unified Hero Eyebrow Pill */}
+              <div className="inline-flex flex-wrap items-center gap-2 min-h-[34px] px-3 sm:px-4 py-1 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono font-bold text-[#2563EB] max-w-full">
+                <span className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0" />
                 {category && (
                   <>
-                    <span className={token.accentText}>{category.toUpperCase()}</span>
-                    <span className="text-slate-300 hidden sm:inline">|</span>
+                    <span className="text-[#1E3A8A]">{category.toUpperCase()}</span>
+                    <span className="text-[#93C5FD] hidden sm:inline">|</span>
                   </>
                 )}
-                <span className="text-slate-700">{kicker}</span>
+                <span className="text-[#2563EB]">{kicker}</span>
               </div>
 
-              {/* Large, Professional Headline */}
-              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.12] text-balance">
+              {/* Large, Professional Headline — Unified Hero Font & Color Effect */}
+              <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-4xl lg:text-[40px] xl:text-[44px] font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] leading-[1.16] text-balance">
                 {title}
               </h1>
 
-              {/* Tagline if provided */}
+              {/* Tagline if provided — Unified Soft Blue Gradient Effect */}
               {tagline && (
-                <p className="text-base sm:text-xl font-semibold text-slate-800 leading-snug">
+                <p className="text-base sm:text-lg font-semibold bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent leading-snug">
                   {tagline}
                 </p>
               )}
 
               {/* Concise Service-Specific Description */}
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl font-medium">
                 {description}
               </p>
 
-              {/* Primary & Secondary Action CTAs */}
-              <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+              {/* Primary & Secondary Action CTAs — Unified Hero Button Color, Size & Layout */}
+              <div className="pt-1 flex flex-row flex-wrap items-center gap-2.5 sm:gap-3">
                 {onPrimaryCta && (
                   <button
+                    type="button"
                     onClick={onPrimaryCta}
-                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-white ${buttonGradient} hover:opacity-95 rounded-xl transition-all shadow-md active:scale-[0.98] cursor-pointer`}
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                   >
                     <span>{primaryCtaText || `Discuss Your ${title} Project`}</span>
-                    <ArrowRight className="w-4 h-4 shrink-0" />
+                    <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
                   </button>
                 )}
 
                 {onSecondaryCta && (
                   <button
+                    type="button"
                     onClick={onSecondaryCta}
-                    className="w-full sm:w-auto px-6 py-3.5 text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 rounded-xl transition-all border border-slate-200/90 shadow-2xs cursor-pointer text-center"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] font-semibold text-xs sm:text-[13px] border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                   >
-                    {secondaryCtaText}
+                    <span>{secondaryCtaText}</span>
                   </button>
                 )}
               </div>

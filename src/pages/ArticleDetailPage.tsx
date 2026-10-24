@@ -60,20 +60,20 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
             </button>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+          <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
             {article.title}
           </h1>
 
-          <p className="text-lg text-slate-600 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
             {article.excerpt}
           </p>
 
           <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
+            <div className="w-10 h-10 rounded-full bg-[#1E3A8A] text-white flex items-center justify-center font-bold text-xs">
               IT
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-900">{article.author.name}</div>
+              <div className="text-xs font-bold text-[#1E3A8A]">{article.author.name}</div>
               <div className="text-[11px] text-slate-500">{article.author.role}</div>
             </div>
           </div>
@@ -138,19 +138,19 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
             </div>
 
             {/* Consultation Callout */}
-            <div className="bg-[#080B11] text-white border border-slate-800 rounded-2xl p-6 space-y-4">
-              <div className="text-[11px] font-mono text-[#04C8E8] uppercase tracking-wider">
+            <div className="bg-gradient-to-br from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] text-[#1E3A8A] border border-[#DBEAFE] rounded-2xl p-6 space-y-4 shadow-[0_4px_20px_rgba(37,99,235,0.06)]">
+              <div className="text-[11px] font-mono text-[#2563EB] font-bold uppercase tracking-wider">
                 ENGINEERING PRACTICE
               </div>
-              <h4 className="text-base font-bold text-white">
+              <h4 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base font-bold text-[#1E3A8A]">
                 Need to implement this architecture?
               </h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-600 leading-relaxed">
                 Our senior engineering team can audit your existing system and build custom implementations with verified benchmarks.
               </p>
               <button
                 onClick={onStartProject}
-                className="w-full py-2.5 bg-gradient-to-r from-[#1266E8] to-[#5427D9] text-white text-xs font-semibold rounded-xl hover:opacity-95 transition-opacity"
+                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 min-h-[40px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs font-semibold rounded-lg shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all cursor-pointer"
               >
                 Discuss Technical Scope
               </button>

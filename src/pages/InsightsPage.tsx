@@ -45,7 +45,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
       />
 
       {/* Article Grid Section */}
-      <section className="py-20 bg-[#F4F7FC]">
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           {/* Search & Categories Bar */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-2 border-b border-slate-200">
@@ -56,7 +56,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search articles by title or keyword..."
-                className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-[#1266E8] focus:outline-hidden bg-white shadow-2xs"
+                className="w-full pl-10 pr-4 py-2.5 text-xs rounded-lg border border-slate-200 focus:border-[#2563EB] focus:outline-hidden bg-white shadow-2xs"
               />
             </div>
 
@@ -67,10 +67,10 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
                       selectedCategory === cat
-                        ? 'bg-slate-900 text-white shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-[#1E3A8A] text-white shadow-xs'
+                        : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
                     }`}
                   >
                     <CatIcon className="w-3.5 h-3.5" />
@@ -92,7 +92,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
               </div>
               <div className="lg:col-span-6 space-y-4">
                 <div className="flex flex-wrap items-center gap-2 text-xs">
-                  <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1266E8] border border-blue-200 font-mono font-bold text-[11px]">
+                  <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#2563EB] border border-blue-200 font-mono font-bold text-[11px]">
                     FEATURED ARCHITECTURE STUDY
                   </span>
                   <span className="font-mono font-bold px-2.5 py-0.5 rounded-md text-[11px] bg-slate-100 text-slate-700">
@@ -105,7 +105,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                   </span>
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-[#1266E8] transition-colors leading-tight">
+                <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors leading-tight">
                   {filteredArticles[0].title}
                 </h2>
 
@@ -115,16 +115,16 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
 
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-[10px]">
+                    <div className="w-7 h-7 rounded-full bg-[#1E3A8A] text-white flex items-center justify-center font-bold text-[10px]">
                       IT
                     </div>
                     <div>
-                      <span className="font-bold text-slate-900">{filteredArticles[0].author.name}</span>
+                      <span className="font-bold text-[#1E3A8A]">{filteredArticles[0].author.name}</span>
                       <span className="text-slate-400 mx-1.5">·</span>
                       <span className="text-slate-500 font-mono text-[11px]">{filteredArticles[0].publishedDate}</span>
                     </div>
                   </div>
-                  <span className="text-[#1266E8] font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                  <span className="text-[#2563EB] font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                     Read Featured Study <ArrowRight className="w-4 h-4" />
                   </span>
                 </div>
@@ -163,7 +163,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                         </div>
                       </div>
 
-                      <h2 className="text-lg font-bold text-slate-900 group-hover:text-slate-950 transition-colors leading-snug mb-3">
+                      <h2 className="text-lg font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors leading-snug mb-3">
                         {art.title}
                       </h2>
 
