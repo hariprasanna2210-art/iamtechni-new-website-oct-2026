@@ -678,8 +678,25 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
         </div>
 
         {/* Centred in light grey mono under the single sliding row */}
-        <div className="pt-2 text-center text-xs text-slate-400 font-mono">
-          IAMTECHNI // https://iamtechni.in
+        <div className="pt-2 text-center">
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate('/');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            aria-label="Go to IAMTECHNI homepage"
+            className="group inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-transparent border border-transparent text-xs text-slate-400 font-mono hover:bg-[#1B3152] hover:border-[#5CE1E6]/60 hover:text-white hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] focus-visible:bg-[#1B3152] focus-visible:border-[#5CE1E6]/60 focus-visible:text-white focus-visible:-translate-y-0.5 focus-visible:shadow-[0_6px_20px_rgba(92,225,230,0.18)] focus:outline-hidden transition-all duration-200 whitespace-nowrap cursor-pointer"
+          >
+            <span>IAMTECHNI // https://iamtechni.in</span>
+            <span
+              aria-hidden="true"
+              className="inline-block opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-focus-visible:opacity-100 group-focus-visible:translate-x-1 transition-all duration-200"
+            >
+              →
+            </span>
+          </a>
         </div>
       </div>
     </section>
