@@ -7,11 +7,14 @@ import {
   Mail,
   Sparkles,
   Check,
-  Plus,
   Lock,
+  Shield,
   FileCheck2,
   Kanban,
   FolderLock,
+  Code2,
+  Palette,
+  FileText,
 } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { PageRoute } from '../../types';
@@ -25,9 +28,24 @@ interface CollaborateSectionProps {
 const EASE_OUT_EXPO: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const ACCORDION_ITEMS = [
-  { id: 0, title: 'Mutual NDA Executed', icon: FileCheck2 },
-  { id: 1, title: 'Phased Sprints', icon: Kanban },
-  { id: 2, title: 'Full IP Ownership', icon: FolderLock },
+  {
+    id: 0,
+    title: 'Mutual NDA Executed',
+    desc: 'Your idea stays confidential from day one.',
+    icon: FileCheck2,
+  },
+  {
+    id: 1,
+    title: 'Phased Sprints',
+    desc: 'Clear milestones, regular demos, steady progress.',
+    icon: Kanban,
+  },
+  {
+    id: 2,
+    title: 'Full IP Ownership',
+    desc: 'Everything we build for you belongs to you.',
+    icon: FolderLock,
+  },
 ] as const;
 
 const SLIDE_COUNT = 3;
@@ -41,7 +59,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number>(0);
-  const [userInteractedAccordion, setUserInteractedAccordion] = useState<boolean>(false);
+  const [accordionPausedUntil, setAccordionPausedUntil] = useState<number>(0);
 
   // Auto-slide the horizontal row every 4.2s unless hovered or reduced motion is enabled
   useEffect(() => {
@@ -52,18 +70,19 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
     return () => window.clearInterval(timer);
   }, [isHovered, prefersReducedMotion]);
 
-  // Auto-advance accordion items every 3.5s
+  // Auto-advance stepper items every 4.5s (loop), pausing for 10s on click
   useEffect(() => {
-    if (userInteractedAccordion || prefersReducedMotion) return;
+    if (prefersReducedMotion) return;
     const timer = window.setInterval(() => {
+      if (Date.now() < accordionPausedUntil) return;
       setActiveAccordion((prev) => (prev + 1) % ACCORDION_ITEMS.length);
-    }, 3500);
+    }, 4500);
     return () => window.clearInterval(timer);
-  }, [userInteractedAccordion, prefersReducedMotion]);
+  }, [accordionPausedUntil, prefersReducedMotion]);
 
   const handleSelectAccordion = (index: number) => {
-    setUserInteractedAccordion(true);
     setActiveAccordion(index);
+    setAccordionPausedUntil(Date.now() + 10000);
   };
 
   const handlePrevSlide = () => {
@@ -292,8 +311,8 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
             <div className="w-full shrink-0 px-1">
               <div className="h-full rounded-[20px] bg-white/95 border border-[#EEF1F5] shadow-[0_20px_50px_rgba(15,27,61,0.08)] p-6 sm:p-8 lg:p-10">
                 <div className="grid grid-cols-1 min-[900px]:grid-cols-12 gap-8 lg:gap-10 items-center h-full">
-                  {/* LEFT COLUMN – Label + Subtext + 3-Item Interactive Accordion */}
-                  <div className="min-[900px]:col-span-6 space-y-4 text-left">
+                  {/* LEFT COLUMN – Vertical Stepper with Connected Nodes & Expandable Cards */}
+                  <div className="min-[900px]:col-span-5 lg:col-span-6 space-y-4 text-left">
                     <div className="text-xs font-mono font-bold uppercase tracking-[0.15em] text-[#1266E8]">
                       IAMTECHNI // ENGINEERING_ENGAGEMENT
                     </div>
@@ -302,31 +321,60 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       // Direct collaboration with senior software architects
                     </p>
 
-                    <div className="pt-1 space-y-2.5">
+                    <div className="pt-2 flex flex-col">
                       {ACCORDION_ITEMS.map((item, idx) => {
                         const isActive = activeAccordion === idx;
+                        const isCompleted = activeAccordion > idx;
                         const IconComponent = item.icon;
-                        return (
-                          <button
-                            key={item.id}
-                            type="button"
-                            onClick={() => handleSelectAccordion(idx)}
-                            className={`w-full text-left rounded-[18px] transition-all duration-300 border cursor-pointer relative overflow-hidden ${
-                              isActive
-                                ? 'bg-white border-[#EEF1F5] shadow-[0_14px_35px_rgba(15,27,61,0.07)] py-3.5 px-5'
-                                : 'bg-slate-50/70 hover:bg-white border-[#EEF1F5] py-3 px-5'
-                            }`}
-                          >
-                            <div
-                              className={`absolute left-0 top-0 bottom-0 w-1.5 transition-opacity duration-300 bg-[#04C8E8] ${
-                                isActive ? 'opacity-100' : 'opacity-0'
-                              }`}
-                            />
+                        const isLast = idx === ACCORDION_ITEMS.length - 1;
 
-                            <div className="flex items-center justify-between gap-4">
-                              <div className="flex items-center gap-3">
+                        return (
+                          <div key={item.id} className="flex items-stretch gap-3 sm:gap-4">
+                            {/* Stepper Node & Connecting Line */}
+                            <div className="flex flex-col items-center shrink-0 w-8">
+                              <button
+                                type="button"
+                                onClick={() => handleSelectAccordion(idx)}
+                                aria-label={`Select step ${idx + 1}: ${item.title}`}
+                                className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold shrink-0 transition-all duration-300 z-10 cursor-pointer ${
+                                  isCompleted
+                                    ? 'bg-[#1266E8] text-white shadow-xs'
+                                    : isActive
+                                    ? 'bg-gradient-to-br from-[#04C8E8] to-[#1266E8] text-white shadow-[0_0_14px_rgba(4,200,232,0.45)] ring-2 ring-[#04C8E8]/40 ring-offset-2 ring-offset-white'
+                                    : 'bg-slate-100 text-slate-400 border border-slate-200 hover:border-slate-300'
+                                }`}
+                              >
+                                {isCompleted ? (
+                                  <Check className="w-4 h-4 stroke-[2.5]" />
+                                ) : (
+                                  <span>{idx + 1}</span>
+                                )}
+                              </button>
+
+                              {!isLast && (
+                                <div className="w-0.5 grow my-1.5 bg-slate-200 rounded-full relative overflow-hidden min-h-[28px]">
+                                  <div
+                                    className={`w-full transition-all duration-500 bg-gradient-to-b from-[#04C8E8] to-[#1266E8] rounded-full ${
+                                      activeAccordion > idx ? 'h-full' : 'h-0'
+                                    }`}
+                                  />
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Step Button Card */}
+                            <button
+                              type="button"
+                              onClick={() => handleSelectAccordion(idx)}
+                              className={`w-full text-left rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden mb-3 border ${
+                                isActive
+                                  ? 'bg-white border-l-4 border-l-[#04C8E8] border-y-[#EEF1F5] border-r-[#EEF1F5] shadow-[0_12px_28px_rgba(15,27,61,0.08)] p-4'
+                                  : 'bg-slate-50/70 hover:bg-slate-100/80 border-slate-200/60 p-3 sm:p-3.5'
+                              }`}
+                            >
+                              <div className="flex items-start gap-3">
                                 <div
-                                  className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors shrink-0 ${
+                                  className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors shrink-0 mt-0.5 ${
                                     isActive
                                       ? 'bg-[#ECFEFF] text-[#0891B2]'
                                       : 'bg-slate-100 text-slate-500'
@@ -334,200 +382,439 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                                 >
                                   <IconComponent className="w-4 h-4" />
                                 </div>
-                                <span
-                                  className={`text-sm sm:text-base font-bold transition-colors ${
-                                    isActive ? 'text-[#0F1B3D]' : 'text-slate-600'
-                                  }`}
-                                >
-                                  {item.title}
-                                </span>
+                                <div className="min-w-0 flex-1">
+                                  <div
+                                    className={`text-sm sm:text-base font-bold transition-colors ${
+                                      isActive ? 'text-[#0F1B3D]' : 'text-slate-600'
+                                    }`}
+                                  >
+                                    {item.title}
+                                  </div>
+                                  {isActive && (
+                                    <motion.p
+                                      initial={prefersReducedMotion ? false : { opacity: 0, height: 0 }}
+                                      animate={{ opacity: 1, height: 'auto' }}
+                                      transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
+                                      className="text-[13px] sm:text-[14px] text-slate-500 mt-1 leading-snug overflow-hidden font-normal"
+                                    >
+                                      {item.desc}
+                                    </motion.p>
+                                  )}
+                                </div>
                               </div>
-
-                              <div
-                                className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors shrink-0 ${
-                                  isActive
-                                    ? 'bg-[#04C8E8]/15 text-[#0891B2]'
-                                    : 'bg-slate-100 text-slate-400'
-                                }`}
-                              >
-                                {isActive ? (
-                                  <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                                ) : (
-                                  <Plus className="w-3.5 h-3.5" />
-                                )}
-                              </div>
-                            </div>
-                          </button>
+                            </button>
+                          </div>
                         );
                       })}
                     </div>
                   </div>
 
-                  {/* RIGHT COLUMN – Crossfading White UI Card + Status Pill */}
-                  <div className="min-[900px]:col-span-6 space-y-3">
-                    <div className="relative rounded-[20px] bg-slate-50/60 border border-[#EEF1F5] shadow-inner p-5 sm:p-6 min-h-[235px] flex flex-col justify-between overflow-hidden">
-                      <div className="flex items-center justify-between pb-3 border-b border-slate-200/70">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-rose-300/80" />
-                          <span className="w-2.5 h-2.5 rounded-full bg-amber-300/80" />
-                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-300/80" />
+                  {/* RIGHT COLUMN – Clean Preview Panel (NDA / Sprints / IP Handover) */}
+                  <div className="min-[900px]:col-span-7 lg:col-span-6 space-y-3">
+                    <div className="relative rounded-[20px] bg-white border border-[#E6EAF0] shadow-sm p-4 sm:p-6 min-h-[350px] flex flex-col justify-between overflow-hidden">
+                      {/* Preview Header: Window dots + Step X of 3 chip + Title + Progress bar */}
+                      <div className="space-y-2.5 pb-3 border-b border-slate-100">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <span className="w-2.5 h-2.5 rounded-full bg-rose-400/80" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
+                          </div>
+
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="px-2 py-0.5 rounded-full bg-cyan-50 border border-cyan-200/80 text-[#0891B2] font-mono text-[10px] font-bold shrink-0">
+                              Step {activeAccordion + 1} of 3
+                            </span>
+                            <span className="text-xs font-mono font-semibold text-[#0F1B3D] truncate">
+                              {ACCORDION_ITEMS[activeAccordion].title}
+                            </span>
+                          </div>
                         </div>
-                        <span className="text-[11px] font-mono font-semibold text-slate-400">
-                          {ACCORDION_ITEMS[activeAccordion].title}
-                        </span>
+
+                        {/* Step Duration Progress Bar */}
+                        <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                          <motion.div
+                            key={`progress-${activeAccordion}-${accordionPausedUntil}`}
+                            initial={{ width: prefersReducedMotion ? '100%' : '0%' }}
+                            animate={{ width: '100%' }}
+                            transition={{
+                              duration: prefersReducedMotion ? 0 : 4.5,
+                              ease: 'linear',
+                            }}
+                            className="h-full rounded-full bg-gradient-to-r from-[#04C8E8] to-[#1266E8]"
+                          />
+                        </div>
                       </div>
 
+                      {/* Preview Body with AnimatePresence crossfade & slight slide */}
                       <div className="my-auto py-3">
                         <AnimatePresence mode="wait">
+                          {/* STEP 1: MUTUAL NDA PREVIEW */}
                           {activeAccordion === 0 && (
                             <motion.div
-                              key="nda-card"
-                              initial={{ opacity: 0, scale: 0.98 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.98 }}
-                              transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-                              className="max-w-sm mx-auto rounded-2xl border border-slate-100 bg-white p-4 space-y-3 shadow-xs"
+                              key="nda-preview"
+                              initial={{
+                                opacity: 0,
+                                x: prefersReducedMotion ? 0 : 20,
+                                scale: prefersReducedMotion ? 1 : 0.98,
+                              }}
+                              animate={{ opacity: 1, x: 0, scale: 1 }}
+                              exit={{
+                                opacity: 0,
+                                x: prefersReducedMotion ? 0 : -20,
+                                scale: prefersReducedMotion ? 1 : 0.98,
+                              }}
+                              transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+                              className="w-full space-y-3"
                             >
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2.5">
-                                  <div className="w-7 h-7 rounded-lg bg-[#ECFEFF] text-[#0891B2] flex items-center justify-center">
-                                    <FileCheck2 className="w-3.5 h-3.5" />
+                              {/* Document Card: Non-Disclosure Agreement */}
+                              <div className="rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 space-y-3 shadow-xs">
+                                <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+                                  <div className="flex items-center gap-2.5">
+                                    <div className="w-7 h-7 rounded-lg bg-[#ECFEFF] text-[#0891B2] flex items-center justify-center">
+                                      <FileCheck2 className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                      <h4 className="text-xs sm:text-sm font-bold text-[#0F1B3D]">
+                                        Non-Disclosure Agreement
+                                      </h4>
+                                      <p className="text-[10px] font-mono text-slate-400">
+                                        MUTUAL_CONFIDENTIALITY_DOC
+                                      </p>
+                                    </div>
                                   </div>
-                                  <div className="space-y-1.5">
-                                    <div className="h-2 w-24 rounded-full bg-[#0F1B3D]/80" />
-                                    <div className="h-1.5 w-14 rounded-full bg-slate-300" />
-                                  </div>
+                                  <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                                    MUTUAL NDA
+                                  </span>
                                 </div>
-                                <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                                  <Check className="w-3 h-3" />
-                                </div>
-                              </div>
 
-                              <div className="space-y-1.5">
-                                <div className="h-1.5 w-full rounded-full bg-slate-200/90" />
-                                <div className="h-1.5 w-[90%] rounded-full bg-slate-200/90" />
-                                <div className="h-1.5 w-[75%] rounded-full bg-slate-200/90" />
-                              </div>
-
-                              <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                                <div className="h-1.5 w-12 rounded-full bg-slate-300" />
-                                <svg
-                                  viewBox="0 0 140 36"
-                                  className="w-28 h-7 text-[#1266E8] overflow-visible"
-                                  fill="none"
-                                >
-                                  <motion.path
-                                    d="M6 26 C 22 8, 30 30, 46 16 C 58 6, 68 28, 84 14 C 98 4, 112 22, 134 12"
-                                    stroke="currentColor"
-                                    strokeWidth="2.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    initial={{ pathLength: 0, opacity: 0.4 }}
-                                    animate={{ pathLength: 1, opacity: 1 }}
-                                    transition={{ duration: 1.1, ease: 'easeInOut' }}
-                                  />
-                                </svg>
-                              </div>
-                            </motion.div>
-                          )}
-
-                          {activeAccordion === 1 && (
-                            <motion.div
-                              key="sprints-card"
-                              initial={{ opacity: 0, scale: 0.98 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.98 }}
-                              transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-                              className="grid grid-cols-3 gap-2.5"
-                            >
-                              {[0, 1, 2].map((col) => (
-                                <div
-                                  key={col}
-                                  className="rounded-xl bg-white border border-slate-100 p-2.5 space-y-2 shadow-xs"
-                                >
-                                  <div className="flex items-center justify-between">
-                                    <div className="h-1.5 w-10 rounded-full bg-slate-300" />
-                                    <span
-                                      className={`w-2 h-2 rounded-full ${
-                                        col === 0
-                                          ? 'bg-[#04C8E8]'
-                                          : col === 1
-                                          ? 'bg-[#1266E8]'
-                                          : 'bg-emerald-500'
-                                      }`}
-                                    />
+                                {/* Signature Rows: Client & IAMTECHNI */}
+                                <div className="space-y-2">
+                                  {/* Row 1: Client */}
+                                  <div className="p-2 sm:p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 flex items-center justify-between gap-3">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                      <span className="text-[11px] font-mono font-bold text-[#0F1B3D] w-14 sm:w-20 shrink-0">
+                                        Client
+                                      </span>
+                                      <div className="h-6 w-28 sm:w-36 flex items-center">
+                                        <svg
+                                          viewBox="0 0 140 28"
+                                          className="w-full h-full text-[#1266E8] overflow-visible"
+                                          fill="none"
+                                        >
+                                          <motion.path
+                                            d="M4 18 C 16 6, 26 24, 40 12 C 50 4, 58 22, 72 10 C 84 2, 96 18, 114 8 C 124 2, 130 14, 136 6"
+                                            stroke="currentColor"
+                                            strokeWidth="2.2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            initial={
+                                              prefersReducedMotion ? false : { pathLength: 0, opacity: 0.3 }
+                                            }
+                                            animate={{ pathLength: 1, opacity: 1 }}
+                                            transition={{
+                                              duration: prefersReducedMotion ? 0 : 1.1,
+                                              ease: 'easeInOut',
+                                            }}
+                                          />
+                                        </svg>
+                                      </div>
+                                    </div>
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 font-mono text-[10px] font-bold shrink-0">
+                                      <Check className="w-3 h-3 stroke-[2.5]" />
+                                      Signed
+                                    </span>
                                   </div>
 
-                                  {[0, 1].map((cardIdx) => (
-                                    <motion.div
-                                      key={cardIdx}
-                                      initial={{ opacity: 0, y: 8 }}
-                                      animate={{ opacity: 1, y: 0 }}
-                                      transition={{
-                                        duration: 0.35,
-                                        delay: col * 0.08 + cardIdx * 0.1,
-                                        ease: EASE_OUT_EXPO,
-                                      }}
-                                      className="rounded-lg bg-slate-50 p-2 border border-slate-100 space-y-1.5"
-                                    >
-                                      <div className="h-1.5 w-4/5 rounded-full bg-[#0F1B3D]/75" />
-                                      <div className="h-1.5 w-3/5 rounded-full bg-slate-200" />
-                                    </motion.div>
-                                  ))}
+                                  {/* Row 2: IAMTECHNI */}
+                                  <div className="p-2 sm:p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 flex items-center justify-between gap-3">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                      <span className="text-[11px] font-mono font-bold text-[#0F1B3D] w-14 sm:w-20 shrink-0">
+                                        IAMTECHNI
+                                      </span>
+                                      <div className="h-6 w-28 sm:w-36 flex items-center">
+                                        <svg
+                                          viewBox="0 0 140 28"
+                                          className="w-full h-full text-[#0891B2] overflow-visible"
+                                          fill="none"
+                                        >
+                                          <motion.path
+                                            d="M6 14 C 20 24, 30 6, 44 20 C 56 28, 66 6, 80 16 C 94 22, 108 4, 122 14 C 130 18, 134 10, 138 10"
+                                            stroke="currentColor"
+                                            strokeWidth="2.2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            initial={
+                                              prefersReducedMotion ? false : { pathLength: 0, opacity: 0.3 }
+                                            }
+                                            animate={{ pathLength: 1, opacity: 1 }}
+                                            transition={{
+                                              duration: prefersReducedMotion ? 0 : 1.1,
+                                              delay: prefersReducedMotion ? 0 : 0.35,
+                                              ease: 'easeInOut',
+                                            }}
+                                          />
+                                        </svg>
+                                      </div>
+                                    </div>
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 font-mono text-[10px] font-bold shrink-0">
+                                      <Check className="w-3 h-3 stroke-[2.5]" />
+                                      Signed
+                                    </span>
+                                  </div>
                                 </div>
-                              ))}
-                            </motion.div>
-                          )}
 
-                          {activeAccordion === 2 && (
-                            <motion.div
-                              key="ip-card"
-                              initial={{ opacity: 0, scale: 0.98 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.98 }}
-                              transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-                              className="max-w-sm mx-auto space-y-2"
-                            >
-                              {[0, 1, 2].map((row) => (
+                                {/* Shield icon with "Confidential" pop-in */}
                                 <motion.div
-                                  key={row}
-                                  initial={{ opacity: 0, x: 12 }}
-                                  animate={{ opacity: 1, x: 0 }}
+                                  initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
                                   transition={{
-                                    duration: 0.3,
-                                    delay: row * 0.07,
+                                    duration: prefersReducedMotion ? 0 : 0.4,
+                                    delay: prefersReducedMotion ? 0 : 0.65,
                                     ease: EASE_OUT_EXPO,
                                   }}
-                                  className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-100 shadow-xs"
+                                  className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 border border-emerald-200/80 text-emerald-800 text-xs font-semibold"
                                 >
+                                  <Shield className="w-4 h-4 text-emerald-600 shrink-0" />
+                                  <span className="font-mono text-[11px] font-bold tracking-tight">
+                                    Confidential · Legally Protected from Day 1
+                                  </span>
+                                </motion.div>
+                              </div>
+                            </motion.div>
+                          )}
+
+                          {/* STEP 2: PHASED SPRINTS PREVIEW */}
+                          {activeAccordion === 1 && (
+                            <motion.div
+                              key="sprints-preview"
+                              initial={{
+                                opacity: 0,
+                                x: prefersReducedMotion ? 0 : 20,
+                                scale: prefersReducedMotion ? 1 : 0.98,
+                              }}
+                              animate={{ opacity: 1, x: 0, scale: 1 }}
+                              exit={{
+                                opacity: 0,
+                                x: prefersReducedMotion ? 0 : -20,
+                                scale: prefersReducedMotion ? 1 : 0.98,
+                              }}
+                              transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+                              className="w-full space-y-3"
+                            >
+                              {/* Horizontal Timeline Bar with animated progress line L-to-R */}
+                              <div className="relative h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                <motion.div
+                                  initial={prefersReducedMotion ? false : { width: '0%' }}
+                                  animate={{ width: '100%' }}
+                                  transition={{
+                                    duration: prefersReducedMotion ? 0 : 1.2,
+                                    ease: 'easeInOut',
+                                  }}
+                                  className="h-full rounded-full bg-gradient-to-r from-[#04C8E8] via-[#1266E8] to-emerald-500"
+                                />
+                              </div>
+
+                              {/* 3 Milestone Cards */}
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                                {[
+                                  {
+                                    sprint: 'Sprint 1 · Plan',
+                                    chip: 'Demo 1',
+                                    tasks: 'Architecture & UX',
+                                    status: 'Done',
+                                    delay: 0,
+                                  },
+                                  {
+                                    sprint: 'Sprint 2 · Build',
+                                    chip: 'Demo 2',
+                                    tasks: 'Core Engine & APIs',
+                                    status: 'Done',
+                                    delay: 0.12,
+                                  },
+                                  {
+                                    sprint: 'Sprint 3 · Launch',
+                                    chip: 'Demo 3',
+                                    tasks: 'QA & Deployment',
+                                    status: 'Ready',
+                                    delay: 0.24,
+                                  },
+                                ].map((card) => (
+                                  <motion.div
+                                    key={card.sprint}
+                                    initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{
+                                      duration: prefersReducedMotion ? 0 : 0.4,
+                                      delay: prefersReducedMotion ? 0 : card.delay,
+                                      ease: EASE_OUT_EXPO,
+                                    }}
+                                    className="rounded-2xl border border-slate-200/80 bg-white p-3 space-y-2.5 shadow-xs"
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-cyan-50 border border-cyan-200/70 text-[#0891B2]">
+                                        {card.chip}
+                                      </span>
+                                      <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center">
+                                        <Check className="w-3 h-3 stroke-[2.5]" />
+                                      </span>
+                                    </div>
+
+                                    <div>
+                                      <h5 className="text-xs font-bold text-[#0F1B3D]">
+                                        {card.sprint}
+                                      </h5>
+                                      <p className="text-[11px] font-mono text-slate-500 mt-0.5">
+                                        {card.tasks}
+                                      </p>
+                                    </div>
+
+                                    <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] font-mono">
+                                      <span className="text-slate-400">Milestone</span>
+                                      <span className="font-semibold text-emerald-600">
+                                        ✓ {card.status}
+                                      </span>
+                                    </div>
+                                  </motion.div>
+                                ))}
+                              </div>
+
+                              <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-100 text-xs font-mono text-slate-600">
+                                <span className="text-[11px] font-semibold">// Bi-weekly review demos</span>
+                                <span className="text-[10px] font-bold text-[#1266E8]">100% TRANSPARENT</span>
+                              </div>
+                            </motion.div>
+                          )}
+
+                          {/* STEP 3: FULL IP OWNERSHIP PREVIEW */}
+                          {activeAccordion === 2 && (
+                            <motion.div
+                              key="ip-preview"
+                              initial={{
+                                opacity: 0,
+                                x: prefersReducedMotion ? 0 : 20,
+                                scale: prefersReducedMotion ? 1 : 0.98,
+                              }}
+                              animate={{ opacity: 1, x: 0, scale: 1 }}
+                              exit={{
+                                opacity: 0,
+                                x: prefersReducedMotion ? 0 : -20,
+                                scale: prefersReducedMotion ? 1 : 0.98,
+                              }}
+                              transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+                              className="w-full space-y-3"
+                            >
+                              {/* Folder Card: Your Project */}
+                              <div className="rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 space-y-3 shadow-xs">
+                                <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
                                   <div className="flex items-center gap-2.5">
                                     <div className="w-7 h-7 rounded-lg bg-[#EEF4FF] text-[#1266E8] flex items-center justify-center">
-                                      <FolderLock className="w-3.5 h-3.5" />
+                                      <FolderLock className="w-4 h-4" />
                                     </div>
-                                    <div className="space-y-1">
-                                      <div
-                                        className={`h-2 rounded-full bg-[#0F1B3D]/80 ${
-                                          row === 0 ? 'w-28' : row === 1 ? 'w-20' : 'w-24'
-                                        }`}
-                                      />
-                                      <div className="h-1.5 w-14 rounded-full bg-slate-300" />
+                                    <div>
+                                      <h4 className="text-xs sm:text-sm font-bold text-[#0F1B3D]">
+                                        Your Project // Deliverables
+                                      </h4>
+                                      <p className="text-[10px] font-mono text-slate-400">
+                                        COMPLETE_ASSET_HANDOVER
+                                      </p>
                                     </div>
                                   </div>
+                                  {/* Lock icon with "100% yours" */}
+                                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-[11px] font-bold">
+                                    <Lock className="w-3 h-3 text-emerald-600" />
+                                    100% yours
+                                  </span>
+                                </div>
 
-                                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-600">
-                                    <Lock className="w-2.5 h-2.5" />
-                                    <Check className="w-2.5 h-2.5" />
+                                {/* 3 rows sliding in: Source code, Design files, Documentation */}
+                                <div className="space-y-2">
+                                  {[
+                                    {
+                                      title: 'Source code',
+                                      sub: 'Full Git repository & commit history',
+                                      icon: Code2,
+                                      delay: 0,
+                                    },
+                                    {
+                                      title: 'Design files',
+                                      sub: 'UI design system, tokens & vector assets',
+                                      icon: Palette,
+                                      delay: 0.12,
+                                    },
+                                    {
+                                      title: 'Documentation',
+                                      sub: 'Architecture blueprints & deployment guides',
+                                      icon: FileText,
+                                      delay: 0.24,
+                                    },
+                                  ].map((row) => {
+                                    const RowIcon = row.icon;
+                                    return (
+                                      <motion.div
+                                        key={row.title}
+                                        initial={prefersReducedMotion ? false : { opacity: 0, x: 15 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{
+                                          duration: prefersReducedMotion ? 0 : 0.35,
+                                          delay: prefersReducedMotion ? 0 : row.delay,
+                                          ease: EASE_OUT_EXPO,
+                                        }}
+                                        className="flex items-center justify-between p-2 sm:p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                                      >
+                                        <div className="flex items-center gap-2.5">
+                                          <div className="w-6 h-6 rounded-md bg-white border border-slate-200/80 text-[#0891B2] flex items-center justify-center shrink-0">
+                                            <RowIcon className="w-3.5 h-3.5" />
+                                          </div>
+                                          <div className="min-w-0">
+                                            <div className="text-xs font-bold text-[#0F1B3D]">
+                                              {row.title}
+                                            </div>
+                                            <div className="text-[10px] font-mono text-slate-400 truncate">
+                                              {row.sub}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-mono text-[10px] font-bold shrink-0">
+                                          <Check className="w-2.5 h-2.5 stroke-[2.5]" />
+                                          Assigned
+                                        </span>
+                                      </motion.div>
+                                    );
+                                  })}
+                                </div>
+
+                                {/* Arrow animation moving folder toward Client badge */}
+                                <div className="pt-1 flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-slate-50 to-cyan-50/40 border border-slate-200/70 text-xs">
+                                  <span className="font-mono text-slate-500 font-semibold text-[11px]">
+                                    Ownership Transfer:
+                                  </span>
+                                  <div className="flex items-center gap-2 text-[#0891B2] font-mono font-bold text-xs">
+                                    <span>All IP &amp; Assets</span>
+                                    <motion.div
+                                      animate={prefersReducedMotion ? undefined : { x: [0, 5, 0] }}
+                                      transition={{
+                                        duration: 1.2,
+                                        repeat: Infinity,
+                                        ease: 'easeInOut',
+                                      }}
+                                    >
+                                      <ArrowRight className="w-3.5 h-3.5 text-[#1266E8]" />
+                                    </motion.div>
+                                    <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[11px]">
+                                      Client
+                                    </span>
                                   </div>
-                                </motion.div>
-                              ))}
+                                </div>
+                              </div>
                             </motion.div>
                           )}
                         </AnimatePresence>
                       </div>
                     </div>
 
-                    {/* Small pill below the card showing STATUS & READY TO ARCHITECT */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2 rounded-full bg-white border border-[#EEF1F5] shadow-xs text-[11px] font-mono">
+                    {/* Small pill below the card showing STATUS & READY TO ARCHITECT with gently pulsing green dot */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 rounded-full bg-white border border-[#E6EAF0] shadow-xs text-[11px] font-mono">
                       <div className="inline-flex items-center gap-2 text-slate-600 font-semibold">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         <span>STATUS: ACCEPTING NEW PROJECTS</span>

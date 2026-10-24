@@ -491,10 +491,10 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
                 e.stopPropagation();
                 onNavigate(`/insights/${currentArticle.slug}` as PageRoute);
               }}
-              className={`w-full py-2.5 px-4 rounded-xl ${theme.buttonBg} ${theme.buttonHoverBg} border ${theme.buttonBorder} ${theme.buttonText} text-xs font-bold flex items-center justify-between transition-all duration-200 cursor-pointer group/btn`}
+              className="w-full h-[42px] sm:h-[44px] min-h-[42px] sm:min-h-[44px] px-5 rounded-lg bg-[#1E3A8A]/90 hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 flex items-center justify-between whitespace-nowrap cursor-pointer group/btn focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
             >
               <span>Read Article</span>
-              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 group-hover/btn:translate-x-1" />
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white shrink-0 transition-transform duration-200 group-hover:translate-x-1 group-hover/btn:translate-x-1" />
             </button>
           </div>
         </div>
