@@ -448,6 +448,8 @@ export interface MobileSectionSkeletonWrapperProps {
   cardCount?: number;
 }
 
+let hasCompletedInitialMobileHydration = false;
+
 /**
  * Wraps any non-hero section to display a lightweight content skeleton on mobile devices (< 768px)
  * during initial page load or progressive scroll entry, while keeping desktop (>= 768px)
@@ -469,7 +471,7 @@ export const MobileSectionSkeletonWrapper: React.FC<MobileSectionSkeletonWrapper
 
   const [isHydrated, setIsHydrated] = useState<boolean>(() => {
     if (typeof window === 'undefined') return true;
-    return window.innerWidth >= 768;
+    return window.innerWidth >= 768 || hasCompletedInitialMobileHydration;
   });
 
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -490,47 +492,21 @@ export const MobileSectionSkeletonWrapper: React.FC<MobileSectionSkeletonWrapper
   }, []);
 
   useEffect(() => {
-    if (!isMobileViewport || prefersReducedMotion) {
+    if (!isMobileViewport || prefersReducedMotion || hasCompletedInitialMobileHydration) {
+      hasCompletedInitialMobileHydration = true;
       setIsHydrated(true);
       return;
     }
 
-    let resolved = false;
-    let timerId: number | undefined;
-    let observer: IntersectionObserver | undefined;
-
-    const completeHydration = (delayMs: number) => {
-      if (resolved) return;
-      resolved = true;
-      timerId = window.setTimeout(() => {
-        setIsHydrated(true);
-      }, delayMs);
-    };
-
-    // Staggered progressive hydration on mobile so initial frame paints Hero immediately
-    // while non-hero sections display crisp skeletons and hydrate smoothly
-    const maxFallbackDelay = 200 + Math.min(sectionIndex, 8) * 45;
-    const fallbackTimer = window.setTimeout(() => {
-      completeHydration(0);
-    }, maxFallbackDelay);
-
-    if (typeof IntersectionObserver !== 'undefined' && wrapperRef.current) {
-      observer = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((entry) => entry.isIntersecting)) {
-            completeHydration(150 + Math.min(sectionIndex, 4) * 35);
-            observer?.disconnect();
-          }
-        },
-        { rootMargin: '260px 0px' }
-      );
-      observer.observe(wrapperRef.current);
-    }
+    // Complete hydration in a single synchronized early frame (60ms) across all sections
+    // so the Hero paints immediately on frame 1 while avoiding staggered mid-scroll height jumps.
+    const timerId = window.setTimeout(() => {
+      hasCompletedInitialMobileHydration = true;
+      setIsHydrated(true);
+    }, 60);
 
     return () => {
-      window.clearTimeout(fallbackTimer);
-      if (timerId !== undefined) window.clearTimeout(timerId);
-      observer?.disconnect();
+      window.clearTimeout(timerId);
     };
   }, [isMobileViewport, prefersReducedMotion, sectionIndex]);
 
@@ -548,5 +524,5 @@ export const MobileSectionSkeletonWrapper: React.FC<MobileSectionSkeletonWrapper
     );
   }
 
-  return <div className="w-full animate-mobile-section-reveal">{children}</div>;
+  return <div className="w-full">{children}</div>;
 };

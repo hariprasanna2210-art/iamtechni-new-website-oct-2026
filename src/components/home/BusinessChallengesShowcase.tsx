@@ -11,6 +11,7 @@ import { IndustryItem, PageRoute } from '../../types';
 import { industriesData } from '../../data/industriesData';
 import { getIndustryIcon } from '../../utils/serviceIcons';
 import { IndustryIllustration } from '../common/TechIllustrations';
+import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportActivity';
 
 interface BusinessChallengesShowcaseProps {
   onNavigate: (route: PageRoute) => void;
@@ -186,10 +187,11 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
   onNavigate,
 }) => {
   const prefersReducedMotion = Boolean(useReducedMotion());
+  const [sectionRef, isSectionInView] = useSectionInView<HTMLElement>(0.15);
+  const isWindowScrolling = useIsWindowScrolling();
   const items: IndustryItem[] = industriesData.slice(0, 6);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
   const [isPausedByHoverOrFocus, setIsPausedByHoverOrFocus] = useState(false);
   const stoppedByUserAction = false;
 
@@ -210,7 +212,6 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
     (index: number, _fromUserInteraction = false) => {
       const normalized = ((index % totalItems) + totalItems) % totalItems;
       setActiveIndex(normalized);
-      setProgress(0);
     },
     [totalItems]
   );
@@ -229,32 +230,27 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
     [activeIndex, goToIndex]
   );
 
-  // Fast auto-change every 2 seconds (pauses when hovering over the card)
+  const isAutoAdvancing =
+    !prefersReducedMotion &&
+    !stoppedByUserAction &&
+    !isPausedByHoverOrFocus &&
+    isSectionInView &&
+    !isWindowScrolling;
+
+  // Auto-advance only when in viewport, not paused, and user is not actively scrolling
   useEffect(() => {
-    if (isPausedByHoverOrFocus) {
+    if (!isAutoAdvancing) {
       return;
     }
 
-    const tickMs = 40;
-    const step = (tickMs / AUTO_CHANGE_MS) * 100;
-
-    const timer = window.setInterval(() => {
-      setProgress((prev) => {
-        if (prev + step >= 100) {
-          return 100;
-        }
-        return prev + step;
-      });
-    }, tickMs);
-
-    return () => window.clearInterval(timer);
-  }, [isPausedByHoverOrFocus, activeIndex]);
-
-  useEffect(() => {
-    if (progress >= 100 && !isPausedByHoverOrFocus) {
+    const timer = window.setTimeout(() => {
       handleNext(false);
-    }
-  }, [progress, isPausedByHoverOrFocus, handleNext]);
+    }, AUTO_CHANGE_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [isAutoAdvancing, activeIndex, handleNext]);
+
+  const shouldFloat = !prefersReducedMotion && isSectionInView;
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchStartXRef.current = e.touches[0]?.clientX ?? null;
@@ -276,7 +272,10 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
   };
 
   return (
-    <section className="py-10 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="py-10 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200 overflow-hidden"
+    >
       {/* Full SEO DOM Content for all 6 items so search engines index every item */}
       <div className="sr-only" aria-hidden="false">
         {items.map((ind, idx) => (
@@ -584,8 +583,8 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                             : { opacity: 0, scale: 0.84 }
                         }
                         animate={
-                          prefersReducedMotion
-                            ? { opacity: 1, scale: 1 }
+                          !shouldFloat
+                            ? { opacity: 1, scale: 1, y: 0 }
                             : {
                                 opacity: 1,
                                 scale: 1,
@@ -595,8 +594,8 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                         transition={{
                           opacity: { duration: 0.4, delay: 0.08, ease: CARD_TRANSITION_EASE },
                           scale: { duration: 0.45, delay: 0.08, ease: CARD_TRANSITION_EASE },
-                          y: prefersReducedMotion
-                            ? { duration: 0 }
+                          y: !shouldFloat
+                            ? { duration: 0.2 }
                             : {
                                 duration: 3.8,
                                 repeat: Infinity,
@@ -617,8 +616,8 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                             : { opacity: 0, scale: 0.8 }
                         }
                         animate={
-                          prefersReducedMotion
-                            ? { opacity: 1, scale: 1 }
+                          !shouldFloat
+                            ? { opacity: 1, scale: 1, y: 0 }
                             : {
                                 opacity: 1,
                                 scale: 1,
@@ -628,8 +627,8 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                         transition={{
                           opacity: { duration: 0.38, delay: 0.16, ease: CARD_TRANSITION_EASE },
                           scale: { duration: 0.42, delay: 0.16, ease: CARD_TRANSITION_EASE },
-                          y: prefersReducedMotion
-                            ? { duration: 0 }
+                          y: !shouldFloat
+                            ? { duration: 0.2 }
                             : {
                                 duration: 3.2,
                                 repeat: Infinity,
@@ -657,8 +656,8 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                             : { opacity: 0, scale: 0.8 }
                         }
                         animate={
-                          prefersReducedMotion
-                            ? { opacity: 1, scale: 1 }
+                          !shouldFloat
+                            ? { opacity: 1, scale: 1, y: 0 }
                             : {
                                 opacity: 1,
                                 scale: 1,
@@ -668,8 +667,8 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                         transition={{
                           opacity: { duration: 0.38, delay: 0.24, ease: CARD_TRANSITION_EASE },
                           scale: { duration: 0.42, delay: 0.24, ease: CARD_TRANSITION_EASE },
-                          y: prefersReducedMotion
-                            ? { duration: 0 }
+                          y: !shouldFloat
+                            ? { duration: 0.2 }
                             : {
                                 duration: 3.6,
                                 repeat: Infinity,
@@ -702,8 +701,8 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                             : { opacity: 0, scale: 0.8 }
                         }
                         animate={
-                          prefersReducedMotion
-                            ? { opacity: 1, scale: 1 }
+                          !shouldFloat
+                            ? { opacity: 1, scale: 1, y: 0 }
                             : {
                                 opacity: 1,
                                 scale: 1,
@@ -713,8 +712,8 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                         transition={{
                           opacity: { duration: 0.38, delay: 0.32, ease: CARD_TRANSITION_EASE },
                           scale: { duration: 0.42, delay: 0.32, ease: CARD_TRANSITION_EASE },
-                          y: prefersReducedMotion
-                            ? { duration: 0 }
+                          y: !shouldFloat
+                            ? { duration: 0.2 }
                             : {
                                 duration: 4.0,
                                 repeat: Infinity,
@@ -808,14 +807,21 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                       >
                         {isActive && (
                           <span
+                            key={`desktop-prog-${activeIndex}`}
                             aria-hidden="true"
-                            className={`block h-full rounded-full ${currentTheme.progressFill} transition-[width] duration-75 ease-linear`}
-                            style={{
-                              width:
-                                prefersReducedMotion || stoppedByUserAction
-                                  ? '100%'
-                                  : `${progress}%`,
-                            }}
+                            className={`block h-full w-full rounded-full ${currentTheme.progressFill} ${
+                              prefersReducedMotion || stoppedByUserAction
+                                ? ''
+                                : 'animate-progress-scale'
+                            }`}
+                            style={
+                              prefersReducedMotion || stoppedByUserAction
+                                ? undefined
+                                : {
+                                    animationDuration: `${AUTO_CHANGE_MS}ms`,
+                                    animationPlayState: isAutoAdvancing ? 'running' : 'paused',
+                                  }
+                            }
                           />
                         )}
                       </button>
@@ -836,13 +842,20 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                       >
                         {isActive && (
                           <span
-                            className={`block h-full rounded-full ${currentTheme.progressFill} transition-[width] duration-75 ease-linear`}
-                            style={{
-                              width:
-                                prefersReducedMotion || stoppedByUserAction
-                                  ? '100%'
-                                  : `${progress}%`,
-                            }}
+                            key={`mobile-prog-${activeIndex}`}
+                            className={`block h-full w-full rounded-full ${currentTheme.progressFill} ${
+                              prefersReducedMotion || stoppedByUserAction
+                                ? ''
+                                : 'animate-progress-scale'
+                            }`}
+                            style={
+                              prefersReducedMotion || stoppedByUserAction
+                                ? undefined
+                                : {
+                                    animationDuration: `${AUTO_CHANGE_MS}ms`,
+                                    animationPlayState: isAutoAdvancing ? 'running' : 'paused',
+                                  }
+                            }
                           />
                         )}
                       </span>

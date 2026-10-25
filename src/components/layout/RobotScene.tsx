@@ -2021,6 +2021,8 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [webglAvailable, setWebglAvailable] = useState(true);
   const globalPointerRef = useRef({ targetX: 0, targetY: 0 });
+  const isVisibleRef = useRef(isVisible);
+  isVisibleRef.current = isVisible;
 
   useEffect(() => {
     try {
@@ -2037,15 +2039,26 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
     }
   }, []);
 
-  // Track pointer across the window for natural head and upper-body responsiveness
+  // Track pointer across the window for natural head and upper-body responsiveness without synchronous layout thrashing
   useEffect(() => {
+    let cachedRect: DOMRect | null = null;
+    let rectDirty = true;
+
+    const markRectDirty = () => {
+      rectDirty = true;
+    };
+
     const handlePointerMove = (e: PointerEvent) => {
+      if (!isVisibleRef.current || e.pointerType === 'touch') return;
       const el = wrapperRef.current;
       if (!el) return;
-      const rect = el.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) return;
-      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const ny = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+      if (rectDirty || !cachedRect) {
+        cachedRect = el.getBoundingClientRect();
+        rectDirty = false;
+      }
+      if (cachedRect.width === 0 || cachedRect.height === 0) return;
+      const nx = ((e.clientX - cachedRect.left) / cachedRect.width) * 2 - 1;
+      const ny = -(((e.clientY - cachedRect.top) / cachedRect.height) * 2 - 1);
       globalPointerRef.current.targetX = THREE.MathUtils.clamp(nx, -1, 1);
       globalPointerRef.current.targetY = THREE.MathUtils.clamp(ny, -1, 1);
     };
@@ -2056,9 +2069,13 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
     };
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    window.addEventListener('scroll', markRectDirty, { passive: true });
+    window.addEventListener('resize', markRectDirty, { passive: true });
     window.addEventListener('blur', handlePointerLeave);
     return () => {
       window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('scroll', markRectDirty);
+      window.removeEventListener('resize', markRectDirty);
       window.removeEventListener('blur', handlePointerLeave);
     };
   }, []);
@@ -2089,6 +2106,9 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
     typeof navigator !== 'undefined' &&
     (navigator.webdriver || /HeadlessChrome/i.test(navigator.userAgent));
 
+  const isMobileScreen =
+    typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
     <div
       ref={wrapperRef}
@@ -2101,7 +2121,7 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
         style={{ pointerEvents: 'none' }}
         resize={{ offsetSize: true }}
         shadows={!isHeadless}
-        dpr={isHeadless ? 1 : [1, 2]}
+        dpr={isHeadless ? 1 : isMobileScreen ? [1, 1.35] : [1, 2]}
         camera={{ position: [0, 0.14, 5.65], fov: 29.5, near: 0.1, far: 100 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >

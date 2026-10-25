@@ -12,6 +12,7 @@ import {
   Workflow,
 } from 'lucide-react';
 import { PageRoute } from '../../types';
+import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportActivity';
 
 interface AIBookSectionProps {
   onNavigate: (route: PageRoute) => void;
@@ -31,21 +32,19 @@ const TURN_EASE: [number, number, number, number] = [0.645, 0.045, 0.355, 1];
 
 export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
   const prefersReducedMotion = Boolean(useReducedMotion());
-  const sectionRef = useRef<HTMLElement | null>(null);
+  const [sectionRef, isBookSectionInView] = useSectionInView<HTMLElement>(0.15);
+  const isWindowScrolling = useIsWindowScrolling();
 
   const [currentSpread, setCurrentSpread] = useState(0);
   const [turnState, setTurnState] = useState<TurnState | null>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isBookHovered, setIsBookHovered] = useState(false);
-  const [autoProgress, setAutoProgress] = useState(0);
   const [newlyRevealedSpread, setNewlyRevealedSpread] = useState<number>(0);
 
   const triggerTurn = useCallback(
     (targetSpread: number, forcedDirection?: 'next' | 'prev') => {
       if (turnState?.isTurning || targetSpread === currentSpread) return;
       if (targetSpread < 0 || targetSpread >= TOTAL_SPREADS) return;
-
-      setAutoProgress(0);
 
       const direction: 'next' | 'prev' =
         forcedDirection || (targetSpread > currentSpread ? 'next' : 'prev');
@@ -75,7 +74,6 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
       if (!prev) return null;
       setCurrentSpread(prev.toSpread);
       setNewlyRevealedSpread(prev.toSpread);
-      setAutoProgress(0);
       return null;
     });
   }, []);
@@ -89,35 +87,37 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
     return () => window.clearTimeout(timer);
   }, [turnState, completeTurn]);
 
-  // Continuous fast auto-turning pages loop (pauses immediately when hovering over the book)
+  // Auto-turn pages only when section is in view, not hovered, and user is not actively scrolling
   useEffect(() => {
-    if (!isAutoPlaying || isBookHovered || turnState?.isTurning) {
+    if (
+      prefersReducedMotion ||
+      !isAutoPlaying ||
+      isBookHovered ||
+      turnState?.isTurning ||
+      !isBookSectionInView ||
+      isWindowScrolling
+    ) {
       return;
     }
 
-    const tickMs = 40;
-    const stepIncrement = (tickMs / AUTO_TURN_INTERVAL_MS) * 100;
-
-    const interval = window.setInterval(() => {
-      setAutoProgress((prev) => {
-        if (prev + stepIncrement >= 100) {
-          return 100;
-        }
-        return prev + stepIncrement;
-      });
-    }, tickMs);
-
-    return () => window.clearInterval(interval);
-  }, [isAutoPlaying, isBookHovered, turnState]);
-
-  useEffect(() => {
-    if (autoProgress >= 100 && !turnState?.isTurning && isAutoPlaying && !isBookHovered) {
+    const timer = window.setTimeout(() => {
       handleNextSpread();
-    }
-  }, [autoProgress, turnState, isAutoPlaying, isBookHovered, handleNextSpread]);
+    }, AUTO_TURN_INTERVAL_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    prefersReducedMotion,
+    isAutoPlaying,
+    isBookHovered,
+    turnState,
+    isBookSectionInView,
+    isWindowScrolling,
+    handleNextSpread,
+  ]);
 
   // Keyboard support: ArrowLeft / ArrowRight when focused inside the book section or when the book section is visible on screen
   const isSectionVisibleRef = useRef(true);
+  isSectionVisibleRef.current = isBookSectionInView;
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === 'ArrowRight') {
@@ -128,24 +128,6 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
       handlePrevSpread();
     }
   };
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el || typeof IntersectionObserver === 'undefined') return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (entry) {
-          isSectionVisibleRef.current = entry.isIntersecting;
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const onWindowKeyDown = (e: KeyboardEvent) => {
@@ -644,9 +626,19 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
                   <span className="relative z-10">{sp.label}</span>
                   {isActive && isAutoPlaying && !prefersReducedMotion && (
                     <span
+                      key={`book-tab-prog-${currentSpread}`}
                       aria-hidden="true"
-                      className="absolute bottom-0 left-0 h-0.5 bg-[#60A5FA] transition-[width] duration-75 ease-linear"
-                      style={{ width: `${autoProgress}%` }}
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#60A5FA] animate-progress-scale"
+                      style={{
+                        animationDuration: `${AUTO_TURN_INTERVAL_MS}ms`,
+                        animationPlayState:
+                          !isBookHovered &&
+                          !turnState?.isTurning &&
+                          isBookSectionInView &&
+                          !isWindowScrolling
+                            ? 'running'
+                            : 'paused',
+                      }}
                     />
                   )}
                 </button>

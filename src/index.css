@@ -69,11 +69,22 @@
   background: #94A3B8;
 }
 
-/* Smooth scrolling when reduced motion is not requested */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
+/* GPU-accelerated linear progress bar fill (avoids 25fps React state ticks) */
+@keyframes progress-fill-scale {
+  0% {
+    transform: scaleX(0);
   }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.animate-progress-scale {
+  transform-origin: left center;
+  will-change: transform;
+  animation-name: progress-fill-scale;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
 }
 
 /* ========================================================================== */

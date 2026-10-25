@@ -19,6 +19,7 @@ import {
   Play,
 } from 'lucide-react';
 import { PageRoute } from '../../types';
+import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportActivity';
 
 interface SolutionPillar {
   id: string;
@@ -418,6 +419,8 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
   onOpenProjectModal,
 }) => {
   const prefersReducedMotion = Boolean(useReducedMotion());
+  const [matrixSectionRef, isMatrixInView] = useSectionInView<HTMLElement>(0.15);
+  const isWindowScrolling = useIsWindowScrolling();
   const [activePillarIndex, setActivePillarIndex] = useState(0);
   const [activeStageIndex, setActiveStageIndex] = useState(0);
   const [isSimulating, setIsSimulating] = useState(false);
@@ -438,20 +441,20 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
     };
   }, []);
 
-  // Gentle running indicator on the Block 1 mini floating pipeline card
+  // Gentle running indicator on the Block 1 mini floating pipeline card (only when in view & not scrolling)
   useEffect(() => {
     if (isSimulating) {
       setMiniRunnerIndex(activeStageIndex);
       return;
     }
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || !isMatrixInView || isWindowScrolling) return;
 
     const timer = window.setInterval(() => {
       setMiniRunnerIndex((prev) => (prev + 1) % stageCount);
     }, 1800);
 
     return () => window.clearInterval(timer);
-  }, [isSimulating, activeStageIndex, stageCount, prefersReducedMotion]);
+  }, [isSimulating, activeStageIndex, stageCount, prefersReducedMotion, isMatrixInView, isWindowScrolling]);
 
   // Simulate Execution: steps through all stages automatically (1.2s each) with progress line, stops on last stage
   const handleSimulateFlow = () => {
@@ -610,7 +613,10 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
   );
 
   return (
-    <section className="py-10 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-[#DBEAFE]/80 overflow-hidden">
+    <section
+      ref={matrixSectionRef}
+      className="py-10 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-[#DBEAFE]/80 overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-12">
         {/* Section Header */}
         <motion.div

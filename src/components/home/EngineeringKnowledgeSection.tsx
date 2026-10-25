@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Cloud, Code2, Cpu } from 'lucide-react';
 import { ArticleItem, PageRoute } from '../../types';
 import { insightsData } from '../../data/insightsData';
+import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportActivity';
 
 interface EngineeringKnowledgeSectionProps {
   onNavigate: (route: PageRoute) => void;
@@ -253,12 +254,14 @@ interface FlipGlassCardProps {
   slotIndex: number;
   articles: ArticleItem[];
   onNavigate: (route: PageRoute) => void;
+  isSectionActive: boolean;
 }
 
 const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
   slotIndex,
   articles,
   onNavigate,
+  isSectionActive,
 }) => {
   const [articleCursor, setArticleCursor] = useState(0);
   const [isFlippedToBack, setIsFlippedToBack] = useState(false);
@@ -272,8 +275,10 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
   const theme = getThemeForCategory(currentArticle.category, slotIndex);
   const CategoryIcon = getCategoryIcon(currentArticle.category);
 
-  // Fast auto-flip every 1.4 seconds in a staggered wave from left to right (0.2s delay between cards)
+  // Auto-flip in a staggered wave only when the section is visible in viewport and user is not actively scrolling
   useEffect(() => {
+    if (!isSectionActive) return;
+
     const staggerDelayMs = slotIndex * 200;
     let intervalId: number | undefined;
 
@@ -283,7 +288,6 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
         setIsFlippedToBack((prev) => {
           const nextIsBack = !prev;
           if (!nextIsBack) {
-            // Flipping back to FRONT: advance to next article if slot has multiple articles, and trigger metric count-up
             setFrontCycleCount((c) => c + 1);
             if (articles.length > 1) {
               setArticleCursor((idx) => (idx + 1) % articles.length);
@@ -293,7 +297,6 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
         });
       };
 
-      triggerFlip();
       intervalId = window.setInterval(triggerFlip, 4600);
     }, staggerDelayMs);
 
@@ -303,7 +306,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
         window.clearInterval(intervalId);
       }
     };
-  }, [slotIndex, articles.length]);
+  }, [slotIndex, articles.length, isSectionActive]);
 
   // Hovering a card pauses auto-flip and flips it to the BACK so user can read and click
   const handleMouseEnter = () => {
@@ -512,6 +515,10 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
 export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionProps> = ({
   onNavigate,
 }) => {
+  const [sectionRef, isSectionInView] = useSectionInView<HTMLElement>(0.15);
+  const isWindowScrolling = useIsWindowScrolling();
+  const isSectionActive = isSectionInView && !isWindowScrolling;
+
   // Distribute articles across 3 card slots (if > 3 articles, slots rotate through additional articles)
   const slotCount = Math.min(3, insightsData.length);
   const cardSlots: ArticleItem[][] = Array.from({ length: slotCount }, (_, slotIdx) =>
@@ -519,7 +526,10 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
   );
 
   return (
-    <section className="relative py-10 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative py-10 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200 overflow-hidden"
+    >
       {/* Subtle Ambient Background Accents for Glass Depth */}
       <div
         aria-hidden="true"
@@ -603,6 +613,7 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
                 slotIndex={slotIdx}
                 articles={slotArticles}
                 onNavigate={onNavigate}
+                isSectionActive={isSectionActive}
               />
             </div>
           ))}

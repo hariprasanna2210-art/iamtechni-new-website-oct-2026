@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   ArrowRight,
   Sparkles,
@@ -58,6 +58,7 @@ import { MobileSectionSkeletonWrapper } from '../components/common/MobileSection
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
 import { getAllUniqueTools } from '../data/heroServiceTools';
+import { useSectionInView, useIsWindowScrolling } from '../utils/useViewportActivity';
 import {
   SiPython,
   SiTensorflow,
@@ -181,7 +182,8 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [activeProcessStep, setActiveProcessStep] = useState(0);
   const [processAutoPlayStopped, setProcessAutoPlayStopped] = useState(false);
   const [processHovered, setProcessHovered] = useState(false);
-  const [processProgress, setProcessProgress] = useState(0);
+  const [processSectionRef, isProcessInView] = useSectionInView<HTMLElement>(0.15);
+  const isWindowScrolling = useIsWindowScrolling();
   const processStageButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const processMobileChipRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const processTimelineButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -251,7 +253,6 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   const handleSelectProcessStage = (index: number) => {
     setProcessAutoPlayStopped(true);
-    setProcessProgress(0);
     setActiveProcessStep(index);
   };
 
@@ -282,26 +283,59 @@ export const HomePage: React.FC<HomePageProps> = ({
     }
   };
 
+  const isProcessAutoAdvancing =
+    !prefersReducedMotion &&
+    !processAutoPlayStopped &&
+    !processHovered &&
+    isProcessInView &&
+    !isWindowScrolling;
+
   useEffect(() => {
-    if (prefersReducedMotion || processAutoPlayStopped || processHovered) {
+    if (!isProcessAutoAdvancing) {
       return;
     }
-    const tickMs = 60;
-    const durationMs = 6000;
-    const stepIncrement = (tickMs / durationMs) * 100;
+    const timer = window.setTimeout(() => {
+      setActiveProcessStep((curr) => (curr + 1) % processStages.length);
+    }, 6000);
 
-    const timer = window.setInterval(() => {
-      setProcessProgress((prev) => {
-        if (prev + stepIncrement >= 100) {
-          setActiveProcessStep((curr) => (curr + 1) % processStages.length);
-          return 0;
-        }
-        return prev + stepIncrement;
-      });
-    }, tickMs);
+    return () => window.clearTimeout(timer);
+  }, [isProcessAutoAdvancing, activeProcessStep, processStages.length]);
 
-    return () => window.clearInterval(timer);
-  }, [prefersReducedMotion, processAutoPlayStopped, processHovered, processStages.length]);
+  const allUniqueTools = useMemo(() => getAllUniqueTools(), []);
+  const websiteTools = useMemo(() => allUniqueTools.slice(0, 18), [allUniqueTools]);
+  const projectCarouselItems = useMemo<ShowcaseCarouselItem[]>(
+    () =>
+      projectsData.map((project): ShowcaseCarouselItem => {
+        const primaryServiceSlug =
+          project.relatedServices?.[0]?.route.replace('/services/', '') ||
+          project.category;
+        return {
+          id: project.id,
+          slug: project.id,
+          title: project.title,
+          category: `${project.category} · ${project.industry}`,
+          summary: project.tagline,
+          icon: getServiceIcon(primaryServiceSlug),
+          highlights: (project.verifiedOutcomes || project.keyFeatures || []).slice(0, 2),
+          stackLabel: 'Key Stack & Tools',
+          tools: project.techStack.slice(0, 4).map((techName) => {
+            const matchedTool = allUniqueTools.find(
+              (t) =>
+                t.name.toLowerCase() === techName.toLowerCase() ||
+                techName.toLowerCase().includes(t.name.toLowerCase())
+            );
+            return {
+              name: techName,
+              icon: matchedTool?.icon,
+              brandColor: matchedTool?.brandColor,
+            };
+          }),
+          ctaLabel: 'View Case Study',
+          onCtaClick: () => onOpenCaseStudy(project),
+        };
+      }),
+    [allUniqueTools, onOpenCaseStudy]
+  );
 
   const filteredProjects =
     selectedProjectFilter === 'All'
@@ -444,7 +478,6 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           {/* 5. Below Tools: Exactly Three Evenly Split Rows of Website Tools */}
           {(() => {
-            const websiteTools = getAllUniqueTools().slice(0, 18);
             const perRow = Math.ceil(websiteTools.length / 3);
             const firstRowTools = websiteTools.slice(0, perRow);
             const secondRowTools = websiteTools.slice(perRow, perRow * 2);
@@ -576,38 +609,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           eyebrow="Project Showcase"
           heading="Ideas transformed into digital experiences."
           subtitle="Explore architectural concept demonstrations detailing business challenges, solution topologies, and verified outcomes."
-          items={(() => {
-            const allUniqueTools = getAllUniqueTools();
-            return projectsData.map((project): ShowcaseCarouselItem => {
-              const primaryServiceSlug =
-                project.relatedServices?.[0]?.route.replace('/services/', '') ||
-                project.category;
-              return {
-                id: project.id,
-                slug: project.id,
-                title: project.title,
-                category: `${project.category} · ${project.industry}`,
-                summary: project.tagline,
-                icon: getServiceIcon(primaryServiceSlug),
-                highlights: (project.verifiedOutcomes || project.keyFeatures || []).slice(0, 2),
-                stackLabel: 'Key Stack & Tools',
-                tools: project.techStack.slice(0, 4).map((techName) => {
-                  const matchedTool = allUniqueTools.find(
-                    (t) =>
-                      t.name.toLowerCase() === techName.toLowerCase() ||
-                      techName.toLowerCase().includes(t.name.toLowerCase())
-                  );
-                  return {
-                    name: techName,
-                    icon: matchedTool?.icon,
-                    brandColor: matchedTool?.brandColor,
-                  };
-                }),
-                ctaLabel: 'View Case Study',
-                onCtaClick: () => onOpenCaseStudy(project),
-              };
-            });
-          })()}
+          items={projectCarouselItems}
           allItemsLabel="All Projects"
           onAllItemsClick={() => onNavigate('/portfolio')}
         />
@@ -618,6 +620,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================================= */}
       <MobileSectionSkeletonWrapper variant="methodology" sectionIndex={5}>
       <section
+        ref={processSectionRef}
         className="py-10 sm:py-24 bg-[#F4F7FE]/70 border-b border-slate-200 overflow-hidden"
         onMouseEnter={() => setProcessHovered(true)}
         onMouseLeave={() => setProcessHovered(false)}
@@ -963,8 +966,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                     aria-hidden="true"
                   >
                     <div
-                      className="h-full bg-gradient-to-r from-[#38BDF8] to-[#93C5FD] transition-[width] duration-75 ease-linear"
-                      style={{ width: `${processProgress}%` }}
+                      key={`process-progress-${activeProcessStep}`}
+                      className="h-full w-full bg-gradient-to-r from-[#38BDF8] to-[#93C5FD] animate-progress-scale"
+                      style={{
+                        animationDuration: '6000ms',
+                        animationPlayState: isProcessAutoAdvancing ? 'running' : 'paused',
+                      }}
                     />
                   </div>
                 )}
@@ -1429,7 +1436,6 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
       <motion.div
         style={{
           y: frameY,
-          scale: frameScale,
           opacity: frameOpacity,
         }}
         className="relative z-10 max-w-7xl mx-auto bg-white rounded-[26px] sm:rounded-[32px] py-5 px-3.5 sm:pt-[56px] sm:px-[40px] sm:pb-[48px] shadow-[0_24px_64px_rgba(15,23,42,0.08)] border border-white/90"

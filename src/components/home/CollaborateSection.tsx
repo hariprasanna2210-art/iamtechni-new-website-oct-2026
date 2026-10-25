@@ -19,6 +19,7 @@ import {
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { PageRoute } from '../../types';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
+import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportActivity';
 
 interface CollaborateSectionProps {
   onNavigate: (route: PageRoute) => void;
@@ -56,29 +57,34 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
   onOpenProjectModal,
 }) => {
   const prefersReducedMotion = useReducedMotion();
+  const [sectionRef, isSectionInView] = useSectionInView<HTMLElement>(0.15);
+  const isWindowScrolling = useIsWindowScrolling();
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number>(0);
   const [accordionPausedUntil, setAccordionPausedUntil] = useState<number>(0);
 
-  // Auto-slide the horizontal row every 4.2s unless hovered or reduced motion is enabled
+  const isAutoPlaying =
+    !isHovered && !prefersReducedMotion && isSectionInView && !isWindowScrolling;
+
+  // Auto-slide the horizontal row every 4.2s only when in view, not hovered, and not actively scrolling
   useEffect(() => {
-    if (isHovered || prefersReducedMotion) return;
+    if (!isAutoPlaying) return;
     const timer = window.setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % SLIDE_COUNT);
     }, SLIDE_INTERVAL_MS);
     return () => window.clearInterval(timer);
-  }, [isHovered, prefersReducedMotion]);
+  }, [isAutoPlaying]);
 
-  // Auto-advance stepper items every 4.5s (loop), pausing for 10s on click
+  // Auto-advance stepper items every 4.5s (loop) only when in view and not actively scrolling
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || !isSectionInView || isWindowScrolling) return;
     const timer = window.setInterval(() => {
       if (Date.now() < accordionPausedUntil) return;
       setActiveAccordion((prev) => (prev + 1) % ACCORDION_ITEMS.length);
     }, 4500);
     return () => window.clearInterval(timer);
-  }, [accordionPausedUntil, prefersReducedMotion]);
+  }, [accordionPausedUntil, prefersReducedMotion, isSectionInView, isWindowScrolling]);
 
   const handleSelectAccordion = (index: number) => {
     setActiveAccordion(index);
@@ -93,50 +99,51 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
     setActiveSlide((prev) => (prev + 1) % SLIDE_COUNT);
   };
 
+  const shouldAnimateGlow = !prefersReducedMotion && isSectionInView;
+
   return (
     <section
+      ref={sectionRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative py-10 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] text-[#1E3A8A] overflow-hidden border-t border-[#DBEAFE]/80"
     >
-      {/* Soft, large blurred gradient glows behind the single sliding row */}
+      {/* GPU-friendly soft radial gradient glows behind the single sliding row */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <motion.div
           animate={
-            prefersReducedMotion
-              ? undefined
+            !shouldAnimateGlow
+              ? { x: 0, y: 0, scale: 1 }
               : {
                   x: [0, 35, -20, 0],
                   y: [0, -25, 20, 0],
                   scale: [1, 1.06, 0.96, 1],
                 }
           }
-          transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut' }}
+          transition={{ duration: 13, repeat: shouldAnimateGlow ? Infinity : 0, ease: 'easeInOut' }}
           style={{
-            background: '#DCE8FF',
-            filter: 'blur(120px)',
-            opacity: 0.55,
+            background:
+              'radial-gradient(circle, rgba(220, 232, 255, 0.65) 0%, rgba(220, 232, 255, 0) 70%)',
           }}
-          className="absolute -top-16 right-[8%] w-[420px] h-[420px] rounded-full"
+          className="absolute -top-24 right-[4%] w-[540px] h-[540px] rounded-full"
         />
 
         <motion.div
           animate={
-            prefersReducedMotion
-              ? undefined
+            !shouldAnimateGlow
+              ? { x: 0, y: 0, scale: 1 }
               : {
                   x: [0, -30, 25, 0],
                   y: [0, 30, -20, 0],
                   scale: [1, 0.95, 1.05, 1],
                 }
           }
-          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+          transition={{ duration: 15, repeat: shouldAnimateGlow ? Infinity : 0, ease: 'easeInOut' }}
           style={{
-            background: '#E0F2FE',
-            filter: 'blur(120px)',
-            opacity: 0.55,
+            background:
+              'radial-gradient(circle, rgba(224, 242, 254, 0.65) 0%, rgba(224, 242, 254, 0) 70%)',
           }}
-          className="absolute bottom-0 -left-16 w-[440px] h-[440px] rounded-full"
+          className="absolute -bottom-16 -left-24 w-[560px] h-[560px] rounded-full"
         />
       </div>
 
@@ -160,15 +167,13 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                     aria-label={`Slide ${idx + 1}`}
                   >
                     {isCurrent && (
-                      <motion.span
-                        key={`${activeSlide}-${isHovered ? 'paused' : 'playing'}`}
-                        initial={{ width: '0%' }}
-                        animate={{ width: '100%' }}
-                        transition={{
-                          duration: isHovered ? 0.3 : SLIDE_INTERVAL_MS / 1000,
-                          ease: isHovered ? 'easeOut' : 'linear',
+                      <span
+                        key={`${activeSlide}`}
+                        className="block h-full w-full rounded-full bg-gradient-to-r from-[#04C8E8] to-[#1266E8] animate-progress-scale"
+                        style={{
+                          animationDuration: `${SLIDE_INTERVAL_MS}ms`,
+                          animationPlayState: isAutoPlaying ? 'running' : 'paused',
                         }}
-                        className="block h-full rounded-full bg-gradient-to-r from-[#04C8E8] to-[#1266E8]"
                       />
                     )}
                   </button>
