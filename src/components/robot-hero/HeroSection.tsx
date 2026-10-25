@@ -573,13 +573,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* ===================================================================
             MOBILE & TABLET VERTICAL LAYOUT (< 1024px)
-            1. Top: Service heading and short description
-            2. Middle: Central robot animation (fluidly scaled to remaining height)
-            3. Below robot: Compact related-service visual
-            4. Bottom: CTA buttons and service navigation controls
+            1. Top: Single service pill, essential heading, and concise description
+            2. Middle: Central 3D robot animation with generous breathing room
+            3. Bottom: Prominent CTA buttons and streamlined service switcher
         =================================================================== */}
-        <div className="flex lg:hidden flex-col items-center justify-between gap-1.5 sm:gap-2 w-full flex-1 min-h-0">
-          {/* 1. Top: Service Heading & Short Description */}
+        <div className="flex lg:hidden flex-col items-center justify-between gap-2 sm:gap-3 w-full flex-1 min-h-0 py-1">
+          {/* 1. Top: Service Heading & Short Supporting Description */}
           <HeroContent
             slide={activeSlide}
             onNavigate={onNavigate}
@@ -587,9 +586,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             mode="mobile-top"
           />
 
-          {/* 2. Middle: Central 3D Robot Animation & Voice Controls */}
-          <div className="relative w-full flex-1 min-h-[120px] self-stretch flex flex-col items-center justify-center">
-            <div className="relative w-full max-w-[440px] flex-1 min-h-[100px] self-stretch mx-auto">
+          {/* 2. Middle: Central 3D Robot Animation & Compact Voice Controls */}
+          <div className="relative w-full flex-1 min-h-[170px] sm:min-h-[240px] self-stretch flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-[380px] sm:max-w-[440px] flex-1 min-h-[145px] sm:min-h-[200px] self-stretch mx-auto">
               <div className="absolute inset-0">
                 {!isDesktop && (
                   <RobotScene
@@ -619,11 +618,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </AnimatePresence>
             </div>
 
-            <div className="shrink-0 -mt-0.5">
+            <div className="shrink-0 mt-1">
               <RobotSpeechControls
                 isSpeaking={isVoiceSpeaking}
                 isMuted={isMuted}
-                showTapToHearHint={!hasInteracted && !isMuted}
+                showTapToHearHint={false}
                 onToggleVoiceGuide={handleToggleVoiceGuide}
                 onToggleMute={handleToggleMute}
                 onTriggerGreeting={handleTriggerGreeting}
@@ -631,16 +630,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* 3. Below Robot: Compact Related-Service Visual */}
-          <div className="w-full max-w-xl mx-auto shrink-0">
-            <HeroServiceVisuals
-              slide={activeSlide}
-              onNavigate={onNavigate}
-              compact
-            />
-          </div>
-
-          {/* 4. Bottom: CTA Buttons */}
+          {/* 3. Bottom: Essential CTA Buttons */}
           <div className="w-full max-w-xl mx-auto shrink-0">
             <HeroContent
               slide={activeSlide}
@@ -652,9 +642,75 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
 
         {/* ===================================================================
-            SYNCHRONIZED 8-SERVICE CAROUSEL NAVIGATION BAR (Desktop & Mobile)
+            MOBILE & TABLET STREAMLINED SERVICE SWITCHER (< 1024px)
         =================================================================== */}
-        <div className="relative z-20 mt-1 sm:mt-2 lg:mt-2 pt-1.5 sm:pt-2 border-t border-white/10 flex flex-row items-center justify-between gap-1.5 sm:gap-2.5 shrink-0">
+        <div className="relative z-20 mt-2 pt-2 pr-14 sm:pr-16 border-t border-white/10 flex lg:hidden items-center justify-between gap-2 w-full max-w-md sm:max-w-lg mx-auto shrink-0">
+          {/* Interactive Progress Dots for the 8 Services */}
+          <div
+            role="tablist"
+            aria-label="Select active IAMTECHNI service"
+            className="flex items-center gap-1.5"
+          >
+            {HERO_SERVICE_SLIDES.map((item, idx) => {
+              const isActive = idx === activeIndex;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-label={`Service ${idx + 1}: ${item.categoryLabel}`}
+                  onClick={() => handleSelectSlide(idx)}
+                  className={`h-2 rounded-full transition-all duration-250 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00D2FF] ${
+                    isActive
+                      ? 'w-7 bg-[#00D2FF] shadow-[0_0_10px_rgba(0,210,255,0.6)]'
+                      : 'w-2 bg-white/25 hover:bg-white/45'
+                  }`}
+                />
+              );
+            })}
+          </div>
+
+          {/* Prev / Play-Pause / Next Touch Controls */}
+          <div className="inline-flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={handlePrevSlide}
+              aria-label="Previous service"
+              className="w-8 h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer active:scale-95"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsAutoPlaying((prev) => !prev)}
+              aria-label={isAutoPlaying ? 'Pause service rotation' : 'Resume service rotation'}
+              className="w-8 h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer active:scale-95"
+            >
+              {isAutoPlaying ? (
+                <Pause className="w-3.5 h-3.5" />
+              ) : (
+                <Play className="w-3.5 h-3.5 ml-0.5" />
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleNextSlide}
+              aria-label="Next service"
+              className="w-8 h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer active:scale-95"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* ===================================================================
+            DESKTOP SYNCHRONIZED 8-SERVICE CAROUSEL NAVIGATION BAR (lg: >= 1024px)
+            Preserved 100% unchanged for Desktop
+        =================================================================== */}
+        <div className="relative z-20 mt-1 sm:mt-2 lg:mt-2 pt-1.5 sm:pt-2 border-t border-white/10 hidden lg:flex flex-row items-center justify-between gap-1.5 sm:gap-2.5 shrink-0">
           {/* 8 Service Interactive Pills / Indicators — Single non-wrapping row */}
           <div
             role="tablist"

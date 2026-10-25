@@ -32,6 +32,25 @@ const renderHighlightedHeadline = (headline: string, highlightPhrase: string) =>
   );
 };
 
+const MOBILE_CONCISE_DESCRIPTIONS: Record<string, string> = {
+  'ai-generative':
+    'Deploy custom LLMs, private RAG knowledge assistants, and enterprise AI copilots.',
+  'ml-automation':
+    'Turn operational data into real-time predictive models and automated workflows.',
+  'robotics-systems':
+    'Connect edge AI vision, ROS 2 motion control, and real-time hardware telemetry.',
+  'web-ecommerce':
+    'Build ultra-fast web platforms and scalable e-commerce storefronts engineered to convert.',
+  'mobile-apps':
+    'Deliver sleek iOS, Android, and cross-platform apps with native 60fps performance.',
+  'custom-software':
+    'Replace legacy tools with custom enterprise platforms, SaaS products, and secure APIs.',
+  'cloud-devops':
+    'Scale on AWS and Azure with Kubernetes orchestration and zero-downtime CI/CD.',
+  'digital-marketing':
+    'Accelerate qualified pipeline with technical SEO, conversion optimization, and analytics.',
+};
+
 export const HeroContent: React.FC<HeroContentProps> = ({
   slide,
   onNavigate,
@@ -53,38 +72,34 @@ export const HeroContent: React.FC<HeroContentProps> = ({
   };
 
   if (mode === 'mobile-top') {
-    return (
-      <div className="flex flex-col items-center text-center w-full shrink-0">
-        {/* Eyebrow + Active Service Counter */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-1 sm:mb-1.5">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-[#091834]/90 border border-[#00D2FF]/35 text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.14em] text-[#00D2FF] font-bold shadow-[0_0_20px_rgba(0,210,255,0.12)]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] animate-pulse shrink-0" />
-            <span>INNOVATION • INTELLIGENCE • TECHNOLOGY</span>
-          </div>
+    const mobileDescription =
+      MOBILE_CONCISE_DESCRIPTIONS[slide.id] || slide.description;
 
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/15 text-[9.5px] sm:text-[10px] font-mono font-bold text-slate-200">
-            <span className="text-[#00D2FF]">{slide.counterLabel.split(' / ')[0]}</span>
-            <span className="text-slate-500">/</span>
-            <span>{slide.counterLabel.split(' / ')[1]}</span>
+    return (
+      <div className="flex flex-col items-center text-center w-full shrink-0 pt-1">
+        {/* Single Compact Service Pill (Counter + Short Service Name) */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#091834]/90 border border-[#00D2FF]/35 text-[10.5px] sm:text-xs font-mono font-bold text-slate-200 mb-2 shadow-[0_0_18px_rgba(0,210,255,0.12)]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] animate-pulse shrink-0" />
+          <span className="text-[#00D2FF]">{slide.counterLabel}</span>
+          <span className="text-slate-500" aria-hidden="true">•</span>
+          <span className="text-[#38BDF8] uppercase tracking-wider">
+            {slide.shortTitle}
           </span>
         </div>
 
-        {/* Animated Service Headline & Description */}
+        {/* Essential Service Headline & Concise Supporting Description */}
         <motion.div
           key={`mobile-text-${slide.id}`}
           initial={prefersReducedMotion ? false : { opacity: 0.9, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full"
+          className="w-full max-w-md sm:max-w-xl mx-auto px-1"
         >
-          <div className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-[#38BDF8] font-semibold mb-0.5">
-            {slide.categoryLabel}
-          </div>
-          <h1 className="text-[clamp(1.15rem,min(4.8vw,2.65dvh),1.95rem)] font-extrabold tracking-tight leading-[1.12] mb-1">
+          <h1 className="text-[clamp(1.25rem,min(5.2vw,3.15dvh),1.95rem)] sm:text-[clamp(1.55rem,min(4vw,3.5dvh),2.25rem)] font-extrabold tracking-tight leading-[1.15] mb-1.5">
             {renderHighlightedHeadline(slide.headline, slide.highlightPhrase)}
           </h1>
-          <p className="text-[clamp(0.7rem,min(3.1vw,1.62dvh),0.875rem)] text-slate-300/90 leading-snug max-w-xl mx-auto line-clamp-2 sm:line-clamp-3">
-            {slide.description}
+          <p className="text-[clamp(0.78rem,min(3.4vw,1.85dvh),0.9rem)] text-slate-300/95 leading-snug max-w-[40ch] mx-auto">
+            {mobileDescription}
           </p>
         </motion.div>
       </div>
@@ -93,41 +108,25 @@ export const HeroContent: React.FC<HeroContentProps> = ({
 
   if (mode === 'mobile-bottom') {
     return (
-      <div className="flex flex-col items-center w-full gap-1.5 sm:gap-2 shrink-0">
-        {/* Compact Tech Stack Row on Mobile */}
-        <div className="flex items-center justify-center flex-wrap gap-1 sm:gap-1.5">
-          {slide.techStack.map((tech) => {
-            const Icon = tech.icon;
-            return (
-              <div
-                key={tech.name}
-                className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-[#08152E]/90 border border-white/10 text-[10px] sm:text-[11px] font-medium text-slate-200"
-              >
-                <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" style={{ color: tech.color }} />
-                <span>{tech.name}</span>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Two CTA Buttons — Side-by-side on mobile & tablet to preserve vertical viewport fit */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-2.5 w-full">
+      <div className="flex flex-col items-center w-full shrink-0 pt-0.5">
+        {/* Essential CTA Buttons — Clean, prominent, and easy to tap on all mobile widths */}
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full max-w-md sm:max-w-lg mx-auto">
           <button
             type="button"
             onClick={handleExploreServices}
-            className="group inline-flex items-center justify-center gap-1.5 h-9 sm:h-10 px-3 sm:px-5 rounded-xl bg-gradient-to-r from-[#00D2FF] via-[#087BFA] to-[#2563EB] text-white font-bold text-xs sm:text-sm tracking-tight shadow-[0_8px_22px_rgba(0,210,255,0.26)] hover:shadow-[0_12px_28px_rgba(0,210,255,0.4)] transition-all duration-200 cursor-pointer whitespace-nowrap"
+            className="group inline-flex items-center justify-center gap-1.5 h-10 sm:h-11 px-3 sm:px-5 rounded-xl bg-gradient-to-r from-[#00D2FF] via-[#087BFA] to-[#2563EB] text-white font-bold text-xs sm:text-sm tracking-tight shadow-[0_8px_22px_rgba(0,210,255,0.26)] hover:shadow-[0_12px_28px_rgba(0,210,255,0.4)] active:scale-[0.99] transition-all duration-200 cursor-pointer whitespace-nowrap"
           >
-            <span>Explore Our Services</span>
+            <span>Explore Services</span>
             <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 group-hover:translate-x-0.5 transition-transform" />
           </button>
 
           <button
             type="button"
             onClick={() => onOpenProjectModal(slide.categoryLabel)}
-            className="inline-flex items-center justify-center gap-1.5 h-9 sm:h-10 px-3 sm:px-5 rounded-xl bg-[#091834]/85 hover:bg-[#0D224A] text-white font-semibold text-xs sm:text-sm border border-[#00D2FF]/40 hover:border-[#00D2FF]/80 shadow-[0_6px_18px_rgba(0,0,0,0.35)] transition-all duration-200 cursor-pointer whitespace-nowrap"
+            className="inline-flex items-center justify-center gap-1.5 h-10 sm:h-11 px-3 sm:px-5 rounded-xl bg-[#091834]/90 hover:bg-[#0D224A] text-white font-semibold text-xs sm:text-sm border border-[#00D2FF]/45 hover:border-[#00D2FF]/80 shadow-[0_6px_18px_rgba(0,0,0,0.35)] active:scale-[0.99] transition-all duration-200 cursor-pointer whitespace-nowrap"
           >
             <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00D2FF] shrink-0" />
-            <span>Let&apos;s Build Together</span>
+            <span>Let&apos;s Build</span>
           </button>
         </div>
       </div>
