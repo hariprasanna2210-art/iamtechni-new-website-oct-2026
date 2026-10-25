@@ -2119,8 +2119,9 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
     >
       <Canvas
         style={{ pointerEvents: 'none' }}
+        frameloop={isVisible ? 'always' : 'never'}
         resize={{ offsetSize: true }}
-        shadows={!isHeadless}
+        shadows={!isHeadless && !isMobileScreen}
         dpr={isHeadless ? 1 : isMobileScreen ? [1, 1.35] : [1, 2]}
         camera={{ position: [0, 0.14, 5.65], fov: 29.5, near: 0.1, far: 100 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
@@ -2133,7 +2134,7 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
         <directionalLight
           position={[3.8, 5.4, 4.4]}
           intensity={1.6}
-          castShadow={!isHeadless}
+          castShadow={!isHeadless && !isMobileScreen}
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
           shadow-camera-near={1}

@@ -25,7 +25,7 @@ export const HeroDarkBackground: React.FC<HeroDarkBackgroundProps> = ({
 
       {/* 2. Subtle Ambient Cyan / Electric Blue Left & Center-Stage Illumination */}
       <div
-        className="absolute -top-[18%] left-[4%] w-[46rem] h-[46rem] rounded-full opacity-25 blur-[130px] transition-colors duration-1000"
+        className="absolute -top-[18%] left-[4%] w-[46rem] h-[46rem] rounded-full opacity-25 blur-2xl lg:blur-[130px] transition-colors duration-1000"
         style={{
           background: `radial-gradient(circle, ${activeAccentHex} 0%, rgba(8, 123, 250, 0.25) 48%, transparent 74%)`,
         }}
@@ -33,7 +33,7 @@ export const HeroDarkBackground: React.FC<HeroDarkBackgroundProps> = ({
 
       {/* 3. Restrained Purple Accent Illumination on Upper-Right Visual Stage */}
       <div
-        className="absolute top-[8%] right-[2%] w-[42rem] h-[42rem] rounded-full opacity-20 blur-[140px] transition-colors duration-1000"
+        className="absolute top-[8%] right-[2%] w-[42rem] h-[42rem] rounded-full opacity-20 blur-2xl lg:blur-[140px] transition-colors duration-1000"
         style={{
           background: `radial-gradient(circle, ${activeSecondaryHex} 0%, rgba(124, 58, 237, 0.22) 45%, transparent 72%)`,
         }}
@@ -41,7 +41,7 @@ export const HeroDarkBackground: React.FC<HeroDarkBackgroundProps> = ({
 
       {/* 4. Soft Radial Halo Glow Directly Behind the Central Robot */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] sm:w-[38rem] lg:w-[44rem] h-[30rem] sm:h-[38rem] lg:h-[44rem] rounded-full opacity-35 blur-[90px]"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] sm:w-[38rem] lg:w-[44rem] h-[30rem] sm:h-[38rem] lg:h-[44rem] rounded-full opacity-35 blur-xl lg:blur-[90px]"
         style={{
           background:
             'radial-gradient(circle, rgba(0, 210, 255, 0.34) 0%, rgba(37, 99, 235, 0.18) 38%, rgba(124, 58, 237, 0.08) 62%, transparent 78%)',

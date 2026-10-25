@@ -1260,11 +1260,25 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
 }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRowRef = useRef<HTMLDivElement>(null);
+  const [isMobileScreen, setIsMobileScreen] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(max-width: 767px)');
+    const onChange = (e: MediaQueryListEvent) => setIsMobileScreen(e.matches);
+    setIsMobileScreen(mql.matches);
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, []);
+
+  const skipParallax = prefersReducedMotion || isMobileScreen;
 
   // Trigger widget count-up & inner animations when cards are ~60% visible
-  const widgetsVisible = useInView(cardsRowRef, { once: true, amount: 0.55 });
+  const widgetsVisible = useInView(cardsRowRef, { once: true, amount: 0.35 });
 
-  // Scroll-linked progress across the section with smooth spring physics
+  // Scroll-linked progress across the section with smooth spring physics (desktop/tablet)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
@@ -1276,90 +1290,76 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
     mass: 0.35,
   });
 
-  // 1. Background gradient slowly shifts hue as user scrolls
-  const bgHueFilter = useTransform(
-    smoothProgress,
-    [0, 0.5, 1],
-    prefersReducedMotion
-      ? ['hue-rotate(0deg)', 'hue-rotate(0deg)', 'hue-rotate(0deg)']
-      : ['hue-rotate(-12deg)', 'hue-rotate(0deg)', 'hue-rotate(18deg)']
-  );
-
-  // 2. Huge faded "IAMTECHNI" wordmark slides horizontally at the bottom
+  // 1. Huge faded "IAMTECHNI" wordmark slides horizontally at the bottom
   const wordmarkX = useTransform(
     smoothProgress,
     [0, 1],
-    prefersReducedMotion ? ['0%', '0%'] : ['12%', '-12%']
+    skipParallax ? ['0%', '0%'] : ['12%', '-12%']
   );
 
-  // 3. White frame rises gently and stays crisp on all viewports
+  // 2. White frame rises gently on desktop and stays rock-solid on mobile touch scroll
   const frameY = useTransform(
     smoothProgress,
     [0.02, 0.28],
-    prefersReducedMotion ? [0, 0] : [28, 0]
-  );
-  const frameScale = useTransform(
-    smoothProgress,
-    [0.02, 0.28],
-    prefersReducedMotion ? [1, 1] : [0.98, 1]
+    skipParallax ? [0, 0] : [28, 0]
   );
   const frameOpacity = useTransform(
     smoothProgress,
     [0.0, 0.16],
-    prefersReducedMotion ? [1, 1] : [0.85, 1]
+    skipParallax ? [1, 1] : [0.85, 1]
   );
 
-  // 4. Headline and buttons fade up gently
+  // 3. Headline and buttons fade up gently
   const headerY = useTransform(
     smoothProgress,
     [0.04, 0.24],
-    prefersReducedMotion ? [0, 0] : [18, 0]
+    skipParallax ? [0, 0] : [18, 0]
   );
   const headerOpacity = useTransform(
     smoothProgress,
     [0.04, 0.2],
-    prefersReducedMotion ? [1, 1] : [0.85, 1]
+    skipParallax ? [1, 1] : [0.85, 1]
   );
 
-  // 5. Photo cards rise smoothly without hiding content on short/mobile screens
+  // 4. Photo cards rise smoothly on desktop without fighting vertical touch scrolling on mobile
   const centerCardY = useTransform(
     smoothProgress,
     [0.06, 0.3, 0.85],
-    prefersReducedMotion ? [0, 0, 0] : [28, 0, -6]
+    skipParallax ? [0, 0, 0] : [28, 0, -6]
   );
   const centerCardOpacity = useTransform(
     smoothProgress,
     [0.05, 0.22],
-    prefersReducedMotion ? [1, 1] : [0.85, 1]
+    skipParallax ? [1, 1] : [0.85, 1]
   );
 
   const sideCardY = useTransform(
     smoothProgress,
     [0.1, 0.34, 0.85],
-    prefersReducedMotion ? [0, 0, 0] : [32, 0, 4]
+    skipParallax ? [0, 0, 0] : [32, 0, 4]
   );
   const sideCardOpacity = useTransform(
     smoothProgress,
     [0.08, 0.26],
-    prefersReducedMotion ? [1, 1] : [0.85, 1]
+    skipParallax ? [1, 1] : [0.85, 1]
   );
 
   const leftCardX = useTransform(
     smoothProgress,
     [0.28, 0.82],
-    prefersReducedMotion ? [0, 0] : [0, 0]
+    [0, 0]
   );
   const rightCardX = useTransform(
     smoothProgress,
     [0.28, 0.82],
-    prefersReducedMotion ? [0, 0] : [0, 0]
+    [0, 0]
   );
 
-  // 6. Each photo moves slower than the page (scroll parallax)
+  // 5. Each photo moves slower than the page on desktop (scroll parallax)
   const photoParallaxY = useTransform(
     smoothProgress,
     [0, 1],
-    prefersReducedMotion ? ['0%', '0%'] : ['-8%', '8%']
+    skipParallax ? ['0%', '0%'] : ['-8%', '8%']
   );
 
   // Count-up metrics triggered when cards are ~60% visible

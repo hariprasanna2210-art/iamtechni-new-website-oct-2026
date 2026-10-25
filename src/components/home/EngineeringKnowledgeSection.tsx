@@ -372,17 +372,15 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
             background: theme.cardTintBg,
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
             borderColor: isHovered ? theme.hoverBorderColor : theme.borderColor,
           }}
-          className="absolute inset-0 rounded-[20px] border p-4 sm:p-6 flex flex-col justify-between overflow-hidden shadow-[0_16px_42px_-10px_rgba(30,58,138,0.12)] transition-colors duration-300"
+          className="absolute inset-0 rounded-[20px] border p-4 sm:p-6 flex flex-col justify-between overflow-hidden md:backdrop-blur-md shadow-[0_16px_42px_-10px_rgba(30,58,138,0.12)] transition-colors duration-300"
         >
           {/* Soft Coloured Glow Blob on LEFT Edge */}
           <div
             aria-hidden="true"
             style={{ background: theme.glowGradient }}
-            className="pointer-events-none absolute -left-12 top-0 bottom-0 w-56 blur-2xl opacity-85 group-hover:opacity-100 transition-opacity duration-300"
+            className="pointer-events-none absolute -left-12 top-0 bottom-0 w-56 blur-xl sm:blur-2xl opacity-85 group-hover:opacity-100 transition-opacity duration-300"
           />
 
           {/* Top Row: Tinted Rounded Square Icon + Category Chip + Read Time Chip */}
@@ -440,23 +438,23 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
             WebkitBackfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
             background: theme.cardTintBg,
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
             borderColor: isHovered ? theme.hoverBorderColor : theme.borderColor,
           }}
-          className="absolute inset-0 rounded-[20px] border p-4 sm:p-6 flex flex-col justify-between overflow-hidden shadow-[0_16px_42px_-10px_rgba(30,58,138,0.12)] transition-colors duration-300"
+          className="absolute inset-0 rounded-[20px] border p-4 sm:p-6 flex flex-col justify-between overflow-hidden md:backdrop-blur-md shadow-[0_16px_42px_-10px_rgba(30,58,138,0.12)] transition-colors duration-300"
         >
           {/* Soft Coloured Glow Blob on LEFT Edge (Brighter on hover) */}
           <div
             aria-hidden="true"
             style={{ background: theme.glowGradient }}
-            className="pointer-events-none absolute -left-10 top-0 bottom-0 w-64 blur-2xl opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+            className="pointer-events-none absolute -left-10 top-0 bottom-0 w-64 blur-xl sm:blur-2xl opacity-90 group-hover:opacity-100 transition-opacity duration-300"
           />
 
           <div className="relative z-10 space-y-4">
             {/* Top Row: Small Icon in Rounded Square + Category & Read Time Chips */}
             <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2.5">
+              <div
+                className="flex items-center gap-2.5"
+              >
                 <div
                   className={`w-10 h-10 rounded-xl ${theme.iconBg} border ${theme.iconBorder} ${theme.iconText} flex items-center justify-center shadow-2xs shrink-0`}
                 >
@@ -533,11 +531,11 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
       {/* Subtle Ambient Background Accents for Glass Depth */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 left-1/4 w-96 h-96 bg-[#DBEAFE]/40 rounded-full blur-[130px]"
+        className="pointer-events-none absolute -top-24 left-1/4 w-96 h-96 bg-[#DBEAFE]/40 rounded-full blur-2xl sm:blur-[130px]"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-24 right-1/4 w-96 h-96 bg-[#EEF4FF]/60 rounded-full blur-[130px]"
+        className="pointer-events-none absolute -bottom-24 right-1/4 w-96 h-96 bg-[#EEF4FF]/60 rounded-full blur-2xl sm:blur-[130px]"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -471,7 +471,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full h-[calc(100dvh-var(--header-height,64px))] max-h-[calc(100dvh-var(--header-height,64px))] min-h-[500px] bg-[#040814] text-white overflow-hidden flex flex-col justify-between select-none"
+      className="relative w-full h-[calc(100svh-var(--header-height,64px))] max-h-[calc(100svh-var(--header-height,64px))] lg:h-[calc(100dvh-var(--header-height,64px))] lg:max-h-[calc(100dvh-var(--header-height,64px))] min-h-[500px] bg-[#040814] text-white overflow-hidden flex flex-col justify-between select-none"
     >
       {/* Sophisticated Dark Animated Background */}
       <HeroDarkBackground

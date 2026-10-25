@@ -93,6 +93,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
   const isMobileVerticalMode = mobileVerticalStack && !isDesktopOrTablet;
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [mobileScrollDir, setMobileScrollDir] = useState<1 | -1>(1);
   const [isHovered, setIsHovered] = useState(false);
   const [isTouching, setIsTouching] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -104,10 +105,19 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
   const didDragMoveRef = useRef<boolean>(false);
   const isTouchInteractionRef = useRef<boolean>(false);
 
+  // Mobile pinned scroll-runway & continuous progress bar refs
+  const mobileRunwayRef = useRef<HTMLDivElement | null>(null);
+  const mobileProgressFillRef = useRef<HTMLDivElement | null>(null);
+  const currentIndexRef = useRef<number>(0);
+
   const tabsScrollRef = useRef<HTMLDivElement | null>(null);
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
   const onSelectSlugRef = useRef(onSelectSlug);
   const lastSyncedSlugRef = useRef<string | undefined>(selectedSlug);
+
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
 
   useEffect(() => {
     onSelectSlugRef.current = onSelectSlug;
@@ -135,6 +145,8 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
     (index: number, updateUrlAndParent = false, updateHash = false) => {
       if (totalItems === 0) return;
       const safeIndex = ((index % totalItems) + totalItems) % totalItems;
+      setMobileScrollDir(safeIndex >= currentIndexRef.current ? 1 : -1);
+      currentIndexRef.current = safeIndex;
       setCurrentIndex(safeIndex);
 
       const item = items[safeIndex];
@@ -152,16 +164,137 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
     [totalItems, items, enableServiceHashSync]
   );
 
-  // Sync when selectedSlug prop changes externally
+  // Scroll the mobile pinned runway to the exact vertical position for a target service index
+  const scrollToMobileServiceIndex = useCallback(
+    (targetIndex: number, smooth = true) => {
+      if (typeof window === 'undefined' || totalItems <= 0) return;
+      const clamped = Math.min(totalItems - 1, Math.max(0, targetIndex));
+      const runwayEl = mobileRunwayRef.current;
+      if (!runwayEl) {
+        handleSelectItem(clamped, true, false);
+        return;
+      }
+      const rect = runwayEl.getBoundingClientRect();
+      const runwayTopDoc = window.scrollY + rect.top;
+      const headerOffset =
+        parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue('--header-height')
+        ) || 64;
+      const viewportAvailable = Math.max(320, window.innerHeight - headerOffset);
+      const totalScrollable = Math.max(1, runwayEl.offsetHeight - viewportAvailable);
+      const targetProgress = totalItems > 1 ? (clamped + 0.35) / totalItems : 0;
+      const targetScrollY = runwayTopDoc - headerOffset + targetProgress * totalScrollable;
+
+      setMobileScrollDir(clamped >= currentIndexRef.current ? 1 : -1);
+      currentIndexRef.current = clamped;
+      setCurrentIndex(clamped);
+
+      const nextItem = items[clamped];
+      if (nextItem) {
+        const slug = nextItem.slug || nextItem.id;
+        lastSyncedSlugRef.current = slug;
+        onSelectSlugRef.current?.(slug);
+      }
+
+      window.scrollTo({
+        top: Math.max(0, targetScrollY),
+        behavior: prefersReducedMotion || !smooth ? 'auto' : 'smooth',
+      });
+    },
+    [totalItems, items, handleSelectItem, prefersReducedMotion]
+  );
+
+  // Mobile (<768px) Scroll-Driven Pinned Sequence:
+  // Maps vertical scroll progress through mobileRunwayRef to one active service at a time (01..13)
+  useEffect(() => {
+    if (!isMobileVerticalMode || typeof window === 'undefined' || totalItems <= 1) return;
+
+    let rafId: number | null = null;
+
+    const updateFromScroll = () => {
+      rafId = null;
+      const runwayEl = mobileRunwayRef.current;
+      if (!runwayEl) return;
+
+      const rect = runwayEl.getBoundingClientRect();
+      const headerOffset =
+        parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue('--header-height')
+        ) || 64;
+      const viewportAvailable = Math.max(320, window.innerHeight - headerOffset);
+      const totalScrollable = Math.max(1, rect.height - viewportAvailable);
+
+      const scrolledIntoRunway = -rect.top + headerOffset;
+      const rawProgress = Math.max(0, Math.min(1, scrolledIntoRunway / totalScrollable));
+
+      // Update continuous GPU progress bar directly without React re-render
+      if (mobileProgressFillRef.current) {
+        const visualFill = Math.max(1 / totalItems, rawProgress);
+        mobileProgressFillRef.current.style.transform = `scaleX(${visualFill})`;
+      }
+
+      const exactFloatIndex = rawProgress * (totalItems - 0.0001);
+      const candidateIndex = Math.min(
+        totalItems - 1,
+        Math.max(0, Math.floor(exactFloatIndex))
+      );
+      const prevIndex = currentIndexRef.current;
+
+      if (candidateIndex !== prevIndex) {
+        // Subtle hysteresis deadzone prevents rapid boundary flicker if finger rests on a threshold
+        const bucketFraction = exactFloatIndex - candidateIndex;
+        if (
+          Math.abs(candidateIndex - prevIndex) === 1 &&
+          ((candidateIndex > prevIndex && bucketFraction < 0.07) ||
+            (candidateIndex < prevIndex && bucketFraction > 0.93))
+        ) {
+          return;
+        }
+
+        currentIndexRef.current = candidateIndex;
+        setMobileScrollDir(candidateIndex > prevIndex ? 1 : -1);
+        setCurrentIndex(candidateIndex);
+
+        const nextItem = items[candidateIndex];
+        if (nextItem) {
+          const slug = nextItem.slug || nextItem.id;
+          lastSyncedSlugRef.current = slug;
+          onSelectSlugRef.current?.(slug);
+        }
+      }
+    };
+
+    const onScrollOrResize = () => {
+      if (rafId === null) {
+        rafId = window.requestAnimationFrame(updateFromScroll);
+      }
+    };
+
+    updateFromScroll();
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', onScrollOrResize);
+      window.removeEventListener('resize', onScrollOrResize);
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, [isMobileVerticalMode, totalItems, items]);
+
+  // Sync when selectedSlug prop changes externally (on desktop or when not actively inside mobile scroll runway)
   useEffect(() => {
     if (!selectedSlug) return;
     if (selectedSlug === lastSyncedSlugRef.current) return;
+    if (isMobileVerticalMode) return;
     const matchedIdx = findItemIndexBySlug(selectedSlug);
     if (matchedIdx !== -1) {
       lastSyncedSlugRef.current = selectedSlug;
+      currentIndexRef.current = matchedIdx;
       setCurrentIndex(matchedIdx);
     }
-  }, [selectedSlug, findItemIndexBySlug]);
+  }, [selectedSlug, findItemIndexBySlug, isMobileVerticalMode]);
 
   // Listen for hero card selection custom event & URL hash (#services/<slug>) when enabled
   useEffect(() => {
@@ -175,19 +308,19 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
         if (matchedIdx !== -1) {
           const targetSlug = items[matchedIdx].slug || items[matchedIdx].id;
           lastSyncedSlugRef.current = targetSlug;
+          currentIndexRef.current = matchedIdx;
           setCurrentIndex(matchedIdx);
           onSelectSlugRef.current?.(targetSlug);
           if (scrollIntoViewOnInitial) {
-            const targetCardEl = document.getElementById(
-              `${sectionId}-mobile-card-${targetSlug}`
-            );
-            const fallbackSectionEl = document.getElementById(sectionId);
-            const scrollTarget =
-              isMobileVerticalMode && targetCardEl ? targetCardEl : fallbackSectionEl;
-            scrollTarget?.scrollIntoView({
-              behavior: prefersReducedMotion ? 'auto' : 'smooth',
-              block: 'start',
-            });
+            if (isMobileVerticalMode) {
+              scrollToMobileServiceIndex(matchedIdx, false);
+            } else {
+              const fallbackSectionEl = document.getElementById(sectionId);
+              fallbackSectionEl?.scrollIntoView({
+                behavior: prefersReducedMotion ? 'auto' : 'smooth',
+                block: 'start',
+              });
+            }
           }
         }
       }
@@ -203,6 +336,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
         if (matchedIdx !== -1) {
           const targetSlug = items[matchedIdx].slug || items[matchedIdx].id;
           lastSyncedSlugRef.current = targetSlug;
+          currentIndexRef.current = matchedIdx;
           setCurrentIndex(matchedIdx);
         }
       }
@@ -223,6 +357,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
     prefersReducedMotion,
     sectionId,
     isMobileVerticalMode,
+    scrollToMobileServiceIndex,
   ]);
 
   const handlePrev = useCallback(() => {
@@ -356,15 +491,23 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
       id={sectionId}
       aria-labelledby={`${sectionId}-section-title`}
       onKeyDown={handleKeyDown}
-      className="relative w-full py-9 sm:py-18 lg:py-22 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-[#DBEAFE]/80 overflow-hidden scroll-mt-16"
+      className={`relative w-full bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-[#DBEAFE]/80 scroll-mt-16 ${
+        isMobileVerticalMode
+          ? 'py-0 overflow-x-clip'
+          : 'py-9 sm:py-18 lg:py-22 overflow-hidden'
+      }`}
     >
       {stageAnchorId && <div id={stageAnchorId} className="sr-only" aria-hidden="true" />}
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-3.5 min-[390px]:px-4 sm:px-6 lg:px-8">
         {/* ===================================================================== */}
-        {/* 1. MODERN SECTION HEADER                                              */}
+        {/* 1. MODERN SECTION HEADER (Shown on Desktop/Tablet & Non-Pinned Mobile)*/}
         {/* ===================================================================== */}
-        <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-2.5 sm:space-y-4 mb-5 sm:mb-10">
+        <div
+          className={`${
+            isMobileVerticalMode ? 'hidden md:flex' : 'flex'
+          } flex-col items-center text-center max-w-3xl mx-auto space-y-2.5 sm:space-y-4 mb-5 sm:mb-10`}
+        >
           {/* Eyebrow Pill */}
           <div className="inline-flex items-center gap-2 h-[32px] px-3 sm:px-4 max-w-full rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-mono text-[10.5px] min-[360px]:text-xs font-bold tracking-widest uppercase">
             <span
@@ -376,7 +519,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
 
           {/* Section Title */}
           <motion.h2
-            id={`${sectionId}-section-title`}
+            id={!isMobileVerticalMode ? `${sectionId}-section-title` : undefined}
             whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
             transition={{ duration: 0.28, ease: 'easeOut' }}
             className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[26px] min-[360px]:text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-[-0.03em] text-[#1E3A8A] leading-[1.12] origin-center cursor-default"
@@ -420,167 +563,321 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
         </div>
 
         {/* ===================================================================== */}
-        {/* MOBILE VERTICAL SERVICE STACK (< 768px when mobileVerticalStack=true) */}
-        {/* Displays all 13 services vertically in natural page-scrolling order   */}
+        {/* MOBILE PINNED FIXED-FRAME SERVICE SEQUENCE (< 768px)                  */}
+        {/* Keeps the section pinned in the same visual frame while scrolling     */}
+        {/* naturally transitions through all 13 services one at a time.          */}
         {/* ===================================================================== */}
-        {isMobileVerticalMode && (
-          <div className="md:hidden space-y-4">
-            {/* Mobile Vertical List Header Cue */}
-            <div className="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE] shadow-[0_2px_10px_rgba(30,58,138,0.05)]">
-              <div className="inline-flex items-center gap-2 min-w-0">
-                <span className="px-2.5 py-0.5 rounded-md bg-[#1E3A8A] text-white font-mono text-[11px] font-bold shrink-0">
-                  {totalItems} Services
-                </span>
-                <span className="text-xs font-bold text-[#1E3A8A] truncate">
-                  Scroll down to explore all {totalItems} disciplines
-                </span>
-              </div>
-              <span
-                aria-hidden="true"
-                className="text-[11px] font-mono font-bold text-[#2563EB] shrink-0"
+        {isMobileVerticalMode && (() => {
+          const ActiveIcon = activeItem.icon;
+          const activeTools = (activeItem.tools || []).slice(0, 4);
+          const activeHighlights = (activeItem.highlights || []).slice(0, 2);
+          const formattedNumber = String(currentIndex + 1).padStart(2, '0');
+          const formattedTotal = String(totalItems).padStart(2, '0');
+          const nextServiceItem =
+            currentIndex < totalItems - 1 ? items[currentIndex + 1] : null;
+          const prevServiceItem =
+            currentIndex > 0 ? items[currentIndex - 1] : null;
+
+          return (
+            <div
+              ref={mobileRunwayRef}
+              className="md:hidden relative w-full"
+              style={{
+                height: `calc(100svh + ${Math.max(1, totalItems - 1) * 20}svh)`,
+              }}
+            >
+              {/* Sticky Viewport Frame — Accounts for fixed/sticky site header */}
+              <div
+                className="sticky w-full flex flex-col justify-between py-2.5 min-[390px]:py-3.5"
+                style={{
+                  top: 'var(--header-height, 64px)',
+                  height: 'calc(100svh - var(--header-height, 64px))',
+                  minHeight: '460px',
+                }}
               >
-                01–{String(totalItems).padStart(2, '0')} ↓
-              </span>
-            </div>
+                {/* 1. Compact Pinned Section Header + Live Number & Progress Indicator */}
+                <div className="space-y-1.5 min-[390px]:space-y-2 shrink-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE] text-[#2563EB] font-mono text-[10px] min-[360px]:text-[10.5px] font-bold uppercase tracking-wider min-w-0">
+                      <span
+                        className="w-1.5 h-1.5 rounded-full bg-[#2563EB] shrink-0"
+                        aria-hidden="true"
+                      />
+                      <span className="truncate">{eyebrow}</span>
+                    </div>
 
-            {/* Vertical List of All 13 Service Cards */}
-            <div className="flex flex-col gap-4" role="list" aria-label={heading}>
-              {items.map((item, idx) => {
-                const ItemIcon = item.icon;
-                const tools = (item.tools || []).slice(0, 4);
-                const keyHighlights = (item.highlights || []).slice(0, 2);
-                const formattedNumber = String(idx + 1).padStart(2, '0');
-                const formattedTotal = String(totalItems).padStart(2, '0');
+                    <div className="inline-flex items-center gap-1.5 shrink-0">
+                      <span
+                        aria-live="polite"
+                        className="px-2.5 py-1 rounded-lg bg-[#1E3A8A] text-white font-mono text-[11px] font-bold tabular-nums shadow-2xs"
+                      >
+                        {formattedNumber} / {formattedTotal}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={onAllItemsClick}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 min-h-[34px] rounded-lg bg-white hover:bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] text-[11px] font-bold shadow-2xs cursor-pointer"
+                      >
+                        <span>{allItemsLabel}</span>
+                        <ArrowRight className="w-3 h-3 text-[#2563EB]" />
+                      </button>
+                    </div>
+                  </div>
 
-                return (
-                  <article
-                    key={item.slug || item.id}
-                    id={`${sectionId}-mobile-card-${item.slug || item.id}`}
-                    role="listitem"
-                    className="group relative w-full rounded-2xl bg-gradient-to-br from-[#FFFFFF] via-[#F8FBFF] to-[#EEF4FF]/90 border border-[#DBEAFE] shadow-[0_8px_24px_-6px_rgba(30,58,138,0.10),inset_0_1px_0_rgba(255,255,255,0.95)] p-4 flex flex-col justify-between gap-3.5 overflow-hidden"
+                  <h2
+                    id={`${sectionId}-section-title`}
+                    className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[17.5px] min-[360px]:text-[19.5px] min-[390px]:text-[21px] font-extrabold tracking-[-0.025em] text-[#1E3A8A] leading-[1.16]"
                   >
-                    {/* Subtle Top Accent Bar */}
+                    {heading}
+                  </h2>
+
+                  {/* Interactive 13-Service Segmented Progress Bar + Continuous Scroll Fill */}
+                  <div className="space-y-1 pt-0.5">
+                    <div
+                      className="grid gap-1 w-full"
+                      style={{
+                        gridTemplateColumns: `repeat(${totalItems}, minmax(0, 1fr))`,
+                      }}
+                      role="tablist"
+                      aria-label="Service sequence progress"
+                    >
+                      {items.map((it, idx) => {
+                        const isCompleted = idx < currentIndex;
+                        const isCurrent = idx === currentIndex;
+                        return (
+                          <button
+                            key={it.slug || it.id}
+                            type="button"
+                            role="tab"
+                            aria-selected={isCurrent}
+                            aria-label={`Service ${idx + 1} of ${totalItems}: ${it.title}`}
+                            onClick={() => scrollToMobileServiceIndex(idx, true)}
+                            className="py-1.5 cursor-pointer focus:outline-none"
+                          >
+                            <span
+                              className={`block h-1.5 w-full rounded-full transition-all duration-200 ${
+                                isCurrent
+                                  ? 'bg-[#1E3A8A] scale-y-125 shadow-[0_0_8px_rgba(30,58,138,0.4)]'
+                                  : isCompleted
+                                  ? 'bg-[#2563EB]/75'
+                                  : 'bg-[#DBEAFE]'
+                              }`}
+                            />
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Continuous Scroll Progress Track */}
                     <div
                       aria-hidden="true"
-                      className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#06B6D4]"
-                    />
-
-                    {/* Card Top Content */}
-                    <div className="space-y-2.5 pt-0.5">
-                      {/* Header Row: Icon Box + Number & Category Badge */}
-                      <div className="flex items-center justify-between gap-2.5">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1E3A8A] to-[#2563EB] text-white border border-[#60A5FA]/30 shadow-[0_4px_12px_rgba(30,58,138,0.20)] flex items-center justify-center shrink-0">
-                            <ItemIcon className="w-4.5 h-4.5" />
-                          </div>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-1.5 text-[11px] font-bold tracking-wide text-[#2563EB]">
-                              <span className="font-mono tabular-nums px-1.5 py-0.5 rounded bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE]">
-                                {formattedNumber}/{formattedTotal}
-                              </span>
-                              <span aria-hidden="true">·</span>
-                              <span className="truncate">{item.category || 'Engineering'}</span>
-                            </div>
-                            <h3 className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[16.5px] font-extrabold text-[#1E3A8A] leading-snug mt-0.5">
-                              {item.title}
-                            </h3>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Full Readable Service Description (No Awkward Truncation) */}
-                      <p className="text-[13.5px] text-slate-600 font-medium leading-relaxed">
-                        {item.summary}
-                      </p>
-
-                      {/* Core Highlights / Key Features */}
-                      {keyHighlights.length > 0 && (
-                        <div className="grid grid-cols-1 gap-1.5 pt-2 border-t border-[#DBEAFE]/75">
-                          {keyHighlights.map((highlight) => (
-                            <div
-                              key={highlight}
-                              className="flex items-start gap-2 text-xs leading-snug text-[#1E3A8A]"
-                            >
-                              <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] shrink-0 mt-0.5" />
-                              <span className="font-semibold">{highlight}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                      className="h-0.5 w-full rounded-full bg-[#DBEAFE]/70 overflow-hidden"
+                    >
+                      <div
+                        ref={mobileProgressFillRef}
+                        style={{
+                          transform: `scaleX(${(currentIndex + 1) / totalItems})`,
+                          transformOrigin: 'left center',
+                        }}
+                        className="h-full w-full bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#06B6D4] will-change-transform"
+                      />
                     </div>
+                  </div>
+                </div>
 
-                    {/* Card Bottom: Technology Stack Tags + Explore Details Button */}
-                    <div className="pt-2.5 border-t border-[#DBEAFE]/80 space-y-3">
-                      {tools.length > 0 && (
-                        <div>
-                          <div className="text-[10px] uppercase font-bold tracking-wider text-[#2563EB]/90 mb-1.5">
-                            {item.stackLabel || 'Key Stack & Tools'}
-                          </div>
-                          <div className="flex items-center flex-wrap gap-1.5">
-                            {tools.map((tool) => {
-                              const ToolIcon = tool.icon;
-                              return (
-                                <div
-                                  key={tool.name}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-white border border-[#DBEAFE] text-[#1E3A8A] shadow-2xs"
-                                >
-                                  {ToolIcon && (
-                                    <span
-                                      style={{ color: tool.brandColor || '#2563EB' }}
-                                      className="shrink-0"
-                                    >
-                                      <ToolIcon className="w-3 h-3" />
-                                    </span>
-                                  )}
-                                  <span>{tool.name}</span>
-                                </div>
-                              );
-                            })}
+                {/* 2. Single Active Service Card in the Same Frame (Animated on Scroll) */}
+                <div className="relative flex-1 min-h-0 flex items-center justify-center my-1.5">
+                  <AnimatePresence mode="wait" initial={false} custom={mobileScrollDir}>
+                    <motion.article
+                      key={activeItem.slug || activeItem.id}
+                      id={`${sectionId}-mobile-card-${activeItem.slug || activeItem.id}`}
+                      custom={mobileScrollDir}
+                      initial={
+                        prefersReducedMotion
+                          ? { opacity: 1 }
+                          : {
+                              opacity: 0,
+                              y: mobileScrollDir > 0 ? 18 : -18,
+                              scale: 0.985,
+                            }
+                      }
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                      }}
+                      exit={
+                        prefersReducedMotion
+                          ? { opacity: 0 }
+                          : {
+                              opacity: 0,
+                              y: mobileScrollDir > 0 ? -16 : 16,
+                              scale: 0.985,
+                            }
+                      }
+                      transition={{
+                        duration: 0.22,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="relative w-full h-full max-h-[430px] rounded-2xl bg-gradient-to-br from-[#1E3A8A] via-[#1E3A8A]/95 to-[#2563EB] text-white border border-[#60A5FA]/45 shadow-[0_16px_36px_-8px_rgba(30,58,138,0.28),inset_0_1px_0_rgba(255,255,255,0.22)] p-3.5 min-[360px]:p-4 min-[390px]:p-5 flex flex-col justify-between overflow-hidden"
+                    >
+                      {/* Top Decorative Accent Bar */}
+                      <div
+                        aria-hidden="true"
+                        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#38BDF8] via-[#60A5FA] to-[#93C5FD]"
+                      />
+
+                      {/* Card Top Content: Icon, Service Number, Title, Description & Key Features */}
+                      <div className="relative z-10 space-y-2 min-[390px]:space-y-2.5">
+                        <div className="flex items-start justify-between gap-2.5">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="w-9 h-9 min-[390px]:w-10 min-[390px]:h-10 rounded-xl bg-white/15 text-white border border-white/25 shadow-[0_4px_12px_rgba(0,0,0,0.14)] flex items-center justify-center shrink-0">
+                              <ActiveIcon className="w-4.5 h-4.5" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-1.5 text-[10.5px] min-[360px]:text-[11px] font-bold tracking-wide text-[#BFDBFE]">
+                                <span className="font-mono tabular-nums px-1.5 py-0.5 rounded bg-white/15 text-white border border-white/20">
+                                  {formattedNumber} / {formattedTotal}
+                                </span>
+                                <span aria-hidden="true">·</span>
+                                <span className="truncate">
+                                  {activeItem.category || 'Engineering'}
+                                </span>
+                              </div>
+                              <h3 className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[15.5px] min-[360px]:text-[17px] min-[390px]:text-[18.5px] font-extrabold text-white leading-snug mt-0.5">
+                                {activeItem.title}
+                              </h3>
+                            </div>
                           </div>
                         </div>
-                      )}
 
-                      {/* Action Row: Explore Details Button + Next Card Indicator */}
-                      <div className="flex items-center justify-between gap-2 pt-0.5">
-                        <button
-                          type="button"
-                          onClick={() => item.onCtaClick()}
-                          className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white text-xs font-bold shadow-xs transition-colors cursor-pointer active:scale-[0.99]"
-                        >
-                          <span>{item.ctaLabel}</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
+                        {/* Service Description */}
+                        <p className="text-[12.5px] min-[360px]:text-[13px] min-[390px]:text-[13.5px] text-blue-50/95 font-medium leading-relaxed line-clamp-3">
+                          {activeItem.summary}
+                        </p>
 
-                        {idx < totalItems - 1 ? (
-                          <span className="text-[11px] font-mono font-semibold text-slate-500">
-                            Next: #{String(idx + 2).padStart(2, '0')} ↓
-                          </span>
-                        ) : (
-                          <span className="text-[11px] font-mono font-semibold text-emerald-700">
-                            ✓ All {totalItems} shown
-                          </span>
+                        {/* Key Features / Highlights */}
+                        {activeHighlights.length > 0 && (
+                          <div className="grid grid-cols-1 gap-1 min-[390px]:gap-1.5 pt-1.5 min-[390px]:pt-2 border-t border-white/15">
+                            {activeHighlights.map((highlight) => (
+                              <div
+                                key={highlight}
+                                className="flex items-center gap-2 text-[11.5px] min-[360px]:text-xs leading-snug text-white/95"
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[#93C5FD] shrink-0" />
+                                <span className="font-semibold truncate">{highlight}</span>
+                              </div>
+                            ))}
+                          </div>
                         )}
                       </div>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
 
-            {/* Bottom All Services Directory Button */}
-            <div className="pt-2 flex justify-center">
-              <button
-                type="button"
-                onClick={onAllItemsClick}
-                className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 min-h-[44px] min-w-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white text-xs font-bold shadow-[0_6px_20px_rgba(30,58,138,0.18)] transition-colors cursor-pointer"
-              >
-                <Layers className="w-4 h-4 shrink-0" />
-                <span>{allItemsLabel} ({totalItems} Practices)</span>
-                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
-              </button>
+                      {/* Card Bottom: Technology Tags + Explore Details Action Button */}
+                      <div className="relative z-10 pt-2 min-[390px]:pt-2.5 border-t border-white/15 space-y-2.5">
+                        {activeTools.length > 0 && (
+                          <div>
+                            <div className="text-[9.5px] min-[360px]:text-[10px] uppercase font-bold tracking-wider text-[#BFDBFE] mb-1">
+                              {activeItem.stackLabel || 'Key Stack & Tools'}
+                            </div>
+                            <div className="flex items-center flex-wrap gap-1.5">
+                              {activeTools.map((tool) => {
+                                const ToolIcon = tool.icon;
+                                return (
+                                  <div
+                                    key={tool.name}
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] min-[360px]:text-[11px] font-semibold bg-white/14 border border-white/20 text-white"
+                                  >
+                                    {ToolIcon && (
+                                      <span className="text-[#93C5FD] shrink-0">
+                                        <ToolIcon className="w-3 h-3" />
+                                      </span>
+                                    )}
+                                    <span>{tool.name}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Action Bar: Explore Details Button */}
+                        <div className="flex items-center justify-between gap-2 pt-0.5">
+                          <button
+                            type="button"
+                            onClick={() => activeItem.onCtaClick()}
+                            className="w-full inline-flex items-center justify-between gap-2 px-4 py-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-white hover:bg-[#EEF4FF] text-[#1E3A8A] text-xs font-extrabold shadow-[0_4px_14px_rgba(0,0,0,0.16)] transition-colors cursor-pointer active:scale-[0.99]"
+                          >
+                            <span>{activeItem.ctaLabel}</span>
+                            <ArrowRight className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
+                          </button>
+                        </div>
+                      </div>
+                    </motion.article>
+                  </AnimatePresence>
+                </div>
+
+                {/* 3. Clear Scroll-Continuation Indicator & Step Controls */}
+                <div className="shrink-0 flex items-center justify-between gap-2 px-3 py-2 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE] shadow-[0_2px_10px_rgba(30,58,138,0.06)]">
+                  <div className="min-w-0 flex-1">
+                    {nextServiceItem ? (
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#2563EB]">
+                          Scroll down for #{String(currentIndex + 2).padStart(2, '0')} ↓
+                        </span>
+                        <span className="text-xs font-bold text-[#1E3A8A] truncate">
+                          Next: {nextServiceItem.title}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-700">
+                          ✓ All {totalItems} Services Viewed
+                        </span>
+                        <span className="text-xs font-bold text-[#1E3A8A] truncate">
+                          Keep scrolling for next section ↓
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Accessible Prev / Next Step Buttons inside the Pinned Frame */}
+                  <div className="inline-flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      disabled={!prevServiceItem}
+                      onClick={() =>
+                        scrollToMobileServiceIndex(Math.max(0, currentIndex - 1), true)
+                      }
+                      aria-label="Previous service"
+                      className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white disabled:opacity-40 disabled:pointer-events-none border border-[#DBEAFE] shadow-2xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (nextServiceItem) {
+                          scrollToMobileServiceIndex(
+                            Math.min(totalItems - 1, currentIndex + 1),
+                            true
+                          );
+                        } else {
+                          onAllItemsClick();
+                        }
+                      }}
+                      aria-label={
+                        nextServiceItem ? 'Next service' : allItemsLabel
+                      }
+                      className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-2xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* ===================================================================== */}
         {/* DESKTOP & TABLET HORIZONTAL CAROUSEL (Preserved 100% Unchanged!)      */}
