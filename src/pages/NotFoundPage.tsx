@@ -31,42 +31,42 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-left max-w-lg mx-auto">
           <button
             onClick={() => onNavigate('/')}
-            className="p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
+            className="min-h-[44px] min-w-[44px] p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
           >
             <span>Home</span>
             <Home className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1266E8]" />
           </button>
           <button
             onClick={() => onNavigate('/services')}
-            className="p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
+            className="min-h-[44px] min-w-[44px] p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
           >
             <span>Services (17)</span>
             <Layers className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1266E8]" />
           </button>
           <button
             onClick={() => onNavigate('/industries')}
-            className="p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
+            className="min-h-[44px] min-w-[44px] p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
           >
             <span>Industries</span>
             <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1266E8]" />
           </button>
           <button
             onClick={() => onNavigate('/portfolio')}
-            className="p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
+            className="min-h-[44px] min-w-[44px] p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
           >
             <span>Portfolio</span>
             <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1266E8]" />
           </button>
           <button
             onClick={() => onNavigate('/insights')}
-            className="p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
+            className="min-h-[44px] min-w-[44px] p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
           >
             <span>Insights</span>
             <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1266E8]" />
           </button>
           <button
             onClick={() => onNavigate('/contact')}
-            className="p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
+            className="min-h-[44px] min-w-[44px] p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
           >
             <span>Contact</span>
             <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1266E8]" />
@@ -77,7 +77,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
         <div className="pt-2">
           <button
             onClick={() => onNavigate('/')}
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-all shadow-md"
+            className="min-h-[44px] min-w-[44px] inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-all shadow-md"
           >
             <Home className="w-4 h-4" />
             <span>Return to Homepage</span>

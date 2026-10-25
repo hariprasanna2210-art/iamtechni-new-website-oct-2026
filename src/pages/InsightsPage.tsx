@@ -7,6 +7,7 @@ import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon } from '../utils/serviceIcons';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 import { ArticleGraphic } from '../components/common/ServiceVisualMockups';
+import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 
 interface InsightsPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -45,10 +46,11 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
       />
 
       {/* Article Grid Section */}
-      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={0} cardCount={3}>
+      <section className="py-10 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-10">
           {/* Search & Categories Bar */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pb-2 border-b border-slate-200">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4 pb-2 border-b border-slate-200">
             <div className="relative w-full md:w-96">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
@@ -67,7 +69,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`min-h-[38px] px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                    className={`min-h-[44px] min-w-[44px] md:min-h-[38px] md:min-w-0 px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
                       selectedCategory === cat
                         ? 'bg-[#1E3A8A] text-white shadow-xs'
                         : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
@@ -85,12 +87,12 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
           {filteredArticles.length > 0 && selectedCategory === 'All' && !searchQuery && (
             <div
               onClick={() => onNavigate(`/insights/${filteredArticles[0].slug}` as PageRoute)}
-              className="bg-white border border-blue-200/90 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all cursor-pointer group grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+              className="bg-white border border-blue-200/90 rounded-2xl p-4 sm:p-8 shadow-sm hover:shadow-md transition-all cursor-pointer group grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8 items-center"
             >
               <div className="lg:col-span-6">
                 <ArticleGraphic slug={filteredArticles[0].slug} className="shadow-sm" />
               </div>
-              <div className="lg:col-span-6 space-y-4">
+              <div className="lg:col-span-6 space-y-3 sm:space-y-4">
                 <div className="flex flex-wrap items-center gap-2 text-xs">
                   <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#2563EB] border border-blue-200 font-mono font-bold text-[11px]">
                     FEATURED ARCHITECTURE STUDY
@@ -105,16 +107,16 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                   </span>
                 </div>
 
-                <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors leading-tight">
+                <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors leading-tight">
                   {filteredArticles[0].title}
                 </h2>
 
-                <p className="text-sm text-slate-600 leading-relaxed">
+                <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed line-clamp-2 sm:line-clamp-none">
                   {filteredArticles[0].excerpt}
                 </p>
 
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2.5">
+                <div className="pt-2.5 sm:pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2 sm:gap-2.5">
                     <div className="w-7 h-7 rounded-full bg-[#1E3A8A] text-white flex items-center justify-center font-bold text-[10px]">
                       IT
                     </div>
@@ -132,7 +134,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
             </div>
           )}
 
-          <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerChildren={0.12}>
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8" staggerChildren={0.12}>
             {filteredArticles.map((art, idx) => {
               const color = getCardColorToken(idx);
               const ArticleIcon = getServiceIcon(art.category);
@@ -141,13 +143,13 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                 <ScrollRevealItem key={art.slug} className="h-full">
                   <article
                     onClick={() => onNavigate(`/insights/${art.slug}` as PageRoute)}
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-6 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
+                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-4 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-2xs interactive-card-lift`}
                   >
                     <div>
                       {/* Editorial Article Graphic */}
-                      <ArticleGraphic slug={art.slug} className="mb-4" />
+                      <ArticleGraphic slug={art.slug} className="mb-3 sm:mb-4" />
 
-                      <div className="flex items-center justify-between text-xs mb-3.5">
+                      <div className="flex items-center justify-between text-xs mb-2.5 sm:mb-3.5">
                         <div className="flex items-center gap-2">
                           <span className={`font-mono font-bold px-2.5 py-0.5 rounded-md text-[11px] ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                             {art.category}
@@ -163,16 +165,16 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                         </div>
                       </div>
 
-                      <h2 className="text-lg font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors leading-snug mb-3">
+                      <h2 className="text-base sm:text-lg font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors leading-snug mb-2 sm:mb-3">
                         {art.title}
                       </h2>
 
-                      <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed mb-6 line-clamp-4">
+                      <p className="text-[13px] sm:text-sm text-slate-700 leading-relaxed mb-4 sm:mb-6 line-clamp-2 sm:line-clamp-4">
                         {art.excerpt}
                       </p>
                     </div>
 
-                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
+                    <div className="pt-3 sm:pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
                       <span className="font-mono text-[11px]">{art.publishedDate}</span>
                       <span className={`${color.accentText} font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform`}>
                         Read Article <ArrowRight className="w-3.5 h-3.5" />
@@ -185,6 +187,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
           </ScrollReveal>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
     </div>
   );
 };

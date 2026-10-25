@@ -40,7 +40,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+              className="min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 p-1.5 flex items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
               aria-label="Close dialog"
             >
               <X className="w-5 h-5" />
@@ -151,7 +151,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
                     onClose();
                     onNavigate(rel.route);
                   }}
-                  className="text-[#1266E8] hover:underline font-medium"
+                  className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center px-2 md:px-0 text-[#1266E8] hover:underline font-medium"
                 >
                   {rel.title}
                 </button>
@@ -161,7 +161,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <button
                 onClick={onClose}
-                className="flex-1 sm:flex-none px-4 py-2 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+                className="flex-1 sm:flex-none min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-4 py-2 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
               >
                 Close
               </button>
@@ -170,7 +170,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
                   onClose();
                   onStartProject(project.relatedServices[0]?.title);
                 }}
-                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors"
+                className="flex-1 sm:flex-none min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors"
               >
                 Engineer Similar Solution <ArrowRight className="w-3.5 h-3.5" />
               </button>

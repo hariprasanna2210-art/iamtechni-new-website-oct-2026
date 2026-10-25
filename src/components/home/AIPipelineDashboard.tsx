@@ -507,7 +507,7 @@ export const AIPipelineDashboard: React.FC<{ className?: string }> = ({
                   aria-selected={isActive}
                   aria-label={`Switch to ${tab.label} view`}
                   onClick={() => stopAutoPlayAndRun(() => setActiveView(tab.id))}
-                  className={`relative px-2.5 py-1 rounded-md text-[10px] font-bold transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#04C8E8] ${
+                  className={`relative min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[10px] font-bold transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#04C8E8] ${
                     isActive ? 'text-slate-950' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -524,8 +524,8 @@ export const AIPipelineDashboard: React.FC<{ className?: string }> = ({
             })}
           </div>
 
-          {/* 3 Small View Jump Dots */}
-          <div className="flex items-center gap-1.5" role="group" aria-label="Jump between views">
+          {/* 3 Small View Jump Dots (Desktop only; mobile switches via the 44px tab buttons above) */}
+          <div className="hidden md:flex items-center gap-1.5" role="group" aria-label="Jump between views">
             {(['overview', 'detail', 'governance'] as DashboardView[]).map((v, idx) => {
               const isCurrent = activeView === v;
               const dotLabels = ['Overview view', 'Step detail view', 'Governance view'];
@@ -732,7 +732,7 @@ export const AIPipelineDashboard: React.FC<{ className?: string }> = ({
                     type="button"
                     onClick={() => stopAutoPlayAndRun(() => setActiveView('overview'))}
                     aria-label="Back to pipeline overview"
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-200 border border-slate-700 text-[10px] font-bold transition-colors cursor-pointer"
+                    className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-200 border border-slate-700 text-[10px] font-bold transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-3 h-3 text-[#04C8E8]" />
                     <span>Overview</span>
@@ -747,7 +747,7 @@ export const AIPipelineDashboard: React.FC<{ className?: string }> = ({
                           stopAutoPlayAndRun(() => setSelectedStepIdx(st.index))
                         }
                         aria-label={`View step ${st.stepCode} ${st.title}`}
-                        className={`px-2 py-0.5 rounded text-[9.5px] font-bold cursor-pointer transition-colors ${
+                        className={`min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-2 py-0.5 rounded text-[9.5px] font-bold cursor-pointer transition-colors ${
                           selectedStepIdx === st.index
                             ? 'bg-[#1266E8] text-white'
                             : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
@@ -908,7 +908,7 @@ export const AIPipelineDashboard: React.FC<{ className?: string }> = ({
                         stopAutoPlayAndRun(() => setActiveView('governance'))
                       }
                       aria-label="Open Earned Autonomy and Governance view"
-                      className="w-full mt-1 py-1.5 px-2.5 rounded-lg bg-[#1266E8]/25 hover:bg-[#1266E8]/40 border border-[#1266E8]/50 text-[#04C8E8] text-[9.5px] font-bold flex items-center justify-between transition-colors cursor-pointer"
+                      className="w-full mt-1 min-h-[44px] md:min-h-0 py-1.5 px-2.5 rounded-lg bg-[#1266E8]/25 hover:bg-[#1266E8]/40 border border-[#1266E8]/50 text-[#04C8E8] text-[9.5px] font-bold flex items-center justify-between transition-colors cursor-pointer"
                     >
                       <span>View Earned Autonomy</span>
                       <ChevronRight className="w-3 h-3" />
@@ -987,7 +987,7 @@ export const AIPipelineDashboard: React.FC<{ className?: string }> = ({
                             setSelectedAutonomy('act_report');
                           })
                         }
-                        className="px-2.5 py-1 rounded-lg bg-[#04C8E8] hover:bg-[#04C8E8]/85 text-slate-950 font-bold text-[10px] transition-colors cursor-pointer"
+                        className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-2.5 py-1 rounded-lg bg-[#04C8E8] hover:bg-[#04C8E8]/85 text-slate-950 font-bold text-[10px] transition-colors cursor-pointer"
                       >
                         {promotionReviewed ? 'Promotion Active ✓' : 'Review promotion'}
                       </button>
@@ -999,7 +999,7 @@ export const AIPipelineDashboard: React.FC<{ className?: string }> = ({
                             setSelectedAutonomy('approve_first');
                           })
                         }
-                        className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-bold text-[10px] transition-colors cursor-pointer"
+                        className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-bold text-[10px] transition-colors cursor-pointer"
                       >
                         Not now
                       </button>
@@ -1007,7 +1007,7 @@ export const AIPipelineDashboard: React.FC<{ className?: string }> = ({
                     <button
                       type="button"
                       onClick={() => stopAutoPlayAndRun(() => setActiveView('overview'))}
-                      className="text-[9.5px] text-slate-400 hover:text-white underline cursor-pointer"
+                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center text-[9.5px] text-slate-400 hover:text-white underline cursor-pointer"
                     >
                       Back to Overview
                     </button>
@@ -1033,7 +1033,7 @@ export const AIPipelineDashboard: React.FC<{ className?: string }> = ({
                             stopAutoPlayAndRun(() => setSelectedAutonomy(lvl.id))
                           }
                           aria-pressed={isSelected}
-                          className={`relative text-left p-2 rounded-lg border transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#04C8E8] ${
+                          className={`relative min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-left p-2 rounded-lg border transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#04C8E8] ${
                             isSelected
                               ? 'border-[#04C8E8] text-white'
                               : 'border-slate-800 bg-slate-950/70 text-slate-400 hover:text-slate-200'

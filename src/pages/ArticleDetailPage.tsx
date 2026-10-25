@@ -4,6 +4,7 @@ import { PageRoute, ArticleItem } from '../types';
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { insightsData } from '../data/insightsData';
 import { ArticleGraphic } from '../components/common/ServiceVisualMockups';
+import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 
 interface ArticleDetailPageProps {
   article: ArticleItem;
@@ -39,8 +40,8 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
       />
 
       {/* Article Header with Rich Technical Graphic */}
-      <section className="bg-white border-b border-slate-200 py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <section className="bg-white border-b border-slate-200 py-8 sm:py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 font-mono">
               <span className="text-[#1266E8] font-bold uppercase">{article.category}</span>
@@ -52,7 +53,7 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
 
             <button
               onClick={handleCopyLink}
-              className="inline-flex items-center gap-1.5 min-h-[38px] px-3.5 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-[44px] min-w-[44px] md:min-h-[38px] md:min-w-0 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
               aria-label="Copy article link"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
@@ -64,11 +65,11 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
             {article.title}
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+          <p className="text-sm sm:text-lg text-slate-600 leading-relaxed font-normal">
             {article.excerpt}
           </p>
 
-          <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
+          <div className="pt-3 sm:pt-4 border-t border-slate-100 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#1E3A8A] text-white flex items-center justify-center font-bold text-xs">
               IT
             </div>
@@ -79,25 +80,26 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
           </div>
 
           {/* Featured Architecture Diagram */}
-          <div className="pt-2">
+          <div className="pt-1 sm:pt-2">
             <ArticleGraphic slug={article.slug} className="shadow-lg" />
           </div>
         </div>
       </section>
 
       {/* Article Body & Table of Contents Layout */}
-      <section className="py-16 bg-[#F5F7FA]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <MobileSectionSkeletonWrapper variant="split-detail" sectionIndex={0}>
+      <section className="py-10 sm:py-16 bg-[#F5F7FA]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
           {/* Main Article Prose (8 cols) */}
-          <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-8 shadow-2xs space-y-8">
+          <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-4 sm:p-8 shadow-2xs space-y-6 sm:space-y-8">
             {article.sections.map((sec) => (
-              <div key={sec.id} id={sec.id} className="space-y-4 scroll-mt-24">
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 pt-2 border-t border-slate-100 first:border-0 first:pt-0">
+              <div key={sec.id} id={sec.id} className="space-y-3 sm:space-y-4 scroll-mt-24">
+                <h2 className="text-lg sm:text-2xl font-bold tracking-tight text-slate-900 pt-2 border-t border-slate-100 first:border-0 first:pt-0">
                   {sec.heading}
                 </h2>
 
                 {sec.body.map((paragraph, pIdx) => (
-                  <p key={pIdx} className="text-[15px] sm:text-base text-slate-700 leading-relaxed">
+                  <p key={pIdx} className="text-[14px] sm:text-base text-slate-700 leading-relaxed">
                     {paragraph}
                   </p>
                 ))}
@@ -118,18 +120,18 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
           </div>
 
           {/* Sidebar: Table of Contents & Sticky Consultation (4 cols) */}
-          <div className="lg:col-span-4 space-y-6">
+          <div className="lg:col-span-4 space-y-4 sm:space-y-6">
             {/* Table of Contents */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono mb-3">
+            <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-2xs">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono mb-2.5 sm:mb-3">
                 Table of Contents
               </h3>
-              <nav className="space-y-1.5">
+              <nav className="space-y-1 md:space-y-1.5">
                 {article.tableOfContents.map((item) => (
                   <a
                     key={item.id}
                     href={`#${item.id}`}
-                    className="block text-[13.5px] sm:text-sm text-slate-600 hover:text-[#1266E8] transition-colors leading-snug py-1"
+                    className="min-h-[44px] min-w-[44px] flex items-center md:min-h-0 md:min-w-0 md:block text-[13px] sm:text-sm text-slate-600 hover:text-[#1266E8] transition-colors leading-snug py-1"
                   >
                     {item.title}
                   </a>
@@ -138,14 +140,14 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
             </div>
 
             {/* Consultation Callout */}
-            <div className="bg-gradient-to-br from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] text-[#1E3A8A] border border-[#DBEAFE] rounded-2xl p-6 space-y-4 shadow-[0_4px_20px_rgba(37,99,235,0.06)]">
+            <div className="bg-gradient-to-br from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] text-[#1E3A8A] border border-[#DBEAFE] rounded-2xl p-4 sm:p-6 space-y-3 sm:space-y-4 shadow-[0_4px_20px_rgba(37,99,235,0.06)]">
               <div className="text-[11px] font-mono text-[#2563EB] font-bold uppercase tracking-wider">
                 ENGINEERING PRACTICE
               </div>
               <h4 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base sm:text-lg font-bold text-[#1E3A8A]">
                 Need to implement this architecture?
               </h4>
-              <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed">
+              <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed">
                 Our senior engineering team can audit your existing system and build custom implementations with verified benchmarks.
               </p>
               <button
@@ -158,25 +160,27 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
           </div>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
 
       {/* Related Articles Strip */}
       {relatedArticles.length > 0 && (
-        <section className="py-16 bg-white border-t border-slate-200">
+        <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={1}>
+        <section className="py-10 sm:py-16 bg-white border-t border-slate-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 className="text-xl font-bold text-slate-900 mb-6">Related Engineering Articles</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-4 sm:mb-6">Related Engineering Articles</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {relatedArticles.map((rel) => (
                 <article
                   key={rel.slug}
                   onClick={() => onNavigate(`/insights/${rel.slug}` as PageRoute)}
-                  className="bg-[#FAFBFD] border border-slate-200 rounded-xl p-5 hover:border-slate-300 transition-all cursor-pointer group flex flex-col justify-between"
+                  className="bg-[#FAFBFD] border border-slate-200 rounded-xl p-4 sm:p-5 hover:border-slate-300 transition-all cursor-pointer group flex flex-col justify-between"
                 >
                   <div>
-                    <ArticleGraphic slug={rel.slug} className="mb-3.5" />
-                    <div className="text-xs font-mono text-[#1266E8] font-semibold mb-2">
+                    <ArticleGraphic slug={rel.slug} className="mb-3 sm:mb-3.5" />
+                    <div className="text-xs font-mono text-[#1266E8] font-semibold mb-1.5 sm:mb-2">
                       {rel.category}
                     </div>
-                    <h4 className="text-sm font-bold text-slate-900 group-hover:text-[#1266E8] transition-colors mb-2">
+                    <h4 className="text-sm font-bold text-slate-900 group-hover:text-[#1266E8] transition-colors mb-1.5 sm:mb-2">
                       {rel.title}
                     </h4>
                     <p className="text-xs text-slate-600 line-clamp-2">{rel.excerpt}</p>
@@ -192,6 +196,7 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
             </div>
           </div>
         </section>
+        </MobileSectionSkeletonWrapper>
       )}
     </div>
   );

@@ -162,6 +162,65 @@
   transform: translateY(-4px);
 }
 
+/* ========================================================================== */
+/* MOBILE-ONLY LIGHTWEIGHT CONTENT SKELETON SHIMMER STATES                    */
+/* ========================================================================== */
+
+@keyframes mobile-skeleton-wave {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes mobile-section-reveal {
+  0% {
+    opacity: 0.12;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.skeleton-shimmer-light {
+  background: linear-gradient(
+    90deg,
+    rgba(219, 234, 254, 0.55) 0%,
+    rgba(239, 246, 255, 0.95) 50%,
+    rgba(219, 234, 254, 0.55) 100%
+  );
+  background-size: 200% 100%;
+  animation: mobile-skeleton-wave 1.5s ease-in-out infinite;
+}
+
+.skeleton-shimmer-subtle {
+  background: linear-gradient(
+    90deg,
+    rgba(226, 232, 240, 0.65) 0%,
+    rgba(241, 245, 249, 0.96) 50%,
+    rgba(226, 232, 240, 0.65) 100%
+  );
+  background-size: 200% 100%;
+  animation: mobile-skeleton-wave 1.5s ease-in-out infinite;
+}
+
+.skeleton-shimmer-dark {
+  background: linear-gradient(
+    90deg,
+    rgba(30, 58, 138, 0.38) 0%,
+    rgba(59, 130, 246, 0.30) 50%,
+    rgba(30, 58, 138, 0.38) 100%
+  );
+  background-size: 200% 100%;
+  animation: mobile-skeleton-wave 1.5s ease-in-out infinite;
+}
+
+.animate-mobile-section-reveal {
+  animation: mobile-section-reveal 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Reduced motion accessibility */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
@@ -174,7 +233,11 @@
   .animate-float-delayed,
   .animate-pulse-soft,
   .animate-shimmer,
-  .animate-gradient-wave {
+  .animate-gradient-wave,
+  .skeleton-shimmer-light,
+  .skeleton-shimmer-subtle,
+  .skeleton-shimmer-dark,
+  .animate-mobile-section-reveal {
     animation: none !important;
   }
   .interactive-card-lift:hover {

@@ -276,7 +276,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
   };
 
   return (
-    <section className="py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200 overflow-hidden">
+    <section className="py-10 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200 overflow-hidden">
       {/* Full SEO DOM Content for all 6 items so search engines index every item */}
       <div className="sr-only" aria-hidden="false">
         {items.map((ind, idx) => (
@@ -292,9 +292,9 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header + Subheading + View All Industries Link */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-12 gap-4 sm:gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 mb-3 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
+            <div className="inline-flex items-center gap-2 h-[32px] sm:h-[34px] px-3 sm:px-4 mb-2.5 sm:mb-3 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
               <span
                 className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
                 aria-hidden="true"
@@ -344,7 +344,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
               )}
             </motion.h2>
 
-            <p className="text-[15px] sm:text-base lg:text-[17px] text-slate-600 font-medium mt-3 leading-relaxed max-w-2xl">
+            <p className="text-[13.5px] sm:text-base lg:text-[17px] text-slate-600 font-medium mt-2 sm:mt-3 leading-relaxed max-w-2xl line-clamp-2 sm:line-clamp-none">
               We design and engineer digital systems tailored to the exact regulatory, workflow, and customer contexts of your industry.
             </p>
           </div>
@@ -352,7 +352,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
           <button
             type="button"
             onClick={() => onNavigate('/industries')}
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start md:self-auto shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[44px] min-w-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start md:self-auto shrink-0"
           >
             <span>View All Industries</span>
             <ArrowRight className="w-3.5 h-3.5 text-white" />
@@ -374,7 +374,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
         >
           {/* Outer Showcase Card Shell with Crossfading Soft Tinted Gradient */}
           <div
-            className={`relative min-h-[440px] sm:min-h-[460px] rounded-[28px] border ${currentTheme.cardBorder} shadow-[0_24px_60px_-15px_rgba(15,23,42,0.08)] overflow-hidden transition-colors duration-700 flex flex-col justify-between p-6 sm:p-10 lg:px-14 lg:py-11`}
+            className={`relative min-h-0 sm:min-h-[460px] rounded-[24px] sm:rounded-[28px] border ${currentTheme.cardBorder} shadow-[0_24px_60px_-15px_rgba(15,23,42,0.08)] overflow-hidden transition-colors duration-700 flex flex-col justify-between p-4 sm:p-10 lg:px-14 lg:py-11`}
           >
             {/* Smoothly Crossfading Background Tint Layer */}
             <AnimatePresence initial={false}>
@@ -415,7 +415,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                   type="button"
                   aria-label="Previous sector"
                   onClick={() => handlePrev(true)}
-                  className="w-9 h-9 rounded-xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-800 shadow-2xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-800 shadow-2xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -423,7 +423,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                   type="button"
                   aria-label="Next sector"
                   onClick={() => handleNext(true)}
-                  className="w-9 h-9 rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] border border-[#1E3A8A] text-white shadow-2xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] border border-[#1E3A8A] text-white shadow-2xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -454,12 +454,12 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                     duration: prefersReducedMotion ? 0.25 : 0.42,
                     ease: CARD_TRANSITION_EASE,
                   }}
-                  className="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-8 lg:gap-10 items-center"
+                  className="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-4 sm:gap-8 lg:gap-10 items-center"
                 >
                   {/* ------------------------------------------------------- */}
                   {/* CARD LEFT SIDE: Icon Badge, Title, Description, Link    */}
                   {/* ------------------------------------------------------- */}
-                  <div className="w-full lg:col-span-6 space-y-4 sm:space-y-5">
+                  <div className="w-full lg:col-span-6 space-y-3 sm:space-y-5">
                     {/* Rounded Glowing Icon Badge + SECTOR 0X Tag */}
                     <div className="flex items-center gap-3.5">
                       <motion.div
@@ -517,7 +517,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                         delay: prefersReducedMotion ? 0 : 0.14,
                         ease: CARD_TRANSITION_EASE,
                       }}
-                      className="text-sm sm:text-[15px] text-slate-600 font-medium leading-relaxed max-w-xl"
+                      className="text-[13.5px] sm:text-[15px] text-slate-600 font-medium leading-relaxed max-w-xl line-clamp-2 sm:line-clamp-none"
                     >
                       {currentItem.summary}
                     </motion.p>
@@ -535,12 +535,12 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                         delay: prefersReducedMotion ? 0 : 0.18,
                         ease: CARD_TRANSITION_EASE,
                       }}
-                      className="p-4 rounded-2xl bg-white/90 backdrop-blur-xs border border-[#DBEAFE] shadow-2xs space-y-1 max-w-xl"
+                      className="p-3 sm:p-4 rounded-2xl bg-white/90 backdrop-blur-xs border border-[#DBEAFE] shadow-2xs space-y-1 max-w-xl"
                     >
-                      <div className="font-bold text-[#1E3A8A] text-[11px] uppercase tracking-wide">
+                      <div className="font-bold text-[#1E3A8A] text-[10.5px] sm:text-[11px] uppercase tracking-wide">
                         Core Challenge Addressed:
                       </div>
-                      <div className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed">
+                      <div className="text-[13px] sm:text-sm text-slate-700 leading-snug sm:leading-relaxed">
                         {currentItem.coreChallenges[0]}
                       </div>
                     </motion.div>
@@ -563,7 +563,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                       <button
                         type="button"
                         onClick={() => onNavigate('/industries')}
-                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer group"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[44px] min-w-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer group"
                       >
                         <span>Explore Industry Solutions</span>
                         <ArrowRight className="w-3.5 h-3.5 text-white group-hover:translate-x-0.5 transition-transform" />
@@ -575,7 +575,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                   {/* CARD RIGHT SIDE: Staggered Pop-In + Floating UI Visual  */}
                   {/* ------------------------------------------------------- */}
                   <div className="w-full lg:col-span-6 flex items-center justify-center">
-                    <div className="relative w-full max-w-[460px] py-4 sm:py-6 px-2 sm:px-6">
+                    <div className="relative w-full max-w-[460px] py-1 sm:py-6 px-1 sm:px-6">
                       {/* Element 1: Central Visual Card */}
                       <motion.div
                         initial={
@@ -786,7 +786,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
               {/* Progress Bars / Dots + Prev / Next Arrow Buttons */}
               <div className="flex items-center justify-between sm:justify-end gap-4">
                 <div
-                  className="flex items-center gap-1.5"
+                  className="hidden md:flex items-center gap-1.5"
                   role="tablist"
                   aria-label="Business challenges items"
                 >
@@ -823,12 +823,39 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                   })}
                 </div>
 
+                {/* Mobile visual progress indicator (non-interactive dots so touch targets are the 44x44 buttons) */}
+                <div className="flex md:hidden items-center gap-1.5" aria-hidden="true">
+                  {items.map((item, idx) => {
+                    const isActive = idx === activeIndex;
+                    return (
+                      <span
+                        key={item.id}
+                        className={`relative h-2 rounded-full overflow-hidden transition-all duration-300 ${
+                          isActive ? 'w-10 bg-slate-300/75' : 'w-2.5 bg-slate-300/70'
+                        }`}
+                      >
+                        {isActive && (
+                          <span
+                            className={`block h-full rounded-full ${currentTheme.progressFill} transition-[width] duration-75 ease-linear`}
+                            style={{
+                              width:
+                                prefersReducedMotion || stoppedByUserAction
+                                  ? '100%'
+                                  : `${progress}%`,
+                            }}
+                          />
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
+
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     aria-label="Previous"
                     onClick={() => handlePrev(true)}
-                    className="w-10 h-10 rounded-xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-700 hover:text-slate-950 shadow-2xs flex items-center justify-center transition-all active:scale-[0.96] cursor-pointer"
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-10 md:h-10 md:min-w-0 md:min-h-0 rounded-xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-700 hover:text-slate-950 shadow-2xs flex items-center justify-center transition-all active:scale-[0.96] cursor-pointer"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
@@ -836,7 +863,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                     type="button"
                     aria-label="Next"
                     onClick={() => handleNext(true)}
-                    className="w-10 h-10 rounded-xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-700 hover:text-slate-950 shadow-2xs flex items-center justify-center transition-all active:scale-[0.96] cursor-pointer"
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-10 md:h-10 md:min-w-0 md:min-h-0 rounded-xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-700 hover:text-slate-950 shadow-2xs flex items-center justify-center transition-all active:scale-[0.96] cursor-pointer"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>

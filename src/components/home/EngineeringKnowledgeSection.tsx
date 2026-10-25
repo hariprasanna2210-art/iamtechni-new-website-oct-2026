@@ -350,7 +350,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
       role="group"
       aria-label={`${currentArticle.category}: ${currentArticle.title}`}
       style={{ perspective: '1200px' }}
-      className="group relative h-[380px] sm:h-[390px] w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] rounded-[20px] cursor-pointer select-none"
+      className="group relative h-[330px] sm:h-[390px] w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] rounded-[20px] cursor-pointer select-none"
     >
       <motion.div
         animate={{ rotateY: effectiveRotateY }}
@@ -373,7 +373,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
             WebkitBackdropFilter: 'blur(16px)',
             borderColor: isHovered ? theme.hoverBorderColor : theme.borderColor,
           }}
-          className="absolute inset-0 rounded-[20px] border p-6 flex flex-col justify-between overflow-hidden shadow-[0_16px_42px_-10px_rgba(30,58,138,0.12)] transition-colors duration-300"
+          className="absolute inset-0 rounded-[20px] border p-4 sm:p-6 flex flex-col justify-between overflow-hidden shadow-[0_16px_42px_-10px_rgba(30,58,138,0.12)] transition-colors duration-300"
         >
           {/* Soft Coloured Glow Blob on LEFT Edge */}
           <div
@@ -441,7 +441,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
             WebkitBackdropFilter: 'blur(16px)',
             borderColor: isHovered ? theme.hoverBorderColor : theme.borderColor,
           }}
-          className="absolute inset-0 rounded-[20px] border p-6 flex flex-col justify-between overflow-hidden shadow-[0_16px_42px_-10px_rgba(30,58,138,0.12)] transition-colors duration-300"
+          className="absolute inset-0 rounded-[20px] border p-4 sm:p-6 flex flex-col justify-between overflow-hidden shadow-[0_16px_42px_-10px_rgba(30,58,138,0.12)] transition-colors duration-300"
         >
           {/* Soft Coloured Glow Blob on LEFT Edge (Brighter on hover) */}
           <div
@@ -497,7 +497,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
                 e.stopPropagation();
                 onNavigate(`/insights/${currentArticle.slug}` as PageRoute);
               }}
-              className="w-full h-[42px] sm:h-[44px] min-h-[42px] sm:min-h-[44px] px-5 rounded-lg bg-[#1E3A8A]/90 hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 flex items-center justify-between whitespace-nowrap cursor-pointer group/btn focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
+              className="w-full h-[44px] min-h-[44px] min-w-[44px] px-5 rounded-lg bg-[#1E3A8A]/90 hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 flex items-center justify-between whitespace-nowrap cursor-pointer group/btn focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
             >
               <span>Read Article</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white shrink-0 transition-transform duration-200 group-hover:translate-x-1 group-hover/btn:translate-x-1" />
@@ -519,7 +519,7 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
   );
 
   return (
-    <section className="relative py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200 overflow-hidden">
+    <section className="relative py-10 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200 overflow-hidden">
       {/* Subtle Ambient Background Accents for Glass Depth */}
       <div
         aria-hidden="true"
@@ -532,9 +532,9 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header (Matched with White Background & Hero Reference Style) */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-12 gap-4 sm:gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 mb-3 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
+            <div className="inline-flex items-center gap-2 h-[32px] sm:h-[34px] px-3 sm:px-4 mb-2.5 sm:mb-3 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
               <span
                 className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
                 aria-hidden="true"
@@ -577,7 +577,7 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
               )}
             </motion.h2>
 
-            <p className="text-[15px] sm:text-base lg:text-[17px] text-slate-600 font-medium mt-3 leading-relaxed max-w-2xl">
+            <p className="text-[13.5px] sm:text-base lg:text-[17px] text-slate-600 font-medium mt-2 sm:mt-3 leading-relaxed max-w-2xl line-clamp-2 sm:line-clamp-none">
               Technical articles, architecture reviews, and field notes written by our senior engineering team.
             </p>
           </div>
@@ -585,22 +585,26 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
           <button
             type="button"
             onClick={() => onNavigate('/insights')}
-            className="inline-flex items-center justify-center gap-1.5 min-h-[42px] sm:min-h-[44px] px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start md:self-auto shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start md:self-auto shrink-0"
           >
             <span>Browse All Articles</span>
             <ArrowRight className="w-3.5 h-3.5 text-white" />
           </button>
         </div>
 
-        {/* 3D Flip Glass Cards Grid: 3 in a row on Desktop, 2 on Tablet, 1 on Mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+        {/* 3D Flip Glass Cards Grid: 3 in a row on Desktop, 2 on Tablet, 2 compact on Mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-7">
           {cardSlots.map((slotArticles, slotIdx) => (
-            <FlipGlassCard
+            <div
               key={slotArticles[0]?.slug || slotIdx}
-              slotIndex={slotIdx}
-              articles={slotArticles}
-              onNavigate={onNavigate}
-            />
+              className={slotIdx === 2 ? 'hidden md:block' : 'block'}
+            >
+              <FlipGlassCard
+                slotIndex={slotIdx}
+                articles={slotArticles}
+                onNavigate={onNavigate}
+              />
+            </div>
           ))}
         </div>
       </div>

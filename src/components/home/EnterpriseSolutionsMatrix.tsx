@@ -509,14 +509,14 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
 
   // Hero button style (reused from HeroContent.tsx)
   const heroButtonClass =
-    'inline-flex items-center justify-center gap-1.5 min-h-[42px] sm:min-h-[44px] px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer';
+    'inline-flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer';
 
   const progressFillPercent =
     stageCount > 1 ? (activeStageIndex / (stageCount - 1)) * 100 : 100;
 
   // Reusable softer royal-navy detail card for Block 4 (shown on right column on tablet/desktop, and below active stage on mobile)
   const renderStageDetailCard = (keyPrefix: string) => (
-    <div className="relative rounded-[24px] bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] border border-[#60A5FA]/35 shadow-[0_20px_48px_-15px_rgba(30,58,138,0.28)] p-6 sm:p-8 text-white overflow-hidden flex flex-col justify-between min-h-[340px]">
+    <div className="relative rounded-[20px] sm:rounded-[24px] bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] border border-[#60A5FA]/35 shadow-[0_20px_48px_-15px_rgba(30,58,138,0.28)] p-4 sm:p-8 text-white overflow-hidden flex flex-col justify-between min-h-0 sm:min-h-[340px]">
       {/* Soft radial cyan/blue glow matching homepage hero */}
       <div
         aria-hidden="true"
@@ -542,13 +542,13 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
               : { opacity: 0, scale: 0.98, y: -8 }
           }
           transition={{ duration: 0.32, ease: BLOCK_EASE }}
-          className="relative z-10 flex flex-col justify-between h-full space-y-6"
+          className="relative z-10 flex flex-col justify-between h-full space-y-4 sm:space-y-6"
         >
           {/* Top Row: Inspection Label + Protocol Hero Chip */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/10">
-            <div className="flex items-center gap-2.5">
+          <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3 pb-3 sm:pb-4 border-b border-white/10">
+            <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#22D3EE] shadow-[0_0_10px_#22D3EE]" />
-              <span className="font-mono text-[#22D3EE] uppercase text-xs tracking-[0.12em] font-bold">
+              <span className="font-mono text-[#22D3EE] uppercase text-[11px] sm:text-xs tracking-[0.12em] font-bold">
                 Stage {activeStage.step} Inspection
               </span>
             </div>
@@ -556,46 +556,46 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
           </div>
 
           {/* Center: Big Stage Number + Stage Title + Highlighted Metric */}
-          <div className="space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/15 flex items-center justify-center !font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#22D3EE] shadow-inner shrink-0">
+          <div className="space-y-3.5 sm:space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-11 h-11 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/15 flex items-center justify-center !font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold text-[#22D3EE] shadow-inner shrink-0">
                   {activeStage.step}
                 </div>
                 <div>
-                  <div className="text-[11px] font-mono uppercase tracking-wider text-slate-300">
+                  <div className="text-[10.5px] sm:text-[11px] font-mono uppercase tracking-wider text-slate-300">
                     Active Pipeline Node
                   </div>
-                  <h4 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl lg:text-[26px] font-bold tracking-[-0.015em] text-white leading-tight mt-0.5">
+                  <h4 className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-2xl lg:text-[26px] font-bold tracking-[-0.015em] text-white leading-tight mt-0.5">
                     {activeStage.name}
                   </h4>
                 </div>
               </div>
 
               {/* Large Metric Highlight Box */}
-              <div className="px-4 py-3 rounded-2xl bg-[#22D3EE]/12 border border-[#22D3EE]/35 backdrop-blur-sm self-start sm:self-auto shrink-0">
+              <div className="px-3.5 py-2 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl bg-[#22D3EE]/12 border border-[#22D3EE]/35 backdrop-blur-sm self-start sm:self-auto shrink-0">
                 <div className="text-[10px] font-mono uppercase tracking-wider text-[#22D3EE] font-semibold">
                   Verified Metric
                 </div>
-                <div className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-white tracking-tight mt-0.5">
+                <div className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-2xl font-bold text-white tracking-tight mt-0.5">
                   {activeStage.metric}
                 </div>
               </div>
             </div>
 
             {/* Stage Description + VPC Security Context */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2">
-              <p className="text-sm sm:text-base text-slate-100 leading-relaxed font-medium">
+            <div className="p-3.5 sm:p-5 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2">
+              <p className="text-[13px] sm:text-base text-slate-100 leading-relaxed font-medium">
                 {activeStage.description}
               </p>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              <p className="hidden sm:block text-xs sm:text-sm text-slate-300 leading-relaxed">
                 This layer operates within private VPC subnet boundaries, with zero public egress and automated latency alerting.
               </p>
             </div>
           </div>
 
           {/* Footer SLA & Compliance Row */}
-          <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-slate-300">
+          <div className="pt-3 sm:pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 sm:gap-3 text-[11px] sm:text-xs font-mono text-slate-300">
             <span className="text-[#22D3EE] font-bold">
               Target SLA: {activeStage.metric}
             </span>
@@ -610,15 +610,15 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
   );
 
   return (
-    <section className="py-20 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-[#DBEAFE]/80 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
+    <section className="py-10 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-[#DBEAFE]/80 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-12">
         {/* Section Header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.25 }}
           variants={blockVariants}
-          className="max-w-3xl mx-auto text-center space-y-3"
+          className="max-w-3xl mx-auto text-center space-y-2.5 sm:space-y-3"
         >
           <motion.div
             variants={childVariants}
@@ -629,13 +629,13 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
           </motion.div>
           <motion.h2
             variants={childVariants}
-            className="!font-['Outfit','Space_Grotesk',sans-serif] text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] leading-[1.18]"
+            className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-4xl lg:text-[42px] font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] leading-[1.18]"
           >
             Engineered solutions. Verified business outcomes.
           </motion.h2>
           <motion.p
             variants={childVariants}
-            className="text-[15px] sm:text-base lg:text-[17px] text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto"
+            className="text-[13.5px] sm:text-base lg:text-[17px] text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto line-clamp-2 sm:line-clamp-none"
           >
             Explore how IAMTECHNI architectures solve critical operational bottlenecks—from private AI document search to resilient multi-cloud modernization.
           </motion.p>
@@ -669,7 +669,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                   setIsSimulating(false);
                 }}
                 aria-label="Previous solution domain"
-                className="w-9 h-9 rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
               >
                 <ArrowRight className="w-4 h-4 rotate-180" />
               </button>
@@ -687,7 +687,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                   setIsSimulating(false);
                 }}
                 aria-label="Next solution domain"
-                className="w-9 h-9 rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
               >
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -719,7 +719,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                         setActiveStageIndex(0);
                         setIsSimulating(false);
                       }}
-                      className={`flex items-center gap-2 min-h-[42px] px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                      className={`flex items-center gap-2 min-h-[44px] min-w-[44px] px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
                         isActive
                           ? 'bg-[#1E3A8A] text-white shadow-xs'
                           : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#EEF4FF]/60'
@@ -749,7 +749,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
           variants={blockVariants}
           whileHover={prefersReducedMotion ? undefined : { y: -4 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="relative rounded-[28px] bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] border border-[#60A5FA]/35 shadow-[0_20px_48px_-15px_rgba(30,58,138,0.26)] p-6 sm:p-10 lg:p-12 overflow-hidden"
+          className="relative rounded-[22px] sm:rounded-[28px] bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] border border-[#60A5FA]/35 shadow-[0_20px_48px_-15px_rgba(30,58,138,0.26)] p-5 sm:p-10 lg:p-12 overflow-hidden"
         >
           {/* Soft radial cyan/blue glow */}
           <div
@@ -757,12 +757,12 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
             className="pointer-events-none absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[#38BDF8]/18 blur-3xl"
           />
 
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-center">
             {/* Left: Eyebrow, Big Heading, Both Hero-Styled Buttons */}
-            <div className="md:col-span-7 lg:col-span-7 space-y-5">
+            <div className="md:col-span-7 lg:col-span-7 space-y-3.5 sm:space-y-5">
               <motion.div
                 variants={childVariants}
-                className="inline-flex items-center gap-2 text-xs font-mono text-[#22D3EE] tracking-[0.12em] uppercase font-bold"
+                className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-mono text-[#22D3EE] tracking-[0.12em] uppercase font-bold"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#22D3EE] shrink-0" />
                 <span>{currentPillar.tagline}</span>
@@ -770,14 +770,14 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
 
               <motion.h3
                 variants={childVariants}
-                className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-[38px] font-bold tracking-[-0.015em] text-white leading-[1.2] drop-shadow-[0_2px_10px_rgba(34,211,238,0.18)]"
+                className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl lg:text-[38px] font-bold tracking-[-0.015em] text-white leading-[1.2] drop-shadow-[0_2px_10px_rgba(34,211,238,0.18)]"
               >
                 {currentPillar.title}
               </motion.h3>
 
               <motion.div
                 variants={childVariants}
-                className="pt-1 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3"
+                className="pt-1 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3"
               >
                 <button
                   type="button"
@@ -798,10 +798,10 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
               </motion.div>
             </div>
 
-            {/* Right: Floating White UI Card showing Mini Pipeline with Green Running Dot */}
+            {/* Right: Floating White UI Card showing Mini Pipeline with Green Running Dot (Hidden on mobile <md since Block 4 below shows the interactive pipeline) */}
             <motion.div
               variants={childVariants}
-              className="md:col-span-5 lg:col-span-5 flex justify-center md:justify-end"
+              className="hidden md:flex md:col-span-5 lg:col-span-5 justify-center md:justify-end"
             >
               <div className="w-full max-w-[380px] rounded-2xl bg-white/95 backdrop-blur-md border border-[#DBEAFE] shadow-[0_20px_50px_rgba(4,11,20,0.45)] p-4 sm:p-5 text-slate-900">
                 <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
@@ -885,21 +885,21 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
           variants={blockVariants}
-          className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-5 lg:gap-6 items-stretch"
+          className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3.5 sm:gap-5 lg:gap-6 items-stretch"
         >
           {/* Card 1: THE OPERATIONAL CHALLENGE */}
           <motion.div
             variants={childVariants}
             whileHover={prefersReducedMotion ? undefined : { y: -4 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="h-full rounded-[24px] bg-[#FFF8E7] border border-amber-200/80 p-6 sm:p-8 shadow-[0_12px_32px_-12px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_40px_-15px_rgba(217,119,6,0.14)] transition-shadow flex flex-col justify-between"
+            className="h-full rounded-[20px] sm:rounded-[24px] bg-[#FFF8E7] border border-amber-200/80 p-4 sm:p-8 shadow-[0_12px_32px_-12px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_40px_-15px_rgba(217,119,6,0.14)] transition-shadow flex flex-col justify-between"
           >
-            <div className="space-y-3">
-              <div className="text-xs font-mono font-bold uppercase tracking-[0.12em] text-amber-900 flex items-center gap-2">
+            <div className="space-y-2 sm:space-y-3">
+              <div className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-[0.12em] text-amber-900 flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)] shrink-0" />
                 <span>The Operational Challenge</span>
               </div>
-              <p className="text-sm sm:text-base text-[#1E3A8A] font-medium leading-relaxed">
+              <p className="text-[13px] sm:text-base text-[#1E3A8A] font-medium leading-relaxed line-clamp-3 sm:line-clamp-none">
                 {currentPillar.businessProblem}
               </p>
             </div>
@@ -921,14 +921,14 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
             variants={childVariants}
             whileHover={prefersReducedMotion ? undefined : { y: -4 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="h-full rounded-[24px] bg-[#EEF4FF] border border-[#DBEAFE] p-6 sm:p-8 shadow-[0_12px_32px_-12px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.14)] transition-shadow flex flex-col justify-between"
+            className="h-full rounded-[20px] sm:rounded-[24px] bg-[#EEF4FF] border border-[#DBEAFE] p-4 sm:p-8 shadow-[0_12px_32px_-12px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.14)] transition-shadow flex flex-col justify-between"
           >
-            <div className="space-y-3">
-              <div className="text-xs font-mono font-bold uppercase tracking-[0.12em] text-[#2563EB] flex items-center gap-2">
+            <div className="space-y-2 sm:space-y-3">
+              <div className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-[0.12em] text-[#2563EB] flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.5)] shrink-0" />
                 <span>IAMTECHNI Engineering Approach</span>
               </div>
-              <p className="text-sm sm:text-base text-[#1E3A8A] font-medium leading-relaxed">
+              <p className="text-[13px] sm:text-base text-[#1E3A8A] font-medium leading-relaxed line-clamp-3 sm:line-clamp-none">
                 {currentPillar.engineeringApproach}
               </p>
             </div>
@@ -943,7 +943,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
           variants={blockVariants}
-          className="space-y-6"
+          className="space-y-4 sm:space-y-6"
         >
           <motion.div
             variants={childVariants}
@@ -955,7 +955,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
           </motion.div>
 
           {/* Bento Metric Grid: 1st Card Highlighted in Hero Cyan/Teal Accent, Others White */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 sm:gap-5">
             {currentPillar.metrics.map((metric, mIdx) => {
               const isHighlighted = mIdx === 0;
 
@@ -967,16 +967,16 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                   transition={{ duration: 0.25, ease: 'easeOut' }}
                   className={
                     isHighlighted
-                      ? 'md:col-span-6 rounded-[24px] bg-gradient-to-br from-[#E0F2FE] via-[#ECFEFF] to-[#EEF4FF] text-[#1E3A8A] p-6 sm:p-8 shadow-[0_14px_34px_-12px_rgba(37,99,235,0.14)] border border-[#BAE6FD] flex flex-col justify-between'
-                      : 'md:col-span-3 rounded-[24px] bg-white border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_30px_-12px_rgba(15,23,42,0.06)] hover:shadow-[0_18px_36px_-12px_rgba(30,58,138,0.12)] transition-shadow flex flex-col justify-between'
+                      ? 'md:col-span-6 rounded-[20px] sm:rounded-[24px] bg-gradient-to-br from-[#E0F2FE] via-[#ECFEFF] to-[#EEF4FF] text-[#1E3A8A] p-4 sm:p-8 shadow-[0_14px_34px_-12px_rgba(37,99,235,0.14)] border border-[#BAE6FD] flex flex-col justify-between'
+                      : 'md:col-span-3 rounded-[20px] sm:rounded-[24px] bg-white border border-slate-200/90 p-4 sm:p-7 shadow-[0_10px_30px_-12px_rgba(15,23,42,0.06)] hover:shadow-[0_18px_36px_-12px_rgba(30,58,138,0.12)] transition-shadow flex flex-col justify-between'
                   }
                 >
                   <div>
                     <div
                       className={
                         isHighlighted
-                          ? "!font-['Outfit','Space_Grotesk',sans-serif] text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1E3A8A]"
-                          : "!font-['Outfit','Space_Grotesk',sans-serif] text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A]"
+                          ? "!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-5xl font-extrabold tracking-tight text-[#1E3A8A]"
+                          : "!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A]"
                       }
                     >
                       <CountUpMetric
@@ -987,8 +987,8 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                     <div
                       className={
                         isHighlighted
-                          ? 'text-sm sm:text-base font-bold text-[#1E3A8A] mt-2'
-                          : 'text-sm font-bold text-[#1E3A8A] mt-2'
+                          ? 'text-xs sm:text-base font-bold text-[#1E3A8A] mt-1 sm:mt-2'
+                          : 'text-xs sm:text-sm font-bold text-[#1E3A8A] mt-1 sm:mt-2'
                       }
                     >
                       {metric.label}
@@ -998,8 +998,8 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                   <div
                     className={
                       isHighlighted
-                        ? 'text-xs sm:text-sm font-semibold text-[#2563EB] mt-3 leading-snug'
-                        : 'text-xs text-slate-500 mt-3 leading-snug'
+                        ? 'text-xs sm:text-sm font-semibold text-[#2563EB] mt-1.5 sm:mt-3 leading-snug'
+                        : 'text-xs text-slate-500 mt-1.5 sm:mt-3 leading-snug'
                     }
                   >
                     {metric.detail}
@@ -1012,17 +1012,19 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
           {/* Deliverables & Core Toolchain Bento Strip */}
           <motion.div
             variants={childVariants}
-            className="rounded-[24px] bg-white border border-slate-200/90 p-6 sm:p-7 shadow-[0_10px_30px_-12px_rgba(15,23,42,0.05)] space-y-5"
+            className="rounded-[20px] sm:rounded-[24px] bg-white border border-slate-200/90 p-4 sm:p-7 shadow-[0_10px_30px_-12px_rgba(15,23,42,0.05)] space-y-4 sm:space-y-5"
           >
             <div>
-              <div className="text-xs font-mono font-bold uppercase tracking-[0.12em] text-[#1E3A8A] mb-3">
+              <div className="text-xs font-mono font-bold uppercase tracking-[0.12em] text-[#1E3A8A] mb-2.5 sm:mb-3">
                 Production Deliverables Included
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
                 {currentPillar.deliverables.map((del, dIdx) => (
                   <div
                     key={dIdx}
-                    className="flex items-start gap-2.5 text-[13.5px] sm:text-sm text-slate-700 bg-[#F6F8FB] p-3.5 rounded-xl border border-slate-200/80"
+                    className={`${
+                      dIdx >= 2 ? 'hidden sm:flex' : 'flex'
+                    } items-start gap-2 text-[13px] sm:text-sm text-slate-700 bg-[#F6F8FB] p-3 sm:p-3.5 rounded-xl border border-slate-200/80`}
                   >
                     <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0 mt-0.5" />
                     <span className="leading-snug font-medium">{del}</span>
@@ -1031,7 +1033,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-200/80 flex flex-wrap items-center gap-2">
+            <div className="pt-3 sm:pt-4 border-t border-slate-200/80 flex flex-wrap items-center gap-1.5 sm:gap-2">
               <span className="text-[11px] font-mono font-bold text-slate-500 mr-1 uppercase">
                 Core Toolchain:
               </span>

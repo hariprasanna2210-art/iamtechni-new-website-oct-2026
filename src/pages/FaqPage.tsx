@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { PageRoute } from '../types';
+import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 
 interface FaqPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -132,11 +133,11 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
       </div>
 
       {/* FAQ Hero */}
-      <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-20 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-[#FFFFFF] border-b border-slate-200">
+      <section className="relative overflow-hidden pt-5 pb-8 sm:pt-8 sm:pb-16 lg:pt-14 lg:pb-20 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-[#FFFFFF] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-bold text-[#2563EB]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 items-center">
+            <div className="lg:col-span-7 space-y-3 sm:space-y-4">
+              <div className="inline-flex items-center gap-2 h-[32px] sm:h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-bold text-[#2563EB]">
                 <HelpCircle className="w-3.5 h-3.5" />
                 <span>Knowledge Base &amp; FAQs</span>
               </div>
@@ -145,45 +146,45 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
                 Frequently Asked Questions
               </h1>
 
-              <p className="text-[15px] sm:text-base lg:text-[17px] text-slate-600 leading-relaxed">
+              <p className="text-[13.5px] sm:text-base lg:text-[17px] text-slate-600 leading-relaxed">
                 Find transparent answers about our engineering capabilities, engagement process, code ownership, pricing models, and security standards.
               </p>
 
               {/* Search Input */}
-              <div className="pt-4 max-w-lg relative">
+              <div className="pt-2 sm:pt-4 max-w-lg relative">
                 <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
                   placeholder="Search questions by keyword (e.g. ownership, AI, timeline)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 min-h-[44px] rounded-lg border border-slate-200 bg-white text-sm text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#2563EB]"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-3 min-h-[44px] rounded-lg border border-slate-200 bg-white text-sm text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#2563EB]"
                 />
               </div>
             </div>
 
             <div className="lg:col-span-5">
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-6 space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-4 sm:p-6 space-y-3 sm:space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-2.5 sm:pb-3">
                   <div className="text-xs font-mono font-bold text-slate-900">TRANSPARENCY_GUARANTEES</div>
                   <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1266E8] border border-blue-200 text-[10px] font-mono font-bold">
                     VERIFIED ANSWERS
                   </span>
                 </div>
-                <div className="space-y-2.5 text-xs">
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div className="space-y-2 sm:space-y-2.5 text-xs">
+                  <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-200/80">
                     <span className="font-semibold text-slate-800 flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Source Code &amp; IP Ownership
                     </span>
                     <span className="font-mono font-bold text-emerald-700">100% Client</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                  <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-200/80">
                     <span className="font-semibold text-slate-800 flex items-center gap-2">
                       <Workflow className="w-4 h-4 text-[#1266E8]" /> Delivery Lifecycle
                     </span>
                     <span className="font-mono font-bold text-[#1266E8]">7-Stage Agile</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                  <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-slate-50 border border-slate-200/80">
                     <span className="font-semibold text-slate-800 flex items-center gap-2">
                       <Lock className="w-4 h-4 text-[#5427D9]" /> AI Data Privacy
                     </span>
@@ -197,8 +198,9 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
       </section>
 
       {/* Accordion Content */}
-      <section className="py-20 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <MobileSectionSkeletonWrapper variant="faq-accordion" sectionIndex={0}>
+      <section className="py-10 sm:py-20 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
           {filteredCategories.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-2xl border border-slate-200 p-8 space-y-3">
               <h3 className="text-lg font-bold text-slate-900">No matching questions found</h3>
@@ -207,7 +209,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
               </p>
               <button
                 onClick={() => setSearchQuery('')}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold"
+                className="min-h-[44px] min-w-[44px] px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold"
               >
                 Clear Search
               </button>
@@ -223,16 +225,16 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
               const CatIcon = getCategoryIcon(cat.category);
 
               return (
-                <div key={catIdx} className="space-y-4">
-                  <div className="flex items-center gap-2.5 px-1 border-b border-slate-200 pb-3">
+                <div key={catIdx} className="space-y-3 sm:space-y-4">
+                  <div className="flex items-center gap-2.5 px-1 border-b border-slate-200 pb-2.5 sm:pb-3">
                     <div className="w-7 h-7 rounded-lg bg-blue-100 text-[#1266E8] flex items-center justify-center shadow-2xs">
                       <CatIcon className="w-4 h-4" />
                     </div>
-                    <h2 className="text-lg font-bold text-slate-900">
+                    <h2 className="text-base sm:text-lg font-bold text-slate-900">
                       {cat.category}
                     </h2>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2.5 sm:space-y-3">
                     {cat.items.map((item, itemIdx) => {
                       const key = `${catIdx}-${itemIdx}`;
                       const isOpen = openItems[key];
@@ -247,7 +249,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
                         >
                           <button
                             onClick={() => toggleItem(key)}
-                            className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors cursor-pointer"
+                            className="w-full min-h-[48px] p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors cursor-pointer"
                             aria-expanded={isOpen}
                           >
                             <span className="text-sm sm:text-base font-bold text-slate-900">
@@ -260,7 +262,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
                             />
                           </button>
                           {isOpen && (
-                            <div className="px-5 pb-5 pt-2 text-sm sm:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100">
+                            <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-2 text-[13px] sm:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100">
                               {item.answer}
                             </div>
                           )}
@@ -274,23 +276,23 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
           )}
 
           {/* Have More Questions CTA Box */}
-          <div className="p-8 rounded-2xl bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] shadow-[0_4px_20px_rgba(37,99,235,0.06)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <div className="p-5 sm:p-8 rounded-2xl bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] shadow-[0_4px_20px_rgba(37,99,235,0.06)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
             <div className="space-y-1">
               <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base sm:text-lg font-bold text-[#1E3A8A]">Still have questions?</h3>
-              <p className="text-sm text-slate-600">
+              <p className="text-[13px] sm:text-sm text-slate-600">
                 Our solutions engineering team is available for a direct technical consultation.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={() => onOpenProjectModal('General Inquiry')}
-                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 min-h-[44px] min-w-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all cursor-pointer"
               >
                 Ask a Question
               </button>
               <button
                 onClick={() => onNavigate('/contact/consultation')}
-                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-white hover:bg-[#F5F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.06)] transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 min-h-[44px] min-w-[44px] rounded-lg bg-white hover:bg-[#F5F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.06)] transition-all cursor-pointer"
               >
                 Schedule Call
               </button>
@@ -298,6 +300,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
           </div>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
     </div>
   );
 };

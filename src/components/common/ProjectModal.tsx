@@ -121,7 +121,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               </div>
               <button
                 onClick={onClose}
-                className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/60 transition-colors cursor-pointer"
+                className="min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 p-2 flex items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/60 transition-colors cursor-pointer"
                 aria-label="Close dialog"
               >
                 <X className="w-5 h-5" />
@@ -255,7 +255,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       <button
                         type="button"
                         onClick={handleReset}
-                        className="px-7 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 transition-colors shadow-sm cursor-pointer"
+                        className="min-h-[44px] min-w-[44px] px-7 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 transition-colors shadow-sm cursor-pointer"
                       >
                         Close &amp; Return
                       </button>
@@ -275,11 +275,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                     <div className="p-3 bg-[#F4F7FC] border border-slate-200 rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs">
                       <span className="text-slate-600 font-medium">Prefer direct contact?</span>
                       <div className="flex flex-wrap items-center gap-3 font-mono font-semibold">
-                        <a href="tel:+917418120053" className="text-[#0D9488] hover:underline flex items-center gap-1">
+                        <a href="tel:+917418120053" className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1 text-[#0D9488] hover:underline">
                           <Phone className="w-3.5 h-3.5" /> +91-7418120053
                         </a>
                         <span className="text-slate-300">·</span>
-                        <a href="mailto:info@iamtechni.in" className="text-[#1266E8] hover:underline flex items-center gap-1">
+                        <a href="mailto:info@iamtechni.in" className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1 text-[#1266E8] hover:underline">
                           <Mail className="w-3.5 h-3.5" /> info@iamtechni.in
                         </a>
                       </div>
@@ -429,7 +429,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#1266E8] to-[#5427D9] text-white rounded-xl text-sm font-semibold shadow-sm hover:opacity-95 transition-all disabled:opacity-50 cursor-pointer"
+                        className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#1266E8] to-[#5427D9] text-white rounded-xl text-sm font-semibold shadow-sm hover:opacity-95 transition-all disabled:opacity-50 cursor-pointer"
                       >
                         {isSubmitting ? (
                           <span className="inline-flex items-center gap-2">

@@ -54,6 +54,7 @@ import { BusinessChallengesShowcase } from '../components/home/BusinessChallenge
 import { EngineeringKnowledgeSection } from '../components/home/EngineeringKnowledgeSection';
 import { CollaborateSection } from '../components/home/CollaborateSection';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
+import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
 import { getAllUniqueTools } from '../data/heroServiceTools';
@@ -322,16 +323,19 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================================= */}
       {/* 2. SERVICES BUILT FOR YOUR NEXT STAGE OF GROWTH (Pill Tabs & Card Carousel)*/}
       {/* ========================================================================= */}
-      <HomeServicesSection
-        onNavigate={onNavigate}
-        selectedServiceSlug={selectedServiceSlug}
-        onSelectServiceSlug={setSelectedServiceSlug}
-      />
+      <MobileSectionSkeletonWrapper variant="carousel" sectionIndex={0}>
+        <HomeServicesSection
+          onNavigate={onNavigate}
+          selectedServiceSlug={selectedServiceSlug}
+          onSelectServiceSlug={setSelectedServiceSlug}
+        />
+      </MobileSectionSkeletonWrapper>
 
       {/* ========================================================================= */}
       {/* 3. ENGINEERING DISCIPLINES (Hero-Color-Coded Upper Section + 2 Horizontal Tool Rows) */}
       {/* ========================================================================= */}
-      <section className="relative pt-20 pb-8 sm:pt-24 sm:pb-10 bg-gradient-to-b from-[#F8FAFF] via-white to-[#EEF4FF]/60 border-b border-[#DBEAFE]/90 overflow-hidden">
+      <MobileSectionSkeletonWrapper variant="disciplines" sectionIndex={1}>
+      <section className="relative pt-10 pb-6 sm:pt-24 sm:pb-10 bg-gradient-to-b from-[#F8FAFF] via-white to-[#EEF4FF]/60 border-b border-[#DBEAFE]/90 overflow-hidden">
         {/* Subtle Dotted Pattern */}
         <div
           aria-hidden="true"
@@ -354,7 +358,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
           {/* 1. Upper Section: Eyebrow Pill (Hero Section Color Coding) */}
-          <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 max-w-full rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[11px] min-[360px]:text-[12px] sm:text-[13px] font-bold tracking-[0.12em] uppercase mb-5">
+          <div className="inline-flex items-center gap-2 h-[32px] sm:h-[34px] px-3 sm:px-4 max-w-full rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[11px] min-[360px]:text-[12px] sm:text-[13px] font-bold tracking-[0.12em] uppercase mb-3.5 sm:mb-5">
             <span
               className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
               aria-hidden="true"
@@ -411,28 +415,28 @@ export const HomePage: React.FC<HomePageProps> = ({
           </motion.h2>
 
           {/* 3. Subtitle */}
-          <p className="mt-5 !font-['Inter',sans-serif] font-medium text-[15px] sm:text-[17px] md:text-[18px] text-slate-600 leading-[1.7] max-w-[740px] mx-auto">
+          <p className="mt-3 sm:mt-5 !font-['Inter',sans-serif] font-medium text-[13.5px] sm:text-[17px] md:text-[18px] text-slate-600 leading-[1.6] sm:leading-[1.7] max-w-[740px] mx-auto line-clamp-3 sm:line-clamp-none">
             Every business faces distinct operational challenges. IAMTECHNI brings design, full-stack development, artificial intelligence, cloud infrastructure, and growth engineering together into solutions engineered for long-term reliability.
           </p>
 
           {/* 4. Upper Feature Boxes: Strongly Typed & Multi-Cloud */}
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 w-full max-w-[720px] mx-auto">
-            <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE] shadow-[0_4px_16px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-left transition-all duration-200 hover:border-[#93C5FD] hover:shadow-[0_8px_24px_rgba(30,58,138,0.12)]">
-              <div className="flex items-center gap-2 text-[#1E3A8A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-sm sm:text-[15px] mb-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+          <div className="mt-5 sm:mt-8 grid grid-cols-2 gap-2.5 sm:gap-5 w-full max-w-[720px] mx-auto">
+            <div className="rounded-2xl p-3 sm:p-5 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE] shadow-[0_4px_16px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-left transition-all duration-200 hover:border-[#93C5FD] hover:shadow-[0_8px_24px_rgba(30,58,138,0.12)]">
+              <div className="flex items-center gap-1.5 sm:gap-2 text-[#1E3A8A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-xs sm:text-[15px] mb-1 sm:mb-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2563EB] shrink-0" />
                 <span>Strongly Typed</span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+              <p className="text-[11px] sm:text-sm text-slate-600 font-medium leading-snug sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
                 TypeScript strict mode across API &amp; client contracts.
               </p>
             </div>
 
-            <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE] shadow-[0_4px_16px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-left transition-all duration-200 hover:border-[#93C5FD] hover:shadow-[0_8px_24px_rgba(30,58,138,0.12)]">
-              <div className="flex items-center gap-2 text-[#1E3A8A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-sm sm:text-[15px] mb-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+            <div className="rounded-2xl p-3 sm:p-5 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE] shadow-[0_4px_16px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-left transition-all duration-200 hover:border-[#93C5FD] hover:shadow-[0_8px_24px_rgba(30,58,138,0.12)]">
+              <div className="flex items-center gap-1.5 sm:gap-2 text-[#1E3A8A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-xs sm:text-[15px] mb-1 sm:mb-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2563EB] shrink-0" />
                 <span>Multi-Cloud</span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+              <p className="text-[11px] sm:text-sm text-slate-600 font-medium leading-snug sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
                 Zero vendor lock-in across AWS &amp; Azure runtimes.
               </p>
             </div>
@@ -485,7 +489,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             return (
               <div
-                className="mt-12 sm:mt-14 w-full max-w-full pt-2 overflow-hidden"
+                className="mt-7 sm:mt-14 w-full max-w-full pt-1 sm:pt-2 overflow-hidden"
                 aria-label="IAMTECHNI website technology stack"
               >
                 {/* Tablet (md) & Desktop (lg+): Exactly Three Centered Rows with Equal Spacing */}
@@ -500,30 +504,30 @@ export const HomePage: React.FC<HomePageProps> = ({
                   ))}
                 </div>
 
-                {/* Mobile (<md): Clean Responsive 2/3-Column Technology Grid (No Endless Auto-Marquee) */}
-                <div className="grid grid-cols-2 min-[390px]:grid-cols-3 md:hidden gap-2.5 w-full">
-                  {toolRows.flat().map((tool) => {
+                {/* Mobile (<md): Compact 3-Column Core Stack Grid (12 primary tools) */}
+                <div className="grid grid-cols-3 md:hidden gap-2 w-full">
+                  {toolRows.flat().slice(0, 12).map((tool) => {
                     const ToolIcon = tool.icon;
                     const displayLabel =
                       tool.name === 'Google Cloud'
-                        ? 'Google Cloud'
+                        ? 'GCP'
                         : tool.name === 'Tailwind CSS'
-                        ? 'Tailwind CSS'
+                        ? 'Tailwind'
                         : tool.name;
                     return (
                       <div
                         key={`tech-mobile-grid-${tool.name}`}
-                        className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white/90 border border-[#DBEAFE] shadow-[0_2px_10px_rgba(30,58,138,0.05)] min-w-0"
+                        className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-white/90 border border-[#DBEAFE] shadow-[0_2px_10px_rgba(30,58,138,0.05)] min-w-0"
                       >
                         {ToolIcon && (
                           <span
                             className="shrink-0 flex items-center justify-center"
                             style={{ color: tool.brandColor || '#2563EB' }}
                           >
-                            <ToolIcon className="w-4 h-4" />
+                            <ToolIcon className="w-3.5 h-3.5" />
                           </span>
                         )}
-                        <span className="text-xs font-bold text-[#1E3A8A] truncate">
+                        <span className="text-[11px] font-bold text-[#1E3A8A] truncate">
                           {displayLabel}
                         </span>
                       </div>
@@ -535,22 +539,27 @@ export const HomePage: React.FC<HomePageProps> = ({
           })()}
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
 
       {/* ========================================================================= */}
       {/* 3.5 CORE ADVANTAGES (Scroll-Animated Pastel Frame + Meadow Cards + Original Content) */}
       {/* ========================================================================= */}
-      <PrinciplesScrollSection
-        onNavigate={onNavigate}
-        prefersReducedMotion={Boolean(prefersReducedMotion)}
-      />
+      <MobileSectionSkeletonWrapper variant="principles" sectionIndex={2}>
+        <PrinciplesScrollSection
+          onNavigate={onNavigate}
+          prefersReducedMotion={Boolean(prefersReducedMotion)}
+        />
+      </MobileSectionSkeletonWrapper>
 
       {/* ========================================================================= */}
       {/* 2.5 ENTERPRISE SOLUTIONS & ARCHITECTURE MATRIX (Relevant to IAMTECHNI)     */}
       {/* ========================================================================= */}
-      <EnterpriseSolutionsMatrix
-        onNavigate={onNavigate}
-        onOpenProjectModal={onOpenProjectModal}
-      />
+      <MobileSectionSkeletonWrapper variant="matrix" sectionIndex={3}>
+        <EnterpriseSolutionsMatrix
+          onNavigate={onNavigate}
+          onOpenProjectModal={onOpenProjectModal}
+        />
+      </MobileSectionSkeletonWrapper>
 
       {/* ========================================================================= */}
       {/* 3. CAPABILITIES DIRECTORY (Legacy Services Section)                       */}
@@ -561,52 +570,55 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================================= */}
       {/* 4. FEATURED PROJECTS (Same Carousel Component as Services Section)        */}
       {/* ========================================================================= */}
-      <ShowcaseCardCarouselSection
-        sectionId="projects"
-        eyebrow="Project Showcase"
-        heading="Ideas transformed into digital experiences."
-        subtitle="Explore architectural concept demonstrations detailing business challenges, solution topologies, and verified outcomes."
-        items={(() => {
-          const allUniqueTools = getAllUniqueTools();
-          return projectsData.map((project): ShowcaseCarouselItem => {
-            const primaryServiceSlug =
-              project.relatedServices?.[0]?.route.replace('/services/', '') ||
-              project.category;
-            return {
-              id: project.id,
-              slug: project.id,
-              title: project.title,
-              category: `${project.category} · ${project.industry}`,
-              summary: project.tagline,
-              icon: getServiceIcon(primaryServiceSlug),
-              highlights: (project.verifiedOutcomes || project.keyFeatures || []).slice(0, 2),
-              stackLabel: 'Key Stack & Tools',
-              tools: project.techStack.slice(0, 4).map((techName) => {
-                const matchedTool = allUniqueTools.find(
-                  (t) =>
-                    t.name.toLowerCase() === techName.toLowerCase() ||
-                    techName.toLowerCase().includes(t.name.toLowerCase())
-                );
-                return {
-                  name: techName,
-                  icon: matchedTool?.icon,
-                  brandColor: matchedTool?.brandColor,
-                };
-              }),
-              ctaLabel: 'View Case Study',
-              onCtaClick: () => onOpenCaseStudy(project),
-            };
-          });
-        })()}
-        allItemsLabel="All Projects"
-        onAllItemsClick={() => onNavigate('/portfolio')}
-      />
+      <MobileSectionSkeletonWrapper variant="carousel" sectionIndex={4}>
+        <ShowcaseCardCarouselSection
+          sectionId="projects"
+          eyebrow="Project Showcase"
+          heading="Ideas transformed into digital experiences."
+          subtitle="Explore architectural concept demonstrations detailing business challenges, solution topologies, and verified outcomes."
+          items={(() => {
+            const allUniqueTools = getAllUniqueTools();
+            return projectsData.map((project): ShowcaseCarouselItem => {
+              const primaryServiceSlug =
+                project.relatedServices?.[0]?.route.replace('/services/', '') ||
+                project.category;
+              return {
+                id: project.id,
+                slug: project.id,
+                title: project.title,
+                category: `${project.category} · ${project.industry}`,
+                summary: project.tagline,
+                icon: getServiceIcon(primaryServiceSlug),
+                highlights: (project.verifiedOutcomes || project.keyFeatures || []).slice(0, 2),
+                stackLabel: 'Key Stack & Tools',
+                tools: project.techStack.slice(0, 4).map((techName) => {
+                  const matchedTool = allUniqueTools.find(
+                    (t) =>
+                      t.name.toLowerCase() === techName.toLowerCase() ||
+                      techName.toLowerCase().includes(t.name.toLowerCase())
+                  );
+                  return {
+                    name: techName,
+                    icon: matchedTool?.icon,
+                    brandColor: matchedTool?.brandColor,
+                  };
+                }),
+                ctaLabel: 'View Case Study',
+                onCtaClick: () => onOpenCaseStudy(project),
+              };
+            });
+          })()}
+          allItemsLabel="All Projects"
+          onAllItemsClick={() => onNavigate('/portfolio')}
+        />
+      </MobileSectionSkeletonWrapper>
 
       {/* ========================================================================= */}
       {/* 5. ENGINEERING APPROACH: 7-Stage Interactive Process Timeline             */}
       {/* ========================================================================= */}
+      <MobileSectionSkeletonWrapper variant="methodology" sectionIndex={5}>
       <section
-        className="py-24 bg-[#F4F7FE]/70 border-b border-slate-200 overflow-hidden"
+        className="py-10 sm:py-24 bg-[#F4F7FE]/70 border-b border-slate-200 overflow-hidden"
         onMouseEnter={() => setProcessHovered(true)}
         onMouseLeave={() => setProcessHovered(false)}
       >
@@ -616,7 +628,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-3xl mb-12"
+            className="max-w-3xl mb-6 sm:mb-12"
           >
             <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 mb-3 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
               <span
@@ -689,7 +701,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     )
                   }
                   aria-label="Previous methodology stage"
-                  className="w-9 h-9 rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
                 >
                   <ChevronRight className="w-4 h-4 rotate-180" />
                 </button>
@@ -701,7 +713,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     )
                   }
                   aria-label="Next methodology stage"
-                  className="w-9 h-9 rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -958,8 +970,8 @@ export const HomePage: React.FC<HomePageProps> = ({
                 )}
               </motion.div>
 
-              {/* Middle Row: Timeline Card (b) + Progress Ring Card (c) */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+              {/* Middle Row: Timeline Card (b) + Progress Ring Card (c) — Hidden on mobile (<md) where top stage chip row + counter already provide instant stage navigation */}
+              <div className="hidden md:grid grid-cols-1 md:grid-cols-12 gap-5">
                 {/* b) Timeline Card: 7-Stage Horizontal Track */}
                 <motion.div
                   variants={{
@@ -1183,7 +1195,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                         `Process Discussion: Stage ${processStages[activeProcessStep].title}`
                       )
                     }
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start sm:self-auto"
+                    className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start sm:self-auto"
                   >
                     <span>Discuss Your Workflow</span>
                     <ArrowRight className="w-3.5 h-3.5 text-white" />
@@ -1194,29 +1206,38 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
 
       {/* ========================================================================= */}
       {/* 6. SELECTIVE DARK NAVY SECTION: AI & High-Performance Innovation          */}
       {/* ========================================================================= */}
-      <AIBookSection onNavigate={onNavigate} />
+      <MobileSectionSkeletonWrapper variant="dark-book" sectionIndex={6}>
+        <AIBookSection onNavigate={onNavigate} />
+      </MobileSectionSkeletonWrapper>
 
       {/* ========================================================================= */}
       {/* 7. INDUSTRIES SERVED (Auto-Changing Stacked Card Showcase)                */}
       {/* ========================================================================= */}
-      <BusinessChallengesShowcase onNavigate={onNavigate} />
+      <MobileSectionSkeletonWrapper variant="showcase" sectionIndex={7}>
+        <BusinessChallengesShowcase onNavigate={onNavigate} />
+      </MobileSectionSkeletonWrapper>
 
       {/* ========================================================================= */}
       {/* 8. LATEST ENGINEERING INSIGHTS (Dark Glass 3D Flip Cards)                 */}
       {/* ========================================================================= */}
-      <EngineeringKnowledgeSection onNavigate={onNavigate} />
+      <MobileSectionSkeletonWrapper variant="dark-cards" sectionIndex={8}>
+        <EngineeringKnowledgeSection onNavigate={onNavigate} />
+      </MobileSectionSkeletonWrapper>
 
       {/* ========================================================================= */}
       {/* 9. UNIFIED COLLABORATE & DIRECT INQUIRIES SECTION                         */}
       {/* ========================================================================= */}
-      <CollaborateSection
-        onNavigate={onNavigate}
-        onOpenProjectModal={onOpenProjectModal}
-      />
+      <MobileSectionSkeletonWrapper variant="collaborate" sectionIndex={9}>
+        <CollaborateSection
+          onNavigate={onNavigate}
+          onOpenProjectModal={onOpenProjectModal}
+        />
+      </MobileSectionSkeletonWrapper>
     </div>
   );
 };
@@ -1383,7 +1404,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
   return (
     <section
       ref={sectionRef}
-      className="relative py-14 sm:py-24 px-3 sm:px-6 lg:px-8 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200/70 overflow-hidden"
+      className="relative py-9 sm:py-24 px-3 sm:px-6 lg:px-8 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-slate-200/70 overflow-hidden"
     >
       {/* Clean Top-to-Bottom Gradient Layer (#F5F8FC -> #FFFFFF) */}
       <div
@@ -1411,7 +1432,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
           scale: frameScale,
           opacity: frameOpacity,
         }}
-        className="relative z-10 max-w-7xl mx-auto bg-white rounded-[32px] py-[28px] px-[16px] sm:pt-[56px] sm:px-[40px] sm:pb-[48px] shadow-[0_24px_64px_rgba(15,23,42,0.08)] border border-white/90"
+        className="relative z-10 max-w-7xl mx-auto bg-white rounded-[26px] sm:rounded-[32px] py-5 px-3.5 sm:pt-[56px] sm:px-[40px] sm:pb-[48px] shadow-[0_24px_64px_rgba(15,23,42,0.08)] border border-white/90"
       >
         {/* 2. HEADER (inside the white card, centered) */}
         <motion.div
@@ -1419,7 +1440,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             y: headerY,
             opacity: headerOpacity,
           }}
-          className="flex flex-col items-center text-center mb-9 sm:mb-12"
+          className="flex flex-col items-center text-center mb-6 sm:mb-12"
         >
           {/* Headline — Exact Hero Section Font Family, Pure Dark Blue (#1E3A8A), No Hover Color Change, Zoom-In/Zoom-Out on Hover */}
           <motion.h2
@@ -1465,14 +1486,14 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
           </p>
 
           {/* Buttons — Dark Blue (#1E3A8A) with Softer Hover (#1E3A8A/80) */}
-          <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full sm:w-auto max-w-[280px] sm:max-w-none">
+          <div className="mt-4 sm:mt-6 grid grid-cols-2 sm:flex sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3 w-full sm:w-auto max-w-[330px] sm:max-w-none">
             <a
               href="/contact"
               onClick={(e) => {
                 e.preventDefault();
                 onNavigate('/contact');
               }}
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
             >
               <span>Start a Project</span>
             </a>
@@ -1487,7 +1508,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
                   onNavigate('/services');
                 }
               }}
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-5 py-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
             >
               <span>Explore Services</span>
             </a>
@@ -1497,7 +1518,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
         {/* 3. PHOTO CARDS + ORIGINAL ICON, TITLE, AND PARAGRAPH DIRECTLY BELOW EACH */}
         <div
           ref={cardsRowRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-row lg:items-start gap-8 sm:gap-6 lg:gap-[18px]"
+          className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-row lg:items-start gap-5 sm:gap-6 lg:gap-[18px]"
         >
           {/* --------------------------------------------------------------- */}
           {/* LEFT CARD: Modern Software Craftsmanship                        */}
@@ -1511,7 +1532,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             className="group/card md:order-2 lg:order-1 lg:w-[29.5%] shrink-0 flex flex-col items-center"
           >
             {/* Card Container */}
-            <div className="group w-full h-[210px] sm:h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-4 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
+            <div className="group w-full h-[170px] sm:h-[220px] lg:h-[240px] rounded-[20px] sm:rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 sm:p-4 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
               <motion.div
                 style={{ y: photoParallaxY }}
                 className="absolute -inset-y-5 inset-x-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.9)_0%,rgba(219,234,254,0.45)_60%,rgba(239,246,255,0.8)_100%)] pointer-events-none"
@@ -1559,14 +1580,14 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             </div>
 
             {/* Original Icon, Title, and Paragraph Directly Below Photo Card */}
-            <div className="mt-5 flex flex-col items-center text-center px-1">
-              <div className="w-10 h-10 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
+            <div className="mt-3 sm:mt-5 flex flex-col items-center text-center px-1">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors duration-200">
                 <Code2 className="w-[18px] h-[18px]" />
               </div>
-              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[16.5px] sm:text-[19px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-1.5 sm:mb-2 leading-snug">
                 Modern Software Craftsmanship
               </h3>
-              <p className="text-[14.5px] sm:text-[15px] text-slate-600 font-medium leading-relaxed">
+              <p className="text-[13px] sm:text-[15px] text-slate-600 font-medium leading-relaxed line-clamp-2 sm:line-clamp-none">
                 We write clean, strongly-typed TypeScript and Python code, enforce component modularity, and create architectures designed for maintainability and rapid onboarding.
               </p>
             </div>
@@ -1583,7 +1604,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             className="group/card md:col-span-2 md:order-1 lg:order-2 lg:w-[41%] shrink-0 flex flex-col items-center"
           >
             {/* Card Container */}
-            <div className="group w-full h-[220px] sm:h-[260px] lg:h-[300px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-4 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_16px_38px_rgba(30,58,138,0.10)] hover:shadow-[0_24px_50px_rgba(30,58,138,0.18)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
+            <div className="group w-full h-[180px] sm:h-[260px] lg:h-[300px] rounded-[20px] sm:rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 sm:p-4 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_16px_38px_rgba(30,58,138,0.10)] hover:shadow-[0_24px_50px_rgba(30,58,138,0.18)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
               <motion.div
                 style={{ y: photoParallaxY }}
                 className="absolute -inset-y-5 inset-x-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.92)_0%,rgba(219,234,254,0.45)_60%,rgba(239,246,255,0.8)_100%)] pointer-events-none"
@@ -1689,14 +1710,14 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             </div>
 
             {/* Original Icon, Title, and Paragraph Directly Below Photo Card */}
-            <div className="mt-5 flex flex-col items-center text-center px-2 max-w-[420px]">
-              <div className="w-10 h-10 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
+            <div className="mt-3 sm:mt-5 flex flex-col items-center text-center px-2 max-w-[420px]">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors duration-200">
                 <Cpu className="w-[18px] h-[18px]" />
               </div>
-              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[16.5px] sm:text-[19px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-1.5 sm:mb-2 leading-snug">
                 Practical, Grounded Intelligence
               </h3>
-              <p className="text-[14.5px] sm:text-[15px] text-slate-600 font-medium leading-relaxed">
+              <p className="text-[13px] sm:text-[15px] text-slate-600 font-medium leading-relaxed line-clamp-2 sm:line-clamp-none">
                 We deploy Retrieval-Augmented Generation (RAG) and private document search with strict citation traceability, ensuring your proprietary data never leaks into public models.
               </p>
             </div>
@@ -1714,7 +1735,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             className="group/card md:order-3 lg:order-3 lg:w-[29.5%] shrink-0 flex flex-col items-center"
           >
             {/* Card Container */}
-            <div className="group w-full h-[210px] sm:h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-4 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
+            <div className="group w-full h-[170px] sm:h-[220px] lg:h-[240px] rounded-[20px] sm:rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 sm:p-4 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
               <motion.div
                 style={{ y: photoParallaxY }}
                 className="absolute -inset-y-5 inset-x-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.9)_0%,rgba(219,234,254,0.45)_60%,rgba(239,246,255,0.8)_100%)] pointer-events-none"
@@ -1779,14 +1800,14 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             </div>
 
             {/* Original Icon, Title, and Paragraph Directly Below Photo Card */}
-            <div className="mt-5 flex flex-col items-center text-center px-1">
-              <div className="w-10 h-10 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
+            <div className="mt-3 sm:mt-5 flex flex-col items-center text-center px-1">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-2 sm:mb-3 transition-colors duration-200">
                 <ShieldCheck className="w-[18px] h-[18px]" />
               </div>
-              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[16.5px] sm:text-[19px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-1.5 sm:mb-2 leading-snug">
                 Enterprise Reliability &amp; Security
               </h3>
-              <p className="text-[14.5px] sm:text-[15px] text-slate-600 font-medium leading-relaxed">
+              <p className="text-[13px] sm:text-[15px] text-slate-600 font-medium leading-relaxed line-clamp-2 sm:line-clamp-none">
                 Automated CI/CD deployment pipelines, defensive hardening, OWASP security best practices, and proactive cloud FinOps governance that prevent budget surprises.
               </p>
             </div>

@@ -66,7 +66,7 @@ export const DirectInquiriesCard: React.FC<DirectInquiriesCardProps> = ({
             onMouseLeave={handleButtonLeave}
             onFocus={() => handleButtonHover(0)}
             onBlur={handleButtonLeave}
-            className={`inline-flex items-center gap-2.5 px-4 py-2.5 bg-teal-950 border text-teal-200 hover:text-white rounded-xl text-xs font-semibold transition-all duration-300 group ${
+            className={`min-h-[44px] min-w-[44px] inline-flex items-center gap-2.5 px-4 py-2.5 bg-teal-950 border text-teal-200 hover:text-white rounded-xl text-xs font-semibold transition-all duration-300 group ${
               activeScene === 0
                 ? 'border-teal-400 ring-4 ring-teal-500/30 shadow-[0_8px_24px_rgba(20,184,166,0.28)] text-white'
                 : 'border-teal-500/40 hover:border-teal-400 shadow-sm'
@@ -93,7 +93,7 @@ export const DirectInquiriesCard: React.FC<DirectInquiriesCardProps> = ({
             onMouseLeave={handleButtonLeave}
             onFocus={() => handleButtonHover(1)}
             onBlur={handleButtonLeave}
-            className={`inline-flex items-center gap-2.5 px-4 py-2.5 bg-blue-950 border text-blue-200 hover:text-white rounded-xl text-xs font-semibold transition-all duration-300 group ${
+            className={`min-h-[44px] min-w-[44px] inline-flex items-center gap-2.5 px-4 py-2.5 bg-blue-950 border text-blue-200 hover:text-white rounded-xl text-xs font-semibold transition-all duration-300 group ${
               activeScene === 1
                 ? 'border-blue-400 ring-4 ring-blue-500/30 shadow-[0_8px_24px_rgba(59,130,246,0.28)] text-white'
                 : 'border-blue-500/40 hover:border-blue-400 shadow-sm'
@@ -121,7 +121,7 @@ export const DirectInquiriesCard: React.FC<DirectInquiriesCardProps> = ({
             onMouseLeave={handleButtonLeave}
             onFocus={() => handleButtonHover(2)}
             onBlur={handleButtonLeave}
-            className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-950 hover:bg-indigo-900 text-indigo-100 hover:text-white border rounded-xl text-xs font-semibold transition-all duration-300 active:scale-98 cursor-pointer ${
+            className={`min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-950 hover:bg-indigo-900 text-indigo-100 hover:text-white border rounded-xl text-xs font-semibold transition-all duration-300 active:scale-98 cursor-pointer ${
               activeScene === 2
                 ? 'border-indigo-400 ring-4 ring-indigo-500/30 shadow-[0_8px_24px_rgba(99,102,241,0.3)] text-white'
                 : 'border-indigo-500/40 shadow-sm'
@@ -140,7 +140,7 @@ export const DirectInquiriesCard: React.FC<DirectInquiriesCardProps> = ({
             onMouseLeave={handleButtonLeave}
             onFocus={() => handleButtonHover(3)}
             onBlur={handleButtonLeave}
-            className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-[#0F1B3D] hover:bg-slate-50 border rounded-xl text-xs font-bold transition-all duration-300 active:scale-98 cursor-pointer ${
+            className={`min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-[#0F1B3D] hover:bg-slate-50 border rounded-xl text-xs font-bold transition-all duration-300 active:scale-98 cursor-pointer ${
               activeScene === 3
                 ? 'border-[#1266E8] ring-4 ring-[#1266E8]/25 shadow-[0_8px_24px_rgba(18,102,232,0.22)]'
                 : 'border-slate-300 shadow-sm'

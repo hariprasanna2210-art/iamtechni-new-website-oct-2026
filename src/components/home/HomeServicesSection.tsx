@@ -346,7 +346,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
       id={sectionId}
       aria-labelledby={`${sectionId}-section-title`}
       onKeyDown={handleKeyDown}
-      className="relative w-full py-14 sm:py-18 lg:py-22 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-[#DBEAFE]/80 overflow-hidden scroll-mt-16"
+      className="relative w-full py-9 sm:py-18 lg:py-22 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] border-b border-[#DBEAFE]/80 overflow-hidden scroll-mt-16"
     >
       {stageAnchorId && <div id={stageAnchorId} className="sr-only" aria-hidden="true" />}
 
@@ -354,7 +354,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
         {/* ===================================================================== */}
         {/* 1. MODERN SECTION HEADER                                              */}
         {/* ===================================================================== */}
-        <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-4 mb-8 sm:mb-10">
+        <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-2.5 sm:space-y-4 mb-5 sm:mb-10">
           {/* Eyebrow Pill */}
           <div className="inline-flex items-center gap-2 h-[32px] px-3 sm:px-4 max-w-full rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-[#2563EB] font-mono text-[10.5px] min-[360px]:text-xs font-bold tracking-widest uppercase">
             <span
@@ -404,7 +404,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
           </motion.h2>
 
           {/* Subtitle Paragraph */}
-          <p className="!font-['Inter','Plus_Jakarta_Sans',sans-serif] text-[15px] sm:text-base lg:text-[17px] text-slate-600 font-medium leading-[1.68] max-w-2xl mx-auto">
+          <p className="!font-['Inter','Plus_Jakarta_Sans',sans-serif] text-[13.5px] sm:text-base lg:text-[17px] text-slate-600 font-medium leading-[1.55] sm:leading-[1.68] max-w-2xl mx-auto line-clamp-2 sm:line-clamp-none">
             {subtitle}
           </p>
         </div>
@@ -456,7 +456,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                     aria-selected={isActive}
                     aria-controls={`${sectionId}-card-${item.slug || item.id}`}
                     onClick={() => handleSelectItem(index, true, true)}
-                    className={`relative inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[40px] rounded-xl text-xs sm:text-[13px] font-semibold transition-colors duration-200 whitespace-nowrap shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
+                    className={`relative inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[44px] min-w-[44px] md:min-h-[40px] md:min-w-0 rounded-xl text-xs sm:text-[13px] font-semibold transition-colors duration-200 whitespace-nowrap shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
                       isActive
                         ? 'text-white font-bold'
                         : 'text-[#1E3A8A]/85 hover:text-[#1E3A8A] hover:bg-white/70'
@@ -534,7 +534,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                 type="button"
                 onClick={handlePrev}
                 aria-label="Previous item"
-                className="w-9 h-9 rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -542,7 +542,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                 type="button"
                 onClick={handleNext}
                 aria-label="Next item"
-                className="w-9 h-9 rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -637,7 +637,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                     }`}
                   >
                     <div
-                      className={`group relative h-full flex flex-col justify-between p-5 sm:p-5 rounded-2xl overflow-hidden backdrop-blur-md transition-all duration-[400ms] ease-out ${
+                      className={`group relative h-full flex flex-col justify-between p-4 sm:p-5 rounded-2xl overflow-hidden backdrop-blur-md transition-all duration-[400ms] ease-out ${
                         isCenter
                           ? 'bg-gradient-to-br from-[#1E3A8A]/95 via-[#1E3A8A]/90 to-[#2563EB]/90 border border-[#60A5FA]/40 shadow-[0_18px_38px_rgba(30,58,138,0.24),inset_0_1px_0_rgba(255,255,255,0.22)] -translate-y-1'
                           : 'bg-gradient-to-br from-[#FFFFFF] via-[#F8FBFF] to-[#EEF4FF]/85 border border-[#DBEAFE] shadow-[0_6px_20px_rgba(30,58,138,0.06),inset_0_1px_0_rgba(255,255,255,0.95)] hover:border-[#93C5FD]'
@@ -706,7 +706,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
 
                         {/* Concise Description */}
                         <p
-                          className={`text-[13.5px] sm:text-xs lg:text-[13px] leading-relaxed line-clamp-3 sm:line-clamp-2 mb-3.5 transition-colors duration-[400ms] ${
+                          className={`text-[13px] sm:text-xs lg:text-[13px] leading-relaxed line-clamp-2 mb-3 transition-colors duration-[400ms] ${
                             isCenter
                               ? 'text-blue-50/95'
                               : 'text-slate-600 font-medium'
@@ -761,13 +761,15 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                               {item.stackLabel || 'Key Stack & Tools'}
                             </div>
                             <div className="flex items-center flex-wrap gap-1.5">
-                              {tools.map((tool) => {
+                              {tools.map((tool, tIdx) => {
                                 const ToolIcon = tool.icon;
                                 return (
                                   <div
                                     key={tool.name}
                                     title={tool.name}
-                                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold transition-colors duration-[400ms] ${
+                                    className={`${
+                                      tIdx >= 3 ? 'hidden sm:inline-flex' : 'inline-flex'
+                                    } items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold transition-colors duration-[400ms] ${
                                       isCenter
                                         ? 'bg-white/14 border border-white/20 text-white'
                                         : 'bg-white border border-[#DBEAFE] text-[#1E3A8A] shadow-2xs'
@@ -801,7 +803,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                             }}
                             className={`inline-flex items-center gap-1.5 text-xs font-bold transition-all duration-200 group/link cursor-pointer ${
                               isCenter
-                                ? 'px-3.5 py-2 min-h-[38px] rounded-lg bg-white text-[#1E3A8A] hover:bg-[#EEF4FF] shadow-xs'
+                                ? 'px-3.5 py-2 min-h-[44px] min-w-[44px] md:min-h-[38px] md:min-w-0 rounded-lg bg-white text-[#1E3A8A] hover:bg-[#EEF4FF] shadow-xs'
                                 : 'py-1.5 text-[#1E3A8A] hover:text-[#2563EB]'
                             }`}
                           >
@@ -862,9 +864,9 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
           {/* =================================================================== */}
           {/* 4. DYNAMIC INTERACTIVE PLAYBACK & PROGRESS DOCK                     */}
           {/* =================================================================== */}
-          <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 px-3.5 sm:px-4 py-3 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.06)] max-w-3xl mx-auto">
-            {/* Left: Active Item Counter & Dynamic Title */}
-            <div className="flex items-center justify-center sm:justify-start gap-2 min-w-0 max-w-full">
+          <div className="mt-3 sm:mt-5 flex flex-row items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.06)] max-w-3xl mx-auto">
+            {/* Left: Active Item Counter & Dynamic Title (hidden on mobile where top bar already displays it) */}
+            <div className="hidden sm:flex items-center justify-start gap-2 min-w-0 max-w-full">
               <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-[#1E3A8A] text-white font-mono text-xs font-bold tabular-nums shrink-0">
                 {String(currentIndex + 1).padStart(2, '0')} / {String(totalItems).padStart(2, '0')}
               </span>
@@ -882,9 +884,9 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
               </AnimatePresence>
             </div>
 
-            {/* Center: Interactive Segmented Progress Dots */}
+            {/* Center: Interactive Segmented Progress Dots (Desktop/Tablet) + Visual Counter Pill (Mobile) */}
             <div
-              className="flex flex-wrap items-center justify-center gap-1.5 max-w-full"
+              className="hidden md:flex flex-wrap items-center justify-center gap-1.5 max-w-full"
               role="tablist"
               aria-label={`${sectionId} carousel slide indicators`}
             >
@@ -914,6 +916,14 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                 );
               })}
             </div>
+            <div className="flex md:hidden items-center gap-2 min-w-0" aria-hidden="true">
+              <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-[#1E3A8A] text-white font-mono text-xs font-bold tabular-nums shrink-0">
+                {String(currentIndex + 1).padStart(2, '0')} / {String(totalItems).padStart(2, '0')}
+              </span>
+              <span className="text-xs font-bold text-[#1E3A8A] truncate">
+                {activeItem.title}
+              </span>
+            </div>
 
             {/* Right: Play/Pause + Prev/Next + All Items Link */}
             <div className="flex items-center justify-center gap-2 shrink-0 max-w-full">
@@ -922,7 +932,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                 onClick={() => setIsPausedByUser((p) => !p)}
                 aria-label={isPausedByUser ? 'Resume auto-slide' : 'Pause auto-slide'}
                 title={isPausedByUser ? 'Resume auto-slide' : 'Pause auto-slide'}
-                className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] sm:w-8 sm:h-8 sm:min-w-0 sm:min-h-0 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
               >
                 {isPausedByUser ? (
                   <Play className="w-3.5 h-3.5 fill-current" />
@@ -935,7 +945,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                 type="button"
                 onClick={handlePrev}
                 aria-label="Previous slide"
-                className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
+                className="hidden sm:flex w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] items-center justify-center transition-colors cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -944,17 +954,17 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                 type="button"
                 onClick={handleNext}
                 aria-label="Next slide"
-                className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
+                className="hidden sm:flex w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] items-center justify-center transition-colors cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
 
-              <div className="w-px h-5 bg-[#DBEAFE] mx-0.5" aria-hidden="true" />
+              <div className="hidden sm:block w-px h-5 bg-[#DBEAFE] mx-0.5" aria-hidden="true" />
 
               <button
                 type="button"
                 onClick={onAllItemsClick}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[44px] min-w-[44px] sm:min-h-[36px] sm:min-w-0 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
               >
                 <Layers className="w-3.5 h-3.5 shrink-0" />
                 <span>{allItemsLabel}</span>

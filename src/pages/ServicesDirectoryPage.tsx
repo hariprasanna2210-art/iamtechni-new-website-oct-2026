@@ -7,6 +7,7 @@ import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon } from '../utils/serviceIcons';
 import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
+import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 
 interface ServicesDirectoryPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -97,10 +98,11 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
       />
 
       {/* Services Grid Section */}
-      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
+      <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={0} cardCount={3}>
+      <section className="py-10 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Search & Category Filter Bar */}
-          <div className="mb-12 pb-8 border-b border-slate-200/80 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          <div className="mb-6 sm:mb-12 pb-5 sm:pb-8 border-b border-slate-200/80 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4">
             <div className="relative w-full md:w-96">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
@@ -117,7 +119,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`min-h-[38px] px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                  className={`min-h-[44px] min-w-[44px] md:min-h-[38px] md:min-w-0 px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
                     selectedCategory === cat
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
@@ -130,20 +132,20 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
           </div>
 
           {filteredServices.length === 0 ? (
-            <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+            <div className="text-center py-12 sm:py-16 bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
               <p className="text-slate-600 text-sm">No services matched your query "{searchQuery}".</p>
               <button
                 onClick={() => {
                   setSearchQuery('');
                   setSelectedCategory('All');
                 }}
-                className="mt-3 text-xs font-semibold text-[#2563EB] underline cursor-pointer"
+                className="mt-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-3 text-xs font-semibold text-[#2563EB] underline cursor-pointer"
               >
                 Reset filters
               </button>
             </div>
           ) : (
-            <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.08}>
+            <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8" staggerChildren={0.08}>
               {filteredServices.map((service, idx) => {
                 // Deterministic color assignment cycling through 8 distinct palettes
                 const color = getCardColorToken(idx);
@@ -153,38 +155,41 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                   <ScrollRevealItem key={service.id} className="h-full">
                     <div
                       onClick={() => onNavigate(`/services/${service.slug}` as PageRoute)}
-                      className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-xs interactive-card-lift`}
+                      className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-4 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 cursor-pointer group shadow-xs interactive-card-lift`}
                     >
                       <div>
                         {/* Visual Service Thumbnail Preview */}
-                        <ServiceCardThumbnail slug={service.slug} category={service.category} className="mb-4" />
+                        <ServiceCardThumbnail slug={service.slug} category={service.category} className="mb-3 sm:mb-4" />
 
                         {/* Top Category Badge & Icon */}
-                        <div className="flex items-center justify-between text-xs mb-4">
+                        <div className="flex items-center justify-between text-xs mb-3 sm:mb-4">
                           <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                             {service.category.toUpperCase()}
                           </span>
-                          <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
-                            <ServiceIcon className="w-4.5 h-4.5" />
+                          <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                            <ServiceIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                           </div>
                         </div>
 
-                        <h2 className="text-xl font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors mb-2.5 flex items-center justify-between">
+                        <h2 className="text-lg sm:text-xl font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors mb-2 sm:mb-2.5 flex items-center justify-between">
                           <span>{service.title}</span>
                           <span className={`w-2 h-2 rounded-full ${color.dotBg} shrink-0 opacity-80 group-hover:scale-125 transition-transform`} />
                         </h2>
 
-                        <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed mb-4 line-clamp-3">
+                        <p className="text-[13px] sm:text-sm text-slate-700 leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3">
                           {service.summary}
                         </p>
 
                         {/* Capabilities Bullet List */}
-                        <div className="space-y-1.5 mb-5 text-xs">
+                        <div className="space-y-1.5 mb-3.5 sm:mb-5 text-xs">
                           <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wide">
                             Key Capabilities:
                           </div>
                           {service.capabilities.slice(0, 3).map((cap, i) => (
-                            <div key={i} className="flex items-center gap-2 text-slate-700 text-xs sm:text-[13px]">
+                            <div
+                              key={i}
+                              className={`${i === 2 ? 'hidden sm:flex' : 'flex'} items-center gap-2 text-slate-700 text-xs sm:text-[13px]`}
+                            >
                               <span className={`w-1.5 h-1.5 rounded-full ${color.dotBg} shrink-0`} />
                               <span className="line-clamp-1">{cap.title}</span>
                             </div>
@@ -192,11 +197,11 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                         </div>
 
                         {/* Technology Chips */}
-                        <div className="flex flex-wrap gap-1.5 mb-4">
+                        <div className="flex flex-wrap gap-1.5 mb-3 sm:mb-4">
                           {service.technologies.slice(0, 4).map((tech, i) => (
                             <span
                               key={i}
-                              className="px-2.5 py-0.5 text-[11px] font-mono bg-white/90 text-slate-700 rounded-md border border-slate-200/90"
+                              className={`${i === 3 ? 'hidden sm:inline-block' : 'inline-block'} px-2.5 py-0.5 text-[11px] font-mono bg-white/90 text-slate-700 rounded-md border border-slate-200/90`}
                             >
                               {tech}
                             </span>
@@ -205,7 +210,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                       </div>
 
                       {/* Bottom CTA Action Strip */}
-                      <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold">
+                      <div className="pt-3 sm:pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-semibold">
                         <span className={`${color.accentText} flex items-center gap-1.5 group-hover:underline`}>
                           Explore Service Architecture
                           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -216,7 +221,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                             e.stopPropagation();
                             onStartProject(service.title);
                           }}
-                          className="text-[11px] font-mono text-slate-500 hover:text-slate-900 cursor-pointer"
+                          className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-2 md:px-0 text-[11px] font-mono text-slate-500 hover:text-slate-900 cursor-pointer"
                         >
                           Quick Brief
                         </button>
@@ -229,6 +234,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
           )}
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
     </div>
   );
 };

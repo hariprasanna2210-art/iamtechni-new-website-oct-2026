@@ -97,7 +97,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
     <section
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] text-[#1E3A8A] overflow-hidden border-t border-[#DBEAFE]/80"
+      className="relative py-10 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] text-[#1E3A8A] overflow-hidden border-t border-[#DBEAFE]/80"
     >
       {/* Soft, large blurred gradient glows behind the single sliding row */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -152,7 +152,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                     key={idx}
                     type="button"
                     onClick={() => setActiveSlide(idx)}
-                    className={`relative h-2.5 rounded-full transition-all duration-300 cursor-pointer overflow-hidden ${
+                    className={`hidden md:inline-flex relative h-2.5 rounded-full transition-all duration-300 cursor-pointer overflow-hidden ${
                       isCurrent
                         ? 'w-14 bg-slate-200'
                         : 'w-3 bg-slate-200 hover:bg-slate-300'
@@ -174,7 +174,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                   </button>
                 );
               })}
-              <span className="md:hidden ml-1.5 text-xs font-mono font-bold text-[#1E3A8A]">
+              <span className="md:hidden text-xs font-mono font-bold text-[#1E3A8A]">
                 0{activeSlide + 1} / 03 · Swipe or tap
               </span>
             </div>
@@ -184,7 +184,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                 type="button"
                 onClick={handlePrevSlide}
                 aria-label="Previous slide"
-                className="w-10 h-10 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-10 md:h-10 md:min-w-0 md:min-h-0 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -192,7 +192,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                 type="button"
                 onClick={handleNextSlide}
                 aria-label="Next slide"
-                className="w-10 h-10 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-10 md:h-10 md:min-w-0 md:min-h-0 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -212,7 +212,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                   key={tab.idx}
                   type="button"
                   onClick={() => setActiveSlide(tab.idx)}
-                  className={`px-2.5 py-2 rounded-xl text-[11px] font-bold transition-all cursor-pointer truncate ${
+                  className={`min-h-[44px] min-w-[44px] px-2.5 py-2 rounded-xl text-[11px] font-bold transition-all cursor-pointer truncate flex items-center justify-center ${
                     isCurrent
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'bg-white/90 text-[#1E3A8A] border border-[#DBEAFE]'
@@ -251,11 +251,11 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
             {/* SLIDE 1 – Hero CTA ("READY TO COLLABORATE")                   */}
             {/* ------------------------------------------------------------- */}
             <div className="w-full shrink-0 px-1">
-              <div className="h-full rounded-[20px] bg-white/95 border border-[#EEF1F5] shadow-[0_20px_50px_rgba(15,27,61,0.08)] p-6 sm:p-8 lg:p-10">
-                <div className="grid grid-cols-1 min-[900px]:grid-cols-12 gap-8 lg:gap-10 items-center h-full">
+              <div className="h-full rounded-[20px] bg-white/95 border border-[#EEF1F5] shadow-[0_20px_50px_rgba(15,27,61,0.08)] p-4 sm:p-8 lg:p-10">
+                <div className="grid grid-cols-1 min-[900px]:grid-cols-12 gap-5 sm:gap-8 lg:gap-10 items-center h-full">
                   {/* LEFT COLUMN */}
-                  <div className="min-[900px]:col-span-6 space-y-4 text-left">
-                    <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono font-bold uppercase tracking-widest text-[#2563EB]">
+                  <div className="min-[900px]:col-span-6 space-y-3 sm:space-y-4 text-left">
+                    <div className="inline-flex items-center gap-2 h-[32px] sm:h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono font-bold uppercase tracking-widest text-[#2563EB]">
                       <span className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0" />
                       <span>READY TO COLLABORATE</span>
                     </div>
@@ -264,15 +264,15 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       Have a challenge? Let’s engineer the solution.
                     </h2>
 
-                    <p className="text-[15px] sm:text-base text-slate-600 font-medium leading-relaxed max-w-xl">
+                    <p className="text-[13.5px] sm:text-base text-slate-600 font-medium leading-relaxed max-w-xl">
                       Tell us what you want to build, improve or transform. Let’s explore the right technology and a practical path forward.
                     </p>
 
-                    <div className="pt-2 flex flex-row flex-wrap items-center gap-2.5">
+                    <div className="pt-1 sm:pt-2 flex flex-row flex-wrap items-center gap-2.5">
                       <button
                         type="button"
                         onClick={() => onOpenProjectModal()}
-                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[44px] min-w-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                       >
                         <span>Discuss Your Project</span>
                         <ArrowRight className="w-3.5 h-3.5 text-white" />
@@ -281,7 +281,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       <button
                         type="button"
                         onClick={() => onNavigate('/contact')}
-                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[44px] min-w-[44px] rounded-lg bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                       >
                         <Mail className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
                         <span>Contact IAMTECHNI</span>
@@ -290,12 +290,12 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                   </div>
 
                   {/* RIGHT COLUMN – Overlapping Rounded Photos + Floating SLA Chip */}
-                  <div className="min-[900px]:col-span-6 relative flex justify-center min-[900px]:justify-end py-4">
+                  <div className="min-[900px]:col-span-6 relative flex justify-center min-[900px]:justify-end py-1 sm:py-4">
                     <div className="relative w-full max-w-[440px]">
                       <motion.div
                         animate={prefersReducedMotion ? undefined : { y: [-5, 5, -5] }}
                         transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
-                        className="relative ml-auto w-[84%] h-[250px] sm:h-[290px] rounded-[20px] overflow-hidden border border-[#EEF1F5] bg-slate-100 shadow-[0_20px_50px_rgba(15,27,61,0.08)]"
+                        className="relative ml-auto w-full sm:w-[84%] h-[165px] sm:h-[290px] rounded-[18px] sm:rounded-[20px] overflow-hidden border border-[#EEF1F5] bg-slate-100 shadow-[0_20px_50px_rgba(15,27,61,0.08)]"
                       >
                         <img
                           src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80"
@@ -309,7 +309,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       <motion.div
                         animate={prefersReducedMotion ? undefined : { y: [6, -6, 6] }}
                         transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
-                        className="absolute -bottom-4 left-0 w-[48%] h-[145px] sm:h-[165px] z-10 rounded-[20px] overflow-hidden border-4 border-white bg-slate-100 shadow-[0_20px_50px_rgba(15,27,61,0.12)]"
+                        className="hidden sm:block absolute -bottom-4 left-0 w-[48%] h-[145px] sm:h-[165px] z-10 rounded-[20px] overflow-hidden border-4 border-white bg-slate-100 shadow-[0_20px_50px_rgba(15,27,61,0.12)]"
                       >
                         <img
                           src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=700&q=80"
@@ -322,10 +322,10 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       <motion.div
                         animate={prefersReducedMotion ? undefined : { y: [-4, 4, -4] }}
                         transition={{ duration: 4.4, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-                        className="absolute -top-3 right-2 sm:-right-2 z-20 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white border border-[#EEF1F5] shadow-[0_20px_50px_rgba(15,27,61,0.10)]"
+                        className="absolute -top-2.5 sm:-top-3 right-2 sm:-right-2 z-20 inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-[#EEF1F5] shadow-[0_20px_50px_rgba(15,27,61,0.10)]"
                       >
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                        <span className="text-xs font-mono font-bold text-[#0F1B3D] tracking-tight">
+                        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                        <span className="text-[11px] sm:text-xs font-mono font-bold text-[#0F1B3D] tracking-tight">
                           1 Business Day SLA
                         </span>
                       </motion.div>
@@ -361,12 +361,12 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                         return (
                           <div key={item.id} className="flex items-stretch gap-3 sm:gap-4">
                             {/* Stepper Node & Connecting Line */}
-                            <div className="flex flex-col items-center shrink-0 w-8">
+                            <div className="flex flex-col items-center shrink-0 w-11 md:w-8">
                               <button
                                 type="button"
                                 onClick={() => handleSelectAccordion(idx)}
                                 aria-label={`Select step ${idx + 1}: ${item.title}`}
-                                className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold shrink-0 transition-all duration-300 z-10 cursor-pointer ${
+                                className={`w-11 h-11 min-w-[44px] min-h-[44px] md:w-8 md:h-8 md:min-w-0 md:min-h-0 rounded-full flex items-center justify-center font-mono text-xs font-bold shrink-0 transition-all duration-300 z-10 cursor-pointer ${
                                   isCompleted
                                     ? 'bg-[#1266E8] text-white shadow-xs'
                                     : isActive
@@ -862,10 +862,10 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
             {/* SLIDE 3 – Direct Inquiries & Project Discovery Split Card     */}
             {/* ------------------------------------------------------------- */}
             <div className="w-full shrink-0 px-1">
-              <div className="h-full rounded-[20px] bg-white/95 border border-[#EEF1F5] shadow-[0_20px_50px_rgba(15,27,61,0.08)] p-6 sm:p-8 lg:p-10">
-                <div className="grid grid-cols-1 min-[900px]:grid-cols-12 gap-8 lg:gap-10 items-center h-full">
+              <div className="h-full rounded-[20px] bg-white/95 border border-[#EEF1F5] shadow-[0_20px_50px_rgba(15,27,61,0.08)] p-4 sm:p-8 lg:p-10">
+                <div className="grid grid-cols-1 min-[900px]:grid-cols-12 gap-5 sm:gap-8 lg:gap-10 items-center h-full">
                   {/* LEFT COLUMN – Exact Text & 2x2 Action Buttons */}
-                  <div className="min-[900px]:col-span-7 space-y-4 text-left">
+                  <div className="min-[900px]:col-span-7 space-y-3 sm:space-y-4 text-left">
                     <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                       <span className="text-[#0891B2] font-bold uppercase tracking-wider">
@@ -877,19 +877,19 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       </span>
                     </div>
 
-                    <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] leading-snug">
+                    <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] leading-snug">
                       Have a project or technology requirement in mind?
                     </h3>
 
-                    <p className="text-sm sm:text-base text-slate-600 max-w-xl leading-relaxed">
+                    <p className="text-[13.5px] sm:text-base text-slate-600 max-w-xl leading-relaxed">
                       Reach out to our engineering and consulting team directly by phone or email.
                     </p>
 
-                    <div className="pt-2 grid grid-cols-1 min-[560px]:grid-cols-2 gap-3">
+                    <div className="pt-1 sm:pt-2 grid grid-cols-1 min-[560px]:grid-cols-2 gap-2.5 sm:gap-3">
                       <motion.a
                         href={COMPANY_CONTACT.phoneTel}
                         whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                        className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-[#DBEAFE] shadow-[0_8px_20px_rgba(30,58,138,0.05)] hover:border-[#93C5FD] transition-all group"
+                        className="min-h-[44px] min-w-[44px] inline-flex items-center gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl bg-white border border-[#DBEAFE] shadow-[0_8px_20px_rgba(30,58,138,0.05)] hover:border-[#93C5FD] transition-all group"
                         title={`Call ${COMPANY_CONTACT.phone}`}
                       >
                         <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -908,7 +908,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       <motion.a
                         href={COMPANY_CONTACT.emailMailto}
                         whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                        className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-[#DBEAFE] shadow-[0_8px_20px_rgba(30,58,138,0.05)] hover:border-[#93C5FD] transition-all group"
+                        className="min-h-[44px] min-w-[44px] inline-flex items-center gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl bg-white border border-[#DBEAFE] shadow-[0_8px_20px_rgba(30,58,138,0.05)] hover:border-[#93C5FD] transition-all group"
                         title={`Email ${COMPANY_CONTACT.email}`}
                       >
                         <div className="w-9 h-9 rounded-xl bg-[#EEF4FF] text-[#2563EB] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -931,7 +931,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                         onClick={() =>
                           window.dispatchEvent(new CustomEvent('iamtechni:open-chat'))
                         }
-                        className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-[#DBEAFE] shadow-[0_8px_20px_rgba(30,58,138,0.05)] hover:border-[#93C5FD] transition-all cursor-pointer group"
+                        className="min-h-[44px] min-w-[44px] inline-flex items-center gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl bg-white border border-[#DBEAFE] shadow-[0_8px_20px_rgba(30,58,138,0.05)] hover:border-[#93C5FD] transition-all cursor-pointer group"
                         title="Open IAMTECHNI AI Assistant"
                       >
                         <div className="w-9 h-9 rounded-xl bg-[#EEF4FF] text-[#2563EB] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -945,7 +945,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       <button
                         type="button"
                         onClick={() => onOpenProjectModal()}
-                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[48px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[44px] min-w-[44px] sm:min-h-[48px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                       >
                         <span>Start a Project</span>
                         <ArrowRight className="w-3.5 h-3.5 text-white" />
@@ -954,7 +954,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                   </div>
 
                   {/* RIGHT COLUMN – Two Smaller Rounded Photos Stacked & Offset */}
-                  <div className="min-[900px]:col-span-5 relative h-[240px] sm:h-[270px] flex items-center justify-center">
+                  <div className="hidden sm:flex min-[900px]:col-span-5 relative h-[240px] sm:h-[270px] items-center justify-center">
                     <div className="relative w-full max-w-[360px] h-full">
                       <motion.div
                         animate={prefersReducedMotion ? undefined : { y: [-6, 6, -6] }}
@@ -1037,7 +1037,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             aria-label="Go to IAMTECHNI homepage"
-            className="group inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-transparent border border-transparent text-xs text-slate-400 font-mono hover:bg-[#1B3152] hover:border-[#5CE1E6]/60 hover:text-white hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] focus-visible:bg-[#1B3152] focus-visible:border-[#5CE1E6]/60 focus-visible:text-white focus-visible:-translate-y-0.5 focus-visible:shadow-[0_6px_20px_rgba(92,225,230,0.18)] focus:outline-hidden transition-all duration-200 whitespace-nowrap cursor-pointer"
+            className="group min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-transparent border border-transparent text-xs text-slate-400 font-mono hover:bg-[#1B3152] hover:border-[#5CE1E6]/60 hover:text-white hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] focus-visible:bg-[#1B3152] focus-visible:border-[#5CE1E6]/60 focus-visible:text-white focus-visible:-translate-y-0.5 focus-visible:shadow-[0_6px_20px_rgba(92,225,230,0.18)] focus:outline-hidden transition-all duration-200 whitespace-nowrap cursor-pointer"
           >
             <span>IAMTECHNI // https://iamtechni.in</span>
             <span

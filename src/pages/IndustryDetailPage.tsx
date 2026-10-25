@@ -18,6 +18,7 @@ import {
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { IndustryItem, PageRoute } from '../types';
 import { IndustryIllustration } from '../components/common/TechIllustrations';
+import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 
 interface IndustryDetailPageProps {
   industry: IndustryItem;
@@ -63,14 +64,14 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
       </div>
 
       {/* Dedicated Industry Hero Section */}
-      <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-20 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-[#FFFFFF] border-b border-slate-200">
+      <section className="relative overflow-hidden pt-5 pb-10 sm:pt-8 sm:pb-16 lg:pt-14 lg:pb-20 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-[#FFFFFF] border-b border-slate-200">
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#04C8E8]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-10 w-96 h-96 bg-[#5427D9]/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-bold text-[#2563EB]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 items-center">
+            <div className="lg:col-span-7 space-y-4 sm:space-y-6">
+              <div className="inline-flex items-center gap-2 h-[32px] sm:h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-bold text-[#2563EB]">
                 <span>Industry Solutions</span>
                 <span className="text-slate-300">•</span>
                 <span>Specialized Domain Practice</span>
@@ -80,11 +81,11 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
                 {industry.name} Technology Solutions
               </h1>
 
-              <p className="text-[15px] sm:text-base lg:text-[17px] text-slate-600 leading-relaxed max-w-2xl">
+              <p className="text-[13.5px] sm:text-base lg:text-[17px] text-slate-600 leading-relaxed max-w-2xl">
                 {industry.summary}
               </p>
 
-              <div className="pt-2 flex flex-wrap items-center gap-3">
+              <div className="pt-1 sm:pt-2 flex flex-wrap items-center gap-2.5 sm:gap-3">
                 <button
                   onClick={() => onStartProject(`${industry.name} Consultation`)}
                   className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
@@ -105,7 +106,7 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
             <div className="lg:col-span-5 relative space-y-4">
               <IndustryIllustration industryId={industry.name} className="shadow-lg" />
 
-              <div className="rounded-2xl bg-white p-5 border border-slate-200 shadow-sm space-y-3">
+              <div className="rounded-2xl bg-white p-4 sm:p-5 border border-slate-200 shadow-sm space-y-3">
                 <div className="flex items-center justify-between text-xs font-bold text-slate-700 uppercase tracking-wider">
                   <span>Recommended Disciplines</span>
                   <span className="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
@@ -117,7 +118,7 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
                     <button
                       key={idx}
                       onClick={() => onNavigate(service.route as PageRoute)}
-                      className="p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/80 hover:border-blue-200 transition-all text-left flex items-center justify-between group cursor-pointer"
+                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/80 hover:border-blue-200 transition-all text-left flex items-center justify-between group cursor-pointer"
                     >
                       <span className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8] truncate">
                         {service.name}
@@ -133,23 +134,24 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
       </section>
 
       {/* Challenges & Opportunities Section */}
-      <section className="py-20 bg-white border-b border-slate-200">
+      <MobileSectionSkeletonWrapper variant="split-detail" sectionIndex={0}>
+      <section className="py-10 sm:py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12">
             {/* Industry Challenges */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-rose-600">
                 <AlertCircle className="w-4 h-4" />
                 <span>Critical Domain Challenges</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              <h2 className="text-xl sm:text-3xl font-extrabold text-slate-900">
                 Operational friction we help solve.
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-2.5 sm:space-y-4">
                 {industry.coreChallenges.map((challenge, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-start gap-3.5"
+                    className="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-start gap-3 sm:gap-3.5"
                   >
                     <div className="w-6 h-6 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">
                       {idx + 1}
@@ -163,19 +165,19 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
             </div>
 
             {/* Digital Opportunities */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600">
                 <Sparkles className="w-4 h-4" />
                 <span>Transformation Opportunities</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              <h2 className="text-xl sm:text-3xl font-extrabold text-slate-900">
                 Where technology drives competitive edge.
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-2.5 sm:space-y-4">
                 {industry.digitalOpportunities.map((opportunity, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-xl bg-emerald-50/50 border border-emerald-200/80 flex items-start gap-3.5"
+                    className="p-3.5 sm:p-4 rounded-xl bg-emerald-50/50 border border-emerald-200/80 flex items-start gap-3 sm:gap-3.5"
                   >
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                     <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
@@ -188,35 +190,37 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
           </div>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
 
       {/* IAMTECHNI Engineered Solutions for this Industry */}
-      <section className="py-20 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={1}>
+      <section className="py-10 sm:py-20 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-12">
           <div className="max-w-3xl">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-2">
+            <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1.5 sm:mb-2">
               Deliverables & Capabilities
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-xl sm:text-3xl font-extrabold text-slate-900">
               What we build for {industry.name}
             </h2>
-            <p className="text-sm text-slate-600 mt-2">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2">
               Every deliverable is crafted to address industry regulations, usability expectations, and integration requirements.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {industry.iamtechniSolutions.map((solution, idx) => (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-3 flex flex-col justify-between"
+                className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-xs space-y-2.5 sm:space-y-3 flex flex-col justify-between"
               >
                 <div className="space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#1266E8] font-bold flex items-center justify-center text-xs">
                     0{idx + 1}
                   </div>
-                  <h3 className="text-base font-bold text-slate-900">{solution}</h3>
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900">{solution}</h3>
                 </div>
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div className="pt-3 sm:pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                   <span>Custom Architecture</span>
                   <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                 </div>
@@ -225,15 +229,17 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
           </div>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
 
       {/* Industry Call to Action Banner */}
-      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
+      <MobileSectionSkeletonWrapper variant="split-detail" sectionIndex={2}>
+      <section className="py-10 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-8 sm:p-12 text-center space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+          <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-5 sm:p-12 text-center space-y-4 sm:space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Ready to engineer your {industry.name} digital transformation?
             </h2>
-            <p className="text-[15px] sm:text-base text-slate-600 font-medium max-w-2xl mx-auto">
+            <p className="text-[13.5px] sm:text-base text-slate-600 font-medium max-w-2xl mx-auto">
               Schedule an architectural discovery session with our senior engineering team to scope timelines, system integrations, and business impact.
             </p>
             <div className="pt-2 flex flex-wrap justify-center gap-3">
@@ -254,6 +260,7 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
           </div>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
     </div>
   );
 };

@@ -20,6 +20,7 @@ import { PageRoute } from '../types';
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { COMPANY_CONTACT } from '../data/companyInfo';
 import { PageHero } from '../components/common/PageHero';
+import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 
 interface ContactPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -146,13 +147,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
       {/* ========================================================================= */}
       {/* 2 PROMINENT VISIBLE CONTACT INFORMATION CARDS (PHONE & EMAIL)             */}
       {/* ========================================================================= */}
-      <section className="py-12 bg-white border-b border-slate-200">
+      <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={0}>
+      <section className="py-8 sm:py-12 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-8">
+          <div className="text-center max-w-2xl mx-auto mb-5 sm:mb-8">
             <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
               Direct Contact Channels
             </div>
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#1E3A8A] mt-1 drop-shadow-[0_2px_8px_rgba(30,58,138,0.08)]">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold text-[#1E3A8A] mt-1 drop-shadow-[0_2px_8px_rgba(30,58,138,0.08)]">
               Connect With IAMTECHNI Immediately
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 mt-1">
@@ -160,13 +162,13 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto">
             {/* Card 1: Direct Phone Contact */}
-            <div className="bg-[#F1FBF8] border border-teal-200/80 rounded-2xl p-7 shadow-sm hover:shadow-md hover:border-teal-300 transition-all flex flex-col justify-between">
+            <div className="bg-[#F1FBF8] border border-teal-200/80 rounded-2xl p-4 sm:p-7 shadow-sm hover:shadow-md hover:border-teal-300 transition-all flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center shadow-xs">
-                    <Phone className="w-6 h-6" />
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center shadow-xs">
+                    <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-teal-50 text-teal-800 border border-teal-200">
                     DIRECT CALL
@@ -176,16 +178,16 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 <div className="text-xs font-mono text-[#0D9488] uppercase tracking-wider font-bold mb-1">
                   Immediate Phone Line
                 </div>
-                <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold text-[#1E3A8A] mb-2">
+                <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-xl font-bold text-[#1E3A8A] mb-1.5 sm:mb-2">
                   Call Our Technology Desk
                 </h3>
-                <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed mb-4">
+                <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed mb-3 sm:mb-4">
                   Speak directly with an engineering specialist about project scoping, team allocation, and turnaround times.
                 </p>
 
-                <div className="p-3.5 bg-white rounded-xl border border-teal-200/70 mb-5 shadow-2xs">
+                <div className="p-3 sm:p-3.5 bg-white rounded-xl border border-teal-200/70 mb-4 sm:mb-5 shadow-2xs">
                   <div className="text-[10px] font-mono text-slate-500 uppercase">Phone Number</div>
-                  <div className="text-xl font-mono font-black text-[#1E3A8A] tracking-tight">
+                  <div className="text-lg sm:text-xl font-mono font-black text-[#1E3A8A] tracking-tight">
                     {COMPANY_CONTACT.phone}
                   </div>
                   <div className="text-[11px] text-teal-700 font-medium mt-1">
@@ -205,11 +207,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
             </div>
 
             {/* Card 2: Official Email Contact */}
-            <div className="bg-[#F4F8FF] border border-blue-200/80 rounded-2xl p-6 sm:p-7 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between">
+            <div className="bg-[#F4F8FF] border border-blue-200/80 rounded-2xl p-4 sm:p-7 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#2563EB] text-white flex items-center justify-center shadow-xs">
-                    <Mail className="w-6 h-6" />
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#2563EB] text-white flex items-center justify-center shadow-xs">
+                    <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-blue-50 text-[#2563EB] border border-blue-200">
                     OFFICIAL INBOX
@@ -219,14 +221,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 <div className="text-xs font-mono text-[#2563EB] uppercase tracking-wider font-bold mb-1">
                   Project &amp; HR Desk
                 </div>
-                <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold text-[#1E3A8A] mb-2">
+                <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-xl font-bold text-[#1E3A8A] mb-1.5 sm:mb-2">
                   Email IAMTECHNI
                 </h3>
-                <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed mb-4">
+                <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed mb-3 sm:mb-4">
                   Send project briefs, RFP documentation, software architecture inquiries, or career applications.
                 </p>
 
-                <div className="p-3.5 bg-white rounded-xl border border-blue-200/70 mb-5 shadow-2xs">
+                <div className="p-3 sm:p-3.5 bg-white rounded-xl border border-blue-200/70 mb-4 sm:mb-5 shadow-2xs">
                   <div className="text-[10px] font-mono text-slate-500 uppercase">Email Address</div>
                   <div className="text-lg sm:text-xl font-mono font-black text-[#1E3A8A] tracking-tight break-all">
                     {COMPANY_CONTACT.email}
@@ -249,11 +251,13 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
           </div>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
 
       {/* Contact Layout: Form & Verification */}
-      <section className="py-20 bg-[#F4F7FC]">
+      <MobileSectionSkeletonWrapper variant="form-section" sectionIndex={1}>
+      <section className="py-10 sm:py-20 bg-[#F4F7FC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12">
             {/* Form Column (7 cols) */}
             <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-2xs">
               {isSubmitted ? (
@@ -291,7 +295,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                           consent: false,
                         });
                       }}
-                      className="px-6 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-colors cursor-pointer"
+                      className="min-h-[44px] min-w-[44px] px-6 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-colors cursor-pointer"
                     >
                       Submit Another Inquiry
                     </button>
@@ -438,7 +442,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                         <button
                           type="button"
                           onClick={() => onNavigate('/privacy-policy')}
-                          className="text-[#1266E8] underline"
+                          className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline text-[#1266E8] underline"
                         >
                           Privacy Policy
                         </button>.
@@ -489,7 +493,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                     <div className="text-[10px] font-mono text-slate-500 uppercase font-bold">Direct Phone Line</div>
                     <a
                       href={COMPANY_CONTACT.phoneTel}
-                      className="text-sm font-mono font-bold text-slate-900 hover:text-[#1266E8] transition-colors flex items-center gap-1.5"
+                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-sm font-mono font-bold text-slate-900 hover:text-[#1266E8] transition-colors flex items-center gap-1.5"
                     >
                       <Phone className="w-3.5 h-3.5 text-[#0D9488]" />
                       <span>{COMPANY_CONTACT.phone}</span>
@@ -500,7 +504,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                     <div className="text-[10px] font-mono text-slate-500 uppercase font-bold">Official Business Email</div>
                     <a
                       href={COMPANY_CONTACT.emailMailto}
-                      className="text-sm font-mono font-bold text-slate-900 hover:text-[#1266E8] transition-colors flex items-center gap-1.5 break-all"
+                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-sm font-mono font-bold text-slate-900 hover:text-[#1266E8] transition-colors flex items-center gap-1.5 break-all"
                     >
                       <Mail className="w-3.5 h-3.5 text-[#1266E8]" />
                       <span>{COMPANY_CONTACT.email}</span>
@@ -513,7 +517,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                       href={COMPANY_CONTACT.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-mono font-bold text-[#1266E8] hover:underline flex items-center gap-1.5"
+                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-xs font-mono font-bold text-[#1266E8] hover:underline flex items-center gap-1.5"
                     >
                       <Globe className="w-3.5 h-3.5 text-[#04C8E8]" />
                       <span>{COMPANY_CONTACT.website}</span>
@@ -560,6 +564,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
           </div>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
     </div>
   );
 };

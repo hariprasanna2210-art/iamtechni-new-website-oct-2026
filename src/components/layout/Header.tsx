@@ -291,7 +291,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => handleLinkClick('/')}
-              className="flex items-center gap-2 text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-lg group cursor-pointer"
+              className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 flex items-center gap-2 text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-lg group cursor-pointer"
               aria-label="IAMTECHNI Home"
             >
               <IamtechniLogo size="md" />

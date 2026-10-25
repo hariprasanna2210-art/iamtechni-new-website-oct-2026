@@ -44,7 +44,7 @@ export const TrainingHeroVisual: React.FC<TrainingHeroVisualProps> = ({ classNam
           <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg text-[11px] font-mono">
             <button
               onClick={() => setActiveTab('editor')}
-              className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
+              className={`min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-2.5 md:px-2 py-0.5 rounded transition-all cursor-pointer ${
                 activeTab === 'editor'
                   ? 'bg-white text-[#1266E8] font-bold shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
@@ -54,7 +54,7 @@ export const TrainingHeroVisual: React.FC<TrainingHeroVisualProps> = ({ classNam
             </button>
             <button
               onClick={() => setActiveTab('cloud')}
-              className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
+              className={`min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-2.5 md:px-2 py-0.5 rounded transition-all cursor-pointer ${
                 activeTab === 'cloud'
                   ? 'bg-white text-[#04C8E8] font-bold shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
@@ -64,7 +64,7 @@ export const TrainingHeroVisual: React.FC<TrainingHeroVisualProps> = ({ classNam
             </button>
             <button
               onClick={() => setActiveTab('ai')}
-              className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
+              className={`min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-2.5 md:px-2 py-0.5 rounded transition-all cursor-pointer ${
                 activeTab === 'ai'
                   ? 'bg-white text-[#7C3AED] font-bold shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'

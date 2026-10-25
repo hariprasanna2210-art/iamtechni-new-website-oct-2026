@@ -369,7 +369,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
               <button
                 onClick={handleClearHistory}
                 title="Reset conversation"
-                className="p-1.5 rounded-lg hover:bg-white/10 hover:text-white transition-colors"
+                className="min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 p-1.5 flex items-center justify-center rounded-lg hover:bg-white/10 hover:text-white transition-colors"
                 aria-label="Clear chat"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -378,7 +378,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
               <button
                 onClick={() => setIsMinimized(!isMinimized)}
                 title={isMinimized ? 'Expand' : 'Minimize'}
-                className="p-1.5 rounded-lg hover:bg-white/10 hover:text-white transition-colors"
+                className="min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 p-1.5 flex items-center justify-center rounded-lg hover:bg-white/10 hover:text-white transition-colors"
                 aria-label="Minimize chat"
               >
                 {isMinimized ? <Maximize2 className="w-3.5 h-3.5" /> : <Minimize2 className="w-3.5 h-3.5" />}
@@ -387,7 +387,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
               <button
                 onClick={() => setIsOpen(false)}
                 title="Close chat"
-                className="p-1.5 rounded-lg hover:bg-white/10 hover:text-white transition-colors"
+                className="min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 p-1.5 flex items-center justify-center rounded-lg hover:bg-white/10 hover:text-white transition-colors"
                 aria-label="Close chat"
               >
                 <X className="w-4 h-4" />
@@ -399,11 +399,11 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
           {!isMinimized && (
             <>
               {/* Quick Contact Bar */}
-              <div className="bg-[#F8FAFC] border-b border-slate-200/80 px-4 py-2 flex items-center justify-between text-[11px] text-slate-600">
+              <div className="bg-[#F8FAFC] border-b border-slate-200/80 px-4 py-1.5 md:py-2 flex items-center justify-between text-[11px] text-slate-600">
                 <div className="flex items-center gap-3">
                   <a
                     href={COMPANY_CONTACT.phoneTel}
-                    className="flex items-center gap-1 font-semibold text-[#0F52BA] hover:underline"
+                    className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1 font-semibold text-[#0F52BA] hover:underline"
                   >
                     <Phone className="w-3 h-3 text-emerald-600" />
                     <span>{COMPANY_CONTACT.phone}</span>
@@ -411,7 +411,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
                   <span className="text-slate-300">|</span>
                   <a
                     href={COMPANY_CONTACT.emailMailto}
-                    className="flex items-center gap-1 hover:text-slate-900"
+                    className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1 hover:text-slate-900"
                   >
                     <Mail className="w-3 h-3 text-slate-400" />
                     <span>info@iamtechni.in</span>
@@ -420,7 +420,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
                 {onOpenProjectModal && (
                   <button
                     onClick={() => onOpenProjectModal()}
-                    className="text-[10px] font-semibold text-[#0F52BA] bg-blue-50 px-2 py-0.5 rounded border border-blue-200 hover:bg-blue-100 transition-colors"
+                    className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center text-[10px] font-semibold text-[#0F52BA] bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200 hover:bg-blue-100 transition-colors"
                   >
                     Book Call
                   </button>
@@ -506,7 +506,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
                       <button
                         key={idx}
                         onClick={() => handleSendMessage(prompt)}
-                        className="text-xs bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#0F52BA] px-2.5 py-1 rounded-lg border border-slate-200 hover:border-blue-200 transition-colors text-left font-normal"
+                        className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center text-xs bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#0F52BA] px-2.5 py-1 rounded-lg border border-slate-200 hover:border-blue-200 transition-colors text-left font-normal"
                       >
                         {prompt}
                       </button>
@@ -526,13 +526,13 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
                     onKeyDown={handleKeyDown}
                     placeholder="Ask about architecture, services, feasibility..."
                     disabled={isLoading}
-                    className="flex-1 bg-[#F8FAFC] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0F52BA] focus:ring-1 focus:ring-[#0F52BA] transition-all disabled:opacity-50"
+                    className="flex-1 bg-[#F8FAFC] border border-slate-200 rounded-xl px-3.5 py-2.5 min-h-[44px] md:min-h-0 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0F52BA] focus:ring-1 focus:ring-[#0F52BA] transition-all disabled:opacity-50"
                   />
                   <button
                     onClick={() => handleSendMessage()}
                     disabled={!inputValue.trim() || isLoading}
                     aria-label="Send message"
-                    className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-[#0F52BA] text-white hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-2xs"
+                    className="flex-shrink-0 flex items-center justify-center w-11 h-11 min-w-[44px] min-h-[44px] md:w-10 md:h-10 md:min-w-0 md:min-h-0 rounded-xl bg-[#0F52BA] text-white hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-2xs"
                   >
                     <Send className="w-4 h-4" />
                   </button>
@@ -545,7 +545,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
                         setIsOpen(false);
                         onNavigate('/contact');
                       }}
-                      className="text-[#0F52BA] hover:underline font-medium"
+                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center text-[#0F52BA] hover:underline font-medium"
                     >
                       Contact Page →
                     </button>

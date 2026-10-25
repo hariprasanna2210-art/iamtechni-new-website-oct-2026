@@ -500,7 +500,7 @@ export const RotatingFrame: React.FC<RotatingFrameProps> = ({
 
         {/* 4 Progress Dots Under the Frame */}
         <div
-          className="mt-4 flex items-center justify-center gap-2"
+          className="mt-4 flex items-center justify-center gap-1 md:gap-2"
           role="tablist"
           aria-label="Scene navigation"
         >
@@ -514,24 +514,28 @@ export const RotatingFrame: React.FC<RotatingFrameProps> = ({
                 aria-label={`Show ${scene.title}`}
                 aria-selected={isActive}
                 role="tab"
-                className={`relative h-2.5 rounded-full overflow-hidden transition-all duration-300 cursor-pointer ${
-                  isActive
-                    ? 'w-10 bg-slate-200'
-                    : 'w-2.5 bg-slate-300 hover:bg-slate-400'
-                }`}
+                className="min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 flex items-center justify-center cursor-pointer"
               >
-                {isActive && (
-                  <motion.span
-                    key={`progress-${scene.id}-${isPaused ? 'paused' : 'run'}`}
-                    initial={{ width: '0%' }}
-                    animate={{ width: isPaused ? '100%' : '100%' }}
-                    transition={{
-                      duration: isPaused ? 0.2 : SCENE_DURATION_MS / 1000,
-                      ease: 'linear',
-                    }}
-                    className="block h-full bg-[#1266E8] rounded-full"
-                  />
-                )}
+                <span
+                  className={`relative block h-2.5 rounded-full overflow-hidden transition-all duration-300 ${
+                    isActive
+                      ? 'w-10 bg-slate-200'
+                      : 'w-2.5 bg-slate-300 hover:bg-slate-400'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      key={`progress-${scene.id}-${isPaused ? 'paused' : 'run'}`}
+                      initial={{ width: '0%' }}
+                      animate={{ width: isPaused ? '100%' : '100%' }}
+                      transition={{
+                        duration: isPaused ? 0.2 : SCENE_DURATION_MS / 1000,
+                        ease: 'linear',
+                      }}
+                      className="block h-full bg-[#1266E8] rounded-full"
+                    />
+                  )}
+                </span>
               </button>
             );
           })}
@@ -580,8 +584,8 @@ export const RotatingFrame: React.FC<RotatingFrameProps> = ({
             </AnimatePresence>
           </div>
 
-          {/* Right Shoulder: Mini Dots */}
-          <div className="flex items-center gap-1 shrink-0">
+          {/* Right Shoulder: Mini Dots (Interactive on desktop, visual status indicator on mobile where 4 action buttons below control scenes) */}
+          <div className="hidden md:flex items-center gap-1 shrink-0">
             {scenes.map((s, idx) => (
               <button
                 key={s.id}
@@ -592,6 +596,16 @@ export const RotatingFrame: React.FC<RotatingFrameProps> = ({
                   currentSceneIndex === idx
                     ? 'w-4 bg-[#04C8E8]'
                     : 'w-1.5 bg-slate-700 hover:bg-slate-500'
+                }`}
+              />
+            ))}
+          </div>
+          <div className="flex md:hidden items-center gap-1 shrink-0" aria-hidden="true">
+            {scenes.map((s, idx) => (
+              <span
+                key={s.id}
+                className={`h-1.5 rounded-full transition-all ${
+                  currentSceneIndex === idx ? 'w-4 bg-[#04C8E8]' : 'w-1.5 bg-slate-700'
                 }`}
               />
             ))}

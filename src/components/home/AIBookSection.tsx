@@ -245,9 +245,9 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
       return (
         <motion.div
           {...contentMotionProps}
-          className="h-full flex flex-col justify-between p-6 sm:p-9 lg:p-11 select-none"
+          className="h-full flex flex-col justify-between p-4 sm:p-9 lg:p-11 select-none"
         >
-          <div className="my-auto space-y-4">
+          <div className="my-auto space-y-3 sm:space-y-4">
             <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
               <span
                 className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
@@ -291,9 +291,9 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
       return (
         <motion.div
           {...contentMotionProps}
-          className="h-full flex flex-col justify-between p-6 sm:p-9 lg:p-11 select-none"
+          className="h-full flex flex-col justify-between p-4 sm:p-9 lg:p-11 select-none"
         >
-          <div className="my-auto space-y-5">
+          <div className="my-auto space-y-3.5 sm:space-y-5">
             <div className="w-14 h-14 rounded-2xl bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center shadow-[0_4px_16px_rgba(37,99,235,0.12)]">
               <Search className="w-7 h-7 text-[#2563EB]" />
             </div>
@@ -318,9 +318,9 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
     return (
       <motion.div
         {...contentMotionProps}
-        className="h-full flex flex-col justify-between p-6 sm:p-9 lg:p-11 select-none"
+        className="h-full flex flex-col justify-between p-4 sm:p-9 lg:p-11 select-none"
       >
-        <div className="my-auto space-y-5">
+        <div className="my-auto space-y-3.5 sm:space-y-5">
           <div className="w-14 h-14 rounded-2xl bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center shadow-[0_4px_16px_rgba(37,99,235,0.12)]">
             <Workflow className="w-7 h-7 text-[#2563EB]" />
           </div>
@@ -356,7 +356,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
       return (
         <motion.div
           {...contentMotionProps}
-          className="h-full flex flex-col justify-between p-6 sm:p-9 lg:p-11 font-mono select-none"
+          className="h-full flex flex-col justify-between p-4 sm:p-9 lg:p-11 font-mono select-none"
         >
           <div className="w-full rounded-2xl bg-gradient-to-b from-[#F8FAFF] via-white to-[#EEF4FF]/70 border border-[#DBEAFE] shadow-[0_12px_32px_rgba(30,58,138,0.08)] p-4 sm:p-5 text-[#1E3A8A] flex flex-col justify-between my-auto">
             {/* Top Status */}
@@ -476,9 +476,9 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
       return (
         <motion.div
           {...contentMotionProps}
-          className="h-full flex flex-col justify-between p-6 sm:p-9 lg:p-11 select-none"
+          className="h-full flex flex-col justify-between p-4 sm:p-9 lg:p-11 select-none"
         >
-          <div className="my-auto space-y-5">
+          <div className="my-auto space-y-3.5 sm:space-y-5">
             <div className="w-14 h-14 rounded-2xl bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center shadow-[0_4px_16px_rgba(37,99,235,0.12)]">
               <Cpu className="w-7 h-7 text-[#2563EB]" />
             </div>
@@ -503,9 +503,9 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
     return (
       <motion.div
         {...contentMotionProps}
-        className="h-full flex flex-col justify-between p-6 sm:p-9 lg:p-11 select-none"
+        className="h-full flex flex-col justify-between p-4 sm:p-9 lg:p-11 select-none"
       >
-        <div className="my-auto space-y-5">
+        <div className="my-auto space-y-3.5 sm:space-y-5">
           <div className="w-14 h-14 rounded-2xl bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center shadow-[0_4px_16px_rgba(37,99,235,0.12)]">
             <ShieldCheck className="w-7 h-7 text-[#2563EB]" />
           </div>
@@ -544,7 +544,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
       ref={sectionRef}
       onKeyDown={handleKeyDown}
       aria-label="Artificial Intelligence & Scalability"
-      className="py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] text-[#1E3A8A] border-b border-[#DBEAFE]/80 relative overflow-hidden"
+      className="py-10 sm:py-24 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] text-[#1E3A8A] border-b border-[#DBEAFE]/80 relative overflow-hidden"
     >
       {/* Subtle Light-Blue Ambient Glows Matching Hero Palette */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#DBEAFE]/45 rounded-full blur-[120px] pointer-events-none" />
@@ -598,9 +598,9 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Always-Visible Section Header + Book Page-Turn Controls */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-5 sm:mb-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 h-[34px] px-3 sm:px-4 mb-3 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
+            <div className="inline-flex items-center gap-2 h-[32px] sm:h-[34px] px-3 sm:px-4 mb-2.5 sm:mb-3 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
               <span
                 className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
                 aria-hidden="true"
@@ -635,7 +635,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
                   aria-selected={isActive}
                   aria-label={`Open pages ${sp.label}`}
                   onClick={() => triggerTurn(sp.idx)}
-                  className={`relative overflow-hidden min-h-[40px] px-3.5 py-2 rounded-lg transition-all duration-200 cursor-pointer active:scale-[0.98] flex items-center justify-center ${
+                  className={`relative overflow-hidden min-h-[44px] min-w-[44px] lg:min-h-[40px] lg:min-w-0 px-3.5 py-2 rounded-lg transition-all duration-200 cursor-pointer active:scale-[0.98] flex items-center justify-center ${
                     isActive
                       ? 'bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-bold shadow-xs'
                       : 'text-[#1E3A8A]/80 hover:text-[#1E3A8A] hover:bg-[#EEF4FF]'
@@ -660,7 +660,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
               onClick={() => setIsAutoPlaying((prev) => !prev)}
               aria-label={isAutoPlaying ? 'Pause auto page turn' : 'Resume auto page turn'}
               title={isAutoPlaying ? 'Pause auto page turn' : 'Resume auto page turn'}
-              className="w-10 h-10 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-10 lg:h-10 lg:min-w-0 lg:min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer"
             >
               {isAutoPlaying ? (
                 <Pause className="w-3.5 h-3.5 text-white" />
@@ -673,7 +673,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
               onClick={() => handlePrevSpread()}
               disabled={Boolean(turnState?.isTurning)}
               aria-label="Previous page spread"
-              className="w-10 h-10 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-10 lg:h-10 lg:min-w-0 lg:min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
             >
               <ChevronLeft className="w-4 h-4 text-white" />
             </button>
@@ -682,7 +682,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
               onClick={() => handleNextSpread()}
               disabled={Boolean(turnState?.isTurning)}
               aria-label="Next page spread"
-              className="w-10 h-10 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-10 lg:h-10 lg:min-w-0 lg:min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] flex items-center justify-center transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
             >
               <ChevronRight className="w-4 h-4 text-white" />
             </button>
@@ -976,7 +976,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
                 onClick={() => handlePrevSpread()}
                 disabled={Boolean(turnState?.isTurning)}
                 aria-label="Previous book spread"
-                className="w-9 h-9 rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -985,7 +985,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
                 onClick={() => handleNextSpread()}
                 disabled={Boolean(turnState?.isTurning)}
                 aria-label="Next book spread"
-                className="w-9 h-9 rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -1059,7 +1059,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
           aria-label="Book page navigation"
           onMouseEnter={() => setIsBookHovered(true)}
           onMouseLeave={() => setIsBookHovered(false)}
-          className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3"
+          className="hidden md:flex mt-6 flex-wrap items-center justify-center gap-2 sm:gap-3"
         >
           <button
             type="button"
@@ -1151,7 +1151,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
           <button
             type="button"
             onClick={() => onNavigate('/services/ai-machine-learning')}
-            className="min-h-[40px] inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] shrink-0 cursor-pointer"
+            className="min-h-[44px] min-w-[44px] sm:min-h-[40px] sm:min-w-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] shrink-0 cursor-pointer"
           >
             <span>Explore AI &amp; Machine Learning Practice</span>
             <ArrowRight className="w-3.5 h-3.5 text-white" />

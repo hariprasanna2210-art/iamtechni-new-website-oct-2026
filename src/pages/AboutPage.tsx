@@ -25,6 +25,7 @@ import { PageRoute } from '../types';
 import { PageHero } from '../components/common/PageHero';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
+import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 
 interface AboutPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -135,24 +136,25 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
       />
 
       {/* Mission & Vision with Distinct Coordinated Pastel Cards */}
-      <section className="py-20 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FE] to-[#F0FDFA] border-b border-slate-200">
+      <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={0}>
+      <section className="py-10 sm:py-20 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FE] to-[#F0FDFA] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 gap-8" staggerChildren={0.15}>
+          <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8" staggerChildren={0.15}>
             <ScrollRevealItem className="h-full">
-              <div className="h-full bg-[#EAF3FF] rounded-2xl p-8 sm:p-10 border border-blue-200/90 shadow-sm space-y-4 interactive-card-lift flex flex-col justify-between">
-                <div className="space-y-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
-                    <Target className="w-6 h-6" />
+              <div className="h-full bg-[#EAF3FF] rounded-2xl p-5 sm:p-10 border border-blue-200/90 shadow-sm space-y-3 sm:space-y-4 interactive-card-lift flex flex-col justify-between">
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
+                    <Target className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
-                  <h2 className="text-2xl font-bold text-slate-900">Our Mission</h2>
-                  <p className="text-sm text-slate-700 leading-relaxed">
+                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Our Mission</h2>
+                  <p className="text-[13px] sm:text-sm text-slate-700 leading-relaxed">
                     To turn complex technical challenges into purposeful, reliable digital solutions that advance our clients’ operations, elevate customer experiences, and build long-term business value.
                   </p>
                 </div>
 
                 {/* Visual Trajectory */}
-                <div className="pt-4 border-t border-blue-200/70">
-                  <div className="bg-white/90 rounded-xl p-3.5 border border-blue-200/80 shadow-2xs space-y-2 font-mono">
+                <div className="pt-3 sm:pt-4 border-t border-blue-200/70">
+                  <div className="bg-white/90 rounded-xl p-3 sm:p-3.5 border border-blue-200/80 shadow-2xs space-y-2 font-mono">
                     <div className="text-[10px] text-[#1266E8] font-bold uppercase tracking-wider flex items-center justify-between">
                       <span>Delivery Trajectory</span>
                       <span className="text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded font-semibold text-[9px]">
@@ -176,20 +178,20 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
             </ScrollRevealItem>
 
             <ScrollRevealItem className="h-full">
-              <div className="h-full bg-[#F0EAFF] rounded-2xl p-8 sm:p-10 border border-violet-200/90 shadow-sm space-y-4 interactive-card-lift flex flex-col justify-between">
-                <div className="space-y-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center shadow-xs">
-                    <Eye className="w-6 h-6" />
+              <div className="h-full bg-[#F0EAFF] rounded-2xl p-5 sm:p-10 border border-violet-200/90 shadow-sm space-y-3 sm:space-y-4 interactive-card-lift flex flex-col justify-between">
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center shadow-xs">
+                    <Eye className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
-                  <h2 className="text-2xl font-bold text-slate-900">Our Vision</h2>
-                  <p className="text-sm text-slate-700 leading-relaxed">
+                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Our Vision</h2>
+                  <p className="text-[13px] sm:text-sm text-slate-700 leading-relaxed">
                     To be the trusted engineering partner for forward-looking organizations, recognized for technical discipline, practical artificial intelligence, and software craftsmanship that endures.
                   </p>
                 </div>
 
                 {/* Visual Pillars */}
-                <div className="pt-4 border-t border-violet-200/70">
-                  <div className="bg-white/90 rounded-xl p-3.5 border border-violet-200/80 shadow-2xs space-y-2 font-mono">
+                <div className="pt-3 sm:pt-4 border-t border-violet-200/70">
+                  <div className="bg-white/90 rounded-xl p-3 sm:p-3.5 border border-violet-200/80 shadow-2xs space-y-2 font-mono">
                     <div className="text-[10px] text-[#7C3AED] font-bold uppercase tracking-wider flex items-center justify-between">
                       <span>Strategic Horizon</span>
                       <span className="text-purple-700 bg-purple-50 px-1.5 py-0.2 rounded font-semibold text-[9px]">
@@ -214,13 +216,15 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
           </ScrollReveal>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
 
       {/* Digital Transformation & Engineering Excellence Visual Showcase */}
-      <section className="py-16 sm:py-20 bg-white border-b border-slate-200 overflow-hidden">
+      <MobileSectionSkeletonWrapper variant="split-detail" sectionIndex={1}>
+      <section className="py-10 sm:py-20 bg-white border-b border-slate-200 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12 items-center">
             {/* Left: Engineering Strategy & Governance */}
-            <div className="lg:col-span-6 space-y-6">
+            <div className="lg:col-span-6 space-y-4 sm:space-y-6">
               <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#2563EB]" />
                 <span>Modern Software Delivery</span>
@@ -228,31 +232,31 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
               <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-tight drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 Architected for resilience, precision, and longevity.
               </h2>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed line-clamp-3 sm:line-clamp-none">
                 We combine modern frontend architecture, robust backend systems, and containerized cloud pipelines to deliver software that scales predictably. Our teams operate with automated test suites, typed contracts, and continuous security scanning.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-xl bg-[#F5F8FC] border border-slate-200 space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs sm:text-[13px] font-bold text-[#1E3A8A]">
-                    <CheckCircle2 className="w-4 h-4 text-[#2563EB]" />
-                    <span>Typed Contracts</span>
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-4 pt-1 sm:pt-2">
+                <div className="p-3 sm:p-4 rounded-xl bg-[#F5F8FC] border border-slate-200 space-y-1 sm:space-y-1.5">
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-[13px] font-bold text-[#1E3A8A]">
+                    <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
+                    <span className="truncate">Typed Contracts</span>
                   </div>
-                  <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed">TypeScript strict mode and end-to-end schema validation eliminating runtime bugs.</p>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-2 sm:line-clamp-none">TypeScript strict mode and end-to-end schema validation eliminating runtime bugs.</p>
                 </div>
-                <div className="p-4 rounded-xl bg-[#F5F8FC] border border-slate-200 space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs sm:text-[13px] font-bold text-[#1E3A8A]">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>Cloud Native</span>
+                <div className="p-3 sm:p-4 rounded-xl bg-[#F5F8FC] border border-slate-200 space-y-1 sm:space-y-1.5">
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-[13px] font-bold text-[#1E3A8A]">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span className="truncate">Cloud Native</span>
                   </div>
-                  <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed">Multi-region container orchestration across AWS and Azure with zero-downtime updates.</p>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-2 sm:line-clamp-none">Multi-region container orchestration across AWS and Azure with zero-downtime updates.</p>
                 </div>
               </div>
             </div>
 
             {/* Right: Rich Interactive Engineering Topology Visual */}
             <div className="lg:col-span-6 w-full">
-              <div className="bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] rounded-3xl p-6 sm:p-7 border border-[#60A5FA]/35 shadow-xl text-white space-y-4 font-mono">
+              <div className="bg-gradient-to-br from-[#162D5E] via-[#1C3873] to-[#1E3A8A] rounded-3xl p-4 sm:p-7 border border-[#60A5FA]/35 shadow-xl text-white space-y-3 sm:space-y-4 font-mono">
                 <div className="flex items-center justify-between border-b border-white/15 pb-3">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -264,24 +268,24 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                  <div className="p-3 bg-white/10 rounded-xl border border-white/15">
+                  <div className="p-2.5 sm:p-3 bg-white/10 rounded-xl border border-white/15">
                     <div className="text-[10px] text-blue-100/80">CI/CD Gate</div>
                     <div className="text-sm font-bold text-emerald-300">100% Pass</div>
                     <div className="text-[9px] text-blue-200/70">Unit + Integration</div>
                   </div>
-                  <div className="p-3 bg-white/10 rounded-xl border border-white/15">
+                  <div className="p-2.5 sm:p-3 bg-white/10 rounded-xl border border-white/15">
                     <div className="text-[10px] text-blue-100/80">Global P99</div>
                     <div className="text-sm font-bold text-[#67E8F9]">&lt;65ms</div>
                     <div className="text-[9px] text-blue-200/70">Edge CDN Ingest</div>
                   </div>
-                  <div className="p-3 bg-white/10 rounded-xl border border-white/15">
+                  <div className="p-2.5 sm:p-3 bg-white/10 rounded-xl border border-white/15">
                     <div className="text-[10px] text-blue-100/80">Vulnerability</div>
                     <div className="text-sm font-bold text-indigo-200">0 Critical</div>
                     <div className="text-[9px] text-blue-200/70">Continuous Snyk</div>
                   </div>
                 </div>
 
-                <div className="p-3 bg-[#10234A]/80 rounded-xl border border-white/15 text-[11px] text-blue-100 space-y-1">
+                <div className="p-2.5 sm:p-3 bg-[#10234A]/80 rounded-xl border border-white/15 text-[11px] text-blue-100 space-y-1">
                   <div className="text-blue-200/70">// Multi-Region Edge Mesh Active</div>
                   <div className="flex items-center justify-between">
                     <span className="text-[#67E8F9]">US-East · EU-Central · AP-South</span>
@@ -293,20 +297,22 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
           </div>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
 
       {/* Core Values with Distinct 8-Color System */}
-      <section className="py-24 bg-[#F5F8FC] border-b border-slate-200">
+      <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={2} cardCount={3}>
+      <section className="py-10 sm:py-24 bg-[#F5F8FC] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-14">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-2">
+          <div className="max-w-2xl mb-7 sm:mb-14">
+            <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1.5 sm:mb-2">
               Foundational Principles
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               The values that govern our engineering.
             </h2>
           </div>
 
-          <ScrollReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" staggerChildren={0.1}>
+          <ScrollReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8" staggerChildren={0.1}>
             {values.map((val, idx) => {
               const color = getCardColorToken(idx);
               const ValueIcon = val.icon;
@@ -314,19 +320,19 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
               return (
                 <ScrollRevealItem key={idx} className="h-full">
                   <div
-                    className={`h-full ${color.cardBg} ${color.cardBorder} border rounded-2xl p-7 shadow-xs ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 flex flex-col justify-between interactive-card-lift group`}
+                    className={`h-full ${color.cardBg} ${color.cardBorder} border rounded-2xl p-4 sm:p-7 shadow-xs ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 flex flex-col justify-between interactive-card-lift group`}
                   >
                     <div>
-                      <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center justify-between mb-3 sm:mb-4">
                         <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                           {val.step}
                         </span>
-                        <div className={`w-9 h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
-                          <ValueIcon className="w-4.5 h-4.5" />
+                        <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                          <ValueIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                         </div>
                       </div>
-                      <h3 className="text-lg font-bold text-slate-900 mb-2">{val.title}</h3>
-                      <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed">{val.desc}</p>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-1.5 sm:mb-2">{val.title}</h3>
+                      <p className="text-[13px] sm:text-sm text-slate-700 leading-relaxed line-clamp-2 sm:line-clamp-none">{val.desc}</p>
                     </div>
                   </div>
                 </ScrollRevealItem>
@@ -335,15 +341,17 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
           </ScrollReveal>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
 
       {/* Bottom CTA Section */}
-      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
+      <MobileSectionSkeletonWrapper variant="split-detail" sectionIndex={3}>
+      <section className="py-10 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-8 sm:p-12 text-center space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+          <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-5 sm:p-12 text-center space-y-4 sm:space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
+            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Ready to discuss your technology requirements?
             </h2>
-            <p className="text-[15px] sm:text-base text-slate-600 font-medium max-w-xl mx-auto leading-relaxed">
+            <p className="text-[13.5px] sm:text-base text-slate-600 font-medium max-w-xl mx-auto leading-relaxed">
               Let’s review what you want to build and explore how our engineering team can help.
             </p>
             <div className="pt-2">
@@ -358,6 +366,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
           </div>
         </div>
       </section>
+      </MobileSectionSkeletonWrapper>
     </div>
   );
 };
