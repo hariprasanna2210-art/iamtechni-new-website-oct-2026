@@ -1,20 +1,22 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { useReducedMotion } from 'framer-motion';
-import { PageRoute } from '../../types';
-import { HeroContent } from './HeroContent';
-import { SquircleShiftBackground } from '../SquircleShiftBackground';
-import { RobotScene } from '../layout/RobotScene';
-import { ServiceCards, mapServiceToOrbitCardId } from './ServiceCards';
-import { RobotSpeechControls } from './RobotSpeechControls';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  ROBOT_SPEECH_DATA,
-  getHeroFloatingServiceCards,
-  getRobotTourSteps,
-  getStepReadingDurationMs,
-  HeroFloatingServiceCard,
-} from '../../data/robotScript';
-
-const MUTE_STORAGE_KEY = 'iamtechni_robot_muted';
+  ChevronLeft,
+  ChevronRight,
+  Pause,
+  Play,
+  ArrowLeft,
+  ArrowRight,
+} from 'lucide-react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { PageRoute } from '../../types';
+import { RobotAnimationState } from './RobotController';
+import { HERO_SERVICE_SLIDES, HeroServiceSlide } from './heroCarouselData';
+import { HeroDarkBackground } from './HeroDarkBackground';
+import { HeroContent } from './HeroContent';
+import { HeroServiceVisuals } from './HeroServiceVisuals';
+import { RobotScene } from '../layout/RobotScene';
+import { RobotSpeechControls } from './RobotSpeechControls';
+import { ROBOT_SPEECH_DATA } from '../../data/robotScript';
 
 export interface HeroSectionProps {
   onNavigate: (route: PageRoute) => void;
@@ -23,182 +25,142 @@ export interface HeroSectionProps {
   onSelectServiceSlug?: (slug: string) => void;
 }
 
+const MUTE_STORAGE_KEY = 'iamtechni_robot_voice_muted_v1';
+const AUTO_ROTATE_INTERVAL_MS = 6000;
+
+/**
+ * Selects a clear, natural male English voice for the IAMTECHNI AI Ambassador.
+ * Priority: Google UK English Male, Microsoft Ravi / Guy / David, Daniel, Alex, or any male English voice.
+ */
+function selectPreferredVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+  if (!voices || voices.length === 0) return null;
+
+  const englishVoices = voices.filter((v) =>
+    v.lang.toLowerCase().startsWith('en')
+  );
+  const pool = englishVoices.length > 0 ? englishVoices : voices;
+
+  const priorityNames = [
+    'google uk english male',
+    'microsoft ravi',
+    'microsoft guy',
+    'microsoft david',
+    'daniel',
+    'alex',
+  ];
+
+  for (const target of priorityNames) {
+    const found = pool.find((v) => v.name.toLowerCase().includes(target));
+    if (found) return found;
+  }
+
+  const anyMale = pool.find((v) => /\bmale\b/i.test(v.name));
+  if (anyMale) return anyMale;
+
+  const langPrefs = ['en-in', 'en-gb', 'en-us'];
+  for (const lang of langPrefs) {
+    const foundLang = pool.find((v) => v.lang.toLowerCase().startsWith(lang));
+    if (foundLang) return foundLang;
+  }
+
+  return pool[0] || voices[0] || null;
+}
+
+/**
+ * Formats speech text so the brand "IAMTECHNI" is always pronounced naturally as "I Am Techni".
+ */
+function formatBrandPronunciation(text: string): string {
+  return text.replace(/IAMTECHNI/gi, 'I Am Techni');
+}
+
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onNavigate,
   onOpenProjectModal,
   selectedServiceSlug,
   onSelectServiceSlug,
 }) => {
-  const sectionRef = useRef<HTMLElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
 
-  const floatingCards = useMemo(() => getHeroFloatingServiceCards(), []);
-  const tourSteps = useMemo(() => getRobotTourSteps(floatingCards), [floatingCards]);
-
-  const [activeServiceSlug, setActiveServiceSlug] = useState<string>(() =>
-    selectedServiceSlug
-      ? mapServiceToOrbitCardId(selectedServiceSlug)
-      : floatingCards[0]?.slug || 'ai-machine-learning'
-  );
+  const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isHeroVisible, setIsHeroVisible] = useState<boolean>(true);
+  const [greetTriggerCount, setGreetTriggerCount] = useState<number>(0);
+  const [gesturePulseState, setGesturePulseState] =
+    useState<RobotAnimationState>('presenting');
+  const [isDesktop, setIsDesktop] = useState<boolean>(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(min-width: 1024px)').matches
+      : true
+  );
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(min-width: 1024px)');
+    const handleChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    setIsDesktop(mql.matches);
+    mql.addEventListener('change', handleChange);
+    return () => mql.removeEventListener('change', handleChange);
+  }, []);
+
+  // Voice Guide State
+  const [hasInteracted, setHasInteracted] = useState<boolean>(false);
   const [isVoiceSpeaking, setIsVoiceSpeaking] = useState<boolean>(false);
-  const [isRobotTalkingVisual, setIsRobotTalkingVisual] = useState<boolean>(false);
+  const [speechEnergy, setSpeechEnergy] = useState<number>(0);
+  const [captionText, setCaptionText] = useState<string | null>(null);
   const [isMuted, setIsMuted] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
     try {
-      return (
-        typeof window !== 'undefined' &&
-        window.sessionStorage.getItem(MUTE_STORAGE_KEY) === '1'
-      );
+      return window.sessionStorage.getItem(MUTE_STORAGE_KEY) === '1';
     } catch {
       return false;
     }
   });
-  const [hasInteracted, setHasInteracted] = useState<boolean>(false);
-  const [speechEnergy, setSpeechEnergy] = useState<number>(0);
-  const [captionText, setCaptionText] = useState<string | null>(null);
-  const [greetTriggerCount, setGreetTriggerCount] = useState<number>(0);
-  const [isHeroVisible, setIsHeroVisible] = useState<boolean>(true);
-  const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
-  // Stable refs so state updates never cancel speech or reset timers in useEffect cleanups
-  const tourSessionIdRef = useRef<number>(0);
-  const currentTourStepRef = useRef<number>(0);
-  const isAutoPlayingRef = useRef<boolean>(true);
-  const isHeroVisibleRef = useRef<boolean>(true);
-  const isMutedRef = useRef<boolean>(isMuted);
-  const hasInteractedRef = useRef<boolean>(false);
-  const voiceTourEnabledRef = useRef<boolean>(false);
-  const hasCompletedVoiceTourOnceRef = useRef<boolean>(false);
-  const isCardScrollSpeechRef = useRef<boolean>(false);
-  const hasStartedInitialTourRef = useRef<boolean>(false);
-
-  // Timers & Chrome speechSynthesis GC / 15s cutoff workarounds
-  const stepTimerRef = useRef<number | null>(null);
+  // Refs for timers & speech synthesis
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const rotateTimerRef = useRef<number | null>(null);
   const energyIntervalRef = useRef<number | null>(null);
-  const chromeKeepAliveRef = useRef<number | null>(null);
+  const keepAliveIntervalRef = useRef<number | null>(null);
+  const cachedVoiceRef = useRef<SpeechSynthesisVoice | null>(null);
   const utterancePoolRef = useRef<SpeechSynthesisUtterance[]>([]);
-  const onSelectServiceSlugRef = useRef(onSelectServiceSlug);
-
-  useEffect(() => {
-    onSelectServiceSlugRef.current = onSelectServiceSlug;
-  }, [onSelectServiceSlug]);
+  const voiceSessionIdRef = useRef<number>(0);
+  const isMutedRef = useRef<boolean>(isMuted);
+  const touchStartXRef = useRef<number | null>(null);
 
   useEffect(() => {
     isMutedRef.current = isMuted;
   }, [isMuted]);
 
+  const activeSlide: HeroServiceSlide =
+    HERO_SERVICE_SLIDES[activeIndex] || HERO_SERVICE_SLIDES[0];
+
+  // Trigger robot pointing/presenting gesture whenever activeIndex changes
   useEffect(() => {
-    isAutoPlayingRef.current = isAutoPlaying;
-  }, [isAutoPlaying]);
+    const slide = HERO_SERVICE_SLIDES[activeIndex] || HERO_SERVICE_SLIDES[0];
+    setGesturePulseState(slide.gestureState);
+  }, [activeIndex]);
 
-  // Sync with external selectedServiceSlug prop if updated by parent/carousel
+  // IntersectionObserver to pause rotation and speech when hero scrolls out of view
   useEffect(() => {
-    if (selectedServiceSlug) {
-      const targetHeroSlug = mapServiceToOrbitCardId(selectedServiceSlug);
-      const matched = floatingCards.find(
-        (c) => c.slug === targetHeroSlug || c.id === targetHeroSlug
-      );
-      if (matched) {
-        setActiveServiceSlug(matched.slug);
-      }
-    }
-  }, [selectedServiceSlug, floatingCards]);
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
 
-  const stopEnergyPulse = useCallback(() => {
-    if (energyIntervalRef.current !== null) {
-      window.clearInterval(energyIntervalRef.current);
-      energyIntervalRef.current = null;
-    }
-    setSpeechEnergy(0);
-    setIsRobotTalkingVisual(false);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry) return;
+        const visible = entry.isIntersecting && entry.intersectionRatio >= 0.15;
+        setIsHeroVisible(visible);
+      },
+      { threshold: [0, 0.15, 0.5] }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
-  const startEnergyPulse = useCallback(() => {
-    if (energyIntervalRef.current !== null) {
-      window.clearInterval(energyIntervalRef.current);
-    }
-    setIsRobotTalkingVisual(true);
-    setSpeechEnergy(0.75);
-    energyIntervalRef.current = window.setInterval(() => {
-      setSpeechEnergy(0.4 + Math.random() * 0.6);
-    }, 100);
-  }, []);
-
-  const stopChromeKeepAlive = useCallback(() => {
-    if (chromeKeepAliveRef.current !== null) {
-      window.clearInterval(chromeKeepAliveRef.current);
-      chromeKeepAliveRef.current = null;
-    }
-  }, []);
-
-  // Standard Chrome workaround: pause() then resume() every 10 seconds while speaking
-  const startChromeKeepAlive = useCallback(() => {
-    stopChromeKeepAlive();
-    chromeKeepAliveRef.current = window.setInterval(() => {
-      if (
-        typeof window !== 'undefined' &&
-        'speechSynthesis' in window &&
-        window.speechSynthesis.speaking &&
-        !window.speechSynthesis.paused
-      ) {
-        try {
-          window.speechSynthesis.pause();
-          window.speechSynthesis.resume();
-        } catch {
-          // Ignore pause/resume errors
-        }
-      }
-    }, 10000);
-  }, [stopChromeKeepAlive]);
-
-  const clearStepTimer = useCallback(() => {
-    if (stepTimerRef.current !== null) {
-      window.clearTimeout(stepTimerRef.current);
-      stepTimerRef.current = null;
-    }
-  }, []);
-
-  const cancelBrowserSpeechOnly = useCallback(() => {
-    stopChromeKeepAlive();
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      try {
-        window.speechSynthesis.cancel();
-      } catch {
-        // Ignore cancel errors
-      }
-    }
-    setIsVoiceSpeaking(false);
-  }, [stopChromeKeepAlive]);
-
-  // Select preferred English voice (prefer en-IN, fall back to en-US)
-  const selectBestVoice = useCallback((voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null => {
-    if (!voices || voices.length === 0) return null;
-
-    const enInVoice =
-      voices.find(
-        (v) =>
-          v.lang.toLowerCase().startsWith('en-in') &&
-          (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Microsoft'))
-      ) || voices.find((v) => v.lang.toLowerCase().startsWith('en-in'));
-
-    if (enInVoice) return enInVoice;
-
-    const enUsVoice =
-      voices.find(
-        (v) =>
-          v.lang.toLowerCase().startsWith('en-us') &&
-          (v.name.includes('Natural') ||
-            v.name.includes('Google') ||
-            v.name.includes('Microsoft') ||
-            v.name.includes('Samantha'))
-      ) ||
-      voices.find((v) => v.lang.toLowerCase().startsWith('en-us')) ||
-      voices.find((v) => v.lang.toLowerCase().startsWith('en'));
-
-    return enUsVoice || null;
-  }, []);
-
-  // Wait for voices to load (speechSynthesis.onvoiceschanged) so the first line is never skipped
+  // Preload Web Speech API Voices
   const ensureVoicesLoaded = useCallback((): Promise<SpeechSynthesisVoice | null> => {
     return new Promise((resolve) => {
       if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
@@ -206,73 +168,135 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         return;
       }
       const existing = window.speechSynthesis.getVoices();
-      if (existing && existing.length > 0) {
-        resolve(selectBestVoice(existing));
+      if (existing.length > 0) {
+        if (!cachedVoiceRef.current) {
+          cachedVoiceRef.current = selectPreferredVoice(existing);
+        }
+        resolve(cachedVoiceRef.current);
+        return;
+      }
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        window.speechSynthesis.removeEventListener('voiceschanged', finish);
+        const loaded = window.speechSynthesis.getVoices();
+        cachedVoiceRef.current = selectPreferredVoice(loaded);
+        resolve(cachedVoiceRef.current);
+      };
+      window.speechSynthesis.addEventListener('voiceschanged', finish);
+      window.setTimeout(finish, 600);
+    });
+  }, []);
+
+  useEffect(() => {
+    ensureVoicesLoaded();
+  }, [ensureVoicesLoaded]);
+
+  const stopEnergyPulse = useCallback(() => {
+    if (energyIntervalRef.current !== null) {
+      window.clearInterval(energyIntervalRef.current);
+      energyIntervalRef.current = null;
+    }
+    setSpeechEnergy(0);
+  }, []);
+
+  const startEnergyPulse = useCallback(() => {
+    stopEnergyPulse();
+    if (prefersReducedMotion) {
+      setSpeechEnergy(0.35);
+      return;
+    }
+    energyIntervalRef.current = window.setInterval(() => {
+      const wave =
+        0.35 +
+        Math.sin(Date.now() * 0.018) * 0.25 +
+        Math.cos(Date.now() * 0.031) * 0.2;
+      setSpeechEnergy(Math.max(0.15, Math.min(1, wave)));
+    }, 85);
+  }, [prefersReducedMotion, stopEnergyPulse]);
+
+  const stopChromeKeepAlive = useCallback(() => {
+    if (keepAliveIntervalRef.current !== null) {
+      window.clearInterval(keepAliveIntervalRef.current);
+      keepAliveIntervalRef.current = null;
+    }
+  }, []);
+
+  const startChromeKeepAlive = useCallback(() => {
+    stopChromeKeepAlive();
+    keepAliveIntervalRef.current = window.setInterval(() => {
+      if (
+        typeof window !== 'undefined' &&
+        'speechSynthesis' in window &&
+        window.speechSynthesis.speaking &&
+        !window.speechSynthesis.paused
+      ) {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+      }
+    }, 10000);
+  }, [stopChromeKeepAlive]);
+
+  const cancelSpeech = useCallback(() => {
+    voiceSessionIdRef.current += 1;
+    stopChromeKeepAlive();
+    stopEnergyPulse();
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch {
+        // Ignore browser cancel errors
+      }
+    }
+    utterancePoolRef.current = [];
+    setIsVoiceSpeaking(false);
+    setCaptionText(null);
+  }, [stopChromeKeepAlive, stopEnergyPulse]);
+
+  useEffect(() => {
+    if (!isHeroVisible && isVoiceSpeaking) {
+      cancelSpeech();
+    }
+  }, [isHeroVisible, isVoiceSpeaking, cancelSpeech]);
+
+  useEffect(() => {
+    return () => {
+      cancelSpeech();
+    };
+  }, [cancelSpeech]);
+
+  const speakLine = useCallback(
+    async (rawText: string, onDone?: () => void) => {
+      if (
+        isMutedRef.current ||
+        typeof window === 'undefined' ||
+        !('speechSynthesis' in window) ||
+        typeof SpeechSynthesisUtterance === 'undefined'
+      ) {
+        onDone?.();
         return;
       }
 
-      let resolved = false;
-      const done = () => {
-        if (resolved) return;
-        resolved = true;
-        const loaded = window.speechSynthesis.getVoices();
-        resolve(selectBestVoice(loaded));
-      };
+      const sessionId = voiceSessionIdRef.current + 1;
+      voiceSessionIdRef.current = sessionId;
 
-      const prevHandler = window.speechSynthesis.onvoiceschanged;
-      window.speechSynthesis.onvoiceschanged = (ev) => {
-        if (typeof prevHandler === 'function') {
-          prevHandler.call(window.speechSynthesis, ev);
-        }
-        done();
-      };
-
-      window.setTimeout(done, 550);
-    });
-  }, [selectBestVoice]);
-
-  // Speak a single utterance in the queue, keeping it in utterancePoolRef so Chrome never GCs it
-  const speakSingleUtterance = useCallback(
-    async (text: string, sessionId: number, onComplete: () => void) => {
-      if (tourSessionIdRef.current !== sessionId) return;
-
-      const durationMs = getStepReadingDurationMs(text);
-      const canSpeakAudio =
-        voiceTourEnabledRef.current &&
-        !isMutedRef.current &&
-        hasInteractedRef.current &&
-        typeof window !== 'undefined' &&
-        'speechSynthesis' in window &&
-        typeof SpeechSynthesisUtterance !== 'undefined';
-
-      if (!canSpeakAudio) {
-        setIsVoiceSpeaking(false);
-        clearStepTimer();
-        stepTimerRef.current = window.setTimeout(() => {
-          if (tourSessionIdRef.current === sessionId) {
-            onComplete();
-          }
-        }, durationMs);
-        return;
+      try {
+        window.speechSynthesis.cancel();
+      } catch {
+        // Ignore
       }
 
       const preferredVoice = await ensureVoicesLoaded();
-      if (tourSessionIdRef.current !== sessionId) return;
-
-      // Re-check in case user muted while waiting for voices
-      if (!voiceTourEnabledRef.current || isMutedRef.current) {
-        setIsVoiceSpeaking(false);
-        clearStepTimer();
-        stepTimerRef.current = window.setTimeout(() => {
-          if (tourSessionIdRef.current === sessionId) {
-            onComplete();
-          }
-        }, durationMs);
+      if (voiceSessionIdRef.current !== sessionId || isMutedRef.current) {
+        onDone?.();
         return;
       }
 
       try {
-        const utterance = new SpeechSynthesisUtterance(text);
+        const utterance = new SpeechSynthesisUtterance(
+          formatBrandPronunciation(rawText)
+        );
         if (preferredVoice) {
           utterance.voice = preferredVoice;
           utterance.lang = preferredVoice.lang;
@@ -280,11 +304,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           utterance.lang = 'en-IN';
         }
         utterance.rate = 0.95;
-        utterance.pitch = 1.02;
+        utterance.pitch = 0.9;
+        utterance.volume = 1;
 
-        // Keep reference in array to prevent Chrome garbage collection mid-speech
         utterancePoolRef.current.push(utterance);
-        if (utterancePoolRef.current.length > 25) {
+        if (utterancePoolRef.current.length > 15) {
           utterancePoolRef.current.shift();
         }
 
@@ -292,586 +316,430 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         const finalize = () => {
           if (finished) return;
           finished = true;
-          clearStepTimer();
-          if (tourSessionIdRef.current === sessionId) {
-            onComplete();
+          if (voiceSessionIdRef.current === sessionId) {
+            stopChromeKeepAlive();
+            stopEnergyPulse();
+            setIsVoiceSpeaking(false);
+            setCaptionText(null);
+            onDone?.();
           }
         };
 
         utterance.onboundary = () => {
-          if (tourSessionIdRef.current === sessionId) {
+          if (voiceSessionIdRef.current === sessionId) {
             setSpeechEnergy(0.45 + Math.random() * 0.55);
           }
         };
+        utterance.onend = finalize;
+        utterance.onerror = finalize;
 
-        utterance.onend = () => {
-          finalize();
-        };
-
-        utterance.onerror = () => {
-          finalize();
-        };
-
-        // Safety fallback timer only if browser speech hangs without firing onend
-        clearStepTimer();
-        stepTimerRef.current = window.setTimeout(() => {
-          finalize();
-        }, durationMs + 7500);
-
+        setCaptionText(rawText);
         setIsVoiceSpeaking(true);
+        startEnergyPulse();
         startChromeKeepAlive();
         window.speechSynthesis.speak(utterance);
       } catch {
-        setIsVoiceSpeaking(false);
-        clearStepTimer();
-        stepTimerRef.current = window.setTimeout(() => {
-          if (tourSessionIdRef.current === sessionId) {
-            onComplete();
-          }
-        }, durationMs);
-      }
-    },
-    [clearStepTimer, ensureVoicesLoaded, startChromeKeepAlive]
-  );
-
-  // Recursive queue runner for the guided tour steps
-  const runTourStep = useCallback(
-    (stepIndex: number, sessionId: number) => {
-      if (tourSessionIdRef.current !== sessionId) return;
-      if (!isAutoPlayingRef.current || !isHeroVisibleRef.current) {
         stopEnergyPulse();
         setIsVoiceSpeaking(false);
-        return;
+        setCaptionText(null);
+        onDone?.();
       }
-
-      const safeIndex = ((stepIndex % tourSteps.length) + tourSteps.length) % tourSteps.length;
-      currentTourStepRef.current = safeIndex;
-      const step = tourSteps[safeIndex];
-      if (!step) return;
-
-      // Switch scene, highlight floating card when voice tour is active, and show live caption
-      if (voiceTourEnabledRef.current) {
-        setActiveServiceSlug(step.serviceSlug);
-      }
-      setCaptionText(step.text);
-      startEnergyPulse();
-
-      if (step.type === 'welcome') {
-        setGreetTriggerCount((prev) => prev + 1);
-      }
-
-      speakSingleUtterance(step.text, sessionId, () => {
-        if (tourSessionIdRef.current !== sessionId) return;
-
-        const isLastStep = safeIndex >= tourSteps.length - 1;
-        if (isLastStep) {
-          // Tour completed one full cycle
-          if (voiceTourEnabledRef.current) {
-            // After the voice tour completes once, do not loop the voice; return to silent caption loop
-            hasCompletedVoiceTourOnceRef.current = true;
-            voiceTourEnabledRef.current = false;
-          }
-          stopChromeKeepAlive();
-          setIsVoiceSpeaking(false);
-          stopEnergyPulse();
-          setCaptionText(null);
-
-          // Pause 3 seconds after the closing line, then loop the tour again (captions only)
-          clearStepTimer();
-          stepTimerRef.current = window.setTimeout(() => {
-            if (tourSessionIdRef.current === sessionId && isAutoPlayingRef.current && isHeroVisibleRef.current) {
-              runTourStep(0, sessionId);
-            }
-          }, 3000);
-        } else {
-          // Advance immediately to the next utterance in the queue
-          runTourStep(safeIndex + 1, sessionId);
-        }
-      });
     },
-    [clearStepTimer, speakSingleUtterance, startEnergyPulse, stopChromeKeepAlive, stopEnergyPulse, tourSteps]
+    [ensureVoicesLoaded, startChromeKeepAlive, startEnergyPulse, stopChromeKeepAlive, stopEnergyPulse]
   );
 
-  // Stop voice and pause tour completely (used by Stop button)
-  const stopAndPauseTour = useCallback(() => {
-    tourSessionIdRef.current += 1;
-    isCardScrollSpeechRef.current = false;
-    voiceTourEnabledRef.current = false;
-    clearStepTimer();
-    cancelBrowserSpeechOnly();
-    stopEnergyPulse();
-    setCaptionText(null);
-    setIsAutoPlaying(false);
-    isAutoPlayingRef.current = false;
-  }, [cancelBrowserSpeechOnly, clearStepTimer, stopEnergyPulse]);
-
-  // 1. AUTO TOUR ON PAGE LOAD: 1.5 seconds after hero loads, start guided tour automatically
+  // Synchronized 8-Service Auto-Rotation Timer (every 6 seconds, pauses on hover or when paused)
   useEffect(() => {
-    const initialTimer = window.setTimeout(() => {
-      hasStartedInitialTourRef.current = true;
-      if (isAutoPlayingRef.current && isHeroVisibleRef.current) {
-        const sessionId = tourSessionIdRef.current + 1;
-        tourSessionIdRef.current = sessionId;
-        runTourStep(0, sessionId);
-      }
-    }, 1500);
-
-    return () => {
-      window.clearTimeout(initialTimer);
-    };
-  }, [runTourStep]);
-
-  // 2. VOICE STARTS ON FIRST INTERACTION: listen once for first pointerdown or keydown on document
-  useEffect(() => {
-    if (hasInteracted) return;
-
-    const handleFirstInteraction = (e: Event) => {
-      if (hasInteractedRef.current) return;
-      hasInteractedRef.current = true;
-      setHasInteracted(true);
-
-      // If user clicked directly on a dedicated robot control button, card, or the services carousel section, let its own handler manage state
-      const target = e.target as HTMLElement | null;
-      if (
-        target &&
-        typeof target.closest === 'function' &&
-        (target.closest('[data-robot-control="true"]') || target.closest('#services'))
-      ) {
-        return;
-      }
-
-      if (isMutedRef.current || hasCompletedVoiceTourOnceRef.current || !isHeroVisibleRef.current) {
-        return;
-      }
-
-      // Unlock speech and start speaking from the CURRENT line of the tour (do not restart from beginning)
-      voiceTourEnabledRef.current = true;
-      isAutoPlayingRef.current = true;
-      setIsAutoPlaying(true);
-      hasStartedInitialTourRef.current = true;
-
-      clearStepTimer();
-      cancelBrowserSpeechOnly();
-
-      const sessionId = tourSessionIdRef.current + 1;
-      tourSessionIdRef.current = sessionId;
-      runTourStep(currentTourStepRef.current, sessionId);
-    };
-
-    document.addEventListener('pointerdown', handleFirstInteraction, { once: true, capture: true });
-    document.addEventListener('keydown', handleFirstInteraction, { once: true, capture: true });
-
-    return () => {
-      document.removeEventListener('pointerdown', handleFirstInteraction, { capture: true });
-      document.removeEventListener('keydown', handleFirstInteraction, { capture: true });
-    };
-  }, [hasInteracted, cancelBrowserSpeechOnly, clearStepTimer, runTourStep]);
-
-  // 3. CONTROLS: Voice Guide / Stop toggle button
-  const handleToggleVoiceGuide = useCallback(() => {
-    hasInteractedRef.current = true;
-    setHasInteracted(true);
-
-    if (isVoiceSpeaking) {
-      // Stop silences the voice and pauses the tour
-      stopAndPauseTour();
-    } else {
-      // Clicking Voice Guide again restarts the voice tour from the beginning (Step 0)
-      if (isMutedRef.current) {
-        isMutedRef.current = false;
-        setIsMuted(false);
-        try {
-          window.sessionStorage.setItem(MUTE_STORAGE_KEY, '0');
-        } catch {
-          // Ignore storage error
-        }
-      }
-      clearStepTimer();
-      cancelBrowserSpeechOnly();
-
-      voiceTourEnabledRef.current = true;
-      hasCompletedVoiceTourOnceRef.current = false;
-      isAutoPlayingRef.current = true;
-      setIsAutoPlaying(true);
-
-      const sessionId = tourSessionIdRef.current + 1;
-      tourSessionIdRef.current = sessionId;
-      runTourStep(0, sessionId);
+    if (rotateTimerRef.current !== null) {
+      window.clearInterval(rotateTimerRef.current);
+      rotateTimerRef.current = null;
     }
-  }, [isVoiceSpeaking, stopAndPauseTour, clearStepTimer, cancelBrowserSpeechOnly, runTourStep]);
 
-  // Clicking the robot itself: if speaking, stop; otherwise unlock/start voice from current step (or restart if paused)
-  const handleRobotClick = useCallback(() => {
-    hasInteractedRef.current = true;
-    setHasInteracted(true);
-
-    if (isVoiceSpeaking) {
-      stopAndPauseTour();
+    if (!isAutoPlaying || isHovered || !isHeroVisible || isVoiceSpeaking) {
       return;
     }
 
-    if (isMutedRef.current) return;
+    rotateTimerRef.current = window.setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % HERO_SERVICE_SLIDES.length);
+    }, AUTO_ROTATE_INTERVAL_MS);
 
-    clearStepTimer();
-    cancelBrowserSpeechOnly();
-    voiceTourEnabledRef.current = true;
-    hasCompletedVoiceTourOnceRef.current = false;
-    isAutoPlayingRef.current = true;
-    setIsAutoPlaying(true);
+    return () => {
+      if (rotateTimerRef.current !== null) {
+        window.clearInterval(rotateTimerRef.current);
+        rotateTimerRef.current = null;
+      }
+    };
+  }, [isAutoPlaying, isHovered, isHeroVisible, isVoiceSpeaking]);
 
-    const sessionId = tourSessionIdRef.current + 1;
-    tourSessionIdRef.current = sessionId;
-    runTourStep(currentTourStepRef.current, sessionId);
-  }, [isVoiceSpeaking, stopAndPauseTour, clearStepTimer, cancelBrowserSpeechOnly, runTourStep]);
+  const handleSelectSlide = useCallback(
+    (index: number) => {
+      const normalized =
+        ((index % HERO_SERVICE_SLIDES.length) + HERO_SERVICE_SLIDES.length) %
+        HERO_SERVICE_SLIDES.length;
+      setActiveIndex(normalized);
+      const targetSlide = HERO_SERVICE_SLIDES[normalized];
+      if (targetSlide) {
+        onSelectServiceSlug?.(targetSlide.slug);
+      }
+      if (isVoiceSpeaking && targetSlide) {
+        speakLine(targetSlide.spokenLine);
+      }
+    },
+    [isVoiceSpeaking, onSelectServiceSlug, speakLine]
+  );
 
-  // Mute / Unmute toggle (remembers mute state in sessionStorage inside try/catch; captions keep running)
-  const handleToggleMute = useCallback(() => {
-    hasInteractedRef.current = true;
+  const handlePrevSlide = useCallback(() => {
+    handleSelectSlide(activeIndex - 1);
+  }, [activeIndex, handleSelectSlide]);
+
+  const handleNextSlide = useCallback(() => {
+    handleSelectSlide(activeIndex + 1);
+  }, [activeIndex, handleSelectSlide]);
+
+  // Voice Guide Controls
+  const handleToggleVoiceGuide = useCallback(() => {
     setHasInteracted(true);
+    if (isVoiceSpeaking) {
+      cancelSpeech();
+      return;
+    }
+    if (isMutedRef.current) {
+      isMutedRef.current = false;
+      setIsMuted(false);
+      try {
+        window.sessionStorage.setItem(MUTE_STORAGE_KEY, '0');
+      } catch {
+        // Ignore
+      }
+    }
+    speakLine(activeSlide.spokenLine);
+  }, [activeSlide.spokenLine, cancelSpeech, isVoiceSpeaking, speakLine]);
 
+  const handleToggleMute = useCallback(() => {
+    setHasInteracted(true);
     const nextMuted = !isMutedRef.current;
     isMutedRef.current = nextMuted;
     setIsMuted(nextMuted);
-
     try {
       window.sessionStorage.setItem(MUTE_STORAGE_KEY, nextMuted ? '1' : '0');
     } catch {
-      // Ignore sessionStorage errors
+      // Ignore
     }
-
     if (nextMuted) {
-      // Turn sound off permanently for this visit, but keep captions running
-      voiceTourEnabledRef.current = false;
-      cancelBrowserSpeechOnly();
-      if (isAutoPlayingRef.current && isHeroVisibleRef.current) {
-        clearStepTimer();
-        const sessionId = tourSessionIdRef.current + 1;
-        tourSessionIdRef.current = sessionId;
-        runTourStep(currentTourStepRef.current, sessionId);
-      }
+      cancelSpeech();
     } else {
-      // Unmuted: start speaking from current step if tour is active
-      voiceTourEnabledRef.current = true;
-      hasCompletedVoiceTourOnceRef.current = false;
-      if (isAutoPlayingRef.current && isHeroVisibleRef.current) {
-        clearStepTimer();
-        cancelBrowserSpeechOnly();
-        const sessionId = tourSessionIdRef.current + 1;
-        tourSessionIdRef.current = sessionId;
-        runTourStep(currentTourStepRef.current, sessionId);
-      }
+      speakLine(activeSlide.spokenLine);
     }
-  }, [cancelBrowserSpeechOnly, clearStepTimer, runTourStep]);
+  }, [activeSlide.spokenLine, cancelSpeech, speakLine]);
 
-  // Greet button: wave + speak greeting line, then resume silent caption loop
   const handleTriggerGreeting = useCallback(() => {
-    hasInteractedRef.current = true;
     setHasInteracted(true);
-
-    clearStepTimer();
-    cancelBrowserSpeechOnly();
-
-    const sessionId = tourSessionIdRef.current + 1;
-    tourSessionIdRef.current = sessionId;
-    voiceTourEnabledRef.current = !isMutedRef.current;
-
     setGreetTriggerCount((prev) => prev + 1);
-    setCaptionText(ROBOT_SPEECH_DATA.greetMessage);
-    startEnergyPulse();
+    if (!isMutedRef.current) {
+      speakLine(ROBOT_SPEECH_DATA.greetMessage);
+    }
+  }, [speakLine]);
 
-    speakSingleUtterance(ROBOT_SPEECH_DATA.greetMessage, sessionId, () => {
-      if (tourSessionIdRef.current !== sessionId) return;
-      stopChromeKeepAlive();
-      setIsVoiceSpeaking(false);
-      stopEnergyPulse();
-      setCaptionText(null);
-      voiceTourEnabledRef.current = false;
+  // Touch Swipe Support on Mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0]?.clientX ?? null;
+  };
 
-      if (isAutoPlayingRef.current && isHeroVisibleRef.current) {
-        stepTimerRef.current = window.setTimeout(() => {
-          if (tourSessionIdRef.current === sessionId) {
-            runTourStep(currentTourStepRef.current, sessionId);
-          }
-        }, 1800);
-      }
-    });
-  }, [
-    clearStepTimer,
-    cancelBrowserSpeechOnly,
-    startEnergyPulse,
-    speakSingleUtterance,
-    stopChromeKeepAlive,
-    stopEnergyPulse,
-    runTourStep,
-  ]);
-
-  // Clicking a floating card: speak that service's line and scroll to 2nd section (#services)
-  const handleSelectServiceCard = useCallback(
-    (card: HeroFloatingServiceCard, shouldScrollAndSpeak = true) => {
-      hasInteractedRef.current = true;
-      setHasInteracted(true);
-
-      setActiveServiceSlug(card.slug);
-      onSelectServiceSlugRef.current?.(card.slug);
-
-      const matchedStepIdx = tourSteps.findIndex(
-        (s) => s.type === 'service' && s.serviceSlug === card.slug
-      );
-      if (matchedStepIdx !== -1) {
-        currentTourStepRef.current = matchedStepIdx;
-      }
-
-      if (typeof window !== 'undefined') {
-        window.history.replaceState(null, '', `#services/${card.slug}`);
-        window.dispatchEvent(
-          new CustomEvent('iamtechni:select-service', { detail: { slug: card.slug } })
-        );
-      }
-
-      clearStepTimer();
-      cancelBrowserSpeechOnly();
-
-      const sessionId = tourSessionIdRef.current + 1;
-      tourSessionIdRef.current = sessionId;
-
-      if (shouldScrollAndSpeak) {
-        isCardScrollSpeechRef.current = true;
-        voiceTourEnabledRef.current = !isMutedRef.current;
-
-        const servicesEl = document.getElementById('services');
-        if (servicesEl) {
-          servicesEl.scrollIntoView({
-            behavior: prefersReducedMotion ? 'auto' : 'smooth',
-            block: 'start',
-          });
-        }
-
-        setCaptionText(card.spokenLine);
-        startEnergyPulse();
-
-        speakSingleUtterance(card.spokenLine, sessionId, () => {
-          if (tourSessionIdRef.current === sessionId) {
-            isCardScrollSpeechRef.current = false;
-            voiceTourEnabledRef.current = false;
-            stopChromeKeepAlive();
-            setIsVoiceSpeaking(false);
-            stopEnergyPulse();
-            setCaptionText(null);
-          }
-        });
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return;
+    const endX = e.changedTouches[0]?.clientX ?? touchStartXRef.current;
+    const deltaX = endX - touchStartXRef.current;
+    touchStartXRef.current = null;
+    if (Math.abs(deltaX) > 44) {
+      if (deltaX < 0) {
+        handleNextSlide();
       } else {
-        // Scene controller dot / prev / next click: switch to that service step in the tour
-        if (isAutoPlayingRef.current && isHeroVisibleRef.current && matchedStepIdx !== -1) {
-          runTourStep(matchedStepIdx, sessionId);
-        } else {
-          setCaptionText(card.spokenLine);
-        }
+        handlePrevSlide();
       }
-    },
-    [
-      tourSteps,
-      clearStepTimer,
-      cancelBrowserSpeechOnly,
-      prefersReducedMotion,
-      startEnergyPulse,
-      speakSingleUtterance,
-      stopChromeKeepAlive,
-      stopEnergyPulse,
-      runTourStep,
-    ]
-  );
-
-  // Scene controller Play / Pause toggle
-  const handleToggleAutoPlay = useCallback(() => {
-    const next = !isAutoPlayingRef.current;
-    isAutoPlayingRef.current = next;
-    setIsAutoPlaying(next);
-
-    if (!next) {
-      tourSessionIdRef.current += 1;
-      voiceTourEnabledRef.current = false;
-      clearStepTimer();
-      cancelBrowserSpeechOnly();
-      stopEnergyPulse();
-    } else {
-      const sessionId = tourSessionIdRef.current + 1;
-      tourSessionIdRef.current = sessionId;
-      runTourStep(currentTourStepRef.current, sessionId);
     }
-  }, [clearStepTimer, cancelBrowserSpeechOnly, stopEnergyPulse, runTourStep]);
+  };
 
-  // Stop voice and pause tour when scrolling out of the hero; resume silent tour when scrolling back
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el || typeof IntersectionObserver === 'undefined') return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const visible = entry.isIntersecting;
-          isHeroVisibleRef.current = visible;
-          setIsHeroVisible(visible);
-
-          if (!visible) {
-            if (!isCardScrollSpeechRef.current) {
-              tourSessionIdRef.current += 1;
-              voiceTourEnabledRef.current = false;
-              clearStepTimer();
-              cancelBrowserSpeechOnly();
-              stopEnergyPulse();
-            }
-          } else if (
-            visible &&
-            hasStartedInitialTourRef.current &&
-            isAutoPlayingRef.current &&
-            !isCardScrollSpeechRef.current
-          ) {
-            const sessionId = tourSessionIdRef.current + 1;
-            tourSessionIdRef.current = sessionId;
-            runTourStep(currentTourStepRef.current, sessionId);
-          }
-        });
-      },
-      { threshold: 0.08 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [clearStepTimer, cancelBrowserSpeechOnly, stopEnergyPulse, runTourStep]);
-
-  // Preload voices and stop voice / pause tour when switching browser tabs or leaving page
-  useEffect(() => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.getVoices();
-    }
-
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        tourSessionIdRef.current += 1;
-        isCardScrollSpeechRef.current = false;
-        voiceTourEnabledRef.current = false;
-        clearStepTimer();
-        cancelBrowserSpeechOnly();
-        stopEnergyPulse();
-      } else if (
-        hasStartedInitialTourRef.current &&
-        isAutoPlayingRef.current &&
-        isHeroVisibleRef.current
-      ) {
-        const sessionId = tourSessionIdRef.current + 1;
-        tourSessionIdRef.current = sessionId;
-        runTourStep(currentTourStepRef.current, sessionId);
-      }
-    };
-
-    const handleBeforeUnload = () => {
-      tourSessionIdRef.current += 1;
-      clearStepTimer();
-      cancelBrowserSpeechOnly();
-      stopEnergyPulse();
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      tourSessionIdRef.current += 1;
-      clearStepTimer();
-      cancelBrowserSpeechOnly();
-      stopEnergyPulse();
-    };
-  }, [clearStepTimer, cancelBrowserSpeechOnly, stopEnergyPulse, runTourStep]);
-
-  const handlePointerMove = useCallback(
-    (e: React.PointerEvent<HTMLElement>) => {
-      if (prefersReducedMotion || !sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) return;
-      const nx = (e.clientX - rect.left) / rect.width - 0.5;
-      const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      setParallax({ x: nx, y: ny });
-    },
-    [prefersReducedMotion]
-  );
-
-  const handlePointerLeave = useCallback(() => {
-    setParallax({ x: 0, y: 0 });
-  }, []);
-
-  const activeCard =
-    floatingCards.find((c) => c.slug === activeServiceSlug) || floatingCards[0];
-
-  const showTapToHearHint = !hasInteracted && !isMuted && !isVoiceSpeaking;
+  const effectiveAnimationState: RobotAnimationState = isVoiceSpeaking
+    ? 'speaking'
+    : gesturePulseState;
 
   return (
     <section
       ref={sectionRef}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
-      aria-label="IAMTECHNI Futuristic AI Ambassador Hero"
-      className="relative w-full overflow-hidden bg-[#0C1F38] border-b border-slate-800/70 pt-2 pb-20 sm:pt-3 sm:pb-20 lg:py-6 h-auto lg:h-[calc(100svh-var(--header-height,65px))] lg:min-h-[540px] lg:max-h-[860px] flex items-center"
+      aria-label="IAMTECHNI AI Innovation & Engineering Hero"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className="relative w-full h-[calc(100dvh-var(--header-height,64px))] max-h-[calc(100dvh-var(--header-height,64px))] min-h-[500px] bg-[#040814] text-white overflow-hidden flex flex-col justify-between select-none"
     >
-      {/* Squircle Shift Box Wave Background (z-0, pointer-events-none) */}
-      <SquircleShiftBackground />
+      {/* Sophisticated Dark Animated Background */}
+      <HeroDarkBackground
+        activeAccentHex={activeSlide.accentHex}
+        activeSecondaryHex={activeSlide.secondaryHex}
+      />
 
-      {/* Main Page Container
-          DOM order: Text column first (for SEO & screen readers), Robot column second.
-          Visual order: Below 1024px -> Robot first (order-1), Text second (order-2).
-          Desktop (1024px+) -> Text left (lg:order-1), Robot right (lg:order-2). */}
-      <div className="relative z-10 w-full max-w-[1440px] 2xl:max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 h-full min-h-0 flex flex-col lg:flex-row items-center justify-between gap-5 sm:gap-6 lg:gap-8">
-        {/* LEFT COLUMN (1st in HTML DOM): Eyebrow → Headline → Subtitle → CTAs → Trust Row */}
-        <div className="w-full lg:w-[46%] xl:w-[45%] min-h-0 flex flex-col justify-center order-2 lg:order-1 items-center lg:items-start text-center lg:text-left">
-          <HeroContent
-            onNavigate={onNavigate}
-            onOpenProjectModal={onOpenProjectModal}
-          />
-        </div>
+      {/* Main Hero Container */}
+      <div className="relative z-10 w-full max-w-[1480px] mx-auto px-3.5 sm:px-6 lg:px-8 xl:px-10 py-2 sm:py-2.5 lg:py-3 xl:py-4 flex-1 min-h-0 flex flex-col justify-between">
+        {/* ===================================================================
+            DESKTOP 3-COLUMN COMPOSITION (lg: >= 1024px)
+            Left (~34%): Dynamic Service Information
+            Center (~32%): Main Animated 3D Robot Centerpiece
+            Right (~34%): Dynamic Service Visuals Showcase
+        =================================================================== */}
+        <div className="hidden lg:grid lg:grid-cols-[34%_32%_34%] items-center gap-0 flex-1 min-h-0">
+          {/* LEFT COLUMN: Dynamic Service Information */}
+          <div className="pr-3 xl:pr-6 min-h-0 flex flex-col justify-center">
+            <HeroContent
+              slide={activeSlide}
+              onNavigate={onNavigate}
+              onOpenProjectModal={onOpenProjectModal}
+              mode="desktop"
+            />
+          </div>
 
-        {/* RIGHT COLUMN (2nd in HTML DOM): 3D Coded Humanoid Robot Presenter Stage
-            Desktop scene wrapper scaled down by ~25%: ~500px at 1280px, 520px at 1366px/1440px, 580px at 1920px,
-            vertically centered with the left text column and clear of the bottom-right AI chat button. */}
-        <div className="w-full lg:w-[54%] xl:w-[55%] h-auto lg:h-full min-h-0 flex flex-col justify-center items-center order-1 lg:order-2 relative">
-          <div className="relative w-full max-w-[calc(100vw-32px)] md:max-w-[640px] lg:max-w-[500px] xl:max-w-[520px] 2xl:max-w-[580px] h-[420px] md:h-[430px] lg:h-[405px] xl:h-[420px] 2xl:h-[455px] flex flex-col items-center justify-between my-auto">
-            {/* Centered Pill-Shaped Voice Control Toolbar Directly Above the Robot's Head */}
-            <div className="relative z-40 flex justify-center w-full mb-0.5 pointer-events-auto">
+          {/* CENTER COLUMN: Main Animated 3D Robot Centerpiece */}
+          <div className="relative flex flex-col items-center justify-between h-[clamp(310px,60dvh,530px)] min-h-0 w-full py-0.5">
+            {/* Directional Robot Gesture Status Pill */}
+            <motion.div
+              key={`gesture-pill-${activeSlide.id}`}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25 }}
+              className="shrink-0 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#07152E]/85 backdrop-blur-md border border-[#00D2FF]/30 text-[9.5px] xl:text-[10px] font-mono uppercase tracking-widest text-slate-300 shadow-[0_4px_16px_rgba(0,0,0,0.35)]"
+            >
+              {activeSlide.gestureDirection === 'left' ? (
+                <>
+                  <ArrowLeft className="w-3 h-3 text-[#00D2FF] animate-pulse shrink-0" />
+                  <span>AI AMBASSADOR // PRESENTING SERVICE</span>
+                </>
+              ) : (
+                <>
+                  <span>AI AMBASSADOR // SHOWCASING ARCHITECTURE</span>
+                  <ArrowRight className="w-3 h-3 text-[#00D2FF] animate-pulse shrink-0" />
+                </>
+              )}
+            </motion.div>
+
+            {/* 3D Robot Stage — Scales fluidly to available column height */}
+            <div className="relative w-full flex-1 min-h-[220px] self-stretch">
+              <div className="absolute inset-0">
+                {isDesktop && (
+                  <RobotScene
+                    activeServiceId={activeSlide.robotServiceId}
+                    animationState={effectiveAnimationState}
+                    isSpeaking={isVoiceSpeaking}
+                    speechEnergy={speechEnergy}
+                    greetTriggerCount={greetTriggerCount}
+                    isVisible={isHeroVisible}
+                    onRobotClick={handleToggleVoiceGuide}
+                  />
+                )}
+              </div>
+
+              {/* Live Speech Caption Overlay when Voice Guide is active */}
+              <AnimatePresence>
+                {captionText && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    className="pointer-events-none absolute bottom-2 inset-x-3 mx-auto max-w-xs rounded-xl bg-[#051024]/92 backdrop-blur-xl border border-[#00D2FF]/40 px-3 py-1.5 text-center text-[11px] text-slate-100 leading-snug shadow-[0_10px_28px_rgba(0,0,0,0.55)]"
+                  >
+                    {captionText}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Robot Voice & Greeting Controls */}
+            <div className="shrink-0 mt-0.5">
               <RobotSpeechControls
                 isSpeaking={isVoiceSpeaking}
                 isMuted={isMuted}
-                showTapToHearHint={showTapToHearHint}
+                showTapToHearHint={!hasInteracted && !isMuted}
                 onToggleVoiceGuide={handleToggleVoiceGuide}
                 onToggleMute={handleToggleMute}
                 onTriggerGreeting={handleTriggerGreeting}
               />
             </div>
+          </div>
 
-            {/* Centered 3D Coded Humanoid Robot Presenter (230px on mobile, 320px on tablet, scaled proportional stage on desktop).
-                On desktop (lg:), z-30 places the robot and its hands ABOVE the floating cards (z-20), while pointer-events-none keeps all cards clickable. */}
-            <div className="relative z-10 lg:z-30 lg:pointer-events-none w-[172px] sm:w-[200px] md:w-full lg:w-full h-[230px] md:h-[320px] lg:h-full lg:flex-1 min-h-0 flex items-center justify-center mx-auto">
-              <RobotScene
-                activeServiceId={activeCard?.robotServiceId || 'ai-ml'}
-                animationState={activeCard?.gestureState || 'presenting'}
-                isSpeaking={isRobotTalkingVisual}
-                speechEnergy={speechEnergy}
-                greetTriggerCount={greetTriggerCount}
-                isVisible={isHeroVisible}
-                onRobotClick={handleRobotClick}
-              />
+          {/* RIGHT COLUMN: Dynamic Service Visuals Showcase */}
+          <div className="pl-3 xl:pl-6 min-h-0 flex flex-col justify-center">
+            <HeroServiceVisuals slide={activeSlide} onNavigate={onNavigate} />
+          </div>
+        </div>
+
+        {/* ===================================================================
+            MOBILE & TABLET VERTICAL LAYOUT (< 1024px)
+            1. Top: Service heading and short description
+            2. Middle: Central robot animation (fluidly scaled to remaining height)
+            3. Below robot: Compact related-service visual
+            4. Bottom: CTA buttons and service navigation controls
+        =================================================================== */}
+        <div className="flex lg:hidden flex-col items-center justify-between gap-1.5 sm:gap-2 w-full flex-1 min-h-0">
+          {/* 1. Top: Service Heading & Short Description */}
+          <HeroContent
+            slide={activeSlide}
+            onNavigate={onNavigate}
+            onOpenProjectModal={onOpenProjectModal}
+            mode="mobile-top"
+          />
+
+          {/* 2. Middle: Central 3D Robot Animation & Voice Controls */}
+          <div className="relative w-full flex-1 min-h-[120px] self-stretch flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-[440px] flex-1 min-h-[100px] self-stretch mx-auto">
+              <div className="absolute inset-0">
+                {!isDesktop && (
+                  <RobotScene
+                    activeServiceId={activeSlide.robotServiceId}
+                    animationState={effectiveAnimationState}
+                    isSpeaking={isVoiceSpeaking}
+                    speechEnergy={speechEnergy}
+                    greetTriggerCount={greetTriggerCount}
+                    isVisible={isHeroVisible}
+                    onRobotClick={handleToggleVoiceGuide}
+                  />
+                )}
+              </div>
+
+              {/* Live Speech Caption Overlay on Mobile */}
+              <AnimatePresence>
+                {captionText && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 4 }}
+                    className="pointer-events-none absolute bottom-1 inset-x-3 mx-auto max-w-xs rounded-xl bg-[#051024]/92 backdrop-blur-xl border border-[#00D2FF]/40 px-2.5 py-1 text-center text-[10.5px] text-slate-100 leading-snug shadow-[0_8px_20px_rgba(0,0,0,0.55)]"
+                  >
+                    {captionText}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* Symmetrical Floating Service Cards (6 surrounding chips on mobile, 6 full cards on tablet/desktop) + Scene Controller */}
-            <ServiceCards
-              activeServiceSlug={activeCard?.slug || 'ai-machine-learning'}
-              isAutoPlaying={isAutoPlaying}
-              isSpeaking={isRobotTalkingVisual}
-              captionText={captionText}
-              onSelectServiceCard={handleSelectServiceCard}
-              onToggleAutoPlay={handleToggleAutoPlay}
-              parallaxOffset={parallax}
+            <div className="shrink-0 -mt-0.5">
+              <RobotSpeechControls
+                isSpeaking={isVoiceSpeaking}
+                isMuted={isMuted}
+                showTapToHearHint={!hasInteracted && !isMuted}
+                onToggleVoiceGuide={handleToggleVoiceGuide}
+                onToggleMute={handleToggleMute}
+                onTriggerGreeting={handleTriggerGreeting}
+              />
+            </div>
+          </div>
+
+          {/* 3. Below Robot: Compact Related-Service Visual */}
+          <div className="w-full max-w-xl mx-auto shrink-0">
+            <HeroServiceVisuals
+              slide={activeSlide}
+              onNavigate={onNavigate}
+              compact
             />
+          </div>
+
+          {/* 4. Bottom: CTA Buttons */}
+          <div className="w-full max-w-xl mx-auto shrink-0">
+            <HeroContent
+              slide={activeSlide}
+              onNavigate={onNavigate}
+              onOpenProjectModal={onOpenProjectModal}
+              mode="mobile-bottom"
+            />
+          </div>
+        </div>
+
+        {/* ===================================================================
+            SYNCHRONIZED 8-SERVICE CAROUSEL NAVIGATION BAR (Desktop & Mobile)
+        =================================================================== */}
+        <div className="relative z-20 mt-1 sm:mt-2 lg:mt-2 pt-1.5 sm:pt-2 border-t border-white/10 flex flex-row items-center justify-between gap-1.5 sm:gap-2.5 shrink-0">
+          {/* 8 Service Interactive Pills / Indicators — Single non-wrapping row */}
+          <div
+            role="tablist"
+            aria-label="Select active IAMTECHNI service"
+            className="flex items-center justify-start flex-nowrap gap-1 sm:gap-1.5 min-w-0 overflow-x-auto no-scrollbar"
+          >
+            {HERO_SERVICE_SLIDES.map((item, idx) => {
+              const isActive = idx === activeIndex;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-label={`Service ${idx + 1}: ${item.categoryLabel}`}
+                  onClick={() => handleSelectSlide(idx)}
+                  className={`group relative inline-flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2.5 py-1 rounded-full text-[9.5px] sm:text-[10.5px] font-medium transition-all duration-250 cursor-pointer shrink-0 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00D2FF] ${
+                    isActive
+                      ? 'bg-[#0A1F44] text-white border border-[#00D2FF]/65 shadow-[0_0_18px_rgba(0,210,255,0.22)]'
+                      : 'bg-white/[0.04] hover:bg-white/[0.09] text-slate-400 hover:text-slate-200 border border-white/10'
+                  }`}
+                >
+                  <span
+                    className={`font-mono text-[9.5px] sm:text-[10px] font-bold ${
+                      isActive ? 'text-[#00D2FF]' : 'text-slate-500 group-hover:text-slate-300'
+                    }`}
+                  >
+                    0{idx + 1}
+                  </span>
+                  <span
+                    className={`${
+                      isActive ? 'hidden sm:inline' : 'hidden xl:inline'
+                    } whitespace-nowrap`}
+                  >
+                    {item.shortTitle}
+                  </span>
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] shadow-[0_0_8px_#00D2FF]" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Prev / Play-Pause / Next Manual Controls */}
+          <div className="inline-flex items-center gap-1 sm:gap-1.5 shrink-0">
+            <span className="text-[10.5px] font-mono text-slate-400 mr-1 hidden 2xl:inline">
+              {activeSlide.counterLabel} • {isAutoPlaying && !isHovered ? 'AUTO-SYNC' : 'PAUSED'}
+            </span>
+
+            <button
+              type="button"
+              onClick={handlePrevSlide}
+              aria-label="Previous service"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer"
+            >
+              <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsAutoPlaying((prev) => !prev)}
+              aria-label={isAutoPlaying ? 'Pause service rotation' : 'Resume service rotation'}
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer"
+            >
+              {isAutoPlaying ? (
+                <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              ) : (
+                <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 ml-0.5" />
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleNextSlide}
+              aria-label="Next service"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer"
+            >
+              <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </button>
           </div>
         </div>
       </div>
     </section>
   );
 };
+
+export default HeroSection;

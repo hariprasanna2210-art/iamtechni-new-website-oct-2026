@@ -425,20 +425,29 @@ const ResponsiveCameraRig: React.FC = () => {
   useEffect(() => {
     if (camera instanceof THREE.PerspectiveCamera) {
       const aspect = size.width / Math.max(1, size.height);
-      if (size.width < 320) {
-        // Mobile compact view
+      // Ensure both full vertical height (head-to-base) and outstretched gesturing arms fit without clipping
+      const narrowCompensation = aspect < 0.82 ? Math.min(1.24, 0.82 / Math.max(0.52, aspect)) : 1;
+
+      if (size.height < 230) {
+        // Ultra-compact mobile landscape / short phone stage
         camera.fov = 31;
-        camera.position.set(0, 0.14, 5.95);
-        camera.lookAt(0, 0.06, 0);
+        camera.position.set(0, 0.08, 6.1 * narrowCompensation);
+        camera.lookAt(0, 0.07, 0);
+      } else if (size.width < 340) {
+        // Small mobile portrait stage
+        camera.fov = 31;
+        camera.position.set(0, 0.09, 6.05 * narrowCompensation);
+        camera.lookAt(0, 0.07, 0);
       } else if (aspect > 1.25) {
-        // Desktop & Tablet stage: frames full robot head-to-feet, platform, and orbit rings with clear space around cards
+        // Wide stage: frames full robot head-to-feet, platform, and orbit rings
         camera.fov = 30.5;
-        camera.position.set(0, 0.12, 6.05);
-        camera.lookAt(0, 0.05, 0);
+        camera.position.set(0, 0.09, 6.05);
+        camera.lookAt(0, 0.07, 0);
       } else {
+        // Standard desktop & tablet center column
         camera.fov = 30.5;
-        camera.position.set(0, 0.14, 5.9);
-        camera.lookAt(0, 0.06, 0);
+        camera.position.set(0, 0.09, 6.0 * narrowCompensation);
+        camera.lookAt(0, 0.07, 0);
       }
       camera.updateProjectionMatrix();
     }
@@ -2056,7 +2065,7 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
 
   if (!webglAvailable) {
     return (
-      <div className="w-full h-full min-h-[340px] flex flex-col items-center justify-center p-6 rounded-3xl bg-[#F3F8FF] border border-[#087BFA]/20 text-center">
+      <div className="w-full h-full min-h-[300px] flex flex-col items-center justify-center p-6 rounded-3xl bg-[#07142C]/90 border border-[#00D2FF]/30 text-center">
         <img
           src="/logo-clean.png"
           alt="IAMTECHNI AI Ambassador Logo"
@@ -2064,12 +2073,12 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
           height={93}
           loading="eager"
           decoding="async"
-          className="h-12 w-auto object-contain mb-3"
+          className="h-12 w-auto object-contain mb-3 brightness-110"
         />
-        <div className="text-base font-bold text-[#071638]">
+        <div className="text-base font-bold text-white">
           IAMTECHNI AI Ambassador
         </div>
-        <p className="text-xs text-slate-600 max-w-xs mt-1">
+        <p className="text-xs text-slate-300 max-w-xs mt-1">
           Interactive service tour is active. Select any capability to explore IAMTECHNI solutions.
         </p>
       </div>
@@ -2099,11 +2108,11 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
         <StudioEnvironment />
         <ResponsiveCameraRig />
 
-        {/* Balanced Sculptural Studio Key, Cool Fill & Cyan Rim Lighting */}
-        <hemisphereLight args={[0xffffff, 0x9bb5d8, 0.82]} position={[0, 8, 0]} />
+        {/* Balanced Sculptural Studio Key, Cyan Rim Light & Subtle Purple Accent Lighting */}
+        <hemisphereLight args={[0xffffff, 0x0b1d3a, 0.88]} position={[0, 8, 0]} />
         <directionalLight
           position={[3.8, 5.4, 4.4]}
-          intensity={1.55}
+          intensity={1.6}
           castShadow={!isHeadless}
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
@@ -2116,8 +2125,9 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
           shadow-bias={-0.0005}
           shadow-normalBias={0.02}
         />
-        <directionalLight position={[-4.2, 2.2, 3.0]} intensity={0.95} color={0x00c7f2} />
-        <directionalLight position={[0.6, 3.6, -4.5]} intensity={1.25} color={0x087bfa} />
+        <directionalLight position={[-4.2, 2.2, 3.0]} intensity={1.15} color={0x00d2ff} />
+        <directionalLight position={[4.2, 2.4, -2.8]} intensity={0.82} color={0x8b5cf6} />
+        <directionalLight position={[0.6, 3.6, -4.5]} intensity={1.35} color={0x087bfa} />
 
         {/* Sculpted Humanoid AI Ambassador */}
         <HumanoidAmbassador
