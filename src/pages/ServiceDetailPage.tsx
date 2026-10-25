@@ -69,7 +69,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
               <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A] leading-snug drop-shadow-[0_2px_8px_rgba(30,58,138,0.08)]">
                 Why traditional approaches fail in {service.title}
               </h2>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                 {service.problemStatement}
               </p>
               <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-4 text-xs font-mono text-slate-500">
@@ -120,14 +120,14 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
                       </span>
                       <span className={`w-2 h-2 rounded-full ${color.dotBg}`} />
                     </div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-2">{cap.title}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed mb-5">{cap.description}</p>
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">{cap.title}</h3>
+                    <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed mb-5">{cap.description}</p>
                   </div>
 
-                  <div className="space-y-2 pt-3 border-t border-slate-200/60">
+                  <div className="space-y-2.5 pt-3.5 border-t border-slate-200/60">
                     {cap.points.map((pt, pIdx) => (
-                      <div key={pIdx} className="flex items-start gap-2.5 text-xs text-slate-700">
-                        <CheckCircle2 className={`w-3.5 h-3.5 ${color.accentText} shrink-0 mt-0.5`} />
+                      <div key={pIdx} className="flex items-start gap-2.5 text-[13.5px] sm:text-sm text-slate-700">
+                        <CheckCircle2 className={`w-4 h-4 ${color.accentText} shrink-0 mt-0.5`} />
                         <span>{pt}</span>
                       </div>
                     ))}
@@ -163,10 +163,10 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
                     <span className={`text-[11px] font-mono px-2.5 py-0.5 rounded-md font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}>
                       ILLUSTRATIVE SCENARIO
                     </span>
-                    <h3 className="text-base font-bold text-slate-900 mt-3 mb-2">{uc.title}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed mb-4">{uc.description}</p>
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 mt-3 mb-2">{uc.title}</h3>
+                    <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed mb-4">{uc.description}</p>
 
-                    <div className="bg-white/90 border border-slate-200/90 rounded-xl p-3.5 text-xs text-slate-800 font-medium shadow-2xs">
+                    <div className="bg-white/90 border border-slate-200/90 rounded-xl p-4 text-[13.5px] sm:text-sm text-slate-800 font-medium shadow-2xs">
                       <span className={`font-bold ${color.accentText}`}>Measurable Outcome: </span>
                       {uc.outcome}
                     </div>
@@ -205,7 +205,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
                     <div className={`text-xs font-mono font-bold ${color.accentText} mb-2`}>
                       {step.phase}
                     </div>
-                    <p className="text-xs text-slate-700 leading-relaxed">{step.description}</p>
+                    <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed">{step.description}</p>
                   </div>
                 </div>
               );
@@ -257,17 +257,17 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
               >
                 <button
                   onClick={() => toggleFaq(idx)}
-                  className="w-full px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors"
+                  className="w-full min-h-[52px] px-5 sm:px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors cursor-pointer"
                 >
-                  <span className="text-sm font-bold text-slate-900">{faq.question}</span>
+                  <span className="text-sm sm:text-base font-bold text-slate-900">{faq.question}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-slate-500 transition-transform ${
+                    className={`w-4 h-4 text-slate-500 shrink-0 transition-transform ${
                       openFaqIndex === idx ? 'rotate-180 text-[#1266E8]' : ''
                     }`}
                   />
                 </button>
                 {openFaqIndex === idx && (
-                  <div className="px-6 pb-5 pt-1 text-xs text-slate-600 leading-relaxed border-t border-slate-100 bg-[#FAFBFD]">
+                  <div className="px-5 sm:px-6 pb-5 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-[#FAFBFD]">
                     {faq.answer}
                   </div>
                 )}
@@ -284,20 +284,20 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
             <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Ready to build with IAMTECHNI?
             </h2>
-            <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-[15px] sm:text-base text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">
               Schedule an exploratory engineering consultation to evaluate project scope, architecture, budget, and implementation timelines.
             </p>
             <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => onStartProject(service.title)}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
               >
                 <span>Discuss Your Project</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
               <button
                 onClick={() => onNavigate('/contact')}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-white hover:bg-[#F5F9FF] text-[#1E3A8A] hover:text-[#2563EB] font-semibold text-xs sm:text-[13px] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.06)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-xl bg-white hover:bg-[#F5F9FF] text-[#1E3A8A] hover:text-[#2563EB] font-semibold text-sm border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.06)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
               >
                 <span>Contact Engineering</span>
               </button>

@@ -141,57 +141,87 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        {/* Top Row Controls: Slide Indicator Pills + Prev/Next Buttons */}
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-            {[0, 1, 2].map((idx) => {
-              const isCurrent = activeSlide === idx;
+        {/* Top Row Controls: Slide Indicator Pills + Named Mobile Step Tabs + Prev/Next Buttons */}
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+              {[0, 1, 2].map((idx) => {
+                const isCurrent = activeSlide === idx;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveSlide(idx)}
+                    className={`relative h-2.5 rounded-full transition-all duration-300 cursor-pointer overflow-hidden ${
+                      isCurrent
+                        ? 'w-14 bg-slate-200'
+                        : 'w-3 bg-slate-200 hover:bg-slate-300'
+                    }`}
+                    aria-label={`Slide ${idx + 1}`}
+                  >
+                    {isCurrent && (
+                      <motion.span
+                        key={`${activeSlide}-${isHovered ? 'paused' : 'playing'}`}
+                        initial={{ width: '0%' }}
+                        animate={{ width: '100%' }}
+                        transition={{
+                          duration: isHovered ? 0.3 : SLIDE_INTERVAL_MS / 1000,
+                          ease: isHovered ? 'easeOut' : 'linear',
+                        }}
+                        className="block h-full rounded-full bg-gradient-to-r from-[#04C8E8] to-[#1266E8]"
+                      />
+                    )}
+                  </button>
+                );
+              })}
+              <span className="md:hidden ml-1.5 text-xs font-mono font-bold text-[#1E3A8A]">
+                0{activeSlide + 1} / 03 · Swipe or tap
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handlePrevSlide}
+                aria-label="Previous slide"
+                className="w-10 h-10 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={handleNextSlide}
+                aria-label="Next slide"
+                className="w-10 h-10 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile-Only (<md) Named Slide Selector Pills for Instant Discoverability */}
+          <div className="grid grid-cols-3 gap-2 md:hidden">
+            {[
+              { idx: 0, label: '01. Collaborate' },
+              { idx: 1, label: '02. How We Work' },
+              { idx: 2, label: '03. Direct Contact' },
+            ].map((tab) => {
+              const isCurrent = activeSlide === tab.idx;
               return (
                 <button
-                  key={idx}
+                  key={tab.idx}
                   type="button"
-                  onClick={() => setActiveSlide(idx)}
-                  className={`relative h-2.5 rounded-full transition-all duration-300 cursor-pointer overflow-hidden ${
+                  onClick={() => setActiveSlide(tab.idx)}
+                  className={`px-2.5 py-2 rounded-xl text-[11px] font-bold transition-all cursor-pointer truncate ${
                     isCurrent
-                      ? 'w-14 bg-slate-200'
-                      : 'w-3 bg-slate-200 hover:bg-slate-300'
+                      ? 'bg-[#1E3A8A] text-white shadow-xs'
+                      : 'bg-white/90 text-[#1E3A8A] border border-[#DBEAFE]'
                   }`}
-                  aria-label={`Slide ${idx + 1}`}
                 >
-                  {isCurrent && (
-                    <motion.span
-                      key={`${activeSlide}-${isHovered ? 'paused' : 'playing'}`}
-                      initial={{ width: '0%' }}
-                      animate={{ width: '100%' }}
-                      transition={{
-                        duration: isHovered ? 0.3 : SLIDE_INTERVAL_MS / 1000,
-                        ease: isHovered ? 'easeOut' : 'linear',
-                      }}
-                      className="block h-full rounded-full bg-gradient-to-r from-[#04C8E8] to-[#1266E8]"
-                    />
-                  )}
+                  {tab.label}
                 </button>
               );
             })}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handlePrevSlide}
-              aria-label="Previous slide"
-              className="w-9 h-9 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={handleNextSlide}
-              aria-label="Next slide"
-              className="w-9 h-9 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
           </div>
         </div>
 
@@ -234,7 +264,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       Have a challenge? Let’s engineer the solution.
                     </h2>
 
-                    <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium leading-relaxed max-w-xl">
+                    <p className="text-[15px] sm:text-base text-slate-600 font-medium leading-relaxed max-w-xl">
                       Tell us what you want to build, improve or transform. Let’s explore the right technology and a practical path forward.
                     </p>
 
@@ -242,7 +272,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       <button
                         type="button"
                         onClick={() => onOpenProjectModal()}
-                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                       >
                         <span>Discuss Your Project</span>
                         <ArrowRight className="w-3.5 h-3.5 text-white" />
@@ -251,7 +281,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       <button
                         type="button"
                         onClick={() => onNavigate('/contact')}
-                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
                       >
                         <Mail className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
                         <span>Contact IAMTECHNI</span>
@@ -963,6 +993,39 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
             </div>
           </motion.div>
         </div>
+
+        {/* Mobile-Only (<md) Next Slide Preview Strip */}
+        {(() => {
+          const slideMeta = [
+            { num: '01', title: 'Ready to Collaborate — Project Initiation' },
+            { num: '02', title: 'Engineering Engagement — 3-Step Delivery' },
+            { num: '03', title: 'Direct Inquiries — Contact & Architecture Desk' },
+          ];
+          const nextIdx = (activeSlide + 1) % 3;
+          const nextSlide = slideMeta[nextIdx];
+          return (
+            <div className="md:hidden">
+              <button
+                type="button"
+                onClick={handleNextSlide}
+                className="w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-white/95 border border-[#BFDBFE] shadow-[0_6px_18px_rgba(30,58,138,0.08)] text-left transition-all active:scale-[0.99] cursor-pointer"
+              >
+                <div className="min-w-0">
+                  <div className="text-[10.5px] font-mono font-bold uppercase tracking-wider text-[#2563EB]">
+                    Up Next · Slide {nextSlide.num} / 03
+                  </div>
+                  <div className="text-xs font-bold text-[#1E3A8A] truncate">
+                    {nextSlide.title}
+                  </div>
+                </div>
+                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#1E3A8A] text-white text-xs font-bold shrink-0">
+                  <span>Next</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </span>
+              </button>
+            </div>
+          );
+        })()}
 
         {/* Centred in light grey mono under the single sliding row */}
         <div className="pt-2 text-center">

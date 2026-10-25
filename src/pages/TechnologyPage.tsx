@@ -45,10 +45,10 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
       <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           {/* Category Filter Tabs */}
-          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl max-w-2xl shadow-2xs">
+          <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-xl max-w-3xl shadow-2xs">
             <button
               onClick={() => setActiveCategory('all')}
-              className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+              className={`min-h-[38px] px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 activeCategory === 'all'
                   ? 'bg-[#1E3A8A] text-white shadow-xs'
                   : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
@@ -62,7 +62,7 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                  className={`min-h-[38px] px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
                     activeCategory === cat.id
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
@@ -111,16 +111,16 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
                                 <div className={`w-8 h-8 rounded-lg ${itemColor.iconBg} text-white flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform`}>
                                   <ItemIcon className="w-4 h-4" />
                                 </div>
-                                <h3 className="text-sm font-bold text-slate-900">{item.name}</h3>
+                                <h3 className="text-sm sm:text-base font-bold text-slate-900">{item.name}</h3>
                               </div>
                               <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md font-bold ${itemColor.badgeBg} ${itemColor.badgeText} border ${itemColor.badgeBorder}`}>
                                 {item.level}
                               </span>
                             </div>
-                            <div className={`text-[11px] font-semibold ${itemColor.accentText} mb-2 font-mono`}>
+                            <div className={`text-xs font-semibold ${itemColor.accentText} mb-2 font-mono`}>
                               {item.role}
                             </div>
-                            <p className="text-xs text-slate-700 leading-relaxed">{item.description}</p>
+                            <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed">{item.description}</p>
                           </div>
                         </div>
                       </ScrollRevealItem>
@@ -140,16 +140,16 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
             <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Have an existing stack that needs modernization?
             </h2>
-            <p className="text-sm bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-xl mx-auto leading-relaxed">
+            <p className="text-[15px] sm:text-base text-slate-600 font-medium max-w-xl mx-auto leading-relaxed">
               We review existing codebases and plan phased migrations with zero downtime and guaranteed business continuity.
             </p>
             <div className="pt-2">
               <button
                 onClick={() => onStartProject('IT Consulting & Modernization')}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
               >
                 <span>Request Stack Audit</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   ArrowRight,
   ChevronLeft,
@@ -26,11 +26,11 @@ interface TurnState {
 
 const TOTAL_SPREADS = 3;
 const TURN_DURATION_SEC = 0.5;
-const AUTO_TURN_INTERVAL_MS = 1800;
+const AUTO_TURN_INTERVAL_MS = 4200;
 const TURN_EASE: [number, number, number, number] = [0.645, 0.045, 0.355, 1];
 
 export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
-  const prefersReducedMotion = false;
+  const prefersReducedMotion = Boolean(useReducedMotion());
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const [currentSpread, setCurrentSpread] = useState(0);
@@ -150,6 +150,11 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
   useEffect(() => {
     const onWindowKeyDown = (e: KeyboardEvent) => {
       if (e.defaultPrevented || !isSectionVisibleRef.current) return;
+      const el = sectionRef.current;
+      const hasFocusOrHover =
+        isBookHovered || (el && document.activeElement && el.contains(document.activeElement));
+      if (!hasFocusOrHover) return;
+
       const target = e.target as HTMLElement | null;
       if (
         target &&
@@ -172,7 +177,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
 
     window.addEventListener('keydown', onWindowKeyDown);
     return () => window.removeEventListener('keydown', onWindowKeyDown);
-  }, [handleNextSpread, handlePrevSpread]);
+  }, [handleNextSpread, handlePrevSpread, isBookHovered]);
 
   const renderHeroZoomHeading = (
     words: string[],
@@ -257,7 +262,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
               'text-2xl sm:text-3xl lg:text-[34px] xl:text-[38px]'
             )}
 
-            <p className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent leading-relaxed font-medium">
+            <p className="text-[14.5px] sm:text-base text-slate-600 leading-relaxed font-medium">
               We help enterprises move beyond generic chatbot hype. We build grounded, domain-specific AI applications, automated knowledge assistants, and cost-controlled inference pipelines.
             </p>
 
@@ -297,7 +302,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
 
             <div className="h-0.5 w-16 bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-transparent rounded-full" />
 
-            <p className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed max-w-md">
+            <p className="text-[14.5px] sm:text-base text-slate-600 font-medium leading-relaxed max-w-md">
               Query thousands of internal contracts, SOPs, and engineering manuals with verifiable source page citations.
             </p>
           </div>
@@ -324,7 +329,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
 
           <div className="h-0.5 w-16 bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-transparent rounded-full" />
 
-          <p className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed max-w-md">
+          <p className="text-[14.5px] sm:text-base text-slate-600 font-medium leading-relaxed max-w-md">
             Automated document extraction, invoice classification, and human-in-the-loop review queues.
           </p>
         </div>
@@ -482,7 +487,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
 
             <div className="h-0.5 w-16 bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-transparent rounded-full" />
 
-            <p className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed max-w-md">
+            <p className="text-[14.5px] sm:text-base text-slate-600 font-medium leading-relaxed max-w-md">
               Domain-specific assistants trained on your proprietary processes without leaking data to public training sets.
             </p>
           </div>
@@ -509,7 +514,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
 
           <div className="h-0.5 w-16 bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-transparent rounded-full" />
 
-          <p className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed max-w-md">
+          <p className="text-[14.5px] sm:text-base text-slate-600 font-medium leading-relaxed max-w-md">
             Cost-aware token budgeting, prompt caching, and defensive filters against prompt injection attacks.
           </p>
         </div>
@@ -605,7 +610,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
 
             {renderHeroZoomHeading(
               ['Put', 'intelligent', 'technology', 'to', 'practical', 'work.'],
-              'h1',
+              'h2',
               'text-2xl sm:text-3xl lg:text-[36px] xl:text-[40px]'
             )}
           </div>
@@ -923,34 +928,128 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
         <div
           onMouseEnter={() => setIsBookHovered(true)}
           onMouseLeave={() => setIsBookHovered(false)}
+          onTouchStart={(e) => {
+            setIsBookHovered(true);
+            (e.currentTarget as HTMLDivElement).dataset.touchStartX = String(
+              e.touches[0]?.clientX ?? 0
+            );
+            (e.currentTarget as HTMLDivElement).dataset.touchStartY = String(
+              e.touches[0]?.clientY ?? 0
+            );
+          }}
+          onTouchEnd={(e) => {
+            setIsBookHovered(false);
+            const startX = Number(
+              (e.currentTarget as HTMLDivElement).dataset.touchStartX || 0
+            );
+            const startY = Number(
+              (e.currentTarget as HTMLDivElement).dataset.touchStartY || 0
+            );
+            const endX = e.changedTouches[0]?.clientX ?? startX;
+            const endY = e.changedTouches[0]?.clientY ?? startY;
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            if (Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+              if (deltaX < 0) {
+                handleNextSpread();
+              } else {
+                handlePrevSpread();
+              }
+            }
+          }}
           className="lg:hidden relative mx-auto my-2"
           style={{ perspective: '1600px' }}
         >
-          {/* Stacked Page Edges for Mobile Book */}
-          <div
-            aria-hidden="true"
-            className="absolute top-2 bottom-2 -right-2 w-4 rounded-r-[22px] bg-[#E2E8F0] border-r border-y border-[#CBD5E1] pointer-events-none"
-          />
-          <div
-            aria-hidden="true"
-            className="absolute top-1 bottom-1 -right-1 w-4 rounded-r-[22px] bg-[#EEF4FF] border-r border-y border-[#DBEAFE] pointer-events-none"
-          />
+          {/* Mobile/Tablet Top Spread Discoverability & Flip Control Bar */}
+          <div className="flex items-center justify-between gap-2 mb-3 px-1">
+            <div className="inline-flex items-center gap-2 min-w-0">
+              <span className="px-2.5 py-1 rounded-lg bg-[#1E3A8A] text-white font-mono text-xs font-bold shrink-0">
+                Spread 0{currentSpread + 1} / 03
+              </span>
+              <span className="text-xs font-semibold text-[#2563EB] truncate">
+                Swipe or tap to flip pages →
+              </span>
+            </div>
+            <div className="inline-flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => handlePrevSpread()}
+                disabled={Boolean(turnState?.isTurning)}
+                aria-label="Previous book spread"
+                className="w-9 h-9 rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleNextSpread()}
+                disabled={Boolean(turnState?.isTurning)}
+                aria-label="Next book spread"
+                className="w-9 h-9 rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
 
-          <motion.div
-            key={`mobile-spread-${currentSpread}`}
-            initial={
-              prefersReducedMotion
-                ? { opacity: 1 }
-                : { opacity: 0, rotateY: -12, scale: 0.98 }
-            }
-            animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-            transition={{ duration: 0.45, ease: TURN_EASE }}
-            style={{ transformOrigin: 'left center' }}
-            className="rounded-[24px] bg-gradient-to-b from-white via-[#FAFBFD] to-[#F1F5FD] border border-[#DBEAFE] shadow-[0_20px_50px_-15px_rgba(30,58,138,0.14)] overflow-hidden divide-y divide-[#DBEAFE]"
-          >
-            <div>{renderLeftPage(currentSpread, true)}</div>
-            <div>{renderRightPage(currentSpread, true)}</div>
-          </motion.div>
+          <div className="relative">
+            {/* Stacked Page Edges for Mobile Book */}
+            <div
+              aria-hidden="true"
+              className="absolute top-2 bottom-2 -right-2 w-4 rounded-r-[22px] bg-[#E2E8F0] border-r border-y border-[#CBD5E1] pointer-events-none"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute top-1 bottom-1 -right-1 w-4 rounded-r-[22px] bg-[#EEF4FF] border-r border-y border-[#DBEAFE] pointer-events-none"
+            />
+
+            <motion.div
+              key={`mobile-spread-${currentSpread}`}
+              initial={
+                prefersReducedMotion
+                  ? { opacity: 1 }
+                  : { opacity: 0, rotateY: -12, scale: 0.98 }
+              }
+              animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+              transition={{ duration: 0.45, ease: TURN_EASE }}
+              style={{ transformOrigin: 'left center' }}
+              className="rounded-[24px] bg-gradient-to-b from-white via-[#FAFBFD] to-[#F1F5FD] border border-[#DBEAFE] shadow-[0_20px_50px_-15px_rgba(30,58,138,0.14)] overflow-hidden divide-y divide-[#DBEAFE]"
+            >
+              <div>{renderLeftPage(currentSpread, true)}</div>
+              <div>{renderRightPage(currentSpread, true)}</div>
+            </motion.div>
+          </div>
+
+          {/* Mobile/Tablet Next Spread Preview Bar */}
+          {(() => {
+            const spreadTitles = [
+              { num: '01–02', label: 'Private RAG Pipeline & Architecture' },
+              { num: '03–04', label: 'Private Document RAG & Knowledge Assistants' },
+              { num: '05–06', label: 'Workflow Automation & Cost FinOps' },
+            ];
+            const nextSpreadIdx = (currentSpread + 1) % 3;
+            const nextSpreadMeta = spreadTitles[nextSpreadIdx];
+            return (
+              <button
+                type="button"
+                onClick={() => handleNextSpread()}
+                className="mt-3 w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-white via-[#F8FBFF] to-[#EEF4FF] border border-[#BFDBFE] shadow-[0_6px_18px_rgba(30,58,138,0.08)] text-left transition-all active:scale-[0.99] cursor-pointer"
+              >
+                <div className="min-w-0">
+                  <div className="text-[10.5px] font-mono font-bold uppercase tracking-wider text-[#2563EB]">
+                    Up Next · Pages {nextSpreadMeta.num} (Spread 0{nextSpreadIdx + 1}/03)
+                  </div>
+                  <div className="text-xs font-bold text-[#1E3A8A] truncate">
+                    {nextSpreadMeta.label}
+                  </div>
+                </div>
+                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#1E3A8A] text-white text-xs font-bold shrink-0">
+                  <span>Flip Page</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </span>
+              </button>
+            );
+          })()}
         </div>
 
         {/* ================================================================= */}
@@ -1046,7 +1145,7 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
         {/* BOTTOM LINE + HERO-MATCHED CTA BUTTON (Always Visible Below Book) */}
         {/* ================================================================= */}
         <div className="mt-8 pt-6 border-t border-[#DBEAFE] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <span className="bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium">
+          <span className="text-xs sm:text-sm text-slate-600 font-medium text-center sm:text-left">
             Every AI deployment is backed by privacy compliance, rate-limiting, and evaluation benchmarks.
           </span>
           <button

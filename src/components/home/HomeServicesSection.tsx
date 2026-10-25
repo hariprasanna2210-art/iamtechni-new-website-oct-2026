@@ -85,7 +85,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
   }, [onSelectSlug]);
 
   const totalItems = items.length;
-  const SLIDE_DURATION = 2000; // 2 seconds per slide
+  const SLIDE_DURATION = 3600; // 3.6 seconds per slide for comfortable reading
 
   // Find item index by slug or id
   const findItemIndexBySlug = useCallback(
@@ -403,8 +403,8 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
             })}
           </motion.h2>
 
-          {/* Subtitle Paragraph — Hero Section Subtitle Gradient (#100C2E -> #3A279E -> #2557D6) */}
-          <p className="!font-['Inter','Plus_Jakarta_Sans',sans-serif] text-sm min-[360px]:text-base sm:text-[17px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-[1.65] max-w-2xl mx-auto">
+          {/* Subtitle Paragraph */}
+          <p className="!font-['Inter','Plus_Jakarta_Sans',sans-serif] text-[15px] sm:text-base lg:text-[17px] text-slate-600 font-medium leading-[1.68] max-w-2xl mx-auto">
             {subtitle}
           </p>
         </div>
@@ -412,13 +412,34 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
         {/* ===================================================================== */}
         {/* 2. DYNAMIC ICON + NUMBERED FILTER TRACK                               */}
         {/* ===================================================================== */}
-        <div className="relative w-full max-w-5xl mx-auto mb-6 sm:mb-8">
-          <div className="p-1.5 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/85 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_4px_20px_rgba(30,58,138,0.06),inset_0_1px_0_rgba(255,255,255,0.9)]">
+        <div className="relative w-full max-w-5xl mx-auto mb-5 sm:mb-8">
+          {/* Mobile-Only Discoverability Header above Filter Track */}
+          <div className="flex md:hidden items-center justify-between gap-2 px-1 mb-2">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-[#1E3A8A] uppercase tracking-wider">
+              <span className="px-2 py-0.5 rounded-md bg-[#1E3A8A] text-white">
+                {String(currentIndex + 1).padStart(2, '0')} / {String(totalItems).padStart(2, '0')}
+              </span>
+              <span className="truncate max-w-[170px] text-[#1E3A8A]/90">
+                {activeItem.title}
+              </span>
+            </div>
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2563EB] shrink-0">
+              <span>Swipe categories</span>
+              <ArrowRight className="w-3 h-3" />
+            </span>
+          </div>
+
+          <div className="relative p-1.5 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/85 backdrop-blur-md border border-[#DBEAFE]/90 shadow-[0_4px_20px_rgba(30,58,138,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] overflow-hidden">
+            {/* Mobile-only right-edge gradient cue indicating more scrollable tabs */}
+            <div
+              aria-hidden="true"
+              className="md:hidden pointer-events-none absolute inset-y-1 right-0 w-10 bg-gradient-to-l from-[#ECFEFF] via-[#F5F9FF]/85 to-transparent z-20 rounded-r-xl"
+            />
             <div
               ref={tabsScrollRef}
               role="tablist"
               aria-label={`Filter ${sectionId} item`}
-              className="flex items-center justify-start gap-1.5 overflow-x-auto scrollbar-none py-1 px-1 max-w-full"
+              className="flex items-center justify-start gap-1.5 overflow-x-auto no-scrollbar py-1 pl-1 pr-7 md:px-1 max-w-full"
               style={{ WebkitOverflowScrolling: 'touch' }}
             >
               {items.map((item, index) => {
@@ -435,7 +456,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                     aria-selected={isActive}
                     aria-controls={`${sectionId}-card-${item.slug || item.id}`}
                     onClick={() => handleSelectItem(index, true, true)}
-                    className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors duration-200 whitespace-nowrap shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
+                    className={`relative inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[40px] rounded-xl text-xs sm:text-[13px] font-semibold transition-colors duration-200 whitespace-nowrap shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
                       isActive
                         ? 'text-white font-bold'
                         : 'text-[#1E3A8A]/85 hover:text-[#1E3A8A] hover:bg-white/70'
@@ -453,7 +474,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                       />
                     )}
                     <span
-                      className={`relative z-10 text-[10px] font-mono tabular-nums ${
+                      className={`relative z-10 text-[10.5px] font-mono tabular-nums ${
                         isActive ? 'text-[#93C5FD]' : 'text-[#1D4ED8]'
                       }`}
                     >
@@ -476,7 +497,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
         {/* 3. DYNAMIC LAYERED CAROUSEL STAGE                                     */}
         {/*    - Desktop (lg+): 3 full compact cards + peeking side cards         */}
         {/*    - Tablet (md): 2 compact cards                                     */}
-        {/*    - Mobile (<md): 1 centered active card                             */}
+        {/*    - Mobile (<md): 1 centered active card + next-card preview         */}
         {/* ===================================================================== */}
         <div
           className="relative w-full max-w-5xl mx-auto"
@@ -502,6 +523,32 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
             if (isDragging) finishDrag();
           }}
         >
+          {/* Mobile-Only Top Swipe Cue & Quick Prev/Next Controls */}
+          <div className="flex md:hidden items-center justify-between gap-2 mb-2.5 px-1">
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1E3A8A]">
+              <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse" />
+              <span>Swipe card or tap arrows to browse ({totalItems} total)</span>
+            </span>
+            <div className="inline-flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={handlePrev}
+                aria-label="Previous item"
+                className="w-9 h-9 rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Next item"
+                className="w-9 h-9 rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
           {/* Desktop Edge Fade Gradients over the Peeking Cards */}
           <div
             aria-hidden="true"
@@ -538,7 +585,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
             onPointerMove={handlePointerMove}
             onPointerUp={finishDrag}
             onPointerCancel={finishDrag}
-            className={`relative w-full py-4 sm:py-6 select-none touch-pan-y ${
+            className={`relative w-full py-2 sm:py-6 select-none touch-pan-y ${
               isDragging ? 'cursor-grabbing' : 'cursor-grab'
             }`}
           >
@@ -581,7 +628,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                         handleSelectItem(targetIndex, true, false);
                       }
                     }}
-                    className={`h-full w-full max-w-[305px] sm:max-w-[315px] mx-auto flex flex-col transition-[transform,opacity] duration-[400ms] ease-out ${visibilityClasses} ${
+                    className={`h-full w-full max-w-[380px] md:max-w-[330px] lg:max-w-[315px] mx-auto flex flex-col transition-[transform,opacity] duration-[400ms] ease-out ${visibilityClasses} ${
                       isCenter
                         ? 'z-20 md:scale-[1.035] lg:scale-[1.045]'
                         : isPeek
@@ -590,9 +637,9 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                     }`}
                   >
                     <div
-                      className={`group relative h-full flex flex-col justify-between p-4 sm:p-5 rounded-2xl overflow-hidden backdrop-blur-md transition-all duration-[400ms] ease-out ${
+                      className={`group relative h-full flex flex-col justify-between p-5 sm:p-5 rounded-2xl overflow-hidden backdrop-blur-md transition-all duration-[400ms] ease-out ${
                         isCenter
-                          ? 'bg-gradient-to-br from-[#1E3A8A]/92 via-[#1E3A8A]/86 to-[#2563EB]/85 border border-[#60A5FA]/40 shadow-[0_18px_38px_rgba(30,58,138,0.24),inset_0_1px_0_rgba(255,255,255,0.22)] -translate-y-1'
+                          ? 'bg-gradient-to-br from-[#1E3A8A]/95 via-[#1E3A8A]/90 to-[#2563EB]/90 border border-[#60A5FA]/40 shadow-[0_18px_38px_rgba(30,58,138,0.24),inset_0_1px_0_rgba(255,255,255,0.22)] -translate-y-1'
                           : 'bg-gradient-to-br from-[#FFFFFF] via-[#F8FBFF] to-[#EEF4FF]/85 border border-[#DBEAFE] shadow-[0_6px_20px_rgba(30,58,138,0.06),inset_0_1px_0_rgba(255,255,255,0.95)] hover:border-[#93C5FD]'
                       }`}
                     >
@@ -622,7 +669,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                         {/* Header Row: Icon Box + Index/Category Metadata */}
                         <div className="flex items-center justify-between gap-2.5 mb-3">
                           <div
-                            className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${
+                            className={`w-10 h-10 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${
                               isCenter
                                 ? 'bg-white/15 text-white border border-white/25 shadow-[0_4px_12px_rgba(0,0,0,0.12)]'
                                 : 'bg-gradient-to-br from-[#EEF4FF] to-[#DBEAFE]/80 text-[#1E3A8A] border border-[#DBEAFE]'
@@ -632,15 +679,15 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                           </div>
 
                           <div
-                            className={`flex items-center gap-1.5 text-[10.5px] font-bold tracking-wide transition-colors duration-[400ms] ${
+                            className={`flex items-center gap-1.5 text-[11px] font-bold tracking-wide transition-colors duration-[400ms] ${
                               isCenter ? 'text-[#BFDBFE]' : 'text-[#2563EB]'
                             }`}
                           >
-                            <span className="font-mono tabular-nums opacity-80">
+                            <span className="font-mono tabular-nums opacity-85">
                               {formattedNumber}
                             </span>
                             <span aria-hidden="true">·</span>
-                            <span className="truncate max-w-[165px]">
+                            <span className="truncate max-w-[175px]">
                               {item.category || 'Engineering'}
                             </span>
                           </div>
@@ -648,7 +695,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
 
                         {/* Card Title */}
                         <h3
-                          className={`text-[15px] sm:text-[16px] font-bold leading-snug mb-1.5 transition-colors duration-[400ms] ${
+                          className={`text-base sm:text-[17px] font-bold leading-snug mb-2 transition-colors duration-[400ms] ${
                             isCenter
                               ? 'text-white'
                               : 'text-[#1E3A8A] group-hover:text-[#2563EB]'
@@ -659,10 +706,10 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
 
                         {/* Concise Description */}
                         <p
-                          className={`text-xs leading-relaxed line-clamp-2 mb-3 transition-colors duration-[400ms] ${
+                          className={`text-[13.5px] sm:text-xs lg:text-[13px] leading-relaxed line-clamp-3 sm:line-clamp-2 mb-3.5 transition-colors duration-[400ms] ${
                             isCenter
-                              ? 'text-[#E2E8F0]'
-                              : 'bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium'
+                              ? 'text-blue-50/95'
+                              : 'text-slate-600 font-medium'
                           }`}
                         >
                           {item.summary}
@@ -671,14 +718,14 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                         {/* Dynamic Core Highlights List (2 key items) */}
                         {keyHighlights.length > 0 && (
                           <div
-                            className={`space-y-1.5 mb-3 pt-2.5 border-t transition-colors duration-[400ms] ${
-                              isCenter ? 'border-white/12' : 'border-[#DBEAFE]/70'
+                            className={`space-y-1.5 mb-3.5 pt-2.5 border-t transition-colors duration-[400ms] ${
+                              isCenter ? 'border-white/15' : 'border-[#DBEAFE]/70'
                             }`}
                           >
                             {keyHighlights.map((highlight) => (
                               <div
                                 key={highlight}
-                                className="flex items-center gap-1.5 text-[11px] leading-tight"
+                                className="flex items-center gap-2 text-xs leading-snug"
                               >
                                 <CheckCircle2
                                   className={`w-3.5 h-3.5 shrink-0 ${
@@ -700,29 +747,29 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
 
                       {/* Card Bottom: Key Stack & Tools + Action Row */}
                       <div
-                        className={`relative z-10 pt-2.5 border-t space-y-2.5 transition-colors duration-[400ms] ${
+                        className={`relative z-10 pt-3 border-t space-y-3 transition-colors duration-[400ms] ${
                           isCenter ? 'border-white/15' : 'border-[#DBEAFE]/80'
                         }`}
                       >
                         {tools.length > 0 && (
                           <div>
                             <div
-                              className={`text-[9.5px] uppercase font-bold tracking-wider mb-1.5 transition-colors duration-[400ms] ${
+                              className={`text-[10px] uppercase font-bold tracking-wider mb-1.5 transition-colors duration-[400ms] ${
                                 isCenter ? 'text-[#BFDBFE]' : 'text-[#2563EB]/85'
                               }`}
                             >
                               {item.stackLabel || 'Key Stack & Tools'}
                             </div>
-                            <div className="flex items-center flex-wrap gap-1">
+                            <div className="flex items-center flex-wrap gap-1.5">
                               {tools.map((tool) => {
                                 const ToolIcon = tool.icon;
                                 return (
                                   <div
                                     key={tool.name}
                                     title={tool.name}
-                                    className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10.5px] font-semibold transition-colors duration-[400ms] ${
+                                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold transition-colors duration-[400ms] ${
                                       isCenter
-                                        ? 'bg-white/12 border border-white/18 text-white'
+                                        ? 'bg-white/14 border border-white/20 text-white'
                                         : 'bg-white border border-[#DBEAFE] text-[#1E3A8A] shadow-2xs'
                                     }`}
                                   >
@@ -754,8 +801,8 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                             }}
                             className={`inline-flex items-center gap-1.5 text-xs font-bold transition-all duration-200 group/link cursor-pointer ${
                               isCenter
-                                ? 'px-3 py-1.5 rounded-lg bg-white text-[#1E3A8A] hover:bg-[#EEF4FF] shadow-xs'
-                                : 'text-[#1E3A8A] hover:text-[#2563EB]'
+                                ? 'px-3.5 py-2 min-h-[38px] rounded-lg bg-white text-[#1E3A8A] hover:bg-[#EEF4FF] shadow-xs'
+                                : 'py-1.5 text-[#1E3A8A] hover:text-[#2563EB]'
                             }`}
                           >
                             <span>{item.ctaLabel}</span>
@@ -763,7 +810,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                           </button>
 
                           {!isCenter && (
-                            <span className="text-[10px] font-semibold text-[#2563EB]/75 group-hover:text-[#2563EB] transition-colors">
+                            <span className="text-[11px] font-semibold text-[#2563EB]/80 group-hover:text-[#2563EB] transition-colors">
                               Click to focus
                             </span>
                           )}
@@ -774,15 +821,51 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                 );
               })}
             </div>
+
+            {/* Mobile-Only (<md) Intentional Next-Card Preview Strip */}
+            {totalItems > 1 && (() => {
+              const nextIndex = (currentIndex + 1) % totalItems;
+              const nextItem = items[nextIndex];
+              if (!nextItem) return null;
+              const NextIcon = nextItem.icon;
+              const nextFormatted = String(nextIndex + 1).padStart(2, '0');
+              return (
+                <div className="md:hidden mt-3 max-w-[380px] mx-auto">
+                  <button
+                    type="button"
+                    onClick={() => handleSelectItem(nextIndex, true, false)}
+                    className="w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-white via-[#F8FBFF] to-[#EEF4FF] border border-[#BFDBFE] shadow-[0_6px_18px_rgba(30,58,138,0.08)] text-left transition-all active:scale-[0.99] cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-xl bg-[#EEF4FF] border border-[#DBEAFE] text-[#1E3A8A] flex items-center justify-center shrink-0">
+                        <NextIcon className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 text-[10.5px] font-mono font-bold uppercase tracking-wider text-[#2563EB]">
+                          <span>Up Next · {nextFormatted}/{String(totalItems).padStart(2, '0')}</span>
+                        </div>
+                        <div className="text-xs font-bold text-[#1E3A8A] truncate">
+                          {nextItem.title}
+                        </div>
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#1E3A8A] text-white text-[11px] font-bold shrink-0">
+                      <span>Next</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </span>
+                  </button>
+                </div>
+              );
+            })()}
           </div>
 
           {/* =================================================================== */}
           {/* 4. DYNAMIC INTERACTIVE PLAYBACK & PROGRESS DOCK                     */}
           {/* =================================================================== */}
-          <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 px-3 sm:px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.06)] max-w-3xl mx-auto">
+          <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 px-3.5 sm:px-4 py-3 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.06)] max-w-3xl mx-auto">
             {/* Left: Active Item Counter & Dynamic Title */}
             <div className="flex items-center justify-center sm:justify-start gap-2 min-w-0 max-w-full">
-              <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-md bg-[#1E3A8A] text-white font-mono text-[11px] font-bold tabular-nums shrink-0">
+              <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-[#1E3A8A] text-white font-mono text-xs font-bold tabular-nums shrink-0">
                 {String(currentIndex + 1).padStart(2, '0')} / {String(totalItems).padStart(2, '0')}
               </span>
               <AnimatePresence mode="wait">
@@ -792,7 +875,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                   animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
                   exit={prefersReducedMotion ? {} : { opacity: 0, y: -4 }}
                   transition={{ duration: 0.2 }}
-                  className="text-xs font-bold text-[#1E3A8A] truncate"
+                  className="text-xs sm:text-[13px] font-bold text-[#1E3A8A] truncate"
                 >
                   {activeItem.title}
                 </motion.span>
@@ -801,7 +884,7 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
 
             {/* Center: Interactive Segmented Progress Dots */}
             <div
-              className="flex flex-wrap items-center justify-center gap-1 min-[360px]:gap-1.5 max-w-full"
+              className="flex flex-wrap items-center justify-center gap-1.5 max-w-full"
               role="tablist"
               aria-label={`${sectionId} carousel slide indicators`}
             >
@@ -815,10 +898,10 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                     aria-selected={isActive}
                     aria-label={`Jump to ${it.title}`}
                     onClick={() => handleSelectItem(idx, true, false)}
-                    className={`relative h-2 rounded-full overflow-hidden transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
+                    className={`relative h-2.5 rounded-full overflow-hidden transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
                       isActive
-                        ? 'w-6 min-[360px]:w-7 bg-[#DBEAFE]'
-                        : 'w-1.5 min-[360px]:w-2 bg-[#93C5FD]/60 hover:bg-[#2563EB]/70'
+                        ? 'w-7 bg-[#DBEAFE]'
+                        : 'w-2 bg-[#93C5FD]/60 hover:bg-[#2563EB]/70'
                     }`}
                   >
                     {isActive && (
@@ -833,13 +916,13 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
             </div>
 
             {/* Right: Play/Pause + Prev/Next + All Items Link */}
-            <div className="flex items-center justify-center gap-1.5 shrink-0 max-w-full">
+            <div className="flex items-center justify-center gap-2 shrink-0 max-w-full">
               <button
                 type="button"
                 onClick={() => setIsPausedByUser((p) => !p)}
                 aria-label={isPausedByUser ? 'Resume auto-slide' : 'Pause auto-slide'}
                 title={isPausedByUser ? 'Resume auto-slide' : 'Pause auto-slide'}
-                className="w-7 h-7 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
+                className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
               >
                 {isPausedByUser ? (
                   <Play className="w-3.5 h-3.5 fill-current" />
@@ -852,28 +935,28 @@ export const ShowcaseCardCarouselSection: React.FC<ShowcaseCardCarouselSectionPr
                 type="button"
                 onClick={handlePrev}
                 aria-label="Previous slide"
-                className="w-7 h-7 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
+                className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
               >
-                <ChevronLeft className="w-3.5 h-3.5" />
+                <ChevronLeft className="w-4 h-4" />
               </button>
 
               <button
                 type="button"
                 onClick={handleNext}
                 aria-label="Next slide"
-                className="w-7 h-7 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
+                className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
               >
-                <ChevronRight className="w-3.5 h-3.5" />
+                <ChevronRight className="w-4 h-4" />
               </button>
 
-              <div className="w-px h-4 bg-[#DBEAFE] mx-0.5" aria-hidden="true" />
+              <div className="w-px h-5 bg-[#DBEAFE] mx-0.5" aria-hidden="true" />
 
               <button
                 type="button"
                 onClick={onAllItemsClick}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white text-[11px] font-semibold transition-colors cursor-pointer whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
               >
-                <Layers className="w-3 h-3 shrink-0" />
+                <Layers className="w-3.5 h-3.5 shrink-0" />
                 <span>{allItemsLabel}</span>
               </button>
             </div>

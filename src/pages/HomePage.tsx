@@ -410,19 +410,19 @@ export const HomePage: React.FC<HomePageProps> = ({
             })}
           </motion.h2>
 
-          {/* 3. Subtitle — Softer Hero Blue Gradient (#1E3A8A -> #2563EB -> #3B82F6) */}
-          <p className="mt-5 !font-['Inter',sans-serif] font-medium text-[15px] sm:text-[17px] md:text-[18.5px] bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent leading-[1.7] max-w-[740px] mx-auto">
+          {/* 3. Subtitle */}
+          <p className="mt-5 !font-['Inter',sans-serif] font-medium text-[15px] sm:text-[17px] md:text-[18px] text-slate-600 leading-[1.7] max-w-[740px] mx-auto">
             Every business faces distinct operational challenges. IAMTECHNI brings design, full-stack development, artificial intelligence, cloud infrastructure, and growth engineering together into solutions engineered for long-term reliability.
           </p>
 
-          {/* 4. Upper Feature Boxes: Strongly Typed & Multi-Cloud (Hero Pill/Card Color Coding) */}
+          {/* 4. Upper Feature Boxes: Strongly Typed & Multi-Cloud */}
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 w-full max-w-[720px] mx-auto">
             <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE] shadow-[0_4px_16px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-left transition-all duration-200 hover:border-[#93C5FD] hover:shadow-[0_8px_24px_rgba(30,58,138,0.12)]">
               <div className="flex items-center gap-2 text-[#1E3A8A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-sm sm:text-[15px] mb-1.5">
                 <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
                 <span>Strongly Typed</span>
               </div>
-              <p className="text-xs sm:text-[13px] text-[#2563EB] font-medium leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
                 TypeScript strict mode across API &amp; client contracts.
               </p>
             </div>
@@ -432,7 +432,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
                 <span>Multi-Cloud</span>
               </div>
-              <p className="text-xs sm:text-[13px] text-[#2563EB] font-medium leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
                 Zero vendor lock-in across AWS &amp; Azure runtimes.
               </p>
             </div>
@@ -500,26 +500,32 @@ export const HomePage: React.FC<HomePageProps> = ({
                   ))}
                 </div>
 
-                {/* Mobile (<md): Three Scrolling Marquee Rows (Alternating Left, Right, Left, Paused on Hover) */}
-                <div className="flex md:hidden flex-col gap-y-5 w-full overflow-hidden">
-                  {toolRows.map((rowTools, rowIdx) => {
-                    const isReverse = rowIdx === 1;
-                    const marqueeClass = prefersReducedMotion
-                      ? 'flex items-center justify-center flex-wrap gap-x-5 gap-y-3 w-full'
-                      : isReverse
-                      ? 'animate-tech-marquee-reverse items-center gap-x-7 pr-7'
-                      : 'animate-tech-marquee items-center gap-x-7 pr-7';
-
+                {/* Mobile (<md): Clean Responsive 2/3-Column Technology Grid (No Endless Auto-Marquee) */}
+                <div className="grid grid-cols-2 min-[390px]:grid-cols-3 md:hidden gap-2.5 w-full">
+                  {toolRows.flat().map((tool) => {
+                    const ToolIcon = tool.icon;
+                    const displayLabel =
+                      tool.name === 'Google Cloud'
+                        ? 'Google Cloud'
+                        : tool.name === 'Tailwind CSS'
+                        ? 'Tailwind CSS'
+                        : tool.name;
                     return (
                       <div
-                        key={`tech-mobile-row-${rowIdx + 1}`}
-                        className="relative w-full overflow-hidden"
+                        key={`tech-mobile-grid-${tool.name}`}
+                        className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white/90 border border-[#DBEAFE] shadow-[0_2px_10px_rgba(30,58,138,0.05)] min-w-0"
                       >
-                        <div className={marqueeClass}>
-                          {rowTools.map((tool) => renderToolItem(tool, '-a'))}
-                          {!prefersReducedMotion &&
-                            rowTools.map((tool) => renderToolItem(tool, '-b'))}
-                        </div>
+                        {ToolIcon && (
+                          <span
+                            className="shrink-0 flex items-center justify-center"
+                            style={{ color: tool.brandColor || '#2563EB' }}
+                          >
+                            <ToolIcon className="w-4 h-4" />
+                          </span>
+                        )}
+                        <span className="text-xs font-bold text-[#1E3A8A] truncate">
+                          {displayLabel}
+                        </span>
                       </div>
                     );
                   })}
@@ -658,60 +664,106 @@ export const HomePage: React.FC<HomePageProps> = ({
               })}
             </motion.h2>
 
-            <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium mt-3 leading-relaxed">
+            <p className="text-[15px] sm:text-base text-slate-600 font-medium mt-3 leading-relaxed">
               We guide projects from initial requirements discovery through validation and monitored deployment with a disciplined seven-stage methodology.
             </p>
           </motion.div>
 
-          {/* Mobile / Tablet Horizontally Scrollable Stage Chip Row */}
-          <div
-            className="lg:hidden -mx-4 px-4 mb-6 overflow-x-auto no-scrollbar"
-            role="tablist"
-            aria-label="Methodology stages"
-          >
-            <div className="flex items-center gap-2.5 min-w-max pb-1">
-              {processStages.map((stg, idx) => {
-                const StepIcon = getProcessStepIcon(stg.step);
-                const isActive = activeProcessStep === idx;
-                return (
-                  <button
-                    key={stg.step}
-                    ref={(el) => {
-                      processMobileChipRefs.current[idx] = el;
-                    }}
-                    type="button"
-                    onClick={() => handleSelectProcessStage(idx)}
-                    onKeyDown={(e) => handleProcessKeyDown(e, idx, processMobileChipRefs)}
-                    aria-label={`${stg.step}. ${stg.title} — ${stg.tagline}`}
-                    aria-current={isActive ? 'step' : undefined}
-                    className={`group relative px-3.5 py-2.5 rounded-2xl border text-left transition-all duration-200 flex items-center gap-2.5 cursor-pointer shrink-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
-                      isActive
-                        ? 'text-white border-[#1E3A8A] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)]'
-                        : 'bg-white hover:bg-[#EEF4FF]/80 border-slate-200/90 text-[#1E3A8A] hover:border-[#93C5FD]'
-                    }`}
-                  >
-                    {isActive && (
-                      <motion.div
-                        layoutId="process-active-stage-mobile-chip"
-                        className="absolute inset-0 rounded-2xl bg-[#1E3A8A] group-hover:bg-[#1E3A8A]/80 transition-colors duration-200"
-                        transition={{ type: 'spring', stiffness: 360, damping: 32 }}
-                      />
-                    )}
-                    <span
-                      className={`relative z-10 w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
-                        isActive
-                          ? 'bg-white/15 text-white border border-white/20'
-                          : 'bg-[#EEF4FF] text-[#1E3A8A]'
-                      }`}
-                    >
-                      <StepIcon className="w-3.5 h-3.5" />
-                    </span>
-                    <div className="relative z-10 text-xs font-bold whitespace-nowrap">
-                      {stg.step}. {stg.title}
-                    </div>
-                  </button>
-                );
-              })}
+          {/* Mobile / Tablet Stage Discoverability Header + Horizontally Scrollable Stage Chip Row */}
+          <div className="lg:hidden mb-6">
+            <div className="flex items-center justify-between gap-2 mb-2.5 px-0.5">
+              <div className="inline-flex items-center gap-2">
+                <span className="px-2.5 py-1 rounded-lg bg-[#1E3A8A] text-white font-mono text-xs font-bold">
+                  Stage {processStages[activeProcessStep].step} / 07
+                </span>
+                <span className="text-xs font-semibold text-[#2563EB]">
+                  Swipe or tap stages →
+                </span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleSelectProcessStage(
+                      (activeProcessStep - 1 + processStages.length) % processStages.length
+                    )
+                  }
+                  aria-label="Previous methodology stage"
+                  className="w-9 h-9 rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                >
+                  <ChevronRight className="w-4 h-4 rotate-180" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleSelectProcessStage(
+                      (activeProcessStep + 1) % processStages.length
+                    )
+                  }
+                  aria-label="Next methodology stage"
+                  className="w-9 h-9 rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="relative -mx-4 px-4">
+              {/* Right-edge scroll fade indicator on mobile/tablet */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#F4F7FE] via-[#F4F7FE]/85 to-transparent z-20"
+              />
+              <div
+                className="overflow-x-auto no-scrollbar pr-8"
+                role="tablist"
+                aria-label="Methodology stages"
+              >
+                <div className="flex items-center gap-2.5 min-w-max pb-1">
+                  {processStages.map((stg, idx) => {
+                    const StepIcon = getProcessStepIcon(stg.step);
+                    const isActive = activeProcessStep === idx;
+                    return (
+                      <button
+                        key={stg.step}
+                        ref={(el) => {
+                          processMobileChipRefs.current[idx] = el;
+                        }}
+                        type="button"
+                        onClick={() => handleSelectProcessStage(idx)}
+                        onKeyDown={(e) => handleProcessKeyDown(e, idx, processMobileChipRefs)}
+                        aria-label={`${stg.step}. ${stg.title} — ${stg.tagline}`}
+                        aria-current={isActive ? 'step' : undefined}
+                        className={`group relative px-3.5 py-2.5 min-h-[44px] rounded-2xl border text-left transition-all duration-200 flex items-center gap-2.5 cursor-pointer shrink-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                          isActive
+                            ? 'text-white border-[#1E3A8A] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)]'
+                            : 'bg-white hover:bg-[#EEF4FF]/80 border-slate-200/90 text-[#1E3A8A] hover:border-[#93C5FD]'
+                        }`}
+                      >
+                        {isActive && (
+                          <motion.div
+                            layoutId="process-active-stage-mobile-chip"
+                            className="absolute inset-0 rounded-2xl bg-[#1E3A8A] group-hover:bg-[#1E3A8A]/80 transition-colors duration-200"
+                            transition={{ type: 'spring', stiffness: 360, damping: 32 }}
+                          />
+                        )}
+                        <span
+                          className={`relative z-10 w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
+                            isActive
+                              ? 'bg-white/15 text-white border border-white/20'
+                              : 'bg-[#EEF4FF] text-[#1E3A8A]'
+                          }`}
+                        >
+                          <StepIcon className="w-3.5 h-3.5" />
+                        </span>
+                        <div className="relative z-10 text-xs font-bold whitespace-nowrap">
+                          {stg.step}. {stg.title}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -931,7 +983,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </div>
 
                   <div
-                    className="grid grid-cols-7 gap-1.5 sm:gap-2 my-auto"
+                    className="grid grid-cols-2 min-[420px]:grid-cols-4 sm:grid-cols-7 gap-2 my-auto"
                     role="group"
                     aria-label="Stage timeline blocks"
                   >
@@ -951,12 +1003,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                           }
                           aria-label={`${stg.step}. ${stg.title}`}
                           aria-current={isCurrent ? 'step' : undefined}
-                          className={`relative group rounded-xl p-2 sm:p-2.5 border text-center transition-all duration-200 cursor-pointer flex flex-col items-center justify-center gap-1 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
+                          className={`relative group rounded-xl p-2.5 border text-center transition-all duration-200 cursor-pointer flex flex-col items-center justify-center gap-1 min-h-[54px] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] ${
                             isCurrent
                               ? 'text-white border-[#1E3A8A] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)]'
                               : isCompleted
                               ? 'bg-[#DBEAFE]/75 border-[#93C5FD] text-[#1E3A8A] hover:bg-[#DBEAFE]'
-                              : 'bg-slate-50/70 border-slate-200 text-slate-400 hover:border-[#93C5FD] hover:text-[#1E3A8A]'
+                              : 'bg-slate-50/70 border-slate-200 text-slate-500 hover:border-[#93C5FD] hover:text-[#1E3A8A]'
                           }`}
                         >
                           {isCurrent && (
@@ -972,18 +1024,18 @@ export const HomePage: React.FC<HomePageProps> = ({
                                 ? 'text-white'
                                 : isCompleted
                                 ? 'text-[#1E3A8A]'
-                                : 'text-slate-400'
+                                : 'text-slate-500'
                             }`}
                           >
                             {stg.step}
                           </span>
                           <span
-                            className={`relative z-10 text-[10px] font-semibold truncate max-w-full ${
+                            className={`relative z-10 text-[11px] font-semibold truncate max-w-full ${
                               isCurrent
                                 ? 'text-blue-100'
                                 : isCompleted
-                                ? 'text-[#1E3A8A]/85'
-                                : 'text-slate-400'
+                                ? 'text-[#1E3A8A]/90'
+                                : 'text-slate-500'
                             }`}
                           >
                             {stg.title}
@@ -1212,68 +1264,67 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
     prefersReducedMotion ? ['0%', '0%'] : ['12%', '-12%']
   );
 
-  // 3. White frame rises from 80px and scales from 0.94 to 1
+  // 3. White frame rises gently and stays crisp on all viewports
   const frameY = useTransform(
     smoothProgress,
-    [0.02, 0.32],
-    prefersReducedMotion ? [0, 0] : [80, 0]
+    [0.02, 0.28],
+    prefersReducedMotion ? [0, 0] : [28, 0]
   );
   const frameScale = useTransform(
     smoothProgress,
-    [0.02, 0.32],
-    prefersReducedMotion ? [1, 1] : [0.94, 1]
+    [0.02, 0.28],
+    prefersReducedMotion ? [1, 1] : [0.98, 1]
   );
   const frameOpacity = useTransform(
     smoothProgress,
-    [0.0, 0.2],
-    prefersReducedMotion ? [1, 1] : [0.35, 1]
+    [0.0, 0.16],
+    prefersReducedMotion ? [1, 1] : [0.85, 1]
   );
 
-  // 4. Headline and buttons fade up
+  // 4. Headline and buttons fade up gently
   const headerY = useTransform(
     smoothProgress,
-    [0.05, 0.3],
-    prefersReducedMotion ? [0, 0] : [36, 0]
+    [0.04, 0.24],
+    prefersReducedMotion ? [0, 0] : [18, 0]
   );
   const headerOpacity = useTransform(
     smoothProgress,
-    [0.05, 0.26],
-    prefersReducedMotion ? [1, 1] : [0, 1]
+    [0.04, 0.2],
+    prefersReducedMotion ? [1, 1] : [0.85, 1]
   );
 
-  // 5. Photo cards rise from 120px below (center card first, side cards slightly delayed)
-  //    While scrolling through, side cards drift slightly outward, center card slightly upward
+  // 5. Photo cards rise smoothly without hiding content on short/mobile screens
   const centerCardY = useTransform(
     smoothProgress,
-    [0.08, 0.36, 0.85],
-    prefersReducedMotion ? [0, 0, 0] : [120, 0, -14]
+    [0.06, 0.3, 0.85],
+    prefersReducedMotion ? [0, 0, 0] : [28, 0, -6]
   );
   const centerCardOpacity = useTransform(
     smoothProgress,
-    [0.07, 0.28],
-    prefersReducedMotion ? [1, 1] : [0, 1]
+    [0.05, 0.22],
+    prefersReducedMotion ? [1, 1] : [0.85, 1]
   );
 
   const sideCardY = useTransform(
     smoothProgress,
-    [0.14, 0.42, 0.85],
-    prefersReducedMotion ? [0, 0, 0] : [120, 0, 6]
+    [0.1, 0.34, 0.85],
+    prefersReducedMotion ? [0, 0, 0] : [32, 0, 4]
   );
   const sideCardOpacity = useTransform(
     smoothProgress,
-    [0.12, 0.34],
-    prefersReducedMotion ? [1, 1] : [0, 1]
+    [0.08, 0.26],
+    prefersReducedMotion ? [1, 1] : [0.85, 1]
   );
 
   const leftCardX = useTransform(
     smoothProgress,
     [0.28, 0.82],
-    prefersReducedMotion ? [0, 0] : [8, -10]
+    prefersReducedMotion ? [0, 0] : [0, 0]
   );
   const rightCardX = useTransform(
     smoothProgress,
     [0.28, 0.82],
-    prefersReducedMotion ? [0, 0] : [-8, 10]
+    prefersReducedMotion ? [0, 0] : [0, 0]
   );
 
   // 6. Each photo moves slower than the page (scroll parallax)
@@ -1408,20 +1459,20 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             })}
           </motion.h2>
 
-          {/* Subtitle — Softer Hero Section Subtitle Gradient (#1E3A8A -> #2563EB -> #3B82F6) */}
-          <p className="mt-3 text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium leading-relaxed max-w-[540px] mx-auto">
+          {/* Subtitle */}
+          <p className="mt-3 text-[15px] sm:text-base text-slate-600 font-medium leading-relaxed max-w-[540px] mx-auto">
             Clean engineering, private AI, and enterprise security, working together so your product grows without surprises.
           </p>
 
-          {/* Buttons — Dark Blue (#1E3A8A) with Softer Hover (#1E3A8A/80) Exactly as per Hero Section */}
-          <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 w-full sm:w-auto max-w-[260px] sm:max-w-none">
+          {/* Buttons — Dark Blue (#1E3A8A) with Softer Hover (#1E3A8A/80) */}
+          <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full sm:w-auto max-w-[280px] sm:max-w-none">
             <a
               href="/contact"
               onClick={(e) => {
                 e.preventDefault();
                 onNavigate('/contact');
               }}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
             >
               <span>Start a Project</span>
             </a>
@@ -1436,7 +1487,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
                   onNavigate('/services');
                 }
               }}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
             >
               <span>Explore Services</span>
             </a>
@@ -1446,7 +1497,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
         {/* 3. PHOTO CARDS + ORIGINAL ICON, TITLE, AND PARAGRAPH DIRECTLY BELOW EACH */}
         <div
           ref={cardsRowRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-row lg:items-start gap-6 lg:gap-[18px]"
+          className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-row lg:items-start gap-8 sm:gap-6 lg:gap-[18px]"
         >
           {/* --------------------------------------------------------------- */}
           {/* LEFT CARD: Modern Software Craftsmanship                        */}
@@ -1459,30 +1510,24 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             }}
             className="group/card md:order-2 lg:order-1 lg:w-[29.5%] shrink-0 flex flex-col items-center"
           >
-            {/* Card Container (Grass removed, clean soft sky gradient preserved) */}
-            <div className="group w-full h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
+            {/* Card Container */}
+            <div className="group w-full h-[210px] sm:h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-4 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
               <motion.div
                 style={{ y: photoParallaxY }}
                 className="absolute -inset-y-5 inset-x-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.9)_0%,rgba(219,234,254,0.45)_60%,rgba(239,246,255,0.8)_100%)] pointer-events-none"
               />
 
-              {/* Compact White Widget (Hero Section Color Coding) */}
+              {/* Compact White Widget */}
               <motion.div
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-                animate={
-                  prefersReducedMotion
-                    ? { opacity: 1, y: 0 }
-                    : widgetsVisible
-                    ? { opacity: 1, y: 0 }
-                    : { opacity: 0, y: 20 }
-                }
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
                   type: 'spring',
                   stiffness: 120,
                   damping: 18,
-                  delay: prefersReducedMotion ? 0 : 0.12,
+                  delay: prefersReducedMotion ? 0 : 0.1,
                 }}
-                className="relative z-10 w-[68%] sm:w-[60%] lg:w-[68%] max-w-[210px] bg-white rounded-xl p-[12px] border border-[#DBEAFE]/90 shadow-[0_10px_28px_rgba(30,58,138,0.14)] text-[11px] leading-tight text-left transition-transform duration-300 ease-out group-hover:-translate-y-[4px]"
+                className="relative z-10 w-[84%] sm:w-[68%] lg:w-[74%] max-w-[230px] bg-white rounded-xl p-3 border border-[#DBEAFE]/90 shadow-[0_10px_28px_rgba(30,58,138,0.14)] text-[11px] leading-tight text-left transition-transform duration-300 ease-out group-hover:-translate-y-[4px]"
               >
                 <div className="flex items-center justify-between gap-1.5 mb-2">
                   <span className="font-bold text-[#1E3A8A] truncate">Code quality</span>
@@ -1513,15 +1558,15 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
               </motion.div>
             </div>
 
-            {/* Original Icon, Title, and Paragraph Directly Below Photo Card (Hero Section Colors & Font) */}
+            {/* Original Icon, Title, and Paragraph Directly Below Photo Card */}
             <div className="mt-5 flex flex-col items-center text-center px-1">
-              <div className="w-9 h-9 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
+              <div className="w-10 h-10 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
                 <Code2 className="w-[18px] h-[18px]" />
               </div>
-              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
                 Modern Software Craftsmanship
               </h3>
-              <p className="text-[14.5px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed">
+              <p className="text-[14.5px] sm:text-[15px] text-slate-600 font-medium leading-relaxed">
                 We write clean, strongly-typed TypeScript and Python code, enforce component modularity, and create architectures designed for maintainability and rapid onboarding.
               </p>
             </div>
@@ -1537,30 +1582,24 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             }}
             className="group/card md:col-span-2 md:order-1 lg:order-2 lg:w-[41%] shrink-0 flex flex-col items-center"
           >
-            {/* Card Container (300px tall on desktop, grass removed, clean soft sky gradient preserved) */}
-            <div className="group w-full h-[220px] sm:h-[260px] lg:h-[300px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_16px_38px_rgba(30,58,138,0.10)] hover:shadow-[0_24px_50px_rgba(30,58,138,0.18)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
+            {/* Card Container */}
+            <div className="group w-full h-[220px] sm:h-[260px] lg:h-[300px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-4 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_16px_38px_rgba(30,58,138,0.10)] hover:shadow-[0_24px_50px_rgba(30,58,138,0.18)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
               <motion.div
                 style={{ y: photoParallaxY }}
                 className="absolute -inset-y-5 inset-x-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.92)_0%,rgba(219,234,254,0.45)_60%,rgba(239,246,255,0.8)_100%)] pointer-events-none"
               />
 
-              {/* Compact White Widget (Hero Section Color Coding) */}
+              {/* Compact White Widget */}
               <motion.div
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-                animate={
-                  prefersReducedMotion
-                    ? { opacity: 1, y: 0 }
-                    : widgetsVisible
-                    ? { opacity: 1, y: 0 }
-                    : { opacity: 0, y: 20 }
-                }
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
                   type: 'spring',
                   stiffness: 120,
                   damping: 18,
                   delay: 0,
                 }}
-                className="relative z-10 w-[70%] sm:w-[56%] lg:w-[64%] max-w-[245px] bg-white rounded-xl p-[12px] border border-[#DBEAFE]/90 shadow-[0_10px_28px_rgba(30,58,138,0.14)] text-[11px] leading-tight text-left transition-transform duration-300 ease-out group-hover:-translate-y-[4px]"
+                className="relative z-10 w-[86%] sm:w-[62%] lg:w-[68%] max-w-[260px] bg-white rounded-xl p-3 border border-[#DBEAFE]/90 shadow-[0_10px_28px_rgba(30,58,138,0.14)] text-[11px] leading-tight text-left transition-transform duration-300 ease-out group-hover:-translate-y-[4px]"
               >
                 <div className="flex items-center justify-between gap-2 mb-2.5">
                   <div className="flex items-center gap-1.5">
@@ -1604,8 +1643,8 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
                     </span>
                   </div>
 
-                  {/* 4x3 Grid of AI Tool Icons (No '••' dots) */}
-                  <div className="grid grid-cols-4 gap-1.5 flex-1 max-w-[116px]">
+                  {/* 4x3 Grid of AI Tool Icons */}
+                  <div className="grid grid-cols-4 gap-1.5 flex-1 max-w-[124px]">
                     {[
                       { name: 'OpenAI', Icon: TbBrandOpenai, color: '#10A37F' },
                       { name: 'Python', Icon: SiPython, color: '#3776AB' },
@@ -1649,15 +1688,15 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
               </motion.div>
             </div>
 
-            {/* Original Icon, Title, and Paragraph Directly Below Photo Card (Hero Section Colors & Font) */}
-            <div className="mt-5 flex flex-col items-center text-center px-2 max-w-[400px]">
-              <div className="w-9 h-9 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
+            {/* Original Icon, Title, and Paragraph Directly Below Photo Card */}
+            <div className="mt-5 flex flex-col items-center text-center px-2 max-w-[420px]">
+              <div className="w-10 h-10 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
                 <Cpu className="w-[18px] h-[18px]" />
               </div>
-              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
                 Practical, Grounded Intelligence
               </h3>
-              <p className="text-[14.5px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed">
+              <p className="text-[14.5px] sm:text-[15px] text-slate-600 font-medium leading-relaxed">
                 We deploy Retrieval-Augmented Generation (RAG) and private document search with strict citation traceability, ensuring your proprietary data never leaks into public models.
               </p>
             </div>
@@ -1674,30 +1713,24 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
             }}
             className="group/card md:order-3 lg:order-3 lg:w-[29.5%] shrink-0 flex flex-col items-center"
           >
-            {/* Card Container (Grass removed, clean soft sky gradient preserved) */}
-            <div className="group w-full h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-3 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
+            {/* Card Container */}
+            <div className="group w-full h-[210px] sm:h-[220px] lg:h-[240px] rounded-[24px] overflow-hidden relative flex items-center justify-center p-4 bg-gradient-to-b from-[#DBEAFE]/65 via-[#EFF6FF]/75 to-[#F8FAFF] border border-[#DBEAFE]/90 shadow-[0_12px_30px_rgba(30,58,138,0.08)] hover:shadow-[0_20px_42px_rgba(30,58,138,0.16)] transition-all duration-300 ease-out hover:-translate-y-[6px]">
               <motion.div
                 style={{ y: photoParallaxY }}
                 className="absolute -inset-y-5 inset-x-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.9)_0%,rgba(219,234,254,0.45)_60%,rgba(239,246,255,0.8)_100%)] pointer-events-none"
               />
 
-              {/* Compact White Widget (Hero Section Color Coding) */}
+              {/* Compact White Widget */}
               <motion.div
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-                animate={
-                  prefersReducedMotion
-                    ? { opacity: 1, y: 0 }
-                    : widgetsVisible
-                    ? { opacity: 1, y: 0 }
-                    : { opacity: 0, y: 20 }
-                }
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
                   type: 'spring',
                   stiffness: 120,
                   damping: 18,
-                  delay: prefersReducedMotion ? 0 : 0.24,
+                  delay: prefersReducedMotion ? 0 : 0.2,
                 }}
-                className="relative z-10 w-[68%] sm:w-[60%] lg:w-[68%] max-w-[210px] bg-white rounded-xl p-[12px] border border-[#DBEAFE]/90 shadow-[0_10px_28px_rgba(30,58,138,0.14)] text-[11px] leading-tight text-left transition-transform duration-300 ease-out group-hover:-translate-y-[4px]"
+                className="relative z-10 w-[84%] sm:w-[68%] lg:w-[74%] max-w-[230px] bg-white rounded-xl p-3 border border-[#DBEAFE]/90 shadow-[0_10px_28px_rgba(30,58,138,0.14)] text-[11px] leading-tight text-left transition-transform duration-300 ease-out group-hover:-translate-y-[4px]"
               >
                 <div className="flex items-center justify-between gap-1 mb-1">
                   <span className="text-[10.5px] font-bold text-[#1E3A8A]">Uptime</span>
@@ -1745,15 +1778,15 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
               </motion.div>
             </div>
 
-            {/* Original Icon, Title, and Paragraph Directly Below Photo Card (Hero Section Colors & Font) */}
+            {/* Original Icon, Title, and Paragraph Directly Below Photo Card */}
             <div className="mt-5 flex flex-col items-center text-center px-1">
-              <div className="w-9 h-9 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
+              <div className="w-10 h-10 rounded-xl bg-[#DBEAFE]/85 text-[#1E3A8A] border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.10)] group-hover/card:bg-[#1E3A8A] group-hover/card:text-white flex items-center justify-center mb-3 transition-colors duration-200">
                 <ShieldCheck className="w-[18px] h-[18px]" />
               </div>
-              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] mb-2 leading-snug">
                 Enterprise Reliability &amp; Security
               </h3>
-              <p className="text-[14.5px] bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium leading-relaxed">
+              <p className="text-[14.5px] sm:text-[15px] text-slate-600 font-medium leading-relaxed">
                 Automated CI/CD deployment pipelines, defensive hardening, OWASP security best practices, and proactive cloud FinOps governance that prevent budget surprises.
               </p>
             </div>

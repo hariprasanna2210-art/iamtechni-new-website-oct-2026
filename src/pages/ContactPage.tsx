@@ -179,7 +179,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold text-[#1E3A8A] mb-2">
                   Call Our Technology Desk
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed mb-4">
                   Speak directly with an engineering specialist about project scoping, team allocation, and turnaround times.
                 </p>
 
@@ -197,7 +197,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
               {/* Call Now Action Button */}
               <a
                 href={COMPANY_CONTACT.phoneTel}
-                className="w-full py-2.5 px-4 min-h-[40px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg font-semibold text-xs sm:text-[13px] transition-all shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
+                className="w-full py-2.5 px-4 min-h-[44px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg font-semibold text-xs sm:text-sm transition-all shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
               >
                 <PhoneCall className="w-4 h-4 shrink-0" />
                 <span className="truncate">Call Now ({COMPANY_CONTACT.phone})</span>
@@ -222,7 +222,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold text-[#1E3A8A] mb-2">
                   Email IAMTECHNI
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed mb-4">
                   Send project briefs, RFP documentation, software architecture inquiries, or career applications.
                 </p>
 
@@ -240,7 +240,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
               {/* Email Us Action Button */}
               <a
                 href={COMPANY_CONTACT.emailMailto}
-                className="w-full py-2.5 px-4 min-h-[40px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg font-semibold text-xs sm:text-[13px] transition-all shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
+                className="w-full py-2.5 px-4 min-h-[44px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg font-semibold text-xs sm:text-sm transition-all shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
               >
                 <Mail className="w-4 h-4 shrink-0" />
                 <span className="truncate">Email Us ({COMPANY_CONTACT.email})</span>
@@ -376,7 +376,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                       <select
                         value={formData.service}
                         onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                        className="w-full px-3 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden"
+                        className="w-full px-3.5 py-2.5 min-h-[44px] text-sm rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden"
                       >
                         <option value="Web Development">Web Development</option>
                         <option value="E-commerce Development">E-commerce</option>
@@ -400,7 +400,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                       <select
                         value={formData.preferredContact}
                         onChange={(e) => setFormData({ ...formData, preferredContact: e.target.value })}
-                        className="w-full px-3 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden"
+                        className="w-full px-3.5 py-2.5 min-h-[44px] text-sm rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden"
                       >
                         <option value="Phone Call">Phone Call</option>
                         <option value="Email">Email</option>
@@ -456,14 +456,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 min-h-[40px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all disabled:opacity-50 cursor-pointer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all disabled:opacity-50 cursor-pointer"
                     >
                       {isSubmitting ? (
                         'Validating...'
                       ) : (
                         <>
                           <span>Submit Project Inquiry</span>
-                          <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                          <ArrowRight className="w-4 h-4 shrink-0" />
                         </>
                       )}
                     </button>
@@ -480,7 +480,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                   Verified Engineering Practice
                 </div>
                 <h3 className="text-xl font-bold text-slate-900">Direct Communication</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed">
                   IAMTECHNI maintains transparent digital engineering communication channels. We provide honest estimates, architectural feasibility reviews, and predictable timelines.
                 </p>
 
@@ -529,7 +529,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
               {/* What to Expect Next Card */}
               <div className="bg-white rounded-2xl p-7 border border-slate-200 space-y-4 shadow-2xs">
                 <h3 className="text-base font-bold text-slate-900">What Happens Next?</h3>
-                <div className="space-y-3 text-xs text-slate-600">
+                <div className="space-y-3 text-[13.5px] sm:text-sm text-slate-600">
                   <div className="flex items-start gap-2.5">
                     <span className="w-5 h-5 rounded-full bg-blue-100 text-[#1266E8] font-bold flex items-center justify-center shrink-0 text-[11px]">
                       1

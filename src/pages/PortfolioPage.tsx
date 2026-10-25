@@ -59,12 +59,12 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
               </h2>
             </div>
 
-            <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs max-w-full overflow-x-auto">
+            <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-xl shadow-2xs max-w-full overflow-x-auto">
               {filters.map((flt) => (
                 <button
                   key={flt}
                   onClick={() => setSelectedFilter(flt)}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`min-h-[38px] px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                     selectedFilter === flt
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
@@ -105,7 +105,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
                         <span className={`w-2 h-2 rounded-full ${color.dotBg} shrink-0 opacity-80 group-hover:scale-125 transition-transform`} />
                       </h2>
 
-                      <p className="text-xs text-slate-700 leading-relaxed mb-4 line-clamp-3">
+                      <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed mb-4 line-clamp-3">
                         {project.tagline}
                       </p>
 
@@ -117,7 +117,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
                           {project.techStack.map((tech, i) => (
                             <span
                               key={i}
-                              className="px-2 py-0.5 text-[10px] font-mono bg-white/90 text-slate-700 rounded-md border border-slate-200/90"
+                              className="px-2.5 py-0.5 text-[11px] font-mono bg-white/90 text-slate-700 rounded-md border border-slate-200/90"
                             >
                               {tech}
                             </span>
@@ -147,16 +147,16 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
             <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Have a custom software or web architecture in mind?
             </h2>
-            <p className="text-sm bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-xl mx-auto">
+            <p className="text-[15px] sm:text-base text-slate-600 font-medium max-w-xl mx-auto">
               Our engineers can review your business workflow and prepare a detailed architecture plan.
             </p>
             <div className="pt-2">
               <button
                 onClick={() => onStartProject('Custom Project Scoping')}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
               >
                 <span>Discuss Your Project</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>

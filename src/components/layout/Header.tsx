@@ -718,9 +718,10 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onStartProject}
               aria-label="Start a Project"
               title="Start a Project"
-              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 min-h-[40px] lg:min-h-0 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 min-h-[44px] lg:min-h-[38px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
             >
-              <span className="hidden sm:inline">Start a Project</span>
+              <span className="hidden min-[380px]:inline">Start a Project</span>
+              <span className="min-[380px]:hidden">Start</span>
               <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
             </button>
 
@@ -728,7 +729,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden min-w-[40px] min-h-[40px] p-2 flex items-center justify-center text-slate-700 hover:text-slate-900 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
+              className="lg:hidden min-w-[44px] min-h-[44px] p-2.5 flex items-center justify-center text-slate-700 hover:text-slate-900 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
               aria-label={isMobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation-panel"

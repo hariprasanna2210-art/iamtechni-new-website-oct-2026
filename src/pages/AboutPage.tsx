@@ -234,18 +234,18 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 <div className="p-4 rounded-xl bg-[#F5F8FC] border border-slate-200 space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs font-bold text-[#1E3A8A]">
+                  <div className="flex items-center gap-2 text-xs sm:text-[13px] font-bold text-[#1E3A8A]">
                     <CheckCircle2 className="w-4 h-4 text-[#2563EB]" />
                     <span>Typed Contracts</span>
                   </div>
-                  <p className="text-[11px] text-slate-600">TypeScript strict mode and end-to-end schema validation eliminating runtime bugs.</p>
+                  <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed">TypeScript strict mode and end-to-end schema validation eliminating runtime bugs.</p>
                 </div>
                 <div className="p-4 rounded-xl bg-[#F5F8FC] border border-slate-200 space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs font-bold text-[#1E3A8A]">
+                  <div className="flex items-center gap-2 text-xs sm:text-[13px] font-bold text-[#1E3A8A]">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     <span>Cloud Native</span>
                   </div>
-                  <p className="text-[11px] text-slate-600">Multi-region container orchestration across AWS and Azure with zero-downtime updates.</p>
+                  <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed">Multi-region container orchestration across AWS and Azure with zero-downtime updates.</p>
                 </div>
               </div>
             </div>
@@ -326,7 +326,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
                         </div>
                       </div>
                       <h3 className="text-lg font-bold text-slate-900 mb-2">{val.title}</h3>
-                      <p className="text-xs text-slate-700 leading-relaxed">{val.desc}</p>
+                      <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed">{val.desc}</p>
                     </div>
                   </div>
                 </ScrollRevealItem>
@@ -343,16 +343,16 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
             <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Ready to discuss your technology requirements?
             </h2>
-            <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-xl mx-auto">
+            <p className="text-[15px] sm:text-base text-slate-600 font-medium max-w-xl mx-auto leading-relaxed">
               Let’s review what you want to build and explore how our engineering team can help.
             </p>
             <div className="pt-2">
               <button
                 onClick={onStartProject}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
               >
                 <span>Start a Project</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>

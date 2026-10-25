@@ -45,7 +45,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
               <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 Build Purposeful Technology with IAMTECHNI
               </h1>
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              <p className="text-[15px] sm:text-base lg:text-[17px] text-slate-600 leading-relaxed">
                 We look for curious, disciplined software engineers, UI specialists, and AI practitioners who take pride in craftsmanship, readability, and real business impact.
               </p>
             </div>
@@ -93,7 +93,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
             <div className="bg-white p-6 rounded-2xl border border-slate-200">
               <div className="text-xs font-mono font-bold text-[#1266E8] mb-2">AUTONOMY & CLARITY</div>
               <h3 className="text-base font-bold text-slate-900 mb-2">High Trust, Low Bureaucracy</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed">
                 Small, focused engineering squads working directly with technical architects without layers of management friction.
               </p>
             </div>
@@ -101,7 +101,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
             <div className="bg-white p-6 rounded-2xl border border-slate-200">
               <div className="text-xs font-mono font-bold text-[#04C8E8] mb-2">CRAFTSMANSHIP</div>
               <h3 className="text-base font-bold text-slate-900 mb-2">Zero Technical Shortcuts</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed">
                 We believe in writing strongly-typed code, robust automated tests, and documenting architectural decisions properly.
               </p>
             </div>
@@ -109,7 +109,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
             <div className="bg-white p-6 rounded-2xl border border-slate-200">
               <div className="text-xs font-mono font-bold text-[#5427D9] mb-2">CONTINUOUS LEARNING</div>
               <h3 className="text-base font-bold text-slate-900 mb-2">Dedicated R&D Time</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed">
                 Continuous opportunities to build internal tools, master emerging RAG architectures, and contribute to knowledge field notes.
               </p>
             </div>
@@ -154,13 +154,13 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
                   </div>
 
                   <h3 className="text-xl font-bold text-slate-900">{role.title}</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">{role.overview}</p>
+                  <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed">{role.overview}</p>
 
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {role.skills.map((sk, sIdx) => (
                       <span
                         key={sIdx}
-                        className="px-2 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded text-slate-700"
+                        className="px-2.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded text-slate-700"
                       >
                         {sk}
                       </span>
@@ -171,7 +171,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
                 <div className="shrink-0 flex items-center gap-3">
                   <button
                     onClick={() => handleApply(role)}
-                    className="w-full lg:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold rounded-lg shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all cursor-pointer"
+                    className="w-full lg:w-auto inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 min-h-[42px] sm:min-h-[44px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold rounded-lg shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all cursor-pointer"
                   >
                     <span>View Role & Apply</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -255,7 +255,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
                           required
                           value={applicant.name}
                           onChange={(e) => setApplicant({ ...applicant, name: e.target.value })}
-                          className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 focus:outline-hidden focus:border-[#1266E8]"
+                          className="w-full px-3.5 py-2.5 min-h-[42px] text-sm rounded-lg border border-slate-200 focus:outline-hidden focus:border-[#1266E8]"
                         />
                       </div>
                       <div>
@@ -267,7 +267,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
                           required
                           value={applicant.email}
                           onChange={(e) => setApplicant({ ...applicant, email: e.target.value })}
-                          className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 focus:outline-hidden focus:border-[#1266E8]"
+                          className="w-full px-3.5 py-2.5 min-h-[42px] text-sm rounded-lg border border-slate-200 focus:outline-hidden focus:border-[#1266E8]"
                         />
                       </div>
                     </div>
@@ -281,7 +281,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
                         value={applicant.portfolio}
                         onChange={(e) => setApplicant({ ...applicant, portfolio: e.target.value })}
                         placeholder="https://github.com/your-handle"
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 focus:outline-hidden focus:border-[#1266E8]"
+                        className="w-full px-3.5 py-2.5 min-h-[42px] text-sm rounded-lg border border-slate-200 focus:outline-hidden focus:border-[#1266E8]"
                       />
                     </div>
 
@@ -294,7 +294,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
                         value={applicant.notes}
                         onChange={(e) => setApplicant({ ...applicant, notes: e.target.value })}
                         placeholder="Highlight recent projects or technologies you enjoy working with..."
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 focus:outline-hidden focus:border-[#1266E8]"
+                        className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-200 focus:outline-hidden focus:border-[#1266E8]"
                       />
                     </div>
                   </div>
@@ -303,13 +303,13 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
                     <button
                       type="button"
                       onClick={() => setIsApplying(false)}
-                      className="px-4 py-2 text-xs text-slate-600 hover:text-slate-900 cursor-pointer"
+                      className="px-4 py-2 min-h-[42px] text-xs sm:text-sm text-slate-600 hover:text-slate-900 cursor-pointer"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-4.5 py-2.5 min-h-[40px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs font-semibold shadow-xs transition-all cursor-pointer"
+                      className="px-5 py-2.5 min-h-[44px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs sm:text-sm font-semibold shadow-xs transition-all cursor-pointer"
                     >
                       Submit Candidate Profile
                     </button>

@@ -404,7 +404,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                         {course.title}
                       </h3>
 
-                      <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                      <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed mb-4">
                         {course.subtitle}
                       </p>
 
@@ -414,9 +414,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                           Key Curriculum Highlights
                         </div>
                         {course.highlights.map((hl, hIdx) => (
-                          <div key={hIdx} className="flex items-start gap-2 text-xs text-slate-700">
+                          <div key={hIdx} className="flex items-start gap-2 text-[13px] sm:text-[13.5px] text-slate-700">
                             <Check className={`w-3.5 h-3.5 ${color.accentText} shrink-0 mt-0.5`} />
-                            <span className="leading-tight">{hl}</span>
+                            <span className="leading-snug">{hl}</span>
                           </div>
                         ))}
                       </div>
@@ -432,7 +432,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       <div className="grid grid-cols-2 gap-2">
                         <button
                           onClick={() => handleSelectCourseForEnquiry(course.title)}
-                          className="w-full py-2 px-3 min-h-[38px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
+                          className="w-full py-2.5 px-3 min-h-[42px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
                         >
                           <span>Enquire Now</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -442,7 +442,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                           href={getCourseWhatsAppUrl(course.title)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-full py-2 px-3 min-h-[38px] bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-900 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
+                          className="w-full py-2.5 px-3 min-h-[42px] bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-900 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
                           title={`Enquire about ${course.title} on WhatsApp`}
                         >
                           <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
@@ -491,10 +491,10 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                   <h3 className="text-lg font-bold text-slate-900 mb-2">
                     Full Stack &amp; Software Engineering
                   </h3>
-                  <p className="text-xs text-slate-700 leading-relaxed mb-4">
+                  <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed mb-4">
                     Learn to build end-to-end web applications with modern React, Next.js, Node.js, Python, and SQL databases.
                   </p>
-                  <ul className="space-y-1.5 text-xs text-slate-700">
+                  <ul className="space-y-1.5 text-xs sm:text-[13px] text-slate-700">
                     <li className="flex items-center gap-1.5">
                       <Check className="w-3.5 h-3.5 text-[#1266E8]" /> Frontend: React, Next.js, TypeScript
                     </li>
@@ -509,7 +509,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                 <div className="pt-5 mt-5 border-t border-blue-200/70">
                   <button
                     onClick={() => handleSelectCourseForEnquiry('Full Stack Development')}
-                    className="text-xs font-bold text-[#1266E8] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-xs sm:text-[13px] font-bold text-[#1266E8] hover:underline flex items-center gap-1 cursor-pointer py-1"
                   >
                     <span>Enquire About Full Stack Track</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -533,10 +533,10 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                   <h3 className="text-lg font-bold text-slate-900 mb-2">
                     Cloud Computing &amp; DevOps
                   </h3>
-                  <p className="text-xs text-slate-700 leading-relaxed mb-4">
+                  <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed mb-4">
                     Deploy, orchestrate, and secure distributed infrastructure across AWS and Microsoft Azure with automated CI/CD.
                   </p>
-                  <ul className="space-y-1.5 text-xs text-slate-700">
+                  <ul className="space-y-1.5 text-xs sm:text-[13px] text-slate-700">
                     <li className="flex items-center gap-1.5">
                       <Check className="w-3.5 h-3.5 text-[#0284C7]" /> AWS Core Architecture &amp; Topologies
                     </li>
@@ -551,7 +551,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                 <div className="pt-5 mt-5 border-t border-cyan-200/70">
                   <button
                     onClick={() => handleSelectCourseForEnquiry('Amazon Web Services (AWS)')}
-                    className="text-xs font-bold text-[#0284C7] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-xs sm:text-[13px] font-bold text-[#0284C7] hover:underline flex items-center gap-1 cursor-pointer py-1"
                   >
                     <span>Enquire About Cloud Track</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -575,10 +575,10 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                   <h3 className="text-lg font-bold text-slate-900 mb-2">
                     Artificial Intelligence &amp; Generative AI
                   </h3>
-                  <p className="text-xs text-slate-700 leading-relaxed mb-4">
+                  <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed mb-4">
                     Master applied machine learning, neural networks, vector databases, and enterprise RAG systems with Python.
                   </p>
-                  <ul className="space-y-1.5 text-xs text-slate-700">
+                  <ul className="space-y-1.5 text-xs sm:text-[13px] text-slate-700">
                     <li className="flex items-center gap-1.5">
                       <Check className="w-3.5 h-3.5 text-[#7C3AED]" /> Python for Data Science &amp; Scikit-Learn
                     </li>
@@ -593,7 +593,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                 <div className="pt-5 mt-5 border-t border-violet-200/70">
                   <button
                     onClick={() => handleSelectCourseForEnquiry('Generative AI')}
-                    className="text-xs font-bold text-[#7C3AED] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-xs sm:text-[13px] font-bold text-[#7C3AED] hover:underline flex items-center gap-1 cursor-pointer py-1"
                   >
                     <span>Enquire About AI Track</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -878,7 +878,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       placeholder="e.g. Rahul Sharma / Sarah Jenkins"
-                      className={`w-full px-4 py-2.5 text-xs rounded-xl border bg-white focus:outline-hidden transition-colors ${
+                      className={`w-full px-4 py-2.5 min-h-[44px] text-sm rounded-xl border bg-white focus:outline-hidden transition-colors ${
                         formErrors.fullName
                           ? 'border-rose-300 focus:border-rose-500 bg-rose-50/20'
                           : 'border-slate-200 focus:border-[#1266E8]'
@@ -886,7 +886,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       required
                     />
                     {formErrors.fullName && (
-                      <p className="text-[11px] text-rose-600 mt-1">{formErrors.fullName}</p>
+                      <p className="text-xs text-rose-600 mt-1">{formErrors.fullName}</p>
                     )}
                   </div>
 
@@ -901,7 +901,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                         value={formData.mobileNumber}
                         onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })}
                         placeholder="e.g. +91 98765 43210"
-                        className={`w-full px-4 py-2.5 text-xs rounded-xl border bg-white focus:outline-hidden transition-colors ${
+                        className={`w-full px-4 py-2.5 min-h-[44px] text-sm rounded-xl border bg-white focus:outline-hidden transition-colors ${
                           formErrors.mobileNumber
                             ? 'border-rose-300 focus:border-rose-500 bg-rose-50/20'
                             : 'border-slate-200 focus:border-[#1266E8]'
@@ -909,7 +909,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                         required
                       />
                       {formErrors.mobileNumber && (
-                        <p className="text-[11px] text-rose-600 mt-1">{formErrors.mobileNumber}</p>
+                        <p className="text-xs text-rose-600 mt-1">{formErrors.mobileNumber}</p>
                       )}
                     </div>
 
@@ -922,14 +922,14 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="e.g. name@example.com"
-                        className={`w-full px-4 py-2.5 text-xs rounded-xl border bg-white focus:outline-hidden transition-colors ${
+                        className={`w-full px-4 py-2.5 min-h-[44px] text-sm rounded-xl border bg-white focus:outline-hidden transition-colors ${
                           formErrors.email
                             ? 'border-rose-300 focus:border-rose-500 bg-rose-50/20'
                             : 'border-slate-200 focus:border-[#1266E8]'
                         }`}
                       />
                       {formErrors.email && (
-                        <p className="text-[11px] text-rose-600 mt-1">{formErrors.email}</p>
+                        <p className="text-xs text-rose-600 mt-1">{formErrors.email}</p>
                       )}
                     </div>
                   </div>
@@ -942,7 +942,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                     <select
                       value={formData.course}
                       onChange={(e) => setFormData({ ...formData, course: e.target.value })}
-                      className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden cursor-pointer"
+                      className="w-full px-4 py-2.5 min-h-[44px] text-sm rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden cursor-pointer"
                       required
                     >
                       {coursesData.map((c) => (
@@ -962,7 +962,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       <select
                         value={formData.currentStatus}
                         onChange={(e) => setFormData({ ...formData, currentStatus: e.target.value })}
-                        className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden cursor-pointer"
+                        className="w-full px-4 py-2.5 min-h-[44px] text-sm rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden cursor-pointer"
                       >
                         <option value="Student">Student</option>
                         <option value="Fresher">Fresher / Recent Graduate</option>
@@ -979,7 +979,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       <select
                         value={formData.learningMode}
                         onChange={(e) => setFormData({ ...formData, learningMode: e.target.value })}
-                        className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden cursor-pointer"
+                        className="w-full px-4 py-2.5 min-h-[44px] text-sm rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden cursor-pointer"
                       >
                         <option value="Online">Online Interactive Sessions</option>
                         <option value="Classroom">Classroom Training</option>
@@ -998,7 +998,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       value={formData.preferredBatch}
                       onChange={(e) => setFormData({ ...formData, preferredBatch: e.target.value })}
                       placeholder="e.g. Weekend Batch, Morning 8 AM, or Immediate"
-                      className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden"
+                      className="w-full px-4 py-2.5 min-h-[44px] text-sm rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden"
                     />
                   </div>
 
@@ -1012,7 +1012,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       value={formData.questions}
                       onChange={(e) => setFormData({ ...formData, questions: e.target.value })}
                       placeholder="Any specific topics, syllabus questions, or career goals you'd like to share?"
-                      className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden resize-none"
+                      className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-[#1266E8] focus:outline-hidden resize-none"
                     />
                   </div>
 
@@ -1037,7 +1037,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       </span>
                     </label>
                     {formErrors.consent && (
-                      <p className="text-[11px] text-rose-600 mt-1">{formErrors.consent}</p>
+                      <p className="text-xs text-rose-600 mt-1">{formErrors.consent}</p>
                     )}
                   </div>
 
@@ -1046,7 +1046,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-3 px-5 min-h-[42px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs sm:text-[13px] font-semibold transition-all shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] active:scale-98 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-70"
+                      className="w-full py-3 px-5 min-h-[46px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs sm:text-sm font-semibold transition-all shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] active:scale-98 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-70"
                     >
                       {isSubmitting ? (
                         <>
@@ -1173,7 +1173,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                     />
                   </button>
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                    <div className="px-5 pb-5 pt-2 text-sm sm:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100">
                       {faq.answer}
                     </div>
                   )}
@@ -1199,7 +1199,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
               Ready to Start Learning?
             </h2>
 
-            <p className="text-sm sm:text-base bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-[15px] sm:text-base text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">
               Connect with IAMTECHNI to explore upcoming batch dates, detailed syllabus breakdowns, and practical technology learning roadmaps.
             </p>
 
@@ -1210,20 +1210,20 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                     enquiryFormRef.current.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
               >
                 <span>Enquire for Next Batch</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
 
               <a
                 href={getCourseWhatsAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 font-semibold text-xs sm:text-[13px] transition-all cursor-pointer shadow-2xs"
+                className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 min-h-[44px] rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 font-semibold text-xs sm:text-sm transition-all cursor-pointer shadow-2xs"
                 title="Message our admissions desk on WhatsApp"
               >
-                <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
+                <WhatsAppIcon className="w-4 h-4 text-emerald-600" />
                 <span>Chat on WhatsApp (+91-7418120053)</span>
               </a>
             </div>

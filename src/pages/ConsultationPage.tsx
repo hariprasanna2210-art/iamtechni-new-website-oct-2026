@@ -99,7 +99,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
               Request a Technical Architecture Consultation
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+            <p className="text-[15px] sm:text-base lg:text-[17px] text-slate-600 leading-relaxed">
               Meet directly with an IAMTECHNI solutions architect to review your technical requirements, architectural dependencies, and realistic timelines.
             </p>
           </div>
@@ -151,7 +151,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                           type="button"
                           key={service}
                           onClick={() => setFormData({ ...formData, serviceInterest: service })}
-                          className={`p-3 rounded-lg border text-left text-xs font-semibold transition-all cursor-pointer ${
+                          className={`p-3 min-h-[44px] rounded-lg border text-left text-xs sm:text-[13px] font-semibold transition-all cursor-pointer flex items-center ${
                             formData.serviceInterest === service
                               ? 'bg-[#1E3A8A] text-white border-[#1E3A8A] shadow-xs'
                               : 'bg-[#F5F8FC] hover:bg-[#EEF4FF] text-slate-700 border-slate-200'
@@ -166,13 +166,13 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                   {/* Step 2: Target Launch Timeline */}
                   <div className="pt-4 border-t border-slate-100">
                     <div className="space-y-2">
-                      <label className="block text-xs font-bold text-slate-900">
+                      <label className="block text-xs sm:text-[13px] font-bold text-slate-900">
                         Target Launch Timeline *
                       </label>
                       <select
                         value={formData.timeline}
                         onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                        className="w-full p-3 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 focus:ring-2 focus:ring-[#1266E8]"
+                        className="w-full p-3 min-h-[44px] rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:ring-2 focus:ring-[#1266E8]"
                       >
                         {timelineOptions.map((opt) => (
                           <option key={opt} value={opt}>
@@ -185,7 +185,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
 
                   {/* Step 3: Project Overview */}
                   <div className="space-y-2 pt-4 border-t border-slate-100">
-                    <label className="block text-xs font-bold text-slate-900">
+                    <label className="block text-xs sm:text-[13px] font-bold text-slate-900">
                       Project Goals & Technical Requirements *
                     </label>
                     <textarea
@@ -195,7 +195,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                       onChange={(e) =>
                         setFormData({ ...formData, projectOverview: e.target.value })
                       }
-                      className={`w-full p-3.5 rounded-xl border text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#1266E8] ${
+                      className={`w-full p-3.5 rounded-xl border text-sm text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#1266E8] ${
                         errors.projectOverview ? 'border-rose-400 bg-rose-50/30' : 'border-slate-200 bg-white'
                       }`}
                     />
@@ -217,7 +217,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                           placeholder="e.g. Rachel Miller"
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className={`w-full p-2.5 rounded-xl border text-xs text-slate-800 focus:ring-2 focus:ring-[#1266E8] ${
+                          className={`w-full px-3.5 py-2.5 min-h-[44px] rounded-xl border text-sm text-slate-800 focus:ring-2 focus:ring-[#1266E8] ${
                             errors.name ? 'border-rose-400' : 'border-slate-200'
                           }`}
                         />
@@ -231,7 +231,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                           placeholder="rachel@company.com"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className={`w-full p-2.5 rounded-xl border text-xs text-slate-800 focus:ring-2 focus:ring-[#1266E8] ${
+                          className={`w-full px-3.5 py-2.5 min-h-[44px] rounded-xl border text-sm text-slate-800 focus:ring-2 focus:ring-[#1266E8] ${
                             errors.email ? 'border-rose-400' : 'border-slate-200'
                           }`}
                         />
@@ -245,7 +245,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                           placeholder="e.g. Apex Health Systems"
                           value={formData.company}
                           onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                          className={`w-full p-2.5 rounded-xl border text-xs text-slate-800 focus:ring-2 focus:ring-[#1266E8] ${
+                          className={`w-full px-3.5 py-2.5 min-h-[44px] rounded-xl border text-sm text-slate-800 focus:ring-2 focus:ring-[#1266E8] ${
                             errors.company ? 'border-rose-400' : 'border-slate-200'
                           }`}
                         />
@@ -259,7 +259,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                           placeholder="+1 (555) 019-2834"
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:ring-2 focus:ring-[#1266E8]"
+                          className="w-full px-3.5 py-2.5 min-h-[44px] rounded-xl border border-slate-200 text-sm text-slate-800 focus:ring-2 focus:ring-[#1266E8]"
                         />
                       </div>
                     </div>
@@ -269,10 +269,10 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                   <div className="pt-4">
                     <button
                       type="submit"
-                      className="w-full py-3 min-h-[42px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full py-3 min-h-[46px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <span>Submit Architecture Brief & Schedule Session</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-4 h-4" />
                     </button>
                     <p className="text-[11px] text-slate-400 text-center mt-2.5">
                       Protected under standard mutual non-disclosure (NDA). We never sell or share contact details.
@@ -289,19 +289,19 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span className="text-xs text-slate-600">
+                    <span className="text-[13.5px] sm:text-sm text-slate-600">
                       <strong>Senior Engineer Led:</strong> Direct discussion with an engineering lead, not a high-pressure sales rep.
                     </span>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span className="text-xs text-slate-600">
+                    <span className="text-[13.5px] sm:text-sm text-slate-600">
                       <strong>Architecture Assessment:</strong> Candid analysis of your stack and Build vs. Buy options.
                     </span>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span className="text-xs text-slate-600">
+                    <span className="text-[13.5px] sm:text-sm text-slate-600">
                       <strong>Actionable Roadmap:</strong> High-level phased delivery plan with realistic cost and timing expectations.
                     </span>
                   </div>
@@ -313,7 +313,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                   <ShieldCheck className="w-4 h-4" />
                   <span>Confidentiality Guaranteed</span>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed">
                   All architecture reviews and technical documentation shared with IAMTECHNI are treated as strictly confidential.
                 </p>
                 <div className="pt-2 text-xs font-mono text-slate-500">

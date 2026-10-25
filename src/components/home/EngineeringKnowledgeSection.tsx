@@ -294,7 +294,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
       };
 
       triggerFlip();
-      intervalId = window.setInterval(triggerFlip, 1400);
+      intervalId = window.setInterval(triggerFlip, 4600);
     }, staggerDelayMs);
 
     return () => {
@@ -411,14 +411,20 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
             />
           </div>
 
-          {/* Bottom Row: Published Date + Title Preview Hint */}
-          <div className="relative z-10 pt-3 border-t border-slate-200/80 flex items-center justify-between gap-3 text-xs">
-            <span className="font-mono text-[11px] text-slate-600 shrink-0">
-              {currentArticle.publishedDate}
-            </span>
-            <span className="text-[11px] font-bold text-[#1E3A8A] truncate">
-              {currentArticle.title}
-            </span>
+          {/* Bottom Row: Published Date + Title Preview Hint + Mobile Tap-to-Flip Cue */}
+          <div className="relative z-10 pt-3 border-t border-slate-200/80 space-y-2">
+            <div className="flex items-center justify-between gap-3 text-xs">
+              <span className="font-mono text-[11px] text-slate-600 shrink-0">
+                {currentArticle.publishedDate}
+              </span>
+              <span className="text-[11px] font-bold text-[#1E3A8A] truncate">
+                {currentArticle.title}
+              </span>
+            </div>
+            <div className="flex md:hidden items-center justify-between px-2.5 py-1.5 rounded-lg bg-[#1E3A8A]/90 text-white text-[11px] font-semibold">
+              <span>Tap card to flip for article summary</span>
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+            </div>
           </div>
         </div>
 
@@ -471,7 +477,7 @@ const FlipGlassCard: React.FC<FlipGlassCardProps> = ({
             </h3>
 
             {/* Article Excerpt */}
-            <p className="text-xs sm:text-[13px] text-slate-700 leading-relaxed">
+            <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed">
               {currentArticle.excerpt}
             </p>
           </div>
@@ -537,15 +543,8 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
             </div>
 
             <motion.h2
-              animate={{ scale: [1, 1.02, 1] }}
-              whileHover={{ scale: 1.03 }}
-              transition={{
-                scale: {
-                  duration: 2.8,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                },
-              }}
+              whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
               className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-[36px] xl:text-[40px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2] origin-left cursor-default"
             >
               {['Ideas,', 'knowledge', 'and', 'practical', 'engineering.'].map(
@@ -555,20 +554,15 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
                     <React.Fragment key={`${word}-${i}`}>
                       <motion.span
                         initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0, scale: [1, 1.04, 1] }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
                         whileHover={{
-                          scale: 1.09,
+                          scale: 1.06,
                           transition: { duration: 0.22, ease: 'easeOut' },
                         }}
                         transition={{
                           opacity: { duration: 0.4, delay: 0.05 * i },
                           y: { duration: 0.4, delay: 0.05 * i },
-                          scale: {
-                            duration: 2.4,
-                            repeat: Infinity,
-                            ease: 'easeInOut',
-                            delay: 0.15 * i,
-                          },
                         }}
                         className={`inline-block text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)] hover:drop-shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-shadow duration-200 ${
                           isLast ? 'mr-0' : 'mr-[0.24em]'
@@ -583,7 +577,7 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
               )}
             </motion.h2>
 
-            <p className="text-sm sm:text-base bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-3 leading-relaxed max-w-2xl">
+            <p className="text-[15px] sm:text-base lg:text-[17px] text-slate-600 font-medium mt-3 leading-relaxed max-w-2xl">
               Technical articles, architecture reviews, and field notes written by our senior engineering team.
             </p>
           </div>
@@ -591,7 +585,7 @@ export const EngineeringKnowledgeSection: React.FC<EngineeringKnowledgeSectionPr
           <button
             type="button"
             onClick={() => onNavigate('/insights')}
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start md:self-auto shrink-0"
+            className="inline-flex items-center justify-center gap-1.5 min-h-[42px] sm:min-h-[44px] px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer self-start md:self-auto shrink-0"
           >
             <span>Browse All Articles</span>
             <ArrowRight className="w-3.5 h-3.5 text-white" />

@@ -145,7 +145,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
                 Frequently Asked Questions
               </h1>
 
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              <p className="text-[15px] sm:text-base lg:text-[17px] text-slate-600 leading-relaxed">
                 Find transparent answers about our engineering capabilities, engagement process, code ownership, pricing models, and security standards.
               </p>
 
@@ -157,7 +157,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
                   placeholder="Search questions by keyword (e.g. ownership, AI, timeline)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-200 bg-white text-xs sm:text-sm text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#2563EB]"
+                  className="w-full pl-10 pr-4 py-3 min-h-[44px] rounded-lg border border-slate-200 bg-white text-sm text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#2563EB]"
                 />
               </div>
             </div>
@@ -260,7 +260,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
                             />
                           </button>
                           {isOpen && (
-                            <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                            <div className="px-5 pb-5 pt-2 text-sm sm:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100">
                               {item.answer}
                             </div>
                           )}
@@ -276,21 +276,21 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate, onOpenProjectModal
           {/* Have More Questions CTA Box */}
           <div className="p-8 rounded-2xl bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] shadow-[0_4px_20px_rgba(37,99,235,0.06)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div className="space-y-1">
-              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base font-bold text-[#1E3A8A]">Still have questions?</h3>
-              <p className="text-xs text-slate-600">
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base sm:text-lg font-bold text-[#1E3A8A]">Still have questions?</h3>
+              <p className="text-sm text-slate-600">
                 Our solutions engineering team is available for a direct technical consultation.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={() => onOpenProjectModal('General Inquiry')}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs sm:text-[13px] font-semibold shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all cursor-pointer"
               >
                 Ask a Question
               </button>
               <button
                 onClick={() => onNavigate('/contact/consultation')}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-white hover:bg-[#F5F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.06)] transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-white hover:bg-[#F5F9FF] text-[#1E3A8A] hover:text-[#2563EB] text-xs sm:text-[13px] font-semibold border border-[#DBEAFE] shadow-[0_2px_10px_rgba(37,99,235,0.06)] transition-all cursor-pointer"
               >
                 Schedule Call
               </button>

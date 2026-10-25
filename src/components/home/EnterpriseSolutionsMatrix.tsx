@@ -509,7 +509,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
 
   // Hero button style (reused from HeroContent.tsx)
   const heroButtonClass =
-    'inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer';
+    'inline-flex items-center justify-center gap-1.5 min-h-[42px] sm:min-h-[44px] px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] cursor-pointer';
 
   const progressFillPercent =
     stageCount > 1 ? (activeStageIndex / (stageCount - 1)) * 100 : 100;
@@ -635,47 +635,107 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
           </motion.h2>
           <motion.p
             variants={childVariants}
-            className="text-sm sm:text-base text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto"
+            className="text-[15px] sm:text-base lg:text-[17px] text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto"
           >
             Explore how IAMTECHNI architectures solve critical operational bottlenecks—from private AI document search to resilient multi-cloud modernization.
           </motion.p>
         </motion.div>
 
         {/* Interactive Domain Pillar Selector */}
-        <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 no-scrollbar">
-          <div className="flex items-center gap-2 p-1.5 bg-white border border-slate-200/90 rounded-2xl shadow-xs">
-            {SOLUTION_PILLARS.map((pillar, idx) => {
-              const PillarIcon = pillar.icon;
-              const isActive = activePillarIndex === idx;
+        <div className="space-y-2.5">
+          {/* Mobile-Only (<sm) Domain Counter & Quick Prev/Next Bar */}
+          <div className="flex sm:hidden items-center justify-between gap-2 px-1">
+            <div className="inline-flex items-center gap-2 min-w-0">
+              <span className="px-2.5 py-1 rounded-lg bg-[#1E3A8A] text-white font-mono text-xs font-bold shrink-0">
+                0{activePillarIndex + 1} / 0{SOLUTION_PILLARS.length}
+              </span>
+              <span className="text-xs font-semibold text-[#2563EB] truncate">
+                Swipe or tap solution domains →
+              </span>
+            </div>
+            <div className="inline-flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  if (simIntervalRef.current !== null) {
+                    window.clearInterval(simIntervalRef.current);
+                    simIntervalRef.current = null;
+                  }
+                  setActivePillarIndex(
+                    (activePillarIndex - 1 + SOLUTION_PILLARS.length) %
+                      SOLUTION_PILLARS.length
+                  );
+                  setActiveStageIndex(0);
+                  setIsSimulating(false);
+                }}
+                aria-label="Previous solution domain"
+                className="w-9 h-9 rounded-xl bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+              >
+                <ArrowRight className="w-4 h-4 rotate-180" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (simIntervalRef.current !== null) {
+                    window.clearInterval(simIntervalRef.current);
+                    simIntervalRef.current = null;
+                  }
+                  setActivePillarIndex(
+                    (activePillarIndex + 1) % SOLUTION_PILLARS.length
+                  );
+                  setActiveStageIndex(0);
+                  setIsSimulating(false);
+                }}
+                aria-label="Next solution domain"
+                className="w-9 h-9 rounded-xl bg-[#1E3A8A] hover:bg-[#2563EB] text-white border border-[#1E3A8A] shadow-xs flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
 
-              return (
-                <button
-                  key={pillar.id}
-                  type="button"
-                  onClick={() => {
-                    if (simIntervalRef.current !== null) {
-                      window.clearInterval(simIntervalRef.current);
-                      simIntervalRef.current = null;
-                    }
-                    setActivePillarIndex(idx);
-                    setActiveStageIndex(0);
-                    setIsSimulating(false);
-                  }}
-                  className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                    isActive
-                      ? 'bg-[#1E3A8A] text-white shadow-xs'
-                      : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#EEF4FF]/60'
-                  }`}
-                >
-                  <PillarIcon
-                    className={`w-4 h-4 ${
-                      isActive ? 'text-[#22D3EE]' : 'text-slate-500'
-                    }`}
-                  />
-                  <span>{pillar.tabLabel}</span>
-                </button>
-              );
-            })}
+          <div className="relative -mx-4 px-4 sm:mx-0 sm:px-0">
+            {/* Mobile-only right-edge fade indicating more scrollable tabs */}
+            <div
+              aria-hidden="true"
+              className="sm:hidden pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#F8FAFD] via-[#F8FAFD]/85 to-transparent z-20"
+            />
+            <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-2 pr-6 sm:pr-0 no-scrollbar">
+              <div className="flex items-center gap-2 p-1.5 bg-white border border-slate-200/90 rounded-2xl shadow-xs">
+                {SOLUTION_PILLARS.map((pillar, idx) => {
+                  const PillarIcon = pillar.icon;
+                  const isActive = activePillarIndex === idx;
+
+                  return (
+                    <button
+                      key={pillar.id}
+                      type="button"
+                      onClick={() => {
+                        if (simIntervalRef.current !== null) {
+                          window.clearInterval(simIntervalRef.current);
+                          simIntervalRef.current = null;
+                        }
+                        setActivePillarIndex(idx);
+                        setActiveStageIndex(0);
+                        setIsSimulating(false);
+                      }}
+                      className={`flex items-center gap-2 min-h-[42px] px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                        isActive
+                          ? 'bg-[#1E3A8A] text-white shadow-xs'
+                          : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#EEF4FF]/60'
+                      }`}
+                    >
+                      <PillarIcon
+                        className={`w-4 h-4 ${
+                          isActive ? 'text-[#22D3EE]' : 'text-slate-500'
+                        }`}
+                      />
+                      <span>{pillar.tabLabel}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -962,7 +1022,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                 {currentPillar.deliverables.map((del, dIdx) => (
                   <div
                     key={dIdx}
-                    className="flex items-start gap-2.5 text-xs sm:text-[13px] text-slate-700 bg-[#F6F8FB] p-3.5 rounded-xl border border-slate-200/80"
+                    className="flex items-start gap-2.5 text-[13.5px] sm:text-sm text-slate-700 bg-[#F6F8FB] p-3.5 rounded-xl border border-slate-200/80"
                   >
                     <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0 mt-0.5" />
                     <span className="leading-snug font-medium">{del}</span>
@@ -1008,7 +1068,7 @@ export const EnterpriseSolutionsMatrix: React.FC<EnterpriseSolutionsMatrixProps>
                 <h4 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A] tracking-tight">
                   Request &amp; Execution Pipeline
                 </h4>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   Click any stage below to inspect the security parameters, protocols, and latency guarantees enforced in our production deployments.
                 </p>
               </div>

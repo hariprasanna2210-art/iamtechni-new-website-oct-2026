@@ -72,12 +72,12 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
               </h2>
             </div>
 
-            <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs">
+            <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-xl shadow-2xs">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`min-h-[38px] px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                     selectedCategory === cat
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
@@ -121,7 +121,7 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
 
                       <button
                         onClick={() => onStartProject(sol.title)}
-                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 sm:px-4.5 sm:py-2.5 min-h-[40px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer shrink-0"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-2.5 min-h-[42px] sm:min-h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer shrink-0 self-start md:self-auto"
                       >
                         <span>Consult on this Solution</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -130,21 +130,21 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
 
                     {/* Problem vs Proposed Approach + Visual Blueprint Preview */}
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6 items-stretch">
-                      <div className="lg:col-span-4 bg-white/80 p-5 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col justify-between">
+                      <div className="lg:col-span-4 bg-white/85 p-5 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col justify-between">
                         <div>
-                          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 font-mono">
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-600 mb-2 font-mono">
                             The Business Problem
                           </h4>
-                          <p className="text-xs text-slate-700 leading-relaxed">{sol.problem}</p>
+                          <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed">{sol.problem}</p>
                         </div>
                       </div>
 
-                      <div className="lg:col-span-4 bg-white/80 p-5 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col justify-between">
+                      <div className="lg:col-span-4 bg-white/85 p-5 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col justify-between">
                         <div>
                           <h4 className={`text-xs font-bold uppercase tracking-wider ${color.accentText} mb-2 font-mono`}>
                             IAMTECHNI Architectural Approach
                           </h4>
-                          <p className="text-xs text-slate-700 leading-relaxed">{sol.proposedApproach}</p>
+                          <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed">{sol.proposedApproach}</p>
                         </div>
                       </div>
 
@@ -159,7 +159,7 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
 
                     {/* Measurable Impact Banner */}
                     <div className="mt-6 p-4 rounded-xl bg-white border border-slate-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
-                      <div className="text-xs text-slate-700">
+                      <div className="text-[13.5px] sm:text-sm text-slate-700">
                         <span className={`font-bold ${color.accentText}`}>Verified Benefit: </span>
                         {sol.potentialBenefits[0]}
                       </div>

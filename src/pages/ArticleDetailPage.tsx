@@ -41,8 +41,8 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
       {/* Article Header with Rich Technical Graphic */}
       <section className="bg-white border-b border-slate-200 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs text-slate-500 font-mono">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 font-mono">
               <span className="text-[#1266E8] font-bold uppercase">{article.category}</span>
               <span>·</span>
               <span>{article.readTime}</span>
@@ -52,7 +52,7 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
 
             <button
               onClick={handleCopyLink}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs text-slate-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-[38px] px-3.5 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
               aria-label="Copy article link"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
@@ -97,7 +97,7 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
                 </h2>
 
                 {sec.body.map((paragraph, pIdx) => (
-                  <p key={pIdx} className="text-sm text-slate-700 leading-relaxed">
+                  <p key={pIdx} className="text-[15px] sm:text-base text-slate-700 leading-relaxed">
                     {paragraph}
                   </p>
                 ))}
@@ -124,12 +124,12 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono mb-3">
                 Table of Contents
               </h3>
-              <nav className="space-y-2">
+              <nav className="space-y-1.5">
                 {article.tableOfContents.map((item) => (
                   <a
                     key={item.id}
                     href={`#${item.id}`}
-                    className="block text-xs text-slate-600 hover:text-[#1266E8] transition-colors leading-snug py-0.5"
+                    className="block text-[13.5px] sm:text-sm text-slate-600 hover:text-[#1266E8] transition-colors leading-snug py-1"
                   >
                     {item.title}
                   </a>
@@ -142,15 +142,15 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
               <div className="text-[11px] font-mono text-[#2563EB] font-bold uppercase tracking-wider">
                 ENGINEERING PRACTICE
               </div>
-              <h4 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base font-bold text-[#1E3A8A]">
+              <h4 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base sm:text-lg font-bold text-[#1E3A8A]">
                 Need to implement this architecture?
               </h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-[13.5px] sm:text-sm text-slate-600 leading-relaxed">
                 Our senior engineering team can audit your existing system and build custom implementations with verified benchmarks.
               </p>
               <button
                 onClick={onStartProject}
-                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 min-h-[40px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs font-semibold rounded-lg shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 min-h-[44px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-sm font-semibold rounded-xl shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all cursor-pointer"
               >
                 Discuss Technical Scope
               </button>

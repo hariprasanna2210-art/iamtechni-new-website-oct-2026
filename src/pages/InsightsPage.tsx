@@ -48,7 +48,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
       <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           {/* Search & Categories Bar */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-2 border-b border-slate-200">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pb-2 border-b border-slate-200">
             <div className="relative w-full md:w-96">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
@@ -56,18 +56,18 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search articles by title or keyword..."
-                className="w-full pl-10 pr-4 py-2.5 text-xs rounded-lg border border-slate-200 focus:border-[#2563EB] focus:outline-hidden bg-white shadow-2xs"
+                className="w-full min-h-[42px] pl-10 pr-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-[#2563EB] focus:outline-hidden bg-white shadow-2xs"
               />
             </div>
 
-            <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs w-full md:w-auto">
+            <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-xl shadow-2xs w-full md:w-auto">
               {categories.map((cat) => {
                 const CatIcon = cat === 'All' ? Sparkles : getServiceIcon(cat);
                 return (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                    className={`min-h-[38px] px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
                       selectedCategory === cat
                         ? 'bg-[#1E3A8A] text-white shadow-xs'
                         : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
@@ -167,7 +167,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                         {art.title}
                       </h2>
 
-                      <p className="text-xs text-slate-700 leading-relaxed mb-6 line-clamp-4">
+                      <p className="text-[13.5px] sm:text-sm text-slate-700 leading-relaxed mb-6 line-clamp-4">
                         {art.excerpt}
                       </p>
                     </div>
