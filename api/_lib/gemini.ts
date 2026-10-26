@@ -1,5 +1,5 @@
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
-import type { FormattedChatContent } from './validation';
+import type { FormattedChatContent } from './validation.js';
 
 export const DEFAULT_TIMEOUT_MS = 20_000;
 const PRIMARY_MODEL_TIMEOUT_MS = 10_000;
@@ -76,7 +76,7 @@ export function getGeminiClient(): GoogleGenAI | null {
 }
 
 export function isGeminiConfigured(): boolean {
-  return getGeminiClient() !== null;
+  return Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== 'MY_GEMINI_API_KEY');
 }
 
 export function withTimeout<T>(

@@ -9,18 +9,16 @@ import {
   DEFAULT_TIMEOUT_MS,
   ERROR_FALLBACK_TEXT,
   generateChatResponse,
-  isGeminiConfigured,
-} from './api/_lib/gemini';
+} from './api/_lib/gemini.js';
 import {
   validateAndFormatChatMessages,
   validateCourseEnquiryPayload,
-} from './api/_lib/validation';
-import { checkRateLimit, getClientIp } from './api/_lib/rateLimit';
-import { formatFriendlyChatError } from './api/_lib/http';
+} from './api/_lib/validation.js';
+import { checkRateLimit, getClientIp } from './api/_lib/rateLimit.js';
+import { formatFriendlyChatError } from './api/_lib/http.js';
 import {
-  getCourseEnquiriesCount,
   recordCourseEnquiry,
-} from './api/_lib/courseEnquiryStore';
+} from './api/_lib/courseEnquiryStore.js';
 
 dotenv.config();
 
@@ -143,10 +141,7 @@ app.post('/api/course-enquiry', (req, res) => {
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
-    service: 'IAMTECHNI Enterprise Backend',
-    geminiConfigured: isGeminiConfigured(),
-    enquiriesCount: getCourseEnquiriesCount(),
-    timestamp: new Date().toISOString(),
+    geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
   });
 });
 

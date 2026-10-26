@@ -1,6 +1,4 @@
-import { getCourseEnquiriesCount } from './_lib/courseEnquiryStore';
-import { isGeminiConfigured } from './_lib/gemini';
-import type { VercelRequestLike, VercelResponseLike } from './_lib/http';
+import type { VercelRequestLike, VercelResponseLike } from './_lib/http.js';
 
 export default async function handler(req: VercelRequestLike, res: VercelResponseLike) {
   res.setHeader('Cache-Control', 'no-store');
@@ -12,9 +10,6 @@ export default async function handler(req: VercelRequestLike, res: VercelRespons
 
   return res.status(200).json({
     status: 'ok',
-    service: 'IAMTECHNI Enterprise Backend',
-    geminiConfigured: isGeminiConfigured(),
-    enquiriesCount: getCourseEnquiriesCount(),
-    timestamp: new Date().toISOString(),
+    geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
   });
 }

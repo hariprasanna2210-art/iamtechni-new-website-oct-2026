@@ -1,4 +1,4 @@
-import type { CourseEnquiry } from './validation';
+import type { CourseEnquiry } from './validation.js';
 
 const courseEnquiries: CourseEnquiry[] = [];
 

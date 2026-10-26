@@ -1,4 +1,4 @@
-import { ERROR_FALLBACK_TEXT } from './gemini';
+import { ERROR_FALLBACK_TEXT } from './gemini.js';
 
 export interface VercelRequestLike {
   method?: string;

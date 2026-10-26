@@ -1,12 +1,12 @@
-import { DEFAULT_TIMEOUT_MS, ERROR_FALLBACK_TEXT, generateChatResponse } from './_lib/gemini';
+import { DEFAULT_TIMEOUT_MS, ERROR_FALLBACK_TEXT, generateChatResponse } from './_lib/gemini.js';
 import {
   formatFriendlyChatError,
   parseRequestBody,
   type VercelRequestLike,
   type VercelResponseLike,
-} from './_lib/http';
-import { checkRateLimit, getClientIp } from './_lib/rateLimit';
-import { validateAndFormatChatMessages } from './_lib/validation';
+} from './_lib/http.js';
+import { checkRateLimit, getClientIp } from './_lib/rateLimit.js';
+import { validateAndFormatChatMessages } from './_lib/validation.js';
 
 export default async function handler(req: VercelRequestLike, res: VercelResponseLike) {
   res.setHeader('Cache-Control', 'no-store');

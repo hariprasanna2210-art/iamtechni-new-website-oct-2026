@@ -1,11 +1,11 @@
-import { recordCourseEnquiry } from './_lib/courseEnquiryStore';
+import { recordCourseEnquiry } from './_lib/courseEnquiryStore.js';
 import {
   parseRequestBody,
   type VercelRequestLike,
   type VercelResponseLike,
-} from './_lib/http';
-import { checkRateLimit, getClientIp } from './_lib/rateLimit';
-import { validateCourseEnquiryPayload } from './_lib/validation';
+} from './_lib/http.js';
+import { checkRateLimit, getClientIp } from './_lib/rateLimit.js';
+import { validateCourseEnquiryPayload } from './_lib/validation.js';
 
 export default async function handler(req: VercelRequestLike, res: VercelResponseLike) {
   res.setHeader('Cache-Control', 'no-store');
