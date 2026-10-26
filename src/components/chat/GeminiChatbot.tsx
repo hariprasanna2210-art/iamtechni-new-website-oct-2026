@@ -143,8 +143,8 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
     }, 20_000);
 
     try {
-      // Exclude the static initial welcome message ('welcome-1') and any prior fallback/error messages
-      // so the conversation history sent to Gemini always begins with a 'user' message and never mentions past errors.
+      // Exclude the static initial welcome message ('welcome-1') and any prior fallback/error messages,
+      // keep only the last 6 messages, and ensure history starts with a 'user' message.
       const filteredHistory = newMessages.filter(
         (m) =>
           m.id !== 'welcome-1' &&
@@ -152,13 +152,16 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
           !m.id.startsWith('bot-err-') &&
           !(
             m.role === 'assistant' &&
-            /temporary (network )?delay|temporary connection issue|took longer than 20 seconds/i.test(
-              m.content
-            )
+            (m.content.startsWith('Hello! I am the **IAMTECHNI AI Solutions Architect**') ||
+              /temporary (network )?delay|temporary connection issue|took longer than 20 seconds/i.test(
+                m.content
+              ))
           )
       );
-      const firstUserIndex = filteredHistory.findIndex((m) => m.role === 'user');
-      const validHistory = firstUserIndex >= 0 ? filteredHistory.slice(firstUserIndex) : [userMessage];
+      const lastSixMessages = filteredHistory.slice(-6);
+      const firstUserIndex = lastSixMessages.findIndex((m) => m.role === 'user');
+      const validHistory =
+        firstUserIndex >= 0 ? lastSixMessages.slice(firstUserIndex) : [userMessage];
 
       const payloadMessages = validHistory.map((m) => ({
         role: m.role === 'assistant' ? 'model' : 'user',

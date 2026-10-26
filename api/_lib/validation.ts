@@ -25,7 +25,7 @@ export interface CourseEnquiry {
   createdAt: string;
 }
 
-const MAX_CHAT_MESSAGES = 40;
+const MAX_CHAT_MESSAGES = 6;
 const MAX_MESSAGE_CHARS = 4_000;
 
 export function validateAndFormatChatMessages(
@@ -53,10 +53,9 @@ export function validateAndFormatChatMessages(
     return { ok: false, error: 'Messages array is required' };
   }
 
-  const trimmedMessages = rawMessages.slice(-MAX_CHAT_MESSAGES);
-
+  // Filter out the initial static greeting and any fallback/error messages first
   const mapped: FormattedChatContent[] = [];
-  for (const m of trimmedMessages) {
+  for (const m of rawMessages) {
     if (m?.id === 'welcome-1') continue;
 
     let textContent = '';
@@ -74,11 +73,12 @@ export function validateAndFormatChatMessages(
     const role: 'user' | 'model' =
       m?.role === 'assistant' || m?.role === 'model' ? 'model' : 'user';
 
-    // Never pass previous error/fallback messages back into model context
+    // Skip initial static greeting or prior error/fallback messages
     if (
       role === 'model' &&
       (m?.id?.startsWith('bot-fallback-') ||
         m?.id?.startsWith('bot-err-') ||
+        sanitizedText.startsWith('Hello! I am the **IAMTECHNI AI Solutions Architect**') ||
         /temporary (network )?delay|temporary connection issue|took longer than 20 seconds/i.test(
           sanitizedText
         ))
@@ -92,9 +92,12 @@ export function validateAndFormatChatMessages(
     });
   }
 
-  // Strip any leading 'model' messages so the conversation history always starts with a 'user' turn
-  const firstUserIdx = mapped.findIndex((item) => item.role === 'user');
-  const normalizedContents = firstUserIdx >= 0 ? mapped.slice(firstUserIdx) : [];
+  // Keep only the last 6 messages
+  const recentMessages = mapped.slice(-MAX_CHAT_MESSAGES);
+
+  // Ensure the history sent to Gemini starts with a 'user' message
+  const firstUserIdx = recentMessages.findIndex((item) => item.role === 'user');
+  const normalizedContents = firstUserIdx >= 0 ? recentMessages.slice(firstUserIdx) : [];
 
   if (normalizedContents.length === 0) {
     return { ok: false, error: 'At least one non-empty user message is required.' };

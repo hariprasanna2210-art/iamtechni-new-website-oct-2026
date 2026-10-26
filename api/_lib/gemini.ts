@@ -3,8 +3,10 @@ import type { FormattedChatContent } from './validation';
 
 export const DEFAULT_TIMEOUT_MS = 20_000;
 const PRIMARY_MODEL_TIMEOUT_MS = 10_000;
-const FALLBACK_MODEL_TIMEOUT_MS = 9_000;
-const MAX_CHAT_OUTPUT_TOKENS = 500;
+const FALLBACK_MODEL_TIMEOUT_MS = 8_000;
+export const MAX_CHAT_OUTPUT_TOKENS = 500;
+export const FAST_CHAT_MODEL = 'gemini-3.1-flash-lite';
+export const FALLBACK_CHAT_MODEL = 'gemini-3.8-flash';
 
 export const SYSTEM_INSTRUCTION = `You are the IAMTECHNI AI Solutions Architect and Virtual Technology Advisor for IAMTECHNI (https://iamtechni.in).
 IAMTECHNI is a premier enterprise digital engineering, artificial intelligence, cloud modernization, and custom software development company.
@@ -113,34 +115,10 @@ export async function generateChatResponse(
 
   const runGeneration = async (): Promise<string> => {
     try {
+      // Use fastest Flash Lite model (gemini-3.1-flash-lite) with thinking disabled (ThinkingLevel.MINIMAL) and maxOutputTokens: 500
       const response = await withTimeout(
         ai.models.generateContent({
-          model: 'gemini-3.8-flash',
-          contents: formattedContents,
-          config: {
-            systemInstruction: SYSTEM_INSTRUCTION,
-            temperature: 0.7,
-            maxOutputTokens: MAX_CHAT_OUTPUT_TOKENS,
-            thinkingConfig: {
-              thinkingLevel: ThinkingLevel.LOW,
-            },
-          },
-        }),
-        Math.min(PRIMARY_MODEL_TIMEOUT_MS, timeoutMs),
-        'Primary Gemini model timed out'
-      );
-      if (response.text) {
-        return response.text;
-      }
-      throw new Error('Empty response from primary model');
-    } catch (primaryErr: any) {
-      console.warn(
-        'Primary model gemini-3.8-flash busy/errored, attempting gemini-3.1-flash-lite...',
-        primaryErr?.message
-      );
-      const fallbackResponse = await withTimeout(
-        ai.models.generateContent({
-          model: 'gemini-3.1-flash-lite',
+          model: FAST_CHAT_MODEL,
           contents: formattedContents,
           config: {
             systemInstruction: SYSTEM_INSTRUCTION,
@@ -148,6 +126,31 @@ export async function generateChatResponse(
             maxOutputTokens: MAX_CHAT_OUTPUT_TOKENS,
             thinkingConfig: {
               thinkingLevel: ThinkingLevel.MINIMAL,
+            },
+          },
+        }),
+        Math.min(PRIMARY_MODEL_TIMEOUT_MS, timeoutMs),
+        'Primary Flash Lite model timed out'
+      );
+      if (response.text) {
+        return response.text;
+      }
+      throw new Error('Empty response from primary Flash Lite model');
+    } catch (primaryErr: any) {
+      console.warn(
+        `Primary model ${FAST_CHAT_MODEL} busy/errored, attempting ${FALLBACK_CHAT_MODEL}...`,
+        primaryErr?.message
+      );
+      const fallbackResponse = await withTimeout(
+        ai.models.generateContent({
+          model: FALLBACK_CHAT_MODEL,
+          contents: formattedContents,
+          config: {
+            systemInstruction: SYSTEM_INSTRUCTION,
+            temperature: 0.7,
+            maxOutputTokens: MAX_CHAT_OUTPUT_TOKENS,
+            thinkingConfig: {
+              thinkingLevel: ThinkingLevel.LOW,
             },
           },
         }),

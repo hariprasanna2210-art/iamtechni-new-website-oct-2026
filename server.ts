@@ -10,17 +10,17 @@ import {
   ERROR_FALLBACK_TEXT,
   generateChatResponse,
   isGeminiConfigured,
-} from './netlify/functions/_lib/gemini';
+} from './api/_lib/gemini';
 import {
   validateAndFormatChatMessages,
   validateCourseEnquiryPayload,
-} from './netlify/functions/_lib/validation';
-import { checkRateLimit, getClientIp } from './netlify/functions/_lib/rateLimit';
-import { formatFriendlyChatError } from './netlify/functions/_lib/http';
+} from './api/_lib/validation';
+import { checkRateLimit, getClientIp } from './api/_lib/rateLimit';
+import { formatFriendlyChatError } from './api/_lib/http';
 import {
   getCourseEnquiriesCount,
   recordCourseEnquiry,
-} from './netlify/functions/_lib/courseEnquiryStore';
+} from './api/_lib/courseEnquiryStore';
 
 dotenv.config();
 

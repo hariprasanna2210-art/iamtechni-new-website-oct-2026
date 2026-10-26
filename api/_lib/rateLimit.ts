@@ -21,8 +21,8 @@ export function getClientIp(
     return val;
   };
 
-  const netlifyIp = lookup('x-nf-client-connection-ip');
-  if (netlifyIp) return netlifyIp.trim();
+  const vercelForwarded = lookup('x-vercel-forwarded-for');
+  if (vercelForwarded) return vercelForwarded.split(',')[0].trim();
 
   const forwardedFor = lookup('x-forwarded-for');
   if (forwardedFor) {
@@ -51,7 +51,6 @@ export function checkRateLimit(
   const key = clientIp || 'unknown';
   const entry = bucketMap.get(key) || { timestamps: [] };
 
-  // Remove expired timestamps outside the current window
   entry.timestamps = entry.timestamps.filter((ts) => now - ts < windowMs);
 
   if (entry.timestamps.length >= maxRequests) {
@@ -68,7 +67,6 @@ export function checkRateLimit(
   entry.timestamps.push(now);
   bucketMap.set(key, entry);
 
-  // Periodic cleanup to avoid unbounded memory growth
   if (bucketMap.size > 2_000) {
     for (const [ipKey, val] of bucketMap.entries()) {
       const active = val.timestamps.filter((ts) => now - ts < windowMs);
