@@ -65,8 +65,8 @@ app.get('/services/:slug', (req, res, next) => {
   return next();
 });
 
-// Gemini Multi-Turn Chat API Endpoint
-app.post('/api/chat', async (req, res) => {
+// Gemini Multi-Turn Chat & Advisor API Endpoint
+const handleChatRequest: express.RequestHandler = async (req, res) => {
   try {
     const clientIp = getClientIp(req.headers as Record<string, string | string[] | undefined>) || req.ip || 'unknown';
     const rate = checkRateLimit(clientIp, 'chat', 20, 60_000);
@@ -75,25 +75,33 @@ app.post('/api/chat', async (req, res) => {
       return res.status(429).json({
         error: `Too many chat requests. Please wait ${rate.retryAfterSeconds} seconds before trying again.`,
         fallbackText: ERROR_FALLBACK_TEXT,
+        text: ERROR_FALLBACK_TEXT,
       });
     }
 
     const validation = validateAndFormatChatMessages(req.body);
     if (!validation.ok) {
-      return res.status(400).json({ error: validation.error });
+      return res.status(400).json({
+        error: validation.error,
+        fallbackText: ERROR_FALLBACK_TEXT,
+      });
     }
 
     const result = await generateChatResponse(validation.contents, DEFAULT_TIMEOUT_MS);
-    return res.json({ text: result.text });
+    return res.json({ text: result.text, reply: result.reply });
   } catch (error: any) {
     console.error('Error generating Gemini chat response:', error);
     const friendly = formatFriendlyChatError(error);
     return res.status(friendly.statusCode).json({
       error: friendly.error,
       fallbackText: friendly.fallbackText,
+      text: friendly.fallbackText,
     });
   }
-});
+};
+
+app.post('/api/chat', handleChatRequest);
+app.post('/api/advisor', handleChatRequest);
 
 // Course Enquiry Submission Endpoint
 app.post('/api/course-enquiry', (req, res) => {

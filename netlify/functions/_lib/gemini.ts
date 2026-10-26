@@ -1,7 +1,10 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 import type { FormattedChatContent } from './validation';
 
 export const DEFAULT_TIMEOUT_MS = 20_000;
+const PRIMARY_MODEL_TIMEOUT_MS = 10_000;
+const FALLBACK_MODEL_TIMEOUT_MS = 9_000;
+const MAX_CHAT_OUTPUT_TOKENS = 500;
 
 export const SYSTEM_INSTRUCTION = `You are the IAMTECHNI AI Solutions Architect and Virtual Technology Advisor for IAMTECHNI (https://iamtechni.in).
 IAMTECHNI is a premier enterprise digital engineering, artificial intelligence, cloud modernization, and custom software development company.
@@ -33,12 +36,15 @@ Core Engineering Disciplines & Solutions:
 
 Your Persona & Behavior:
 - Professional, knowledgeable, articulate, and welcoming.
+- Start replies naturally and warmly (for example, "Hello! Welcome to IAMTECHNI..." when greeted).
+- NEVER mention delays, system readiness, connection status, or previous errors.
+- Keep answers short and scannable (under 120 words) unless the user explicitly asks for in-depth detail.
 - Provide actionable architectural guidance, technology recommendations, and scope estimations when asked.
 - Encourage users to schedule an exploratory technical consultation or contact the team directly via phone (+91-7418120053) or email (info@iamtechni.in).
 - Format responses clearly using markdown: clear headings, concise bullet points, bold key terms, and code snippets when requested.
 - If asked about pricing or exact timelines, offer typical engineering ranges and suggest an exploratory discovery session.`;
 
-export const UNCONFIGURED_FALLBACK_TEXT = `### Welcome to IAMTECHNI!\n\nI am your AI Solutions Architect. While our live Gemini backend is connecting, our technical consulting team is actively available for project consultations and technical feasibility reviews.\n\n**Connect with IAMTECHNI:**\n- 📞 **Direct Phone:** [+91-7418120053](tel:+917418120053)\n- ✉️ **Direct Email:** [info@iamtechni.in](mailto:info@iamtechni.in)\n- 🌐 **Global Delivery:** India, US, EMEA, APAC\n\nHow can we help advance your technology roadmap today?`;
+export const UNCONFIGURED_FALLBACK_TEXT = `Hello! Welcome to **IAMTECHNI**. I am your AI Solutions Architect.\n\nWe help businesses design, build, and scale enterprise web platforms, mobile apps, cloud infrastructure, and custom AI solutions.\n\n**Connect with IAMTECHNI:**\n- 📞 **Direct Phone:** [+91-7418120053](tel:+917418120053)\n- ✉️ **Direct Email:** [info@iamtechni.in](mailto:info@iamtechni.in)\n- 🌐 **Global Delivery:** India, US, EMEA, APAC\n\nHow can we help advance your technology roadmap today?`;
 
 export const ERROR_FALLBACK_TEXT =
   'I apologize, but I encountered a temporary connection issue. You can reach our engineering team directly at +91-7418120053 or info@iamtechni.in for immediate support.';
@@ -98,41 +104,60 @@ export function withTimeout<T>(
 export async function generateChatResponse(
   formattedContents: FormattedChatContent[],
   timeoutMs: number = DEFAULT_TIMEOUT_MS
-): Promise<{ text: string }> {
+): Promise<{ text: string; reply: string }> {
   const ai = getGeminiClient();
 
   if (!ai) {
-    return { text: UNCONFIGURED_FALLBACK_TEXT };
+    return { text: UNCONFIGURED_FALLBACK_TEXT, reply: UNCONFIGURED_FALLBACK_TEXT };
   }
 
   const runGeneration = async (): Promise<string> => {
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.8-flash',
-        contents: formattedContents,
-        config: {
-          systemInstruction: SYSTEM_INSTRUCTION,
-          temperature: 0.7,
-        },
-      });
-      return response.text || '';
+      const response = await withTimeout(
+        ai.models.generateContent({
+          model: 'gemini-3.8-flash',
+          contents: formattedContents,
+          config: {
+            systemInstruction: SYSTEM_INSTRUCTION,
+            temperature: 0.7,
+            maxOutputTokens: MAX_CHAT_OUTPUT_TOKENS,
+            thinkingConfig: {
+              thinkingLevel: ThinkingLevel.LOW,
+            },
+          },
+        }),
+        Math.min(PRIMARY_MODEL_TIMEOUT_MS, timeoutMs),
+        'Primary Gemini model timed out'
+      );
+      if (response.text) {
+        return response.text;
+      }
+      throw new Error('Empty response from primary model');
     } catch (primaryErr: any) {
       console.warn(
         'Primary model gemini-3.8-flash busy/errored, attempting gemini-3.1-flash-lite...',
         primaryErr?.message
       );
-      const fallbackResponse = await ai.models.generateContent({
-        model: 'gemini-3.1-flash-lite',
-        contents: formattedContents,
-        config: {
-          systemInstruction: SYSTEM_INSTRUCTION,
-          temperature: 0.7,
-        },
-      });
-      return fallbackResponse.text || '';
+      const fallbackResponse = await withTimeout(
+        ai.models.generateContent({
+          model: 'gemini-3.1-flash-lite',
+          contents: formattedContents,
+          config: {
+            systemInstruction: SYSTEM_INSTRUCTION,
+            temperature: 0.7,
+            maxOutputTokens: MAX_CHAT_OUTPUT_TOKENS,
+            thinkingConfig: {
+              thinkingLevel: ThinkingLevel.MINIMAL,
+            },
+          },
+        }),
+        Math.min(FALLBACK_MODEL_TIMEOUT_MS, timeoutMs),
+        'Fallback Gemini model timed out'
+      );
+      return fallbackResponse.text || UNCONFIGURED_FALLBACK_TEXT;
     }
   };
 
   const responseText = await withTimeout(runGeneration(), timeoutMs);
-  return { text: responseText };
+  return { text: responseText, reply: responseText };
 }

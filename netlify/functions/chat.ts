@@ -30,6 +30,7 @@ export async function handler(event: NetlifyEventLike): Promise<NetlifyResponseL
       {
         error: `Too many chat requests. Please wait ${rate.retryAfterSeconds} seconds before trying again.`,
         fallbackText: ERROR_FALLBACK_TEXT,
+        text: ERROR_FALLBACK_TEXT,
       },
       { 'Retry-After': String(rate.retryAfterSeconds) }
     );
@@ -37,23 +38,24 @@ export async function handler(event: NetlifyEventLike): Promise<NetlifyResponseL
 
   const parsed = parseJsonBody(event);
   if (!parsed.ok) {
-    return jsonResponse(400, { error: parsed.error });
+    return jsonResponse(400, { error: parsed.error, fallbackText: ERROR_FALLBACK_TEXT });
   }
 
   const validation = validateAndFormatChatMessages(parsed.data);
   if (!validation.ok) {
-    return jsonResponse(400, { error: validation.error });
+    return jsonResponse(400, { error: validation.error, fallbackText: ERROR_FALLBACK_TEXT });
   }
 
   try {
     const result = await generateChatResponse(validation.contents, DEFAULT_TIMEOUT_MS);
-    return jsonResponse(200, { text: result.text });
+    return jsonResponse(200, { text: result.text, reply: result.reply });
   } catch (error: unknown) {
     console.error('Error generating Gemini chat response:', error);
     const friendly = formatFriendlyChatError(error);
     return jsonResponse(friendly.statusCode, {
       error: friendly.error,
       fallbackText: friendly.fallbackText,
+      text: friendly.fallbackText,
     });
   }
 }

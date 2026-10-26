@@ -82,6 +82,16 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const messagesRef = useRef<ChatMessage[]>(messages);
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
+  const isLoadingRef = useRef<boolean>(isLoading);
+  useEffect(() => {
+    isLoadingRef.current = isLoading;
+  }, [isLoading]);
+
   // Save conversation history to sessionStorage
   useEffect(() => {
     try {
@@ -90,19 +100,6 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
       // ignore
     }
   }, [messages]);
-
-  // Support global trigger to open chat from any button/link
-  useEffect(() => {
-    const handleOpenChat = (e: any) => {
-      setIsOpen(true);
-      setIsMinimized(false);
-      if (e?.detail?.prompt) {
-        handleSendMessage(e.detail.prompt);
-      }
-    };
-    window.addEventListener('iamtechni:open-chat', handleOpenChat);
-    return () => window.removeEventListener('iamtechni:open-chat', handleOpenChat);
-  }, []);
 
   // Auto-scroll to latest message
   useEffect(() => {
@@ -122,8 +119,8 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
   }, [isOpen, isMinimized]);
 
   const handleSendMessage = async (textToSend?: string) => {
-    const text = (textToSend || inputValue).trim();
-    if (!text || isLoading) return;
+    const text = (textToSend ?? inputValue).trim();
+    if (!text || isLoadingRef.current) return;
 
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -132,16 +129,40 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
-    const newMessages = [...messages, userMessage];
+    const currentHistory = Array.isArray(messagesRef.current) ? messagesRef.current : INITIAL_MESSAGES;
+    const newMessages = [...currentHistory, userMessage];
+    messagesRef.current = newMessages;
     setMessages(newMessages);
     setInputValue('');
+    isLoadingRef.current = true;
     setIsLoading(true);
 
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => {
+      controller.abort();
+    }, 20_000);
+
     try {
-      // Build conversation history for server-side Gemini API
-      // Send past turns to maintain multi-turn chat context
-      const payloadMessages = newMessages.map((m) => ({
+      // Exclude the static initial welcome message ('welcome-1') and any prior fallback/error messages
+      // so the conversation history sent to Gemini always begins with a 'user' message and never mentions past errors.
+      const filteredHistory = newMessages.filter(
+        (m) =>
+          m.id !== 'welcome-1' &&
+          !m.id.startsWith('bot-fallback-') &&
+          !m.id.startsWith('bot-err-') &&
+          !(
+            m.role === 'assistant' &&
+            /temporary (network )?delay|temporary connection issue|took longer than 20 seconds/i.test(
+              m.content
+            )
+          )
+      );
+      const firstUserIndex = filteredHistory.findIndex((m) => m.role === 'user');
+      const validHistory = firstUserIndex >= 0 ? filteredHistory.slice(firstUserIndex) : [userMessage];
+
+      const payloadMessages = validHistory.map((m) => ({
         role: m.role === 'assistant' ? 'model' : 'user',
+        content: m.content,
         parts: [{ text: m.content }],
       }));
 
@@ -151,14 +172,46 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ messages: payloadMessages }),
+        signal: controller.signal,
       });
 
-      if (!res.ok) {
-        throw new Error(`Server returned HTTP ${res.status}`);
+      let data: {
+        text?: string;
+        reply?: string;
+        message?: string;
+        fallbackText?: string;
+        error?: string;
+      } | null = null;
+
+      try {
+        data = await res.json();
+      } catch {
+        data = null;
       }
 
-      const data = await res.json();
-      const replyText = data.text || data.fallbackText || 'Thank you for reaching out. Please contact our engineering team directly at +91-7418120053 or info@iamtechni.in.';
+      if (!res.ok) {
+        const friendlyServerError =
+          data?.fallbackText ||
+          data?.text ||
+          data?.error ||
+          `I am currently experiencing a temporary network delay. You can connect with our team directly:\n- 📞 Phone: **+91-7418120053**\n- ✉️ Email: **info@iamtechni.in**\n- 🌐 Office: Tamil Nadu, India (Global Delivery)`;
+
+        const errorBotMessage: ChatMessage = {
+          id: `bot-err-${Date.now()}`,
+          role: 'assistant',
+          content: friendlyServerError,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        };
+        setMessages((prev) => [...prev, errorBotMessage]);
+        return;
+      }
+
+      const replyText =
+        data?.text ||
+        data?.reply ||
+        data?.message ||
+        data?.fallbackText ||
+        'Thank you for reaching out. Please contact our engineering team directly at +91-7418120053 or info@iamtechni.in.';
 
       const botMessage: ChatMessage = {
         id: `bot-${Date.now()}`,
@@ -171,22 +224,36 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
       if (!isOpen) {
         setHasUnread(true);
       }
-    } catch (err) {
-      console.error('Chat error:', err);
+    } catch (err: any) {
+      const isTimeout = err?.name === 'AbortError';
       const fallbackMsg: ChatMessage = {
         id: `bot-fallback-${Date.now()}`,
         role: 'assistant',
-        content: `I am currently experiencing a temporary network delay. You can connect with our team directly:
-- 📞 Phone: **+91-7418120053**
-- ✉️ Email: **info@iamtechni.in**
-- 🌐 Office: Tamil Nadu, India (Global Delivery)`,
+        content: isTimeout
+          ? `The AI advisor took longer than 20 seconds to respond. Please try again with a shorter question, or connect with our team directly:\n- 📞 Phone: **+91-7418120053**\n- ✉️ Email: **info@iamtechni.in**\n- 🌐 Office: Tamil Nadu, India (Global Delivery)`
+          : `I am currently experiencing a temporary network delay. You can connect with our team directly:\n- 📞 Phone: **+91-7418120053**\n- ✉️ Email: **info@iamtechni.in**\n- 🌐 Office: Tamil Nadu, India (Global Delivery)`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, fallbackMsg]);
     } finally {
+      window.clearTimeout(timeoutId);
+      isLoadingRef.current = false;
       setIsLoading(false);
     }
   };
+
+  // Support global trigger to open chat from any button/link
+  useEffect(() => {
+    const handleOpenChat = (e: any) => {
+      setIsOpen(true);
+      setIsMinimized(false);
+      if (e?.detail?.prompt) {
+        handleSendMessage(e.detail.prompt);
+      }
+    };
+    window.addEventListener('iamtechni:open-chat', handleOpenChat);
+    return () => window.removeEventListener('iamtechni:open-chat', handleOpenChat);
+  }, []);
 
   const handleClearHistory = () => {
     if (window.confirm('Reset conversation history?')) {

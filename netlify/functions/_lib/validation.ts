@@ -1,4 +1,5 @@
 export interface RawChatMessage {
+  id?: string;
   role?: string;
   content?: string;
   text?: string;
@@ -34,14 +35,30 @@ export function validateAndFormatChatMessages(
     return { ok: false, error: 'Request body must be a valid JSON object.' };
   }
 
-  const { messages } = body as { messages?: unknown };
-  if (!messages || !Array.isArray(messages) || messages.length === 0) {
+  const record = body as {
+    messages?: unknown;
+    message?: unknown;
+    prompt?: unknown;
+  };
+
+  let rawMessages: RawChatMessage[] = [];
+
+  if (Array.isArray(record.messages) && record.messages.length > 0) {
+    rawMessages = record.messages as RawChatMessage[];
+  } else if (typeof record.message === 'string' && record.message.trim()) {
+    rawMessages = [{ role: 'user', content: record.message.trim() }];
+  } else if (typeof record.prompt === 'string' && record.prompt.trim()) {
+    rawMessages = [{ role: 'user', content: record.prompt.trim() }];
+  } else {
     return { ok: false, error: 'Messages array is required' };
   }
 
-  const trimmedMessages = messages.slice(-MAX_CHAT_MESSAGES) as RawChatMessage[];
+  const trimmedMessages = rawMessages.slice(-MAX_CHAT_MESSAGES);
 
-  const formattedContents: FormattedChatContent[] = trimmedMessages.map((m) => {
+  const mapped: FormattedChatContent[] = [];
+  for (const m of trimmedMessages) {
+    if (m?.id === 'welcome-1') continue;
+
     let textContent = '';
     if (typeof m?.content === 'string') {
       textContent = m.content;
@@ -52,19 +69,38 @@ export function validateAndFormatChatMessages(
     }
 
     const sanitizedText = textContent.trim().slice(0, MAX_MESSAGE_CHARS);
+    if (!sanitizedText) continue;
 
-    return {
-      role: m?.role === 'assistant' || m?.role === 'model' ? 'model' : 'user',
+    const role: 'user' | 'model' =
+      m?.role === 'assistant' || m?.role === 'model' ? 'model' : 'user';
+
+    // Never pass previous error/fallback messages back into model context
+    if (
+      role === 'model' &&
+      (m?.id?.startsWith('bot-fallback-') ||
+        m?.id?.startsWith('bot-err-') ||
+        /temporary (network )?delay|temporary connection issue|took longer than 20 seconds/i.test(
+          sanitizedText
+        ))
+    ) {
+      continue;
+    }
+
+    mapped.push({
+      role,
       parts: [{ text: sanitizedText }],
-    };
-  });
-
-  const hasNonEmptyMessage = formattedContents.some((item) => item.parts[0].text.length > 0);
-  if (!hasNonEmptyMessage) {
-    return { ok: false, error: 'At least one non-empty message is required.' };
+    });
   }
 
-  return { ok: true, contents: formattedContents };
+  // Strip any leading 'model' messages so the conversation history always starts with a 'user' turn
+  const firstUserIdx = mapped.findIndex((item) => item.role === 'user');
+  const normalizedContents = firstUserIdx >= 0 ? mapped.slice(firstUserIdx) : [];
+
+  if (normalizedContents.length === 0) {
+    return { ok: false, error: 'At least one non-empty user message is required.' };
+  }
+
+  return { ok: true, contents: normalizedContents };
 }
 
 export function validateCourseEnquiryPayload(
