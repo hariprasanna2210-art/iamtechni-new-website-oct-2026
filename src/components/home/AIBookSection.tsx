@@ -30,7 +30,707 @@ const TURN_DURATION_SEC = 0.5;
 const AUTO_TURN_INTERVAL_MS = 4200;
 const TURN_EASE: [number, number, number, number] = [0.645, 0.045, 0.355, 1];
 
-export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
+const TOTAL_MOBILE_PAGES = 6;
+const MOBILE_AUTO_TURN_MS = 2500;
+const MOBILE_INTERACTION_PAUSE_MS = 3000;
+
+interface MobileBookTurnState {
+  activePage: number;
+  prevPage: number | null;
+  direction: 'next' | 'prev';
+  revision: number;
+}
+
+// ============================================================================
+// MOBILE SINGLE-PAGE BOOK (< 768px)
+// Shows ONE page at a time (01 -> 06) inside a compact single-page book frame
+// with stacked right page edges, left spine shadow, 2.5s auto-turn, lightweight
+// 0.35s CSS rotateY page-turn effect, passive touch swipe, and bottom controls.
+// ============================================================================
+const MobileAIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
+  const prefersReducedMotion = Boolean(useReducedMotion());
+  const [sectionRef, isBookSectionInView] = useSectionInView<HTMLElement>(0.15);
+  const bookViewportRef = useRef<HTMLDivElement | null>(null);
+
+  const [bookState, setBookState] = useState<MobileBookTurnState>({
+    activePage: 0,
+    prevPage: null,
+    direction: 'next',
+    revision: 0,
+  });
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isTouching, setIsTouching] = useState(false);
+  const [isTabHidden, setIsTabHidden] = useState<boolean>(() =>
+    typeof document !== 'undefined' ? document.hidden : false
+  );
+
+  const activePageRef = useRef(0);
+  const nextDelayMsRef = useRef<number>(MOBILE_AUTO_TURN_MS);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    activePageRef.current = bookState.activePage;
+  }, [bookState.activePage]);
+
+  // Pause when browser tab is hidden
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const handleVisibilityChange = () => {
+      setIsTabHidden(document.hidden);
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  const turnToPage = useCallback(
+    (
+      targetPage: number,
+      direction: 'next' | 'prev',
+      pauseDurationMs = MOBILE_INTERACTION_PAUSE_MS
+    ) => {
+      const wrapped =
+        ((targetPage % TOTAL_MOBILE_PAGES) + TOTAL_MOBILE_PAGES) % TOTAL_MOBILE_PAGES;
+      nextDelayMsRef.current = pauseDurationMs;
+      setBookState((prev) => {
+        if (wrapped === prev.activePage) {
+          return { ...prev, revision: prev.revision + 1 };
+        }
+        return {
+          activePage: wrapped,
+          prevPage: prev.activePage,
+          direction,
+          revision: prev.revision + 1,
+        };
+      });
+    },
+    []
+  );
+
+  const handlePrevPage = useCallback(() => {
+    turnToPage(activePageRef.current - 1, 'prev', MOBILE_INTERACTION_PAUSE_MS);
+  }, [turnToPage]);
+
+  const handleNextPage = useCallback(() => {
+    turnToPage(activePageRef.current + 1, 'next', MOBILE_INTERACTION_PAUSE_MS);
+  }, [turnToPage]);
+
+  // Single timer for 2.5s auto-turn and 3s post-interaction pause (cleared on unmount)
+  useEffect(() => {
+    if (
+      prefersReducedMotion ||
+      !isAutoPlaying ||
+      !isBookSectionInView ||
+      isTabHidden ||
+      isTouching
+    ) {
+      return;
+    }
+
+    const delay = nextDelayMsRef.current;
+    const timerId = window.setTimeout(() => {
+      nextDelayMsRef.current = MOBILE_AUTO_TURN_MS;
+      setBookState((prev) => ({
+        activePage: (prev.activePage + 1) % TOTAL_MOBILE_PAGES,
+        prevPage: prev.activePage,
+        direction: 'next',
+        revision: prev.revision + 1,
+      }));
+    }, delay);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [
+    bookState.activePage,
+    bookState.revision,
+    prefersReducedMotion,
+    isAutoPlaying,
+    isBookSectionInView,
+    isTabHidden,
+    isTouching,
+  ]);
+
+  // Passive touch listeners for horizontal page swipe (40px threshold, never blocks vertical scroll)
+  useEffect(() => {
+    const el = bookViewportRef.current;
+    if (!el) return;
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        touchStartXRef.current = e.touches[0].clientX;
+        touchStartYRef.current = e.touches[0].clientY;
+        setIsTouching(true);
+      }
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (touchStartXRef.current !== null && e.changedTouches.length > 0) {
+        const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+        const deltaY =
+          touchStartYRef.current !== null
+            ? e.changedTouches[0].clientY - touchStartYRef.current
+            : 0;
+
+        if (Math.abs(deltaX) >= 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (deltaX < 0) {
+            turnToPage(activePageRef.current + 1, 'next', MOBILE_INTERACTION_PAUSE_MS);
+          } else {
+            turnToPage(activePageRef.current - 1, 'prev', MOBILE_INTERACTION_PAUSE_MS);
+          }
+        }
+      }
+      touchStartXRef.current = null;
+      touchStartYRef.current = null;
+      setIsTouching(false);
+    };
+
+    const onTouchCancel = () => {
+      touchStartXRef.current = null;
+      touchStartYRef.current = null;
+      setIsTouching(false);
+    };
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
+    el.addEventListener('touchcancel', onTouchCancel, { passive: true });
+
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchend', onTouchEnd);
+      el.removeEventListener('touchcancel', onTouchCancel);
+    };
+  }, [turnToPage]);
+
+  const renderMobileBookPageContent = (pageIndex: number) => {
+    switch (pageIndex) {
+      case 0:
+        // PAGE 01 / 06
+        return (
+          <div className="h-full flex flex-col justify-between p-4 pl-5 select-none">
+            <div className="my-auto space-y-2.5">
+              <div className="inline-flex items-center gap-1.5 h-[28px] px-2.5 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 text-[10px] font-mono uppercase tracking-wider text-[#2563EB] font-bold">
+                <span
+                  className="w-1.5 h-1.5 rounded-full bg-[#2563EB] shrink-0"
+                  aria-hidden="true"
+                />
+                <span className="truncate">Artificial Intelligence &amp; Scalability</span>
+              </div>
+
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[20px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2]">
+                Put intelligent technology to practical work.
+              </h3>
+
+              <p className="text-[13px] text-slate-600 leading-relaxed font-medium line-clamp-4">
+                We help enterprises move beyond generic chatbot hype. We build grounded, domain-specific AI applications, automated knowledge assistants, and cost-controlled inference pipelines.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px] font-mono text-[#2563EB]">
+                <span className="bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 px-2.5 py-0.5 rounded-full text-[#1E3A8A] font-semibold">
+                  ✓ pgvector Embeddings
+                </span>
+                <span className="bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 px-2.5 py-0.5 rounded-full text-[#2563EB] font-semibold">
+                  ✓ Verifiable Citations
+                </span>
+                <span className="bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 px-2.5 py-0.5 rounded-full text-[#1E3A8A] font-semibold">
+                  ✓ Zero Model Training Leakage
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2.5 border-t border-[#DBEAFE]/80 flex items-center justify-between text-[11px] font-mono font-bold text-[#2563EB]">
+              <span>01 / 06</span>
+            </div>
+          </div>
+        );
+
+      case 1:
+        // PAGE 02 / 06
+        return (
+          <div className="h-full flex flex-col justify-between p-4 pl-5 font-mono select-none">
+            <div className="w-full rounded-xl bg-gradient-to-b from-[#F8FAFF] via-white to-[#EEF4FF]/70 border border-[#DBEAFE] shadow-[0_8px_24px_rgba(30,58,138,0.06)] p-3 text-[#1E3A8A] flex flex-col justify-between my-auto">
+              {/* Top Status */}
+              <div className="flex items-center justify-between gap-1.5 border-b border-[#DBEAFE] pb-2">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span className="w-2 h-2 rounded-full bg-[#2563EB] shrink-0" />
+                  <span className="text-[10px] font-bold text-[#1E3A8A] truncate">
+                    PRIVATE_RAG_INFERENCE_PIPELINE
+                  </span>
+                </div>
+                <span className="text-[9.5px] text-[#2563EB] bg-[#EEF4FF] px-2 py-0.5 rounded-full border border-[#DBEAFE] font-bold shrink-0">
+                  Zero Leakage
+                </span>
+              </div>
+
+              {/* Pipeline Steps */}
+              <div className="space-y-1.5 my-2">
+                <div className="p-2 bg-white rounded-lg border border-[#DBEAFE] flex items-center justify-between gap-1.5">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-5 h-5 rounded-md bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center text-[9.5px] font-bold shrink-0">
+                      01
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[#1E3A8A] font-bold text-[10.5px] truncate">
+                        Enterprise Query Embedding
+                      </div>
+                      <div className="text-[9.5px] text-[#2563EB]/85 truncate">
+                        text-embedding-3 · 1536 dims
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[#1E3A8A] bg-[#EEF4FF] px-1.5 py-0.5 rounded border border-[#DBEAFE] text-[9.5px] font-bold shrink-0">
+                    &lt;18ms
+                  </span>
+                </div>
+
+                <div className="p-2 bg-white rounded-lg border border-[#DBEAFE] flex items-center justify-between gap-1.5">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-5 h-5 rounded-md bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center text-[9.5px] font-bold shrink-0">
+                      02
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[#1E3A8A] font-bold text-[10.5px] truncate">
+                        Cosine Distance Retrieval
+                      </div>
+                      <div className="text-[9.5px] text-[#2563EB]/85 truncate">
+                        pgvector · HNSW Index Matching
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[#1E3A8A] bg-[#EEF4FF] px-1.5 py-0.5 rounded border border-[#DBEAFE] text-[9.5px] font-bold shrink-0">
+                    0.94 Similarity
+                  </span>
+                </div>
+
+                <div className="p-2 bg-white rounded-lg border border-[#DBEAFE] flex items-center justify-between gap-1.5">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-5 h-5 rounded-md bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center text-[9.5px] font-bold shrink-0">
+                      03
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[#1E3A8A] font-bold text-[10.5px] truncate">
+                        Guardrailed Response Synthesizer
+                      </div>
+                      <div className="text-[9.5px] text-[#2563EB]/85 truncate">
+                        Verifiable Page &amp; Doc Citations
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[#1E3A8A] bg-[#EEF4FF] px-1.5 py-0.5 rounded border border-[#DBEAFE] text-[9.5px] font-bold shrink-0">
+                    100% Traceable
+                  </span>
+                </div>
+              </div>
+
+              {/* Metrics Row */}
+              <div className="grid grid-cols-3 gap-1.5 text-center pt-2 border-t border-[#DBEAFE]">
+                <div className="p-1.5 bg-[#F8FAFF] rounded-lg border border-[#DBEAFE]">
+                  <div className="text-[8.5px] text-[#2563EB] font-semibold truncate">
+                    Prompt Cache
+                  </div>
+                  <div className="text-[11px] font-bold text-[#1E3A8A]">
+                    92% Hit
+                  </div>
+                </div>
+                <div className="p-1.5 bg-[#F8FAFF] rounded-lg border border-[#DBEAFE]">
+                  <div className="text-[8.5px] text-[#2563EB] font-semibold truncate">
+                    P95 Latency
+                  </div>
+                  <div className="text-[11px] font-bold text-[#1E3A8A]">
+                    340ms
+                  </div>
+                </div>
+                <div className="p-1.5 bg-[#F8FAFF] rounded-lg border border-[#DBEAFE]">
+                  <div className="text-[8.5px] text-[#2563EB] font-semibold truncate">
+                    Hallucination
+                  </div>
+                  <div className="text-[11px] font-bold text-[#1E3A8A]">
+                    0.00%
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-2.5 border-t border-[#DBEAFE]/80 flex items-center justify-end text-[11px] font-mono font-bold text-[#2563EB]">
+              <span>02 / 06</span>
+            </div>
+          </div>
+        );
+
+      case 2:
+        // PAGE 03 / 06
+        return (
+          <div className="h-full flex flex-col justify-between p-4 pl-5 select-none">
+            <div className="my-auto space-y-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center shadow-[0_4px_16px_rgba(37,99,235,0.12)]">
+                <Search className="w-6 h-6 text-[#2563EB]" />
+              </div>
+
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2]">
+                Private Document RAG
+              </h3>
+
+              <div className="h-0.5 w-16 bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-transparent rounded-full" />
+
+              <p className="text-[13.5px] text-slate-600 font-medium leading-relaxed line-clamp-4">
+                Query thousands of internal contracts, SOPs, and engineering manuals with verifiable source page citations.
+              </p>
+            </div>
+
+            <div className="pt-2.5 border-t border-[#DBEAFE]/80 flex items-center justify-start text-[11px] font-mono font-bold text-[#2563EB]">
+              <span>03 / 06</span>
+            </div>
+          </div>
+        );
+
+      case 3:
+        // PAGE 04 / 06
+        return (
+          <div className="h-full flex flex-col justify-between p-4 pl-5 select-none">
+            <div className="my-auto space-y-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center shadow-[0_4px_16px_rgba(37,99,235,0.12)]">
+                <Cpu className="w-6 h-6 text-[#2563EB]" />
+              </div>
+
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2]">
+                Knowledge Assistants
+              </h3>
+
+              <div className="h-0.5 w-16 bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-transparent rounded-full" />
+
+              <p className="text-[13.5px] text-slate-600 font-medium leading-relaxed line-clamp-4">
+                Domain-specific assistants trained on your proprietary processes without leaking data to public training sets.
+              </p>
+            </div>
+
+            <div className="pt-2.5 border-t border-[#DBEAFE]/80 flex items-center justify-end text-[11px] font-mono font-bold text-[#2563EB]">
+              <span>04 / 06</span>
+            </div>
+          </div>
+        );
+
+      case 4:
+        // PAGE 05 / 06
+        return (
+          <div className="h-full flex flex-col justify-between p-4 pl-5 select-none">
+            <div className="my-auto space-y-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center shadow-[0_4px_16px_rgba(37,99,235,0.12)]">
+                <Workflow className="w-6 h-6 text-[#2563EB]" />
+              </div>
+
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2]">
+                Workflow Automation
+              </h3>
+
+              <div className="h-0.5 w-16 bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-transparent rounded-full" />
+
+              <p className="text-[13.5px] text-slate-600 font-medium leading-relaxed line-clamp-4">
+                Automated document extraction, invoice classification, and human-in-the-loop review queues.
+              </p>
+            </div>
+
+            <div className="pt-2.5 border-t border-[#DBEAFE]/80 flex items-center justify-start text-[11px] font-mono font-bold text-[#2563EB]">
+              <span>05 / 06</span>
+            </div>
+          </div>
+        );
+
+      default:
+        // PAGE 06 / 06
+        return (
+          <div className="h-full flex flex-col justify-between p-4 pl-5 select-none">
+            <div className="my-auto space-y-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] flex items-center justify-center shadow-[0_4px_16px_rgba(37,99,235,0.12)]">
+                <ShieldCheck className="w-6 h-6 text-[#2563EB]" />
+              </div>
+
+              <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2]">
+                Guardrails &amp; Cost FinOps
+              </h3>
+
+              <div className="h-0.5 w-16 bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-transparent rounded-full" />
+
+              <p className="text-[13.5px] text-slate-600 font-medium leading-relaxed line-clamp-4">
+                Cost-aware token budgeting, prompt caching, and defensive filters against prompt injection attacks.
+              </p>
+            </div>
+
+            <div className="pt-2.5 border-t border-[#DBEAFE]/80 flex items-center justify-end text-[11px] font-mono font-bold text-[#2563EB]">
+              <span>06 / 06</span>
+            </div>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <section
+      ref={sectionRef}
+      aria-label="Artificial Intelligence & Scalability"
+      className="py-10 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF] text-[#1E3A8A] border-b border-[#DBEAFE]/80 relative overflow-hidden"
+    >
+      {/* Lightweight CSS Keyframes for 0.35s Single-Page Book Turn (transform & opacity only) */}
+      <style>{`
+        @keyframes mobileBookTurnOut {
+          0% {
+            transform: rotateY(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: rotateY(-90deg);
+            opacity: 0;
+          }
+        }
+        @keyframes mobileBookTurnIn {
+          0% {
+            transform: rotateY(90deg);
+            opacity: 0;
+          }
+          100% {
+            transform: rotateY(0deg);
+            opacity: 1;
+          }
+        }
+      `}</style>
+
+      {/* Screen-Reader Full DOM Content for All 6 Pages */}
+      <div className="sr-only" aria-hidden="false">
+        <p>
+          We help enterprises move beyond generic chatbot hype. We build grounded, domain-specific AI applications, automated knowledge assistants, and cost-controlled inference pipelines.
+        </p>
+        <span>✓ pgvector Embeddings</span>
+        <span>✓ Verifiable Citations</span>
+        <span>✓ Zero Model Training Leakage</span>
+        <span>PRIVATE_RAG_INFERENCE_PIPELINE</span>
+        <span>Zero Leakage</span>
+        <span>01 Enterprise Query Embedding text-embedding-3 · 1536 dims &lt;18ms</span>
+        <span>02 Cosine Distance Retrieval pgvector · HNSW Index Matching 0.94 Similarity</span>
+        <span>03 Guardrailed Response Synthesizer Verifiable Page &amp; Doc Citations 100% Traceable</span>
+        <span>Prompt Cache 92% Hit</span>
+        <span>P95 Latency 340ms</span>
+        <span>Hallucination 0.00%</span>
+        <h3>Private Document RAG</h3>
+        <p>
+          Query thousands of internal contracts, SOPs, and engineering manuals with verifiable source page citations.
+        </p>
+        <h3>Knowledge Assistants</h3>
+        <p>
+          Domain-specific assistants trained on your proprietary processes without leaking data to public training sets.
+        </p>
+        <h3>Workflow Automation</h3>
+        <p>
+          Automated document extraction, invoice classification, and human-in-the-loop review queues.
+        </p>
+        <h3>Guardrails &amp; Cost FinOps</h3>
+        <p>
+          Cost-aware token budgeting, prompt caching, and defensive filters against prompt injection attacks.
+        </p>
+      </div>
+
+      {/* Content Container with 16px (px-4) Side Padding */}
+      <div className="relative max-w-7xl mx-auto px-4">
+        {/* Section Header (Without 01–02 / 03–04 / 05–06 Tabs on Mobile) */}
+        <div className="mb-4">
+          <div className="inline-flex items-center gap-2 h-[32px] px-3 mb-2.5 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
+            <span
+              className="w-2 h-2 rounded-full bg-[#2563EB] shadow-[0_0_8px_rgba(37,99,235,0.4)] shrink-0"
+              aria-hidden="true"
+            />
+            <span>Artificial Intelligence &amp; Scalability</span>
+          </div>
+
+          <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2]">
+            Put intelligent technology to practical work.
+          </h2>
+        </div>
+
+        {/* Small Single-Page Book Frame (Full Content Width, Fixed Height) */}
+        <div className="relative pr-2.5 my-1">
+          {/* Soft Drop Shadow Under the Book */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-2 -bottom-3 h-8 bg-[#1E3A8A]/12 rounded-[28px] blur-xl pointer-events-none"
+          />
+
+          {/* Stacked Page Edges on Right Outer Edge (Matches Desktop Book) */}
+          <div
+            aria-hidden="true"
+            className="absolute top-3 bottom-3 right-0 w-4 rounded-r-[22px] bg-[#E2E8F0] border-r border-y border-[#CBD5E1] shadow-2xs pointer-events-none"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute top-2 bottom-2 right-1 w-4 rounded-r-[21px] bg-[#EEF4FF] border-r border-y border-[#DBEAFE] pointer-events-none"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute top-1 bottom-1 right-2 w-4 rounded-r-[20px] bg-[#F8FAFF] border-r border-y border-[#DBEAFE] pointer-events-none"
+          />
+
+          {/* Book Viewport: Fixed Height h-[372px], Perspective 1000px */}
+          <div
+            ref={bookViewportRef}
+            style={{ perspective: '1000px' }}
+            className="relative w-full h-[372px] rounded-[22px] bg-gradient-to-l from-white via-[#FAFBFD] to-[#F1F5FD] border border-[#DBEAFE] shadow-[0_20px_50px_-15px_rgba(30,58,138,0.16)] overflow-hidden touch-pan-y"
+          >
+            {/* Subtle Inner Page Border */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-2 rounded-[15px] border border-[#DBEAFE]/60 z-20"
+            />
+
+            {/* Thin Left Spine Shadow & Binding Crease */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 left-0 w-7 bg-gradient-to-r from-[#1E3A8A]/[0.13] via-[#1E3A8A]/[0.04] to-transparent z-20 flex items-center"
+            >
+              <div className="w-[2px] h-full bg-gradient-to-b from-[#93C5FD]/70 via-[#2563EB]/55 to-[#93C5FD]/70" />
+            </div>
+
+            {/* Outgoing Page (Rotates Out: rotateY 0 -> -90deg, transform-origin left) */}
+            {!prefersReducedMotion && bookState.prevPage !== null && (
+              <div
+                key={`out-${bookState.prevPage}-${bookState.revision}`}
+                aria-hidden="true"
+                style={{
+                  transformOrigin: 'left center',
+                  backfaceVisibility: 'hidden',
+                  animation: 'mobileBookTurnOut 0.35s ease-out forwards',
+                }}
+                className="pointer-events-none absolute inset-0 rounded-[22px] bg-gradient-to-l from-white via-[#FAFBFD] to-[#F1F5FD] z-10"
+              >
+                {renderMobileBookPageContent(bookState.prevPage)}
+              </div>
+            )}
+
+            {/* Current Page (Rotates In: rotateY 90 -> 0deg, transform-origin left; or Simple Fade for Reduced Motion) */}
+            <div
+              key={`in-${bookState.activePage}-${bookState.revision}`}
+              style={
+                prefersReducedMotion
+                  ? {
+                      opacity: 1,
+                      transition: 'opacity 0.25s ease',
+                    }
+                  : bookState.prevPage !== null
+                  ? {
+                      transformOrigin: 'left center',
+                      backfaceVisibility: 'hidden',
+                      animation: 'mobileBookTurnIn 0.35s ease-out forwards',
+                    }
+                  : undefined
+              }
+              className="absolute inset-0 rounded-[22px] bg-gradient-to-l from-white via-[#FAFBFD] to-[#F1F5FD] z-10"
+            >
+              {renderMobileBookPageContent(bookState.activePage)}
+            </div>
+          </div>
+        </div>
+
+        {/* Controls Below the Book: Desktop-Styled Counter + Page Dots + ‹ › Arrows (44px) + Pause Button */}
+        <nav
+          aria-label="Book page navigation"
+          className="mt-4 flex items-center justify-between gap-2"
+        >
+          {/* Left: Pause/Play Button + Page Counter */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsAutoPlaying((prev) => !prev)}
+              aria-label={isAutoPlaying ? 'Pause auto page turn' : 'Resume auto page turn'}
+              title={isAutoPlaying ? 'Pause auto page turn' : 'Resume auto page turn'}
+              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white shadow-2xs flex items-center justify-center transition-colors active:scale-95 cursor-pointer"
+            >
+              {isAutoPlaying ? (
+                <Pause className="w-4 h-4 text-white" />
+              ) : (
+                <Play className="w-4 h-4 text-white fill-current" />
+              )}
+            </button>
+
+            <span className="px-2.5 py-1.5 rounded-xl bg-[#F8FAFF] border border-[#DBEAFE] text-[#1E3A8A] font-mono text-xs font-bold tabular-nums">
+              0{bookState.activePage + 1} / 0{TOTAL_MOBILE_PAGES}
+            </span>
+          </div>
+
+          {/* Center: 6 Interactive Page Dots */}
+          <div
+            className="flex items-center justify-center gap-1.5"
+            role="tablist"
+            aria-label="Book pages"
+          >
+            {Array.from({ length: TOTAL_MOBILE_PAGES }).map((_, idx) => {
+              const isActive = idx === bookState.activePage;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-label={`Go to page 0${idx + 1}`}
+                  onClick={() =>
+                    turnToPage(
+                      idx,
+                      idx >= bookState.activePage ? 'next' : 'prev',
+                      MOBILE_INTERACTION_PAUSE_MS
+                    )
+                  }
+                  className={`h-2 rounded-full transition-all duration-200 cursor-pointer p-0 border-0 ${
+                    isActive
+                      ? 'w-5 bg-[#1E3A8A]'
+                      : 'w-2 bg-[#93C5FD] hover:bg-[#2563EB]'
+                  }`}
+                />
+              );
+            })}
+          </div>
+
+          {/* Right: ‹ › Arrows (44px Tap Area) */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={handlePrevPage}
+              aria-label="Previous book page"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] shadow-2xs flex items-center justify-center transition-colors active:scale-95 cursor-pointer"
+            >
+              <ChevronLeft className="w-4.5 h-4.5 text-[#1E3A8A]" />
+            </button>
+            <button
+              type="button"
+              onClick={handleNextPage}
+              aria-label="Next book page"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white border border-[#1E3A8A] shadow-2xs flex items-center justify-center transition-colors active:scale-95 cursor-pointer"
+            >
+              <ChevronRight className="w-4.5 h-4.5 text-white" />
+            </button>
+          </div>
+        </nav>
+
+        {/* Bottom Line + CTA Button */}
+        <div className="mt-6 pt-5 border-t border-[#DBEAFE] flex flex-col items-center justify-between gap-3 text-xs">
+          <span className="text-xs text-slate-600 font-medium text-center">
+            Every AI deployment is backed by privacy compliance, rate-limiting, and evaluation benchmarks.
+          </span>
+          <button
+            type="button"
+            onClick={() => onNavigate('/services/ai-machine-learning')}
+            className="min-h-[44px] min-w-[44px] w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs shadow-xs transition-all duration-200 active:scale-[0.98] cursor-pointer"
+          >
+            <span>Explore AI &amp; Machine Learning Practice</span>
+            <ArrowRight className="w-3.5 h-3.5 text-white" />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ============================================================================
+// DESKTOP & TABLET BOOK SECTION (>= 768px)
+// Preserved 100% untouched.
+// ============================================================================
+const DesktopAIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
   const prefersReducedMotion = Boolean(useReducedMotion());
   const [sectionRef, isBookSectionInView] = useSectionInView<HTMLElement>(0.15);
   const isWindowScrolling = useIsWindowScrolling();
@@ -1153,3 +1853,28 @@ export const AIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
     </section>
   );
 };
+
+export const AIBookSection: React.FC<AIBookSectionProps> = (props) => {
+  const [isDesktopOrTablet, setIsDesktopOrTablet] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    return window.matchMedia('(min-width: 768px)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(min-width: 768px)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      setIsDesktopOrTablet(e.matches);
+    };
+    setIsDesktopOrTablet(mql.matches);
+    mql.addEventListener('change', handleChange);
+    return () => mql.removeEventListener('change', handleChange);
+  }, []);
+
+  if (!isDesktopOrTablet) {
+    return <MobileAIBookSection {...props} />;
+  }
+
+  return <DesktopAIBookSection {...props} />;
+};
+
