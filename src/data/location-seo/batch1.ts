@@ -1322,91 +1322,10 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
 ];
 
 /**
- * Registry of routes 21–30 marked as "not yet implemented" for this batch.
- * This ensures clean tracking and straightforward extension in subsequent runs.
+ * Registry of routes marked as "not yet implemented".
+ * All 30 target location routes across Batches 1, 2, and 3 are now fully implemented.
  */
-export const UNIMPLEMENTED_LOCATION_ROUTES: UnimplementedRoute[] = [
-  {
-    routeNumber: 21,
-    slug: 'digital-marketing-agency-coimbatore',
-    path: '/digital-marketing-agency-coimbatore/',
-    targetLocation: 'Coimbatore, Tamil Nadu',
-    topic: 'Digital Marketing Services',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 22,
-    slug: 'web-development-company-madurai',
-    path: '/web-development-company-madurai/',
-    targetLocation: 'Madurai, Tamil Nadu',
-    topic: 'Web Development Services',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 23,
-    slug: 'digital-marketing-agency-madurai',
-    path: '/digital-marketing-agency-madurai/',
-    targetLocation: 'Madurai, Tamil Nadu',
-    topic: 'Digital Marketing Services',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 24,
-    slug: 'web-development-company-trichy',
-    path: '/web-development-company-trichy/',
-    targetLocation: 'Trichy, Tamil Nadu',
-    topic: 'Web Development Services',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 25,
-    slug: 'it-training-trichy',
-    path: '/it-training-trichy/',
-    targetLocation: 'Trichy, Tamil Nadu',
-    topic: 'IT & Software Training',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 26,
-    slug: 'web-development-company-salem',
-    path: '/web-development-company-salem/',
-    targetLocation: 'Salem, Tamil Nadu',
-    topic: 'Web Development Services',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 27,
-    slug: 'web-development-company-erode',
-    path: '/web-development-company-erode/',
-    targetLocation: 'Erode, Tamil Nadu',
-    topic: 'Web Development Services',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 28,
-    slug: 'web-development-company-vellore',
-    path: '/web-development-company-vellore/',
-    targetLocation: 'Vellore, Tamil Nadu',
-    topic: 'Web Development Services',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 29,
-    slug: 'it-training-vellore',
-    path: '/it-training-vellore/',
-    targetLocation: 'Vellore, Tamil Nadu',
-    topic: 'IT & Software Training',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 30,
-    slug: 'web-development-company-tamil-nadu',
-    path: '/web-development-company-tamil-nadu/',
-    targetLocation: 'Tamil Nadu, India',
-    topic: 'Statewide Web Development & Cloud Services',
-    status: 'not yet implemented',
-  },
-];
+export const UNIMPLEMENTED_LOCATION_ROUTES: UnimplementedRoute[] = [];
 
 export function getLocationSeoPageBySlug(slug: string): LocationSeoPageData | undefined {
   const cleanSlug = slug.replace(/^\/+|\/+$/g, '');
