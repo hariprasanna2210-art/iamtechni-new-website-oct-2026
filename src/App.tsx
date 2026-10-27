@@ -217,6 +217,24 @@ export default function App() {
 
   const currentRoute: PageRoute = normalizeRoute(location.pathname);
 
+  // Dismiss branded preloader as soon as React has mounted
+  useEffect(() => {
+    const preloader = document.getElementById('iamtechni-preloader');
+    if (preloader) {
+      const winWithTimer = window as unknown as { __clearPreloaderFallbackTimer?: () => void };
+      if (typeof winWithTimer.__clearPreloaderFallbackTimer === 'function') {
+        winWithTimer.__clearPreloaderFallbackTimer();
+      }
+      preloader.classList.add('iamtechni-preloader-hidden');
+      const timer = setTimeout(() => {
+        if (preloader && preloader.parentNode) {
+          preloader.parentNode.removeChild(preloader);
+        }
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   // Redirect any #services/xyz hash URL to /services/xyz
   useEffect(() => {
     const redirectHashService = () => {
