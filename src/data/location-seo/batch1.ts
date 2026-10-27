@@ -665,7 +665,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       'aws solutions architect training pondicherry',
       'cloud training institute pondicherry',
     ],
-    intro: 'Cloud skills are in high demand across modern software and infrastructure roles. IAMTECHNI delivers practical, hands-on AWS (Amazon Web Services) cloud training in Pondicherry. Led by experienced cloud practitioners who manage production environments, our program equips students and working professionals with foundational to advanced cloud architecture skills.',
+    intro: 'Cloud skills are in high demand across modern software and infrastructure roles. IAMTECHNI delivers practical, hands-on AWS (Amazon Web Services) cloud training in Pondicherry. Led by practising cloud engineers, our program equips students and working professionals with practical cloud architecture skills.',
     sections: [
       {
         h2: 'Real Cloud Console Labs Instead of Theoretical Slides',
@@ -699,8 +699,8 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         description: 'Aligned with AWS Well-Architected Framework principles and Solutions Architect associate topics.',
       },
       {
-        title: 'Production Architect Mentors',
-        description: 'Learn directly from engineers who deploy and manage enterprise cloud infrastructure.',
+        title: 'Practising Cloud Engineers',
+        description: 'Learn directly from working engineers with real cloud experience.',
       },
       {
         title: 'Flexible Learning Tracks',
@@ -764,7 +764,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
     path: '/devops-training-pondicherry/',
     canonicalUrl: 'https://www.iamtechni.in/devops-training-pondicherry/',
     seoTitle: 'DevOps Training Course in Pondicherry | IAMTECHNI',
-    metaDescription: 'Practical DevOps training in Pondicherry. Learn Docker, Kubernetes, CI/CD pipelines, Terraform, Linux, and Git from senior engineering mentors.',
+    metaDescription: 'Practical DevOps training in Pondicherry. Learn Docker, Kubernetes, CI/CD pipelines, Terraform, Linux, and Git from practising DevOps engineers.',
     h1: 'DevOps Training Course in Pondicherry',
     category: 'Training',
     schemaType: 'Course',
@@ -780,7 +780,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       'docker and ci cd course pondicherry',
       'terraform automation training pondicherry',
     ],
-    intro: 'Master modern software delivery pipelines and container orchestration. IAMTECHNI provides industry-grade DevOps training in Pondicherry. Designed for developers, system administrators, and tech graduates, our curriculum covers Linux internals, Git workflows, Docker containerization, Kubernetes clusters, CI/CD automation with GitHub Actions, and Terraform Infrastructure as Code.',
+    intro: 'Master modern software delivery pipelines and container orchestration. IAMTECHNI provides practical DevOps training in Pondicherry. Led by practising DevOps engineers, our curriculum covers Linux internals, Git workflows, Docker containerization, Kubernetes clusters, CI/CD automation with GitHub Actions, and Terraform Infrastructure as Code.',
     sections: [
       {
         h2: 'Bridge the Gap Between Software Engineering and Operations',
@@ -818,7 +818,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         description: 'Write maintainable Terraform modules to automate cloud provisioning with state management.',
       },
       {
-        title: 'Real Production Capstones',
+        title: 'Practical Lab Capstones',
         description: 'Deploy a microservices architecture on a managed Kubernetes cluster with full Prometheus telemetry.',
       },
     ],
@@ -895,7 +895,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       'ai development course pondicherry',
       'rag and prompt engineering pondicherry',
     ],
-    intro: 'Generative AI is redefining how software is built and how businesses operate. IAMTECHNI offers specialized Generative AI and LLM Engineering training in Pondicherry. Step beyond basic ChatGPT prompting and learn how to engineer real AI products: Retrieval-Augmented Generation (RAG) systems, autonomous AI agents, vector databases, and custom API integrations using Python and modern foundation models.',
+    intro: 'Generative AI is changing how software is built and how businesses operate. IAMTECHNI offers practical Generative AI and LLM training in Pondicherry. Led by practising AI engineers, the program covers Retrieval-Augmented Generation (RAG), autonomous AI agents, vector databases, and API integrations using Python.',
     sections: [
       {
         h2: 'Engineer Production AI Systems, Not Just Chatbot Prompts',
@@ -1227,7 +1227,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       'full stack developer course cuddalore',
       'computer training center cuddalore',
     ],
-    intro: 'Build practical skills for the modern software industry. IAMTECHNI delivers industry-aligned IT training and software courses for students, college graduates, and working professionals in Cuddalore. Located just 20 minutes from Cuddalore in neighboring Puducherry, our programs offer real coding labs and direct mentorship from experienced software developers.',
+    intro: 'Build practical coding skills for the software industry. IAMTECHNI delivers hands-on IT training and software courses for students, college graduates, and working professionals in Cuddalore. Located just 20 minutes from Cuddalore in neighboring Puducherry, our programs offer practical coding labs and mentorship from practising software engineers.',
     sections: [
       {
         h2: 'Learn Real Coding Skills That Tech Teams Work With Daily',
@@ -1257,8 +1257,8 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         description: 'Hands-on training in Python, React, TypeScript, Node.js, AWS Cloud, and SQL databases.',
       },
       {
-        title: 'Taught by Senior Engineers',
-        description: 'Learn directly from practicing software developers.',
+        title: 'Practising Software Engineers',
+        description: 'Learn directly from working software developers.',
       },
       {
         title: 'Portfolio-First Approach',
@@ -1306,8 +1306,8 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         answer: 'Contact our admissions desk via WhatsApp or call +91 93859 48951 for complete batch schedules, upcoming start dates, duration, and fee details.',
       },
       {
-        question: 'Will I receive a course completion certificate?',
-        answer: 'Contact us for certificate details and criteria upon completing course project requirements.',
+        question: 'How do I learn more about the course curriculum and prerequisites?',
+        answer: 'Explore the full course syllabus in our Training section or contact our admissions desk via WhatsApp or call for curriculum guidance.',
       },
     ],
     courseDetails: {

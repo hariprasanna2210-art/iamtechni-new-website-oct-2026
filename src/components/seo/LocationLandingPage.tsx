@@ -345,9 +345,19 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
               </div>
 
               <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                <span>100% Code Ownership</span>
-                <span>·</span>
-                <span className="text-sky-400">Zero License Lock-in</span>
+                {page.category === 'Training' ? (
+                  <>
+                    <span>Hands-on Labs</span>
+                    <span>·</span>
+                    <span className="text-sky-400">Live Instructor Support</span>
+                  </>
+                ) : (
+                  <>
+                    <span>100% Code Ownership</span>
+                    <span>·</span>
+                    <span className="text-sky-400">Zero License Lock-in</span>
+                  </>
+                )}
               </div>
             </div>
           </div>

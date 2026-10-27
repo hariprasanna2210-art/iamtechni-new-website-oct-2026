@@ -258,7 +258,12 @@ function buildLocationStaticRootHtml(page) {
     ? `      <section>\n        <h2>Course Curriculum &amp; Syllabus</h2>\n        <p>Explore module details and practical exercises in our main directory: <a href="${page.matchingCoursePath}">View Course in Training Section</a>.</p>\n        <p>Contact our admissions desk via WhatsApp or phone for upcoming batch schedules, duration, and fee details.</p>\n      </section>`
     : '';
 
-  const contactDetailsHtml = `      <section>\n        <h2>Regional Contact Details</h2>\n        <div>\n          <span>Enquiries: </span>\n          <a href="tel:+919385948951">+91 93859 48951</a>\n        </div>\n        <div>\n          <span>Direct Line: </span>\n          <a href="tel:+917418120053">+91 74181 20053</a>\n        </div>\n        <p>Engineering Hub: Puducherry &amp; Tamil Nadu, India</p>\n      </section>`;
+  const contactFooterText =
+    page.category === 'Training'
+      ? 'Hands-on Labs · Live Instructor Support'
+      : '100% Code Ownership · Zero License Lock-in';
+
+  const contactDetailsHtml = `      <section>\n        <h2>Regional Contact Details</h2>\n        <div>\n          <span>Enquiries: </span>\n          <a href="tel:+919385948951">+91 93859 48951</a>\n        </div>\n        <div>\n          <span>Direct Line: </span>\n          <a href="tel:+917418120053">+91 74181 20053</a>\n        </div>\n        <p>Engineering Hub: Puducherry &amp; Tamil Nadu, India</p>\n        <p>${escapeHtml(contactFooterText)}</p>\n      </section>`;
 
   return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n        <p class="intro">${escapeHtml(page.intro)}</p>\n${contactDetailsHtml}\n${courseLinkHtml}\n      <section>\n        <h2>Key Capabilities &amp; Advantages</h2>\n${highlightsHtml}\n      </section>\n${sectionsHtml}\n      <section>\n        <h2>Delivery Lifecycle</h2>\n${processHtml}\n      </section>\n${localContextHtml}\n${faqsHtml}\n      </main>\n    `;
 }
