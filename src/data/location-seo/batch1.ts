@@ -1322,74 +1322,10 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
 ];
 
 /**
- * Registry of routes 13–30 marked as "not yet implemented" for this batch.
+ * Registry of routes 21–30 marked as "not yet implemented" for this batch.
  * This ensures clean tracking and straightforward extension in subsequent runs.
  */
 export const UNIMPLEMENTED_LOCATION_ROUTES: UnimplementedRoute[] = [
-  {
-    routeNumber: 13,
-    slug: 'web-development-company-chennai',
-    path: '/web-development-company-chennai/',
-    targetLocation: 'Chennai, Tamil Nadu',
-    topic: 'Web Development Services',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 14,
-    slug: 'ecommerce-website-development-chennai',
-    path: '/ecommerce-website-development-chennai/',
-    targetLocation: 'Chennai, Tamil Nadu',
-    topic: 'E-commerce Website Development',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 15,
-    slug: 'software-development-company-chennai',
-    path: '/software-development-company-chennai/',
-    targetLocation: 'Chennai, Tamil Nadu',
-    topic: 'Custom Software Development',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 16,
-    slug: 'mobile-app-development-chennai',
-    path: '/mobile-app-development-chennai/',
-    targetLocation: 'Chennai, Tamil Nadu',
-    topic: 'Mobile App Development',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 17,
-    slug: 'digital-marketing-agency-chennai',
-    path: '/digital-marketing-agency-chennai/',
-    targetLocation: 'Chennai, Tamil Nadu',
-    topic: 'Digital Marketing & Performance Ads',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 18,
-    slug: 'local-seo-services-chennai',
-    path: '/local-seo-services-chennai/',
-    targetLocation: 'Chennai, Tamil Nadu',
-    topic: 'Local SEO & Google Business Profile',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 19,
-    slug: 'web-development-company-coimbatore',
-    path: '/web-development-company-coimbatore/',
-    targetLocation: 'Coimbatore, Tamil Nadu',
-    topic: 'Web Development Services',
-    status: 'not yet implemented',
-  },
-  {
-    routeNumber: 20,
-    slug: 'software-development-company-coimbatore',
-    path: '/software-development-company-coimbatore/',
-    targetLocation: 'Coimbatore, Tamil Nadu',
-    topic: 'Enterprise Software & ERP',
-    status: 'not yet implemented',
-  },
   {
     routeNumber: 21,
     slug: 'digital-marketing-agency-coimbatore',

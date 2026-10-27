@@ -55,7 +55,7 @@ import { insightsData } from './data/insightsData';
 import { industriesData } from './data/industriesData';
 import { LocationLandingPage } from './components/seo/LocationLandingPage';
 import {
-  LOCATION_PAGES_BATCH1,
+  ALL_LOCATION_PAGES,
   getLocationSeoPageBySlug,
 } from './data/location-seo';
 
@@ -618,8 +618,8 @@ export default function App() {
             element={<LegalPage type="terms" onNavigate={navigate} />}
           />
 
-          {/* 16. Location-Based Landing Pages (Batch 1: Routes 1–12) */}
-          {LOCATION_PAGES_BATCH1.map((locPage) => (
+          {/* 16. Location-Based Landing Pages (Batch 1 & 2: Routes 1–20) */}
+          {ALL_LOCATION_PAGES.map((locPage) => (
             <React.Fragment key={locPage.slug}>
               <Route
                 path={`/${locPage.slug}/`}
