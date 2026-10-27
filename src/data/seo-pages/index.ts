@@ -1,5 +1,6 @@
 import { ServicePageData, ServicePageSection, ServicePageFaq } from './types';
 import { getCanonicalServiceSlug } from '../servicesData';
+import pagesJson from './pages.json';
 
 import { webDevelopmentSeoPage } from './web-development';
 import { ecommerceSeoPage } from './ecommerce';
@@ -33,21 +34,7 @@ export {
   roboticsSeoPage,
 };
 
-export const seoServicePages: ServicePageData[] = [
-  webDevelopmentSeoPage,
-  ecommerceSeoPage,
-  customSoftwareSeoPage,
-  mobileAppsSeoPage,
-  aiMachineLearningSeoPage,
-  dataAnalyticsSeoPage,
-  cloudDevopsSeoPage,
-  cybersecuritySeoPage,
-  digitalMarketingSeoPage,
-  uiUxDesignSeoPage,
-  itConsultingSeoPage,
-  trainingSeoPage,
-  roboticsSeoPage,
-];
+export const seoServicePages: ServicePageData[] = pagesJson as ServicePageData[];
 
 export const seoServicePagesMap: Record<string, ServicePageData> = Object.fromEntries(
   seoServicePages.map((page) => [page.slug, page])
@@ -57,3 +44,4 @@ export function getSeoServicePageBySlug(slug: string): ServicePageData | undefin
   const canonicalSlug = getCanonicalServiceSlug(slug);
   return seoServicePagesMap[canonicalSlug];
 }
+

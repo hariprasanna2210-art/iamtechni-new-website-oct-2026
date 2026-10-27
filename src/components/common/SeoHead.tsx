@@ -806,7 +806,7 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
 
   const seo = resolveRouteSeo(currentRoute);
 
-  // Remove initial static description/canonical/og tags once react-helmet-async mounts its managed tags
+  // Remove initial static description/canonical/og/twitter tags once react-helmet-async mounts its managed tags
   useEffect(() => {
     const selectors = [
       'meta[name="description"]',
@@ -814,6 +814,9 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
       'meta[property="og:title"]',
       'meta[property="og:description"]',
       'meta[property="og:url"]',
+      'meta[name="twitter:title"]',
+      'meta[name="twitter:description"]',
+      'meta[name="twitter:url"]',
     ];
     for (const sel of selectors) {
       if (document.head.querySelector(`${sel}[data-rh]`)) {
@@ -838,6 +841,9 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
       <meta property="og:title" content={seo.title} />
       <meta property="og:description" content={seo.description} />
       <meta property="og:url" content={seo.canonicalUrl} />
+      <meta name="twitter:title" content={seo.title} />
+      <meta name="twitter:description" content={seo.description} />
+      <meta name="twitter:url" content={seo.canonicalUrl} />
       {seo.structuredData.length > 0 && (
         <script type="application/ld+json">
           {JSON.stringify({

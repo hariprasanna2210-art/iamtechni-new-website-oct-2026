@@ -76,6 +76,9 @@ export const ServicePage: React.FC<ServicePageProps> = ({
       'meta[property="og:title"]',
       'meta[property="og:description"]',
       'meta[property="og:url"]',
+      'meta[name="twitter:title"]',
+      'meta[name="twitter:description"]',
+      'meta[name="twitter:url"]',
     ];
     for (const sel of selectors) {
       if (document.head.querySelector(`${sel}[data-rh]`)) {
@@ -163,6 +166,9 @@ export const ServicePage: React.FC<ServicePageProps> = ({
         <meta property="og:title" content={seoTitle} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:url" content={canonicalUrl} />
+        <meta name="twitter:title" content={seoTitle} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:url" content={canonicalUrl} />
         <script type="application/ld+json">{JSON.stringify(serviceSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
         {faqSchema && (

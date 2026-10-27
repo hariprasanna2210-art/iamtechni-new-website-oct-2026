@@ -1,0 +1,426 @@
+[
+  {
+    "slug": "web-development",
+    "seoTitle": "Web Development Services | Custom Next.js & React Websites | IAMTECHNI",
+    "metaDescription": "Enterprise web development services by IAMTECHNI. We architect fast, responsive, SEO-ready corporate websites and React/Next.js web applications built to convert.",
+    "h1": "Web Development Services",
+    "sections": [
+      {
+        "h2": "Modern Web Architecture Engineered for Performance & Conversion",
+        "paragraphs": [
+          "IAMTECHNI designs and builds custom corporate websites, customer portals, and progressive web applications using React, Next.js, and TypeScript. Every architecture is engineered from the ground up for sub-second load times, clean semantic HTML, and strict Core Web Vitals compliance.",
+          "Unlike bloated off-the-shelf templates, our modular component systems scale effortlessly alongside your business, integrating cleanly with headless CMS platforms, CRM pipelines, and enterprise authentication."
+        ]
+      },
+      {
+        "h2": "Full-Lifecycle Frontend & Backend Web Engineering",
+        "paragraphs": [
+          "From initial information architecture and interactive wireframing to API integration and automated deployment, our engineering team delivers resilient web platforms tailored to your exact operational and branding requirements.",
+          "Each release undergoes comprehensive cross-device QA, WCAG 2.2 AA accessibility verification, and technical SEO validation before launch."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do you build custom themes or use off-the-shelf templates?",
+        "answer": "We engineer bespoke component architectures tailored to your exact brand and technical requirements. We do not use bloated multi-purpose themes that compromise performance and security."
+      },
+      {
+        "question": "How do you ensure search engine visibility (SEO)?",
+        "answer": "SEO is foundational to our engineering process: semantic HTML5 structures, server-side rendering where beneficial, structured JSON-LD data, automated XML sitemaps, and optimized Core Web Vitals."
+      },
+      {
+        "question": "Can our internal marketing team update copy and media independently?",
+        "answer": "Yes. We pair modern frontend frameworks with headless or structured CMS workflows, providing intuitive visual editing fields without risk of breaking layout geometry."
+      }
+    ]
+  },
+  {
+    "slug": "ecommerce",
+    "seoTitle": "E-commerce Development Services | Custom Online Storefronts | IAMTECHNI",
+    "metaDescription": "Build high-converting online stores with IAMTECHNI e-commerce development services. Custom B2B and D2C storefronts, secure payment gateways, and live inventory sync.",
+    "h1": "E-commerce Development",
+    "sections": [
+      {
+        "h2": "High-Conversion Storefronts & Friction-Free Checkout Engines",
+        "paragraphs": [
+          "IAMTECHNI engineers resilient online storefronts, multi-attribute product catalogs, and streamlined checkout funnels tailored for modern D2C brands and B2B distributors.",
+          "We optimize every step of the buyer journey—from mobile-first product discovery and instant search filtering to tokenized payment gateway orchestration with Stripe, Razorpay, and UPI."
+        ]
+      },
+      {
+        "h2": "Real-Time Inventory, ERP & Fulfillment Synchronization",
+        "paragraphs": [
+          "Your storefront should never operate in a silo. We connect your commerce engine directly to warehouse management systems, accounting software, and shipping carriers for automated stock reservation and order tracking.",
+          "Whether deploying headless commerce or hardened WooCommerce/Shopify architectures, we ensure durability under peak traffic bursts."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Which e-commerce platform do you recommend?",
+        "answer": "We evaluate your SKU volume, existing software stack, and customization needs. For content-rich brands, WooCommerce or headless commerce offers complete ownership; for fast retail, headless Shopify or custom APIs may be ideal."
+      },
+      {
+        "question": "How do you handle payment security?",
+        "answer": "We use tokenized payment integrations where sensitive card details never touch your server, maintaining strict compliance with PCI-DSS guidelines."
+      },
+      {
+        "question": "Can you integrate our online store with existing ERP or billing software?",
+        "answer": "Yes. We engineer real-time webhook and REST API bridges to synchronize inventory counts, pricing tiers, invoices, and shipping statuses automatically."
+      }
+    ]
+  },
+  {
+    "slug": "custom-software",
+    "seoTitle": "Custom Software Development Services | Enterprise Portals & APIs | IAMTECHNI",
+    "metaDescription": "Tailored custom software development by IAMTECHNI. We engineer enterprise web portals, workflow automation engines, and scalable APIs with 100% IP ownership.",
+    "h1": "Custom Software Development",
+    "sections": [
+      {
+        "h2": "Bespoke Software Systems Built Around Your Operational Logic",
+        "paragraphs": [
+          "When off-the-shelf SaaS tools force compromises in your workflow, IAMTECHNI engineers custom web applications, internal operations portals, and multi-tenant platforms designed around your exact business rules.",
+          "Our systems replace fragmented spreadsheets and manual data re-entry with role-based access control (RBAC), immutable audit logs, and automated approval pipelines."
+        ]
+      },
+      {
+        "h2": "Scalable APIs, Microservices & Legacy Modernization",
+        "paragraphs": [
+          "Written in strongly-typed TypeScript, Node.js, and Python backed by PostgreSQL and Redis, our software architectures prioritize long-term maintainability, security hardening, and clean documentation.",
+          "We also modernize brittle legacy desktop or monolith applications into containerized cloud-ready systems using phased, zero-disruption migration patterns."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Who owns the intellectual property and code?",
+        "answer": "You own 100% of the custom source code, database architectures, and assets developed for your organization upon milestone completion."
+      },
+      {
+        "question": "How do you ensure maintainability as our team grows?",
+        "answer": "We write strongly-typed TypeScript/Python, enforce strict linting and architectural boundaries, write automated test suites, and deliver clear system documentation."
+      },
+      {
+        "question": "Can you integrate custom software with our existing CRM or ERP?",
+        "answer": "Yes. We design secure REST and GraphQL middleware layers that unify your existing databases, third-party SaaS platforms, and internal tools."
+      }
+    ]
+  },
+  {
+    "slug": "mobile-apps",
+    "seoTitle": "Mobile App Development Services | iOS, Android & PWA Engineering | IAMTECHNI",
+    "metaDescription": "Custom iOS, Android, and cross-platform mobile app development by IAMTECHNI. High-performance React Native apps and offline-capable Progressive Web Apps.",
+    "h1": "Mobile App Development",
+    "sections": [
+      {
+        "h2": "Cross-Platform iOS & Android Applications with Native Ergonomics",
+        "paragraphs": [
+          "IAMTECHNI designs and engineers responsive mobile applications using React Native and modern cross-platform stacks, delivering 60fps animations, native gesture handling, and shared TypeScript business logic across iOS and Android.",
+          "From customer loyalty and ordering apps to field inspection tools, we focus on intuitive thumb-zone ergonomics, fast startup times, and reliable biometric authentication."
+        ]
+      },
+      {
+        "h2": "Offline-First Architecture & Progressive Web Apps (PWAs)",
+        "paragraphs": [
+          "Field operations and mobile users need software that works even when connectivity drops. We implement local persistence, optimistic UI updates, and automatic background synchronization.",
+          "Where instant web distribution is preferred over app store friction, we also build installable Progressive Web Apps (PWAs) with service worker caching and push notifications."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Should we build a Native app or a Progressive Web App (PWA)?",
+        "answer": "If your application requires deep background sensor access or store presence, React Native is ideal. If you want instant zero-install access via web link with offline caching, PWAs provide lower development cost and faster rollout."
+      },
+      {
+        "question": "Do you handle Apple App Store and Google Play Store submissions?",
+        "answer": "Yes. We manage the complete build signing, provisioning profile setup, privacy policy compliance, and store listing deployment process for both iOS and Android."
+      }
+    ]
+  },
+  {
+    "slug": "ai-machine-learning",
+    "seoTitle": "AI & Machine Learning Services | Enterprise RAG & AI Automation | IAMTECHNI",
+    "metaDescription": "Deploy practical enterprise AI & Machine Learning solutions with IAMTECHNI. Private RAG knowledge assistants, document intelligence, and LLM workflow automation.",
+    "h1": "AI & Machine Learning",
+    "sections": [
+      {
+        "h2": "Private Retrieval-Augmented Generation (RAG) & Knowledge Assistants",
+        "paragraphs": [
+          "IAMTECHNI helps organizations move beyond generic AI demos to deploy domain-grounded, hallucination-resistant intelligence over proprietary enterprise data.",
+          "Using hybrid vector and lexical search (pgvector, Qdrant) paired with strict citation guardrails, our knowledge assistants answer complex operational and engineering queries with verifiable source attribution."
+        ]
+      },
+      {
+        "h2": "Intelligent Document Processing & Agentic Workflow Automation",
+        "paragraphs": [
+          "We automate high-volume document extraction, classification, and validation across invoices, contracts, and technical specifications using structured schema enforcement and human-in-the-loop review queues.",
+          "All AI pipelines are architected with enterprise zero-retention API policies and token cost controls to keep your proprietary data private and operational budgets predictable."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Will our proprietary company data be used to train public AI models?",
+        "answer": "No. We configure enterprise-grade zero-retention API endpoints or private vector stores where your data remains strictly confidential and is never used for training third-party public models."
+      },
+      {
+        "question": "How do you prevent AI hallucinations in critical workflows?",
+        "answer": "We employ strict Retrieval-Augmented Generation (RAG) with source attribution: the system is restricted to answering only from verified retrieved context passages, and flags uncertain queries for human review."
+      }
+    ]
+  },
+  {
+    "slug": "data-analytics",
+    "seoTitle": "Data Analytics & Business Intelligence Services | KPI Dashboards | IAMTECHNI",
+    "metaDescription": "Transform operational data into real-time executive dashboards with IAMTECHNI Data Analytics & Business Intelligence services. Automated ETL pipelines and BI reporting.",
+    "h1": "Data Analytics & Business Intelligence",
+    "sections": [
+      {
+        "h2": "Real-Time Executive KPI Dashboards & Decision Support",
+        "paragraphs": [
+          "IAMTECHNI designs and engineers unified analytics warehouses and interactive web dashboards that give leadership real-time visibility into revenue, unit economics, inventory health, and operational throughput.",
+          "Instead of spending hours reconciling conflicting spreadsheets every week, your team gains role-based drill-down views, cohort retention tracking, and automated scheduled reports."
+        ]
+      },
+      {
+        "h2": "Automated ETL/ELT Data Pipelines & Warehouse Modeling",
+        "paragraphs": [
+          "We build resilient data ingestion pipelines in Python and SQL that extract, clean, deduplicate, and normalize records across your CRM, ERP, e-commerce store, and accounting platforms.",
+          "Whether deploying custom React telemetry dashboards or integrating Power BI, Metabase, and PostgreSQL analytics schemas, we ensure 100% data integrity and governance."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Can we connect custom databases and external SaaS tools?",
+        "answer": "Yes. We build custom ETL pipelines and API connectors for PostgreSQL, MySQL, Google Sheets, CRMs, e-commerce stores, and accounting software."
+      },
+      {
+        "question": "How frequently do your analytics dashboards update?",
+        "answer": "Depending on your operational requirements, we configure real-time streaming telemetry or scheduled incremental syncs (every 5, 15, or 60 minutes) with automated schema drift alerts."
+      }
+    ]
+  },
+  {
+    "slug": "cloud-devops",
+    "seoTitle": "Cloud & DevOps Engineering Services | AWS, Azure & CI/CD | IAMTECHNI",
+    "metaDescription": "Resilient cloud architecture and DevOps automation by IAMTECHNI. AWS and Azure infrastructure, Docker/Kubernetes containerization, zero-downtime CI/CD, and FinOps.",
+    "h1": "Cloud & DevOps Engineering",
+    "sections": [
+      {
+        "h2": "Multi-Cloud Topologies & Containerized Infrastructure",
+        "paragraphs": [
+          "IAMTECHNI architects and manages high-availability cloud environments across AWS and Microsoft Azure. By packaging workloads into standardized Docker containers and orchestrating them cleanly, we ensure complete parity between staging and production.",
+          "Our cloud topologies enforce private VPC networking, automated multi-AZ failover, and encrypted backup schedules to safeguard business continuity."
+        ]
+      },
+      {
+        "h2": "Zero-Downtime CI/CD Pipelines & Cloud FinOps Optimization",
+        "paragraphs": [
+          "We replace risky manual server updates with automated GitHub Actions and GitLab CI pipelines that execute linting, regression tests, and vulnerability scans on every commit.",
+          "Through proactive FinOps audits, compute right-sizing, and budget alerting, we also eliminate idle cloud waste and prevent unexpected monthly bill spikes."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How do you prevent cloud bill shock?",
+        "answer": "We establish proactive budget guardrails, resource auto-scaling caps, automated anomaly notifications, and eliminate orphaned storage volumes or over-provisioned instances."
+      },
+      {
+        "question": "Can you migrate our legacy servers to AWS or Azure without downtime?",
+        "answer": "Yes. We stage parallel containerized environments, replicate database state incrementally, and execute verified blue/green DNS cutovers with zero service interruption."
+      }
+    ]
+  },
+  {
+    "slug": "cybersecurity",
+    "seoTitle": "Cybersecurity & Hardening Services | OWASP Audits & Security | IAMTECHNI",
+    "metaDescription": "Protect your applications and cloud infrastructure with IAMTECHNI Cybersecurity & Hardening services. OWASP security audits, RBAC governance, and server hardening.",
+    "h1": "Cybersecurity & Hardening",
+    "sections": [
+      {
+        "h2": "Application Security & OWASP Top-10 Defensive Engineering",
+        "paragraphs": [
+          "IAMTECHNI embeds defensive security controls directly into your application codebase, APIs, and authentication flows. We remediate XSS, CSRF, injection vectors, and broken access controls before they can be exploited.",
+          "Every web platform we harden is configured with strict HTTP security headers (CSP, HSTS, X-Frame-Options), rate limiting, and parameterized database queries."
+        ]
+      },
+      {
+        "h2": "Vulnerability Audits, Identity Governance & Server Hardening",
+        "paragraphs": [
+          "We perform thorough dependency scanning, static code analysis, and Linux/container infrastructure hardening—enforcing SSH key-only access, firewall isolation, and least-privilege IAM roles.",
+          "Following each assessment, your team receives a prioritized remediation roadmap scored by severity and operational impact."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do you guarantee 100% protection from cyber attacks?",
+        "answer": "No reputable security firm guarantees absolute invulnerability. Our focus is defense-in-depth: eliminating common attack vectors, minimizing blast radius, and implementing monitoring so incidents can be contained rapidly."
+      },
+      {
+        "question": "Can you audit an existing application built by another team?",
+        "answer": "Yes. We conduct independent security and code quality audits on existing repositories and cloud accounts, delivering actionable remediation patches."
+      }
+    ]
+  },
+  {
+    "slug": "digital-marketing",
+    "seoTitle": "Digital Marketing & Technical SEO Services | Organic Growth | IAMTECHNI",
+    "metaDescription": "Accelerate qualified inbound leads with IAMTECHNI Digital Marketing & Technical SEO services. Core Web Vitals optimization, Schema.org JSON-LD, and conversion funnels.",
+    "h1": "Digital Marketing & SEO",
+    "sections": [
+      {
+        "h2": "Engineering-Led Technical SEO & Search Visibility",
+        "paragraphs": [
+          "IAMTECHNI approaches search engine optimization as an engineering discipline. We resolve crawl budget bottlenecks, implement clean URL canonicalization, generate dynamic XML sitemaps, and embed rich Schema.org JSON-LD structured data.",
+          "By pairing technical precision with high-intent keyword architecture, we help your pages rank sustainably for commercial searches that drive real pipeline."
+        ]
+      },
+      {
+        "h2": "Conversion Rate Optimization (CRO) & Attribution Analytics",
+        "paragraphs": [
+          "Traffic without conversion is wasted spend. We refine landing page hierarchy, eliminate inquiry form friction, and configure granular GA4 and Search Console event tracking so every marketing rupee is tied to measurable business outcomes."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How long does it take to see results from technical SEO?",
+        "answer": "Technical fixes (such as resolving indexing issues or Core Web Vitals) often reflect in search engine crawls within 3 to 6 weeks. Broad keyword ranking and organic traffic growth typically compound over 3 to 6 months."
+      },
+      {
+        "question": "Do you provide monthly ranking and lead attribution reports?",
+        "answer": "Yes. Every engagement includes transparent monthly reporting covering organic impressions, keyword movement, Core Web Vitals health, and qualified conversion events."
+      }
+    ]
+  },
+  {
+    "slug": "ui-ux-design",
+    "seoTitle": "UI/UX Design Services | Design Systems & Product Prototyping | IAMTECHNI",
+    "metaDescription": "Human-centered UI/UX design services by IAMTECHNI. User research, interactive Figma prototypes, WCAG 2.2 AA accessible interfaces, and scalable design systems.",
+    "h1": "UI/UX Design",
+    "sections": [
+      {
+        "h2": "User Research, Information Architecture & Interactive Prototyping",
+        "paragraphs": [
+          "IAMTECHNI crafts digital interfaces that feel intuitive from the first interaction. We begin by mapping real user journeys, eliminating redundant steps, and validating spatial layouts through clickable Figma prototypes before engineering begins.",
+          "Every screen is designed for clarity, visual discipline, and effortless conversion across mobile, tablet, and desktop viewports."
+        ]
+      },
+      {
+        "h2": "Tokenized Design Systems & WCAG 2.2 AA Accessibility",
+        "paragraphs": [
+          "We build comprehensive component libraries with standardized typography scales, color tokens, and interactive states (hover, focus, loading, error) that accelerate frontend development.",
+          "All interfaces are audited against WCAG 2.2 AA contrast, keyboard navigation, and touch-target standards."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do you deliver Figma files or working frontend code?",
+        "answer": "Both. We create complete Figma UI kits and design systems, and our frontend engineering team can directly translate them into production-ready React/Tailwind code."
+      },
+      {
+        "question": "Can you redesign an existing legacy software interface?",
+        "answer": "Yes. We conduct usability audits on existing applications and deliver modernized UX flows that reduce user onboarding friction and support tickets."
+      }
+    ]
+  },
+  {
+    "slug": "it-consulting",
+    "seoTitle": "IT Consulting & Technology Roadmaps | Architecture Audits | IAMTECHNI",
+    "metaDescription": "Strategic IT consulting and architecture advisory by IAMTECHNI. Vendor-neutral codebase audits, modernization roadmaps, build-vs-buy analysis, and tech governance.",
+    "h1": "IT Consulting & Technology Roadmaps",
+    "sections": [
+      {
+        "h2": "Vendor-Neutral Architecture Audits & Technical Due Diligence",
+        "paragraphs": [
+          "IAMTECHNI provides objective, senior-level engineering advisory to help leadership make confident technology investments. We inspect existing codebases, database schemas, cloud bills, and security postures to uncover bottlenecks and technical debt.",
+          "Our recommendations are 100% vendor-neutral and focused on long-term reliability, maintainability, and total cost of ownership."
+        ]
+      },
+      {
+        "h2": "Phased Modernization Roadmaps & Engineering Governance",
+        "paragraphs": [
+          "Whether evaluating build-versus-buy decisions, planning a monolith-to-microservices transition, or establishing Git and CI/CD standards for an internal team, we deliver clear 12-to-36 month architectural roadmaps."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Are your consulting recommendations tied to specific vendors?",
+        "answer": "No. We provide strictly vendor-neutral technical advice focused on what delivers the highest business value, durability, and cost efficiency for your specific team."
+      },
+      {
+        "question": "What deliverables do we receive after a technical audit?",
+        "answer": "You receive a comprehensive architecture scorecard, prioritized risk register, cost-optimization recommendations, and a phased implementation blueprint."
+      }
+    ]
+  },
+  {
+    "slug": "training",
+    "seoTitle": "Technical Training & Skill Development | Full Stack, AI & Cloud | IAMTECHNI",
+    "metaDescription": "Hands-on technical training and corporate developer upskilling by IAMTECHNI. Project-driven programs in Full Stack React/TypeScript, Python, AI/RAG, and Cloud DevOps.",
+    "h1": "Technical Training & Skill Development",
+    "sections": [
+      {
+        "h2": "Production-Focused Engineering Curricula & Live Coding Labs",
+        "paragraphs": [
+          "IAMTECHNI bridges the gap between classroom theory and production software engineering. Our training programs immerse participants in real-world TypeScript, React, Node.js, Python, AI RAG pipelines, and AWS/Azure cloud workflows.",
+          "Every module is built around practical lab assignments, Git pull-request reviews, and debugging exercises led by practicing architects."
+        ]
+      },
+      {
+        "h2": "Corporate Team Upskilling & Capstone Mentorship",
+        "paragraphs": [
+          "We customize workshops for corporate engineering teams transitioning from legacy stacks to modern full-stack and AI-assisted architectures, ensuring zero regressions and rapid adoption of engineering best practices."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Are classes lecture-based or hands-on?",
+        "answer": "Our training is 80% hands-on. Participants write real code, debug edge cases, configure tools, and build working applications under guidance."
+      },
+      {
+        "question": "Can you customize training for our internal company tech stack?",
+        "answer": "Yes. We frequently build customized corporate upskilling programs aligned directly with your team’s frameworks, architecture patterns, and tools."
+      }
+    ]
+  },
+  {
+    "slug": "robotics",
+    "seoTitle": "Robotics & Emerging Technologies | ROS2, Edge AI & IoT Telemetry | IAMTECHNI",
+    "metaDescription": "Robotics software engineering and industrial IoT telemetry by IAMTECHNI. ROS2 middleware, edge computer vision, WebRTC teleoperation, and real-time fleet dashboards.",
+    "h1": "Robotics & Emerging Technologies",
+    "sections": [
+      {
+        "h2": "Robotic Control Software, ROS2 Bridges & Edge Computer Vision",
+        "paragraphs": [
+          "IAMTECHNI engineers the software layers that connect autonomous hardware and industrial sensors with cloud intelligence. We build ROS/ROS2 middleware bridges, deterministic safety state machines, and low-latency edge perception pipelines.",
+          "Our architectures enable reliable spatial telemetry, obstacle mapping, and automated dispatch across warehouse and manufacturing environments."
+        ]
+      },
+      {
+        "h2": "Industrial IoT Telemetry & WebRTC Teleoperation Cockpits",
+        "paragraphs": [
+          "We develop sub-second WebSocket and WebRTC web control interfaces for monitoring sensor fleets, streaming live video feeds, and buffering edge telemetry safely during network dropouts."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do you design custom mechanical hardware or software systems?",
+        "answer": "We specialize in the software, firmware integration, and cloud control layers that interface with standard industrial robots, microcontrollers, and IoT sensor hardware."
+      },
+      {
+        "question": "How do you handle connectivity dropouts on remote autonomous devices?",
+        "answer": "We engineer edge-first architectures with local SQLite/buffer queues that record telemetry during disconnects and automatically synchronize once connection is restored."
+      }
+    ]
+  }
+]

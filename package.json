@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx server.ts",
     "prebuild": "node generate-sitemap.mjs",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender-seo.mjs",
     "start": "tsx server.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
