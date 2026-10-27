@@ -217,21 +217,40 @@ export default function App() {
 
   const currentRoute: PageRoute = normalizeRoute(location.pathname);
 
-  // Dismiss branded preloader as soon as React has mounted
+  // Dismiss branded preloader with a minimum display time of 1.5 seconds (1500ms)
   useEffect(() => {
     const preloader = document.getElementById('iamtechni-preloader');
     if (preloader) {
-      const winWithTimer = window as unknown as { __clearPreloaderFallbackTimer?: () => void };
-      if (typeof winWithTimer.__clearPreloaderFallbackTimer === 'function') {
-        winWithTimer.__clearPreloaderFallbackTimer();
-      }
-      preloader.classList.add('iamtechni-preloader-hidden');
-      const timer = setTimeout(() => {
-        if (preloader && preloader.parentNode) {
-          preloader.parentNode.removeChild(preloader);
+      const win = window as unknown as {
+        __clearPreloaderFallbackTimer?: () => void;
+        __preloaderStartTime?: number;
+      };
+
+      const now = typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now();
+      const startTime = typeof win.__preloaderStartTime === 'number' ? win.__preloaderStartTime : now;
+      const elapsed = Math.max(0, now - startTime);
+      const remaining = Math.max(0, 1500 - elapsed);
+
+      let removalTimer: ReturnType<typeof setTimeout> | undefined;
+
+      const dismissTimer = setTimeout(() => {
+        if (typeof win.__clearPreloaderFallbackTimer === 'function') {
+          win.__clearPreloaderFallbackTimer();
         }
-      }, 300);
-      return () => clearTimeout(timer);
+        preloader.classList.add('iamtechni-preloader-hidden');
+        removalTimer = setTimeout(() => {
+          if (preloader && preloader.parentNode) {
+            preloader.parentNode.removeChild(preloader);
+          }
+        }, 300);
+      }, remaining);
+
+      return () => {
+        clearTimeout(dismissTimer);
+        if (removalTimer) {
+          clearTimeout(removalTimer);
+        }
+      };
     }
   }, []);
 

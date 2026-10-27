@@ -232,7 +232,7 @@
           width: 40%;
           background: linear-gradient(90deg, #1266e8 0%, #7c3aed 100%);
           border-radius: 9999px;
-          animation: iamtechni-slide 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+          animation: iamtechni-slide 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
         @keyframes iamtechni-pulse {
           0%, 100% {
@@ -286,6 +286,7 @@
       </div>
       <script>
         (function() {
+          window.__preloaderStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
           var t = setTimeout(function() {
             var el = document.getElementById('iamtechni-preloader');
             if (el) {
@@ -296,7 +297,7 @@
                 }
               }, 300);
             }
-          }, 2500);
+          }, 3000);
           window.__clearPreloaderFallbackTimer = function() {
             clearTimeout(t);
           };
