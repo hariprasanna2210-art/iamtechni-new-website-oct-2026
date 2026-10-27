@@ -13,6 +13,7 @@ export interface ServicePageData {
   seoTitle: string;
   metaDescription: string;
   h1: string;
+  intro?: string;
   sections: ServicePageSection[];
   faqs: ServicePageFaq[];
 }

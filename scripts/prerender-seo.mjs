@@ -51,7 +51,11 @@ function buildStaticRootHtml(page) {
         `\n      </section>`
       : '';
 
-  return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n${sectionsHtml}\n${faqsHtml}\n      </main>\n    `;
+  const introHtml = page.intro
+    ? `      <p class="intro">${escapeHtml(page.intro)}</p>\n`
+    : '';
+
+  return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n${introHtml}${sectionsHtml}\n${faqsHtml}\n      </main>\n    `;
 }
 
 function buildJsonLdScripts(page, canonicalUrl) {
