@@ -181,20 +181,22 @@ async function generateSitemap() {
     loadTsDataModule('src/data/projectsData.ts'),
   ]);
 
-  const today = new Date().toISOString().split('T')[0];
   const seenUrls = new Set();
   const links = [];
 
-  const addLink = (urlPath, changefreq, priority) => {
+  const addLink = (urlPath, changefreq, priority, lastmod = null) => {
     const normalized = urlPath === '/' ? '/' : urlPath.replace(/\/+$/, '');
     if (seenUrls.has(normalized)) return;
     seenUrls.add(normalized);
-    links.push({
+    const linkItem = {
       url: normalized,
       changefreq,
       priority,
-      lastmod: today,
-    });
+    };
+    if (lastmod) {
+      linkItem.lastmod = lastmod;
+    }
+    links.push(linkItem);
   };
 
   // Home: 1.0 (daily)
@@ -263,7 +265,14 @@ async function generateSitemap() {
   for (const article of insightsData) {
     const slug = (article.slug || '').trim();
     if (slug) {
-      addLink(`/insights/${slug}`, 'weekly', 0.7);
+      let articleDate = null;
+      if (article.publishedDate) {
+        const parsed = new Date(article.publishedDate);
+        if (!isNaN(parsed.getTime())) {
+          articleDate = parsed.toISOString().split('T')[0];
+        }
+      }
+      addLink(`/insights/${slug}`, 'weekly', 0.7, articleDate);
     }
   }
 
@@ -275,7 +284,7 @@ async function generateSitemap() {
     }
   }
 
-  // 7. Location-Based SEO Landing Pages (Batch 1: Routes 1–12, strictly with trailing slashes)
+  // 7. Location-Based SEO Landing Pages (strictly with trailing slashes)
   const locationPagesJsonPath = path.resolve(__dirname, 'src/data/location-seo/location-pages.json');
   if (fs.existsSync(locationPagesJsonPath)) {
     const locationPages = JSON.parse(fs.readFileSync(locationPagesJsonPath, 'utf-8'));
@@ -287,7 +296,6 @@ async function generateSitemap() {
           url: trailingSlashPath,
           changefreq: 'weekly',
           priority: 0.8,
-          lastmod: today,
         });
       }
     }
@@ -313,6 +321,7 @@ async function generateSitemap() {
     .replace(/<url>/g, '\n  <url>\n    ')
     .replace(/<\/loc><lastmod>/g, '</loc>\n    <lastmod>')
     .replace(/<\/lastmod><changefreq>/g, '</lastmod>\n    <changefreq>')
+    .replace(/<\/loc><changefreq>/g, '</loc>\n    <changefreq>')
     .replace(/<\/changefreq><priority>/g, '</changefreq>\n    <priority>')
     .replace(/<\/priority><\/url>/g, '</priority>\n  </url>')
     .replace('</urlset>', '\n</urlset>\n');
