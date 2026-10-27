@@ -22,6 +22,13 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+function replaceOrInsertHeadTag(html, regex, replacementTag) {
+  if (regex.test(html)) {
+    return html.replace(regex, replacementTag);
+  }
+  return html.replace('</head>', `    ${replacementTag}\n  </head>`);
+}
+
 function buildStaticRootHtml(page) {
   const sectionsHtml = (page.sections || [])
     .map((sec) => {
@@ -128,40 +135,66 @@ function renderServiceHtml(templateHtml, page) {
 
   let html = templateHtml;
 
-  // 1. Replace <title>
-  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapedTitle}</title>`);
+  // 1. Replace <title> in-place
+  html = replaceOrInsertHeadTag(
+    html,
+    /<title>[\s\S]*?<\/title>/i,
+    `<title>${escapedTitle}</title>`
+  );
 
-  // 2. Replace <meta name="description" ...>
-  html = html.replace(
-    /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i,
+  // 2. Replace <meta name="description"> in-place (supports single-line or multi-line attributes)
+  html = replaceOrInsertHeadTag(
+    html,
+    /<meta\s+name="description"[\s\S]*?\/>/i,
     `<meta name="description" content="${escapedDesc}" />`
   );
 
-  // 3. Remove any existing canonical, og:title, og:description, og:url, twitter:title, twitter:description, twitter:url
-  html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>\s*/gi, '');
-  html = html.replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>\s*/gi, '');
-  html = html.replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>\s*/gi, '');
-  html = html.replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>\s*/gi, '');
-  html = html.replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>\s*/gi, '');
-  html = html.replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>\s*/gi, '');
-  html = html.replace(/<meta\s+name="twitter:url"\s+content="[^"]*"\s*\/?>\s*/gi, '');
+  // 3. Replace <link rel="canonical"> in-place
+  html = replaceOrInsertHeadTag(
+    html,
+    /<link\s+rel="canonical"[\s\S]*?\/>/i,
+    `<link rel="canonical" href="${escapedUrl}" />`
+  );
 
-  // 4. Inject canonical, og:*, twitter:*, and JSON-LD before </head>
+  // 4. Replace Open Graph tags (og:url, og:title, og:description) in-place
+  html = replaceOrInsertHeadTag(
+    html,
+    /<meta\s+property="og:url"[\s\S]*?\/>/i,
+    `<meta property="og:url" content="${escapedUrl}" />`
+  );
+  html = replaceOrInsertHeadTag(
+    html,
+    /<meta\s+property="og:title"[\s\S]*?\/>/i,
+    `<meta property="og:title" content="${escapedTitle}" />`
+  );
+  html = replaceOrInsertHeadTag(
+    html,
+    /<meta\s+property="og:description"[\s\S]*?\/>/i,
+    `<meta property="og:description" content="${escapedDesc}" />`
+  );
+
+  // 5. Replace Twitter tags (twitter:url, twitter:title, twitter:description) in-place
+  html = replaceOrInsertHeadTag(
+    html,
+    /<meta\s+name="twitter:url"[\s\S]*?\/>/i,
+    `<meta name="twitter:url" content="${escapedUrl}" />`
+  );
+  html = replaceOrInsertHeadTag(
+    html,
+    /<meta\s+name="twitter:title"[\s\S]*?\/>/i,
+    `<meta name="twitter:title" content="${escapedTitle}" />`
+  );
+  html = replaceOrInsertHeadTag(
+    html,
+    /<meta\s+name="twitter:description"[\s\S]*?\/>/i,
+    `<meta name="twitter:description" content="${escapedDesc}" />`
+  );
+
+  // 6. Inject JSON-LD scripts before </head>
   const jsonLdScripts = buildJsonLdScripts(page, canonicalUrl);
-  const headInjection = [
-    `<link rel="canonical" href="${escapedUrl}" />`,
-    `<meta property="og:title" content="${escapedTitle}" />`,
-    `<meta property="og:description" content="${escapedDesc}" />`,
-    `<meta property="og:url" content="${escapedUrl}" />`,
-    `<meta name="twitter:title" content="${escapedTitle}" />`,
-    `<meta name="twitter:description" content="${escapedDesc}" />`,
-    `<meta name="twitter:url" content="${escapedUrl}" />`,
-    jsonLdScripts,
-  ].join('\n    ');
+  html = html.replace('</head>', `    ${jsonLdScripts}\n  </head>`);
 
-  html = html.replace('</head>', `    ${headInjection}\n  </head>`);
-
-  // 5. Insert static HTML inside <div id="root">...</div>
+  // 7. Insert static HTML inside <div id="root">...</div>
   const staticBodyHtml = buildStaticRootHtml(page);
   html = html.replace('<div id="root"></div>', `<div id="root">${staticBodyHtml}</div>`);
 
