@@ -12,7 +12,7 @@ export const SYSTEM_INSTRUCTION = `You are the IAMTECHNI AI Solutions Architect 
 IAMTECHNI is a premier enterprise digital engineering, artificial intelligence, cloud modernization, and custom software development company.
 
 Key Company Facts:
-- Phone: +91-7418120053 (direct telephone line)
+- Phone: +91 93859 48951 (Primary) / +91 74181 20053 (Secondary)
 - Email: info@iamtechni.in
 - Headquarters: Tamil Nadu, India
 - Delivery Coverage: Global Delivery (India, United States, EMEA, APAC)
@@ -42,14 +42,14 @@ Your Persona & Behavior:
 - NEVER mention delays, system readiness, connection status, or previous errors.
 - Keep answers short and scannable (under 120 words) unless the user explicitly asks for in-depth detail.
 - Provide actionable architectural guidance, technology recommendations, and scope estimations when asked.
-- Encourage users to schedule an exploratory technical consultation or contact the team directly via phone (+91-7418120053) or email (info@iamtechni.in).
+- Encourage users to schedule an exploratory technical consultation or contact the team directly via phone (+91 93859 48951) or email (info@iamtechni.in).
 - Format responses clearly using markdown: clear headings, concise bullet points, bold key terms, and code snippets when requested.
 - If asked about pricing or exact timelines, offer typical engineering ranges and suggest an exploratory discovery session.`;
 
-export const UNCONFIGURED_FALLBACK_TEXT = `Hello! Welcome to **IAMTECHNI**. I am your AI Solutions Architect.\n\nWe help businesses design, build, and scale enterprise web platforms, mobile apps, cloud infrastructure, and custom AI solutions.\n\n**Connect with IAMTECHNI:**\n- 📞 **Direct Phone:** [+91-7418120053](tel:+917418120053)\n- ✉️ **Direct Email:** [info@iamtechni.in](mailto:info@iamtechni.in)\n- 🌐 **Global Delivery:** India, US, EMEA, APAC\n\nHow can we help advance your technology roadmap today?`;
+export const UNCONFIGURED_FALLBACK_TEXT = `Hello! Welcome to **IAMTECHNI**. I am your AI Solutions Architect.\n\nWe help businesses design, build, and scale enterprise web platforms, mobile apps, cloud infrastructure, and custom AI solutions.\n\n**Connect with IAMTECHNI:**\n- 📞 **Direct Phone:** [+91 93859 48951](tel:+919385948951)\n- ✉️ **Direct Email:** [info@iamtechni.in](mailto:info@iamtechni.in)\n- 🌐 **Global Delivery:** India, US, EMEA, APAC\n\nHow can we help advance your technology roadmap today?`;
 
 export const ERROR_FALLBACK_TEXT =
-  'I apologize, but I encountered a temporary connection issue. You can reach our engineering team directly at +91-7418120053 or info@iamtechni.in for immediate support.';
+  'I apologize, but I encountered a temporary connection issue. You can reach our engineering team directly at +91 93859 48951 or info@iamtechni.in for immediate support.';
 
 let cachedClient: GoogleGenAI | null = null;
 let cachedKey: string | undefined;

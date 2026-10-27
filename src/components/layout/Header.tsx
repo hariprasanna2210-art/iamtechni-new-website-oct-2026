@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { IamtechniLogo } from '../common/IamtechniLogo';
 import { PageRoute } from '../../types';
-import { COMPANY_CONTACT } from '../../data/companyInfo';
+import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../../constants/contact';
 
 interface HeaderProps {
   currentRoute: PageRoute;
@@ -703,13 +703,13 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Direct Phone Call Button — Unified Soft Secondary Button */}
             <a
-              href={COMPANY_CONTACT.phoneTel}
+              href={`tel:${PRIMARY_PHONE_LINK}`}
               className="hidden lg:inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-white hover:bg-[#F5F8FC] transition-all py-2 px-3 rounded-lg border border-[#DBEAFE]/90 shadow-2xs whitespace-nowrap active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
-              title={`Call ${COMPANY_CONTACT.phone}`}
-              aria-label={`Call ${COMPANY_CONTACT.phone}`}
+              title={`Call ${PRIMARY_PHONE}`}
+              aria-label={`Call ${PRIMARY_PHONE}`}
             >
               <Phone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span className="hidden xl:inline">{COMPANY_CONTACT.phone}</span>
+              <span className="hidden xl:inline">{PRIMARY_PHONE}</span>
             </a>
 
             {/* Start a Project CTA Button — Matching Hero Primary Button Layout & Lighter/Softer Hover */}
@@ -1080,7 +1080,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Pinned Bottom Actions: AI Advisor, Phone (+91-7418120053), and Start a Project */}
+            {/* Pinned Bottom Actions: AI Advisor, Phone, and Start a Project */}
             <div className="p-4 sm:px-6 bg-slate-50/90 border-t border-slate-200/80 space-y-2.5 shrink-0">
               <div className="grid grid-cols-2 gap-2">
                 {/* AI Advisor Button */}
@@ -1098,11 +1098,11 @@ export const Header: React.FC<HeaderProps> = ({
 
                 {/* Direct Phone Button */}
                 <a
-                  href={COMPANY_CONTACT.phoneTel}
+                  href={`tel:${PRIMARY_PHONE_LINK}`}
                   className="min-h-[44px] px-3 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 rounded-xl flex items-center justify-center gap-1.5 border border-slate-200/90 shadow-2xs transition-colors"
                 >
                   <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="truncate">{COMPANY_CONTACT.phone}</span>
+                  <span className="truncate">{PRIMARY_PHONE}</span>
                 </a>
               </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, Mail, Sparkles, ArrowRight } from 'lucide-react';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
+import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../../constants/contact';
 import { RotatingFrame } from '../common/RotatingFrame';
 
 interface DirectInquiriesCardProps {
@@ -61,7 +62,7 @@ export const DirectInquiriesCard: React.FC<DirectInquiriesCardProps> = ({
         <div className="order-3 md:order-3 md:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
           {/* 1. Direct Phone */}
           <a
-            href={COMPANY_CONTACT.phoneTel}
+            href={`tel:${PRIMARY_PHONE_LINK}`}
             onMouseEnter={() => handleButtonHover(0)}
             onMouseLeave={handleButtonLeave}
             onFocus={() => handleButtonHover(0)}
@@ -71,7 +72,7 @@ export const DirectInquiriesCard: React.FC<DirectInquiriesCardProps> = ({
                 ? 'border-teal-400 ring-4 ring-teal-500/30 shadow-[0_8px_24px_rgba(20,184,166,0.28)] text-white'
                 : 'border-teal-500/40 hover:border-teal-400 shadow-sm'
             }`}
-            title={`Call ${COMPANY_CONTACT.phone}`}
+            title={`Call ${PRIMARY_PHONE}`}
           >
             <div className="w-7 h-7 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-300 group-hover:scale-110 transition-transform shrink-0">
               <Phone className="w-3.5 h-3.5" />
@@ -81,7 +82,7 @@ export const DirectInquiriesCard: React.FC<DirectInquiriesCardProps> = ({
                 CALL DIRECTLY
               </div>
               <div className="font-mono text-xs font-bold text-white truncate">
-                {COMPANY_CONTACT.phone}
+                {PRIMARY_PHONE}
               </div>
             </div>
           </a>

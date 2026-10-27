@@ -17,6 +17,7 @@ import {
   Headphones
 } from 'lucide-react';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
+import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../../constants/contact';
 import { PageRoute } from '../../types';
 import { IamtechniLogo } from '../common/IamtechniLogo';
 
@@ -197,7 +198,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
           data?.fallbackText ||
           data?.text ||
           data?.error ||
-          `I am currently experiencing a temporary network delay. You can connect with our team directly:\n- 📞 Phone: **+91-7418120053**\n- ✉️ Email: **info@iamtechni.in**\n- 🌐 Office: Tamil Nadu, India (Global Delivery)`;
+          `I am currently experiencing a temporary network delay. You can connect with our team directly:\n- 📞 Phone: **${PRIMARY_PHONE}**\n- ✉️ Email: **info@iamtechni.in**\n- 🌐 Office: Tamil Nadu, India (Global Delivery)`;
 
         const errorBotMessage: ChatMessage = {
           id: `bot-err-${Date.now()}`,
@@ -214,7 +215,7 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
         data?.reply ||
         data?.message ||
         data?.fallbackText ||
-        'Thank you for reaching out. Please contact our engineering team directly at +91-7418120053 or info@iamtechni.in.';
+        `Thank you for reaching out. Please contact our engineering team directly at ${PRIMARY_PHONE} or info@iamtechni.in.`;
 
       const botMessage: ChatMessage = {
         id: `bot-${Date.now()}`,
@@ -233,8 +234,8 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
         id: `bot-fallback-${Date.now()}`,
         role: 'assistant',
         content: isTimeout
-          ? `The AI advisor took longer than 20 seconds to respond. Please try again with a shorter question, or connect with our team directly:\n- 📞 Phone: **+91-7418120053**\n- ✉️ Email: **info@iamtechni.in**\n- 🌐 Office: Tamil Nadu, India (Global Delivery)`
-          : `I am currently experiencing a temporary network delay. You can connect with our team directly:\n- 📞 Phone: **+91-7418120053**\n- ✉️ Email: **info@iamtechni.in**\n- 🌐 Office: Tamil Nadu, India (Global Delivery)`,
+          ? `The AI advisor took longer than 20 seconds to respond. Please try again with a shorter question, or connect with our team directly:\n- 📞 Phone: **${PRIMARY_PHONE}**\n- ✉️ Email: **info@iamtechni.in**\n- 🌐 Office: Tamil Nadu, India (Global Delivery)`
+          : `I am currently experiencing a temporary network delay. You can connect with our team directly:\n- 📞 Phone: **${PRIMARY_PHONE}**\n- ✉️ Email: **info@iamtechni.in**\n- 🌐 Office: Tamil Nadu, India (Global Delivery)`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, fallbackMsg]);
@@ -472,11 +473,11 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
               <div className="bg-[#F8FAFC] border-b border-slate-200/80 px-4 py-1.5 md:py-2 flex items-center justify-between text-[11px] text-slate-600">
                 <div className="flex items-center gap-3">
                   <a
-                    href={COMPANY_CONTACT.phoneTel}
+                    href={`tel:${PRIMARY_PHONE_LINK}`}
                     className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1 font-semibold text-[#0F52BA] hover:underline"
                   >
                     <Phone className="w-3 h-3 text-emerald-600" />
-                    <span>{COMPANY_CONTACT.phone}</span>
+                    <span>{PRIMARY_PHONE}</span>
                   </a>
                   <span className="text-slate-300">|</span>
                   <a
@@ -608,7 +609,9 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
                   </button>
                 </div>
                 <div className="mt-2 flex items-center justify-between text-[10px] text-slate-400">
-                  <span>Direct hotline: +91-7418120053</span>
+                  <a href={`tel:${PRIMARY_PHONE_LINK}`} className="hover:text-[#0F52BA] transition-colors">
+                    Direct hotline: {PRIMARY_PHONE}
+                  </a>
                   {onNavigate && (
                     <button
                       onClick={() => {

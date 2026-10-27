@@ -43,6 +43,7 @@ import {
   WHATSAPP_CONFIG,
 } from '../data/coursesData';
 import { COMPANY_CONTACT } from '../data/companyInfo';
+import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../constants/contact';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { TrainingHeroVisual } from '../components/heroes/TrainingHeroVisual';
@@ -783,7 +784,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                     className="w-full min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#0D9488] hover:bg-[#0f766e] text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-98 cursor-pointer"
                   >
                     <WhatsAppIcon className="w-4 h-4" />
-                    <span>Chat on WhatsApp (+91-7418120053)</span>
+                    <span>Chat on WhatsApp ({PRIMARY_PHONE})</span>
                   </a>
                 </div>
               </div>
@@ -795,7 +796,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="w-3.5 h-3.5 text-[#0D9488]" />
-                  <span className="font-mono">{COMPANY_CONTACT.phone}</span>
+                  <a href={`tel:${PRIMARY_PHONE_LINK}`} className="font-mono hover:text-[#0D9488] transition-colors">
+                    {PRIMARY_PHONE}
+                  </a>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="w-3.5 h-3.5 text-[#1266E8]" />
@@ -1243,7 +1246,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                 title="Message our admissions desk on WhatsApp"
               >
                 <WhatsAppIcon className="w-4 h-4 text-emerald-600" />
-                <span>Chat on WhatsApp (+91-7418120053)</span>
+                <span>Chat on WhatsApp ({PRIMARY_PHONE})</span>
               </a>
             </div>
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, ArrowRight, ShieldCheck, Mail, Building, Phone, User, FileText, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../../constants/contact';
 
 interface ProjectModalProps {
   isOpen: boolean;
@@ -275,8 +276,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                     <div className="p-3 bg-[#F4F7FC] border border-slate-200 rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs">
                       <span className="text-slate-600 font-medium">Prefer direct contact?</span>
                       <div className="flex flex-wrap items-center gap-3 font-mono font-semibold">
-                        <a href="tel:+917418120053" className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1 text-[#0D9488] hover:underline">
-                          <Phone className="w-3.5 h-3.5" /> +91-7418120053
+                        <a href={`tel:${PRIMARY_PHONE_LINK}`} className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1 text-[#0D9488] hover:underline">
+                          <Phone className="w-3.5 h-3.5" /> {PRIMARY_PHONE}
                         </a>
                         <span className="text-slate-300">·</span>
                         <a href="mailto:info@iamtechni.in" className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1 text-[#1266E8] hover:underline">

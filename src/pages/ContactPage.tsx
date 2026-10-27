@@ -19,6 +19,12 @@ import {
 import { PageRoute } from '../types';
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { COMPANY_CONTACT } from '../data/companyInfo';
+import {
+  PRIMARY_PHONE,
+  PRIMARY_PHONE_LINK,
+  SECONDARY_PHONE,
+  SECONDARY_PHONE_LINK,
+} from '../constants/contact';
 import { PageHero } from '../components/common/PageHero';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 
@@ -83,9 +89,9 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
         title="Let’s Engineer Your Next Digital Solution"
         tagline="Direct access to our senior engineering and technical architecture team."
         description="Tell us what you want to build, modernize or automate. Reach us directly via phone, official email, or submit your project questionnaire below for an architecture discovery session within one business day."
-        primaryCtaText="Call Now: +91-7418120053"
+        primaryCtaText={`Call Now: ${PRIMARY_PHONE}`}
         onPrimaryCta={() => {
-          window.location.href = COMPANY_CONTACT.phoneTel;
+          window.location.href = `tel:${PRIMARY_PHONE_LINK}`;
         }}
         secondaryCtaText="Email info@iamtechni.in"
         onSecondaryCta={() => {
@@ -111,7 +117,18 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 </div>
                 <div className="min-w-0">
                   <div className="text-[10px] font-mono uppercase text-[#0D9488] font-bold">Direct Phone Line</div>
-                  <div className="text-sm font-extrabold text-slate-900 truncate">{COMPANY_CONTACT.phone}</div>
+                  <a
+                    href={`tel:${PRIMARY_PHONE_LINK}`}
+                    className="block text-sm font-extrabold text-slate-900 hover:text-[#0D9488] transition-colors truncate"
+                  >
+                    Primary: {PRIMARY_PHONE}
+                  </a>
+                  <a
+                    href={`tel:${SECONDARY_PHONE_LINK}`}
+                    className="block text-xs font-bold text-slate-700 hover:text-[#0D9488] transition-colors truncate"
+                  >
+                    Secondary: {SECONDARY_PHONE}
+                  </a>
                 </div>
               </div>
 
@@ -185,12 +202,21 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                   Speak directly with an engineering specialist about project scoping, team allocation, and turnaround times.
                 </p>
 
-                <div className="p-3 sm:p-3.5 bg-white rounded-xl border border-teal-200/70 mb-4 sm:mb-5 shadow-2xs">
-                  <div className="text-[10px] font-mono text-slate-500 uppercase">Phone Number</div>
-                  <div className="text-lg sm:text-xl font-mono font-black text-[#1E3A8A] tracking-tight">
-                    {COMPANY_CONTACT.phone}
-                  </div>
-                  <div className="text-[11px] text-teal-700 font-medium mt-1">
+                <div className="p-3 sm:p-3.5 bg-white rounded-xl border border-teal-200/70 mb-4 sm:mb-5 shadow-2xs space-y-1">
+                  <div className="text-[10px] font-mono text-slate-500 uppercase">Phone Numbers</div>
+                  <a
+                    href={`tel:${PRIMARY_PHONE_LINK}`}
+                    className="block text-base sm:text-lg font-mono font-black text-[#1E3A8A] hover:text-[#0D9488] transition-colors tracking-tight"
+                  >
+                    Primary: {PRIMARY_PHONE}
+                  </a>
+                  <a
+                    href={`tel:${SECONDARY_PHONE_LINK}`}
+                    className="block text-sm sm:text-base font-mono font-bold text-slate-700 hover:text-[#0D9488] transition-colors tracking-tight"
+                  >
+                    Secondary: {SECONDARY_PHONE}
+                  </a>
+                  <div className="text-[11px] text-teal-700 font-medium pt-0.5">
                     {COMPANY_CONTACT.workingHours}
                   </div>
                 </div>
@@ -198,11 +224,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
               {/* Call Now Action Button */}
               <a
-                href={COMPANY_CONTACT.phoneTel}
+                href={`tel:${PRIMARY_PHONE_LINK}`}
                 className="w-full py-2.5 px-4 min-h-[44px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg font-semibold text-xs sm:text-sm transition-all shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
               >
                 <PhoneCall className="w-4 h-4 shrink-0" />
-                <span className="truncate">Call Now ({COMPANY_CONTACT.phone})</span>
+                <span className="truncate">Call Now ({PRIMARY_PHONE})</span>
               </a>
             </div>
 
@@ -489,14 +515,21 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 </p>
 
                 <div className="space-y-4 pt-2 text-xs">
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
                     <div className="text-[10px] font-mono text-slate-500 uppercase font-bold">Direct Phone Line</div>
                     <a
-                      href={COMPANY_CONTACT.phoneTel}
+                      href={`tel:${PRIMARY_PHONE_LINK}`}
                       className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-sm font-mono font-bold text-slate-900 hover:text-[#1266E8] transition-colors flex items-center gap-1.5"
                     >
-                      <Phone className="w-3.5 h-3.5 text-[#0D9488]" />
-                      <span>{COMPANY_CONTACT.phone}</span>
+                      <Phone className="w-3.5 h-3.5 text-[#0D9488] shrink-0" />
+                      <span>Primary: {PRIMARY_PHONE}</span>
+                    </a>
+                    <a
+                      href={`tel:${SECONDARY_PHONE_LINK}`}
+                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-sm font-mono font-bold text-slate-700 hover:text-[#1266E8] transition-colors flex items-center gap-1.5"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-[#0D9488] shrink-0" />
+                      <span>Secondary: {SECONDARY_PHONE}</span>
                     </a>
                   </div>
 

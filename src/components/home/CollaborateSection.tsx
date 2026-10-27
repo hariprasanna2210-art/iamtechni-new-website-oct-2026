@@ -19,6 +19,7 @@ import {
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { PageRoute } from '../../types';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
+import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../../constants/contact';
 import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportActivity';
 
 interface CollaborateSectionProps {
@@ -892,10 +893,10 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
 
                     <div className="pt-1 sm:pt-2 grid grid-cols-1 min-[560px]:grid-cols-2 gap-2.5 sm:gap-3">
                       <motion.a
-                        href={COMPANY_CONTACT.phoneTel}
+                        href={`tel:${PRIMARY_PHONE_LINK}`}
                         whileHover={prefersReducedMotion ? undefined : { y: -2 }}
                         className="min-h-[44px] min-w-[44px] inline-flex items-center gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl bg-white border border-[#DBEAFE] shadow-[0_8px_20px_rgba(30,58,138,0.05)] hover:border-[#93C5FD] transition-all group"
-                        title={`Call ${COMPANY_CONTACT.phone}`}
+                        title={`Call ${PRIMARY_PHONE}`}
                       >
                         <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                           <Phone className="w-4 h-4" />
@@ -905,7 +906,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                             CALL DIRECTLY
                           </div>
                           <div className="font-mono text-xs sm:text-sm font-bold text-[#1E3A8A] truncate">
-                            {COMPANY_CONTACT.phone}
+                            {PRIMARY_PHONE}
                           </div>
                         </div>
                       </motion.a>

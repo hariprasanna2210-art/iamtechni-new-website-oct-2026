@@ -4,6 +4,12 @@ import { ArrowUpRight, Mail, Globe, Phone, Sparkles } from 'lucide-react';
 import { IamtechniLogo } from '../common/IamtechniLogo';
 import { PageRoute } from '../../types';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
+import {
+  PRIMARY_PHONE,
+  PRIMARY_PHONE_LINK,
+  SECONDARY_PHONE,
+  SECONDARY_PHONE_LINK,
+} from '../../constants/contact';
 
 export const GOOGLE_REVIEWS_URL = "https://share.google/rJ0Tl7uoJfXLnIPi7";
 
@@ -259,10 +265,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
             <div className="space-y-1.5 md:space-y-[12px] text-[13px] sm:text-[14px]">
               <div>
                 <a
-                  href={COMPANY_CONTACT.phoneTel}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
+                  href={`tel:${PRIMARY_PHONE_LINK}`}
+                  className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1.5 whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
                 >
-                  {COMPANY_CONTACT.phone}
+                  <Phone className="w-3.5 h-3.5 text-[#5CE1E6] shrink-0" />
+                  <span>Enquiries: {PRIMARY_PHONE}</span>
+                </a>
+              </div>
+
+              <div>
+                <a
+                  href={`tel:${SECONDARY_PHONE_LINK}`}
+                  className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1.5 whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#5CE1E6] shrink-0" />
+                  <span>Direct Line: {SECONDARY_PHONE}</span>
                 </a>
               </div>
 
@@ -306,9 +323,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                   <Mail className="w-4 h-4" />
                 </a>
                 <a
-                  href={COMPANY_CONTACT.phoneTel}
-                  aria-label="Call IAMTECHNI"
-                  title="Phone Line"
+                  href={`tel:${PRIMARY_PHONE_LINK}`}
+                  aria-label={`Call IAMTECHNI (${PRIMARY_PHONE})`}
+                  title={`Phone Line (${PRIMARY_PHONE})`}
                   className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-9 md:h-9 md:min-w-0 md:min-h-0 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200"
                 >
                   <Phone className="w-4 h-4" />
@@ -350,25 +367,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
       {/* Bottom Bar – Full Width Softer Navy #101F36 */}
       <div className="bg-[#101F36] w-full border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20 lg:pb-4 lg:pr-56 flex flex-col lg:flex-row items-center justify-between gap-3 text-[13px] text-white/85 text-center lg:text-left">
-          {/* Left: Phone & Email */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-1">
-            <a
-              href={COMPANY_CONTACT.phoneTel}
-              className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1.5 hover:text-[#5CE1E6] transition-colors whitespace-nowrap"
-            >
-              <Phone className="w-3.5 h-3.5 text-[#5CE1E6]" />
-              <span>{COMPANY_CONTACT.phone}</span>
-            </a>
-            <a
-              href={COMPANY_CONTACT.emailMailto}
-              className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1.5 hover:text-[#5CE1E6] transition-colors whitespace-nowrap"
-            >
-              <Mail className="w-3.5 h-3.5 text-[#5CE1E6]" />
-              <span>{COMPANY_CONTACT.email}</span>
-            </a>
-          </div>
-
-          {/* Centre: Copyright */}
+          {/* Left: Copyright */}
           <div className="text-white/85">
             © 2026 IAMTECHNI. All rights reserved.
           </div>

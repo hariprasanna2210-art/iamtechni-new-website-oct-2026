@@ -13,6 +13,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
+import { PRIMARY_PHONE } from '../../constants/contact';
 
 export interface RotatingFrameProps {
   variant: 'cta' | 'compact';
@@ -646,7 +647,7 @@ export const RotatingFrame: React.FC<RotatingFrameProps> = ({
                         CALL DIRECTLY
                       </div>
                       <div className="font-mono text-xs sm:text-sm font-bold text-[#0F1B3D] truncate">
-                        {COMPANY_CONTACT.phone}
+                        {PRIMARY_PHONE}
                       </div>
                       <div className="mt-1 flex items-center gap-1.5">
                         <div className="h-1.5 w-14 bg-[#CBD5E1] rounded-full" />

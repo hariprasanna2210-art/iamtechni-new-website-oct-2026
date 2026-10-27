@@ -16,6 +16,7 @@ import { projectsData } from '../../data/projectsData';
 import { coursesData } from '../../data/coursesData';
 import { careersData } from '../../data/careersData';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
+import { PRIMARY_PHONE, SCHEMA_TELEPHONE } from '../../constants/contact';
 
 const BASE_URL = COMPANY_CONTACT.website; // https://www.iamtechni.in
 const DEFAULT_OG_IMAGE = COMPANY_CONTACT.ogImageUrl; // https://www.iamtechni.in/og-image.png
@@ -212,7 +213,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
           '@type': 'Organization',
           '@id': `${BASE_URL}/#organization`,
           name: COMPANY_CONTACT.name,
-          telephone: COMPANY_CONTACT.phone,
+          telephone: SCHEMA_TELEPHONE,
           email: COMPANY_CONTACT.email,
           url: `${BASE_URL}/`,
         },
@@ -682,7 +683,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ...baseMeta,
       title: 'Request an Architecture & Engineering Consultation | IAMTECHNI',
       description: formatMetaDescription(
-        `Schedule a 1-on-1 technical discovery session with IAMTECHNI architects for software, AI, and cloud projects. Call ${COMPANY_CONTACT.phone} or email ${COMPANY_CONTACT.email}.`
+        `Schedule a 1-on-1 technical discovery session with IAMTECHNI architects for software, AI, and cloud projects. Call ${PRIMARY_PHONE} or email ${COMPANY_CONTACT.email}.`
       ),
       canonicalUrl,
       ogType: 'website',
@@ -702,7 +703,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ...baseMeta,
       title: 'Contact IAMTECHNI — Start Your Software, AI or Cloud Project',
       description: formatMetaDescription(
-        `Get in touch with IAMTECHNI in Puducherry & Tamil Nadu, India. Call ${COMPANY_CONTACT.phone} or email ${COMPANY_CONTACT.email} for software, AI, and cloud inquiries.`
+        `Get in touch with IAMTECHNI in Puducherry & Tamil Nadu, India. Call ${PRIMARY_PHONE} or email ${COMPANY_CONTACT.email} for software, AI, and cloud inquiries.`
       ),
       canonicalUrl,
       ogType: 'website',

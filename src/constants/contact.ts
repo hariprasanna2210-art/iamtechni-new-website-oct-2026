@@ -1,0 +1,6 @@
+export const PRIMARY_PHONE = "+91 93859 48951";
+export const PRIMARY_PHONE_LINK = "+919385948951";
+export const SECONDARY_PHONE = "+91 74181 20053";
+export const SECONDARY_PHONE_LINK = "+917418120053";
+export const WHATSAPP_LINK = "https://wa.me/919385948951";
+export const SCHEMA_TELEPHONE = "+91-9385948951";

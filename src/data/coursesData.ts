@@ -1,10 +1,11 @@
 import { CourseItem } from '../types';
 import { COMPANY_CONTACT } from './companyInfo';
+import { PRIMARY_PHONE, PRIMARY_PHONE_LINK, WHATSAPP_LINK } from '../constants/contact';
 
 export const WHATSAPP_CONFIG = {
-  number: '917418120053',
-  displayNumber: '+91-7418120053',
-  baseUrl: 'https://wa.me/917418120053',
+  number: PRIMARY_PHONE_LINK.replace('+', ''),
+  displayNumber: PRIMARY_PHONE,
+  baseUrl: WHATSAPP_LINK,
   isVerified: true,
 };
 

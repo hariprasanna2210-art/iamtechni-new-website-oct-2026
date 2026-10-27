@@ -21,11 +21,16 @@ const officialLogoPath = path.resolve(publicDir, 'iamtechni-logo.png');
 async function loadTsDataModule(relFilePath) {
   const fullPath = path.resolve(__dirname, relFilePath);
   const tsSource = fs.readFileSync(fullPath, 'utf-8');
-  // Replace local relative imports (like companyInfo) if needed or inline them
-  const cleanedSource = tsSource.replace(
-    /import\s+\{\s*COMPANY_CONTACT\s*\}\s+from\s+['"]\.\/companyInfo['"];?/g,
-    'const COMPANY_CONTACT = { phone: "+91-7418120053", email: "info@iamtechni.in", website: "https://www.iamtechni.in" };'
-  );
+  // Replace local relative imports (like companyInfo and contact constants) if needed or inline them
+  const cleanedSource = tsSource
+    .replace(
+      /import\s+\{\s*COMPANY_CONTACT\s*\}\s+from\s+['"]\.\/companyInfo['"];?/g,
+      'const COMPANY_CONTACT = { phone: "+91 93859 48951", email: "info@iamtechni.in", website: "https://www.iamtechni.in" };'
+    )
+    .replace(
+      /import\s+\{[^}]*\}\s+from\s+['"]\.\.\/constants\/contact['"];?/g,
+      'const PRIMARY_PHONE = "+91 93859 48951"; const PRIMARY_PHONE_LINK = "+919385948951"; const SECONDARY_PHONE = "+91 74181 20053"; const SECONDARY_PHONE_LINK = "+917418120053"; const WHATSAPP_LINK = "https://wa.me/919385948951"; const SCHEMA_TELEPHONE = "+91-9385948951";'
+    );
   const { code } = esbuild.transformSync(cleanedSource, {
     loader: 'ts',
     format: 'esm',
