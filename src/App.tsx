@@ -1,4 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { PageRoute, ProjectItem } from './types';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -9,7 +17,7 @@ import { GeminiChatbot } from './components/chat/GeminiChatbot';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ServicesDirectoryPage } from './pages/ServicesDirectoryPage';
-import { ServiceDetailPage } from './pages/ServiceDetailPage';
+import { ServicePage } from './pages/ServicePage';
 import { IndustriesPage } from './pages/IndustriesPage';
 import { IndustryDetailPage } from './pages/IndustryDetailPage';
 import { SolutionsPage } from './pages/SolutionsPage';
@@ -27,346 +35,223 @@ import { TrainingPage } from './pages/TrainingPage';
 import { SeoHead } from './components/common/SeoHead';
 
 import { servicesData, getCanonicalServiceSlug } from './data/servicesData';
+import {
+  webDevelopmentSeoPage,
+  ecommerceSeoPage,
+  customSoftwareSeoPage,
+  mobileAppsSeoPage,
+  aiMachineLearningSeoPage,
+  dataAnalyticsSeoPage,
+  cloudDevopsSeoPage,
+  cybersecuritySeoPage,
+  digitalMarketingSeoPage,
+  uiUxDesignSeoPage,
+  itConsultingSeoPage,
+  trainingSeoPage,
+  roboticsSeoPage,
+  getSeoServicePageBySlug,
+} from './data/seo-pages';
 import { insightsData } from './data/insightsData';
 import { industriesData } from './data/industriesData';
 
+interface RoutePageWrapperProps {
+  onNavigate: (route: PageRoute) => void;
+  onStartProject: (serviceName?: string) => void;
+}
+
+const DynamicServiceRoute: React.FC<RoutePageWrapperProps> = ({
+  onNavigate,
+  onStartProject,
+}) => {
+  const { slug = '' } = useParams<{ slug: string }>();
+  const canonicalSlug = getCanonicalServiceSlug(slug);
+
+  if (canonicalSlug !== slug) {
+    return <Navigate to={`/services/${canonicalSlug}`} replace />;
+  }
+
+  const seoPage = getSeoServicePageBySlug(canonicalSlug);
+  const service = servicesData.find(
+    (s) => s.slug === canonicalSlug || s.id === canonicalSlug
+  );
+
+  if (seoPage) {
+    return (
+      <ServicePage
+        {...seoPage}
+        service={service}
+        onNavigate={onNavigate}
+        onStartProject={onStartProject}
+      />
+    );
+  }
+
+  if (service) {
+    return (
+      <ServicePage
+        slug={service.slug}
+        seoTitle={`${service.title} Services | IAMTECHNI`}
+        metaDescription={service.summary}
+        h1={service.title}
+        sections={[]}
+        faqs={service.faqs}
+        service={service}
+        onNavigate={onNavigate}
+        onStartProject={onStartProject}
+      />
+    );
+  }
+
+  return (
+    <ServicesDirectoryPage
+      onNavigate={onNavigate}
+      onStartProject={onStartProject}
+    />
+  );
+};
+
+const DynamicIndustryRoute: React.FC<RoutePageWrapperProps> = ({
+  onNavigate,
+  onStartProject,
+}) => {
+  const { slug = '' } = useParams<{ slug: string }>();
+  const industry = industriesData.find((i) => i.id === slug);
+  if (industry) {
+    return (
+      <IndustryDetailPage
+        industry={industry}
+        onNavigate={onNavigate}
+        onStartProject={onStartProject}
+      />
+    );
+  }
+  return <IndustriesPage onNavigate={onNavigate} onStartProject={onStartProject} />;
+};
+
+const DynamicSolutionRoute: React.FC<RoutePageWrapperProps> = ({
+  onNavigate,
+  onStartProject,
+}) => {
+  const { slug = '' } = useParams<{ slug: string }>();
+  return (
+    <SolutionsPage
+      slug={slug}
+      onNavigate={onNavigate}
+      onStartProject={onStartProject}
+    />
+  );
+};
+
+const DynamicCaseStudyRoute: React.FC<RoutePageWrapperProps> = ({
+  onNavigate,
+  onStartProject,
+}) => {
+  const { slug = '' } = useParams<{ slug: string }>();
+  return (
+    <CaseStudiesPage
+      slug={slug}
+      onNavigate={onNavigate}
+      onStartProject={onStartProject}
+    />
+  );
+};
+
+const DynamicArticleRoute: React.FC<RoutePageWrapperProps> = ({
+  onNavigate,
+  onStartProject,
+}) => {
+  const { slug = '' } = useParams<{ slug: string }>();
+  const article = insightsData.find((a) => a.slug === slug);
+  if (article) {
+    return (
+      <ArticleDetailPage
+        article={article}
+        onNavigate={onNavigate}
+        onStartProject={() => onStartProject('Architecture Advisory')}
+      />
+    );
+  }
+  return <InsightsPage onNavigate={onNavigate} />;
+};
+
+const DynamicTrainingCourseRoute: React.FC<{
+  onNavigate: (route: PageRoute) => void;
+  onOpenProjectModal: (serviceName?: string) => void;
+}> = ({ onNavigate, onOpenProjectModal }) => {
+  const { slug = '' } = useParams<{ slug: string }>();
+  return (
+    <TrainingPage
+      courseSlug={slug}
+      onNavigate={onNavigate}
+      onOpenProjectModal={onOpenProjectModal}
+    />
+  );
+};
+
 export default function App() {
-  // Normalize route and redirect any duplicate/alias service slug to its canonical slug
-  const normalizeRoute = (rawPath: string, replaceBrowserUrl = false): PageRoute => {
-    const cleanPath = (rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '')) as PageRoute;
+  const location = useLocation();
+  const routerNavigate = useNavigate();
 
-    if (cleanPath.startsWith('/services/')) {
-      const slug = cleanPath.replace('/services/', '');
-      const canonicalSlug = getCanonicalServiceSlug(slug);
-      const canonicalRoute = `/services/${canonicalSlug}` as PageRoute;
-      if (replaceBrowserUrl && canonicalRoute !== rawPath && typeof window !== 'undefined') {
-        window.history.replaceState({}, '', canonicalRoute);
-      }
-      return canonicalRoute;
-    }
-
-    if (
-      cleanPath === '/' ||
-      cleanPath === '/about' ||
-      cleanPath === '/services' ||
-      cleanPath === '/industries' ||
-      cleanPath.startsWith('/industries/') ||
-      cleanPath === '/solutions' ||
-      cleanPath.startsWith('/solutions/') ||
-      cleanPath === '/portfolio' ||
-      cleanPath === '/case-studies' ||
-      cleanPath.startsWith('/case-studies/') ||
-      cleanPath === '/technology' ||
-      cleanPath === '/insights' ||
-      cleanPath.startsWith('/insights/') ||
-      cleanPath === '/careers' ||
-      cleanPath === '/contact' ||
-      cleanPath === '/contact/consultation' ||
-      cleanPath === '/faq' ||
-      cleanPath === '/training' ||
-      cleanPath.startsWith('/training/') ||
-      cleanPath === '/courses' ||
-      cleanPath === '/privacy-policy' ||
-      cleanPath === '/terms'
-    ) {
-      return cleanPath;
-    }
-
-    return '/';
-  };
-
-  // Normalize initial route from browser window pathname if valid
-  const getInitialRoute = (): PageRoute => {
-    return normalizeRoute(window.location.pathname, true);
-  };
-
-  const [currentRoute, setCurrentRoute] = useState<PageRoute>(getInitialRoute);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [modalDefaultService, setModalDefaultService] = useState('Web Development');
   const [activeCaseStudy, setActiveCaseStudy] = useState<ProjectItem | null>(null);
 
-  // Sync route with browser history (redirecting any alias service route to its canonical route)
-  const navigate = (route: PageRoute) => {
-    const canonicalRoute = normalizeRoute(route, false);
-    setCurrentRoute(canonicalRoute);
-    window.history.pushState({}, '', canonicalRoute);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // Listen to popstate (browser back/forward navigation)
-  useEffect(() => {
-    const handlePopState = () => {
-      setCurrentRoute(getInitialRoute());
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+  const normalizeRoute = useCallback((rawPath: string): PageRoute => {
+    const cleanPath = (rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '')) as PageRoute;
+    if (cleanPath.startsWith('/services/')) {
+      const slug = cleanPath.replace('/services/', '');
+      const canonicalSlug = getCanonicalServiceSlug(slug);
+      return `/services/${canonicalSlug}` as PageRoute;
+    }
+    return cleanPath;
   }, []);
 
-  // Route-specific SEO metadata & JSON-LD structured data are managed by <SeoHead currentRoute={currentRoute} />
+  const currentRoute: PageRoute = normalizeRoute(location.pathname);
 
-  const handleOpenProjectModal = (serviceName?: string) => {
+  // Redirect any #services/xyz hash URL to /services/xyz
+  useEffect(() => {
+    const redirectHashService = () => {
+      const hash = window.location.hash || location.hash || '';
+      const match = hash.match(/#\/?services\/([^/?#]+)/i);
+      if (match && match[1]) {
+        const rawSlug = decodeURIComponent(match[1].trim());
+        const canonicalSlug = getCanonicalServiceSlug(rawSlug);
+        routerNavigate(`/services/${canonicalSlug}`, { replace: true });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+
+    redirectHashService();
+    window.addEventListener('hashchange', redirectHashService);
+    return () => window.removeEventListener('hashchange', redirectHashService);
+  }, [location.hash, routerNavigate]);
+
+  // Navigate helper keeping all existing onNavigate(route) calls working
+  const navigate = useCallback(
+    (route: PageRoute) => {
+      const strRoute = String(route || '/');
+      const hashMatch = strRoute.match(/#\/?services\/([^/?#]+)/i);
+      if (hashMatch && hashMatch[1]) {
+        const canonicalSlug = getCanonicalServiceSlug(decodeURIComponent(hashMatch[1].trim()));
+        routerNavigate(`/services/${canonicalSlug}`);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      const canonicalRoute = normalizeRoute(strRoute);
+      routerNavigate(canonicalRoute);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    [normalizeRoute, routerNavigate]
+  );
+
+  const handleOpenProjectModal = useCallback((serviceName?: string) => {
     if (serviceName) setModalDefaultService(serviceName);
     setIsProjectModalOpen(true);
-  };
+  }, []);
 
-  const handleOpenCaseStudy = (project: ProjectItem) => {
+  const handleOpenCaseStudy = useCallback((project: ProjectItem) => {
     setActiveCaseStudy(project);
-  };
-
-  // Helper to find specific service by slug with canonical alias resolution
-  const getServiceBySlug = (slug: string) => {
-    const canonicalSlug = getCanonicalServiceSlug(slug);
-    return servicesData.find((s) => s.slug === canonicalSlug || s.id === canonicalSlug);
-  };
-
-  // Helper to find specific insight by slug
-  const getInsightBySlug = (slug: string) => {
-    return insightsData.find((a) => a.slug === slug);
-  };
-
-  // Helper to find specific industry by slug
-  const getIndustryBySlug = (slug: string) => {
-    return industriesData.find((i) => i.id === slug);
-  };
-
-  // Render Page by Route
-  const renderPage = () => {
-    // 1. Home
-    if (currentRoute === '/') {
-      return (
-        <HomePage
-          onNavigate={navigate}
-          onOpenProjectModal={handleOpenProjectModal}
-          onOpenCaseStudy={handleOpenCaseStudy}
-        />
-      );
-    }
-
-    // 2. About
-    if (currentRoute === '/about') {
-      return (
-        <AboutPage
-          onNavigate={navigate}
-          onStartProject={() => handleOpenProjectModal('Enterprise Consultation')}
-        />
-      );
-    }
-
-    // 3. Services Directory
-    if (currentRoute === '/services') {
-      return (
-        <ServicesDirectoryPage
-          onNavigate={navigate}
-          onStartProject={handleOpenProjectModal}
-        />
-      );
-    }
-
-    // 4. Individual Service Pages
-    if (currentRoute.startsWith('/services/')) {
-      const slug = currentRoute.replace('/services/', '');
-      const service = getServiceBySlug(slug);
-      if (service) {
-        return (
-          <ServiceDetailPage
-            service={service}
-            onNavigate={navigate}
-            onStartProject={handleOpenProjectModal}
-          />
-        );
-      }
-      return (
-        <ServicesDirectoryPage
-          onNavigate={navigate}
-          onStartProject={handleOpenProjectModal}
-        />
-      );
-    }
-
-    // 5. Industries Directory & Individual Industry
-    if (currentRoute === '/industries') {
-      return (
-        <IndustriesPage
-          onNavigate={navigate}
-          onStartProject={handleOpenProjectModal}
-        />
-      );
-    }
-
-    if (currentRoute.startsWith('/industries/')) {
-      const slug = currentRoute.replace('/industries/', '');
-      const industry = getIndustryBySlug(slug);
-      if (industry) {
-        return (
-          <IndustryDetailPage
-            industry={industry}
-            onNavigate={navigate}
-            onStartProject={handleOpenProjectModal}
-          />
-        );
-      }
-      return (
-        <IndustriesPage
-          onNavigate={navigate}
-          onStartProject={handleOpenProjectModal}
-        />
-      );
-    }
-
-    // 6. Solutions & Individual Solution Blueprints
-    if (currentRoute === '/solutions') {
-      return (
-        <SolutionsPage
-          onNavigate={navigate}
-          onStartProject={handleOpenProjectModal}
-        />
-      );
-    }
-
-    if (currentRoute.startsWith('/solutions/')) {
-      const slug = currentRoute.replace('/solutions/', '');
-      return (
-        <SolutionsPage
-          slug={slug}
-          onNavigate={navigate}
-          onStartProject={handleOpenProjectModal}
-        />
-      );
-    }
-
-    // 7. Portfolio
-    if (currentRoute === '/portfolio') {
-      return (
-        <PortfolioPage
-          onNavigate={navigate}
-          onOpenCaseStudy={handleOpenCaseStudy}
-          onStartProject={handleOpenProjectModal}
-        />
-      );
-    }
-
-    // 8. Case Studies Directory & Details
-    if (currentRoute === '/case-studies') {
-      return (
-        <CaseStudiesPage
-          onNavigate={navigate}
-          onStartProject={handleOpenProjectModal}
-        />
-      );
-    }
-
-    if (currentRoute.startsWith('/case-studies/')) {
-      const slug = currentRoute.replace('/case-studies/', '');
-      return (
-        <CaseStudiesPage
-          slug={slug}
-          onNavigate={navigate}
-          onStartProject={handleOpenProjectModal}
-        />
-      );
-    }
-
-    // 9. Technology Ecosystem
-    if (currentRoute === '/technology') {
-      return (
-        <TechnologyPage
-          onNavigate={navigate}
-          onStartProject={handleOpenProjectModal}
-        />
-      );
-    }
-
-    // 10. Insights Directory
-    if (currentRoute === '/insights') {
-      return <InsightsPage onNavigate={navigate} />;
-    }
-
-    // 11. Individual Articles
-    if (currentRoute.startsWith('/insights/')) {
-      const slug = currentRoute.replace('/insights/', '');
-      const article = getInsightBySlug(slug);
-      if (article) {
-        return (
-          <ArticleDetailPage
-            article={article}
-            onNavigate={navigate}
-            onStartProject={() => handleOpenProjectModal('Architecture Advisory')}
-          />
-        );
-      }
-      return <InsightsPage onNavigate={navigate} />;
-    }
-
-    // 12. Careers
-    if (currentRoute === '/careers') {
-      return <CareersPage onNavigate={navigate} />;
-    }
-
-    // 13. Contact & Consultation
-    if (currentRoute === '/contact/consultation') {
-      return <ConsultationPage onNavigate={navigate} />;
-    }
-
-    if (currentRoute === '/contact') {
-      return <ContactPage onNavigate={navigate} />;
-    }
-
-    // 14. Training & Professional Courses
-    if (currentRoute.startsWith('/training/')) {
-      const courseSlug = currentRoute.replace('/training/', '');
-      return (
-        <TrainingPage
-          courseSlug={courseSlug}
-          onNavigate={navigate}
-          onOpenProjectModal={handleOpenProjectModal}
-        />
-      );
-    }
-
-    if (
-      currentRoute === '/training' ||
-      currentRoute === '/courses' ||
-      currentRoute === '/services/training'
-    ) {
-      return (
-        <TrainingPage
-          onNavigate={navigate}
-          onOpenProjectModal={handleOpenProjectModal}
-        />
-      );
-    }
-
-    // 15. FAQ
-    if (currentRoute === '/faq') {
-      return <FaqPage onNavigate={navigate} onOpenProjectModal={handleOpenProjectModal} />;
-    }
-
-    // 15. Legal Policies
-    if (currentRoute === '/privacy-policy') {
-      return <LegalPage type="privacy" onNavigate={navigate} />;
-    }
-
-    if (currentRoute === '/terms') {
-      return <LegalPage type="terms" onNavigate={navigate} />;
-    }
-
-    // Fallback 404
-    return (
-      <div className="py-24 text-center px-4 max-w-lg mx-auto space-y-4">
-        <h1 className="text-4xl font-extrabold text-slate-900">404</h1>
-        <h2 className="text-lg font-bold text-slate-700">Page Not Found</h2>
-        <p className="text-xs text-slate-500">
-          The requested route does not exist in the IAMTECHNI directory.
-        </p>
-        <button
-          onClick={() => navigate('/')}
-          className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-semibold cursor-pointer"
-        >
-          Return to Home
-        </button>
-      </div>
-    );
-  };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#141A24] w-full overflow-x-clip">
@@ -380,8 +265,371 @@ export default function App() {
         onStartProject={() => handleOpenProjectModal()}
       />
 
-      {/* Main Page Content Body */}
-      <main className="flex-1 w-full overflow-x-clip">{renderPage()}</main>
+      {/* Main Page Content Body via react-router-dom Routes */}
+      <main className="flex-1 w-full overflow-x-clip">
+        <Routes>
+          {/* 1. Home */}
+          <Route
+            path="/"
+            element={
+              <HomePage
+                onNavigate={navigate}
+                onOpenProjectModal={handleOpenProjectModal}
+                onOpenCaseStudy={handleOpenCaseStudy}
+              />
+            }
+          />
+
+          {/* 2. About */}
+          <Route
+            path="/about"
+            element={
+              <AboutPage
+                onNavigate={navigate}
+                onStartProject={() => handleOpenProjectModal('Enterprise Consultation')}
+              />
+            }
+          />
+
+          {/* 3. Services Directory */}
+          <Route
+            path="/services"
+            element={
+              <ServicesDirectoryPage
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* 4. Explicit Route per Existing Service using ServicePage template */}
+          <Route
+            path="/services/web-development"
+            element={
+              <ServicePage
+                {...webDevelopmentSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/ecommerce"
+            element={
+              <ServicePage
+                {...ecommerceSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/custom-software"
+            element={
+              <ServicePage
+                {...customSoftwareSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/mobile-apps"
+            element={
+              <ServicePage
+                {...mobileAppsSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/ai-machine-learning"
+            element={
+              <ServicePage
+                {...aiMachineLearningSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/data-analytics"
+            element={
+              <ServicePage
+                {...dataAnalyticsSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/cloud-devops"
+            element={
+              <ServicePage
+                {...cloudDevopsSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/cybersecurity"
+            element={
+              <ServicePage
+                {...cybersecuritySeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/digital-marketing"
+            element={
+              <ServicePage
+                {...digitalMarketingSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/ui-ux-design"
+            element={
+              <ServicePage
+                {...uiUxDesignSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/it-consulting"
+            element={
+              <ServicePage
+                {...itConsultingSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/training"
+            element={
+              <ServicePage
+                {...trainingSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/services/robotics"
+            element={
+              <ServicePage
+                {...roboticsSeoPage}
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* Dynamic fallback & canonical redirect for service alias slugs */}
+          <Route
+            path="/services/:slug"
+            element={
+              <DynamicServiceRoute
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* 5. Industries Directory & Individual Industry */}
+          <Route
+            path="/industries"
+            element={
+              <IndustriesPage
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/industries/:slug"
+            element={
+              <DynamicIndustryRoute
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* 6. Solutions & Individual Solution Blueprints */}
+          <Route
+            path="/solutions"
+            element={
+              <SolutionsPage
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/solutions/:slug"
+            element={
+              <DynamicSolutionRoute
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* 7. Portfolio */}
+          <Route
+            path="/portfolio"
+            element={
+              <PortfolioPage
+                onNavigate={navigate}
+                onOpenCaseStudy={handleOpenCaseStudy}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* 8. Case Studies Directory & Details */}
+          <Route
+            path="/case-studies"
+            element={
+              <CaseStudiesPage
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/case-studies/:slug"
+            element={
+              <DynamicCaseStudyRoute
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* 9. Technology Ecosystem */}
+          <Route
+            path="/technology"
+            element={
+              <TechnologyPage
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* 10. Insights Directory & Individual Articles */}
+          <Route
+            path="/insights"
+            element={<InsightsPage onNavigate={navigate} />}
+          />
+          <Route
+            path="/insights/:slug"
+            element={
+              <DynamicArticleRoute
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* 11. Careers */}
+          <Route
+            path="/careers"
+            element={<CareersPage onNavigate={navigate} />}
+          />
+
+          {/* 12. Contact & Consultation */}
+          <Route
+            path="/contact/consultation"
+            element={<ConsultationPage onNavigate={navigate} />}
+          />
+          <Route
+            path="/contact"
+            element={<ContactPage onNavigate={navigate} />}
+          />
+
+          {/* 13. Training & Professional Courses */}
+          <Route
+            path="/training/:slug"
+            element={
+              <DynamicTrainingCourseRoute
+                onNavigate={navigate}
+                onOpenProjectModal={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/training"
+            element={
+              <TrainingPage
+                onNavigate={navigate}
+                onOpenProjectModal={handleOpenProjectModal}
+              />
+            }
+          />
+          <Route
+            path="/courses"
+            element={
+              <TrainingPage
+                onNavigate={navigate}
+                onOpenProjectModal={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* 14. FAQ */}
+          <Route
+            path="/faq"
+            element={
+              <FaqPage
+                onNavigate={navigate}
+                onOpenProjectModal={handleOpenProjectModal}
+              />
+            }
+          />
+
+          {/* 15. Legal Policies */}
+          <Route
+            path="/privacy-policy"
+            element={<LegalPage type="privacy" onNavigate={navigate} />}
+          />
+          <Route
+            path="/terms"
+            element={<LegalPage type="terms" onNavigate={navigate} />}
+          />
+
+          {/* Fallback 404 */}
+          <Route
+            path="*"
+            element={
+              <div className="py-24 text-center px-4 max-w-lg mx-auto space-y-4">
+                <h1 className="text-4xl font-extrabold text-slate-900">404</h1>
+                <h2 className="text-lg font-bold text-slate-700">Page Not Found</h2>
+                <p className="text-xs text-slate-500">
+                  The requested route does not exist in the IAMTECHNI directory.
+                </p>
+                <button
+                  onClick={() => navigate('/')}
+                  className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-semibold cursor-pointer"
+                >
+                  Return to Home
+                </button>
+              </div>
+            }
+          />
+        </Routes>
+      </main>
 
       {/* Shared Global Footer */}
       <Footer

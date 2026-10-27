@@ -10,6 +10,7 @@ export interface HeroContentProps {
   onNavigate: (route: PageRoute) => void;
   onOpenProjectModal: (serviceName?: string) => void;
   mode?: 'desktop' | 'mobile-top' | 'mobile-bottom';
+  isHeadingH1?: boolean;
 }
 
 const renderHighlightedHeadline = (headline: string, highlightPhrase: string) => {
@@ -56,6 +57,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
   onNavigate,
   onOpenProjectModal,
   mode = 'desktop',
+  isHeadingH1 = true,
 }) => {
   const prefersReducedMotion = useReducedMotion();
 
@@ -74,6 +76,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
   if (mode === 'mobile-top') {
     const mobileDescription =
       MOBILE_CONCISE_DESCRIPTIONS[slide.id] || slide.description;
+    const MobileHeadingTag = isHeadingH1 ? 'h1' : 'div';
 
     return (
       <div className="flex flex-col items-center text-center w-full shrink-0 pt-1">
@@ -95,9 +98,9 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
           className="w-full max-w-md sm:max-w-xl mx-auto px-1"
         >
-          <h1 className="text-[clamp(1.25rem,min(5.2vw,3.15dvh),1.95rem)] sm:text-[clamp(1.55rem,min(4vw,3.5dvh),2.25rem)] font-extrabold tracking-tight leading-[1.15] mb-1.5">
+          <MobileHeadingTag className="text-[clamp(1.25rem,min(5.2vw,3.15dvh),1.95rem)] sm:text-[clamp(1.55rem,min(4vw,3.5dvh),2.25rem)] font-extrabold tracking-tight leading-[1.15] mb-1.5">
             {renderHighlightedHeadline(slide.headline, slide.highlightPhrase)}
-          </h1>
+          </MobileHeadingTag>
           <p className="text-[clamp(0.78rem,min(3.4vw,1.85dvh),0.9rem)] text-slate-300/95 leading-snug max-w-[40ch] mx-auto">
             {mobileDescription}
           </p>
@@ -133,6 +136,8 @@ export const HeroContent: React.FC<HeroContentProps> = ({
     );
   }
 
+  const DesktopHeadingTag = isHeadingH1 ? 'h1' : 'div';
+
   // Desktop Left Column (~34% width) — Proportionally scaled with viewport height (dvh) & width (vw)
   return (
     <div className="relative z-10 flex flex-col items-start text-left justify-center w-full">
@@ -166,9 +171,9 @@ export const HeroContent: React.FC<HeroContentProps> = ({
             <span>// {slide.categoryLabel}</span>
           </div>
 
-          <h1 className="text-[clamp(1.5rem,min(2.45vw,3.8dvh),2.95rem)] font-extrabold tracking-tight leading-[1.12] mb-2 xl:mb-3">
+          <DesktopHeadingTag className="text-[clamp(1.5rem,min(2.45vw,3.8dvh),2.95rem)] font-extrabold tracking-tight leading-[1.12] mb-2 xl:mb-3">
             {renderHighlightedHeadline(slide.headline, slide.highlightPhrase)}
-          </h1>
+          </DesktopHeadingTag>
 
           <p className="text-[clamp(0.8125rem,min(1vw,1.9dvh),0.96875rem)] text-slate-300/95 leading-relaxed max-w-[54ch] font-normal">
             {slide.description}

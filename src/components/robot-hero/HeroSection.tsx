@@ -495,6 +495,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               onNavigate={onNavigate}
               onOpenProjectModal={onOpenProjectModal}
               mode="desktop"
+              isHeadingH1={isDesktop}
             />
           </div>
 
@@ -584,6 +585,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             onNavigate={onNavigate}
             onOpenProjectModal={onOpenProjectModal}
             mode="mobile-top"
+            isHeadingH1={!isDesktop}
           />
 
           {/* 2. Middle: Central 3D Robot Animation & Compact Voice Controls */}

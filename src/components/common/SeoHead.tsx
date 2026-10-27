@@ -9,6 +9,7 @@ import {
   CourseItem,
 } from '../../types';
 import { servicesData, getCanonicalServiceSlug } from '../../data/servicesData';
+import { getSeoServicePageBySlug } from '../../data/seo-pages';
 import { solutionsData } from '../../data/solutionsData';
 import { industriesData } from '../../data/industriesData';
 import { insightsData } from '../../data/insightsData';
@@ -188,16 +189,20 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
   // 2. Individual Service Detail Page (/services/:slug)
   if (cleanPath.startsWith('/services/')) {
     const slug = cleanPath.replace('/services/', '');
+    const seoPage = getSeoServicePageBySlug(slug);
     const service = findServiceBySlug(slug);
-    if (service) {
-      const serviceCanonicalPath = `/services/${service.slug || service.id}`;
+    if (seoPage || service) {
+      const canonicalSlug = seoPage?.slug || service?.slug || service?.id || slug;
+      const serviceCanonicalPath = `/services/${canonicalSlug}`;
       const serviceCanonicalUrl = `${BASE_URL}${serviceCanonicalPath}`;
+      const pageTitle = seoPage?.h1 || service?.title || canonicalSlug;
+      const pageFaqs = seoPage?.faqs || service?.faqs || [];
 
       structuredData.push(
         buildBreadcrumbSchema([
           { name: 'Home', path: '/' },
           { name: 'Services', path: '/services' },
-          { name: service.title, path: serviceCanonicalPath },
+          { name: pageTitle, path: serviceCanonicalPath },
         ])
       );
 
@@ -205,9 +210,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
         '@context': 'https://schema.org',
         '@type': 'Service',
         '@id': `${serviceCanonicalUrl}#service`,
-        name: service.title,
-        serviceType: service.category,
-        description: service.summary || service.tagline,
+        name: pageTitle,
+        serviceType: service?.category || pageTitle,
+        description: seoPage?.metaDescription || service?.summary || service?.tagline,
         url: serviceCanonicalUrl,
         provider: {
           '@type': 'Organization',
@@ -222,25 +227,13 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
           { '@type': 'AdministrativeArea', name: 'Tamil Nadu' },
           { '@type': 'Country', name: 'India' },
         ],
-        hasOfferCatalog: {
-          '@type': 'OfferCatalog',
-          name: `${service.title} Capabilities`,
-          itemListElement: service.capabilities.map((cap) => ({
-            '@type': 'Offer',
-            itemOffered: {
-              '@type': 'Service',
-              name: cap.title,
-              description: cap.description,
-            },
-          })),
-        },
       });
 
-      if (service.faqs && service.faqs.length > 0) {
+      if (pageFaqs.length > 0) {
         structuredData.push({
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
-          mainEntity: service.faqs.map((faq) => ({
+          mainEntity: pageFaqs.map((faq) => ({
             '@type': 'Question',
             name: faq.question,
             acceptedAnswer: {
@@ -253,11 +246,13 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
 
       return {
         ...baseMeta,
-        title: `${service.title} Services | IAMTECHNI`,
-        description: formatMetaDescription(
-          `${service.title}: ${service.summary} ${service.tagline}`,
-          service.category
-        ),
+        title: seoPage?.seoTitle || `${pageTitle} Services | IAMTECHNI`,
+        description:
+          seoPage?.metaDescription ||
+          formatMetaDescription(
+            `${pageTitle}: ${service?.summary || ''} ${service?.tagline || ''}`,
+            service?.category
+          ),
         canonicalUrl: serviceCanonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(service),
@@ -804,25 +799,45 @@ export interface SeoHeadProps {
 }
 
 export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
+  const cleanPath = currentRoute === '/' ? '/' : currentRoute.replace(/\/+$/, '');
+  const isSeoServiceRoute =
+    cleanPath.startsWith('/services/') &&
+    Boolean(getSeoServicePageBySlug(cleanPath.replace('/services/', '')));
+
   const seo = resolveRouteSeo(currentRoute);
 
-  // Remove initial static description/canonical tags once react-helmet-async mounts its managed tags
+  // Remove initial static description/canonical/og tags once react-helmet-async mounts its managed tags
   useEffect(() => {
-    const descTags = document.head.querySelectorAll('meta[name="description"]:not([data-rh])');
-    if (document.head.querySelector('meta[name="description"][data-rh]') && descTags.length > 0) {
-      descTags.forEach((el) => el.remove());
-    }
-    const canonicalTags = document.head.querySelectorAll('link[rel="canonical"]:not([data-rh])');
-    if (document.head.querySelector('link[rel="canonical"][data-rh]') && canonicalTags.length > 0) {
-      canonicalTags.forEach((el) => el.remove());
+    const selectors = [
+      'meta[name="description"]',
+      'link[rel="canonical"]',
+      'meta[property="og:title"]',
+      'meta[property="og:description"]',
+      'meta[property="og:url"]',
+    ];
+    for (const sel of selectors) {
+      if (document.head.querySelector(`${sel}[data-rh]`)) {
+        document.head
+          .querySelectorAll(`${sel}:not([data-rh])`)
+          .forEach((el) => el.remove());
+      }
     }
   }, [currentRoute]);
+
+  // Individual service pages render their own <Helmet> directly inside <ServicePage />
+  if (isSeoServiceRoute) {
+    return null;
+  }
 
   return (
     <Helmet prioritizeSeoTags>
       <title>{seo.title}</title>
       <meta name="description" content={seo.description} />
       <link rel="canonical" href={seo.canonicalUrl} />
+      <meta property="og:type" content={seo.ogType} />
+      <meta property="og:title" content={seo.title} />
+      <meta property="og:description" content={seo.description} />
+      <meta property="og:url" content={seo.canonicalUrl} />
       {seo.structuredData.length > 0 && (
         <script type="application/ld+json">
           {JSON.stringify({

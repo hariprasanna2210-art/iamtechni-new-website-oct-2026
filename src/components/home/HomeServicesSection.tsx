@@ -692,13 +692,10 @@ const DesktopShowcaseCarousel: React.FC<ShowcaseCardCarouselSectionProps> = ({
         lastSyncedSlugRef.current = slug;
         if (updateUrlAndParent) {
           onSelectSlugRef.current?.(slug);
-          if (enableServiceHashSync && updateHash && typeof window !== 'undefined') {
-            window.history.replaceState(null, '', `#services/${slug}`);
-          }
         }
       }
     },
-    [totalItems, items, enableServiceHashSync]
+    [totalItems, items]
   );
 
   // Sync when selectedSlug prop changes externally

@@ -181,7 +181,7 @@ export function getHeroFloatingServiceCards(): HeroFloatingServiceCard[] {
       category: service.category,
       tagline: service.tagline,
       spokenLine: buildServiceSpokenLine(service),
-      hashHref: `#services/${slug}`,
+      hashHref: `/services/${slug}`,
       detailRoute: `/services/${slug}` as PageRoute,
       side: slot.side,
       showOnTablet: slot.showOnTablet,

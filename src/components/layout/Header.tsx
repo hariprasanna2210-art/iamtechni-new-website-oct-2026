@@ -126,7 +126,7 @@ export const Header: React.FC<HeaderProps> = ({
   const servicesList = [
     {
       title: 'Website Design & Development',
-      route: '/services/website-development' as PageRoute,
+      route: '/services/web-development' as PageRoute,
       icon: Globe,
       desc: 'Flagship corporate sites & performant web applications',
     },
@@ -138,19 +138,19 @@ export const Header: React.FC<HeaderProps> = ({
     },
     {
       title: 'E-commerce Platform Development',
-      route: '/services/ecommerce-development' as PageRoute,
+      route: '/services/ecommerce' as PageRoute,
       icon: ShoppingBag,
       desc: 'Custom storefronts, secure checkout & inventory sync',
     },
     {
       title: 'Custom Software Development',
-      route: '/services/custom-software-development' as PageRoute,
+      route: '/services/custom-software' as PageRoute,
       icon: Code2,
       desc: 'Tailored enterprise portals & operational workflow systems',
     },
     {
       title: 'Mobile App Engineering',
-      route: '/services/mobile-app-development' as PageRoute,
+      route: '/services/mobile-apps' as PageRoute,
       icon: Smartphone,
       desc: 'Cross-platform iOS & Android native-feel applications',
     },
@@ -162,19 +162,19 @@ export const Header: React.FC<HeaderProps> = ({
     },
     {
       title: 'Generative AI Solutions',
-      route: '/services/generative-ai' as PageRoute,
+      route: '/services/ai-machine-learning' as PageRoute,
       icon: Sparkles,
       desc: 'Autonomous agent pipelines & enterprise LLM orchestration',
     },
     {
       title: 'Cloud Computing Infrastructure',
-      route: '/services/cloud-computing' as PageRoute,
+      route: '/services/cloud-devops' as PageRoute,
       icon: Cloud,
       desc: 'AWS & Azure multi-region cloud topologies',
     },
     {
       title: 'DevOps & CI/CD Automation',
-      route: '/services/devops' as PageRoute,
+      route: '/services/cloud-devops' as PageRoute,
       icon: Cpu,
       desc: 'Automated build pipelines & container orchestration',
     },
@@ -198,7 +198,7 @@ export const Header: React.FC<HeaderProps> = ({
     },
     {
       title: 'Robotics & Emerging Technologies',
-      route: '/services/robotics-emerging-tech' as PageRoute,
+      route: '/services/robotics' as PageRoute,
       icon: Cpu,
       desc: 'Autonomous control software, edge telemetry & IoT',
     },
