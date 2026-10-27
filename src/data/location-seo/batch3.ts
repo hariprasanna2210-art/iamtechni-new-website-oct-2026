@@ -339,7 +339,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
       city: 'Madurai',
       region: 'Madurai District',
       state: 'Tamil Nadu',
-      distanceFromHub: 'Puducherry headquarters · Interactive live online training',
+      distanceFromHub: 'Puducherry HQ · Live Online Training',
     },
     primaryKeyword: 'it training madurai',
     secondaryKeywords: [
@@ -416,7 +416,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
     faqs: [
       {
         question: 'Are the IT training classes conducted in person in Madurai or online?',
-        answer: 'Classes for Madurai learners are conducted online through interactive live instructor-led virtual sessions with screen sharing, live code walk-throughs, and real-time mentor support.',
+        answer: 'Training is delivered fully online with live instructor-led sessions, so learners can join from anywhere in Tamil Nadu.',
       },
       {
         question: 'Can non-CS students join these software courses?',
@@ -433,7 +433,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
     ],
     courseDetails: {
       duration: 'Contact us for duration and batch details',
-      mode: 'Contact us for training mode (online / virtual)',
+      mode: 'Live online, instructor-led',
       prerequisites: 'Basic computer literacy and enthusiasm to write code',
       certification: 'Contact us for details',
     },
@@ -563,7 +563,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
       city: 'Coimbatore',
       region: 'Coimbatore District',
       state: 'Tamil Nadu',
-      distanceFromHub: 'Puducherry headquarters · Interactive live online training',
+      distanceFromHub: 'Puducherry HQ · Live Online Training',
     },
     primaryKeyword: 'aws training coimbatore',
     secondaryKeywords: [
@@ -591,7 +591,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
       {
         h2: 'Interactive Online Sessions & GitHub Portfolio Mentorship',
         paragraphs: [
-          'Delivered through live virtual classrooms, students participate in real-time instructor lectures, live Q&A, and interactive screen-sharing lab sessions from the comfort of their home or workplace in Coimbatore.',
+          'Delivered through live online virtual sessions, students participate in real-time instructor lectures, live Q&A, and interactive screen-sharing lab sessions from the comfort of their home or workplace in Coimbatore.',
           'You build and document multi-tier cloud architectures on your personal GitHub using Terraform Infrastructure as Code, creating a practical portfolio to demonstrate your capabilities.',
         ],
       },
@@ -640,7 +640,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
     faqs: [
       {
         question: 'Are classes conducted in person in Coimbatore or online?',
-        answer: 'Classes for Coimbatore learners are delivered through interactive live online sessions with real-time instructor guidance, live screen sharing, and mentor lab assistance.',
+        answer: 'Training is delivered fully online with live instructor-led sessions, so learners can join from anywhere in Tamil Nadu.',
       },
       {
         question: 'Are there prerequisites to join this AWS cloud training course?',
@@ -657,7 +657,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
     ],
     courseDetails: {
       duration: 'Contact us for duration and batch details',
-      mode: 'Contact us for training mode (online / virtual)',
+      mode: 'Live online, instructor-led',
       prerequisites: 'Basic knowledge of operating systems (Linux/Windows) and networking concepts',
       certification: 'Contact us for details',
     },
@@ -1003,7 +1003,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
       city: 'Tamil Nadu',
       region: 'Statewide',
       state: 'Tamil Nadu',
-      distanceFromHub: 'Puducherry headquarters · Interactive live online training',
+      distanceFromHub: 'Puducherry HQ · Live Online Training',
     },
     primaryKeyword: 'generative ai training tamil nadu',
     secondaryKeywords: [
@@ -1080,7 +1080,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
     faqs: [
       {
         question: 'Are the Generative AI classes conducted online?',
-        answer: 'Yes. Classes are conducted online through interactive live instructor-led virtual sessions with screen sharing, live coding demonstrations, and real-time mentor assistance for learners across Tamil Nadu.',
+        answer: 'Training is delivered fully online with live instructor-led sessions, so learners can join from anywhere in Tamil Nadu.',
       },
       {
         question: 'Do I need advanced mathematics or machine learning background?',
@@ -1097,7 +1097,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
     ],
     courseDetails: {
       duration: 'Contact us for duration and batch details',
-      mode: 'Contact us for training mode (online / virtual)',
+      mode: 'Live online, instructor-led',
       prerequisites: 'Intermediate Python programming and familiarity with REST API integration',
       certification: 'Contact us for details',
     },

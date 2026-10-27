@@ -663,7 +663,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
       city: 'Chennai',
       region: 'Chennai Metropolitan Region',
       state: 'Tamil Nadu',
-      distanceFromHub: 'Puducherry HQ · Interactive Online & Regional Classroom Labs',
+      distanceFromHub: 'Puducherry HQ · Live Online Training',
     },
     primaryKeyword: 'aws training chennai',
     secondaryKeywords: [
@@ -710,8 +710,8 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
         description: 'Construct resilient multi-tier web hosting topologies following the AWS Well-Architected Framework.',
       },
       {
-        title: 'Flexible Learning Options',
-        description: 'Interactive live instructor-led virtual sessions with screen-share code reviews, plus classroom sessions.',
+        title: 'Interactive Live Online Format',
+        description: 'Interactive live instructor-led virtual sessions with real-time screen-share code reviews.',
       },
     ],
     processSteps: [
@@ -752,12 +752,12 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
       },
       {
         question: 'Are classes conducted online or in person?',
-        answer: 'We offer interactive live virtual sessions featuring live instructor support and screen-sharing reviews, as well as in-person training sessions at our Puducherry hub.',
+        answer: 'Training is delivered fully online with live instructor-led sessions, so learners can join from anywhere in Tamil Nadu.',
       },
     ],
     courseDetails: {
       duration: 'Contact us for duration and batch details',
-      mode: 'Contact us for training mode (classroom / online)',
+      mode: 'Live online, instructor-led',
       prerequisites: 'Basic knowledge of operating systems (Linux/Windows) and networking concepts',
       certification: 'Contact us for details',
     },
@@ -779,7 +779,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
       city: 'Chennai',
       region: 'Chennai Metropolitan Region',
       state: 'Tamil Nadu',
-      distanceFromHub: 'Puducherry HQ · Interactive Online & Regional Classroom Labs',
+      distanceFromHub: 'Puducherry HQ · Live Online Training',
     },
     primaryKeyword: 'devops training chennai',
     secondaryKeywords: [
@@ -873,7 +873,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
     ],
     courseDetails: {
       duration: 'Contact us for duration and batch details',
-      mode: 'Contact us for training mode (classroom / online)',
+      mode: 'Live online, instructor-led',
       prerequisites: 'Basic command-line familiarity (Linux bash) and understanding of web applications',
       certification: 'Contact us for details',
     },

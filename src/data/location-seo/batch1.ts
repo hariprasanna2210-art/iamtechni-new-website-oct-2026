@@ -657,6 +657,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       city: 'Pondicherry',
       region: 'Puducherry',
       state: 'Puducherry',
+      distanceFromHub: 'Puducherry HQ · Live Online Training',
     },
     primaryKeyword: 'aws training pondicherry',
     secondaryKeywords: [
@@ -685,7 +686,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         h2: 'Practical Project Portfolio & Technical Mentorship',
         paragraphs: [
           'Beyond cloud concepts, we help you showcase real cloud projects on your personal GitHub and structure your technical portfolio.',
-          'Both in-person classroom batches in Puducherry and interactive live online sessions are available. For batch dates, course duration, and fee details, contact our team directly via WhatsApp or phone.',
+          'Interactive live online sessions are conducted with real-time mentorship. For batch dates, course duration, and fee details, contact our team directly via WhatsApp or phone.',
         ],
       },
     ],
@@ -744,13 +745,13 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         answer: 'Please contact us directly via WhatsApp or call +91 93859 48951. Our team will share the complete syllabus, upcoming batch timings, duration, and fee details.',
       },
       {
-        question: 'Do you offer both classroom and online sessions?',
-        answer: 'Yes. We offer in-person classroom batches at our Puducherry hub as well as interactive live instructor-led online sessions.',
+        question: 'Is the training delivered online or in person?',
+        answer: 'Training is delivered fully online with live instructor-led sessions, so learners can join from anywhere in Tamil Nadu.',
       },
     ],
     courseDetails: {
       duration: 'Contact us for duration and batch details',
-      mode: 'Contact us for training mode (classroom / online)',
+      mode: 'Live online, instructor-led',
       prerequisites: 'Basic knowledge of operating systems (Linux/Windows) and networking concepts',
       certification: 'Contact us for details',
     },
@@ -772,6 +773,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       city: 'Pondicherry',
       region: 'Puducherry',
       state: 'Puducherry',
+      distanceFromHub: 'Puducherry HQ · Live Online Training',
     },
     primaryKeyword: 'devops training pondicherry',
     secondaryKeywords: [
@@ -865,7 +867,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
     ],
     courseDetails: {
       duration: 'Contact us for duration and batch details',
-      mode: 'Contact us for training mode (classroom / online)',
+      mode: 'Live online, instructor-led',
       prerequisites: 'Basic command-line familiarity (Linux bash) and understanding of web applications',
       certification: 'Contact us for details',
     },
@@ -887,6 +889,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       city: 'Pondicherry',
       region: 'Puducherry',
       state: 'Puducherry',
+      distanceFromHub: 'Puducherry HQ · Live Online Training',
     },
     primaryKeyword: 'generative ai training pondicherry',
     secondaryKeywords: [
@@ -980,7 +983,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
     ],
     courseDetails: {
       duration: 'Contact us for duration and batch details',
-      mode: 'Contact us for training mode (classroom / online)',
+      mode: 'Live online, instructor-led',
       prerequisites: 'Intermediate Python programming and familiarity with REST API integration',
       certification: 'Contact us for details',
     },
@@ -1218,16 +1221,16 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       city: 'Cuddalore',
       region: 'Cuddalore District',
       state: 'Tamil Nadu',
-      distanceFromHub: '22 km from Puducherry headquarters',
+      distanceFromHub: 'Puducherry HQ · Live Online Training',
     },
     primaryKeyword: 'it training cuddalore',
     secondaryKeywords: [
       'software courses cuddalore',
       'python training institute cuddalore',
       'full stack developer course cuddalore',
-      'computer training center cuddalore',
+      'software training cuddalore',
     ],
-    intro: 'Build practical coding skills for the software industry. IAMTECHNI delivers hands-on IT training and software courses for students, college graduates, and working professionals in Cuddalore. Located just 20 minutes from Cuddalore in neighboring Puducherry, our programs offer practical coding labs and mentorship from practising software engineers.',
+    intro: 'Build practical coding skills for the software industry. IAMTECHNI delivers hands-on IT training and software courses for students, college graduates, and working professionals in Cuddalore. Delivered via live instructor-led online sessions, our programs offer practical coding labs and mentorship from practising software engineers.',
     sections: [
       {
         h2: 'Learn Real Coding Skills That Tech Teams Work With Daily',
@@ -1237,10 +1240,10 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         ],
       },
       {
-        h2: 'Flexible Learning: Classroom Hub in Puducherry or Live Online',
+        h2: 'Live Online Training for Cuddalore Learners',
         paragraphs: [
-          'Because our main training center is just 22 km from Cuddalore, students can attend hands-on classroom sessions conveniently.',
-          'For students with busy college schedules or working professionals, we also provide interactive live virtual sessions featuring screen-sharing labs, code reviews, and structured exercises.',
+          'Our training is delivered completely online through live instructor-led sessions, enabling learners in Cuddalore to master modern software skills without commuting.',
+          'For students with busy college schedules or working professionals, we provide interactive virtual sessions featuring real-time screen-sharing labs, code reviews, and structured exercises.',
         ],
       },
       {
@@ -1298,8 +1301,8 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         answer: 'Yes. We have trained learners from various educational backgrounds. We begin with foundational logic and progressive exercises that build confidence regardless of your previous degree.',
       },
       {
-        question: 'Where are the classroom sessions conducted for Cuddalore students?',
-        answer: 'Classroom sessions are conducted at our primary training hub in Puducherry, just 22 km from Cuddalore. We also offer interactive live online sessions for those who prefer learning from home.',
+        question: 'Is the training delivered online or in person?',
+        answer: 'Training is delivered fully online with live instructor-led sessions, so learners can join from anywhere in Tamil Nadu.',
       },
       {
         question: 'How do I enquire about batch schedules, course duration, and fees?',
@@ -1312,7 +1315,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
     ],
     courseDetails: {
       duration: 'Contact us for duration and batch details',
-      mode: 'Contact us for training mode (classroom / online)',
+      mode: 'Live online, instructor-led',
       prerequisites: 'Basic computer literacy and enthusiasm to write code',
       certification: 'Contact us for details',
     },
