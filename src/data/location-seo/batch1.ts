@@ -1,0 +1,1470 @@
+import { LocationSeoPageData, UnimplementedRoute } from './types';
+
+export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
+  // 1. Web Development Company Pondicherry
+  {
+    slug: 'web-development-company-pondicherry',
+    path: '/web-development-company-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-company-pondicherry/',
+    seoTitle: 'Web Development Company in Pondicherry | IAMTECHNI',
+    metaDescription: 'Leading web development company in Pondicherry. We build fast, custom websites and web applications with React, Next.js, and TypeScript. Get a free quote today.',
+    h1: 'Web Development Company in Pondicherry',
+    category: 'Service',
+    schemaType: 'Service',
+    targetLocation: {
+      city: 'Pondicherry',
+      region: 'Puducherry',
+      state: 'Puducherry',
+    },
+    primaryKeyword: 'web development company in pondicherry',
+    secondaryKeywords: [
+      'website design pondicherry',
+      'web developer puducherry',
+      'custom web application pondicherry',
+      'react developers pondicherry',
+    ],
+    intro: 'IAMTECHNI is a premier web development and engineering firm based in Puducherry. We design and engineer modern, ultra-fast, and responsive websites that turn visitors into paying customers. From high-converting corporate sites to complex web applications, our engineering-first approach delivers clean code, sub-second load times, and 100% intellectual property ownership.',
+    sections: [
+      {
+        h2: 'Custom Web Engineering Tailored to Your Business Goals',
+        paragraphs: [
+          'Most website builders rely on bloated WordPress themes or slow drag-and-drop tools that hurt your search ranking and frustrate mobile visitors. At IAMTECHNI, we handcraft performant web applications using React, Next.js, Node.js, and modern CSS architecture.',
+          'Whether you are a hospitality brand along the White Town promenade, an industrial manufacturer in Mettupalayam, or a high-growth tech startup, we architect responsive platforms tailored to your brand identity, security requirements, and operational workflows.',
+        ],
+      },
+      {
+        h2: 'Core Web Vitals & Search Engine Performance Built-in',
+        paragraphs: [
+          'Speed is not an afterthought; it is our baseline. Every web project we launch scores 90+ on Google PageSpeed Insights with sub-second Largest Contentful Paint (LCP) and zero Cumulative Layout Shift (CLS).',
+          'We implement server-side rendering (SSR), automated image optimization, structured Schema.org JSON-LD markup, and complete meta tag architectures to ensure your site climbs to the top of Google search results.',
+        ],
+      },
+      {
+        h2: 'Transparent Delivery Lifecycle With No Hidden Costs',
+        paragraphs: [
+          'We believe in direct communication and zero jargon. You collaborate directly with our lead architects and engineers through transparent milestone-based deliverables.',
+          'Upon project handover, you receive full source code repository access, complete technical documentation, and unrestricted ownership with zero perpetual license fees.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'Modern Tech Stack',
+        description: 'React, Next.js, TypeScript, Tailwind CSS, Node.js, and Python backends built for scale and longevity.',
+      },
+      {
+        title: '90+ Google Lighthouse Score',
+        description: 'Blazing fast load times optimized for mobile network conditions and high Core Web Vitals rankings.',
+      },
+      {
+        title: '100% Source Code Ownership',
+        description: 'Full repository transfer upon launch with zero vendor lock-in or recurring proprietary seat licenses.',
+      },
+      {
+        title: 'Puducherry Local Team',
+        description: 'In-person project scoping and whiteboarding sessions in Puducherry alongside dedicated post-launch SLA support.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'Discovery & Architecture Blueprint',
+        description: 'We audit your objectives, map user journeys, and establish technical architecture and wireframes.',
+      },
+      {
+        step: '02',
+        title: 'Component Design & Development',
+        description: 'Modular frontend development with interactive prototypes, secure APIs, and responsive layouts.',
+      },
+      {
+        step: '03',
+        title: 'Testing & Core Web Vitals Audit',
+        description: 'Cross-browser testing, accessibility compliance, speed optimization, and rigorous security verification.',
+      },
+      {
+        step: '04',
+        title: 'Zero-Downtime Launch & Training',
+        description: 'Production deployment, domain & DNS configuration, automated backup setup, and staff handover.',
+      },
+    ],
+    localContext: 'Headquartered in Puducherry, IAMTECHNI works closely with regional businesses across White Town, Heritage Town, Lawspet, Mettupalayam, and Gorimedu. We offer both on-site strategic workshops and agile sprint updates.',
+    faqs: [
+      {
+        question: 'How long does it take to build a custom website in Pondicherry?',
+        answer: 'Corporate websites and business portals typically take between 3 to 6 weeks from initial design kickoff to production deployment. Larger web applications with custom backend integrations or authentication flows typically take 6 to 10 weeks.',
+      },
+      {
+        question: 'Do you provide ongoing website maintenance and support?',
+        answer: 'Yes. We offer flexible post-launch support plans that cover security patch updates, daily cloud backups, uptime monitoring, performance optimization, and ongoing feature enhancements.',
+      },
+      {
+        question: 'Can we meet in person in Pondicherry to discuss our project?',
+        answer: 'Absolutely. We regularly conduct in-person technical scoping sessions and discovery meetings with clients across Puducherry and neighbouring districts.',
+      },
+      {
+        question: 'Will our website be mobile-responsive and SEO-friendly?',
+        answer: 'Yes. Every website is engineered mobile-first with clean semantic HTML5, fast-loading modern assets, OpenGraph preview cards, and comprehensive Schema.org structured data.',
+      },
+    ],
+  },
+
+  // 2. E-commerce Website Development Pondicherry
+  {
+    slug: 'ecommerce-website-development-pondicherry',
+    path: '/ecommerce-website-development-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/ecommerce-website-development-pondicherry/',
+    seoTitle: 'E-Commerce Website Development in Pondicherry | IAMTECHNI',
+    metaDescription: 'Custom e-commerce website development in Pondicherry. High-converting online stores, Shopify & custom headless commerce with UPI and Razorpay integration.',
+    h1: 'E-Commerce Website Development in Pondicherry',
+    category: 'Service',
+    schemaType: 'Service',
+    targetLocation: {
+      city: 'Pondicherry',
+      region: 'Puducherry',
+      state: 'Puducherry',
+    },
+    primaryKeyword: 'ecommerce website development pondicherry',
+    secondaryKeywords: [
+      'online store design pondicherry',
+      'shopify developers pondicherry',
+      'headless ecommerce puducherry',
+      'razorpay payment gateway integration pondicherry',
+    ],
+    intro: 'Launch a high-performance digital storefront engineered for rapid sales and effortless inventory management. IAMTECHNI builds modern e-commerce platforms for Pondicherry retail brands, artisan producers, export businesses, and direct-to-consumer (D2C) ventures. We combine lightning-fast checkout experiences with robust Indian payment gateway integrations.',
+    sections: [
+      {
+        h2: 'Frictionless Checkout & High Conversion Architectures',
+        paragraphs: [
+          'Cart abandonment is the single biggest revenue leak for online stores. We engineer ultra-fast single-page checkouts, automated address lookup, and instant payment validation that minimize drop-offs and drive higher average order value.',
+          'From boutique handicrafts and gourmet French bakeries to textile exporters and pharmaceutical distributors, we tailor every catalog structure, filter system, and search interface to your customer demographics.',
+        ],
+      },
+      {
+        h2: 'Seamless Indian Payment Gateways & Logistics Integration',
+        paragraphs: [
+          'We integrate leading Indian payment gateways including Razorpay, Cashfree, and PhonePe with support for UPI, Google Pay, credit/debit cards, and Net Banking.',
+          'We also connect your store directly with courier APIs (Shiprocket, Delhivery, Blue Dart) for automated shipping label printing, real-time tracking SMS updates, and cash-on-delivery (COD) verification.',
+        ],
+      },
+      {
+        h2: 'Scalable Headless Commerce & Custom Catalogs',
+        paragraphs: [
+          'When off-the-shelf templates cannot accommodate your wholesale pricing tiers, multi-warehouse inventory, or custom product configurators, our engineering team builds custom headless stores using Next.js, Node.js, and PostgreSQL.',
+          'Your team receives an intuitive admin dashboard where updating products, viewing live sales telemetry, and managing customer returns takes just seconds.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'Instant UPI & Card Payments',
+        description: 'Zero-drop checkout integrations with Razorpay, Cashfree, and Stripe for domestic and international orders.',
+      },
+      {
+        title: 'Sub-Second Page Loads',
+        description: 'Server-side rendered product catalogs that load instantly even on 4G mobile connections.',
+      },
+      {
+        title: 'Automated Shipping Sync',
+        description: 'Live courier rate calculation, dispatch status updates, and automated WhatsApp order notifications.',
+      },
+      {
+        title: 'Inventory & Tax Compliance',
+        description: 'Automated GST invoice generation, stock alerts, and multi-currency support for international exports.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'Catalog & Customer Journey Audit',
+        description: 'Analyzing product variants, SKU structures, shipping zones, and target customer purchase habits.',
+      },
+      {
+        step: '02',
+        title: 'Storefront UI/UX & Wireframing',
+        description: 'Designing intuitive product grids, search filters, product detail pages, and checkout flows.',
+      },
+      {
+        step: '03',
+        title: 'Gateway & Logistics Integration',
+        description: 'Configuring payment gateways, shipping webhooks, tax rules, and email/SMS transactional triggers.',
+      },
+      {
+        step: '04',
+        title: 'Load Testing & Store Launch',
+        description: 'Simulating traffic spikes, end-to-end payment verification, staff training, and official go-live.',
+      },
+    ],
+    localContext: 'Pondicherry boasts a vibrant ecosystem of artisanal businesses, organic brands, fashion boutiques, and tourism-driven retail. IAMTECHNI helps local merchants expand beyond foot traffic into nationwide e-commerce.',
+    faqs: [
+      {
+        question: 'Which e-commerce platforms do you support?',
+        answer: 'We build custom headless storefronts with Next.js and Node.js for maximum performance and customization, as well as customized Shopify and WooCommerce platforms based on your operational scale and budget.',
+      },
+      {
+        question: 'Can you integrate UPI and COD payments for our online store?',
+        answer: 'Yes. We configure full support for UPI QR codes, instant UPI app intents, net banking, credit/debit cards, and Cash on Delivery (COD) with automated OTP verification to curb fake orders.',
+      },
+      {
+        question: 'Can we manage products and inventory ourselves after launch?',
+        answer: 'Yes. We provide a clean, secure admin panel where your staff can easily add new products, adjust pricing, manage discounts, and process shipping manifests without writing a single line of code.',
+      },
+      {
+        question: 'Do you help with international payments and export shipments?',
+        answer: 'Yes. We integrate multi-currency converters, international payment gateways like Stripe and PayPal, and international courier dispatch setups.',
+      },
+    ],
+  },
+
+  // 3. Software Development Company Pondicherry
+  {
+    slug: 'software-development-company-pondicherry',
+    path: '/software-development-company-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/software-development-company-pondicherry/',
+    seoTitle: 'Software Development Company in Pondicherry | IAMTECHNI',
+    metaDescription: 'Custom software development company in Pondicherry. Enterprise ERP, SaaS applications, cloud backends and automated business workflows built to scale.',
+    h1: 'Software Development Company in Pondicherry',
+    category: 'Service',
+    schemaType: 'Service',
+    targetLocation: {
+      city: 'Pondicherry',
+      region: 'Puducherry',
+      state: 'Puducherry',
+    },
+    primaryKeyword: 'software development company in pondicherry',
+    secondaryKeywords: [
+      'custom software pondicherry',
+      'saas application development puducherry',
+      'enterprise erp pondicherry',
+      'cloud software engineers pondicherry',
+    ],
+    intro: 'Transform manual operations, disconnected spreadsheets, and legacy systems into secure, automated software platforms. IAMTECHNI is an engineering-driven software development company in Pondicherry. We engineer enterprise ERPs, customer portals, billing systems, and B2B SaaS applications built for high concurrency and strict data security.',
+    sections: [
+      {
+        h2: 'Bespoke Software Engineered for Real Operational Complexity',
+        paragraphs: [
+          'Commercial off-the-shelf software often forces your business into rigid workflows and exorbitant monthly subscription fees. We build bespoke software platforms tailored exactly to your unique business logic, compliance mandates, and operational structure.',
+          'Our engineering stack leverages TypeScript, Python, PostgreSQL, Redis, Docker, and AWS/Google Cloud to create maintainable architectures that grow seamlessly alongside your enterprise.',
+        ],
+      },
+      {
+        h2: 'SaaS Engineering, API Ecosystems & Data Modernization',
+        paragraphs: [
+          'Looking to launch a subscription software product? We architect multi-tenant SaaS applications with role-based access control (RBAC), metered subscription billing, tenant data isolation, and comprehensive audit logs.',
+          'We also design clean RESTful and GraphQL APIs that integrate seamlessly with third-party CRMs, legacy databases, hardware IoT devices, and external partner ecosystems.',
+        ],
+      },
+      {
+        h2: 'Enterprise-Grade Security & Zero License Lock-In',
+        paragraphs: [
+          'We apply strict DevSecOps protocols to every project: encrypted data at rest and in transit, automated vulnerability scanning, OAuth2/OIDC authentication, and regular automated cloud backups.',
+          'You retain 100% intellectual property ownership of the codebase and database schemas. No perpetual vendor lock-in or per-user monthly penalty fees.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'Custom Workflow Automation',
+        description: 'Digitize manual paperwork, spreadsheet calculations, approval matrices, and internal audits.',
+      },
+      {
+        title: 'Microservices & Clean APIs',
+        description: 'Modular architectures written in TypeScript and Python that scale independently under heavy load.',
+      },
+      {
+        title: 'Role-Based Access Control',
+        description: 'Granular permissions, multi-branch access, and complete audit trails for enterprise security.',
+      },
+      {
+        title: 'Complete Source Code Transfer',
+        description: 'Full Git repository, infrastructure-as-code scripts, and API documentation delivered upon completion.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'Technical Requirements & Flow Mapping',
+        description: 'Deep-dive interviews with your team to model data entities, business rules, and security policies.',
+      },
+      {
+        step: '02',
+        title: 'Architecture & Database Design',
+        description: 'Schema modeling, API contract specifications, security threat modeling, and UI wireframing.',
+      },
+      {
+        step: '03',
+        title: 'Iterative Sprint Development',
+        description: 'Bi-weekly sprint releases with staging preview environments and automated continuous integration.',
+      },
+      {
+        step: '04',
+        title: 'Deployment & SLA Maintenance',
+        description: 'Containerized cloud deployment, database migration scripts, admin training, and 24/7 SLA monitoring.',
+      },
+    ],
+    localContext: 'Serving manufacturing plants in Kurumbapet, healthcare providers, hospitality chains, and educational institutions in Pondicherry with enterprise-grade engineering delivered with local accountability.',
+    faqs: [
+      {
+        question: 'What types of custom software does IAMTECHNI develop?',
+        answer: 'We develop custom ERPs, supply chain portals, billing and invoicing systems, healthcare management portals, customer relationship platforms (CRM), and cloud-native SaaS applications.',
+      },
+      {
+        question: 'Who owns the software and intellectual property?',
+        answer: 'You own 100% of the software, database schemas, and documentation. Upon final settlement, all Git repositories and cloud configurations are transferred directly to your organization.',
+      },
+      {
+        question: 'Can you modernize our existing legacy software or database?',
+        answer: 'Yes. We regularly migrate legacy desktop software, Excel-based systems, and monolithic databases into modern, secure web and cloud applications without business interruption.',
+      },
+      {
+        question: 'How do you handle software data security and backups?',
+        answer: 'We configure TLS 1.3 encryption, database encryption-at-rest, automated daily encrypted backups, role-based access controls, and rate-limited API firewalls.',
+      },
+    ],
+  },
+
+  // 4. Mobile App Development Pondicherry
+  {
+    slug: 'mobile-app-development-pondicherry',
+    path: '/mobile-app-development-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/mobile-app-development-pondicherry/',
+    seoTitle: 'Mobile App Development Company in Pondicherry | IAMTECHNI',
+    metaDescription: 'Expert mobile app development in Pondicherry. Native and cross-platform iOS & Android apps built with React Native and Flutter. Get your app launched.',
+    h1: 'Mobile App Development Company in Pondicherry',
+    category: 'Service',
+    schemaType: 'Service',
+    targetLocation: {
+      city: 'Pondicherry',
+      region: 'Puducherry',
+      state: 'Puducherry',
+    },
+    primaryKeyword: 'mobile app development pondicherry',
+    secondaryKeywords: [
+      'android app developers pondicherry',
+      'ios app development puducherry',
+      'react native developers pondicherry',
+      'cross platform app company pondicherry',
+    ],
+    intro: 'Put your business directly into your customers\' pockets. IAMTECHNI is a specialized mobile app development company in Pondicherry crafting sleek, intuitive, and high-performance apps for iOS and Android. Using React Native and Flutter, we deliver native-speed mobile applications with shared codebases that save budget and launch twice as fast.',
+    sections: [
+      {
+        h2: 'Cross-Platform Performance With Native User Experience',
+        paragraphs: [
+          'Developing separate iOS and Android codebases doubles your initial costs and ongoing maintenance overhead. With modern cross-platform engineering (React Native & Flutter), we deliver 60fps animations, native gesture handling, and hardware access from a unified codebase.',
+          'From customer loyalty apps and on-demand delivery services to enterprise field workforce tracking and telemedicine portals, our mobile engineers build rock-solid mobile solutions.',
+        ],
+      },
+      {
+        h2: 'Hardware Integration & Real-Time Cloud Synchronization',
+        paragraphs: [
+          'Great mobile applications leverage the full capabilities of modern smartphones. We integrate GPS location tracking, camera capture, push notifications, Bluetooth peripherals, and biometrics (Face ID & Fingerprint) with minimal battery drain.',
+          'Our offline-first data synchronization ensures your users can continue browsing or entering data even with intermittent connectivity, syncing automatically once internet access resumes.',
+        ],
+      },
+      {
+        h2: 'End-to-End App Store Submission & Compliance',
+        paragraphs: [
+          'Navigating Apple App Store guidelines and Google Play Console policies can be daunting. We handle the entire release lifecycle: code signing, privacy policy compliance, screenshot generation, and submission handling.',
+          'Post-launch, we monitor crash telemetry, OS upgrade compatibility, and user feedback to ensure your rating stays high.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'iOS & Android Unified',
+        description: 'Single high-performance codebase delivering native apps to both Google Play and Apple App Store.',
+      },
+      {
+        title: 'Offline-First Architecture',
+        description: 'Local caching and background synchronization that works reliably in low-connectivity areas.',
+      },
+      {
+        title: 'Push Notifications & Engagement',
+        description: 'Segmented push notifications via Firebase Cloud Messaging for timely promotional and transactional alerts.',
+      },
+      {
+        title: 'Complete Store Approval',
+        description: 'Guaranteed submission assistance through Apple and Google review processes until publication.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'User Story & Interactive Wireframing',
+        description: 'Mapping app screens, navigation hierarchies, and user interactions into clickable Figma prototypes.',
+      },
+      {
+        step: '02',
+        title: 'Frontend & Backend API Engineering',
+        description: 'Building smooth mobile UI components and scalable cloud endpoints with secure JWT authentication.',
+      },
+      {
+        step: '03',
+        title: 'Real-Device Quality Assurance',
+        description: 'Testing across screen sizes, iOS and Android versions, battery consumption profiles, and edge networks.',
+      },
+      {
+        step: '04',
+        title: 'Store Publishing & Launch Support',
+        description: 'App store submission, production deployment, telemetry integration, and launch monitoring.',
+      },
+    ],
+    localContext: 'From tourism discovery guides and local transport apps to delivery networks and healthcare in Pondicherry, IAMTECHNI translates mobile concepts into dependable production software.',
+    faqs: [
+      {
+        question: 'Should we build native apps or a cross-platform app?',
+        answer: 'For 95% of business applications, cross-platform development (React Native or Flutter) is the smartest choice. It provides identical native performance and feel while slashing initial development and maintenance costs by up to 40%.',
+      },
+      {
+        question: 'How long does it take to build and publish a mobile app?',
+        answer: 'A standard MVP mobile app typically takes 6 to 10 weeks from UI design to App Store and Google Play publishing. Complex applications with hardware integrations or real-time geolocation may take 10 to 14 weeks.',
+      },
+      {
+        question: 'Will you help publish our app to the Apple App Store and Google Play?',
+        answer: 'Yes. We guide you through setting up your developer accounts and take care of the entire submission, icon generation, metadata, privacy questionnaires, and review approvals.',
+      },
+      {
+        question: 'Can the app send push notifications to users?',
+        answer: 'Yes. We integrate Firebase Cloud Messaging (FCM) and Apple Push Notification service (APNs) so you can send targeted, automated notifications based on user actions.',
+      },
+    ],
+  },
+
+  // 5. Digital Marketing Agency Pondicherry
+  {
+    slug: 'digital-marketing-agency-pondicherry',
+    path: '/digital-marketing-agency-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/digital-marketing-agency-pondicherry/',
+    seoTitle: 'Digital Marketing Agency in Pondicherry | IAMTECHNI',
+    metaDescription: 'Results-driven digital marketing agency in Pondicherry. SEO, Google Ads, Meta advertising, social media growth, and content marketing that generate real ROI.',
+    h1: 'Digital Marketing Agency in Pondicherry',
+    category: 'Service',
+    schemaType: 'Service',
+    targetLocation: {
+      city: 'Pondicherry',
+      region: 'Puducherry',
+      state: 'Puducherry',
+    },
+    primaryKeyword: 'digital marketing agency in pondicherry',
+    secondaryKeywords: [
+      'digital marketing company pondicherry',
+      'social media marketing pondicherry',
+      'google ads agency puducherry',
+      'performance marketing pondicherry',
+    ],
+    intro: 'Stop wasting your marketing budget on vanity metrics and empty impressions. IAMTECHNI is a performance-driven digital marketing agency in Pondicherry. We combine data-backed search engine optimization (SEO), hyper-targeted Google and Meta ad campaigns, and persuasive content funnels to deliver qualified leads and measurable revenue growth.',
+    sections: [
+      {
+        h2: 'Data-Driven Performance Marketing That Respects Your Budget',
+        paragraphs: [
+          'Many agencies post generic social graphics and report "reach" while your sales phone remains silent. At IAMTECHNI, we measure success by customer acquisition cost (CAC), lead quality, and return on ad spend (ROAS).',
+          'We engineer precision campaigns across Google Search, YouTube, Instagram, and LinkedIn, ensuring every rupee of your media budget targets high-intent buyers ready to make an inquiry or purchase.',
+        ],
+      },
+      {
+        h2: 'Comprehensive Multi-Channel Digital Growth Strategies',
+        paragraphs: [
+          'Modern consumers interact across multiple touchpoints before making a buying decision. We build unified marketing ecosystems that connect high-intent search ads with retargeting funnels, localized SEO, and automated email/WhatsApp follow-ups.',
+          'Whether you are an educational institution recruiting students, a healthcare clinic booking consultations, or an e-commerce brand scaling nationwide shipments, we tailor strategies to your commercial goals.',
+        ],
+      },
+      {
+        h2: 'Transparent Reporting & Direct Attribution Telemetry',
+        paragraphs: [
+          'No confusing jargon or inflated metrics. You receive clear monthly and weekly performance dashboards showing exact lead numbers, click-through rates, conversion costs, and return on investment.',
+          'We review campaigns continuously, running A/B tests on creative headlines, ad imagery, and landing pages to lower your cost-per-lead over time.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'Hyper-Targeted Google Ads',
+        description: 'Capture high-intent searchers actively looking for your products or professional services.',
+      },
+      {
+        title: 'Meta & Social Advertising',
+        description: 'Engaging visual ad creative and lookalike audiences across Instagram and Facebook.',
+      },
+      {
+        title: 'Full Conversion Tracking',
+        description: 'Google Analytics 4 (GA4), Meta Pixel, and conversion API setups for 100% attribution accuracy.',
+      },
+      {
+        title: 'Transparent ROI Dashboards',
+        description: 'Live reporting dashboards showing exactly where your ad budget goes and what revenue it yields.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'Competitor & Audience Analysis',
+        description: 'Analyzing search intent, competitor ads, audience demographics, and high-value conversion opportunities.',
+      },
+      {
+        step: '02',
+        title: 'Funnel & Creative Architecture',
+        description: 'Designing high-converting landing pages, copywriting compelling ad headlines, and configuring tracking pixels.',
+      },
+      {
+        step: '03',
+        title: 'Campaign Launch & Rapid Testing',
+        description: 'Deploying targeted campaigns with automated budget pacing and initial A/B creative split testing.',
+      },
+      {
+        step: '04',
+        title: 'Continuous Optimization & Scale',
+        description: 'Pruning negative keywords, reallocating budget to top-performing ad sets, and scaling lead volume.',
+      },
+    ],
+    localContext: 'We understand the unique consumer demographics and seasonal market shifts of Puducherry, helping local hospitality, healthcare, education, retail, and manufacturing businesses outpace regional competition.',
+    faqs: [
+      {
+        question: 'How quickly can we expect results from digital marketing?',
+        answer: 'Paid advertising on Google and Meta generates clicks and inquiries within 24 to 48 hours of campaign launch. Organic SEO and content marketing build sustainable compound traffic over 3 to 6 months.',
+      },
+      {
+        question: 'What monthly ad budget do we need to get started?',
+        answer: 'We work with budgets of all sizes. For local Pondicherry campaigns, businesses typically start with Rs. 15,000 to Rs. 40,000 monthly ad spend and scale up based on validated return on investment.',
+      },
+      {
+        question: 'Do you design the ad graphics and write copy for us?',
+        answer: 'Yes. Our in-house creative team designs all ad graphics, produces video assets, writes persuasive copy, and crafts dedicated landing pages optimized for maximum conversion.',
+      },
+      {
+        question: 'How do you measure marketing success and ROI?',
+        answer: 'We measure success through concrete business KPIs: verified phone calls, WhatsApp leads, form submissions, e-commerce purchases, and net customer acquisition cost.',
+      },
+    ],
+  },
+
+  // 6. Local SEO Services Pondicherry
+  {
+    slug: 'local-seo-services-pondicherry',
+    path: '/local-seo-services-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/local-seo-services-pondicherry/',
+    seoTitle: 'Local SEO Services in Pondicherry | IAMTECHNI',
+    metaDescription: 'Dominate Google local search and Google Maps in Pondicherry. Optimize your Google Business Profile, local citations, reviews and local search rankings.',
+    h1: 'Local SEO Services in Pondicherry',
+    category: 'Service',
+    schemaType: 'Service',
+    targetLocation: {
+      city: 'Pondicherry',
+      region: 'Puducherry',
+      state: 'Puducherry',
+    },
+    primaryKeyword: 'local seo services pondicherry',
+    secondaryKeywords: [
+      'google business profile optimization pondicherry',
+      'google maps seo pondicherry',
+      'local search agency puducherry',
+      'rank on google pondicherry',
+    ],
+    intro: 'When customers in Pondicherry search for services "near me," does your business appear in the coveted Google Maps 3-pack, or are your competitors taking every lead? IAMTECHNI provides specialized local SEO services in Pondicherry to ensure your business ranks #1 on Google Search and Google Maps.',
+    sections: [
+      {
+        h2: 'Google Business Profile (GBP) Optimization & Maps Domination',
+        paragraphs: [
+          'Over 70% of local mobile searches result in a direct phone call, store visit, or website click from the Google Maps local pack. We fully optimize your Google Business Profile: accurate categories, geo-tagged photo uploads, localized service descriptions, and regular posting.',
+          'We also audit and resolve duplicate listings, incorrect map pins, and category mismatches that suppress your profile from ranking for high-intent neighborhood searches.',
+        ],
+      },
+      {
+        h2: 'NAP Consistency & Authoritative Local Directory Citations',
+        paragraphs: [
+          'Google requires consistent Name, Address, and Phone number (NAP) data across the web to trust your business location. We build clean, verified local citations across authoritative directories such as Justdial, IndiaMART, Sulekha, and niche business portals.',
+          'This citation network reinforces your geographic relevance in Puducherry, boosting your rankings for terms like "best doctor in pondicherry" or "interior designer near me".',
+        ],
+      },
+      {
+        h2: 'Review Generation Systems & Localized On-Page SEO',
+        paragraphs: [
+          'Authentic customer reviews are a primary ranking factor for local search. We implement automated review generation workflows via SMS and WhatsApp that make it simple for satisfied customers to leave 5-star Google ratings.',
+          'Simultaneously, we optimize your website with localized title tags, geographic Schema.org LocalBusiness structured data, localized FAQ sections, and embedded Google Maps.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'Google Maps 3-Pack Focus',
+        description: 'Targeted optimization designed specifically to elevate your business into the top 3 Google Maps positions.',
+      },
+      {
+        title: 'LocalBusiness Schema Markup',
+        description: 'Advanced structured data that explicitly tells search engines your exact operating hours, address, and coordinates.',
+      },
+      {
+        title: 'Clean NAP Citation Network',
+        description: 'Consistent directory listings across top Indian business portals to eliminate conflicting local signals.',
+      },
+      {
+        title: 'Ethical Review Acceleration',
+        description: 'Streamlined QR codes and WhatsApp workflows to collect genuine 5-star reviews from happy customers.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'Local SEO & Competitor Audit',
+        description: 'Auditing your current Google Maps ranking grid, citation health, and competitor review velocity.',
+      },
+      {
+        step: '02',
+        title: 'Google Business Profile Overhaul',
+        description: 'Optimizing business categories, service menus, geo-tagged imagery, and verified contact numbers.',
+      },
+      {
+        step: '03',
+        title: 'Citation Building & On-Page Tuning',
+        description: 'Publishing consistent directory listings and embedding LocalBusiness JSON-LD markup on your website.',
+      },
+      {
+        step: '04',
+        title: 'Tracking & Geo-Grid Reporting',
+        description: 'Monitoring keyword positions across different geographic pin codes in Pondicherry with monthly ranking reports.',
+      },
+    ],
+    localContext: 'From White Town and Lawspet to Villianur and Kalapet, local search visibility directly dictates walk-in footfall and phone inquiries for businesses across the Union Territory of Puducherry.',
+    faqs: [
+      {
+        question: 'How long does it take to rank on Google Maps in Pondicherry?',
+        answer: 'Most clients begin seeing noticeable improvements in map pack visibility and direct phone calls within 4 to 8 weeks. Highly competitive categories (such as hotels, clinics, and legal services) typically take 3 to 4 months of sustained optimization.',
+      },
+      {
+        question: 'Do I need a physical address in Pondicherry for local SEO?',
+        answer: 'Yes. Google Business Profile requires a verifiable physical address in Pondicherry to rank in Google Maps. Service-area businesses can hide their exact street address while still serving customers across the territory.',
+      },
+      {
+        question: 'What is the difference between local SEO and organic SEO?',
+        answer: 'Local SEO focuses on proximity-based searches, Google Maps, and local search queries (e.g., "car repair in pondicherry"), generating immediate phone calls and foot traffic. Organic SEO targets broader informational or commercial search queries nationally and globally.',
+      },
+      {
+        question: 'Can you help remove fake or malicious reviews from our profile?',
+        answer: 'We flag and appeal policy-violating, fraudulent, or defamatory reviews directly through Google Business support channels while implementing proactive review campaigns to dilute negative impact.',
+      },
+    ],
+  },
+
+  // 7. AWS Training Pondicherry
+  {
+    slug: 'aws-training-pondicherry',
+    path: '/aws-training-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/aws-training-pondicherry/',
+    seoTitle: 'AWS Cloud Training in Pondicherry | IAMTECHNI',
+    metaDescription: 'Hands-on AWS cloud training in Pondicherry. Master EC2, S3, Lambda, VPC, and IAM with live cloud console labs and AWS certification preparation.',
+    h1: 'AWS Cloud Training in Pondicherry',
+    category: 'Training',
+    schemaType: 'Course',
+    targetLocation: {
+      city: 'Pondicherry',
+      region: 'Puducherry',
+      state: 'Puducherry',
+    },
+    primaryKeyword: 'aws training pondicherry',
+    secondaryKeywords: [
+      'aws certification course pondicherry',
+      'cloud computing course puducherry',
+      'aws solutions architect training pondicherry',
+      'cloud training institute pondicherry',
+    ],
+    intro: 'Cloud skills are the number one requirement for modern IT careers. IAMTECHNI delivers intensive, hands-on AWS (Amazon Web Services) cloud training in Pondicherry. Led by experienced cloud architects who manage production infrastructure daily, our program equips students and working professionals with practical, industry-grade skills to clear AWS Solutions Architect certifications and land high-paying cloud roles.',
+    sections: [
+      {
+        h2: 'Real Cloud Console Labs Instead of Outdated Slides',
+        paragraphs: [
+          'You cannot learn cloud architecture by memorizing theoretical diagrams. In our AWS training program, every learner gets direct access to live AWS consoles, provisioning real virtual machines (EC2), configuring storage buckets (S3), and building serverless microservices with AWS Lambda.',
+          'You learn the foundational networking principles that top cloud employers demand: creating Virtual Private Clouds (VPC), managing public/private subnets, setting up Internet Gateways, and locking down security groups.',
+        ],
+      },
+      {
+        h2: 'Comprehensive Curriculum Aligned to AWS Certification',
+        paragraphs: [
+          'Our curriculum is directly mapped to the AWS Certified Cloud Practitioner and AWS Certified Solutions Architect – Associate (SAA-C03) blueprints.',
+          'We cover high availability, auto-scaling, Elastic Load Balancing, relational and NoSQL databases (RDS & DynamoDB), Infrastructure-as-Code (Terraform), and enterprise identity federation via AWS IAM.',
+        ],
+      },
+      {
+        h2: 'Career Mentorship, Mock Interviews & Placement Support',
+        paragraphs: [
+          'Beyond technical training, we prepare you for real-world hiring rounds. We review your resume, help you showcase real cloud projects on GitHub, and conduct 1-on-1 technical mock interviews with senior engineers.',
+          'Both classroom sessions in Puducherry and interactive live online options are available with small batch sizes for dedicated instructor attention.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: '100% Hands-On Labs',
+        description: 'Build real cloud architectures on AWS: VPCs, multi-tier web apps, serverless APIs, and automated backups.',
+      },
+      {
+        title: 'Certification Ready (SAA-C03)',
+        description: 'Includes official exam blueprint alignment, practice question banks, and timed mock tests.',
+      },
+      {
+        title: 'Production Architect Mentors',
+        description: 'Learn directly from engineers who deploy and manage enterprise cloud infrastructure every day.',
+      },
+      {
+        title: 'Flexible Weekend & Weekday Batches',
+        description: 'Designed for engineering college students and working IT professionals seeking cloud upskilling.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'Cloud Foundations & AWS Core',
+        description: 'Understanding virtualization, regions/AZs, AWS Global Infrastructure, and IAM security best practices.',
+      },
+      {
+        step: '02',
+        title: 'Compute, Networking & Storage',
+        description: 'Provisioning EC2 instances, configuring VPC subnets, routing tables, security groups, and S3 lifecycle rules.',
+      },
+      {
+        step: '03',
+        title: 'Databases & Serverless Microservices',
+        description: 'Deploying managed RDS PostgreSQL databases, DynamoDB NoSQL tables, and event-driven AWS Lambda functions.',
+      },
+      {
+        step: '04',
+        title: 'Capstones & Mock Certification',
+        description: 'Architecting a highly available multi-tier enterprise web application and clearing mock certification exams.',
+      },
+    ],
+    localContext: 'Conveniently located for engineering graduates and IT professionals from Pondicherry University, PEC, SMVEC, and regional tech firms looking to transition into high-growth cloud careers.',
+    faqs: [
+      {
+        question: 'Are there any prerequisites to join this AWS training course?',
+        answer: 'Basic computer networking concepts and general familiarity with operating systems are helpful, but no prior cloud experience is required. We start with foundational cloud concepts and progressively advance to complex architectures.',
+      },
+      {
+        question: 'Will this course prepare me for the AWS Solutions Architect exam?',
+        answer: 'Yes. The syllabus is directly aligned with the official AWS Certified Solutions Architect – Associate (SAA-C03) exam syllabus, complete with scenario-based practice questions and architecture labs.',
+      },
+      {
+        question: 'Do you offer both classroom and online sessions?',
+        answer: 'Yes. We offer in-person classroom batches at our Puducherry training facility as well as interactive live instructor-led online sessions for remote students.',
+      },
+      {
+        question: 'Will I get practical hands-on experience or just theory?',
+        answer: 'Our training is 80% hands-on. Every class includes live terminal and console exercises where you design, deploy, and troubleshoot real AWS infrastructure.',
+      },
+    ],
+    courseDetails: {
+      duration: '8 Weeks (Weekend & Weekday options)',
+      mode: 'Classroom in Puducherry / Live Interactive Online',
+      prerequisites: 'Basic IT or computer science background',
+      certification: 'Course Completion Certificate & AWS SAA-C03 Exam Prep',
+    },
+  },
+
+  // 8. DevOps Training Pondicherry
+  {
+    slug: 'devops-training-pondicherry',
+    path: '/devops-training-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/devops-training-pondicherry/',
+    seoTitle: 'DevOps Training Course in Pondicherry | IAMTECHNI',
+    metaDescription: 'Practical DevOps training in Pondicherry. Learn Docker, Kubernetes, CI/CD pipelines, Terraform, Linux, and Git from senior engineering mentors.',
+    h1: 'DevOps Training Course in Pondicherry',
+    category: 'Training',
+    schemaType: 'Course',
+    targetLocation: {
+      city: 'Pondicherry',
+      region: 'Puducherry',
+      state: 'Puducherry',
+    },
+    primaryKeyword: 'devops training pondicherry',
+    secondaryKeywords: [
+      'devops course puducherry',
+      'kubernetes training pondicherry',
+      'docker and ci cd course pondicherry',
+      'terraform automation training pondicherry',
+    ],
+    intro: 'Master modern software delivery pipelines and container orchestration. IAMTECHNI provides industry-grade DevOps training in Pondicherry. Designed for developers, system administrators, and tech graduates, our curriculum covers Linux internals, Git workflows, Docker containerization, Kubernetes clusters, CI/CD automation with GitHub Actions, and Terraform Infrastructure as Code.',
+    sections: [
+      {
+        h2: 'Bridge the Gap Between Software Engineering and Operations',
+        paragraphs: [
+          'DevOps engineers are among the most sought-after and highly compensated professionals in the global IT sector. Organizations need engineers who can automate releases, manage cloud environments, and maintain 99.99% uptime.',
+          'Our course takes you beyond theoretical definitions into real terminal workflows: building multi-stage Dockerfiles, managing container registries, and deploying resilient workloads on Kubernetes clusters.',
+        ],
+      },
+      {
+        h2: 'Automate Everything: CI/CD Pipelines & Terraform IaC',
+        paragraphs: [
+          'Manual server configuration is obsolete. We teach you how to write declarative Infrastructure as Code (IaC) using Terraform to spin up cloud resources across AWS in minutes.',
+          'You will build end-to-end continuous integration and continuous deployment (CI/CD) pipelines using GitHub Actions and GitLab CI, automating linting, testing, Docker image creation, and automated deployment.',
+        ],
+      },
+      {
+        h2: 'Production Observability, Monitoring & Security',
+        paragraphs: [
+          'A reliable DevOps pipeline must include real-time observability. You will learn to configure Prometheus for server metrics, Grafana for visual dashboards, and centralized log aggregation.',
+          'We also integrate DevSecOps practices: scanning container images for CVE vulnerabilities and managing cloud secrets securely.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'Docker & Kubernetes Mastery',
+        description: 'Deep dive into container runtimes, Pods, Deployments, Services, Ingress controllers, and Helm charts.',
+      },
+      {
+        title: 'CI/CD Automation Pipelines',
+        description: 'Build real GitHub Actions workflows for automated code testing, build staging, and zero-downtime releases.',
+      },
+      {
+        title: 'Terraform Infrastructure as Code',
+        description: 'Write maintainable Terraform modules to automate cloud provisioning with state management.',
+      },
+      {
+        title: 'Real Production Capstones',
+        description: 'Deploy a microservices architecture on a managed Kubernetes cluster with full Prometheus telemetry.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'Linux Systems & Git Fundamentals',
+        description: 'Mastering bash scripting, SSH keys, process management, networking tools, and collaborative Git branching.',
+      },
+      {
+        step: '02',
+        title: 'Docker & Container Architecture',
+        description: 'Writing optimized multi-stage Dockerfiles, image caching, volume mounts, and multi-container Docker Compose.',
+      },
+      {
+        step: '03',
+        title: 'Kubernetes Cluster Administration',
+        description: 'Deploying workloads on Kubernetes: ConfigMaps, Secrets, Ingress, PersistentVolumes, and rolling updates.',
+      },
+      {
+        step: '04',
+        title: 'CI/CD, Terraform & Observability',
+        description: 'Automating the pipeline with GitHub Actions, provisioning AWS via Terraform, and setting up Grafana alerts.',
+      },
+    ],
+    localContext: 'Designed to upskill engineering graduates and IT professionals in Puducherry to secure high-demand DevOps and Site Reliability Engineering (SRE) positions across India and global remote teams.',
+    faqs: [
+      {
+        question: 'Do I need programming experience to learn DevOps?',
+        answer: 'Deep programming expertise is not required. However, basic familiarity with Linux command-line commands and fundamental scripting (Bash or Python) is helpful. We include foundational Linux modules in the first two weeks.',
+      },
+      {
+        question: 'Which tools are covered in this DevOps course?',
+        answer: 'We cover Linux, Git & GitHub, Docker, Kubernetes (K8s), Helm, GitHub Actions, Terraform, AWS cloud fundamentals, Prometheus, and Grafana.',
+      },
+      {
+        question: 'Does the program include a real capstone project?',
+        answer: 'Yes. Every learner builds an automated CI/CD pipeline that builds a containerized application, runs automated tests, and deploys to a Kubernetes cluster on AWS using Terraform.',
+      },
+      {
+        question: 'What career roles can I apply for after this training?',
+        answer: 'Graduates are qualified to apply for roles such as DevOps Engineer, Cloud Engineer, Platform Engineer, Site Reliability Engineer (SRE), and Build & Release Engineer.',
+      },
+    ],
+    courseDetails: {
+      duration: '10 Weeks (Practical weekend sessions & lab exercises)',
+      mode: 'Puducherry Hub / Interactive Live Virtual',
+      prerequisites: 'Basic understanding of IT systems or development',
+      certification: 'IAMTECHNI Certified DevOps Engineer Certificate',
+    },
+  },
+
+  // 9. Generative AI Training Pondicherry
+  {
+    slug: 'generative-ai-training-pondicherry',
+    path: '/generative-ai-training-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/generative-ai-training-pondicherry/',
+    seoTitle: 'Generative AI Training in Pondicherry | IAMTECHNI',
+    metaDescription: 'Hands-on Generative AI course in Pondicherry. Build LLM apps, RAG pipelines, AI agents, and fine-tuning with Python, LangChain, and OpenAI/Gemini APIs.',
+    h1: 'Generative AI Training in Pondicherry',
+    category: 'Training',
+    schemaType: 'Course',
+    targetLocation: {
+      city: 'Pondicherry',
+      region: 'Puducherry',
+      state: 'Puducherry',
+    },
+    primaryKeyword: 'generative ai training pondicherry',
+    secondaryKeywords: [
+      'llm course pondicherry',
+      'langchain training puducherry',
+      'ai development course pondicherry',
+      'rag and prompt engineering pondicherry',
+    ],
+    intro: 'Generative AI is redefining how software is built and how businesses operate. IAMTECHNI offers the region\'s premier Generative AI and LLM Engineering training in Pondicherry. Step beyond basic ChatGPT prompting and learn how to engineer real AI products: Retrieval-Augmented Generation (RAG) systems, autonomous AI agents, vector databases, and custom API integrations using Python and modern foundation models.',
+    sections: [
+      {
+        h2: 'Engineer Production AI Systems, Not Just Chatbot Prompts',
+        paragraphs: [
+          'Prompting alone is not enough for modern software careers. Companies need engineers who understand how to connect Large Language Models (LLMs) with proprietary enterprise knowledge bases, APIs, and business databases.',
+          'In this course, you will write production Python code to build semantic search engines, contextual document analyzers, and automated customer support agents using models from OpenAI, Anthropic, and Google Gemini.',
+        ],
+      },
+      {
+        h2: 'Retrieval-Augmented Generation (RAG) & Vector Databases',
+        paragraphs: [
+          'Learn the architectural standard for enterprise AI: Retrieval-Augmented Generation. We dive deep into tokenization, semantic embeddings, chunking strategies, and vector indexing with Pinecone, ChromaDB, and PGvector.',
+          'You will build systems that ingest PDFs, Notion wikis, and SQL databases, generating citations and answering queries without hallucinations.',
+        ],
+      },
+      {
+        h2: 'Autonomous Agents, Tool Calling & AI Guardrails',
+        paragraphs: [
+          'The future of AI lies in agentic workflows where models call external APIs, perform web searches, and execute multi-step tasks autonomously. You will master LangChain, LangGraph, and CrewAI frameworks.',
+          'We also emphasize responsible AI deployment: latency reduction, token cost optimization, output validation with Pydantic, and privacy guardrails.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'Production RAG Architectures',
+        description: 'Build enterprise question-answering systems over proprietary documentation with vector search.',
+      },
+      {
+        title: 'LangChain & LangGraph Agents',
+        description: 'Create multi-step autonomous AI agents equipped with external tools, web browsing, and code execution.',
+      },
+      {
+        title: 'Multi-Model API Integration',
+        description: 'Hands-on experience with OpenAI GPT-4o, Google Gemini 2.5/3.5, and local open-source models like Llama 3 via Ollama.',
+      },
+      {
+        title: 'Enterprise AI Portfolio',
+        description: 'Graduate with 4 production-grade AI applications hosted live on GitHub to impress prospective employers.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'LLM Foundations & Prompt Engineering',
+        description: 'Understanding transformer architectures, attention mechanisms, token economics, few-shot prompting, and structured JSON outputs.',
+      },
+      {
+        step: '02',
+        title: 'Embeddings & Vector Databases',
+        description: 'Generating text embeddings, similarity metrics (cosine/dot product), and storing vectors in ChromaDB and Pinecone.',
+      },
+      {
+        step: '03',
+        title: 'Advanced RAG & LangChain',
+        description: 'Semantic chunking, hybrid search, re-ranking, conversation memory buffers, and evaluation metrics.',
+      },
+      {
+        step: '04',
+        title: 'Autonomous Agents & Deployment',
+        description: 'Building multi-agent systems with LangGraph, tool calling, FastAPI backend wrapping, and cloud deployment.',
+      },
+    ],
+    localContext: 'Positioning Pondicherry students, researchers, and software engineers at the cutting edge of artificial intelligence through practical, production-focused engineering.',
+    faqs: [
+      {
+        question: 'Do I need a strong background in mathematics or machine learning?',
+        answer: 'No advanced mathematics or calculus is required. This course focuses on applied AI engineering—using Python, APIs, and modern frameworks to build practical applications using pre-trained foundation models.',
+      },
+      {
+        question: 'What programming language is used in the course?',
+        answer: 'The entire course is taught in Python, the industry standard for AI and LLM development. Basic familiarity with Python syntax is recommended.',
+      },
+      {
+        question: 'Will we learn how to run local models without paying API fees?',
+        answer: 'Yes. We show you how to run open-weight models (such as Llama 3 and Mistral) locally on your own workstation using Ollama and Hugging Face.',
+      },
+      {
+        question: 'Can this course help me implement AI solutions for my company?',
+        answer: 'Absolutely. Many of our students are working professionals who build proof-of-concept AI search engines, internal document analyzers, and automated ticket responders for their employers as their capstone projects.',
+      },
+    ],
+    courseDetails: {
+      duration: '8 Weeks (Intensive hands-on weekend modules)',
+      mode: 'Puducherry Hub / Live Virtual Interactive',
+      prerequisites: 'Basic Python programming knowledge',
+      certification: 'IAMTECHNI Certified Generative AI Engineer',
+    },
+  },
+
+  // 10. Web Development Cuddalore
+  {
+    slug: 'web-development-cuddalore',
+    path: '/web-development-cuddalore/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-cuddalore/',
+    seoTitle: 'Web Development Services in Cuddalore | IAMTECHNI',
+    metaDescription: 'Custom web development services in Cuddalore. Fast, modern websites, e-commerce stores, and business portals engineered for growth. Get a free consultation.',
+    h1: 'Web Development Services in Cuddalore',
+    category: 'Service',
+    schemaType: 'Service',
+    targetLocation: {
+      city: 'Cuddalore',
+      region: 'Cuddalore District',
+      state: 'Tamil Nadu',
+      distanceFromHub: '22 km from Puducherry headquarters',
+    },
+    primaryKeyword: 'web development cuddalore',
+    secondaryKeywords: [
+      'website design cuddalore',
+      'web designers in cuddalore',
+      'ecommerce website cuddalore',
+      'software development cuddalore',
+    ],
+    intro: 'Empower your Cuddalore business with an exceptional digital presence. IAMTECHNI delivers modern, high-speed website development and custom software solutions for enterprises, industrial manufacturers, retail businesses, and healthcare providers across Cuddalore district. Located just 20 minutes from Cuddalore, we provide local on-site meetings paired with elite engineering standards.',
+    sections: [
+      {
+        h2: 'Modern Web Engineering for Cuddalore\'s Growing Economy',
+        paragraphs: [
+          'From industrial processing facilities in SIPCOT Cuddalore and agricultural exporters to hospitals, educational institutions, and retail traders in Cuddalore OT and New Town, businesses need websites that establish credibility and generate real customer inquiries.',
+          'Instead of slow, outdated WordPress templates that break frequently, we engineer clean, custom websites using React, Next.js, and TypeScript. Your website will load in under a second and look stunning across all smartphones and laptops.',
+        ],
+      },
+      {
+        h2: 'E-Commerce, Billing & Customer Portals for Local Merchants',
+        paragraphs: [
+          'Expand your reach beyond Cuddalore into statewide and national markets. We build secure online shopping portals with instant UPI, debit/credit card, and net banking payment integration via Razorpay.',
+          'We also build custom client billing portals, appointment scheduling engines for clinics, and inventory tracking systems designed to eliminate manual paper registers.',
+        ],
+      },
+      {
+        h2: 'Local Proximity With Direct Engineer Accountability',
+        paragraphs: [
+          'Unlike remote agencies that disappear after taking an advance, IAMTECHNI is your regional neighbor. Our main engineering hub in Puducherry is just a short 20-minute drive from Cuddalore.',
+          'We meet with you face-to-face to understand your business requirements, provide transparent milestone-based quotes, and transfer 100% of the source code upon project completion.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'Close Regional Proximity',
+        description: 'Convenient on-site discovery sessions in Cuddalore OT, New Town, and SIPCOT industrial corridors.',
+      },
+      {
+        title: 'Ultra-Fast Load Speeds',
+        description: 'Websites engineered to score 90+ on Google PageSpeed Insights for superior mobile search rankings.',
+      },
+      {
+        title: 'Indian Payment Gateways',
+        description: 'Seamless integration with Razorpay and PhonePe for zero-friction UPI, card, and QR code payments.',
+      },
+      {
+        title: '100% Code Ownership',
+        description: 'Complete transfer of all code repositories and domains with zero perpetual licensing fees.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'On-Site / Virtual Consultation',
+        description: 'Meeting with your leadership in Cuddalore to understand your commercial goals and technical scope.',
+      },
+      {
+        step: '02',
+        title: 'Custom UI/UX Wireframing',
+        description: 'Designing intuitive website layouts and brand elements tailored to your target audience.',
+      },
+      {
+        step: '03',
+        title: 'Modern Frontend & Backend Build',
+        description: 'Engineering responsive pages with clean code, SEO meta tags, and high-speed asset optimization.',
+      },
+      {
+        step: '04',
+        title: 'Launch, Training & Handover',
+        description: 'Deploying to high-performance cloud hosting, connecting your domain, and training your team.',
+      },
+    ],
+    localContext: 'Serving businesses across Cuddalore OT, Cuddalore New Town, SIPCOT, Panruti, Neyveli, and Kurinjipadi with high-speed digital engineering backed by regional accountability.',
+    faqs: [
+      {
+        question: 'Can your team visit our office in Cuddalore for a discussion?',
+        answer: 'Yes. Since our primary engineering headquarters in Puducherry is only 22 km from Cuddalore, our technical leads regularly visit clients in Cuddalore for in-person requirements discovery and kickoff meetings.',
+      },
+      {
+        question: 'What is the cost of website development for a business in Cuddalore?',
+        answer: 'Website costs vary depending on scope. Standard professional corporate websites start with transparent fixed-price milestones. We provide an exact itemized quote after our initial scoping session with zero hidden costs.',
+      },
+      {
+        question: 'Can you help us rank on Google for Cuddalore local searches?',
+        answer: 'Yes. Every website we build includes local SEO architecture: schema markup, localized title tags, Google Business Profile integration, and fast mobile loading to help you rank at the top of local Cuddalore searches.',
+      },
+      {
+        question: 'Do you offer website redesign services for outdated websites?',
+        answer: 'Yes. We regularly redesign slow, outdated websites into modern, mobile-friendly platforms while preserving your existing domain authority and search engine rankings.',
+      },
+    ],
+  },
+
+  // 11. Web Development Villupuram
+  {
+    slug: 'web-development-villupuram',
+    path: '/web-development-villupuram/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-villupuram/',
+    seoTitle: 'Web Development Services in Villupuram | IAMTECHNI',
+    metaDescription: 'Professional web development in Villupuram. High-performance corporate websites, e-commerce stores, and software solutions built for local business growth.',
+    h1: 'Web Development Services in Villupuram',
+    category: 'Service',
+    schemaType: 'Service',
+    targetLocation: {
+      city: 'Villupuram',
+      region: 'Villupuram District',
+      state: 'Tamil Nadu',
+      distanceFromHub: '38 km from Puducherry headquarters',
+    },
+    primaryKeyword: 'web development villupuram',
+    secondaryKeywords: [
+      'website design villupuram',
+      'web designers in villupuram',
+      'ecommerce website development villupuram',
+      'software company near villupuram',
+    ],
+    intro: 'Accelerate your commercial growth with modern web engineering. IAMTECHNI delivers responsive website development and custom software solutions for businesses, educational institutions, healthcare centers, and agricultural enterprises throughout Villupuram district. Located just 38 km away, we combine regional proximity with world-class engineering standards.',
+    sections: [
+      {
+        h2: 'Tailored Web Solutions for Villupuram Enterprises',
+        paragraphs: [
+          'Villupuram is a critical commercial and transportation crossroads in northern Tamil Nadu, with expanding retail, agricultural processing, healthcare, and educational hubs. To compete effectively in today\'s digital economy, businesses need fast, authoritative websites that convert local interest into real inquiries.',
+          'We engineer custom websites with clean code, intuitive mobile navigation, and lightning-fast loading speeds that establish trust with customers across the district.',
+        ],
+      },
+      {
+        h2: 'From Business Showcases to Multi-Product Online Stores',
+        paragraphs: [
+          'Whether you need a dynamic corporate website showcasing your manufacturing capabilities or a full-scale e-commerce storefront shipping regional products across India, we have the engineering expertise to bring your vision to life.',
+          'All our e-commerce platforms feature seamless Indian payment gateway integrations (Razorpay, PhonePe UPI) and automated shipping tracking for a smooth customer shopping experience.',
+        ],
+      },
+      {
+        h2: 'Direct Engineering Partnership With Zero Middlemen',
+        paragraphs: [
+          'Working with distant agencies often leads to endless miscommunications and delayed project milestones. With IAMTECHNI, you communicate directly with senior developers and solution architects who understand your local market.',
+          'We deliver complete source code ownership, zero proprietary monthly license fees, and reliable ongoing support so your web infrastructure remains secure and up-to-date.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'Regional Proximity & In-Person Meetings',
+        description: 'Direct collaboration with our engineering team just 38 km away along the Villupuram-Puducherry corridor.',
+      },
+      {
+        title: 'Sub-Second Page Load Speed',
+        description: 'Clean React and Next.js engineering that ensures your site loads instantly even on modest mobile networks.',
+      },
+      {
+        title: 'Local Google Search Optimization',
+        description: 'Structured data and local search tuning so customers in Villupuram and surrounding taluks find you first.',
+      },
+      {
+        title: 'Full Source Code Transfer',
+        description: '100% intellectual property ownership with complete documentation upon project delivery.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'Discovery & Scope Definition',
+        description: 'Understanding your business model, customer pain points, and specific feature requirements.',
+      },
+      {
+        step: '02',
+        title: 'Responsive Design & Prototyping',
+        description: 'Crafting modern, brand-aligned visual mockups designed for smartphones, tablets, and desktops.',
+      },
+      {
+        step: '03',
+        title: 'High-Performance Development',
+        description: 'Building the site using modern TypeScript, secure forms, optimized images, and speed enhancements.',
+      },
+      {
+        step: '04',
+        title: 'Cloud Deployment & Training',
+        description: 'Launching on secure cloud hosting, configuring SSL certificates, and providing admin training.',
+      },
+    ],
+    localContext: 'Supporting businesses across Villupuram Town, Tindivanam, Gingee, Vikravandi, and Valavanur with professional, engineering-first digital solutions.',
+    faqs: [
+      {
+        question: 'How far is IAMTECHNI from Villupuram?',
+        answer: 'Our main engineering hub in Puducherry is approximately 38 km from Villupuram (about 45 minutes by road), making in-person consultations, project reviews, and ongoing collaboration straightforward and fast.',
+      },
+      {
+        question: 'Can our website be built in both English and Tamil?',
+        answer: 'Yes. We regularly build bilingual websites with smooth language toggle features, allowing you to reach both local Tamil-speaking customers and statewide/international English-speaking clients.',
+      },
+      {
+        question: 'Do you provide domain registration and web hosting services?',
+        answer: 'Yes. We assist with domain registration, enterprise-grade cloud hosting configuration, SSL security certificates, and corporate email setup (e.g. info@yourbusiness.com).',
+      },
+      {
+        question: 'What kind of support is provided after the website is launched?',
+        answer: 'We provide 30 days of complimentary post-launch warranty support followed by flexible annual maintenance packages for security updates, backups, and content updates.',
+      },
+    ],
+  },
+
+  // 12. IT Training Cuddalore
+  {
+    slug: 'it-training-cuddalore',
+    path: '/it-training-cuddalore/',
+    canonicalUrl: 'https://www.iamtechni.in/it-training-cuddalore/',
+    seoTitle: 'IT Training & Software Courses in Cuddalore | IAMTECHNI',
+    metaDescription: 'Hands-on IT training for students & professionals in Cuddalore. Full stack development, Python, AWS cloud, and AI courses with job placement assistance.',
+    h1: 'IT Training & Software Courses in Cuddalore',
+    category: 'Training',
+    schemaType: 'Course',
+    targetLocation: {
+      city: 'Cuddalore',
+      region: 'Cuddalore District',
+      state: 'Tamil Nadu',
+      distanceFromHub: '22 km from Puducherry headquarters',
+    },
+    primaryKeyword: 'it training cuddalore',
+    secondaryKeywords: [
+      'software courses cuddalore',
+      'python training institute cuddalore',
+      'full stack developer course cuddalore',
+      'computer training center cuddalore',
+    ],
+    intro: 'Launch your career in the high-growth software and tech industry. IAMTECHNI delivers practical, industry-aligned IT training and software courses for students, college graduates, and working professionals in Cuddalore. Located just 20 minutes from Cuddalore in neighboring Puducherry, our programs offer real coding labs, direct mentorship from senior software engineers, and dedicated placement support.',
+    sections: [
+      {
+        h2: 'Learn Real Coding Skills That Tech Companies Actually Hire For',
+        paragraphs: [
+          'Traditional computer coaching centers often teach outdated syntax and theoretical slides that leave graduates unprepared for technical interviews. At IAMTECHNI, you learn software engineering by building real applications from day one.',
+          'Our curriculum covers high-demand industry domains: Full-Stack Web Development (React & Node.js), Python Programming, AWS Cloud Computing, and Modern Generative AI applications.',
+        ],
+      },
+      {
+        h2: 'Flexible Learning: Classroom Hub in Puducherry or Live Online',
+        paragraphs: [
+          'Because our main training center is just 22 km from Cuddalore, many of our students commute easily for hands-on weekend or weekday classroom batches.',
+          'For students with busy college schedules or working professionals, we also provide interactive live virtual sessions featuring screen-sharing labs, code reviews, and recorded session replays.',
+        ],
+      },
+      {
+        h2: 'Portfolio Building, Resume Polish & Interview Preparation',
+        paragraphs: [
+          'A certificate alone doesn\'t guarantee an IT job—a strong GitHub portfolio does. We help every student build 3 to 4 live production projects that can be showcased during technical job interviews.',
+          'We conduct 1-on-1 resume reviews, mock technical coding interviews, and aptitude preparation to help you secure offers at top software companies and startups.',
+        ],
+      },
+    ],
+    highlights: [
+      {
+        title: 'Industry-Standard Tech Curriculum',
+        description: 'Hands-on training in Python, React, TypeScript, Node.js, AWS Cloud, and SQL databases.',
+      },
+      {
+        title: 'Taught by Senior Engineers',
+        description: 'Learn directly from practicing software developers, not academic book-readers.',
+      },
+      {
+        title: 'Portfolio-First Approach',
+        description: 'Graduate with deployed, real-world web applications and clean repositories hosted on your personal GitHub.',
+      },
+      {
+        title: 'Comprehensive Placement Support',
+        description: 'Resume polishing, LinkedIn profile optimization, technical mock interviews, and hiring referrals.',
+      },
+    ],
+    processSteps: [
+      {
+        step: '01',
+        title: 'Foundational Programming Concepts',
+        description: 'Mastering algorithmic thinking, data structures, Git version control, and clean code hygiene.',
+      },
+      {
+        step: '02',
+        title: 'Full-Stack Application Development',
+        description: 'Building interactive frontends with React and robust backend APIs with Node.js and Python.',
+      },
+      {
+        step: '03',
+        title: 'Real-World Capstone Project',
+        description: 'Designing and deploying a full production application with authentication and cloud database storage.',
+      },
+      {
+        step: '04',
+        title: 'Career Coaching & Mock Interviews',
+        description: 'Technical interview practice, problem-solving drills, resume workshops, and company referrals.',
+      },
+    ],
+    localContext: 'Ideal for graduates and students from engineering and arts & science colleges across Cuddalore, Chidambaram, Neyveli, and Panruti looking to break into the tech industry.',
+    faqs: [
+      {
+        question: 'Can non-CS and non-engineering students join these software courses?',
+        answer: 'Yes. We have successfully trained graduates from B.Sc, B.Com, and non-computer engineering backgrounds. We begin with foundational logic and progressive exercises that build confidence regardless of your previous degree.',
+      },
+      {
+        question: 'Where are the classroom sessions conducted for Cuddalore students?',
+        answer: 'Classroom sessions are conducted at our primary training and engineering hub in Puducherry, just 22 km from Cuddalore. We also offer interactive live online sessions for those who prefer learning from home.',
+      },
+      {
+        question: 'Do you offer weekend batches for college students and working professionals?',
+        answer: 'Yes. We run specialized Saturday and Sunday batches with flexible timings designed to accommodate college students and working professionals.',
+      },
+      {
+        question: 'Will I receive a course completion certificate?',
+        answer: 'Yes. Upon successfully completing the training program and submitting your capstone project, you receive an official IAMTECHNI Certificate of Completion and GitHub project credentials.',
+      },
+    ],
+    courseDetails: {
+      duration: '10 to 12 Weeks (Flexible weekday & weekend tracks)',
+      mode: 'Puducherry Hub (20 mins from Cuddalore) / Live Online',
+      prerequisites: 'Basic computer literacy and enthusiasm to write code',
+      certification: 'IAMTECHNI Verified Software Engineering Certificate',
+    },
+  },
+];
+
+/**
+ * Registry of routes 13–30 marked as "not yet implemented" for this batch.
+ * This ensures clean tracking and straightforward extension in subsequent runs.
+ */
+export const UNIMPLEMENTED_LOCATION_ROUTES: UnimplementedRoute[] = [
+  {
+    routeNumber: 13,
+    slug: 'web-development-company-chennai',
+    path: '/web-development-company-chennai/',
+    targetLocation: 'Chennai, Tamil Nadu',
+    topic: 'Web Development Services',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 14,
+    slug: 'ecommerce-website-development-chennai',
+    path: '/ecommerce-website-development-chennai/',
+    targetLocation: 'Chennai, Tamil Nadu',
+    topic: 'E-commerce Website Development',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 15,
+    slug: 'software-development-company-chennai',
+    path: '/software-development-company-chennai/',
+    targetLocation: 'Chennai, Tamil Nadu',
+    topic: 'Custom Software Development',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 16,
+    slug: 'mobile-app-development-chennai',
+    path: '/mobile-app-development-chennai/',
+    targetLocation: 'Chennai, Tamil Nadu',
+    topic: 'Mobile App Development',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 17,
+    slug: 'digital-marketing-agency-chennai',
+    path: '/digital-marketing-agency-chennai/',
+    targetLocation: 'Chennai, Tamil Nadu',
+    topic: 'Digital Marketing & Performance Ads',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 18,
+    slug: 'local-seo-services-chennai',
+    path: '/local-seo-services-chennai/',
+    targetLocation: 'Chennai, Tamil Nadu',
+    topic: 'Local SEO & Google Business Profile',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 19,
+    slug: 'web-development-company-coimbatore',
+    path: '/web-development-company-coimbatore/',
+    targetLocation: 'Coimbatore, Tamil Nadu',
+    topic: 'Web Development Services',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 20,
+    slug: 'software-development-company-coimbatore',
+    path: '/software-development-company-coimbatore/',
+    targetLocation: 'Coimbatore, Tamil Nadu',
+    topic: 'Enterprise Software & ERP',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 21,
+    slug: 'digital-marketing-agency-coimbatore',
+    path: '/digital-marketing-agency-coimbatore/',
+    targetLocation: 'Coimbatore, Tamil Nadu',
+    topic: 'Digital Marketing Services',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 22,
+    slug: 'web-development-company-madurai',
+    path: '/web-development-company-madurai/',
+    targetLocation: 'Madurai, Tamil Nadu',
+    topic: 'Web Development Services',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 23,
+    slug: 'digital-marketing-agency-madurai',
+    path: '/digital-marketing-agency-madurai/',
+    targetLocation: 'Madurai, Tamil Nadu',
+    topic: 'Digital Marketing Services',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 24,
+    slug: 'web-development-company-trichy',
+    path: '/web-development-company-trichy/',
+    targetLocation: 'Trichy, Tamil Nadu',
+    topic: 'Web Development Services',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 25,
+    slug: 'it-training-trichy',
+    path: '/it-training-trichy/',
+    targetLocation: 'Trichy, Tamil Nadu',
+    topic: 'IT & Software Training',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 26,
+    slug: 'web-development-company-salem',
+    path: '/web-development-company-salem/',
+    targetLocation: 'Salem, Tamil Nadu',
+    topic: 'Web Development Services',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 27,
+    slug: 'web-development-company-erode',
+    path: '/web-development-company-erode/',
+    targetLocation: 'Erode, Tamil Nadu',
+    topic: 'Web Development Services',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 28,
+    slug: 'web-development-company-vellore',
+    path: '/web-development-company-vellore/',
+    targetLocation: 'Vellore, Tamil Nadu',
+    topic: 'Web Development Services',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 29,
+    slug: 'it-training-vellore',
+    path: '/it-training-vellore/',
+    targetLocation: 'Vellore, Tamil Nadu',
+    topic: 'IT & Software Training',
+    status: 'not yet implemented',
+  },
+  {
+    routeNumber: 30,
+    slug: 'web-development-company-tamil-nadu',
+    path: '/web-development-company-tamil-nadu/',
+    targetLocation: 'Tamil Nadu, India',
+    topic: 'Statewide Web Development & Cloud Services',
+    status: 'not yet implemented',
+  },
+];
+
+export function getLocationSeoPageBySlug(slug: string): LocationSeoPageData | undefined {
+  const cleanSlug = slug.replace(/^\/+|\/+$/g, '');
+  return LOCATION_PAGES_BATCH1.find((p) => p.slug === cleanSlug);
+}

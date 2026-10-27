@@ -53,6 +53,11 @@ import {
 } from './data/seo-pages';
 import { insightsData } from './data/insightsData';
 import { industriesData } from './data/industriesData';
+import { LocationLandingPage } from './components/seo/LocationLandingPage';
+import {
+  LOCATION_PAGES_BATCH1,
+  getLocationSeoPageBySlug,
+} from './data/location-seo';
 
 interface RoutePageWrapperProps {
   onNavigate: (route: PageRoute) => void;
@@ -202,6 +207,10 @@ export default function App() {
       const slug = cleanPath.replace('/services/', '');
       const canonicalSlug = getCanonicalServiceSlug(slug);
       return `/services/${canonicalSlug}` as PageRoute;
+    }
+    const locPage = getLocationSeoPageBySlug(cleanPath);
+    if (locPage) {
+      return locPage.path as PageRoute;
     }
     return cleanPath;
   }, []);
@@ -608,6 +617,32 @@ export default function App() {
             path="/terms"
             element={<LegalPage type="terms" onNavigate={navigate} />}
           />
+
+          {/* 16. Location-Based Landing Pages (Batch 1: Routes 1–12) */}
+          {LOCATION_PAGES_BATCH1.map((locPage) => (
+            <React.Fragment key={locPage.slug}>
+              <Route
+                path={`/${locPage.slug}/`}
+                element={
+                  <LocationLandingPage
+                    page={locPage}
+                    onNavigate={navigate}
+                    onStartProject={handleOpenProjectModal}
+                  />
+                }
+              />
+              <Route
+                path={`/${locPage.slug}`}
+                element={
+                  <LocationLandingPage
+                    page={locPage}
+                    onNavigate={navigate}
+                    onStartProject={handleOpenProjectModal}
+                  />
+                }
+              />
+            </React.Fragment>
+          ))}
 
           {/* Fallback 404 */}
           <Route

@@ -18,6 +18,7 @@ import { coursesData } from '../../data/coursesData';
 import { careersData } from '../../data/careersData';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
 import { PRIMARY_PHONE, SCHEMA_TELEPHONE } from '../../constants/contact';
+import { getLocationSeoPageBySlug } from '../../data/location-seo';
 
 const BASE_URL = COMPANY_CONTACT.website; // https://www.iamtechni.in
 const DEFAULT_OG_IMAGE = COMPANY_CONTACT.ogImageUrl; // https://www.iamtechni.in/og-image.png
@@ -827,8 +828,10 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
     }
   }, [currentRoute]);
 
-  // Individual service pages render their own <Helmet> directly inside <ServicePage />
-  if (isSeoServiceRoute) {
+  const isLocationRoute = Boolean(getLocationSeoPageBySlug(cleanPath));
+
+  // Individual service pages & location landing pages render their own <Helmet> directly
+  if (isSeoServiceRoute || isLocationRoute) {
     return null;
   }
 

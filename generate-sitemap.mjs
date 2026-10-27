@@ -275,6 +275,24 @@ async function generateSitemap() {
     }
   }
 
+  // 7. Location-Based SEO Landing Pages (Batch 1: Routes 1–12, strictly with trailing slashes)
+  const locationPagesJsonPath = path.resolve(__dirname, 'src/data/location-seo/location-pages.json');
+  if (fs.existsSync(locationPagesJsonPath)) {
+    const locationPages = JSON.parse(fs.readFileSync(locationPagesJsonPath, 'utf-8'));
+    for (const locPage of locationPages) {
+      const trailingSlashPath = locPage.path.endsWith('/') ? locPage.path : `${locPage.path}/`;
+      if (!seenUrls.has(trailingSlashPath)) {
+        seenUrls.add(trailingSlashPath);
+        links.push({
+          url: trailingSlashPath,
+          changefreq: 'weekly',
+          priority: 0.8,
+          lastmod: today,
+        });
+      }
+    }
+  }
+
   const stream = new SitemapStream({
     hostname: HOSTNAME,
     xmlns: {
