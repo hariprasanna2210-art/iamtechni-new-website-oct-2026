@@ -313,7 +313,7 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
                 <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-start gap-3">
                   <Phone className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
-                    <div className="text-[11px] font-mono text-slate-400">Direct Line (Hari Sir):</div>
+                    <div className="text-[11px] font-mono text-slate-400">Direct Line:</div>
                     <a
                       href={`tel:${SECONDARY_PHONE_LINK}`}
                       className="font-bold text-white hover:text-emerald-300 transition-colors"

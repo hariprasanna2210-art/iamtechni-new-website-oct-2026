@@ -254,7 +254,9 @@ function buildLocationStaticRootHtml(page) {
     ? `      <section>\n        <h2>Regional Commitment in ${escapeHtml(page.targetLocation.city)}</h2>\n        <p>${escapeHtml(page.localContext)}</p>\n      </section>`
     : '';
 
-  return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n        <p class="intro">${escapeHtml(page.intro)}</p>\n      <section>\n        <h2>Key Capabilities &amp; Advantages</h2>\n${highlightsHtml}\n      </section>\n${sectionsHtml}\n      <section>\n        <h2>Delivery Lifecycle</h2>\n${processHtml}\n      </section>\n${localContextHtml}\n${faqsHtml}\n      </main>\n    `;
+  const contactDetailsHtml = `      <section>\n        <h2>Regional Contact Details</h2>\n        <div>\n          <span>Enquiries: </span>\n          <a href="tel:+919385948951">+91 93859 48951</a>\n        </div>\n        <div>\n          <span>Direct Line: </span>\n          <a href="tel:+917418120053">+91 74181 20053</a>\n        </div>\n        <p>Engineering Hub: Puducherry &amp; Tamil Nadu, India</p>\n      </section>`;
+
+  return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n        <p class="intro">${escapeHtml(page.intro)}</p>\n${contactDetailsHtml}\n      <section>\n        <h2>Key Capabilities &amp; Advantages</h2>\n${highlightsHtml}\n      </section>\n${sectionsHtml}\n      <section>\n        <h2>Delivery Lifecycle</h2>\n${processHtml}\n      </section>\n${localContextHtml}\n${faqsHtml}\n      </main>\n    `;
 }
 
 function buildLocationJsonLdScripts(page, canonicalUrl) {
