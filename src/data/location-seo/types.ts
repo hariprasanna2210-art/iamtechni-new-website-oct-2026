@@ -50,6 +50,8 @@ export interface LocationSeoPageData {
     prerequisites: string;
     certification: string;
   };
+  matchingCourseId?: string;
+  matchingCoursePath?: string;
 }
 
 export interface UnimplementedRoute {

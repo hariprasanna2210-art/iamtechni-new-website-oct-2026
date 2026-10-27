@@ -35,7 +35,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       {
         h2: 'Core Web Vitals & Search Engine Performance Built-in',
         paragraphs: [
-          'Speed is not an afterthought; it is our baseline. Every web project we launch scores 90+ on Google PageSpeed Insights with sub-second Largest Contentful Paint (LCP) and zero Cumulative Layout Shift (CLS).',
+          'Speed is not an afterthought; it is our baseline. We build for 90+ Google PageSpeed scores and sub-second load times, optimizing Largest Contentful Paint (LCP) and Cumulative Layout Shift (CLS).',
           'We implement server-side rendering (SSR), automated image optimization, structured Schema.org JSON-LD markup, and complete meta tag architectures to ensure your site climbs to the top of Google search results.',
         ],
       },
@@ -53,7 +53,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         description: 'React, Next.js, TypeScript, Tailwind CSS, Node.js, and Python backends built for scale and longevity.',
       },
       {
-        title: '90+ Google Lighthouse Score',
+        title: 'Optimized PageSpeed Performance',
         description: 'Blazing fast load times optimized for mobile network conditions and high Core Web Vitals rankings.',
       },
       {
@@ -344,12 +344,12 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       'react native developers pondicherry',
       'cross platform app company pondicherry',
     ],
-    intro: 'Put your business directly into your customers\' pockets. IAMTECHNI is a specialized mobile app development company in Pondicherry crafting sleek, intuitive, and high-performance apps for iOS and Android. Using React Native and Flutter, we deliver native-speed mobile applications with shared codebases that save budget and launch twice as fast.',
+    intro: 'Put your business directly into your customers\' pockets. IAMTECHNI is a specialized mobile app development company in Pondicherry crafting sleek, intuitive, and high-performance apps for iOS and Android. Using React Native and Flutter, we deliver native-speed mobile applications with shared codebases that streamline development and launch faster.',
     sections: [
       {
         h2: 'Cross-Platform Performance With Native User Experience',
         paragraphs: [
-          'Developing separate iOS and Android codebases doubles your initial costs and ongoing maintenance overhead. With modern cross-platform engineering (React Native & Flutter), we deliver 60fps animations, native gesture handling, and hardware access from a unified codebase.',
+          'Developing separate iOS and Android codebases increases your initial costs and ongoing maintenance overhead. With modern cross-platform engineering (React Native & Flutter), we deliver smooth 60fps animations, native gesture handling, and hardware access from a unified codebase.',
           'From customer loyalty apps and on-demand delivery services to enterprise field workforce tracking and telemedicine portals, our mobile engineers build rock-solid mobile solutions.',
         ],
       },
@@ -364,7 +364,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         h2: 'End-to-End App Store Submission & Compliance',
         paragraphs: [
           'Navigating Apple App Store guidelines and Google Play Console policies can be daunting. We handle the entire release lifecycle: code signing, privacy policy compliance, screenshot generation, and submission handling.',
-          'Post-launch, we monitor crash telemetry, OS upgrade compatibility, and user feedback to ensure your rating stays high.',
+          'Post-launch, we monitor crash telemetry, OS upgrade compatibility, and user feedback to ensure your app remains performant and reliable.',
         ],
       },
     ],
@@ -382,8 +382,8 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         description: 'Segmented push notifications via Firebase Cloud Messaging for timely promotional and transactional alerts.',
       },
       {
-        title: 'Complete Store Approval',
-        description: 'Guaranteed submission assistance through Apple and Google review processes until publication.',
+        title: 'End-to-End Store Publishing',
+        description: 'Comprehensive submission assistance through Apple and Google review processes until publication.',
       },
     ],
     processSteps: [
@@ -412,7 +412,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
     faqs: [
       {
         question: 'Should we build native apps or a cross-platform app?',
-        answer: 'For 95% of business applications, cross-platform development (React Native or Flutter) is the smartest choice. It provides identical native performance and feel while slashing initial development and maintenance costs by up to 40%.',
+        answer: 'Cross-platform development (React Native or Flutter) provides native performance and feel while streamlining initial engineering and ongoing maintenance from a unified codebase.',
       },
       {
         question: 'How long does it take to build and publish a mobile app?',
@@ -523,7 +523,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       },
       {
         question: 'What monthly ad budget do we need to get started?',
-        answer: 'We work with budgets of all sizes. For local Pondicherry campaigns, businesses typically start with Rs. 15,000 to Rs. 40,000 monthly ad spend and scale up based on validated return on investment.',
+        answer: 'We work with budgets of all sizes. Ad spend and campaign budgets are planned per business goals and expected return on investment, scaling as performance is validated.',
       },
       {
         question: 'Do you design the ad graphics and write copy for us?',
@@ -558,12 +558,12 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       'local search agency puducherry',
       'rank on google pondicherry',
     ],
-    intro: 'When customers in Pondicherry search for services "near me," does your business appear in the coveted Google Maps 3-pack, or are your competitors taking every lead? IAMTECHNI provides specialized local SEO services in Pondicherry to ensure your business ranks #1 on Google Search and Google Maps.',
+    intro: 'When customers in Pondicherry search for services "near me," does your business appear in the coveted Google Maps 3-pack, or are your competitors taking every lead? IAMTECHNI provides specialized local SEO services in Pondicherry to ensure your business ranks at the top of Google Search and Google Maps.',
     sections: [
       {
-        h2: 'Google Business Profile (GBP) Optimization & Maps Domination',
+        h2: 'Google Business Profile (GBP) Optimization & Maps Visibility',
         paragraphs: [
-          'Over 70% of local mobile searches result in a direct phone call, store visit, or website click from the Google Maps local pack. We fully optimize your Google Business Profile: accurate categories, geo-tagged photo uploads, localized service descriptions, and regular posting.',
+          'A significant portion of local mobile searches result in a direct phone call, store visit, or website click from the Google Maps local pack. We fully optimize your Google Business Profile: accurate categories, geo-tagged photo uploads, localized service descriptions, and regular posting.',
           'We also audit and resolve duplicate listings, incorrect map pins, and category mismatches that suppress your profile from ranking for high-intent neighborhood searches.',
         ],
       },
@@ -584,8 +584,8 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
     ],
     highlights: [
       {
-        title: 'Google Maps 3-Pack Focus',
-        description: 'Targeted optimization designed specifically to elevate your business into the top 3 Google Maps positions.',
+        title: 'Google Maps Local Pack Focus',
+        description: 'Targeted optimization designed specifically to elevate your business in local Google Maps search positions.',
       },
       {
         title: 'LocalBusiness Schema Markup',
@@ -597,7 +597,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       },
       {
         title: 'Ethical Review Acceleration',
-        description: 'Streamlined QR codes and WhatsApp workflows to collect genuine 5-star reviews from happy customers.',
+        description: 'Streamlined QR codes and WhatsApp workflows to collect genuine reviews from happy customers.',
       },
     ],
     processSteps: [
@@ -618,8 +618,8 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       },
       {
         step: '04',
-        title: 'Tracking & Geo-Grid Reporting',
-        description: 'Monitoring keyword positions across different geographic pin codes in Pondicherry with monthly ranking reports.',
+        title: 'Tracking & Reporting',
+        description: 'Monitoring keyword positions across different geographic areas in Pondicherry with regular ranking reports.',
       },
     ],
     localContext: 'From White Town and Lawspet to Villianur and Kalapet, local search visibility directly dictates walk-in footfall and phone inquiries for businesses across the Union Territory of Puducherry.',
@@ -649,7 +649,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
     path: '/aws-training-pondicherry/',
     canonicalUrl: 'https://www.iamtechni.in/aws-training-pondicherry/',
     seoTitle: 'AWS Cloud Training in Pondicherry | IAMTECHNI',
-    metaDescription: 'Hands-on AWS cloud training in Pondicherry. Master EC2, S3, Lambda, VPC, and IAM with live cloud console labs and AWS certification preparation.',
+    metaDescription: 'Hands-on AWS cloud training in Pondicherry. Master EC2, S3, Lambda, VPC, and IAM with live cloud console labs. Enquire for duration and batch details.',
     h1: 'AWS Cloud Training in Pondicherry',
     category: 'Training',
     schemaType: 'Course',
@@ -665,27 +665,27 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       'aws solutions architect training pondicherry',
       'cloud training institute pondicherry',
     ],
-    intro: 'Cloud skills are the number one requirement for modern IT careers. IAMTECHNI delivers intensive, hands-on AWS (Amazon Web Services) cloud training in Pondicherry. Led by experienced cloud architects who manage production infrastructure daily, our program equips students and working professionals with practical, industry-grade skills to clear AWS Solutions Architect certifications and land high-paying cloud roles.',
+    intro: 'Cloud skills are in high demand across modern software and infrastructure roles. IAMTECHNI delivers practical, hands-on AWS (Amazon Web Services) cloud training in Pondicherry. Led by experienced cloud practitioners who manage production environments, our program equips students and working professionals with foundational to advanced cloud architecture skills.',
     sections: [
       {
-        h2: 'Real Cloud Console Labs Instead of Outdated Slides',
+        h2: 'Real Cloud Console Labs Instead of Theoretical Slides',
         paragraphs: [
-          'You cannot learn cloud architecture by memorizing theoretical diagrams. In our AWS training program, every learner gets direct access to live AWS consoles, provisioning real virtual machines (EC2), configuring storage buckets (S3), and building serverless microservices with AWS Lambda.',
-          'You learn the foundational networking principles that top cloud employers demand: creating Virtual Private Clouds (VPC), managing public/private subnets, setting up Internet Gateways, and locking down security groups.',
+          'You cannot learn cloud architecture by memorizing theoretical diagrams. In our AWS training program, learners work directly with live AWS consoles, provisioning virtual machines (EC2), configuring storage buckets (S3), and building serverless microservices with AWS Lambda.',
+          'You learn the foundational networking principles required for cloud environments: creating Virtual Private Clouds (VPC), managing public/private subnets, setting up Internet Gateways, and locking down security groups.',
         ],
       },
       {
-        h2: 'Comprehensive Curriculum Aligned to AWS Certification',
+        h2: 'Comprehensive Curriculum Mapped to Cloud Best Practices',
         paragraphs: [
-          'Our curriculum is directly mapped to the AWS Certified Cloud Practitioner and AWS Certified Solutions Architect – Associate (SAA-C03) blueprints.',
-          'We cover high availability, auto-scaling, Elastic Load Balancing, relational and NoSQL databases (RDS & DynamoDB), Infrastructure-as-Code (Terraform), and enterprise identity federation via AWS IAM.',
+          'Our curriculum covers high availability, auto-scaling, Elastic Load Balancing, relational and NoSQL databases (RDS & DynamoDB), Infrastructure-as-Code (Terraform), and enterprise identity federation via AWS IAM.',
+          'The syllabus matches the official AWS Certified Solutions Architect – Associate (SAA-C03) learning objectives, covering real architectural scenarios and hands-on lab exercises.',
         ],
       },
       {
-        h2: 'Career Mentorship, Mock Interviews & Placement Support',
+        h2: 'Practical Project Portfolio & Technical Mentorship',
         paragraphs: [
-          'Beyond technical training, we prepare you for real-world hiring rounds. We review your resume, help you showcase real cloud projects on GitHub, and conduct 1-on-1 technical mock interviews with senior engineers.',
-          'Both classroom sessions in Puducherry and interactive live online options are available with small batch sizes for dedicated instructor attention.',
+          'Beyond cloud concepts, we help you showcase real cloud projects on your personal GitHub and structure your technical portfolio.',
+          'Both in-person classroom batches in Puducherry and interactive live online sessions are available. For batch dates, course duration, and fee details, contact our team directly via WhatsApp or phone.',
         ],
       },
     ],
@@ -695,15 +695,15 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         description: 'Build real cloud architectures on AWS: VPCs, multi-tier web apps, serverless APIs, and automated backups.',
       },
       {
-        title: 'Certification Ready (SAA-C03)',
-        description: 'Includes official exam blueprint alignment, practice question banks, and timed mock tests.',
+        title: 'Certification Preparation',
+        description: 'Aligned with AWS Well-Architected Framework principles and Solutions Architect associate topics.',
       },
       {
         title: 'Production Architect Mentors',
-        description: 'Learn directly from engineers who deploy and manage enterprise cloud infrastructure every day.',
+        description: 'Learn directly from engineers who deploy and manage enterprise cloud infrastructure.',
       },
       {
-        title: 'Flexible Weekend & Weekday Batches',
+        title: 'Flexible Learning Tracks',
         description: 'Designed for engineering college students and working IT professionals seeking cloud upskilling.',
       },
     ],
@@ -725,35 +725,37 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       },
       {
         step: '04',
-        title: 'Capstones & Mock Certification',
-        description: 'Architecting a highly available multi-tier enterprise web application and clearing mock certification exams.',
+        title: 'Capstones & Architecture Review',
+        description: 'Architecting a highly available multi-tier enterprise web application following cloud best practices.',
       },
     ],
-    localContext: 'Conveniently located for engineering graduates and IT professionals from Pondicherry University, PEC, SMVEC, and regional tech firms looking to transition into high-growth cloud careers.',
+    localContext: 'Conveniently located for engineering graduates and IT professionals from Pondicherry University, PEC, SMVEC, and regional firms looking to build practical cloud computing skills.',
     faqs: [
       {
         question: 'Are there any prerequisites to join this AWS training course?',
-        answer: 'Basic computer networking concepts and general familiarity with operating systems are helpful, but no prior cloud experience is required. We start with foundational cloud concepts and progressively advance to complex architectures.',
+        answer: 'Basic knowledge of operating systems (Linux/Windows) and networking concepts is recommended. We begin with foundational cloud concepts before advancing to multi-tier architectures.',
       },
       {
-        question: 'Will this course prepare me for the AWS Solutions Architect exam?',
-        answer: 'Yes. The syllabus is directly aligned with the official AWS Certified Solutions Architect – Associate (SAA-C03) exam syllabus, complete with scenario-based practice questions and architecture labs.',
+        question: 'Will this course help prepare me for the AWS Solutions Architect exam?',
+        answer: 'Yes. The syllabus is aligned with core AWS Solutions Architect topics, complete with architecture labs and scenario reviews.',
+      },
+      {
+        question: 'How do I find out about batch schedules, duration, and course fees?',
+        answer: 'Please contact us directly via WhatsApp or call +91 93859 48951. Our team will share the complete syllabus, upcoming batch timings, duration, and fee details.',
       },
       {
         question: 'Do you offer both classroom and online sessions?',
-        answer: 'Yes. We offer in-person classroom batches at our Puducherry training facility as well as interactive live instructor-led online sessions for remote students.',
-      },
-      {
-        question: 'Will I get practical hands-on experience or just theory?',
-        answer: 'Our training is 80% hands-on. Every class includes live terminal and console exercises where you design, deploy, and troubleshoot real AWS infrastructure.',
+        answer: 'Yes. We offer in-person classroom batches at our Puducherry hub as well as interactive live instructor-led online sessions.',
       },
     ],
     courseDetails: {
-      duration: '8 Weeks (Weekend & Weekday options)',
-      mode: 'Classroom in Puducherry / Live Interactive Online',
-      prerequisites: 'Basic IT or computer science background',
-      certification: 'Course Completion Certificate & AWS SAA-C03 Exam Prep',
+      duration: 'Contact us for duration and batch details',
+      mode: 'Contact us for training mode (classroom / online)',
+      prerequisites: 'Basic knowledge of operating systems (Linux/Windows) and networking concepts',
+      certification: 'Contact us for details',
     },
+    matchingCourseId: 'aws',
+    matchingCoursePath: '/training/aws',
   },
 
   // 8. DevOps Training Pondicherry
@@ -783,7 +785,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       {
         h2: 'Bridge the Gap Between Software Engineering and Operations',
         paragraphs: [
-          'DevOps engineers are among the most sought-after and highly compensated professionals in the global IT sector. Organizations need engineers who can automate releases, manage cloud environments, and maintain 99.99% uptime.',
+          'Organizations require engineers who can automate releases, manage cloud environments, and maintain high service availability.',
           'Our course takes you beyond theoretical definitions into real terminal workflows: building multi-stage Dockerfiles, managing container registries, and deploying resilient workloads on Kubernetes clusters.',
         ],
       },
@@ -842,31 +844,33 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         description: 'Automating the pipeline with GitHub Actions, provisioning AWS via Terraform, and setting up Grafana alerts.',
       },
     ],
-    localContext: 'Designed to upskill engineering graduates and IT professionals in Puducherry to secure high-demand DevOps and Site Reliability Engineering (SRE) positions across India and global remote teams.',
+    localContext: 'Designed to upskill engineering graduates and IT professionals in Puducherry with modern containerization and CI/CD automation practices.',
     faqs: [
       {
         question: 'Do I need programming experience to learn DevOps?',
-        answer: 'Deep programming expertise is not required. However, basic familiarity with Linux command-line commands and fundamental scripting (Bash or Python) is helpful. We include foundational Linux modules in the first two weeks.',
+        answer: 'Deep programming expertise is not required. Basic command-line familiarity (Linux bash) and understanding of web applications is recommended.',
       },
       {
         question: 'Which tools are covered in this DevOps course?',
         answer: 'We cover Linux, Git & GitHub, Docker, Kubernetes (K8s), Helm, GitHub Actions, Terraform, AWS cloud fundamentals, Prometheus, and Grafana.',
       },
       {
-        question: 'Does the program include a real capstone project?',
-        answer: 'Yes. Every learner builds an automated CI/CD pipeline that builds a containerized application, runs automated tests, and deploys to a Kubernetes cluster on AWS using Terraform.',
+        question: 'How can I inquire about batch timings, duration, and fees?',
+        answer: 'Reach out to our team directly via WhatsApp or phone at +91 93859 48951 for complete batch schedules, upcoming start dates, duration, and fee structures.',
       },
       {
-        question: 'What career roles can I apply for after this training?',
-        answer: 'Graduates are qualified to apply for roles such as DevOps Engineer, Cloud Engineer, Platform Engineer, Site Reliability Engineer (SRE), and Build & Release Engineer.',
+        question: 'Does the program include practical lab projects?',
+        answer: 'Yes. Learners build automated CI/CD pipelines that build containerized applications, run automated tests, and deploy to Kubernetes clusters.',
       },
     ],
     courseDetails: {
-      duration: '10 Weeks (Practical weekend sessions & lab exercises)',
-      mode: 'Puducherry Hub / Interactive Live Virtual',
-      prerequisites: 'Basic understanding of IT systems or development',
-      certification: 'IAMTECHNI Certified DevOps Engineer Certificate',
+      duration: 'Contact us for duration and batch details',
+      mode: 'Contact us for training mode (classroom / online)',
+      prerequisites: 'Basic command-line familiarity (Linux bash) and understanding of web applications',
+      certification: 'Contact us for details',
     },
+    matchingCourseId: 'devops-engineering',
+    matchingCoursePath: '/training/devops-engineering',
   },
 
   // 9. Generative AI Training Pondicherry
@@ -891,13 +895,13 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       'ai development course pondicherry',
       'rag and prompt engineering pondicherry',
     ],
-    intro: 'Generative AI is redefining how software is built and how businesses operate. IAMTECHNI offers the region\'s premier Generative AI and LLM Engineering training in Pondicherry. Step beyond basic ChatGPT prompting and learn how to engineer real AI products: Retrieval-Augmented Generation (RAG) systems, autonomous AI agents, vector databases, and custom API integrations using Python and modern foundation models.',
+    intro: 'Generative AI is redefining how software is built and how businesses operate. IAMTECHNI offers specialized Generative AI and LLM Engineering training in Pondicherry. Step beyond basic ChatGPT prompting and learn how to engineer real AI products: Retrieval-Augmented Generation (RAG) systems, autonomous AI agents, vector databases, and custom API integrations using Python and modern foundation models.',
     sections: [
       {
         h2: 'Engineer Production AI Systems, Not Just Chatbot Prompts',
         paragraphs: [
-          'Prompting alone is not enough for modern software careers. Companies need engineers who understand how to connect Large Language Models (LLMs) with proprietary enterprise knowledge bases, APIs, and business databases.',
-          'In this course, you will write production Python code to build semantic search engines, contextual document analyzers, and automated customer support agents using models from OpenAI, Anthropic, and Google Gemini.',
+          'Prompting alone is not enough for modern software engineering. Companies need engineers who understand how to connect Large Language Models (LLMs) with enterprise knowledge bases, APIs, and business databases.',
+          'In this course, you will write Python code to build semantic search engines, contextual document analyzers, and automated customer support agents using models from OpenAI, Anthropic, and Google Gemini.',
         ],
       },
       {
@@ -910,7 +914,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       {
         h2: 'Autonomous Agents, Tool Calling & AI Guardrails',
         paragraphs: [
-          'The future of AI lies in agentic workflows where models call external APIs, perform web searches, and execute multi-step tasks autonomously. You will master LangChain, LangGraph, and CrewAI frameworks.',
+          'The future of AI lies in agentic workflows where models call external APIs, perform web searches, and execute multi-step tasks autonomously. You will work with LangChain, LangGraph, and CrewAI frameworks.',
           'We also emphasize responsible AI deployment: latency reduction, token cost optimization, output validation with Pydantic, and privacy guardrails.',
         ],
       },
@@ -926,11 +930,11 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       },
       {
         title: 'Multi-Model API Integration',
-        description: 'Hands-on experience with OpenAI GPT-4o, Google Gemini 2.5/3.5, and local open-source models like Llama 3 via Ollama.',
+        description: 'Hands-on experience with OpenAI GPT-4o, Google Gemini, and local open-source models like Llama 3 via Ollama.',
       },
       {
-        title: 'Enterprise AI Portfolio',
-        description: 'Graduate with 4 production-grade AI applications hosted live on GitHub to impress prospective employers.',
+        title: 'Practical Project Portfolio',
+        description: 'Build live AI application projects hosted on your personal GitHub to showcase your practical capabilities.',
       },
     ],
     processSteps: [
@@ -963,23 +967,25 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       },
       {
         question: 'What programming language is used in the course?',
-        answer: 'The entire course is taught in Python, the industry standard for AI and LLM development. Basic familiarity with Python syntax is recommended.',
+        answer: 'The entire course is taught in Python, the industry standard for AI and LLM development. Intermediate Python programming and familiarity with REST API integration is recommended.',
+      },
+      {
+        question: 'How do I enquire about upcoming batches, duration, and fees?',
+        answer: 'Contact our admissions team via WhatsApp or call +91 93859 48951 for detailed information on upcoming batch dates, duration, mode, and fees.',
       },
       {
         question: 'Will we learn how to run local models without paying API fees?',
         answer: 'Yes. We show you how to run open-weight models (such as Llama 3 and Mistral) locally on your own workstation using Ollama and Hugging Face.',
       },
-      {
-        question: 'Can this course help me implement AI solutions for my company?',
-        answer: 'Absolutely. Many of our students are working professionals who build proof-of-concept AI search engines, internal document analyzers, and automated ticket responders for their employers as their capstone projects.',
-      },
     ],
     courseDetails: {
-      duration: '8 Weeks (Intensive hands-on weekend modules)',
-      mode: 'Puducherry Hub / Live Virtual Interactive',
-      prerequisites: 'Basic Python programming knowledge',
-      certification: 'IAMTECHNI Certified Generative AI Engineer',
+      duration: 'Contact us for duration and batch details',
+      mode: 'Contact us for training mode (classroom / online)',
+      prerequisites: 'Intermediate Python programming and familiarity with REST API integration',
+      certification: 'Contact us for details',
     },
+    matchingCourseId: 'generative-ai',
+    matchingCoursePath: '/training/generative-ai',
   },
 
   // 10. Web Development Cuddalore
@@ -1035,8 +1041,8 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         description: 'Convenient on-site discovery sessions in Cuddalore OT, New Town, and SIPCOT industrial corridors.',
       },
       {
-        title: 'Ultra-Fast Load Speeds',
-        description: 'Websites engineered to score 90+ on Google PageSpeed Insights for superior mobile search rankings.',
+        title: 'Fast Page Load Speeds',
+        description: 'Websites engineered for fast load times and strong Core Web Vitals performance on mobile networks.',
       },
       {
         title: 'Indian Payment Gateways',
@@ -1193,7 +1199,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       },
       {
         question: 'What kind of support is provided after the website is launched?',
-        answer: 'We provide 30 days of complimentary post-launch warranty support followed by flexible annual maintenance packages for security updates, backups, and content updates.',
+        answer: 'We provide post-launch warranty support followed by flexible maintenance packages for security updates, backups, and content updates.',
       },
     ],
   },
@@ -1204,7 +1210,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
     path: '/it-training-cuddalore/',
     canonicalUrl: 'https://www.iamtechni.in/it-training-cuddalore/',
     seoTitle: 'IT Training & Software Courses in Cuddalore | IAMTECHNI',
-    metaDescription: 'Hands-on IT training for students & professionals in Cuddalore. Full stack development, Python, AWS cloud, and AI courses with job placement assistance.',
+    metaDescription: 'Hands-on IT training for students & professionals in Cuddalore. Full stack development, Python, AWS cloud, and AI courses. Enquire for batch schedules.',
     h1: 'IT Training & Software Courses in Cuddalore',
     category: 'Training',
     schemaType: 'Course',
@@ -1221,27 +1227,27 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       'full stack developer course cuddalore',
       'computer training center cuddalore',
     ],
-    intro: 'Launch your career in the high-growth software and tech industry. IAMTECHNI delivers practical, industry-aligned IT training and software courses for students, college graduates, and working professionals in Cuddalore. Located just 20 minutes from Cuddalore in neighboring Puducherry, our programs offer real coding labs, direct mentorship from senior software engineers, and dedicated placement support.',
+    intro: 'Build practical skills for the modern software industry. IAMTECHNI delivers industry-aligned IT training and software courses for students, college graduates, and working professionals in Cuddalore. Located just 20 minutes from Cuddalore in neighboring Puducherry, our programs offer real coding labs and direct mentorship from experienced software developers.',
     sections: [
       {
-        h2: 'Learn Real Coding Skills That Tech Companies Actually Hire For',
+        h2: 'Learn Real Coding Skills That Tech Teams Work With Daily',
         paragraphs: [
-          'Traditional computer coaching centers often teach outdated syntax and theoretical slides that leave graduates unprepared for technical interviews. At IAMTECHNI, you learn software engineering by building real applications from day one.',
+          'Traditional computer coaching centers often teach outdated syntax and theoretical slides that leave graduates unprepared for real development work. At IAMTECHNI, you learn software engineering by building real applications.',
           'Our curriculum covers high-demand industry domains: Full-Stack Web Development (React & Node.js), Python Programming, AWS Cloud Computing, and Modern Generative AI applications.',
         ],
       },
       {
         h2: 'Flexible Learning: Classroom Hub in Puducherry or Live Online',
         paragraphs: [
-          'Because our main training center is just 22 km from Cuddalore, many of our students commute easily for hands-on weekend or weekday classroom batches.',
-          'For students with busy college schedules or working professionals, we also provide interactive live virtual sessions featuring screen-sharing labs, code reviews, and recorded session replays.',
+          'Because our main training center is just 22 km from Cuddalore, students can attend hands-on classroom sessions conveniently.',
+          'For students with busy college schedules or working professionals, we also provide interactive live virtual sessions featuring screen-sharing labs, code reviews, and structured exercises.',
         ],
       },
       {
-        h2: 'Portfolio Building, Resume Polish & Interview Preparation',
+        h2: 'Practical Portfolio Building & Coding Labs',
         paragraphs: [
-          'A certificate alone doesn\'t guarantee an IT job—a strong GitHub portfolio does. We help every student build 3 to 4 live production projects that can be showcased during technical job interviews.',
-          'We conduct 1-on-1 resume reviews, mock technical coding interviews, and aptitude preparation to help you secure offers at top software companies and startups.',
+          'We emphasize practical portfolio building where you build live software projects hosted on your personal GitHub.',
+          'We provide technical guidance on code structure, clean architecture, and best practices to help you present your work effectively.',
         ],
       },
     ],
@@ -1252,15 +1258,15 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       },
       {
         title: 'Taught by Senior Engineers',
-        description: 'Learn directly from practicing software developers, not academic book-readers.',
+        description: 'Learn directly from practicing software developers.',
       },
       {
         title: 'Portfolio-First Approach',
-        description: 'Graduate with deployed, real-world web applications and clean repositories hosted on your personal GitHub.',
+        description: 'Build real-world web applications and clean repositories hosted on your personal GitHub.',
       },
       {
-        title: 'Comprehensive Placement Support',
-        description: 'Resume polishing, LinkedIn profile optimization, technical mock interviews, and hiring referrals.',
+        title: 'Practical Code Mentorship',
+        description: 'Hands-on code reviews, architecture discussions, and technical guidance on your projects.',
       },
     ],
     processSteps: [
@@ -1281,35 +1287,37 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       },
       {
         step: '04',
-        title: 'Career Coaching & Mock Interviews',
-        description: 'Technical interview practice, problem-solving drills, resume workshops, and company referrals.',
+        title: 'Technical Review & Portfolio Polish',
+        description: 'Code reviews, debugging best practices, portfolio showcase on GitHub, and project presentation.',
       },
     ],
-    localContext: 'Ideal for graduates and students from engineering and arts & science colleges across Cuddalore, Chidambaram, Neyveli, and Panruti looking to break into the tech industry.',
+    localContext: 'Ideal for graduates and students from engineering and arts & science colleges across Cuddalore, Chidambaram, Neyveli, and Panruti looking to build software skills.',
     faqs: [
       {
         question: 'Can non-CS and non-engineering students join these software courses?',
-        answer: 'Yes. We have successfully trained graduates from B.Sc, B.Com, and non-computer engineering backgrounds. We begin with foundational logic and progressive exercises that build confidence regardless of your previous degree.',
+        answer: 'Yes. We have trained learners from various educational backgrounds. We begin with foundational logic and progressive exercises that build confidence regardless of your previous degree.',
       },
       {
         question: 'Where are the classroom sessions conducted for Cuddalore students?',
-        answer: 'Classroom sessions are conducted at our primary training and engineering hub in Puducherry, just 22 km from Cuddalore. We also offer interactive live online sessions for those who prefer learning from home.',
+        answer: 'Classroom sessions are conducted at our primary training hub in Puducherry, just 22 km from Cuddalore. We also offer interactive live online sessions for those who prefer learning from home.',
       },
       {
-        question: 'Do you offer weekend batches for college students and working professionals?',
-        answer: 'Yes. We run specialized Saturday and Sunday batches with flexible timings designed to accommodate college students and working professionals.',
+        question: 'How do I enquire about batch schedules, course duration, and fees?',
+        answer: 'Contact our admissions desk via WhatsApp or call +91 93859 48951 for complete batch schedules, upcoming start dates, duration, and fee details.',
       },
       {
         question: 'Will I receive a course completion certificate?',
-        answer: 'Yes. Upon successfully completing the training program and submitting your capstone project, you receive an official IAMTECHNI Certificate of Completion and GitHub project credentials.',
+        answer: 'Contact us for certificate details and criteria upon completing course project requirements.',
       },
     ],
     courseDetails: {
-      duration: '10 to 12 Weeks (Flexible weekday & weekend tracks)',
-      mode: 'Puducherry Hub (20 mins from Cuddalore) / Live Online',
+      duration: 'Contact us for duration and batch details',
+      mode: 'Contact us for training mode (classroom / online)',
       prerequisites: 'Basic computer literacy and enthusiasm to write code',
-      certification: 'IAMTECHNI Verified Software Engineering Certificate',
+      certification: 'Contact us for details',
     },
+    matchingCourseId: 'full-stack-development',
+    matchingCoursePath: '/training/full-stack-development',
   },
 ];
 

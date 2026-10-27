@@ -286,6 +286,16 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
                   <MessageCircle className="w-4 h-4 text-emerald-400" />
                   <span>WhatsApp Us</span>
                 </a>
+
+                {page.matchingCoursePath && (
+                  <button
+                    onClick={() => handleNavigate(page.matchingCoursePath as PageRoute)}
+                    className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-sky-500/10 hover:bg-sky-500/20 text-sky-200 font-semibold text-sm border border-sky-400/30 transition-all cursor-pointer"
+                  >
+                    <span>View Course Syllabus</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -391,6 +401,21 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
                 </div>
               </div>
             </div>
+
+            {page.matchingCoursePath && (
+              <div className="mt-4 pt-3.5 border-t border-sky-200/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <span className="text-slate-600">
+                  Review complete module breakdown, practical exercises, and syllabus in our main directory.
+                </span>
+                <button
+                  onClick={() => handleNavigate(page.matchingCoursePath as PageRoute)}
+                  className="inline-flex items-center gap-1.5 font-bold text-sky-700 hover:text-sky-900 transition-colors cursor-pointer"
+                >
+                  <span>View Course in Training Section</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
           </div>
         </section>
       )}
