@@ -741,6 +741,27 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     };
   }
 
+  // Locations Directory (/locations)
+  if (cleanPath === '/locations') {
+    structuredData.push(
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Locations', path: '/locations' },
+      ])
+    );
+    return {
+      ...baseMeta,
+      title: 'Locations We Serve | IAMTECHNI – Puducherry, Chennai & Tamil Nadu',
+      description: formatMetaDescription(
+        'Explore IAMTECHNI services across Puducherry, Chennai, Coimbatore, Madurai, Trichy, Salem, Erode, Vellore, Cuddalore, and Villupuram. Software, web development, digital marketing, and live online training.'
+      ),
+      canonicalUrl: `${BASE_URL}/locations`,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData,
+    };
+  }
+
   // 20. Legal Pages (/privacy-policy, /terms)
   if (cleanPath === '/privacy-policy') {
     structuredData.push(

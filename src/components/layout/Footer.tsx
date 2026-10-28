@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, Mail, Globe, Phone, Sparkles } from 'lucide-react';
 import { IamtechniLogo } from '../common/IamtechniLogo';
@@ -38,7 +39,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
     <footer className="bg-[#13243D] text-white">
       {/* Main Footer Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-9 pb-7 sm:pt-[56px] sm:pb-[40px]">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.3fr_1fr_0.9fr_1.3fr] gap-6 md:gap-10 lg:gap-[44px] items-start">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.2fr_0.95fr_0.85fr_1.05fr_1.2fr] gap-6 md:gap-8 lg:gap-[32px] xl:gap-[40px] items-start">
           {/* COLUMN 1 – Brand */}
           <motion.div
             custom={0}
@@ -249,9 +250,72 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
             </ul>
           </motion.div>
 
-          {/* COLUMN 4 – GET IN TOUCH */}
+          {/* COLUMN 4 – LOCATIONS */}
           <motion.div
             custom={3}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={columnVariants}
+          >
+            <h4 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#5CE1E6] mb-3.5 sm:mb-[20px] leading-none whitespace-nowrap">
+              LOCATIONS
+            </h4>
+            <ul className="space-y-1 md:space-y-[12px] text-[13px] sm:text-[14px] text-white/85">
+              <li>
+                <Link
+                  to="/web-development-company-pondicherry/"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
+                >
+                  Web Development Pondicherry
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/custom-software-development-pondicherry/"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
+                >
+                  Software Development Pondicherry
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/digital-marketing-agency-pondicherry/"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
+                >
+                  Digital Marketing Pondicherry
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/web-development-company-chennai/"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
+                >
+                  Web Development Chennai
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/aws-training-pondicherry/"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
+                >
+                  AWS Training Pondicherry
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/locations"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap text-[#5CE1E6] font-semibold hover:translate-x-[2px] transition-all duration-200 text-left"
+                >
+                  View all locations →
+                </Link>
+              </li>
+            </ul>
+          </motion.div>
+
+          {/* COLUMN 5 – GET IN TOUCH */}
+          <motion.div
+            custom={4}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.15 }}

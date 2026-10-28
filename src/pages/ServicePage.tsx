@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   ArrowRight,
   CheckCircle2,
   ChevronDown,
   Cpu,
   Compass,
+  MapPin,
 } from 'lucide-react';
 import { PageRoute, ServiceItem } from '../types';
 import { ServicePageData } from '../data/seo-pages/types';
@@ -25,6 +26,58 @@ export interface ServicePageProps extends ServicePageData {
 }
 
 const BASE_URL = 'https://www.iamtechni.in';
+
+const SERVICE_LOCATION_LINKS: Record<string, { city: string; path: string; label: string }[]> = {
+  'web-development': [
+    { city: 'Pondicherry', path: '/web-development-company-pondicherry/', label: 'Web Development Pondicherry' },
+    { city: 'Chennai', path: '/web-development-company-chennai/', label: 'Web Development Chennai' },
+    { city: 'Coimbatore', path: '/web-development-coimbatore/', label: 'Web Development Coimbatore' },
+    { city: 'Madurai', path: '/web-development-madurai/', label: 'Web Development Madurai' },
+    { city: 'Trichy', path: '/web-development-trichy/', label: 'Web Development Trichy' },
+    { city: 'Salem', path: '/web-development-salem/', label: 'Web Development Salem' },
+    { city: 'Erode', path: '/web-development-erode/', label: 'Web Development Erode' },
+    { city: 'Vellore', path: '/web-development-vellore/', label: 'Web Development Vellore' },
+    { city: 'Cuddalore', path: '/web-development-cuddalore/', label: 'Web Development Cuddalore' },
+    { city: 'Villupuram', path: '/web-development-villupuram/', label: 'Web Development Villupuram' },
+  ],
+  'ecommerce': [
+    { city: 'Pondicherry', path: '/ecommerce-website-development-pondicherry/', label: 'E-commerce Development Pondicherry' },
+    { city: 'Chennai', path: '/ecommerce-website-development-chennai/', label: 'E-commerce Development Chennai' },
+  ],
+  'custom-software': [
+    { city: 'Pondicherry', path: '/custom-software-development-pondicherry/', label: 'Custom Software Pondicherry' },
+    { city: 'Chennai', path: '/software-development-company-chennai/', label: 'Software Development Chennai' },
+  ],
+  'mobile-apps': [
+    { city: 'Pondicherry', path: '/mobile-app-development-pondicherry/', label: 'Mobile App Development Pondicherry' },
+    { city: 'Chennai', path: '/mobile-app-development-chennai/', label: 'Mobile App Development Chennai' },
+  ],
+  'digital-marketing': [
+    { city: 'Pondicherry (Agency)', path: '/digital-marketing-agency-pondicherry/', label: 'Digital Marketing Pondicherry' },
+    { city: 'Pondicherry (SEO)', path: '/seo-company-pondicherry/', label: 'SEO Pondicherry' },
+    { city: 'Chennai (Agency)', path: '/digital-marketing-agency-chennai/', label: 'Digital Marketing Chennai' },
+    { city: 'Chennai (SEO)', path: '/seo-company-chennai/', label: 'SEO Chennai' },
+    { city: 'Coimbatore', path: '/digital-marketing-coimbatore/', label: 'Digital Marketing Coimbatore' },
+  ],
+  'cloud-devops': [
+    { city: 'Pondicherry (AWS)', path: '/aws-training-pondicherry/', label: 'AWS Training Pondicherry' },
+    { city: 'Pondicherry (DevOps)', path: '/devops-training-pondicherry/', label: 'DevOps Training Pondicherry' },
+    { city: 'Chennai (AWS)', path: '/aws-training-chennai/', label: 'AWS Training Chennai' },
+    { city: 'Chennai (DevOps)', path: '/devops-training-chennai/', label: 'DevOps Training Chennai' },
+    { city: 'Coimbatore (AWS)', path: '/aws-training-coimbatore/', label: 'AWS Training Coimbatore' },
+  ],
+  'training': [
+    { city: 'Pondicherry (AWS)', path: '/aws-training-pondicherry/', label: 'AWS Training Pondicherry' },
+    { city: 'Pondicherry (DevOps)', path: '/devops-training-pondicherry/', label: 'DevOps Training Pondicherry' },
+    { city: 'Pondicherry (GenAI)', path: '/generative-ai-training-pondicherry/', label: 'Generative AI Pondicherry' },
+    { city: 'Chennai (AWS)', path: '/aws-training-chennai/', label: 'AWS Training Chennai' },
+    { city: 'Chennai (DevOps)', path: '/devops-training-chennai/', label: 'DevOps Training Chennai' },
+    { city: 'Coimbatore (AWS)', path: '/aws-training-coimbatore/', label: 'AWS Training Coimbatore' },
+    { city: 'Madurai (IT)', path: '/it-training-madurai/', label: 'IT Training Madurai' },
+    { city: 'Cuddalore (IT)', path: '/it-training-cuddalore/', label: 'IT Training Cuddalore' },
+    { city: 'Tamil Nadu (GenAI)', path: '/generative-ai-training-tamil-nadu/', label: 'Generative AI Tamil Nadu' },
+  ],
+};
 
 export const ServicePage: React.FC<ServicePageProps> = ({
   slug,
@@ -493,6 +546,58 @@ export const ServicePage: React.FC<ServicePageProps> = ({
           </section>
         </MobileSectionSkeletonWrapper>
       )}
+
+      {/* "Available in" Regional Delivery Row */}
+      {(() => {
+        const locationLinks = SERVICE_LOCATION_LINKS[canonicalSlug];
+        if (!locationLinks || locationLinks.length === 0) return null;
+
+        return (
+          <section className="py-8 sm:py-12 bg-[#F8FAFC] border-b border-slate-200">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-7 shadow-2xs space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-[#1266E8]">
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>Regional Delivery</span>
+                    </div>
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                      {h1} Available Across Locations
+                    </h3>
+                  </div>
+
+                  <Link
+                    to="/locations"
+                    className="text-xs font-semibold text-[#1266E8] hover:underline flex items-center gap-1 shrink-0 self-start sm:self-auto"
+                  >
+                    <span>View all 30 locations</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-semibold text-slate-600 mr-1">Available in:</span>
+                  {locationLinks.map((loc) => (
+                    <Link
+                      key={loc.path}
+                      to={loc.path}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-[#EEF4FF] border border-slate-200 hover:border-[#1266E8]/40 hover:text-[#1266E8] text-slate-700 text-xs font-medium transition-colors"
+                    >
+                      <MapPin className="w-3 h-3 text-slate-400" />
+                      <span>{loc.city}</span>
+                    </Link>
+                  ))}
+                </div>
+
+                <p className="text-[11.5px] text-slate-500 leading-relaxed pt-1">
+                  Headquartered in Puducherry; serving clients remotely across Chennai and Tamil Nadu with in-person meetings on request.
+                </p>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Bottom CTA Banner */}
       <MobileSectionSkeletonWrapper variant="split-detail" sectionIndex={6}>

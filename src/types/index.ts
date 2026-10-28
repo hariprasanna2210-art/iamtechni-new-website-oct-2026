@@ -47,6 +47,7 @@ export type PageRoute =
   | '/contact'
   | '/contact/consultation'
   | '/faq'
+  | '/locations'
   | '/privacy-policy'
   | '/terms'
   | '/terms-and-conditions'

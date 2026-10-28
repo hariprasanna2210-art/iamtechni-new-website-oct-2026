@@ -31,7 +31,9 @@ import {
   Briefcase,
   AlertCircle,
   Laptop,
+  MapPin,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { PageRoute, CourseItem } from '../types';
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import {
@@ -49,6 +51,22 @@ import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../componen
 import { TrainingHeroVisual } from '../components/heroes/TrainingHeroVisual';
 import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+
+const COURSE_LOCATION_LINKS: Record<string, { city: string; path: string; label: string }[]> = {
+  aws: [
+    { city: 'Pondicherry', path: '/aws-training-pondicherry/', label: 'AWS Training Pondicherry' },
+    { city: 'Chennai', path: '/aws-training-chennai/', label: 'AWS Training Chennai' },
+    { city: 'Coimbatore', path: '/aws-training-coimbatore/', label: 'AWS Training Coimbatore' },
+  ],
+  'devops-engineering': [
+    { city: 'Pondicherry', path: '/devops-training-pondicherry/', label: 'DevOps Training Pondicherry' },
+    { city: 'Chennai', path: '/devops-training-chennai/', label: 'DevOps Training Chennai' },
+  ],
+  'generative-ai': [
+    { city: 'Pondicherry', path: '/generative-ai-training-pondicherry/', label: 'Generative AI Training Pondicherry' },
+    { city: 'Tamil Nadu', path: '/generative-ai-training-tamil-nadu/', label: 'Generative AI Training Tamil Nadu' },
+  ],
+};
 
 interface TrainingPageProps {
   courseSlug?: string;
@@ -336,6 +354,41 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
       <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={0} cardCount={3}>
       <section ref={catalogRef} id="courses-catalog" className="py-10 sm:py-16 lg:py-20 bg-[#F4F7FC] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+          {/* Active Course Regional Location Training Banner if accessed via /training/:slug */}
+          {courseSlug && COURSE_LOCATION_LINKS[courseSlug] && (
+            <div className="bg-white rounded-2xl border border-blue-200/90 p-4 sm:p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#1266E8] uppercase">
+                  <MapPin className="w-3.5 h-3.5" /> Regional Online Training Pages
+                </div>
+                <div className="text-sm font-bold text-slate-900">
+                  Looking for {coursesData.find((c) => c.id === courseSlug)?.title || 'course'} training in a specific city?
+                </div>
+                <div className="text-xs text-slate-600">
+                  Delivered live online with instructor guidance across Tamil Nadu &amp; Puducherry.
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                {COURSE_LOCATION_LINKS[courseSlug].map((loc) => (
+                  <Link
+                    key={loc.path}
+                    to={loc.path}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-[#1266E8] text-xs font-semibold transition-colors"
+                  >
+                    <MapPin className="w-3 h-3" />
+                    <span>{loc.label}</span>
+                  </Link>
+                ))}
+                <Link
+                  to="/locations"
+                  className="text-xs font-semibold text-slate-600 hover:text-[#1266E8] px-2 py-1"
+                >
+                  All Locations →
+                </Link>
+              </div>
+            </div>
+          )}
+
           {/* Header & Filter Bar */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 pb-3 sm:pb-4 border-b border-slate-200">
             <div>
@@ -428,10 +481,39 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       </div>
                     </div>
 
+                    {/* Matching Regional Location Pages */}
+                    {(() => {
+                      const regional = COURSE_LOCATION_LINKS[course.id];
+                      if (!regional || regional.length === 0) return null;
+                      return (
+                        <div className="pt-2.5 pb-1 border-t border-slate-200/60">
+                          <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 mb-1.5">
+                            <span className="font-bold text-slate-700 flex items-center gap-1">
+                              <MapPin className="w-3 h-3 text-[#1266E8]" /> Location Pages:
+                            </span>
+                            <Link to="/locations" className="text-[#1266E8] hover:underline">
+                              All locations →
+                            </Link>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            {regional.map((loc) => (
+                              <Link
+                                key={loc.path}
+                                to={loc.path}
+                                className="text-[11.5px] font-medium px-2 py-0.5 rounded-md bg-white border border-slate-200 hover:border-[#1266E8] hover:text-[#1266E8] text-slate-700 transition-colors shadow-2xs"
+                              >
+                                {loc.city}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })()}
+
                     {/* Card Footer Actions: Enquire Now + WhatsApp Option */}
                     <div className="pt-3 sm:pt-4 border-t border-slate-200/70 space-y-2.5">
                       <div className="text-[11px] font-mono text-slate-500 flex items-center justify-between">
-                        <span>Mode: Classroom / Online</span>
+                        <span>Mode: Live Online, Instructor-Led</span>
                         <span className="text-[#2563EB] font-bold">Batches Open</span>
                       </div>
 

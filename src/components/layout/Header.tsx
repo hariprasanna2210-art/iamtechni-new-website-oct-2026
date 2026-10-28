@@ -501,7 +501,17 @@ export const Header: React.FC<HeaderProps> = ({
                     </div>
 
                     <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 px-2">
-                      <span>13 Specialized Technical Practices</span>
+                      <div className="flex items-center gap-3">
+                        <span>13 Specialized Technical Practices</span>
+                        <span className="text-slate-300">·</span>
+                        <button
+                          type="button"
+                          onClick={() => handleLinkClick('/locations')}
+                          className="text-[#1266E8] font-semibold hover:underline cursor-pointer"
+                        >
+                          Locations We Serve →
+                        </button>
+                      </div>
                       <button
                         type="button"
                         onClick={() => handleLinkClick('/services')}
@@ -850,6 +860,18 @@ export const Header: React.FC<HeaderProps> = ({
                         <span className="flex items-center gap-2">
                           <Code2 className="w-3.5 h-3.5" />
                           <span>All Services Directory (15 Practices)</span>
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleLinkClick('/locations')}
+                        className="w-full min-h-[44px] text-left py-2 px-3 rounded-lg text-xs font-bold text-[#1266E8] bg-slate-50 hover:bg-slate-100 flex items-center justify-between transition-colors cursor-pointer border border-slate-200/80"
+                      >
+                        <span className="flex items-center gap-2">
+                          <Globe className="w-3.5 h-3.5 text-[#1266E8]" />
+                          <span>Locations We Serve (Puducherry, Chennai &amp; TN)</span>
                         </span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>

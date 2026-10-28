@@ -32,6 +32,7 @@ import { ConsultationPage } from './pages/ConsultationPage';
 import { FaqPage } from './pages/FaqPage';
 import { LegalPage } from './pages/LegalPages';
 import { TrainingPage } from './pages/TrainingPage';
+import { LocationsPage } from './pages/LocationsPage';
 import { SeoHead } from './components/common/SeoHead';
 
 import { servicesData, getCanonicalServiceSlug } from './data/servicesData';
@@ -646,6 +647,15 @@ export default function App() {
           />
 
           {/* 15. Legal Policies */}
+          <Route
+            path="/locations"
+            element={
+              <LocationsPage
+                onNavigate={navigate}
+                onStartProject={handleOpenProjectModal}
+              />
+            }
+          />
           <Route
             path="/privacy-policy"
             element={<LegalPage type="privacy" onNavigate={navigate} />}

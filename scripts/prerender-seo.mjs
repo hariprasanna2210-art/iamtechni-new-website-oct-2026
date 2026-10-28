@@ -63,7 +63,69 @@ function buildStaticRootHtml(page) {
     ? `      <p class="intro">${escapeHtml(page.intro)}</p>\n`
     : '';
 
-  return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n${introHtml}${sectionsHtml}\n${faqsHtml}\n      </main>\n    `;
+  const serviceLocationMapping = {
+    'web-development': [
+      { name: 'Pondicherry', url: '/web-development-company-pondicherry/' },
+      { name: 'Chennai', url: '/web-development-company-chennai/' },
+      { name: 'Coimbatore', url: '/web-development-coimbatore/' },
+      { name: 'Madurai', url: '/web-development-madurai/' },
+      { name: 'Trichy', url: '/web-development-trichy/' },
+      { name: 'Salem', url: '/web-development-salem/' },
+      { name: 'Erode', url: '/web-development-erode/' },
+      { name: 'Vellore', url: '/web-development-vellore/' },
+      { name: 'Cuddalore', url: '/web-development-cuddalore/' },
+      { name: 'Villupuram', url: '/web-development-villupuram/' },
+    ],
+    ecommerce: [
+      { name: 'Pondicherry', url: '/ecommerce-website-development-pondicherry/' },
+      { name: 'Chennai', url: '/ecommerce-website-development-chennai/' },
+    ],
+    'custom-software': [
+      { name: 'Pondicherry', url: '/custom-software-development-pondicherry/' },
+      { name: 'Chennai', url: '/software-development-company-chennai/' },
+    ],
+    'mobile-apps': [
+      { name: 'Pondicherry', url: '/mobile-app-development-pondicherry/' },
+      { name: 'Chennai', url: '/mobile-app-development-chennai/' },
+    ],
+    'digital-marketing': [
+      { name: 'Pondicherry (Agency)', url: '/digital-marketing-agency-pondicherry/' },
+      { name: 'Pondicherry (SEO)', url: '/seo-company-pondicherry/' },
+      { name: 'Chennai (Agency)', url: '/digital-marketing-agency-chennai/' },
+      { name: 'Chennai (SEO)', url: '/seo-company-chennai/' },
+      { name: 'Coimbatore', url: '/digital-marketing-coimbatore/' },
+    ],
+    'cloud-devops': [
+      { name: 'Pondicherry (AWS)', url: '/aws-training-pondicherry/' },
+      { name: 'Pondicherry (DevOps)', url: '/devops-training-pondicherry/' },
+      { name: 'Chennai (AWS)', url: '/aws-training-chennai/' },
+      { name: 'Chennai (DevOps)', url: '/devops-training-chennai/' },
+      { name: 'Coimbatore (AWS)', url: '/aws-training-coimbatore/' },
+    ],
+    training: [
+      { name: 'Pondicherry (AWS)', url: '/aws-training-pondicherry/' },
+      { name: 'Pondicherry (DevOps)', url: '/devops-training-pondicherry/' },
+      { name: 'Pondicherry (GenAI)', url: '/generative-ai-training-pondicherry/' },
+      { name: 'Chennai (AWS)', url: '/aws-training-chennai/' },
+      { name: 'Chennai (DevOps)', url: '/devops-training-chennai/' },
+      { name: 'Coimbatore (AWS)', url: '/aws-training-coimbatore/' },
+      { name: 'Madurai (IT)', url: '/it-training-madurai/' },
+      { name: 'Cuddalore (IT)', url: '/it-training-cuddalore/' },
+      { name: 'Tamil Nadu (GenAI)', url: '/generative-ai-training-tamil-nadu/' },
+    ],
+  };
+
+  const matchingLocs = serviceLocationMapping[page.slug];
+  const locationsHtml =
+    matchingLocs && matchingLocs.length > 0
+      ? `      <section>\n        <h2>Available Across Locations</h2>\n        <p>Headquartered in Puducherry; serving clients remotely across Tamil Nadu with in-person meetings on request.</p>\n        <ul>\n` +
+        matchingLocs
+          .map((loc) => `          <li><a href="${loc.url}">${escapeHtml(loc.name)}</a></li>`)
+          .join('\n') +
+        `\n        </ul>\n        <p><a href="/locations">View all 30 locations &rarr;</a></p>\n      </section>\n`
+      : '';
+
+  return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n${introHtml}${sectionsHtml}\n${locationsHtml}${faqsHtml}\n      </main>\n    `;
 }
 
 function buildJsonLdScripts(page, canonicalUrl) {
@@ -644,7 +706,106 @@ function renderGeneralPageHtml(templateHtml, page) {
   }
 
   // 7. Insert static HTML inside <div id="root">...</div>
-  const staticBodyHtml = `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n        <p class="intro">${escapeHtml(page.intro)}</p>\n      </main>\n    `;
+  let extraContentHtml = '';
+
+  if (page.canonicalUrl && page.canonicalUrl.endsWith('/locations')) {
+    extraContentHtml = `
+      <section>
+        <h2>Regional Operating Model</h2>
+        <p>Headquartered in Puducherry, IAMTECHNI serves clients across Chennai and Tamil Nadu through remote-first collaboration with on-site visits on request. All training programs are delivered live online with instructor-led sessions.</p>
+      </section>
+      <section>
+        <h2>Pondicherry &amp; Nearby</h2>
+        <p>Direct local presence from our Puducherry headquarters, extending services to Cuddalore and Villupuram.</p>
+        <ul>
+          <li><a href="/web-development-company-pondicherry/">Web Development Company Pondicherry</a></li>
+          <li><a href="/custom-software-development-pondicherry/">Custom Software Development Pondicherry</a></li>
+          <li><a href="/ecommerce-website-development-pondicherry/">E-Commerce Website Development Pondicherry</a></li>
+          <li><a href="/mobile-app-development-pondicherry/">Mobile App Development Pondicherry</a></li>
+          <li><a href="/digital-marketing-agency-pondicherry/">Digital Marketing Agency Pondicherry</a></li>
+          <li><a href="/seo-company-pondicherry/">SEO Company Pondicherry</a></li>
+          <li><a href="/web-development-cuddalore/">Web Development Cuddalore</a></li>
+          <li><a href="/web-development-villupuram/">Web Development Villupuram</a></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Chennai</h2>
+        <p>Serving Chennai startups, IT corridor enterprises, retail brands, and industrial manufacturers.</p>
+        <ul>
+          <li><a href="/web-development-company-chennai/">Web Development Company Chennai</a></li>
+          <li><a href="/ecommerce-website-development-chennai/">E-Commerce Website Development Chennai</a></li>
+          <li><a href="/software-development-company-chennai/">Software Development Company Chennai</a></li>
+          <li><a href="/mobile-app-development-chennai/">Mobile App Development Chennai</a></li>
+          <li><a href="/digital-marketing-agency-chennai/">Digital Marketing Agency Chennai</a></li>
+          <li><a href="/seo-company-chennai/">SEO Company Chennai</a></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Tamil Nadu Cities</h2>
+        <p>Remote digital engineering and web platforms for manufacturing, textile, healthcare, and trade leaders.</p>
+        <ul>
+          <li><a href="/web-development-coimbatore/">Web Development Coimbatore</a></li>
+          <li><a href="/digital-marketing-coimbatore/">Digital Marketing Coimbatore</a></li>
+          <li><a href="/web-development-madurai/">Web Development Madurai</a></li>
+          <li><a href="/web-development-trichy/">Web Development Trichy</a></li>
+          <li><a href="/web-development-salem/">Web Development Salem</a></li>
+          <li><a href="/web-development-erode/">Web Development Erode</a></li>
+          <li><a href="/web-development-vellore/">Web Development Vellore</a></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Online Training</h2>
+        <p>Live online, instructor-led technical programs in AWS, DevOps, Generative AI, and software engineering.</p>
+        <ul>
+          <li><a href="/aws-training-pondicherry/">AWS Training Pondicherry</a></li>
+          <li><a href="/devops-training-pondicherry/">DevOps Training Pondicherry</a></li>
+          <li><a href="/generative-ai-training-pondicherry/">Generative AI Training Pondicherry</a></li>
+          <li><a href="/it-training-cuddalore/">IT Training Cuddalore</a></li>
+          <li><a href="/aws-training-chennai/">AWS Training Chennai</a></li>
+          <li><a href="/devops-training-chennai/">DevOps Training Chennai</a></li>
+          <li><a href="/it-training-madurai/">IT Training Madurai</a></li>
+          <li><a href="/aws-training-coimbatore/">AWS Training Coimbatore</a></li>
+          <li><a href="/generative-ai-training-tamil-nadu/">Generative AI Training Tamil Nadu</a></li>
+        </ul>
+      </section>
+    `;
+  } else if (page.canonicalUrl && page.canonicalUrl.endsWith('/training/aws')) {
+    extraContentHtml = `
+      <section>
+        <h2>Regional AWS Training Locations (Live Online)</h2>
+        <ul>
+          <li><a href="/aws-training-pondicherry/">AWS Training Pondicherry</a></li>
+          <li><a href="/aws-training-chennai/">AWS Training Chennai</a></li>
+          <li><a href="/aws-training-coimbatore/">AWS Training Coimbatore</a></li>
+        </ul>
+        <p><a href="/locations">View all regional training locations &rarr;</a></p>
+      </section>
+    `;
+  } else if (page.canonicalUrl && page.canonicalUrl.endsWith('/training/devops-engineering')) {
+    extraContentHtml = `
+      <section>
+        <h2>Regional DevOps Training Locations (Live Online)</h2>
+        <ul>
+          <li><a href="/devops-training-pondicherry/">DevOps Training Pondicherry</a></li>
+          <li><a href="/devops-training-chennai/">DevOps Training Chennai</a></li>
+        </ul>
+        <p><a href="/locations">View all regional training locations &rarr;</a></p>
+      </section>
+    `;
+  } else if (page.canonicalUrl && page.canonicalUrl.endsWith('/training/generative-ai')) {
+    extraContentHtml = `
+      <section>
+        <h2>Regional Generative AI Training Locations (Live Online)</h2>
+        <ul>
+          <li><a href="/generative-ai-training-pondicherry/">Generative AI Training Pondicherry</a></li>
+          <li><a href="/generative-ai-training-tamil-nadu/">Generative AI Training Tamil Nadu</a></li>
+        </ul>
+        <p><a href="/locations">View all regional training locations &rarr;</a></p>
+      </section>
+    `;
+  }
+
+  const staticBodyHtml = `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n        <p class="intro">${escapeHtml(page.intro)}</p>\n${extraContentHtml}\n      </main>\n    `;
   html = html.replace('<div id="root"></div>', `<div id="root">${staticBodyHtml}</div>`);
 
   return html;
@@ -724,6 +885,11 @@ const STATIC_PAGE_HEADINGS = {
     h1: 'Terms and Conditions',
     intro:
       'The rules, terms, and agreements governing the use of IAMTECHNI services and website.',
+  },
+  '/locations': {
+    h1: 'Locations We Serve Across Puducherry, Chennai & Tamil Nadu',
+    intro:
+      'Headquartered in Puducherry, IAMTECHNI delivers modern software development, web engineering, digital marketing, and live instructor-led online technical training to clients across Chennai and major Tamil Nadu commercial hubs.',
   },
 };
 
