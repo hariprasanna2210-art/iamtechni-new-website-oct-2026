@@ -54,9 +54,6 @@ export const PageHero: React.FC<PageHeroProps> = ({
   customVisual,
   themeOverride,
 }) => {
-  // Deterministically get coordinated accent token for this service
-  const token = getCardColorTokenBySlug(slug);
-
   // Soft, light background gradient matching the sitewide IAMTECHNI palette
   const bgGradient =
     themeOverride?.bgGradient ||

@@ -410,7 +410,8 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
       {/* Chat Window Panel */}
       {isOpen && (
         <div
-          className={`fixed z-40 transition-all duration-300 ease-out flex flex-col bg-white border border-slate-200/90 shadow-2xl rounded-2xl overflow-hidden ${
+          data-chat="true"
+          className={`chat-window fixed z-40 transition-all duration-300 ease-out flex flex-col bg-white border border-slate-200/90 shadow-2xl rounded-2xl overflow-hidden ${
             isMinimized
               ? 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-80 h-16'
               : 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-[440px] h-[640px] max-h-[calc(100vh-3rem)]'

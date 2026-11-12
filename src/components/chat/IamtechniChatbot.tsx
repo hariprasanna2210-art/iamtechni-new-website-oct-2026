@@ -410,7 +410,8 @@ export const IamtechniChatbot: React.FC<IamtechniChatbotProps> = ({
       {/* Chat Window Panel */}
       {isOpen && (
         <div
-          className={`fixed z-40 transition-all duration-300 ease-out flex flex-col bg-white border border-slate-200/90 shadow-2xl overflow-hidden rounded-2xl ${
+          data-chat="true"
+          className={`chat-window fixed z-40 transition-all duration-300 ease-out flex flex-col bg-white border border-slate-200/90 shadow-2xl overflow-hidden rounded-2xl ${
             isMinimized
               ? 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-80 h-16'
               : 'inset-2 sm:inset-auto sm:bottom-6 sm:right-6 w-[calc(100vw-1rem)] sm:w-[440px] h-[calc(100dvh-1rem)] sm:h-[640px] sm:max-h-[calc(100vh-var(--header-height,74px)-1.5rem)]'

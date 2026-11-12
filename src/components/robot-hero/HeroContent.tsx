@@ -3,7 +3,6 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { PageRoute } from '../../types';
 import { HeroServiceSlide } from './heroCarouselData';
-import { HeadingSpark } from '../common/HeadingSpark';
 
 export interface HeroContentProps {
   slide: HeroServiceSlide;
@@ -17,25 +16,7 @@ export interface HeroContentProps {
 const renderHighlightedHeadline = (headline: string, highlightPhrase: string) => {
   const idx = headline.toLowerCase().indexOf(highlightPhrase.toLowerCase());
   if (idx === -1) {
-    const trimmed = headline.trimEnd();
-    const lastSpace = trimmed.lastIndexOf(' ');
-    if (lastSpace === -1) {
-      return (
-        <span className="text-white inline-block whitespace-nowrap">
-          {trimmed}
-          <HeadingSpark isDark={true} />
-        </span>
-      );
-    }
-    return (
-      <span className="text-white">
-        {trimmed.slice(0, lastSpace + 1)}
-        <span className="inline-block whitespace-nowrap">
-          {trimmed.slice(lastSpace + 1)}
-          <HeadingSpark isDark={true} />
-        </span>
-      </span>
-    );
+    return <span className="text-white">{headline}</span>;
   }
   const before = headline.slice(0, idx);
   const match = headline.slice(idx, idx + highlightPhrase.length);
@@ -47,35 +28,7 @@ const renderHighlightedHeadline = (headline: string, highlightPhrase: string) =>
       <span className="bg-gradient-to-r from-[#00D2FF] via-[#38BDF8] to-[#A78BFA] bg-clip-text text-transparent">
         {match}
       </span>
-      {after ? (
-        <span className="text-white">
-          {(() => {
-            const trimmed = after.trimEnd();
-            const lastSpace = trimmed.lastIndexOf(' ');
-            if (lastSpace === -1) {
-              return (
-                <span className="inline-block whitespace-nowrap">
-                  {after}
-                  <HeadingSpark isDark={true} />
-                </span>
-              );
-            }
-            return (
-              <>
-                {trimmed.slice(0, lastSpace + 1)}
-                <span className="inline-block whitespace-nowrap">
-                  {trimmed.slice(lastSpace + 1)}
-                  <HeadingSpark isDark={true} />
-                </span>
-              </>
-            );
-          })()}
-        </span>
-      ) : (
-        <span className="inline-block whitespace-nowrap">
-          <HeadingSpark isDark={true} />
-        </span>
-      )}
+      {after && <span className="text-white">{after}</span>}
     </>
   );
 };
@@ -145,7 +98,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
           className="w-full max-w-md sm:max-w-xl mx-auto px-1"
         >
-          <MobileHeadingTag className="text-[clamp(1.25rem,min(5.2vw,3.15dvh),1.95rem)] sm:text-[clamp(1.55rem,min(4vw,3.5dvh),2.25rem)] font-extrabold tracking-tight leading-[1.15] mb-1.5 line-clamp-3 text-balance">
+          <MobileHeadingTag className="has-burst text-[clamp(1.25rem,min(5.2vw,3.15dvh),1.95rem)] sm:text-[clamp(1.55rem,min(4vw,3.5dvh),2.25rem)] font-extrabold tracking-tight leading-[1.15] mb-1.5 line-clamp-3 text-balance">
             {isHeadingH1 && (
               <span className="sr-only">
                 IAMTECHNI — Website Development, Custom Software, AI &amp; Digital Solutions in Pondicherry &amp; Tamil Nadu:{' '}
@@ -242,7 +195,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
             <span>// {slide.categoryLabel}</span>
           </div>
 
-          <DesktopHeadingTag className="text-[clamp(1.5rem,min(2.45vw,3.8dvh),2.95rem)] font-extrabold tracking-tight leading-[1.12] mb-4">
+          <DesktopHeadingTag className="has-burst text-[clamp(1.5rem,min(2.45vw,3.8dvh),2.95rem)] font-extrabold tracking-tight leading-[1.12] mb-4">
             {isHeadingH1 && (
               <span className="sr-only">
                 IAMTECHNI — Website Development, Custom Software, AI &amp; Digital Solutions in Pondicherry &amp; Tamil Nadu:{' '}

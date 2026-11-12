@@ -915,7 +915,6 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
               >
                 {current.headlineHighlight}
               </span>
-              <HeadingSpark isDark={current.colorTheme.isDark} />
             </h1>
 
             {/* Slide Description */}

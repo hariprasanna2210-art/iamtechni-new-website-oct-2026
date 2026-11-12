@@ -544,31 +544,12 @@ a:active {
 }
 
 /* ========================================================================== */
-/* ANIMATED HEADINGS & HEADING SPARK SYSTEM                                    */
+/* GLOBAL HEADING BURST ICON & ANIMATED HEADINGS                              */
 /* ========================================================================== */
 
-@keyframes spark-cycle-light {
-  0%, 100% {
-    color: #2563EB; /* Brand Blue */
-  }
-  33% {
-    color: #06B6D4; /* Cyan */
-  }
-  66% {
-    color: #7C3AED; /* Purple */
-  }
-}
-
-@keyframes spark-cycle-dark {
-  0%, 100% {
-    color: #22D3EE; /* Cyan */
-  }
-  33% {
-    color: #3B82F6; /* Blue */
-  }
-  66% {
-    color: #A78BFA; /* Purple */
-  }
+:root {
+  --heading-burst-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 40' fill='none' stroke='url(%23g)' stroke-width='4.5' stroke-linecap='round'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='1' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='%232563EB'/%3E%3Cstop offset='100%25' stop-color='%237C3AED'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M44 34 L34 33'/%3E%3Cpath d='M36 16 L28 25'/%3E%3Cpath d='M21 4 L19 19'/%3E%3Cpath d='M5 9 L11 21'/%3E%3C/svg%3E");
+  --heading-burst-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 40' fill='none' stroke='url(%23g)' stroke-width='4.5' stroke-linecap='round'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='1' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='%2322D3EE'/%3E%3Cstop offset='50%25' stop-color='%233B82F6'/%3E%3Cstop offset='100%25' stop-color='%23A78BFA'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M44 34 L34 33'/%3E%3Cpath d='M36 16 L28 25'/%3E%3Cpath d='M21 4 L19 19'/%3E%3Cpath d='M5 9 L11 21'/%3E%3C/svg%3E");
 }
 
 @keyframes spark-pulse {
@@ -580,23 +561,113 @@ a:active {
   }
 }
 
-.heading-spark {
+h1::after,
+h2::after,
+h3::after,
+.has-burst::after,
+.heading-burst {
+  content: "";
   display: inline-block;
   width: 0.7em;
   height: 0.6em;
-  margin-left: 0.15em;
+  margin-left: 0.2em;
   vertical-align: top;
+  background: var(--heading-burst-light) no-repeat center / contain;
   pointer-events: none;
   transform-origin: bottom left;
+  animation: spark-pulse 2.4s ease-in-out infinite;
+}
+
+/* Dark backgrounds: keep the current hero icon colour (cyan -> blue -> purple) */
+h1.text-white::after,
+h2.text-white::after,
+h3.text-white::after,
+.has-burst.text-white::after,
+#hero h1::after,
+#hero h2::after,
+#hero .has-burst::after,
+.dark h1::after,
+.dark h2::after,
+.dark h3::after,
+.dark .has-burst::after,
+.dark-section h1::after,
+.dark-section h2::after,
+.dark-section h3::after,
+.dark-section .has-burst::after,
+section[class*="bg-[#0"] h1::after,
+section[class*="bg-[#0"] h2::after,
+section[class*="bg-[#0"] h3::after,
+section[class*="bg-[#0"] .has-burst::after,
+section[class*="bg-slate-9"] h1::after,
+section[class*="bg-slate-9"] h2::after,
+section[class*="bg-slate-9"] h3::after,
+section[class*="bg-slate-9"] .has-burst::after,
+section[class*="from-[#0"] h1::after,
+section[class*="from-[#0"] h2::after,
+section[class*="from-[#0"] h3::after,
+section[class*="from-[#0"] .has-burst::after,
+div[class*="bg-[#0"] > h1::after,
+div[class*="bg-[#0"] > h2::after,
+div[class*="bg-[#0"] > h3::after {
+  background: var(--heading-burst-dark) no-repeat center / contain;
+}
+
+/* Flex headings: prevent justify-between from pushing ::after to the far right or shrinking */
+h1.flex::after,
+h2.flex::after,
+h3.flex::after,
+.has-burst.flex::after {
   flex-shrink: 0;
+  align-self: flex-start;
 }
 
-.heading-spark-light {
-  animation: spark-pulse 2.4s ease-in-out infinite, spark-cycle-light 4s ease-in-out infinite;
+/* DO NOT ADD THE ICON TO: navbar, footer, chat widget, buttons, chips, slide tabs, or hero right-side cards & stat cards */
+header h1::after,
+header h2::after,
+header h3::after,
+nav h1::after,
+nav h2::after,
+nav h3::after,
+footer h1::after,
+footer h2::after,
+footer h3::after,
+.chat-window h1::after,
+.chat-window h2::after,
+.chat-window h3::after,
+[data-chat] h1::after,
+[data-chat] h2::after,
+[data-chat] h3::after,
+button h1::after,
+button h2::after,
+button h3::after,
+.badge-chip::after,
+.chip-brand::after,
+[role="tablist"] h1::after,
+[role="tablist"] h2::after,
+[role="tablist"] h3::after,
+[role="tab"] h1::after,
+[role="tab"] h2::after,
+[role="tab"] h3::after,
+[aria-label*="Visual showcase"] h1::after,
+[aria-label*="Visual showcase"] h2::after,
+[aria-label*="Visual showcase"] h3::after,
+.group\/carousel h3::after,
+.sr-only::after {
+  content: none !important;
+  display: none !important;
 }
 
-.heading-spark-dark {
-  animation: spark-pulse 2.4s ease-in-out infinite, spark-cycle-dark 4s ease-in-out infinite;
+/* Mobile below 768px: slightly smaller (0.55em) */
+@media (max-width: 767px) {
+  h1::after,
+  h2::after,
+  h3::after,
+  .has-burst::after,
+  .heading-burst {
+    width: 0.55em;
+    height: 0.47em;
+    margin-left: 0.15em;
+  }
 }
 
 /* Flowing gradient (6s infinite, 200% background-size) for highlighted words */
@@ -669,7 +740,7 @@ h2 [class*="text-transparent"] {
   }
 }
 
-/* Card titles (h3): small hover zoom (scale 1.03), no icon, no scroll animation */
+/* Card titles (h3): small hover zoom (scale 1.03) */
 /* Strictly exclude navbar, footer, chat widget */
 main h3:not(header *):not(nav *):not(footer *):not([data-chat] *):not(.chat-window *):not(.no-hover-zoom),
 section h3:not(header *):not(nav *):not(footer *):not([data-chat] *):not(.chat-window *):not(.no-hover-zoom),
@@ -688,6 +759,11 @@ article h3:not(header *):not(nav *):not(footer *):not([data-chat] *):not(.chat-w
 
 /* Accessibility: Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
+  h1::after,
+  h2::after,
+  h3::after,
+  .has-burst::after,
+  .heading-burst,
   .heading-spark,
   .heading-spark-light,
   .heading-spark-dark,
