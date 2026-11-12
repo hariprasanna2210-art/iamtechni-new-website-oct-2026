@@ -294,7 +294,7 @@ export const servicesData: ServiceItem[] = [
       { phase: '04. Evaluation & Grounding Benchmark', description: 'Run test datasets to measure recall, precision, and hallucination rates.' },
       { phase: '05. Monitored Deployment', description: 'Deploy with observability logging, user feedback loops, and token cost analytics.' }
     ],
-    technologies: ['Python', 'LangChain', 'LlamaIndex', 'pgvector', 'OpenAI API', 'Gemini API', 'FastAPI', 'Docker'],
+    technologies: ['Python', 'LangChain', 'LlamaIndex', 'pgvector', 'OpenAI API', 'Enterprise LLMs', 'FastAPI', 'Docker'],
     faqs: [
       {
         question: 'Will our proprietary company data be used to train public AI models?',

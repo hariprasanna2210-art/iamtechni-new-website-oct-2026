@@ -2,6 +2,7 @@
 
 :root {
   --header-height: 74px;
+  --header-h: 74px;
   /* Reusable Hero & Tech Brand Design Tokens (Softer / Lighter Palette) */
   --hero-bg: #F5F8FC;
   --hero-glow: rgba(37, 99, 235, 0.07);
@@ -24,7 +25,7 @@
 
   section[id],
   div[id] {
-    scroll-margin-top: var(--header-height, 74px);
+    scroll-margin-top: var(--header-h, var(--header-height, 74px));
   }
 
   body {
@@ -310,5 +311,237 @@
   display: block;
   pointer-events: none !important;
 }
+
+/* ========================================================================== */
+/* DESIGN POLISH: ALIGNMENT, SPACING, RESPONSIVENESS & HOVER EFFECTS          */
+/* ========================================================================== */
+
+/* 1. Global Consistent Container System (max-w 1440px matching Navbar and Hero, centered, 16px/24px/32px padding) */
+.site-container,
+.app-container {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem; /* 16px mobile */
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .site-container,
+  .app-container {
+    padding-left: 1.5rem; /* 24px sm */
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .site-container,
+  .app-container {
+    padding-left: 2rem; /* 32px desktop */
+    padding-right: 2rem;
+  }
+}
+
+
+/* 2. Consistent Section Vertical Rhythm (Desktop 96px, Tablet 72px, Mobile 56px) */
+.section-py,
+.section-spacing {
+  padding-top: 3.5rem; /* 56px mobile */
+  padding-bottom: 3.5rem;
+}
+@media (min-width: 768px) {
+  .section-py,
+  .section-spacing {
+    padding-top: 4.5rem; /* 72px tablet */
+    padding-bottom: 4.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .section-py,
+  .section-spacing {
+    padding-top: 6rem; /* 96px desktop */
+    padding-bottom: 6rem;
+  }
+}
+
+/* 3. Card Grids & Equal Heights in Rows */
+.equal-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 768px) {
+  .equal-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .equal-card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+@media (min-width: 1440px) {
+  .equal-card-grid-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.equal-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 4. Fluid Typography & Mobile Readability (below 1280px only) */
+@media (max-width: 1279px) {
+  h1 {
+    font-size: clamp(2rem, 3.5vw + 1rem, 3.25rem);
+    line-height: 1.15;
+  }
+  h2 {
+    font-size: clamp(1.65rem, 2.5vw + 0.8rem, 2.5rem);
+    line-height: 1.2;
+  }
+  h3 {
+    font-size: clamp(1.25rem, 1.8vw + 0.5rem, 1.75rem);
+    line-height: 1.25;
+  }
+}
+
+@media (max-width: 767px) {
+  body, p, li, .text-sm {
+    font-size: max(15px, 0.9375rem);
+  }
+}
+
+/* Stop iOS Safari automatic zoom on form focus (input >= 16px) */
+input, textarea, select {
+  font-size: 16px !important;
+}
+
+/* Clear Visibility & Text Contrast (WCAG AA) */
+p, li, span, h1, h2, h3, h4 {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.line-length-optimal {
+  max-width: 72ch;
+  line-height: 1.62;
+}
+
+/* 5. Section Heading Zoom-In / Zoom-Out Animation (h2 below hero only, 0.95 -> 1, 0.5s) */
+@media (prefers-reduced-motion: no-preference) {
+  .heading-scroll-zoom {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+  .heading-scroll-zoom.heading-in-view {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 6. Card Heading Subtle Scale on Hover */
+@media (hover: hover) {
+  .card-hover:hover h3,
+  .card-hover:hover h4,
+  .group:hover h3,
+  .interactive-card-lift:hover h3 {
+    transform: scale(1.03);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/* 7. Hover Effects with Colour */
+@media (hover: hover) {
+  /* Buttons: brand blue/cyan/purple gradient lift */
+  button.btn-brand,
+  .btn-hover-brand,
+  a.btn-hover-brand {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.3s ease,
+                border-color 0.3s ease;
+  }
+  button.btn-brand:hover,
+  .btn-hover-brand:hover,
+  a.btn-hover-brand:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -4px rgba(18, 102, 232, 0.35), 0 4px 12px -2px rgba(10, 25, 47, 0.2);
+  }
+
+  /* Cards: lift by 6px with brand-blue border/glow and icon scale 1.1 */
+  .card-lift-brand,
+  .brand-card-hover {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s ease;
+  }
+  .card-lift-brand:hover,
+  .brand-card-hover:hover {
+    transform: translateY(-6px);
+    border-color: rgba(37, 99, 235, 0.5) !important;
+    box-shadow: 0 20px 40px -12px rgba(30, 58, 138, 0.18), 0 0 24px rgba(0, 210, 255, 0.12) !important;
+  }
+  .card-lift-brand:hover .card-icon,
+  .brand-card-hover:hover .card-icon,
+  .brand-card-hover:hover svg:first-child {
+    transform: scale(1.1);
+    color: #1266E8 !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+  }
+
+  /* Chips and tags: background tint in brand colour on hover */
+  .chip-brand:hover,
+  span.badge-chip:hover {
+    background-color: rgba(238, 244, 255, 0.95) !important;
+    border-color: rgba(147, 197, 253, 0.9) !important;
+    color: #1E3A8A !important;
+    transition: all 0.25s ease;
+  }
+}
+
+/* Nav & Footer Links Animated Underline */
+.link-grow-underline {
+  position: relative;
+  transition: color 0.25s ease;
+}
+.link-grow-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #1266E8, #00D2FF, #9333EA);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 9999px;
+}
+@media (hover: hover) {
+  .link-grow-underline:hover::after {
+    width: 100%;
+  }
+  .link-grow-underline:hover {
+    color: #1266E8;
+  }
+}
+
+/* Accessibility: Focus visible and active touch */
+:focus-visible {
+  outline: 2px solid #2563EB !important;
+  outline-offset: 2px !important;
+}
+
+button:active,
+a:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
 
 

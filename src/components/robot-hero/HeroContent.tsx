@@ -98,7 +98,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
           className="w-full max-w-md sm:max-w-xl mx-auto px-1"
         >
-          <MobileHeadingTag className="text-[clamp(1.25rem,min(5.2vw,3.15dvh),1.95rem)] sm:text-[clamp(1.55rem,min(4vw,3.5dvh),2.25rem)] font-extrabold tracking-tight leading-[1.15] mb-1.5">
+          <MobileHeadingTag className="text-[clamp(1.25rem,min(5.2vw,3.15dvh),1.95rem)] sm:text-[clamp(1.55rem,min(4vw,3.5dvh),2.25rem)] font-extrabold tracking-tight leading-[1.15] mb-1.5 line-clamp-3 text-balance">
             {isHeadingH1 && (
               <span className="sr-only">
                 IAMTECHNI — Website Development, Custom Software, AI &amp; Digital Solutions in Pondicherry &amp; Tamil Nadu:{' '}
@@ -116,13 +116,32 @@ export const HeroContent: React.FC<HeroContentProps> = ({
 
   if (mode === 'mobile-bottom') {
     return (
-      <div className="flex flex-col items-center w-full shrink-0 pt-0.5">
+      <div className="flex flex-col items-center w-full shrink-0 pt-1 mb-6">
+        {/* Core Stack & Tech Chips Relevant to Current Service */}
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-3 w-full max-w-md sm:max-w-lg mx-auto">
+          {slide.techStack.map((tech) => {
+            const Icon = tech.icon;
+            return (
+              <div
+                key={tech.name}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#081630]/90 border border-white/10 text-[10.5px] sm:text-[11px] font-semibold text-slate-200 shadow-xs"
+              >
+                <Icon
+                  className="w-3.5 h-3.5 shrink-0"
+                  style={{ color: tech.color }}
+                />
+                <span>{tech.name}</span>
+              </div>
+            );
+          })}
+        </div>
+
         {/* Essential CTA Buttons — Clean, prominent, and easy to tap on all mobile widths */}
         <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full max-w-md sm:max-w-lg mx-auto">
           <button
             type="button"
             onClick={handleExploreServices}
-            className="group inline-flex items-center justify-center gap-1.5 h-10 sm:h-11 px-3 sm:px-5 rounded-xl bg-gradient-to-r from-[#00D2FF] via-[#087BFA] to-[#2563EB] text-white font-bold text-xs sm:text-sm tracking-tight shadow-[0_8px_22px_rgba(0,210,255,0.26)] hover:shadow-[0_12px_28px_rgba(0,210,255,0.4)] active:scale-[0.99] transition-all duration-200 cursor-pointer whitespace-nowrap"
+            className="group inline-flex items-center justify-center gap-1.5 h-11 px-3 sm:px-5 rounded-xl bg-gradient-to-r from-[#00D2FF] via-[#087BFA] to-[#2563EB] text-white font-bold text-xs sm:text-sm tracking-tight shadow-[0_8px_22px_rgba(0,210,255,0.26)] hover:shadow-[0_12px_28px_rgba(0,210,255,0.4)] active:scale-[0.99] transition-all duration-200 cursor-pointer whitespace-nowrap"
           >
             <span>Explore Services</span>
             <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 group-hover:translate-x-0.5 transition-transform" />
@@ -131,7 +150,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           <button
             type="button"
             onClick={() => onOpenProjectModal(slide.categoryLabel)}
-            className="inline-flex items-center justify-center gap-1.5 h-10 sm:h-11 px-3 sm:px-5 rounded-xl bg-[#091834]/90 hover:bg-[#0D224A] text-white font-semibold text-xs sm:text-sm border border-[#00D2FF]/45 hover:border-[#00D2FF]/80 shadow-[0_6px_18px_rgba(0,0,0,0.35)] active:scale-[0.99] transition-all duration-200 cursor-pointer whitespace-nowrap"
+            className="inline-flex items-center justify-center gap-1.5 h-11 px-3 sm:px-5 rounded-xl bg-[#091834]/90 hover:bg-[#0D224A] text-white font-semibold text-xs sm:text-sm border border-[#00D2FF]/45 hover:border-[#00D2FF]/80 shadow-[0_6px_18px_rgba(0,0,0,0.35)] active:scale-[0.99] transition-all duration-200 cursor-pointer whitespace-nowrap"
           >
             <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00D2FF] shrink-0" />
             <span>Let&apos;s Build</span>
@@ -145,9 +164,9 @@ export const HeroContent: React.FC<HeroContentProps> = ({
 
   // Desktop Left Column (~34% width) — Proportionally scaled with viewport height (dvh) & width (vw)
   return (
-    <div className="relative z-10 flex flex-col items-start text-left justify-center w-full">
-      {/* 1. Eyebrow Label + Active Service Indicator (01 / 08) */}
-      <div className="flex flex-wrap items-center gap-2 mb-2 xl:mb-3">
+    <div className="relative z-10 flex flex-col items-start text-left justify-start w-full">
+      {/* 1. Eyebrow Label + Active Service Indicator (01 / 08) - Stacked on separate lines */}
+      <div className="flex flex-col items-start gap-2 mb-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 xl:px-3.5 xl:py-1.5 rounded-full bg-[#081632]/90 backdrop-blur-md border border-[#00D2FF]/35 text-[10px] xl:text-[11px] font-mono uppercase tracking-[0.15em] text-[#00D2FF] font-bold shadow-[0_0_24px_rgba(0,210,255,0.14)]">
           <span className="w-1.5 h-1.5 xl:w-2 xl:h-2 rounded-full bg-[#00D2FF] shadow-[0_0_10px_#00D2FF] animate-pulse shrink-0" />
           <span>INNOVATION • INTELLIGENCE • TECHNOLOGY</span>
@@ -164,7 +183,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
       </div>
 
       {/* 2. Dynamic Service Category, Bold Animated Headline & Concise Description */}
-      <div className="w-full min-h-[clamp(145px,22dvh,215px)] flex flex-col justify-center">
+      <div className="w-full flex flex-col justify-start">
         <motion.div
           key={`desktop-slide-${slide.id}`}
           initial={prefersReducedMotion ? false : { opacity: 0.9, y: 6 }}
@@ -176,7 +195,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
             <span>// {slide.categoryLabel}</span>
           </div>
 
-          <DesktopHeadingTag className="text-[clamp(1.5rem,min(2.45vw,3.8dvh),2.95rem)] font-extrabold tracking-tight leading-[1.12] mb-2 xl:mb-3">
+          <DesktopHeadingTag className="text-[clamp(1.5rem,min(2.45vw,3.8dvh),2.95rem)] font-extrabold tracking-tight leading-[1.12] mb-4">
             {isHeadingH1 && (
               <span className="sr-only">
                 IAMTECHNI — Website Development, Custom Software, AI &amp; Digital Solutions in Pondicherry &amp; Tamil Nadu:{' '}
@@ -223,11 +242,11 @@ export const HeroContent: React.FC<HeroContentProps> = ({
       </div>
 
       {/* 4. Primary & Secondary CTA Buttons */}
-      <div className="mt-3.5 xl:mt-5 flex flex-nowrap items-center gap-2.5 xl:gap-3.5 w-full">
+      <div className="mt-3 xl:mt-5 flex flex-row items-center gap-2 xl:gap-3.5 w-full flex-nowrap">
         <button
           type="button"
           onClick={handleExploreServices}
-          className="group inline-flex items-center justify-center gap-2 h-10 xl:h-11 px-4 xl:px-6 rounded-xl bg-gradient-to-r from-[#00D2FF] via-[#087BFA] to-[#2563EB] text-white font-bold text-xs xl:text-sm tracking-tight shadow-[0_12px_32px_rgba(0,210,255,0.28)] hover:shadow-[0_16px_40px_rgba(0,210,255,0.45)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer whitespace-nowrap focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00D2FF]"
+          className="group inline-flex items-center justify-center gap-2 h-11 px-4 xl:px-6 rounded-xl bg-gradient-to-r from-[#00D2FF] via-[#087BFA] to-[#2563EB] text-white font-bold text-xs xl:text-sm tracking-tight shadow-[0_12px_32px_rgba(0,210,255,0.28)] hover:shadow-[0_16px_40px_rgba(0,210,255,0.45)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer whitespace-nowrap focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00D2FF]"
         >
           <span>Explore Our Services</span>
           <ArrowRight className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-1" />
@@ -236,7 +255,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         <button
           type="button"
           onClick={() => onOpenProjectModal(slide.categoryLabel)}
-          className="group inline-flex items-center justify-center gap-2 h-10 xl:h-11 px-4 xl:px-6 rounded-xl bg-[#081632]/85 hover:bg-[#0D2149] text-white font-semibold text-xs xl:text-sm border border-[#00D2FF]/40 hover:border-[#00D2FF]/85 shadow-[0_8px_24px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_30px_rgba(0,210,255,0.18)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer whitespace-nowrap focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00D2FF]"
+          className="group inline-flex items-center justify-center gap-2 h-11 px-4 xl:px-6 rounded-xl bg-[#081632]/85 hover:bg-[#0D2149] text-white font-semibold text-xs xl:text-sm border border-[#00D2FF]/40 hover:border-[#00D2FF]/85 shadow-[0_8px_24px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_30px_rgba(0,210,255,0.18)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer whitespace-nowrap focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00D2FF]"
         >
           <Sparkles className="w-4 h-4 text-[#00D2FF] shrink-0 transition-transform duration-200 group-hover:rotate-12" />
           <span>Let&apos;s Build Together</span>

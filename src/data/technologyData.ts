@@ -75,7 +75,7 @@ export const technologyData: TechCategory[] = [
     category: 'AI & Data Ecosystem',
     description: 'Enterprise language model APIs, semantic embedding pipelines, and business intelligence analytics.',
     items: [
-      { name: 'LLM APIs (OpenAI / Gemini)', description: 'State-of-the-art foundation models orchestrated with strict token budgets and system guardrails.', role: 'Inference Layer', level: 'Production Standard' },
+      { name: 'Enterprise LLM APIs (OpenAI / Claude / Llama)', description: 'State-of-the-art foundation models orchestrated with strict token budgets and system guardrails.', role: 'Inference Layer', level: 'Production Standard' },
       { name: 'LangChain & LlamaIndex', description: 'Orchestration frameworks for document parsing, contextual chunking, and retrieval pipelines.', role: 'RAG Frameworks', level: 'Specialized' },
       { name: 'Text Embeddings', description: 'High-dimensional vector representations mapping semantic document relationships.', role: 'Semantic Retrieval', level: 'Specialized' },
       { name: 'Pandas & Data Pipelines', description: 'Python data transformation libraries powering custom business telemetry and ETL workflows.', role: 'Data Transformation', level: 'Standard' }

@@ -881,7 +881,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
     path: '/generative-ai-training-pondicherry/',
     canonicalUrl: 'https://www.iamtechni.in/generative-ai-training-pondicherry/',
     seoTitle: 'Generative AI Training in Pondicherry | IAMTECHNI',
-    metaDescription: 'Hands-on Generative AI course in Pondicherry. Build LLM apps, RAG pipelines, AI agents, and fine-tuning with Python, LangChain, and OpenAI/Gemini APIs.',
+    metaDescription: 'Hands-on Generative AI course in Pondicherry. Build LLM apps, RAG pipelines, AI agents, and fine-tuning with Python, LangChain, and Enterprise LLM APIs.',
     h1: 'Generative AI Training in Pondicherry',
     category: 'Training',
     schemaType: 'Course',
@@ -904,7 +904,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
         h2: 'Engineer Production AI Systems, Not Just Chatbot Prompts',
         paragraphs: [
           'Prompting alone is not enough for modern software engineering. Companies need engineers who understand how to connect Large Language Models (LLMs) with enterprise knowledge bases, APIs, and business databases.',
-          'In this course, you will write Python code to build semantic search engines, contextual document analyzers, and automated customer support agents using models from OpenAI, Anthropic, and Google Gemini.',
+          'In this course, you will write Python code to build semantic search engines, contextual document analyzers, and automated customer support agents using models from OpenAI, Anthropic, and leading foundation models.',
         ],
       },
       {
@@ -933,7 +933,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
       },
       {
         title: 'Multi-Model API Integration',
-        description: 'Hands-on experience with OpenAI GPT-4o, Google Gemini, and local open-source models like Llama 3 via Ollama.',
+        description: 'Hands-on experience with OpenAI GPT-4o, leading enterprise LLMs, and local open-source models like Llama 3 via Ollama.',
       },
       {
         title: 'Practical Project Portfolio',

@@ -39,7 +39,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
     <footer className="bg-[#13243D] text-white">
       {/* Main Footer Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-9 pb-7 sm:pt-[56px] sm:pb-[40px]">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.2fr_0.95fr_0.85fr_1.05fr_1.2fr] gap-6 md:gap-8 lg:gap-[32px] xl:gap-[40px] items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-[1.2fr_0.95fr_0.85fr_1.05fr_1.2fr] gap-8 md:gap-8 lg:gap-8 xl:gap-10 items-start">
           {/* COLUMN 1 – Brand */}
           <motion.div
             custom={0}
@@ -47,7 +47,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
             whileInView="visible"
             viewport={{ once: true, amount: 0.15 }}
             variants={columnVariants}
-            className="col-span-2 md:col-span-3 lg:col-span-1 space-y-3 sm:space-y-4"
+            className="col-span-1 sm:col-span-2 lg:col-span-1 space-y-3 sm:space-y-4"
           >
             <div className="flex items-start">
               <IamtechniLogo size="md" variant="dark" />
@@ -320,7 +320,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
             whileInView="visible"
             viewport={{ once: true, amount: 0.15 }}
             variants={columnVariants}
-            className="col-span-2 md:col-span-1"
+            className="col-span-1 sm:col-span-2 lg:col-span-1"
           >
             <h4 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#5CE1E6] mb-3.5 sm:mb-[20px] leading-none whitespace-nowrap">
               GET IN TOUCH

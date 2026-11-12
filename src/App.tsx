@@ -12,7 +12,7 @@ import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { ProjectModal } from './components/common/ProjectModal';
 import { CaseStudyModal } from './components/common/CaseStudyModal';
-import { GeminiChatbot } from './components/chat/GeminiChatbot';
+import { IamtechniChatbot } from './components/chat/IamtechniChatbot';
 
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
@@ -273,6 +273,59 @@ export default function App() {
     window.addEventListener('hashchange', redirectHashService);
     return () => window.removeEventListener('hashchange', redirectHashService);
   }, [location.hash, routerNavigate]);
+
+  // Section Heading Zoom-in / Zoom-out Scroll Animation (Strictly h2 below Hero)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let observer: IntersectionObserver | null = null;
+    const timer = setTimeout(() => {
+      // Strictly section h2 elements below hero
+      const headings = document.querySelectorAll<HTMLElement>('main section h2, main div[id] h2');
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('heading-in-view');
+            } else {
+              entry.target.classList.remove('heading-in-view');
+            }
+          });
+        },
+        { threshold: 0.25, rootMargin: '0px 0px -30px 0px' }
+      );
+
+      headings.forEach((h) => {
+        // Strict exclusions: hero section, cards, header, nav, footer, chat widget, articles
+        if (
+          h.closest('section[aria-label*="Hero"]') ||
+          h.closest('#hero') ||
+          h.closest('[data-hero]') ||
+          h.closest('header') ||
+          h.closest('nav') ||
+          h.closest('footer') ||
+          h.closest('.card') ||
+          h.closest('[data-card]') ||
+          h.closest('.showcase-card') ||
+          h.closest('article') ||
+          h.closest('#mobile-navigation-panel') ||
+          h.closest('[aria-label*="IAMTECHNI AI Assistant"]') ||
+          h.hasAttribute('data-no-scroll-zoom')
+        ) {
+          return;
+        }
+        h.classList.add('heading-scroll-zoom');
+        observer?.observe(h);
+      });
+    }, 120);
+
+    return () => {
+      clearTimeout(timer);
+      observer?.disconnect();
+    };
+  }, [location.pathname]);
 
   // Navigate helper keeping all existing onNavigate(route) calls working
   const navigate = useCallback(
@@ -749,8 +802,8 @@ export default function App() {
         />
       )}
 
-      {/* IAMTECHNI Enterprise AI Chatbot powered by Gemini */}
-      <GeminiChatbot
+      {/* IAMTECHNI Enterprise AI Chatbot */}
+      <IamtechniChatbot
         onNavigate={navigate}
         onOpenProjectModal={handleOpenProjectModal}
       />

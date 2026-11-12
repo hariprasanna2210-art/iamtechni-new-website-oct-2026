@@ -1120,7 +1120,7 @@ export const HeroServiceVisuals: React.FC<HeroServiceVisualsProps> = ({
 
   return (
     <div
-      className="relative w-full flex flex-col justify-center"
+      className="relative w-full flex flex-col justify-start"
       aria-label={`Visual showcase for ${slide.categoryLabel}`}
     >
       <motion.div
@@ -1128,22 +1128,22 @@ export const HeroServiceVisuals: React.FC<HeroServiceVisualsProps> = ({
         initial={
           prefersReducedMotion
             ? false
-            : { opacity: 0.9, x: 8, scale: 0.99 }
+            : { opacity: 0.9, y: 6, scale: 0.99 }
         }
-        animate={{ opacity: 1, x: 0, scale: 1 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        className="relative flex flex-col gap-2.5 xl:gap-3.5"
+        className="relative flex flex-col gap-3 xl:gap-3.5 w-full box-border"
       >
-        {/* Ambient Frame Glow */}
+        {/* Ambient Frame Glow - contained without negative margins */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -inset-3 rounded-3xl opacity-35 blur-2xl transition-colors duration-700"
+          className="pointer-events-none absolute inset-0 rounded-3xl opacity-35 blur-2xl transition-colors duration-700"
           style={{
             background: `radial-gradient(circle at 65% 35%, ${slide.accentHex}33, ${slide.secondaryHex}22, transparent 75%)`,
           }}
         />
 
-        {/* 1. Primary Service Visual Showcase Card */}
+        {/* 1. Primary Service Visual Showcase Card - 100% width of column */}
         <div
           onClick={() => onNavigate(slide.route)}
           role="button"
@@ -1154,7 +1154,7 @@ export const HeroServiceVisuals: React.FC<HeroServiceVisualsProps> = ({
               onNavigate(slide.route);
             }
           }}
-          className="group relative rounded-2xl bg-[#07132A]/90 backdrop-blur-xl border border-[#00D2FF]/30 hover:border-[#00D2FF]/65 p-3 xl:p-4.5 shadow-[0_20px_50px_rgba(0,0,0,0.55),0_0_30px_rgba(0,210,255,0.1)] transition-all duration-300 cursor-pointer overflow-hidden"
+          className="group relative w-full box-border rounded-2xl bg-[#07132A]/90 backdrop-blur-xl border border-[#00D2FF]/30 hover:border-[#00D2FF]/65 p-3 xl:p-4.5 shadow-[0_20px_50px_rgba(0,0,0,0.55),0_0_30px_rgba(0,210,255,0.1)] transition-all duration-300 cursor-pointer overflow-hidden"
         >
           {/* Top Glowing Accent Hairline */}
           <div
@@ -1200,8 +1200,8 @@ export const HeroServiceVisuals: React.FC<HeroServiceVisualsProps> = ({
           </div>
         </div>
 
-        {/* 2. Two Supporting Visual Sub-Cards */}
-        <div className="grid grid-cols-2 gap-2.5 xl:gap-3.5">
+        {/* 2. Two Supporting Visual Sub-Cards — 2 equal columns with 16px (gap-4) gap */}
+        <div className="grid grid-cols-2 gap-4 w-full box-border">
           {slide.supportingCards.map((card, idx) => {
             const isPurple = card.accent === 'purple';
             const SubIcon = idx === 0 ? Zap : ShieldCheck;
@@ -1217,7 +1217,7 @@ export const HeroServiceVisuals: React.FC<HeroServiceVisualsProps> = ({
                     onNavigate(slide.route);
                   }
                 }}
-                className={`group relative rounded-2xl bg-[#07142C]/85 backdrop-blur-xl border p-2.5 xl:p-3.5 transition-all duration-300 cursor-pointer ${
+                className={`group relative w-full box-border rounded-2xl bg-[#07142C]/85 backdrop-blur-xl border p-2.5 xl:p-3.5 transition-all duration-300 cursor-pointer ${
                   isPurple
                     ? 'border-purple-400/25 hover:border-purple-400/60 shadow-[0_10px_28px_rgba(0,0,0,0.4)]'
                     : 'border-[#00D2FF]/25 hover:border-[#00D2FF]/60 shadow-[0_10px_28px_rgba(0,0,0,0.4)]'

@@ -26,6 +26,19 @@ export const RobotSpeechControls: React.FC<RobotSpeechControlsProps> = ({
       data-robot-control="true"
       className="relative inline-flex flex-col items-center z-30"
     >
+      {/* "Tap anywhere to hear me" sits below the platform without overlapping it */}
+      {showTapToHearHint && (
+        <div
+          role="note"
+          className={`pointer-events-none mb-1.5 whitespace-nowrap inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#07142C]/95 border border-[#00D2FF]/40 text-[#00D2FF] text-[9.5px] sm:text-[10px] font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.5)] ${
+            prefersReducedMotion ? '' : 'animate-pulse'
+          }`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] shadow-[0_0_8px_#00D2FF] shrink-0" />
+          <span>Tap anywhere to hear me</span>
+        </div>
+      )}
+
       {/* Sleek Dark Glassmorphic Voice & Greeting Toolbar */}
       <div
         role="toolbar"
@@ -121,19 +134,6 @@ export const RobotSpeechControls: React.FC<RobotSpeechControlsProps> = ({
           <span className="leading-none">Greet</span>
         </button>
       </div>
-
-      {/* Small Tooltip Above Voice Controls Before First Interaction (avoids downward overflow) */}
-      {showTapToHearHint && (
-        <div
-          role="note"
-          className={`pointer-events-none absolute bottom-full mb-1 whitespace-nowrap inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#07142C]/95 border border-[#00D2FF]/40 text-[#00D2FF] text-[9.5px] sm:text-[10px] font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.5)] ${
-            prefersReducedMotion ? '' : 'animate-pulse'
-          }`}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] shadow-[0_0_8px_#00D2FF] shrink-0" />
-          <span>Tap anywhere to hear me</span>
-        </div>
-      )}
     </div>
   );
 };

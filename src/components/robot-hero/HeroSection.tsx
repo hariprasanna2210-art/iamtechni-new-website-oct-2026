@@ -90,13 +90,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     useState<RobotAnimationState>('presenting');
   const [isDesktop, setIsDesktop] = useState<boolean>(() =>
     typeof window !== 'undefined'
-      ? window.matchMedia('(min-width: 1024px)').matches
+      ? window.matchMedia('(min-width: 1280px)').matches
       : true
   );
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const mql = window.matchMedia('(min-width: 1024px)');
+    const mql = window.matchMedia('(min-width: 1280px)');
     const handleChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
     setIsDesktop(mql.matches);
     mql.addEventListener('change', handleChange);
@@ -471,7 +471,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full h-[calc(100svh-var(--header-height,64px))] max-h-[calc(100svh-var(--header-height,64px))] lg:h-[calc(100dvh-var(--header-height,64px))] lg:max-h-[calc(100dvh-var(--header-height,64px))] min-h-[500px] bg-[#040814] text-white overflow-hidden flex flex-col justify-between select-none"
+      className="relative w-full h-auto pt-6 sm:pt-8 xl:pt-12 pb-6 xl:pb-24 bg-[#040814] text-white overflow-x-clip flex flex-col justify-between select-none"
     >
       {/* Sophisticated Dark Animated Background */}
       <HeroDarkBackground
@@ -480,16 +480,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       />
 
       {/* Main Hero Container */}
-      <div className="relative z-10 w-full max-w-[1480px] mx-auto px-3.5 sm:px-6 lg:px-8 xl:px-10 py-2 sm:py-2.5 lg:py-3 xl:py-4 flex-1 min-h-0 flex flex-col justify-between">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex-1 min-h-0 flex flex-col justify-between">
         {/* ===================================================================
-            DESKTOP 3-COLUMN COMPOSITION (lg: >= 1024px)
-            Left (~34%): Dynamic Service Information
-            Center (~32%): Main Animated 3D Robot Centerpiece
-            Right (~34%): Dynamic Service Visuals Showcase
+            DESKTOP 3-COLUMN COMPOSITION (xl: >= 1280px)
+            Left (~38%): Dynamic Service Information
+            Center (~26%): Main Animated 3D Robot Centerpiece
+            Right (~36%): Dynamic Service Visuals Showcase
         =================================================================== */}
-        <div className="hidden lg:grid lg:grid-cols-[34%_32%_34%] items-center gap-0 flex-1 min-h-0">
-          {/* LEFT COLUMN: Dynamic Service Information */}
-          <div className="pr-3 xl:pr-6 min-h-0 flex flex-col justify-center">
+        <div
+          className="hidden xl:grid items-start gap-8 flex-1 min-h-0 w-full min-w-0"
+          style={{ gridTemplateColumns: 'minmax(0, 38fr) minmax(0, 26fr) minmax(0, 36fr)' }}
+        >
+          {/* LEFT COLUMN: Dynamic Service Information (38%) */}
+          <div className="min-w-0 w-full flex flex-col justify-start">
             <HeroContent
               slide={activeSlide}
               onNavigate={onNavigate}
@@ -499,8 +502,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             />
           </div>
 
-          {/* CENTER COLUMN: Main Animated 3D Robot Centerpiece */}
-          <div className="relative flex flex-col items-center justify-between h-[clamp(310px,60dvh,530px)] min-h-0 w-full py-0.5">
+          {/* CENTER COLUMN: Main Animated 3D Robot Centerpiece (26%) */}
+          <div className="min-w-0 w-full relative flex flex-col items-center justify-between h-[clamp(350px,58dvh,530px)] min-h-0 py-0.5">
             {/* Directional Robot Gesture Status Pill */}
             <motion.div
               key={`gesture-pill-${activeSlide.id}`}
@@ -522,8 +525,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               )}
             </motion.div>
 
-            {/* 3D Robot Stage — Scales fluidly to available column height */}
-            <div className="relative w-full flex-1 min-h-[220px] self-stretch">
+            {/* 3D Robot Stage */}
+            <div className="relative w-full flex-1 min-h-[250px] self-stretch flex items-center justify-center">
               <div className="absolute inset-0">
                 {isDesktop && (
                   <RobotScene
@@ -554,7 +557,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             {/* Robot Voice & Greeting Controls */}
-            <div className="shrink-0 mt-0.5">
+            <div className="shrink-0 mt-1 flex flex-col items-center">
               <RobotSpeechControls
                 isSpeaking={isVoiceSpeaking}
                 isMuted={isMuted}
@@ -566,20 +569,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Dynamic Service Visuals Showcase */}
-          <div className="pl-3 xl:pl-6 min-h-0 flex flex-col justify-center">
+          {/* RIGHT COLUMN: Dynamic Service Visuals Showcase (36%) */}
+          <div className="min-w-0 w-full flex flex-col justify-start">
             <HeroServiceVisuals slide={activeSlide} onNavigate={onNavigate} />
           </div>
         </div>
 
         {/* ===================================================================
-            MOBILE & TABLET VERTICAL LAYOUT (< 1024px)
-            1. Top: Single service pill, essential heading, and concise description
-            2. Middle: Central 3D robot animation with generous breathing room
-            3. Bottom: Prominent CTA buttons and streamlined service switcher
+            MOBILE & TABLET VERTICAL STACK (< 1280px)
+            Order:
+            1. Text first: eyebrow, heading (max 3 lines), description
+            2. Robot: 3D robot stage + voice controls
+            3. Cards: service visuals showcase
+            4. Chips & both buttons: tech chips + CTA buttons + mb-6 (>=24px)
+            5. Slide tabs: scrolling sideways with prev/next controls
         =================================================================== */}
-        <div className="flex lg:hidden flex-col items-center justify-between gap-2 sm:gap-3 w-full flex-1 min-h-0 py-1">
-          {/* 1. Top: Service Heading & Short Supporting Description */}
+        <div className="flex xl:hidden flex-col items-center justify-between gap-3 sm:gap-4 w-full flex-1 min-h-0 py-1">
+          {/* 1. Text first: Service Heading & Short Supporting Description */}
           <HeroContent
             slide={activeSlide}
             onNavigate={onNavigate}
@@ -588,9 +594,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             isHeadingH1={!isDesktop}
           />
 
-          {/* 2. Middle: Central 3D Robot Animation & Compact Voice Controls */}
-          <div className="relative w-full flex-1 min-h-[170px] sm:min-h-[240px] self-stretch flex flex-col items-center justify-center">
-            <div className="relative w-full max-w-[380px] sm:max-w-[440px] flex-1 min-h-[145px] sm:min-h-[200px] self-stretch mx-auto">
+          {/* 2. Robot: Central 3D Robot Animation & Compact Voice Controls */}
+          <div className="relative w-full min-h-[190px] sm:min-h-[250px] self-stretch flex flex-col items-center justify-center my-1 sm:my-2">
+            <div className="relative w-full max-w-[380px] sm:max-w-[440px] h-[180px] sm:h-[240px] self-stretch mx-auto">
               <div className="absolute inset-0">
                 {!isDesktop && (
                   <RobotScene
@@ -632,7 +638,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* 3. Bottom: Essential CTA Buttons */}
+          {/* 3. Cards: Dynamic Service Visuals Showcase */}
+          <div className="w-full max-w-xl mx-auto my-1 sm:my-2 shrink-0">
+            <HeroServiceVisuals slide={activeSlide} onNavigate={onNavigate} compact={true} />
+          </div>
+
+          {/* 4. Chips and both buttons: Tech chips + CTA Buttons (with mb-6 space above slide tabs) */}
           <div className="w-full max-w-xl mx-auto shrink-0">
             <HeroContent
               slide={activeSlide}
@@ -644,14 +655,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
 
         {/* ===================================================================
-            MOBILE & TABLET STREAMLINED SERVICE SWITCHER (< 1024px)
+            MOBILE & TABLET SLIDE TABS BAR (< 1280px)
+            Scrolls sideways if it doesn't fit
         =================================================================== */}
-        <div className="relative z-20 mt-2 pt-2 pr-14 sm:pr-16 border-t border-white/10 flex lg:hidden items-center justify-between gap-2 w-full max-w-md sm:max-w-lg mx-auto shrink-0">
-          {/* Interactive Progress Dots for the 8 Services */}
+        <div className="relative z-20 pt-2 border-t border-white/10 flex xl:hidden items-center justify-between gap-2 w-full max-w-xl sm:max-w-2xl mx-auto shrink-0">
+          {/* 8 Service Interactive Pills — Sideways Scroll */}
           <div
             role="tablist"
             aria-label="Select active IAMTECHNI service"
-            className="flex items-center gap-1.5"
+            className="flex items-center gap-1.5 min-w-0 overflow-x-auto no-scrollbar scroll-smooth whitespace-nowrap py-1 pr-2"
           >
             {HERO_SERVICE_SLIDES.map((item, idx) => {
               const isActive = idx === activeIndex;
@@ -663,18 +675,30 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   aria-selected={isActive}
                   aria-label={`Service ${idx + 1}: ${item.categoryLabel}`}
                   onClick={() => handleSelectSlide(idx)}
-                  className={`h-2 rounded-full transition-all duration-250 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00D2FF] ${
+                  className={`group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all duration-200 cursor-pointer shrink-0 min-h-[38px] ${
                     isActive
-                      ? 'w-7 bg-[#00D2FF] shadow-[0_0_10px_rgba(0,210,255,0.6)]'
-                      : 'w-2 bg-white/25 hover:bg-white/45'
+                      ? 'bg-[#0A1F44] text-white border border-[#00D2FF]/65 shadow-[0_0_14px_rgba(0,210,255,0.25)]'
+                      : 'bg-white/[0.04] text-slate-400 hover:text-white border border-white/10'
                   }`}
-                />
+                >
+                  <span
+                    className={`font-mono text-xs font-bold ${
+                      isActive ? 'text-[#00D2FF]' : 'text-slate-500'
+                    }`}
+                  >
+                    0{idx + 1}
+                  </span>
+                  <span className="whitespace-nowrap">{item.shortTitle}</span>
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF]" />
+                  )}
+                </button>
               );
             })}
           </div>
 
           {/* Prev / Play-Pause / Next Touch Controls */}
-          <div className="inline-flex items-center gap-1.5 shrink-0">
+          <div className="inline-flex items-center gap-1.5 shrink-0 pl-1">
             <button
               type="button"
               onClick={handlePrevSlide}
@@ -709,15 +733,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
 
         {/* ===================================================================
-            DESKTOP SYNCHRONIZED 8-SERVICE CAROUSEL NAVIGATION BAR (lg: >= 1024px)
+            DESKTOP SYNCHRONIZED 8-SERVICE CAROUSEL NAVIGATION BAR (xl: >= 1280px)
             Preserved 100% unchanged for Desktop
         =================================================================== */}
-        <div className="relative z-20 mt-1 sm:mt-2 lg:mt-2 pt-1.5 sm:pt-2 border-t border-white/10 hidden lg:flex flex-row items-center justify-between gap-1.5 sm:gap-2.5 shrink-0">
-          {/* 8 Service Interactive Pills / Indicators — Single non-wrapping row */}
+        <div className="relative z-20 mt-4 pt-3 border-t border-white/10 hidden xl:flex flex-row items-center justify-between gap-4 w-full shrink-0">
+          {/* 8 Service Interactive Pills — Single row, sideways scrolling if needed */}
           <div
             role="tablist"
             aria-label="Select active IAMTECHNI service"
-            className="flex items-center justify-start flex-nowrap gap-1 sm:gap-1.5 min-w-0 overflow-x-auto no-scrollbar"
+            className="flex items-center justify-start flex-nowrap gap-1.5 sm:gap-2 min-w-0 overflow-x-auto no-scrollbar py-1"
           >
             {HERO_SERVICE_SLIDES.map((item, idx) => {
               const isActive = idx === activeIndex;
@@ -729,7 +753,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   aria-selected={isActive}
                   aria-label={`Service ${idx + 1}: ${item.categoryLabel}`}
                   onClick={() => handleSelectSlide(idx)}
-                  className={`group relative inline-flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2.5 py-1 rounded-full text-[9.5px] sm:text-[10.5px] font-medium transition-all duration-250 cursor-pointer shrink-0 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00D2FF] ${
+                  className={`group relative inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[9.5px] sm:text-[10.5px] font-medium transition-all duration-250 cursor-pointer shrink-0 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00D2FF] ${
                     isActive
                       ? 'bg-[#0A1F44] text-white border border-[#00D2FF]/65 shadow-[0_0_18px_rgba(0,210,255,0.22)]'
                       : 'bg-white/[0.04] hover:bg-white/[0.09] text-slate-400 hover:text-slate-200 border border-white/10'
@@ -744,7 +768,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   </span>
                   <span
                     className={`${
-                      isActive ? 'hidden sm:inline' : 'hidden xl:inline'
+                      isActive ? 'inline' : 'hidden 2xl:inline'
                     } whitespace-nowrap`}
                   >
                     {item.shortTitle}
@@ -757,8 +781,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             })}
           </div>
 
-          {/* Prev / Play-Pause / Next Manual Controls */}
-          <div className="inline-flex items-center gap-1 sm:gap-1.5 shrink-0">
+          {/* Prev / Play-Pause / Next Manual Controls — Flush at right edge lined up with card edge */}
+          <div className="inline-flex items-center gap-1 sm:gap-1.5 shrink-0 pl-2">
             <span className="text-[10.5px] font-mono text-slate-400 mr-1 hidden 2xl:inline">
               {activeSlide.counterLabel} • {isAutoPlaying && !isHovered ? 'AUTO-SYNC' : 'PAUSED'}
             </span>

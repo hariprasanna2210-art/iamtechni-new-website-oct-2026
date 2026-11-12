@@ -1018,7 +1018,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
         h2: 'Engineer Production AI Systems, Not Just Chatbot Prompts',
         paragraphs: [
           'Basic prompt engineering is no longer sufficient for modern software engineering roles. Technology organizations require engineers who understand how to connect Large Language Models (LLMs) with enterprise databases, APIs, and proprietary documentation.',
-          'In this course, you write Python code to build semantic search engines, contextual document analyzers, and automated enterprise workflows using foundation models from OpenAI, Anthropic, and Google Gemini.',
+          'In this course, you write Python code to build semantic search engines, contextual document analyzers, and automated enterprise workflows using foundation models from OpenAI, Anthropic, and leading foundation models.',
         ],
       },
       {
@@ -1047,7 +1047,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
       },
       {
         title: 'Multi-Model API Integration',
-        description: 'Hands-on experience with OpenAI, Google Gemini, and local open-source models like Llama via Ollama.',
+        description: 'Hands-on experience with OpenAI, leading enterprise LLMs, and local open-source models like Llama via Ollama.',
       },
       {
         title: 'Interactive Live Online Format',

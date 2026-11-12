@@ -170,3 +170,56 @@ export const ScrollRevealSection: React.FC<ScrollRevealSectionProps> = ({
     </motion.section>
   );
 };
+
+export interface ZoomHeadingProps {
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'div';
+  children: ReactNode;
+  className?: string;
+  id?: string;
+  amount?: number;
+  hoverScale?: boolean;
+}
+
+/**
+ * ZoomHeading: Smoothly zooms in (scale 0.9 -> 1, opacity 0 -> 1) over 0.6s ease-out
+ * as it scrolls into view, and gently zooms out when scrolling out of view (once: false),
+ * animating again each time it enters the viewport. Respects prefers-reduced-motion.
+ */
+export const ZoomHeading: React.FC<ZoomHeadingProps> = ({
+  as = 'h2',
+  children,
+  className = '',
+  id,
+  amount = 0.4,
+  hoverScale = false,
+}) => {
+  const shouldReduceMotion = useReducedMotion();
+
+  if (shouldReduceMotion) {
+    const Tag = as as any;
+    return (
+      <Tag id={id} className={className}>
+        {children}
+      </Tag>
+    );
+  }
+
+  const MotionComponent = (motion as any)[as] || motion.h2;
+
+  return (
+    <MotionComponent
+      id={id}
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: false, amount }}
+      transition={{
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1], // subtle, professional ease-out
+      }}
+      whileHover={hoverScale ? { scale: 1.03, transition: { duration: 0.25 } } : undefined}
+      className={`${className} will-change-[transform,opacity]`}
+    >
+      {children}
+    </MotionComponent>
+  );
+};

@@ -284,28 +284,28 @@ export const Header: React.FC<HeaderProps> = ({
             : 'bg-white border-slate-200/70 shadow-[0_4px_16px_-2px_rgba(15,23,42,0.06),0_2px_6px_-1px_rgba(15,23,42,0.04)]'
         }`}
       >
-        {/* Main Navbar Row — Aligned with Hero Container (max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8) */}
-        <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 xl:py-3 flex items-center justify-between gap-2 lg:gap-2.5 xl:gap-5 whitespace-nowrap">
+        {/* Main Navbar Row — Aligned with Hero Container (w-full max-w-[1480px] mx-auto px-3.5 sm:px-6 lg:px-8 xl:px-10) */}
+        <div className="relative w-full max-w-[1480px] mx-auto px-3.5 sm:px-6 lg:px-8 xl:px-10 py-2.5 xl:py-3 flex items-center justify-between gap-2 lg:gap-2.5 xl:gap-4 whitespace-nowrap">
           {/* Zone 1: Brand Wordmark / Logo */}
           <div className="shrink-0 flex items-center">
             <button
               type="button"
               onClick={() => handleLinkClick('/')}
-              className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 flex items-center gap-2 text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-lg group cursor-pointer"
+              className="h-[44px] flex items-center gap-2 text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-lg group cursor-pointer"
               aria-label="IAMTECHNI Home"
             >
               <IamtechniLogo size="md" />
             </button>
           </div>
 
-          {/* Zone 2: Navigation Links (Zero-Wrap Enforced on 1024px+ Viewports) */}
+          {/* Zone 2: Navigation Links (Zero-Wrap Enforced on 1280px+ Viewports) */}
           <nav
             aria-label="Primary Navigation"
-            className="hidden lg:flex items-center justify-center lg:gap-2.5 xl:gap-5 2xl:gap-6 text-[12px] xl:text-[13px] font-medium text-slate-600 shrink-0"
+            className="hidden xl:flex items-center justify-center gap-1.5 min-[1340px]:gap-2.5 min-[1440px]:gap-5 2xl:gap-6 text-[12px] xl:text-[13px] font-medium text-slate-600 shrink-0 h-[44px]"
           >
             {/* Services with Mega Menu */}
             <div
-              className="py-1"
+              className="h-full flex items-center py-1"
               onMouseEnter={() => handleMouseEnter('services')}
               onMouseLeave={handleMouseLeave}
             >
@@ -318,15 +318,15 @@ export const Header: React.FC<HeaderProps> = ({
                     setActiveMegaMenu('services');
                   }
                 }}
-                className={`flex items-center gap-1 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+                className={`inline-flex items-center gap-1 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
                   currentRoute.startsWith('/services') ? 'text-[#1266E8] font-semibold' : ''
                 }`}
                 aria-expanded={activeMegaMenu === 'services'}
                 aria-haspopup="true"
               >
-                <span>Services</span>
+                <span className="leading-none">Services</span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-150 ${
+                  className={`w-3.5 h-3.5 text-slate-400 shrink-0 self-center transition-transform duration-150 ${
                     activeMegaMenu === 'services' ? 'rotate-180 text-[#1266E8]' : ''
                   }`}
                 />
@@ -527,7 +527,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Solutions with Mega Menu */}
             <div
-              className="py-1"
+              className="h-full flex items-center py-1"
               onMouseEnter={() => handleMouseEnter('solutions')}
               onMouseLeave={handleMouseLeave}
             >
@@ -540,15 +540,15 @@ export const Header: React.FC<HeaderProps> = ({
                     setActiveMegaMenu('solutions');
                   }
                 }}
-                className={`flex items-center gap-1 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+                className={`inline-flex items-center gap-1 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
                   currentRoute === '/solutions' ? 'text-[#1266E8] font-semibold' : ''
                 }`}
                 aria-expanded={activeMegaMenu === 'solutions'}
                 aria-haspopup="true"
               >
-                <span>Solutions</span>
+                <span className="leading-none">Solutions</span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-150 ${
+                  className={`w-3.5 h-3.5 text-slate-400 shrink-0 self-center transition-transform duration-150 ${
                     activeMegaMenu === 'solutions' ? 'rotate-180 text-[#1266E8]' : ''
                   }`}
                 />
@@ -633,14 +633,14 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => handleLinkClick('/training')}
-              className={`hover:text-slate-900 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+              className={`hover:text-slate-900 transition-colors inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
                 currentRoute === '/training' || currentRoute === '/courses'
                   ? 'text-[#1266E8] font-semibold'
                   : ''
               }`}
             >
-              <span>Training</span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold leading-none">
+              <span className="leading-none">Training</span>
+              <span className="inline-flex items-center justify-center text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold leading-none self-center">
                 NEW
               </span>
             </button>
@@ -648,7 +648,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => handleLinkClick('/industries')}
-              className={`hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+              className={`hover:text-slate-900 transition-colors inline-flex items-center whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
                 currentRoute === '/industries' ? 'text-[#1266E8] font-semibold' : ''
               }`}
             >
@@ -658,7 +658,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => handleLinkClick('/portfolio')}
-              className={`hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+              className={`hover:text-slate-900 transition-colors inline-flex items-center whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
                 currentRoute === '/portfolio' ? 'text-[#1266E8] font-semibold' : ''
               }`}
             >
@@ -668,7 +668,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => handleLinkClick('/technology')}
-              className={`hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+              className={`hover:text-slate-900 transition-colors inline-flex items-center whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
                 currentRoute === '/technology' ? 'text-[#1266E8] font-semibold' : ''
               }`}
             >
@@ -678,7 +678,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => handleLinkClick('/insights')}
-              className={`hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+              className={`hover:text-slate-900 transition-colors inline-flex items-center whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
                 currentRoute.startsWith('/insights') ? 'text-[#1266E8] font-semibold' : ''
               }`}
             >
@@ -688,7 +688,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => handleLinkClick('/about')}
-              className={`hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+              className={`hover:text-slate-900 transition-colors inline-flex items-center whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
                 currentRoute === '/about' ? 'text-[#1266E8] font-semibold' : ''
               }`}
             >
@@ -698,14 +698,14 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => handleLinkClick('/job-finder-pro')}
-              className={`hover:text-slate-900 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+              className={`hover:text-slate-900 transition-colors inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
                 currentRoute === '/job-finder-pro' || currentRoute === '/job-finder' || currentRoute === '/jobs'
                   ? 'text-[#1266E8] font-semibold'
                   : ''
               }`}
             >
-              <span>Job Finder Pro</span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-blue-50 text-blue-700 border border-blue-200 font-bold leading-none">
+              <span className="leading-none">Job Finder Pro</span>
+              <span className="inline-flex items-center justify-center text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-blue-50 text-blue-700 border border-blue-200 font-bold leading-none self-center">
                 APP
               </span>
             </button>
@@ -719,7 +719,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => {
                 window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
               }}
-              className="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] transition-all py-2 px-3 rounded-lg border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] whitespace-nowrap cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="hidden lg:inline-flex items-center justify-center gap-1.5 h-[44px] text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] transition-all px-3 rounded-lg border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] whitespace-nowrap cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
               title="Chat with IAMTECHNI AI Solutions Advisor"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
@@ -729,12 +729,12 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Direct Phone Call Button — Unified Soft Secondary Button */}
             <a
               href={`tel:${PRIMARY_PHONE_LINK}`}
-              className="hidden lg:inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-white hover:bg-[#F5F8FC] transition-all py-2 px-3 rounded-lg border border-[#DBEAFE]/90 shadow-2xs whitespace-nowrap active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="hidden xl:inline-flex items-center justify-center gap-1.5 h-[44px] w-[44px] min-[1440px]:w-auto min-[1440px]:px-3.5 text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-white hover:bg-[#F5F8FC] transition-all rounded-lg border border-[#DBEAFE]/90 shadow-2xs whitespace-nowrap active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
               title={`Call ${PRIMARY_PHONE}`}
               aria-label={`Call ${PRIMARY_PHONE}`}
             >
               <Phone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span className="hidden xl:inline">{PRIMARY_PHONE}</span>
+              <span className="hidden min-[1440px]:inline">{PRIMARY_PHONE}</span>
             </a>
 
             {/* Start a Project CTA Button — Matching Hero Primary Button Layout & Lighter/Softer Hover */}
@@ -743,18 +743,18 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onStartProject}
               aria-label="Start a Project"
               title="Start a Project"
-              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 min-h-[44px] lg:min-h-[38px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
             >
               <span className="hidden min-[380px]:inline">Start a Project</span>
               <span className="min-[380px]:hidden">Start</span>
               <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
             </button>
 
-            {/* Accessible Mobile Menu Hamburger Toggle (Below 1024px) */}
+            {/* Accessible Mobile Menu Hamburger Toggle (Below 1280px) */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden min-w-[44px] min-h-[44px] p-2.5 flex items-center justify-center text-slate-700 hover:text-slate-900 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
+              className="xl:hidden min-w-[44px] min-h-[44px] h-[44px] w-[44px] p-2.5 flex items-center justify-center text-slate-700 hover:text-slate-900 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
               aria-label={isMobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation-panel"
@@ -769,10 +769,10 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
 
-      {/* Accessible Full-Height Slide-In Mobile & Tablet Navigation Panel (<1024px) */}
+      {/* Accessible Full-Height Slide-In Mobile & Tablet Navigation Panel (<1280px) */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-x-0 bottom-0 z-50 lg:hidden flex justify-end"
+          className="fixed inset-x-0 bottom-0 z-50 xl:hidden flex justify-end"
           style={{ top: `${headerHeight}px` }}
         >
           {/* Tap-outside Backdrop Overlay */}
