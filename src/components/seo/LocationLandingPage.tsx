@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   ArrowRight,
   CheckCircle2,
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { PageRoute } from '../../types';
 import { LocationSeoPageData } from '../../data/location-seo/types';
+import { ALL_LOCATION_PAGES } from '../../data/location-seo';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
 import {
   PRIMARY_PHONE,
@@ -35,6 +36,18 @@ export interface LocationLandingPageProps {
 }
 
 const BASE_URL = 'https://www.iamtechni.in';
+
+const PARENT_SERVICE_BY_SLUG_KEYWORD: { match: string; path: string; label: string }[] = [
+  { match: 'ecommerce', path: '/services/ecommerce', label: 'E-commerce Development Services' },
+  { match: 'software-development', path: '/services/custom-software', label: 'Custom Software Development' },
+  { match: 'mobile-app', path: '/services/mobile-apps', label: 'Mobile App Development Services' },
+  { match: 'digital-marketing', path: '/services/digital-marketing', label: 'Digital Marketing & SEO Services' },
+  { match: 'seo', path: '/services/digital-marketing', label: 'Search Engine Optimization (SEO) Services' },
+  { match: 'aws-training', path: '/services/cloud-devops', label: 'Cloud & DevOps Engineering' },
+  { match: 'devops-training', path: '/services/cloud-devops', label: 'Cloud & DevOps Engineering' },
+  { match: 'generative-ai', path: '/services/ai-machine-learning', label: 'AI & Machine Learning Solutions' },
+  { match: 'web-development', path: '/services/web-development', label: 'Website Design & Web Development' },
+];
 
 export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
   page,
@@ -65,7 +78,7 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
     setOpenFaqIndex(openFaqIndex === idx ? null : idx);
   };
 
-  // Remove initial static meta/canonical tags once react-helmet-async mounts its managed tags
+  // Remove initial static meta/canonical tags and prerender JSON-LD once react-helmet-async mounts its managed tags
   useEffect(() => {
     const selectors = [
       'meta[name="description"]',
@@ -83,6 +96,11 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
           .querySelectorAll(`${sel}:not([data-rh])`)
           .forEach((el) => el.remove());
       }
+    }
+    if (document.head.querySelector('script[type="application/ld+json"][data-rh]')) {
+      document.head
+        .querySelectorAll('script.prerender-jsonld:not([data-rh])')
+        .forEach((el) => el.remove());
     }
   }, [page.slug]);
 
@@ -103,6 +121,11 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
             telephone: SCHEMA_TELEPHONE,
             email: COMPANY_CONTACT.email,
             url: `${BASE_URL}/`,
+          },
+          hasCourseInstance: {
+            '@type': 'CourseInstance',
+            courseMode: ['online'],
+            courseWorkload: page.courseDetails?.duration || '8–10 Weeks',
           },
         }
       : {
@@ -637,6 +660,117 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
           </div>
         </section>
       )}
+
+      {/* ========================================================================= */}
+      {/* 7.5. RELATED SERVICES & REGIONAL INTERNAL LINKS                           */}
+      {/* ========================================================================= */}
+      {(() => {
+        const parentMatch = PARENT_SERVICE_BY_SLUG_KEYWORD.find((item) =>
+          page.slug.includes(item.match)
+        );
+        const sameCityPages = ALL_LOCATION_PAGES.filter(
+          (p) =>
+            p.slug !== page.slug &&
+            p.targetLocation.city.toLowerCase() === page.targetLocation.city.toLowerCase()
+        );
+        const sameCategoryPages = ALL_LOCATION_PAGES.filter(
+          (p) =>
+            p.slug !== page.slug &&
+            p.category === page.category &&
+            p.targetLocation.city.toLowerCase() !== page.targetLocation.city.toLowerCase()
+        ).slice(0, 6);
+
+        return (
+          <section className="py-10 sm:py-14 bg-[#F8FAFC] border-b border-slate-200/80">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
+                    Connected Practices &amp; Regions
+                  </div>
+                  <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-2xl font-bold text-[#1E3A8A]">
+                    Explore Related Services &amp; Regional Pages
+                  </h2>
+                </div>
+                <div className="flex flex-wrap items-center gap-3 text-xs font-semibold">
+                  {parentMatch && (
+                    <Link
+                      to={parentMatch.path}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-50 text-[#1E3A8A] border border-blue-200 hover:bg-blue-100 transition-colors"
+                    >
+                      <span>{parentMatch.label}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
+                  <Link
+                    to="/locations"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-200 hover:border-[#2563EB] hover:text-[#2563EB] transition-colors"
+                  >
+                    <span>All 30 Locations</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                  <Link
+                    to="/services"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-200 hover:border-[#2563EB] hover:text-[#2563EB] transition-colors"
+                  >
+                    <span>All 13 Services</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+
+              {sameCityPages.length > 0 && (
+                <div className="space-y-2.5">
+                  <h3 className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">
+                    More IAMTECHNI Services in {page.targetLocation.city}
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {sameCityPages.map((rel) => (
+                      <Link
+                        key={rel.slug}
+                        to={rel.path}
+                        className="p-3.5 rounded-xl bg-white hover:bg-blue-50/50 border border-slate-200 hover:border-[#2563EB]/40 transition-colors flex items-center justify-between gap-2 group"
+                      >
+                        <span className="text-xs sm:text-sm font-semibold text-slate-800 group-hover:text-[#1E3A8A] truncate">
+                          {rel.h1}
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#2563EB] shrink-0" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {sameCategoryPages.length > 0 && (
+                <div className="space-y-2.5">
+                  <h3 className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">
+                    Related Regional Pages Across Puducherry &amp; Tamil Nadu
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {sameCategoryPages.map((rel) => (
+                      <Link
+                        key={rel.slug}
+                        to={rel.path}
+                        className="p-3.5 rounded-xl bg-white hover:bg-blue-50/50 border border-slate-200 hover:border-[#2563EB]/40 transition-colors flex items-center justify-between gap-2 group"
+                      >
+                        <div className="min-w-0">
+                          <div className="text-xs sm:text-sm font-semibold text-slate-800 group-hover:text-[#1E3A8A] truncate">
+                            {rel.h1}
+                          </div>
+                          <div className="text-[11px] text-slate-500 font-mono">
+                            {rel.targetLocation.city}
+                          </div>
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#2563EB] shrink-0" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ========================================================================= */}
       {/* 8. BOTTOM CTA BANNER                                                      */}

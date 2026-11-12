@@ -30,16 +30,12 @@ export const COMPANY_CONTACT = {
   workingHours: 'Mon – Sat: 9:00 AM – 7:00 PM IST',
   responseTime: 'Within 1 business day for all technical inquiries',
   address: {
-    // TODO: Replace with exact physical street address in Puducherry / Tamil Nadu when finalized
-    streetAddress: 'Puducherry & Tamil Nadu',
-    addressLocality: 'Puducherry & Tamil Nadu',
-    addressRegion: 'PY / TN',
-    // TODO: Verify exact postal code for primary registered office
-    postalCode: '605001',
+    addressLocality: 'Puducherry',
+    addressRegion: 'Puducherry & Tamil Nadu',
     addressCountry: 'IN',
   },
+  areaServed: ['Puducherry', 'Pondicherry', 'Tamil Nadu', 'Chennai', 'Coimbatore', 'India'],
   socialProfiles: [
     'https://www.linkedin.com/company/iamtechni/',
-    // TODO: Add additional official social profile URLs (e.g., GitHub, X/Twitter, YouTube) when available
   ],
 };

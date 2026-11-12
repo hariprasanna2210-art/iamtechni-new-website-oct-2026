@@ -40,7 +40,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
             onClick={() => onNavigate('/services')}
             className="min-h-[44px] min-w-[44px] p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"
           >
-            <span>Services (17)</span>
+            <span>Services (13)</span>
             <Layers className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1266E8]" />
           </button>
           <button

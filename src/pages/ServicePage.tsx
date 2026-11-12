@@ -43,20 +43,36 @@ const SERVICE_LOCATION_LINKS: Record<string, { city: string; path: string; label
   'ecommerce': [
     { city: 'Pondicherry', path: '/ecommerce-website-development-pondicherry/', label: 'E-commerce Development Pondicherry' },
     { city: 'Chennai', path: '/ecommerce-website-development-chennai/', label: 'E-commerce Development Chennai' },
+    { city: 'Coimbatore', path: '/web-development-coimbatore/', label: 'Web & E-commerce Coimbatore' },
+    { city: 'Madurai', path: '/web-development-madurai/', label: 'Web & E-commerce Madurai' },
   ],
   'custom-software': [
-    { city: 'Pondicherry', path: '/custom-software-development-pondicherry/', label: 'Custom Software Pondicherry' },
+    { city: 'Pondicherry', path: '/software-development-company-pondicherry/', label: 'Software Development Pondicherry' },
     { city: 'Chennai', path: '/software-development-company-chennai/', label: 'Software Development Chennai' },
+    { city: 'Coimbatore', path: '/web-development-coimbatore/', label: 'Enterprise Web & Software Coimbatore' },
+    { city: 'Trichy', path: '/web-development-trichy/', label: 'Custom Web & Portals Trichy' },
   ],
   'mobile-apps': [
     { city: 'Pondicherry', path: '/mobile-app-development-pondicherry/', label: 'Mobile App Development Pondicherry' },
     { city: 'Chennai', path: '/mobile-app-development-chennai/', label: 'Mobile App Development Chennai' },
+    { city: 'Pondicherry (Software)', path: '/software-development-company-pondicherry/', label: 'Software Engineering Pondicherry' },
+  ],
+  'ai-machine-learning': [
+    { city: 'Pondicherry (GenAI)', path: '/generative-ai-training-pondicherry/', label: 'Generative AI Pondicherry' },
+    { city: 'Tamil Nadu (GenAI)', path: '/generative-ai-training-tamil-nadu/', label: 'Generative AI Tamil Nadu' },
+    { city: 'Pondicherry (Software)', path: '/software-development-company-pondicherry/', label: 'Custom AI & Software Pondicherry' },
+    { city: 'Chennai (Software)', path: '/software-development-company-chennai/', label: 'Enterprise AI & Software Chennai' },
+  ],
+  'data-analytics': [
+    { city: 'Pondicherry (Software)', path: '/software-development-company-pondicherry/', label: 'Data & Software Engineering Pondicherry' },
+    { city: 'Chennai (Software)', path: '/software-development-company-chennai/', label: 'Enterprise Data & Software Chennai' },
+    { city: 'Pondicherry (AWS Cloud)', path: '/aws-training-pondicherry/', label: 'AWS Cloud Pondicherry' },
   ],
   'digital-marketing': [
     { city: 'Pondicherry (Agency)', path: '/digital-marketing-agency-pondicherry/', label: 'Digital Marketing Pondicherry' },
-    { city: 'Pondicherry (SEO)', path: '/seo-company-pondicherry/', label: 'SEO Pondicherry' },
+    { city: 'Pondicherry (Local SEO)', path: '/local-seo-services-pondicherry/', label: 'Local SEO Pondicherry' },
     { city: 'Chennai (Agency)', path: '/digital-marketing-agency-chennai/', label: 'Digital Marketing Chennai' },
-    { city: 'Chennai (SEO)', path: '/seo-company-chennai/', label: 'SEO Chennai' },
+    { city: 'Chennai (SEO)', path: '/seo-company-chennai/', label: 'SEO Company Chennai' },
     { city: 'Coimbatore', path: '/digital-marketing-coimbatore/', label: 'Digital Marketing Coimbatore' },
   ],
   'cloud-devops': [
@@ -65,6 +81,26 @@ const SERVICE_LOCATION_LINKS: Record<string, { city: string; path: string; label
     { city: 'Chennai (AWS)', path: '/aws-training-chennai/', label: 'AWS Training Chennai' },
     { city: 'Chennai (DevOps)', path: '/devops-training-chennai/', label: 'DevOps Training Chennai' },
     { city: 'Coimbatore (AWS)', path: '/aws-training-coimbatore/', label: 'AWS Training Coimbatore' },
+  ],
+  'cybersecurity': [
+    { city: 'Pondicherry (Software)', path: '/software-development-company-pondicherry/', label: 'Secure Software Pondicherry' },
+    { city: 'Chennai (Software)', path: '/software-development-company-chennai/', label: 'Enterprise Security & Software Chennai' },
+    { city: 'Pondicherry (Cloud)', path: '/aws-training-pondicherry/', label: 'Cloud Architecture Pondicherry' },
+  ],
+  'ui-ux-design': [
+    { city: 'Pondicherry (Web)', path: '/web-development-company-pondicherry/', label: 'Web Design & Development Pondicherry' },
+    { city: 'Chennai (Web)', path: '/web-development-company-chennai/', label: 'Web Design & Development Chennai' },
+    { city: 'Pondicherry (Mobile)', path: '/mobile-app-development-pondicherry/', label: 'Mobile UI/UX Pondicherry' },
+  ],
+  'it-consulting': [
+    { city: 'Pondicherry', path: '/software-development-company-pondicherry/', label: 'Software & IT Consulting Pondicherry' },
+    { city: 'Chennai', path: '/software-development-company-chennai/', label: 'Software & IT Consulting Chennai' },
+    { city: 'Coimbatore', path: '/web-development-coimbatore/', label: 'Digital Transformation Coimbatore' },
+  ],
+  'robotics': [
+    { city: 'Pondicherry (Engineering)', path: '/software-development-company-pondicherry/', label: 'Software & Systems Pondicherry' },
+    { city: 'Pondicherry (AI)', path: '/generative-ai-training-pondicherry/', label: 'AI Engineering Pondicherry' },
+    { city: 'Chennai (Engineering)', path: '/software-development-company-chennai/', label: 'Systems Engineering Chennai' },
   ],
   'training': [
     { city: 'Pondicherry (AWS)', path: '/aws-training-pondicherry/', label: 'AWS Training Pondicherry' },
@@ -121,7 +157,7 @@ export const ServicePage: React.FC<ServicePageProps> = ({
     setOpenFaqIndex(openFaqIndex === idx ? null : idx);
   };
 
-  // Remove initial static meta/canonical tags once react-helmet-async mounts its managed tags
+  // Remove initial static meta/canonical tags and prerender JSON-LD once react-helmet-async mounts its managed tags
   useEffect(() => {
     const selectors = [
       'meta[name="description"]',
@@ -139,6 +175,11 @@ export const ServicePage: React.FC<ServicePageProps> = ({
           .querySelectorAll(`${sel}:not([data-rh])`)
           .forEach((el) => el.remove());
       }
+    }
+    if (document.head.querySelector('script[type="application/ld+json"][data-rh]')) {
+      document.head
+        .querySelectorAll('script.prerender-jsonld:not([data-rh])')
+        .forEach((el) => el.remove());
     }
   }, [canonicalSlug]);
 
@@ -593,6 +634,55 @@ export const ServicePage: React.FC<ServicePageProps> = ({
                 <p className="text-[11.5px] text-slate-500 leading-relaxed pt-1">
                   Headquartered in Puducherry; serving clients remotely across Chennai and Tamil Nadu with in-person meetings on request.
                 </p>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* Related Services Internal Linking Section */}
+      {(() => {
+        const relatedServices = servicesData
+          .filter((s) => s.slug !== canonicalSlug)
+          .slice(0, 6);
+        return (
+          <section className="py-8 sm:py-12 bg-white border-b border-slate-200">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                <div>
+                  <div className="text-xs font-mono font-bold uppercase tracking-wider text-[#1266E8]">
+                    Complementary Capabilities
+                  </div>
+                  <h2 className="text-lg sm:text-xl font-bold text-slate-900">
+                    Explore Related Engineering Services
+                  </h2>
+                </div>
+                <Link
+                  to="/services"
+                  className="text-xs font-semibold text-[#1266E8] hover:underline inline-flex items-center gap-1"
+                >
+                  <span>All 13 Services</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {relatedServices.map((rel) => (
+                  <Link
+                    key={rel.slug}
+                    to={`/services/${rel.slug}`}
+                    className="p-3.5 rounded-xl bg-slate-50 hover:bg-[#EEF4FF] border border-slate-200 hover:border-[#1266E8]/40 transition-colors group flex items-center justify-between gap-2"
+                  >
+                    <div className="min-w-0">
+                      <div className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-[#1266E8] truncate">
+                        {rel.title}
+                      </div>
+                      <div className="text-[11px] text-slate-500 truncate">
+                        {rel.category}
+                      </div>
+                    </div>
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1266E8] shrink-0" />
+                  </Link>
+                ))}
               </div>
             </div>
           </section>

@@ -4,6 +4,7 @@ import { industriesData } from '../data/industriesData';
 import { coursesData } from '../data/coursesData';
 import { insightsData } from '../data/insightsData';
 import { projectsData } from '../data/projectsData';
+import { ALL_LOCATION_PAGES } from '../data/location-seo';
 
 export const BASE_SITE_URL = 'https://www.iamtechni.in';
 
@@ -16,10 +17,10 @@ export interface SitemapEntry {
 
 /**
  * Dynamically generates all sitemap entries from the static routes and
- * existing data files (servicesData, solutionsData, industriesData, coursesData, insightsData, projectsData).
+ * existing data files (servicesData, solutionsData, industriesData, coursesData, insightsData, projectsData, ALL_LOCATION_PAGES).
  * Priorities:
  * - Home: 1.0 (daily)
- * - Main pages: 0.8 (weekly)
+ * - Main pages & Location landing pages: 0.8 (weekly)
  * - Detail pages (service, solution, industry, course, article, project): 0.7 (weekly)
  * - Contact pages: 0.5 (monthly)
  * - Legal pages: 0.3 (yearly)
@@ -40,6 +41,7 @@ export function getSitemapEntries(): SitemapEntry[] {
     { path: '/about', changefreq: 'weekly', priority: '0.8' },
     { path: '/careers', changefreq: 'weekly', priority: '0.8' },
     { path: '/faq', changefreq: 'weekly', priority: '0.8' },
+    { path: '/locations', changefreq: 'weekly', priority: '0.8' },
   ];
 
   const contactRoutes: { path: string; changefreq: SitemapEntry['changefreq']; priority: string }[] = [
@@ -55,11 +57,22 @@ export function getSitemapEntries(): SitemapEntry[] {
   const seenPaths = new Set<string>();
   const entries: SitemapEntry[] = [];
 
-  const addRoute = (path: string, changefreq: SitemapEntry['changefreq'], priority: string) => {
+  const addRoute = (
+    path: string,
+    changefreq: SitemapEntry['changefreq'],
+    priority: string,
+    preserveTrailingSlash = false
+  ) => {
     const rawPath = path.startsWith('/') ? path : `/${path}`;
-    const cleanPath = rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '');
-    if (seenPaths.has(cleanPath)) return;
-    seenPaths.add(cleanPath);
+    const cleanPath =
+      rawPath === '/'
+        ? '/'
+        : preserveTrailingSlash
+          ? `${rawPath.replace(/\/+$/, '')}/`
+          : rawPath.replace(/\/+$/, '');
+    const dedupeKey = rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '');
+    if (seenPaths.has(dedupeKey)) return;
+    seenPaths.add(dedupeKey);
     entries.push({
       loc: `${BASE_SITE_URL}${cleanPath}`,
       lastmod: today,
@@ -128,6 +141,14 @@ export function getSitemapEntries(): SitemapEntry[] {
     const id = (project.id || '').trim();
     if (id) {
       addRoute(`/case-studies/${id}`, 'weekly', '0.7');
+    }
+  }
+
+  // 10. Dynamically add all 30 location SEO pages with canonical trailing slash (0.8 weekly)
+  for (const locPage of ALL_LOCATION_PAGES) {
+    const slug = (locPage.slug || '').trim().replace(/^\/+|\/+$/g, '');
+    if (slug) {
+      addRoute(`/${slug}/`, 'weekly', '0.8', true);
     }
   }
 

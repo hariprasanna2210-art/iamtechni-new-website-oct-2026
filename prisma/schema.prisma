@@ -1,0 +1,405 @@
+// Prisma Schema for Job Finder Pro – Powered by IAMTECHNI
+// Production-ready PostgreSQL schema with Prisma ORM
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum WorkLocationType {
+  REMOTE
+  HYBRID
+  ONSITE
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+  CONTRACT
+  FREELANCE
+  TEMPORARY
+}
+
+enum ExperienceLevel {
+  FRESHER
+  INTERNSHIP
+  ENTRY_LEVEL
+  ONE_TO_TWO_YEARS
+  THREE_TO_FIVE_YEARS
+  FIVE_TO_TEN_YEARS
+  TEN_PLUS_YEARS
+}
+
+enum EducationLevel {
+  NO_DEGREE
+  DIPLOMA
+  BACHELORS
+  MASTERS
+  DOCTORATE
+  OTHER
+}
+
+enum JobStatus {
+  DRAFT
+  PUBLISHED
+  EXPIRED
+  ARCHIVED
+}
+
+enum JobSourceType {
+  ADMIN_MANUAL
+  AUTOMATED_FEED
+  LICENSED_PARTNER
+}
+
+enum RequestStatus {
+  PENDING
+  REVIEWING
+  APPROVED
+  REJECTED
+  PUBLISHED
+}
+
+enum AlertFrequency {
+  INSTANT
+  DAILY
+  WEEKLY
+}
+
+enum NotificationType {
+  JOB_ALERT_MATCH
+  SAVED_JOB_UPDATE
+  EXPIRED_NOTICE
+  APPLICATION_REMINDER
+  SYSTEM_ANNOUNCEMENT
+}
+
+enum ThemePreference {
+  SYSTEM
+  LIGHT
+  DARK
+}
+
+// 1. Users
+model User {
+  id              String           @id @default(uuid())
+  email           String           @unique
+  passwordHash    String?          // Nullable for Google OAuth accounts
+  googleId        String?          @unique
+  fullName        String
+  mobileNumber    String?
+  role            Role             @default(USER)
+  isEmailVerified Boolean          @default(false)
+  avatarUrl       String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  lastLoginAt     DateTime?
+
+  profile         UserProfile?
+  preferences     UserPreference?
+  savedJobs       SavedJob[]
+  jobAlerts       JobAlert[]
+  notifications   Notification[]
+  auditLogs       AuditLog[]
+
+  @@index([email])
+  @@index([googleId])
+}
+
+// 2. User Profiles
+model UserProfile {
+  id                    String           @id @default(uuid())
+  userId                String           @unique
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  headline              String?
+  bio                   String?
+  country               String           @default("India")
+  state                 String?
+  city                  String?
+  preferredSalaryMin    Int?
+  preferredSalaryMax    Int?
+  salaryCurrency        String           @default("INR")
+  experienceLevel       ExperienceLevel?
+  educationLevel        EducationLevel?
+  preferredSkills       String[]         @default([])
+  preferredCategories   String[]         @default([])
+  resumeUrl             String?
+  resumeFileName        String?
+  portfolioUrl          String?
+  linkedinUrl           String?
+  githubUrl             String?
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+}
+
+// 3. User Preferences
+model UserPreference {
+  id                    String           @id @default(uuid())
+  userId                String           @unique
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme                 ThemePreference  @default(SYSTEM)
+  enablePushNotifications Boolean        @default(true)
+  enableEmailAlerts     Boolean          @default(true)
+  enableInAppAlerts     Boolean          @default(true)
+  fcmToken              String?
+  preferredLocationType WorkLocationType?
+  allowDataSharing      Boolean          @default(false)
+  updatedAt             DateTime         @updatedAt
+}
+
+// 4. Companies
+model Company {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  logoUrl     String?
+  websiteUrl  String?
+  email       String?
+  description String?
+  country     String?
+  city        String?
+  isVerified  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  jobs        Job[]
+
+  @@index([name])
+}
+
+// 5. Job Sources (Permitted Feeds & Manual Tracking)
+model JobSource {
+  id          String        @id @default(uuid())
+  name        String        @unique // e.g. "Arbeitnow Public API", "RemoteOK API", "Admin Manual"
+  type        JobSourceType @default(AUTOMATED_FEED)
+  feedUrl     String?
+  websiteUrl  String?
+  isActive    Boolean       @default(true)
+  lastRunAt   DateTime?
+  totalJobsFetched Int      @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  jobs        Job[]
+}
+
+// 6. Categories
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  iconName    String?
+  description String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  jobs        Job[]
+
+  @@index([slug])
+}
+
+// 7. Jobs (Full specification with 28+ fields, manual and automated aggregation)
+model Job {
+  id                    String           @id @default(uuid())
+  title                 String
+  slug                  String
+  companyId             String
+  company               Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  categoryId            String?
+  category              Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  sourceId              String?
+  source                JobSource?       @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  sourceType            JobSourceType    @default(AUTOMATED_FEED)
+  externalSourceRef     String?          // ID or hash from original feed to prevent duplicates
+  
+  description           String           // Rich description / HTML or markdown
+  responsibilities      String[]         @default([])
+  qualifications        String[]         @default([])
+  requiredSkills        String[]         @default([])
+  experienceRequirement String           // e.g. "Fresher", "3-5 years"
+  experienceLevel       ExperienceLevel  @default(ENTRY_LEVEL)
+  educationRequirement  String           // e.g. "Bachelor's degree"
+  educationLevel        EducationLevel   @default(BACHELORS)
+
+  salaryMin             Int?
+  salaryMax             Int?
+  salaryCurrency        String           @default("INR") // INR, USD, EUR, GBP, AED, etc.
+  salaryPeriod          String           @default("yearly") // yearly, monthly, hourly
+  isSalaryDisclosed     Boolean          @default(true)
+
+  employmentType        EmploymentType   @default(FULL_TIME)
+  workLocationType      WorkLocationType @default(ONSITE)
+  
+  // Worldwide Location Hierarchy
+  country               String           @default("India")
+  state                 String?
+  city                  String
+  locationString        String           // e.g. "Bengaluru, Karnataka, India" or "Remote, Worldwide"
+  isRemoteEligible      Boolean          @default(false)
+  
+  // Additional Filters
+  visaSponsorship       Boolean          @default(false)
+  relocationAssistance  Boolean          @default(false)
+  internationalApplicantsAccepted Boolean @default(false)
+  immediateJoining      Boolean          @default(false)
+  
+  // Application details (External only for genuine applications)
+  applicationUrl        String
+  applicationEmail      String?
+  isExternalApplication Boolean          @default(true)
+  
+  // Administration & Lifecycle
+  status                JobStatus        @default(PUBLISHED)
+  isFeatured            Boolean          @default(false)
+  adminPosted           Boolean          @default(false)
+  postedByAdminId       String?
+  postedByAdmin         AdminUser?       @relation(fields: [postedByAdminId], references: [id], onDelete: SetNull)
+  clickCount            Int              @default(0)
+  viewsCount            Int              @default(0)
+  postedAt              DateTime         @default(now())
+  expiresAt             DateTime?
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  savedByUsers          SavedJob[]
+  notifications         Notification[]
+
+  @@unique([externalSourceRef, sourceId])
+  @@index([country, state, city])
+  @@index([status, postedAt])
+  @@index([employmentType, workLocationType])
+  @@index([salaryMin, salaryMax])
+  @@index([title])
+  @@index([adminPosted])
+}
+
+// 8. Saved Jobs
+model SavedJob {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  notes     String?
+  savedAt   DateTime @default(now())
+
+  @@unique([userId, jobId])
+  @@index([userId])
+}
+
+// 9. Job Alerts
+model JobAlert {
+  id                    String           @id @default(uuid())
+  userId                String
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name                  String           // e.g. "React Native Developer Alerts"
+  keywords              String?
+  skills                String[]         @default([])
+  country               String?          @default("India")
+  state                 String?
+  city                  String?
+  categorySlug          String?
+  employmentType        EmploymentType?
+  workLocationType      WorkLocationType?
+  minSalary             Int?
+  maxSalary             Int?
+  salaryCurrency        String           @default("INR")
+  experienceLevel       ExperienceLevel?
+  isRemoteOnly          Boolean          @default(false)
+  frequency             AlertFrequency   @default(DAILY)
+  isActive              Boolean          @default(true)
+  pushNotificationEnabled Boolean        @default(true)
+  emailNotificationEnabled Boolean       @default(true)
+  lastTriggeredAt       DateTime?
+  matchCount            Int              @default(0)
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  @@index([userId, isActive])
+}
+
+// 10. Employer Requests (Email-Only Intake — No direct self-publishing!)
+model EmployerRequest {
+  id                    String           @id @default(uuid())
+  referenceId           String           @unique // e.g. "REQ-2026-89421"
+  employerName          String
+  companyName           String
+  companyEmail          String
+  contactPerson         String
+  mobileNumber          String?
+  jobTitle              String
+  vacanciesCount        Int              @default(1)
+  jobLocation           String
+  employmentType        String
+  shortJobDescription   String
+  companyWebsite        String?
+  additionalMessage     String?
+  status                RequestStatus    @default(PENDING)
+  adminReviewNotes      String?
+  reviewedByAdminId     String?
+  convertedToJobId      String?
+  submittedAt           DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  @@index([companyEmail])
+  @@index([status])
+}
+
+// 11. Notifications
+model Notification {
+  id          String           @id @default(uuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId       String?
+  job         Job?             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  type        NotificationType @default(JOB_ALERT_MATCH)
+  title       String
+  body        String
+  isRead      Boolean          @default(false)
+  data        Json?            // Extra payload like { externalUrl, deepLink }
+  createdAt   DateTime         @default(now())
+
+  @@index([userId, isRead])
+}
+
+// 12. Admin Users (Separate, secure administrative authentication)
+model AdminUser {
+  id              String      @id @default(uuid())
+  email           String      @unique
+  passwordHash    String
+  fullName        String
+  role            Role        @default(ADMIN)
+  isActive        Boolean     @default(true)
+  lastLoginAt     DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  postedJobs      Job[]
+  auditLogs       AuditLog[]
+
+  @@index([email])
+}
+
+// 13. Audit Logs
+model AuditLog {
+  id          String     @id @default(uuid())
+  adminId     String?
+  admin       AdminUser? @relation(fields: [adminId], references: [id], onDelete: SetNull)
+  userId      String?
+  user        User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action      String     // e.g. "JOB_PUBLISHED", "JOB_EXPIRED", "EMPLOYER_REQUEST_REVIEWED"
+  entityType  String     // "Job", "EmployerRequest", "User"
+  entityId    String?
+  ipAddress   String?
+  metadata    Json?
+  createdAt   DateTime   @default(now())
+
+  @@index([action, createdAt])
+}

@@ -272,7 +272,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               </li>
               <li>
                 <Link
-                  to="/custom-software-development-pondicherry/"
+                  to="/software-development-company-pondicherry/"
                   className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
                 >
                   Software Development Pondicherry
@@ -369,7 +369,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               {/* 4 Round Icon Buttons in ONE row */}
               <div className="pt-2 flex items-center gap-2.5 flex-nowrap">
                 <a
-                  href="https://iamtechni.in"
+                  href="https://www.iamtechni.in/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="IAMTECHNI Website"
@@ -408,7 +408,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <div className="pt-2.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => (onStartProject ? onStartProject() : onNavigate('/consultation'))}
+                  onClick={() => (onStartProject ? onStartProject() : onNavigate('/contact/consultation'))}
                   className="group w-full sm:w-auto min-h-[44px] md:min-h-0 inline-flex items-center justify-center gap-2.5 px-4 py-2 rounded-full bg-[#1B3152] border border-white/15 hover:border-[#5CE1E6]/60 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] text-white font-bold text-sm tracking-tight transition-all duration-200 whitespace-nowrap cursor-pointer"
                 >
                   <span className="text-white font-bold text-sm tracking-tight">Start a Project</span>

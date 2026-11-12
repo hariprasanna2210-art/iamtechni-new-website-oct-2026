@@ -33,6 +33,7 @@ import { FaqPage } from './pages/FaqPage';
 import { LegalPage } from './pages/LegalPages';
 import { TrainingPage } from './pages/TrainingPage';
 import { LocationsPage } from './pages/LocationsPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 import { SeoHead } from './components/common/SeoHead';
 
 import { servicesData, getCanonicalServiceSlug } from './data/servicesData';
@@ -230,7 +231,7 @@ export default function App() {
       const now = typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now();
       const startTime = typeof win.__preloaderStartTime === 'number' ? win.__preloaderStartTime : now;
       const elapsed = Math.max(0, now - startTime);
-      const remaining = Math.max(0, 1500 - elapsed);
+      const remaining = Math.max(0, 120 - elapsed);
 
       let removalTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -691,24 +692,36 @@ export default function App() {
             </React.Fragment>
           ))}
 
+          {/* Legacy / Alias Route Redirects */}
+          <Route
+            path="/custom-software-development-pondicherry"
+            element={<Navigate to="/software-development-company-pondicherry/" replace />}
+          />
+          <Route
+            path="/custom-software-development-pondicherry/"
+            element={<Navigate to="/software-development-company-pondicherry/" replace />}
+          />
+          <Route
+            path="/seo-company-pondicherry"
+            element={<Navigate to="/local-seo-services-pondicherry/" replace />}
+          />
+          <Route
+            path="/seo-company-pondicherry/"
+            element={<Navigate to="/local-seo-services-pondicherry/" replace />}
+          />
+          <Route
+            path="/consultation"
+            element={<Navigate to="/contact/consultation" replace />}
+          />
+          <Route
+            path="/consultation/"
+            element={<Navigate to="/contact/consultation" replace />}
+          />
+
           {/* Fallback 404 */}
           <Route
             path="*"
-            element={
-              <div className="py-24 text-center px-4 max-w-lg mx-auto space-y-4">
-                <h1 className="text-4xl font-extrabold text-slate-900">404</h1>
-                <h2 className="text-lg font-bold text-slate-700">Page Not Found</h2>
-                <p className="text-xs text-slate-500">
-                  The requested route does not exist in the IAMTECHNI directory.
-                </p>
-                <button
-                  onClick={() => navigate('/')}
-                  className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-semibold cursor-pointer"
-                >
-                  Return to Home
-                </button>
-              </div>
-            }
+            element={<NotFoundPage onNavigate={navigate} />}
           />
         </Routes>
       </main>

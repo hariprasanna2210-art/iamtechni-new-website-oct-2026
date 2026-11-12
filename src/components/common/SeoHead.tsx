@@ -27,7 +27,7 @@ export const FAQ_PAGE_ITEMS = [
   {
     question: 'What core services does IAMTECHNI provide?',
     answer:
-      'IAMTECHNI provides 17 engineering and digital growth disciplines spanning Website Design and Development, Custom Software Engineering, AI & Machine Learning, Generative AI Solutions, E-commerce, Mobile Apps, Cloud Computing, DevOps, Data Analytics, Cybersecurity Hardening, and Technical SEO.',
+      'IAMTECHNI provides 13 core engineering and digital growth disciplines spanning Website Design and Development, Custom Software Engineering, AI & Machine Learning, E-commerce, Mobile Apps, Cloud & DevOps, Data Analytics, Cybersecurity, UI/UX Design, IT Consulting, Robotics, Technical Training, and Digital Marketing.',
   },
   {
     question: 'Do you build on off-the-shelf templates or create custom codebases?',
@@ -86,6 +86,7 @@ export interface SeoMetadata {
   ogLocale: string;
   twitterCard: 'summary_large_image';
   structuredData: Record<string, unknown>[];
+  noIndex?: boolean;
 }
 
 /**
@@ -177,9 +178,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
   if (cleanPath === '/') {
     return {
       ...baseMeta,
-      title: 'IAMTECHNI | Digital Solutions for Businesses',
+      title: 'IAMTECHNI | Web Development, Custom Software & AI in Pondicherry',
       description:
-        'Grow your business with IAMTECHNI. Website development, mobile apps, custom software, SEO, digital marketing and branding.',
+        'IAMTECHNI delivers custom web development, e-commerce, mobile apps, enterprise software, AI, Cloud DevOps & digital marketing in Pondicherry & Tamil Nadu.',
       canonicalUrl: 'https://www.iamtechni.in/',
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
@@ -410,10 +411,26 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
         '@type': 'Course',
         name: course.title,
         description: course.description,
+        url: canonicalUrl,
         provider: {
           '@type': 'Organization',
+          '@id': `${BASE_URL}/#organization`,
           name: COMPANY_CONTACT.name,
           sameAs: `${BASE_URL}/`,
+        },
+        hasCourseInstance: {
+          '@type': 'CourseInstance',
+          courseMode: ['online', 'onsite'],
+          location: {
+            '@type': 'Place',
+            name: 'Puducherry & Tamil Nadu (Live Online & Classroom)',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Puducherry',
+              addressRegion: 'Tamil Nadu',
+              addressCountry: 'IN',
+            },
+          },
         },
       });
       return {
@@ -447,16 +464,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       itemListElement: coursesData.map((course, idx) => ({
         '@type': 'ListItem',
         position: idx + 1,
-        item: {
-          '@type': 'Course',
-          name: course.title,
-          description: course.subtitle || course.description,
-          provider: {
-            '@type': 'Organization',
-            name: COMPANY_CONTACT.name,
-            sameAs: `${BASE_URL}/`,
-          },
-        },
+        name: course.title,
+        url: `${BASE_URL}/training/${course.id}`,
       })),
     });
     return {
@@ -803,16 +812,17 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     };
   }
 
-  // Fallback
+  // Fallback (404 / Unknown Route)
   return {
     ...baseMeta,
-    title: 'IAMTECHNI | Digital Solutions for Businesses',
+    title: '404 Page Not Found | IAMTECHNI',
     description:
-      'Grow your business with IAMTECHNI. Website development, mobile apps, custom software, SEO, digital marketing and branding.',
-    canonicalUrl,
+      'The requested page could not be found in the IAMTECHNI directory. Explore our web development, custom software, AI, and digital marketing services.',
+    canonicalUrl: `${BASE_URL}/`,
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
     structuredData,
+    noIndex: true,
   };
 }
 
@@ -825,10 +835,12 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
   const isSeoServiceRoute =
     cleanPath.startsWith('/services/') &&
     Boolean(getSeoServicePageBySlug(cleanPath.replace('/services/', '')));
+  const isLocationRoute = Boolean(getLocationSeoPageBySlug(cleanPath));
+  const isLocationsDirectory = cleanPath === '/locations';
 
   const seo = resolveRouteSeo(currentRoute);
 
-  // Remove initial static description/canonical/og/twitter tags once react-helmet-async mounts its managed tags
+  // Remove initial static description/canonical/og/twitter tags and prerendered route JSON-LD once react-helmet-async mounts its managed tags
   useEffect(() => {
     const selectors = [
       'meta[name="description"]',
@@ -847,12 +859,15 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
           .forEach((el) => el.remove());
       }
     }
+    if (document.head.querySelector('script[type="application/ld+json"][data-rh]')) {
+      document.head
+        .querySelectorAll('script.prerender-jsonld:not([data-rh])')
+        .forEach((el) => el.remove());
+    }
   }, [currentRoute]);
 
-  const isLocationRoute = Boolean(getLocationSeoPageBySlug(cleanPath));
-
-  // Individual service pages & location landing pages render their own <Helmet> directly
-  if (isSeoServiceRoute || isLocationRoute) {
+  // Individual service pages, location landing pages, and /locations render their own <Helmet> directly
+  if (isSeoServiceRoute || isLocationRoute || isLocationsDirectory) {
     return null;
   }
 
@@ -860,6 +875,7 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
     <Helmet prioritizeSeoTags>
       <title>{seo.title}</title>
       <meta name="description" content={seo.description} />
+      {seo.noIndex && <meta name="robots" content="noindex, nofollow" />}
       <link rel="canonical" href={seo.canonicalUrl} />
       <meta property="og:type" content={seo.ogType} />
       <meta property="og:title" content={seo.title} />

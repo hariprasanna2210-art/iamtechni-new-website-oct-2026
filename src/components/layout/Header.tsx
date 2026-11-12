@@ -694,6 +694,21 @@ export const Header: React.FC<HeaderProps> = ({
             >
               About
             </button>
+
+            <button
+              type="button"
+              onClick={() => handleLinkClick('/job-finder-pro')}
+              className={`hover:text-slate-900 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-0.5 ${
+                currentRoute === '/job-finder-pro' || currentRoute === '/job-finder' || currentRoute === '/jobs'
+                  ? 'text-[#1266E8] font-semibold'
+                  : ''
+              }`}
+            >
+              <span>Job Finder Pro</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-blue-50 text-blue-700 border border-blue-200 font-bold leading-none">
+                APP
+              </span>
+            </button>
           </nav>
 
           {/* Zone 3: Action Buttons & Mobile Menu Toggle */}
@@ -1096,6 +1111,27 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   <span>About</span>
                   {currentRoute === '/about' && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
+                  )}
+                </button>
+
+                {/* 9. Job Finder Pro Android App */}
+                <button
+                  type="button"
+                  onClick={() => handleLinkClick('/job-finder-pro')}
+                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
+                    currentRoute === '/job-finder-pro'
+                      ? 'text-[#1266E8] bg-blue-50/70 font-bold'
+                      : 'text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>Job Finder Pro</span>
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-blue-100 text-blue-800 font-bold">
+                      APP
+                    </span>
+                  </div>
+                  {currentRoute === '/job-finder-pro' && (
                     <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
                   )}
                 </button>

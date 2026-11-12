@@ -4,6 +4,28 @@
       "maxDuration": 30
     }
   },
+  "redirects": [
+    {
+      "source": "/custom-software-development-pondicherry/:path*",
+      "destination": "/software-development-company-pondicherry/",
+      "permanent": true
+    },
+    {
+      "source": "/seo-company-pondicherry/:path*",
+      "destination": "/local-seo-services-pondicherry/",
+      "permanent": true
+    },
+    {
+      "source": "/consultation",
+      "destination": "/contact/consultation",
+      "permanent": true
+    },
+    {
+      "source": "/courses",
+      "destination": "/training",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]

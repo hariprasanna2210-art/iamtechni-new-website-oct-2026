@@ -37,6 +37,14 @@ function replaceOrInsertHeadTag(html, regex, replacementTag) {
   return html.replace('</head>', `    ${replacementTag}\n  </head>`);
 }
 
+function replaceRootContent(html, staticBodyHtml) {
+  const rootWithMainRegex = /<div id="root">[\s\S]*?<\/main>\s*<\/div>/i;
+  if (rootWithMainRegex.test(html)) {
+    return html.replace(rootWithMainRegex, `<div id="root">${staticBodyHtml}</div>`);
+  }
+  return html.replace('<div id="root"></div>', `<div id="root">${staticBodyHtml}</div>`);
+}
+
 function buildStaticRootHtml(page) {
   const sectionsHtml = (page.sections || [])
     .map((sec) => {
@@ -79,18 +87,34 @@ function buildStaticRootHtml(page) {
     ecommerce: [
       { name: 'Pondicherry', url: '/ecommerce-website-development-pondicherry/' },
       { name: 'Chennai', url: '/ecommerce-website-development-chennai/' },
+      { name: 'Coimbatore', url: '/web-development-coimbatore/' },
+      { name: 'Madurai', url: '/web-development-madurai/' },
     ],
     'custom-software': [
-      { name: 'Pondicherry', url: '/custom-software-development-pondicherry/' },
+      { name: 'Pondicherry', url: '/software-development-company-pondicherry/' },
       { name: 'Chennai', url: '/software-development-company-chennai/' },
+      { name: 'Coimbatore', url: '/web-development-coimbatore/' },
+      { name: 'Trichy', url: '/web-development-trichy/' },
     ],
     'mobile-apps': [
       { name: 'Pondicherry', url: '/mobile-app-development-pondicherry/' },
       { name: 'Chennai', url: '/mobile-app-development-chennai/' },
+      { name: 'Pondicherry (Software)', url: '/software-development-company-pondicherry/' },
+    ],
+    'ai-machine-learning': [
+      { name: 'Pondicherry (GenAI)', url: '/generative-ai-training-pondicherry/' },
+      { name: 'Tamil Nadu (GenAI)', url: '/generative-ai-training-tamil-nadu/' },
+      { name: 'Pondicherry (Software)', url: '/software-development-company-pondicherry/' },
+      { name: 'Chennai (Software)', url: '/software-development-company-chennai/' },
+    ],
+    'data-analytics': [
+      { name: 'Pondicherry (Software)', url: '/software-development-company-pondicherry/' },
+      { name: 'Chennai (Software)', url: '/software-development-company-chennai/' },
+      { name: 'Pondicherry (AWS Cloud)', url: '/aws-training-pondicherry/' },
     ],
     'digital-marketing': [
       { name: 'Pondicherry (Agency)', url: '/digital-marketing-agency-pondicherry/' },
-      { name: 'Pondicherry (SEO)', url: '/seo-company-pondicherry/' },
+      { name: 'Pondicherry (Local SEO)', url: '/local-seo-services-pondicherry/' },
       { name: 'Chennai (Agency)', url: '/digital-marketing-agency-chennai/' },
       { name: 'Chennai (SEO)', url: '/seo-company-chennai/' },
       { name: 'Coimbatore', url: '/digital-marketing-coimbatore/' },
@@ -101,6 +125,26 @@ function buildStaticRootHtml(page) {
       { name: 'Chennai (AWS)', url: '/aws-training-chennai/' },
       { name: 'Chennai (DevOps)', url: '/devops-training-chennai/' },
       { name: 'Coimbatore (AWS)', url: '/aws-training-coimbatore/' },
+    ],
+    cybersecurity: [
+      { name: 'Pondicherry (Software)', url: '/software-development-company-pondicherry/' },
+      { name: 'Chennai (Software)', url: '/software-development-company-chennai/' },
+      { name: 'Pondicherry (Cloud)', url: '/aws-training-pondicherry/' },
+    ],
+    'ui-ux-design': [
+      { name: 'Pondicherry (Web)', url: '/web-development-company-pondicherry/' },
+      { name: 'Chennai (Web)', url: '/web-development-company-chennai/' },
+      { name: 'Pondicherry (Mobile)', url: '/mobile-app-development-pondicherry/' },
+    ],
+    'it-consulting': [
+      { name: 'Pondicherry', url: '/software-development-company-pondicherry/' },
+      { name: 'Chennai', url: '/software-development-company-chennai/' },
+      { name: 'Coimbatore', url: '/web-development-coimbatore/' },
+    ],
+    robotics: [
+      { name: 'Pondicherry (Engineering)', url: '/software-development-company-pondicherry/' },
+      { name: 'Pondicherry (AI)', url: '/generative-ai-training-pondicherry/' },
+      { name: 'Chennai (Engineering)', url: '/software-development-company-chennai/' },
     ],
     training: [
       { name: 'Pondicherry (AWS)', url: '/aws-training-pondicherry/' },
@@ -122,7 +166,7 @@ function buildStaticRootHtml(page) {
         matchingLocs
           .map((loc) => `          <li><a href="${loc.url}">${escapeHtml(loc.name)}</a></li>`)
           .join('\n') +
-        `\n        </ul>\n        <p><a href="/locations">View all 30 locations &rarr;</a></p>\n      </section>\n`
+        `\n        </ul>\n        <p><a href="/locations">View all 30 locations &rarr;</a> | <a href="/services">Explore all 13 services &rarr;</a></p>\n      </section>\n`
       : '';
 
   return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n${introHtml}${sectionsHtml}\n${locationsHtml}${faqsHtml}\n      </main>\n    `;
@@ -178,8 +222,8 @@ function buildJsonLdScripts(page, canonicalUrl) {
   };
 
   const scripts = [
-    `<script type="application/ld+json">${JSON.stringify(serviceSchema)}</script>`,
-    `<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`,
+    `<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(serviceSchema)}</script>`,
+    `<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`,
   ];
 
   if (page.faqs && page.faqs.length > 0) {
@@ -195,7 +239,7 @@ function buildJsonLdScripts(page, canonicalUrl) {
         },
       })),
     };
-    scripts.push(`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`);
+    scripts.push(`<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(faqSchema)}</script>`);
   }
 
   return scripts.join('\n    ');
@@ -270,7 +314,7 @@ function renderServiceHtml(templateHtml, page) {
 
   // 7. Insert static HTML inside <div id="root">...</div>
   const staticBodyHtml = buildStaticRootHtml(page);
-  html = html.replace('<div id="root"></div>', `<div id="root">${staticBodyHtml}</div>`);
+  html = replaceRootContent(html, staticBodyHtml);
 
   return html;
 }
@@ -328,7 +372,9 @@ function buildLocationStaticRootHtml(page) {
 
   const contactDetailsHtml = `      <section>\n        <h2>Regional Contact Details</h2>\n        <div>\n          <span>Enquiries: </span>\n          <a href="tel:+919385948951">+91 93859 48951</a>\n        </div>\n        <div>\n          <span>Direct Line: </span>\n          <a href="tel:+917418120053">+91 74181 20053</a>\n        </div>\n        <p>Engineering Hub: Puducherry &amp; Tamil Nadu, India</p>\n        <p>${escapeHtml(contactFooterText)}</p>\n      </section>`;
 
-  return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n        <p class="intro">${escapeHtml(page.intro)}</p>\n${contactDetailsHtml}\n${courseLinkHtml}\n      <section>\n        <h2>Key Capabilities &amp; Advantages</h2>\n${highlightsHtml}\n      </section>\n${sectionsHtml}\n      <section>\n        <h2>Delivery Lifecycle</h2>\n${processHtml}\n      </section>\n${localContextHtml}\n${faqsHtml}\n      </main>\n    `;
+  const internalLinksHtml = `      <section>\n        <h2>Explore Related Services &amp; Regional Pages</h2>\n        <ul>\n          <li><a href="/services/web-development">Website Design &amp; Web Development</a></li>\n          <li><a href="/services/custom-software">Custom Software Development</a></li>\n          <li><a href="/services/ecommerce">E-commerce Development</a></li>\n          <li><a href="/services/mobile-apps">Mobile App Development</a></li>\n          <li><a href="/services/digital-marketing">Digital Marketing &amp; SEO</a></li>\n          <li><a href="/services/ai-machine-learning">AI &amp; Machine Learning</a></li>\n          <li><a href="/services/cloud-devops">Cloud &amp; DevOps</a></li>\n          <li><a href="/locations">View All 30 Regional Locations</a></li>\n          <li><a href="/services">Explore All 13 Engineering Services</a></li>\n        </ul>\n      </section>`;
+
+  return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n        <p class="intro">${escapeHtml(page.intro)}</p>\n${contactDetailsHtml}\n${courseLinkHtml}\n      <section>\n        <h2>Key Capabilities &amp; Advantages</h2>\n${highlightsHtml}\n      </section>\n${sectionsHtml}\n      <section>\n        <h2>Delivery Lifecycle</h2>\n${processHtml}\n      </section>\n${localContextHtml}\n${faqsHtml}\n${internalLinksHtml}\n      </main>\n    `;
 }
 
 function buildLocationJsonLdScripts(page, canonicalUrl) {
@@ -348,6 +394,11 @@ function buildLocationJsonLdScripts(page, canonicalUrl) {
             telephone: COMPANY_TELEPHONE,
             email: COMPANY_EMAIL,
             url: `${BASE_URL}/`,
+          },
+          hasCourseInstance: {
+            '@type': 'CourseInstance',
+            courseMode: ['online'],
+            courseWorkload: (page.courseDetails && page.courseDetails.duration) || '8–10 Weeks',
           },
         }
       : {
@@ -403,8 +454,8 @@ function buildLocationJsonLdScripts(page, canonicalUrl) {
   };
 
   const scripts = [
-    `<script type="application/ld+json">${JSON.stringify(primarySchema)}</script>`,
-    `<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`,
+    `<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(primarySchema)}</script>`,
+    `<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`,
   ];
 
   if (page.faqs && page.faqs.length > 0) {
@@ -420,7 +471,7 @@ function buildLocationJsonLdScripts(page, canonicalUrl) {
         },
       })),
     };
-    scripts.push(`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`);
+    scripts.push(`<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(faqSchema)}</script>`);
   }
 
   return scripts.join('\n    ');
@@ -496,7 +547,7 @@ function renderLocationHtml(templateHtml, page) {
 
   // 7. Insert static HTML inside <div id="root">...</div>
   const staticBodyHtml = buildLocationStaticRootHtml(page);
-  html = html.replace('<div id="root"></div>', `<div id="root">${staticBodyHtml}</div>`);
+  html = replaceRootContent(html, staticBodyHtml);
 
   return html;
 }
@@ -698,7 +749,7 @@ function renderGeneralPageHtml(templateHtml, page) {
 
   // 6. Inject JSON-LD scripts before </head> if provided
   if (page.structuredData && page.structuredData.length > 0) {
-    const jsonLdScript = `<script type="application/ld+json">${JSON.stringify({
+    const jsonLdScript = `<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify({
       '@context': 'https://schema.org',
       '@graph': page.structuredData,
     })}</script>`;
@@ -719,11 +770,11 @@ function renderGeneralPageHtml(templateHtml, page) {
         <p>Direct local presence from our Puducherry headquarters, extending services to Cuddalore and Villupuram.</p>
         <ul>
           <li><a href="/web-development-company-pondicherry/">Web Development Company Pondicherry</a></li>
-          <li><a href="/custom-software-development-pondicherry/">Custom Software Development Pondicherry</a></li>
+          <li><a href="/software-development-company-pondicherry/">Software Development Company Pondicherry</a></li>
           <li><a href="/ecommerce-website-development-pondicherry/">E-Commerce Website Development Pondicherry</a></li>
           <li><a href="/mobile-app-development-pondicherry/">Mobile App Development Pondicherry</a></li>
           <li><a href="/digital-marketing-agency-pondicherry/">Digital Marketing Agency Pondicherry</a></li>
-          <li><a href="/seo-company-pondicherry/">SEO Company Pondicherry</a></li>
+          <li><a href="/local-seo-services-pondicherry/">Local SEO Services Pondicherry</a></li>
           <li><a href="/web-development-cuddalore/">Web Development Cuddalore</a></li>
           <li><a href="/web-development-villupuram/">Web Development Villupuram</a></li>
         </ul>
@@ -806,7 +857,7 @@ function renderGeneralPageHtml(templateHtml, page) {
   }
 
   const staticBodyHtml = `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n        <p class="intro">${escapeHtml(page.intro)}</p>\n${extraContentHtml}\n      </main>\n    `;
-  html = html.replace('<div id="root"></div>', `<div id="root">${staticBodyHtml}</div>`);
+  html = replaceRootContent(html, staticBodyHtml);
 
   return html;
 }

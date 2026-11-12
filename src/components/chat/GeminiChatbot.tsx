@@ -424,14 +424,9 @@ export const GeminiChatbot: React.FC<GeminiChatbotProps> = ({
                 <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-slate-900"></span>
               </div>
               <div>
-                <div className="flex items-center gap-1.5">
-                  <h3 className="font-semibold text-sm tracking-tight text-white">
-                    IAMTECHNI AI
-                  </h3>
-                  <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-200 border border-blue-400/30">
-                    Gemini 3.8
-                  </span>
-                </div>
+                <h3 className="font-semibold text-sm tracking-tight text-white whitespace-nowrap">
+                  IAMTECHNI AI
+                </h3>
                 <p className="text-[11px] text-slate-300">Solutions Architect & Technical Advisor</p>
               </div>
             </div>

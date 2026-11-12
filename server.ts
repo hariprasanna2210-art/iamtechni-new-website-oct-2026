@@ -53,6 +53,35 @@ app.get('/sitemap.xml', (_req, res) => {
   return res.send(generateSitemapXml());
 });
 
+// Redirect non-www iamtechni.in to https://www.iamtechni.in in production
+app.use((req, res, next) => {
+  const host = (req.headers.host || '').toLowerCase();
+  if (host === 'iamtechni.in') {
+    return res.redirect(301, `https://www.iamtechni.in${req.originalUrl}`);
+  }
+  return next();
+});
+
+// Redirect legacy / alias slugs to canonical routes
+const LEGACY_ROUTE_REDIRECTS: Record<string, string> = {
+  '/custom-software-development-pondicherry': '/software-development-company-pondicherry/',
+  '/custom-software-development-pondicherry/': '/software-development-company-pondicherry/',
+  '/seo-company-pondicherry': '/local-seo-services-pondicherry/',
+  '/seo-company-pondicherry/': '/local-seo-services-pondicherry/',
+  '/consultation': '/contact/consultation',
+  '/consultation/': '/contact/consultation',
+  '/courses': '/training',
+  '/courses/': '/training',
+};
+
+app.use((req, res, next) => {
+  const target = LEGACY_ROUTE_REDIRECTS[req.path];
+  if (target) {
+    return res.redirect(301, target);
+  }
+  return next();
+});
+
 // Redirect duplicate/alias service slugs (e.g. website-development -> web-development) to canonical slugs
 app.get('/services/:slug', (req, res, next) => {
   const rawSlug = (req.params.slug || '').trim().replace(/\/+$/, '');

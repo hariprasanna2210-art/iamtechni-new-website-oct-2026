@@ -45,11 +45,11 @@ const GROUP_DEFINITIONS = [
     badgeBg: 'bg-blue-100 text-blue-800 border-blue-200',
     slugs: [
       'web-development-company-pondicherry',
-      'custom-software-development-pondicherry',
+      'software-development-company-pondicherry',
       'ecommerce-website-development-pondicherry',
       'mobile-app-development-pondicherry',
       'digital-marketing-agency-pondicherry',
-      'seo-company-pondicherry',
+      'local-seo-services-pondicherry',
       'web-development-cuddalore',
       'web-development-villupuram',
     ],
@@ -121,9 +121,31 @@ export const LocationsPage: React.FC<LocationsPageProps> = ({
   onNavigate,
   onStartProject,
 }) => {
-  // Sync head metadata with react-helmet-async
+  // Sync head metadata with react-helmet-async and clean up static prerendered tags
   useEffect(() => {
     window.scrollTo(0, 0);
+    const selectors = [
+      'meta[name="description"]',
+      'link[rel="canonical"]',
+      'meta[property="og:title"]',
+      'meta[property="og:description"]',
+      'meta[property="og:url"]',
+      'meta[name="twitter:title"]',
+      'meta[name="twitter:description"]',
+      'meta[name="twitter:url"]',
+    ];
+    for (const sel of selectors) {
+      if (document.head.querySelector(`${sel}[data-rh]`)) {
+        document.head
+          .querySelectorAll(`${sel}:not([data-rh])`)
+          .forEach((el) => el.remove());
+      }
+    }
+    if (document.head.querySelector('script[type="application/ld+json"][data-rh]')) {
+      document.head
+        .querySelectorAll('script.prerender-jsonld:not([data-rh])')
+        .forEach((el) => el.remove());
+    }
   }, []);
 
   // Map slug to full page data

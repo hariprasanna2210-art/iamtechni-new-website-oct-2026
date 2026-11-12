@@ -99,6 +99,11 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           className="w-full max-w-md sm:max-w-xl mx-auto px-1"
         >
           <MobileHeadingTag className="text-[clamp(1.25rem,min(5.2vw,3.15dvh),1.95rem)] sm:text-[clamp(1.55rem,min(4vw,3.5dvh),2.25rem)] font-extrabold tracking-tight leading-[1.15] mb-1.5">
+            {isHeadingH1 && (
+              <span className="sr-only">
+                IAMTECHNI — Website Development, Custom Software, AI &amp; Digital Solutions in Pondicherry &amp; Tamil Nadu:{' '}
+              </span>
+            )}
             {renderHighlightedHeadline(slide.headline, slide.highlightPhrase)}
           </MobileHeadingTag>
           <p className="text-[clamp(0.78rem,min(3.4vw,1.85dvh),0.9rem)] text-slate-300/95 leading-snug max-w-[40ch] mx-auto">
@@ -172,6 +177,11 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           </div>
 
           <DesktopHeadingTag className="text-[clamp(1.5rem,min(2.45vw,3.8dvh),2.95rem)] font-extrabold tracking-tight leading-[1.12] mb-2 xl:mb-3">
+            {isHeadingH1 && (
+              <span className="sr-only">
+                IAMTECHNI — Website Development, Custom Software, AI &amp; Digital Solutions in Pondicherry &amp; Tamil Nadu:{' '}
+              </span>
+            )}
             {renderHighlightedHeadline(slide.headline, slide.highlightPhrase)}
           </DesktopHeadingTag>
 

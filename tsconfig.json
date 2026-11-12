@@ -23,5 +23,7 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  }
+  },
+  "include": ["src", "api", "server.ts", "scripts"],
+  "exclude": ["node_modules", "dist", "mobile"]
 }
