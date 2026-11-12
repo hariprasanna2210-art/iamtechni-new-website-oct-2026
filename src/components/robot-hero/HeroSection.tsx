@@ -655,15 +655,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
 
         {/* ===================================================================
-            MOBILE & TABLET SLIDE TABS BAR (< 1280px)
-            Scrolls sideways if it doesn't fit
+            SYNCHRONIZED 8-SERVICE SLIDE TABS BAR
+            Tabs on the left (all 8 fully visible) and controls on the far right
         =================================================================== */}
-        <div className="relative z-20 pt-2 border-t border-white/10 flex xl:hidden items-center justify-between gap-2 w-full max-w-xl sm:max-w-2xl mx-auto shrink-0">
-          {/* 8 Service Interactive Pills — Sideways Scroll */}
+        <div className="relative z-20 mt-3 pt-2.5 sm:pt-3 border-t border-white/10 flex items-center justify-between gap-3 sm:gap-4 w-full shrink-0">
+          {/* 8 Service Interactive Tabs (01 Generative AI … 08 Digital Growth) */}
           <div
             role="tablist"
             aria-label="Select active IAMTECHNI service"
-            className="flex items-center gap-1.5 min-w-0 overflow-x-auto no-scrollbar scroll-smooth whitespace-nowrap py-1 pr-2"
+            className="flex items-center gap-1.5 sm:gap-2 min-w-0 overflow-x-auto no-scrollbar scroll-smooth whitespace-nowrap py-1 pr-2"
           >
             {HERO_SERVICE_SLIDES.map((item, idx) => {
               const isActive = idx === activeIndex;
@@ -697,8 +697,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             })}
           </div>
 
-          {/* Prev / Play-Pause / Next Touch Controls */}
-          <div className="inline-flex items-center gap-1.5 shrink-0 pl-1">
+          {/* Prev, Pause, and Next Buttons — Far right end lined up with hero right-side card */}
+          <div className="inline-flex items-center gap-1.5 shrink-0">
             <button
               type="button"
               onClick={handlePrevSlide}
@@ -728,94 +728,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               className="w-8 h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer active:scale-95"
             >
               <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-
-        {/* ===================================================================
-            DESKTOP SYNCHRONIZED 8-SERVICE CAROUSEL NAVIGATION BAR (xl: >= 1280px)
-            Preserved 100% unchanged for Desktop
-        =================================================================== */}
-        <div className="relative z-20 mt-4 pt-3 border-t border-white/10 hidden xl:flex flex-row items-center justify-between gap-4 w-full shrink-0">
-          {/* 8 Service Interactive Pills — Single row, sideways scrolling if needed */}
-          <div
-            role="tablist"
-            aria-label="Select active IAMTECHNI service"
-            className="flex items-center justify-start flex-nowrap gap-1.5 sm:gap-2 min-w-0 overflow-x-auto no-scrollbar py-1"
-          >
-            {HERO_SERVICE_SLIDES.map((item, idx) => {
-              const isActive = idx === activeIndex;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={isActive}
-                  aria-label={`Service ${idx + 1}: ${item.categoryLabel}`}
-                  onClick={() => handleSelectSlide(idx)}
-                  className={`group relative inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[9.5px] sm:text-[10.5px] font-medium transition-all duration-250 cursor-pointer shrink-0 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00D2FF] ${
-                    isActive
-                      ? 'bg-[#0A1F44] text-white border border-[#00D2FF]/65 shadow-[0_0_18px_rgba(0,210,255,0.22)]'
-                      : 'bg-white/[0.04] hover:bg-white/[0.09] text-slate-400 hover:text-slate-200 border border-white/10'
-                  }`}
-                >
-                  <span
-                    className={`font-mono text-[9.5px] sm:text-[10px] font-bold ${
-                      isActive ? 'text-[#00D2FF]' : 'text-slate-500 group-hover:text-slate-300'
-                    }`}
-                  >
-                    0{idx + 1}
-                  </span>
-                  <span
-                    className={`${
-                      isActive ? 'inline' : 'hidden 2xl:inline'
-                    } whitespace-nowrap`}
-                  >
-                    {item.shortTitle}
-                  </span>
-                  {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] shadow-[0_0_8px_#00D2FF]" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Prev / Play-Pause / Next Manual Controls — Flush at right edge lined up with card edge */}
-          <div className="inline-flex items-center gap-1 sm:gap-1.5 shrink-0 pl-2">
-            <span className="text-[10.5px] font-mono text-slate-400 mr-1 hidden 2xl:inline">
-              {activeSlide.counterLabel} • {isAutoPlaying && !isHovered ? 'AUTO-SYNC' : 'PAUSED'}
-            </span>
-
-            <button
-              type="button"
-              onClick={handlePrevSlide}
-              aria-label="Previous service"
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer"
-            >
-              <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setIsAutoPlaying((prev) => !prev)}
-              aria-label={isAutoPlaying ? 'Pause service rotation' : 'Resume service rotation'}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer"
-            >
-              {isAutoPlaying ? (
-                <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              ) : (
-                <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 ml-0.5" />
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={handleNextSlide}
-              aria-label="Next service"
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer"
-            >
-              <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
           </div>
         </div>
