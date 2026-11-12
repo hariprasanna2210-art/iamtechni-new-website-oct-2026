@@ -8,6 +8,7 @@ import { getServiceIcon } from '../utils/serviceIcons';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 import { ProjectVisualThumbnail } from '../components/common/ServiceVisualMockups';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 
 interface PortfolioPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -56,9 +57,9 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
               <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
                 Project Showcase
               </div>
-              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A] mt-1 drop-shadow-[0_2px_8px_rgba(30,58,138,0.08)]">
+              <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A] mt-1 drop-shadow-[0_2px_8px_rgba(30,58,138,0.08)]">
                 Filter by Engineering Domain
-              </h2>
+              </AnimatedHeading>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-xl shadow-2xs max-w-full overflow-x-auto">
@@ -148,9 +149,9 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
       <section className="py-10 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-5 sm:p-12 text-center space-y-3 sm:space-y-4 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+            <AnimatedHeading as="h2" align="center" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Have a custom software or web architecture in mind?
-            </h2>
+            </AnimatedHeading>
             <p className="text-[13.5px] sm:text-base text-slate-600 font-medium max-w-xl mx-auto">
               Our engineers can review your business workflow and prepare a detailed architecture plan.
             </p>

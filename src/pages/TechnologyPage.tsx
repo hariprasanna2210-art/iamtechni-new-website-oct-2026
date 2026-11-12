@@ -7,6 +7,7 @@ import { getCardColorToken } from '../utils/cardColorTokens';
 import { getServiceIcon, getTechCategoryIcon } from '../utils/serviceIcons';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 
 interface TechnologyPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -91,7 +92,7 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
                     <CatHeaderIcon className="w-4 h-4" />
                     <span>PRACTICE ECOSYSTEM // {group.category.toUpperCase()}</span>
                   </div>
-                  <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A]">{group.category}</h2>
+                  <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A]">{group.category}</AnimatedHeading>
                   <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed line-clamp-2 sm:line-clamp-none">
                     {group.description}
                   </p>
@@ -141,9 +142,9 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
       <section className="py-10 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-5 sm:p-12 text-center space-y-3 sm:space-y-4 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+            <AnimatedHeading as="h2" align="center" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Have an existing stack that needs modernization?
-            </h2>
+            </AnimatedHeading>
             <p className="text-[13.5px] sm:text-base text-slate-600 font-medium max-w-xl mx-auto leading-relaxed">
               We review existing codebases and plan phased migrations with zero downtime and guaranteed business continuity.
             </p>

@@ -51,6 +51,7 @@ import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../componen
 import { TrainingHeroVisual } from '../components/heroes/TrainingHeroVisual';
 import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 
 const COURSE_LOCATION_LINKS: Record<string, { city: string; path: string; label: string }[]> = {
   aws: [
@@ -290,12 +291,12 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                 <span className="text-[#1E3A8A]">HANDS-ON LABS</span>
               </div>
 
-              <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] text-balance">
+              <AnimatedHeading as="h1" hasHighlight={true} className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] text-balance">
                 Learn Tomorrow's Technology.{' '}
-                <span className="bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent block sm:inline">
+                <span className="bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent block sm:inline heading-flowing-accent-light">
                   Build Your Future.
                 </span>
-              </h1>
+              </AnimatedHeading>
 
               <p className="text-[13px] sm:text-base text-slate-600 leading-relaxed max-w-2xl line-clamp-3 sm:line-clamp-none">
                 Upgrade your skills with practical technology training in software development, cloud computing, artificial intelligence, cybersecurity, and DevOps. Explore your interests and connect with IAMTECHNI to find the right learning path.
@@ -395,9 +396,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
               <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
                 Technology Curriculum
               </div>
-              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 Explore Our Courses
-              </h2>
+              </AnimatedHeading>
               <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
                 Choose from 13 comprehensive training tracks. Tap <strong>Enquire Now</strong> for complete syllabus details, duration, batch schedules, and learning modes.
               </p>
@@ -557,9 +558,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
               Structured Trajectories
             </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+            <AnimatedHeading as="h2" className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               Choose Your Learning Path
-            </h2>
+            </AnimatedHeading>
             <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2 leading-relaxed">
               Tailored learning paths engineered to take you from foundational syntax to building production-ready architectures.
             </p>
@@ -706,9 +707,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
               Methodology
             </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+            <AnimatedHeading as="h2" className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               Practical Learning Approach
-            </h2>
+            </AnimatedHeading>
             <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2 leading-relaxed">
               We focus on building actual software, configuring real cloud services, and debugging live code. No dry theory without applied practice.
             </p>
@@ -769,9 +770,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1">
               Target Audiences
             </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+            <AnimatedHeading as="h2" className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               Who Can Join IAMTECHNI Training?
-            </h2>
+            </AnimatedHeading>
             <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2 leading-relaxed">
               Our training tracks are engineered with adaptable pacing, making them suitable for students, fresh graduates, working tech professionals, and career changers.
             </p>
@@ -836,9 +837,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Personalized Guidance</span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+                <AnimatedHeading as="h2" className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
                   Find the Right Course for You
-                </h2>
+                </AnimatedHeading>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   Tell us a little about yourself and the course you're interested in. Our team can contact you with relevant training information, syllabus breakdowns, batch dates, and fee details.
                 </p>
@@ -1177,9 +1178,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
             <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
               Admission Workflow
             </div>
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+            <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               How Enquiry &amp; Enrollment Works
-            </h2>
+            </AnimatedHeading>
             <p className="text-sm text-slate-600 mt-2 leading-relaxed">
               A transparent four-step process from initial discovery to beginning your hands-on code labs.
             </p>
@@ -1240,9 +1241,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
             <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
               Got Questions?
             </div>
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+            <AnimatedHeading as="h2" align="center" className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Training Frequently Asked Questions
-            </h2>
+            </AnimatedHeading>
             <p className="text-sm text-slate-600">
               Clear answers regarding our curriculum, prerequisites, batch schedules, and learning formats.
             </p>
@@ -1299,9 +1300,9 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
               <span>ADMISSIONS OPEN FOR UPCOMING BATCHES</span>
             </div>
 
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-tight drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+            <AnimatedHeading as="h2" align="center" className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-tight drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Ready to Start Learning?
-            </h2>
+            </AnimatedHeading>
 
             <p className="text-[15px] sm:text-base text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">
               Connect with IAMTECHNI to explore upcoming batch dates, detailed syllabus breakdowns, and practical technology learning roadmaps.

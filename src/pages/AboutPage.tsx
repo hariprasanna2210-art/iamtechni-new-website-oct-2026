@@ -26,6 +26,7 @@ import { PageHero } from '../components/common/PageHero';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 
 interface AboutPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -146,7 +147,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
                     <Target className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Our Mission</h2>
+                  <AnimatedHeading as="h2" className="text-xl sm:text-2xl font-bold text-slate-900">Our Mission</AnimatedHeading>
                   <p className="text-[13px] sm:text-sm text-slate-700 leading-relaxed">
                     To turn complex technical challenges into purposeful, reliable digital solutions that advance our clients’ operations, elevate customer experiences, and build long-term business value.
                   </p>
@@ -183,7 +184,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center shadow-xs">
                     <Eye className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Our Vision</h2>
+                  <AnimatedHeading as="h2" className="text-xl sm:text-2xl font-bold text-slate-900">Our Vision</AnimatedHeading>
                   <p className="text-[13px] sm:text-sm text-slate-700 leading-relaxed">
                     To be the trusted engineering partner for forward-looking organizations, recognized for technical discipline, practical artificial intelligence, and software craftsmanship that endures.
                   </p>
@@ -229,9 +230,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
                 <Sparkles className="w-4 h-4 text-[#2563EB]" />
                 <span>Modern Software Delivery</span>
               </div>
-              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-tight drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-tight drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 Architected for resilience, precision, and longevity.
-              </h2>
+              </AnimatedHeading>
               <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed line-clamp-3 sm:line-clamp-none">
                 We combine modern frontend architecture, robust backend systems, and containerized cloud pipelines to deliver software that scales predictably. Our teams operate with automated test suites, typed contracts, and continuous security scanning.
               </p>
@@ -307,9 +308,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1.5 sm:mb-2">
               Foundational Principles
             </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+            <AnimatedHeading as="h2" className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               The values that govern our engineering.
-            </h2>
+            </AnimatedHeading>
           </div>
 
           <ScrollReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8" staggerChildren={0.1}>
@@ -348,9 +349,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
       <section className="py-10 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-5 sm:p-12 text-center space-y-4 sm:space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+            <AnimatedHeading as="h2" align="center" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Ready to discuss your technology requirements?
-            </h2>
+            </AnimatedHeading>
             <p className="text-[13.5px] sm:text-base text-slate-600 font-medium max-w-xl mx-auto leading-relaxed">
               Let’s review what you want to build and explore how our engineering team can help.
             </p>

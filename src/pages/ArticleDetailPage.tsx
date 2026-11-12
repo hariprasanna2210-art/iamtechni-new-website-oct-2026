@@ -5,6 +5,7 @@ import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { insightsData } from '../data/insightsData';
 import { ArticleGraphic } from '../components/common/ServiceVisualMockups';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 
 interface ArticleDetailPageProps {
   article: ArticleItem;

@@ -3,6 +3,7 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { PageRoute } from '../../types';
 import { HeroServiceSlide } from './heroCarouselData';
+import { HeadingSpark } from '../common/HeadingSpark';
 
 export interface HeroContentProps {
   slide: HeroServiceSlide;
@@ -16,7 +17,25 @@ export interface HeroContentProps {
 const renderHighlightedHeadline = (headline: string, highlightPhrase: string) => {
   const idx = headline.toLowerCase().indexOf(highlightPhrase.toLowerCase());
   if (idx === -1) {
-    return <span className="text-white">{headline}</span>;
+    const trimmed = headline.trimEnd();
+    const lastSpace = trimmed.lastIndexOf(' ');
+    if (lastSpace === -1) {
+      return (
+        <span className="text-white inline-block whitespace-nowrap">
+          {trimmed}
+          <HeadingSpark isDark={true} />
+        </span>
+      );
+    }
+    return (
+      <span className="text-white">
+        {trimmed.slice(0, lastSpace + 1)}
+        <span className="inline-block whitespace-nowrap">
+          {trimmed.slice(lastSpace + 1)}
+          <HeadingSpark isDark={true} />
+        </span>
+      </span>
+    );
   }
   const before = headline.slice(0, idx);
   const match = headline.slice(idx, idx + highlightPhrase.length);
@@ -28,7 +47,35 @@ const renderHighlightedHeadline = (headline: string, highlightPhrase: string) =>
       <span className="bg-gradient-to-r from-[#00D2FF] via-[#38BDF8] to-[#A78BFA] bg-clip-text text-transparent">
         {match}
       </span>
-      <span className="text-white">{after}</span>
+      {after ? (
+        <span className="text-white">
+          {(() => {
+            const trimmed = after.trimEnd();
+            const lastSpace = trimmed.lastIndexOf(' ');
+            if (lastSpace === -1) {
+              return (
+                <span className="inline-block whitespace-nowrap">
+                  {after}
+                  <HeadingSpark isDark={true} />
+                </span>
+              );
+            }
+            return (
+              <>
+                {trimmed.slice(0, lastSpace + 1)}
+                <span className="inline-block whitespace-nowrap">
+                  {trimmed.slice(lastSpace + 1)}
+                  <HeadingSpark isDark={true} />
+                </span>
+              </>
+            );
+          })()}
+        </span>
+      ) : (
+        <span className="inline-block whitespace-nowrap">
+          <HeadingSpark isDark={true} />
+        </span>
+      )}
     </>
   );
 };

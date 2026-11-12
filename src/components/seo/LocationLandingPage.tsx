@@ -28,6 +28,7 @@ import {
   SCHEMA_TELEPHONE,
 } from '../../constants/contact';
 import { getCardColorToken } from '../../utils/cardColorTokens';
+import { AnimatedHeading } from '../common/AnimatedHeading';
 
 export interface LocationLandingPageProps {
   page: LocationSeoPageData;
@@ -269,9 +270,9 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
               </div>
 
               {/* Main H1 */}
-              <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+              <AnimatedHeading as="h1" isDark={true} className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 {page.h1}
-              </h1>
+              </AnimatedHeading>
 
               {/* Intro summary */}
               <p className="text-sm sm:text-base lg:text-lg text-slate-300 leading-relaxed max-w-3xl">
@@ -463,9 +464,9 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
               <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
                 Why Choose IAMTECHNI in {page.targetLocation.city}
               </div>
-              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold tracking-tight text-[#1E3A8A]">
+              <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold tracking-tight text-[#1E3A8A]">
                 Engineering Rigor, Local Proximity &amp; Real Outcomes
-              </h2>
+              </AnimatedHeading>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -518,9 +519,9 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
                       <Sparkles className="w-4 h-4 text-[#2563EB]" />
                       <span>Focus Area 0{idx + 1}</span>
                     </div>
-                    <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-2xl font-bold text-[#1E3A8A] leading-snug">
+                    <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-2xl font-bold text-[#1E3A8A] leading-snug">
                       {sec.h2}
-                    </h2>
+                    </AnimatedHeading>
                     <div className="space-y-3">
                       {sec.paragraphs.map((p, pIdx) => (
                         <p
@@ -549,9 +550,9 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
               <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
                 Structured Execution
               </div>
-              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold tracking-tight text-[#1E3A8A]">
+              <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold tracking-tight text-[#1E3A8A]">
                 Our 4-Stage Delivery Lifecycle
-              </h2>
+              </AnimatedHeading>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -590,9 +591,9 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
             <MapPin className="w-3.5 h-3.5 text-[#2563EB]" />
             <span>Regional Presence &amp; Client Access</span>
           </div>
-          <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold text-[#1E3A8A]">
+          <AnimatedHeading as="h2" align="center" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold text-[#1E3A8A]">
             Serving {page.targetLocation.city} with Direct Engineering Accountability
-          </h2>
+          </AnimatedHeading>
           <p className="text-sm sm:text-base text-slate-700 leading-relaxed max-w-3xl mx-auto">
             {page.localContext}
           </p>
@@ -625,9 +626,9 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
               <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
                 Frequently Asked Questions
               </div>
-              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold text-[#1E3A8A]">
+              <AnimatedHeading as="h2" align="center" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold text-[#1E3A8A]">
                 Answers for {page.targetLocation.city} Clients
-              </h2>
+              </AnimatedHeading>
             </div>
 
             <div className="space-y-3">
@@ -688,9 +689,9 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
                   <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
                     Connected Practices &amp; Regions
                   </div>
-                  <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-2xl font-bold text-[#1E3A8A]">
+                  <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-2xl font-bold text-[#1E3A8A]">
                     Explore Related Services &amp; Regional Pages
-                  </h2>
+                  </AnimatedHeading>
                 </div>
                 <div className="flex flex-wrap items-center gap-3 text-xs font-semibold">
                   {parentMatch && (
@@ -778,9 +779,9 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
       <section className="py-10 sm:py-16 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-6 sm:p-12 text-center space-y-4 sm:space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#1E3A8A]">
+            <AnimatedHeading as="h2" align="center" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#1E3A8A]">
               Ready to work with IAMTECHNI in {page.targetLocation.city}?
-            </h2>
+            </AnimatedHeading>
             <p className="text-sm sm:text-base text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">
               Contact our engineering team today to review your project scope, timeline, and exact deliverables. Call our direct line or request a callback.
             </p>

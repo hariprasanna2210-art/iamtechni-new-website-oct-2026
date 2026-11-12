@@ -8,6 +8,7 @@ import { getServiceIcon } from '../utils/serviceIcons';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 import { ArticleGraphic } from '../components/common/ServiceVisualMockups';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 
 interface InsightsPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -107,9 +108,9 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ onNavigate }) => {
                   </span>
                 </div>
 
-                <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors leading-tight">
+                <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl font-bold text-[#1E3A8A] group-hover:text-[#2563EB] transition-colors leading-tight">
                   {filteredArticles[0].title}
-                </h2>
+                </AnimatedHeading>
 
                 <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed line-clamp-2 sm:line-clamp-none">
                   {filteredArticles[0].excerpt}

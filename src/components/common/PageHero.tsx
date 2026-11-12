@@ -3,7 +3,7 @@ import { ArrowRight, ChevronRight, Sparkles } from 'lucide-react';
 import { PageRoute } from '../../types';
 import { Breadcrumbs } from '../layout/Breadcrumbs';
 import { PageHeroVisual } from '../heroes/PageHeroVisuals';
-import { getCardColorTokenBySlug } from '../../utils/cardColorTokens';
+import { AnimatedHeading } from './AnimatedHeading';
 
 export interface PageHeroProps {
   // Breadcrumb information
@@ -100,9 +100,12 @@ export const PageHero: React.FC<PageHeroProps> = ({
               </div>
 
               {/* Large, Professional Headline — Unified Hero Font & Color Effect */}
-              <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-[clamp(1.55rem,3.6vw,2.75rem)] font-bold tracking-[-0.02em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] leading-[1.15] text-balance">
+              <AnimatedHeading
+                as="h1"
+                className="!font-['Outfit','Space_Grotesk',sans-serif] text-[clamp(1.55rem,3.6vw,2.75rem)] font-bold tracking-[-0.02em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] leading-[1.15] text-balance"
+              >
                 {title}
-              </h1>
+              </AnimatedHeading>
 
               {/* Tagline if provided */}
               {tagline && (

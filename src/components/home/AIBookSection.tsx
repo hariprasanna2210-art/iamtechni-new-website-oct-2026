@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { PageRoute } from '../../types';
 import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportActivity';
+import { AnimatedHeading } from '../common/AnimatedHeading';
 
 interface AIBookSectionProps {
   onNavigate: (route: PageRoute) => void;
@@ -541,9 +542,12 @@ const MobileAIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
             <span>Artificial Intelligence &amp; Scalability</span>
           </div>
 
-          <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2]">
+          <AnimatedHeading
+            as="h2"
+            className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.2]"
+          >
             Put intelligent technology to practical work.
-          </h2>
+          </AnimatedHeading>
         </div>
 
         {/* Small Single-Page Book Frame (Full Content Width, Fixed Height) */}

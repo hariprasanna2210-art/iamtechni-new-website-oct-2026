@@ -8,6 +8,7 @@ import { getIndustryIcon } from '../utils/serviceIcons';
 import { IndustryIllustration } from '../components/common/TechIllustrations';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 
 interface IndustriesPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -62,7 +63,7 @@ export const IndustriesPage: React.FC<IndustriesPageProps> = ({
                           <span className="text-slate-400 hidden sm:inline">·</span>
                           <span className="text-slate-600 font-semibold hidden sm:inline">{ind.name.toUpperCase()}</span>
                         </div>
-                        <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A] pt-1">{ind.name}</h2>
+                        <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A] pt-1">{ind.name}</AnimatedHeading>
                         <p className="text-[13px] sm:text-sm text-slate-600 max-w-2xl leading-relaxed line-clamp-2 sm:line-clamp-none">
                           {ind.summary}
                         </p>

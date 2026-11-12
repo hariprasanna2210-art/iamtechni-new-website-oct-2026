@@ -543,5 +543,170 @@ a:active {
   transition: transform 0.1s ease;
 }
 
+/* ========================================================================== */
+/* ANIMATED HEADINGS & HEADING SPARK SYSTEM                                    */
+/* ========================================================================== */
+
+@keyframes spark-cycle-light {
+  0%, 100% {
+    color: #2563EB; /* Brand Blue */
+  }
+  33% {
+    color: #06B6D4; /* Cyan */
+  }
+  66% {
+    color: #7C3AED; /* Purple */
+  }
+}
+
+@keyframes spark-cycle-dark {
+  0%, 100% {
+    color: #22D3EE; /* Cyan */
+  }
+  33% {
+    color: #3B82F6; /* Blue */
+  }
+  66% {
+    color: #A78BFA; /* Purple */
+  }
+}
+
+@keyframes spark-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.heading-spark {
+  display: inline-block;
+  width: 0.7em;
+  height: 0.6em;
+  margin-left: 0.15em;
+  vertical-align: top;
+  pointer-events: none;
+  transform-origin: bottom left;
+  flex-shrink: 0;
+}
+
+.heading-spark-light {
+  animation: spark-pulse 2.4s ease-in-out infinite, spark-cycle-light 4s ease-in-out infinite;
+}
+
+.heading-spark-dark {
+  animation: spark-pulse 2.4s ease-in-out infinite, spark-cycle-dark 4s ease-in-out infinite;
+}
+
+/* Flowing gradient (6s infinite, 200% background-size) for highlighted words */
+@keyframes flowing-gradient-anim {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.heading-flowing-accent-light,
+h1 .bg-clip-text,
+h2 .bg-clip-text,
+h1 em,
+h2 em,
+h1 [class*="text-transparent"],
+h2 [class*="text-transparent"] {
+  background-image: linear-gradient(135deg, #2563EB 0%, #06B6D4 35%, #7C3AED 70%, #2563EB 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flowing-gradient-anim 6s ease-in-out infinite;
+}
+
+.heading-flowing-accent-dark,
+.dark-section h1 .bg-clip-text,
+.dark-section h2 .bg-clip-text,
+.dark-section h1 em,
+.dark-section h2 em,
+.dark-section h1 [class*="text-transparent"],
+.dark-section h2 [class*="text-transparent"] {
+  background-image: linear-gradient(135deg, #22D3EE 0%, #3B82F6 35%, #A78BFA 70%, #22D3EE 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flowing-gradient-anim 6s ease-in-out infinite;
+}
+
+/* Headings with no highlighted word: change to brand gradient on desktop hover (0.4s transition) */
+.heading-hover-gradient-light {
+  transition: color 0.4s ease, -webkit-text-fill-color 0.4s ease, background 0.4s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .heading-hover-gradient-light:hover {
+    background-image: linear-gradient(135deg, #2563EB, #4F46E5, #7C3AED);
+    background-size: 100% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.heading-hover-gradient-dark {
+  transition: color 0.4s ease, -webkit-text-fill-color 0.4s ease, background 0.4s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .heading-hover-gradient-dark:hover {
+    background-image: linear-gradient(135deg, #22D3EE, #3B82F6, #A78BFA);
+    background-size: 100% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Card titles (h3): small hover zoom (scale 1.03), no icon, no scroll animation */
+/* Strictly exclude navbar, footer, chat widget */
+main h3:not(header *):not(nav *):not(footer *):not([data-chat] *):not(.chat-window *):not(.no-hover-zoom),
+section h3:not(header *):not(nav *):not(footer *):not([data-chat] *):not(.chat-window *):not(.no-hover-zoom),
+article h3:not(header *):not(nav *):not(footer *):not([data-chat] *):not(.chat-window *):not(.no-hover-zoom) {
+  transition: transform 0.25s ease-out;
+  transform-origin: left center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  main h3:not(header *):not(nav *):not(footer *):not([data-chat] *):not(.chat-window *):not(.no-hover-zoom):hover,
+  section h3:not(header *):not(nav *):not(footer *):not([data-chat] *):not(.chat-window *):not(.no-hover-zoom):hover,
+  article h3:not(header *):not(nav *):not(footer *):not([data-chat] *):not(.chat-window *):not(.no-hover-zoom):hover {
+    transform: scale(1.03);
+  }
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .heading-spark,
+  .heading-spark-light,
+  .heading-spark-dark,
+  .heading-flowing-accent-light,
+  .heading-flowing-accent-dark,
+  h1 .bg-clip-text,
+  h2 .bg-clip-text,
+  h1 em,
+  h2 em {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  main h3, section h3, article h3 {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+
 
 

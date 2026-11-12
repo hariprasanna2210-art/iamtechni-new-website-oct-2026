@@ -19,6 +19,7 @@ import { getCardColorToken } from '../utils/cardColorTokens';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 import { ProjectVisualThumbnail } from '../components/common/ServiceVisualMockups';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 
 interface CaseStudiesPageProps {
   slug?: string;
@@ -85,9 +86,9 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
                   )}
                 </div>
 
-                <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-[#1E3A8A] tracking-[-0.015em] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+                <AnimatedHeading as="h1" className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-[#1E3A8A] tracking-[-0.015em] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                   {project.title}
-                </h1>
+                </AnimatedHeading>
 
                 <p className="text-[13.5px] sm:text-base lg:text-[17px] text-slate-600 leading-relaxed">
                   {project.tagline}
@@ -128,9 +129,9 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
                 <div className="text-xs font-bold uppercase tracking-wider text-rose-600">
                   01 // The Problem Statement
                 </div>
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                <AnimatedHeading as="h2" className="text-xl sm:text-2xl font-bold text-slate-900">
                   Business Challenge & Operating Friction
-                </h2>
+                </AnimatedHeading>
                 <p className="text-slate-600 text-[13px] sm:text-sm leading-relaxed">
                   {project.challenge}
                 </p>
@@ -140,9 +141,9 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
                 <div className="text-xs font-bold uppercase tracking-wider text-[#1266E8]">
                   02 // Project Objectives
                 </div>
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                <AnimatedHeading as="h2" className="text-xl sm:text-2xl font-bold text-slate-900">
                   Target Engineering Milestones
-                </h2>
+                </AnimatedHeading>
                 <div className="space-y-2.5 sm:space-y-3">
                   {project.objectives.map((obj, idx) => (
                     <div key={idx} className="flex items-start gap-2.5 sm:gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
@@ -188,9 +189,9 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
               <div className="text-xs font-bold uppercase tracking-wider text-emerald-600">
                 04 // Measurable Results
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              <AnimatedHeading as="h2" className="text-xl sm:text-2xl font-bold text-slate-900">
                 Verified Outcomes & Benchmark Performance
-              </h2>
+              </AnimatedHeading>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-6">
                 {project.verifiedOutcomes.map((outcome, idx) => (
                   <div key={idx} className="p-4 sm:p-6 rounded-2xl bg-emerald-50/50 border border-emerald-200/80 space-y-1.5 sm:space-y-2">
@@ -239,9 +240,9 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
             <span>Architecture Field Notes</span>
           </div>
 
-          <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-[#1E3A8A] tracking-[-0.015em] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] max-w-3xl">
+          <AnimatedHeading as="h1" className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-[#1E3A8A] tracking-[-0.015em] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] max-w-3xl">
             Case Studies & Implementation Blueprints
-          </h1>
+          </AnimatedHeading>
 
           <p className="text-[13.5px] sm:text-base lg:text-[17px] text-slate-600 max-w-2xl leading-relaxed line-clamp-2 sm:line-clamp-none">
             Examine in-depth technical breakdowns of business challenges, solution architectures, tech stacks, and verified measurable outcomes.

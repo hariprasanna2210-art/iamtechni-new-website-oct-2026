@@ -14,6 +14,7 @@ import { servicesData } from '../../data/servicesData';
 import { getServiceIcon } from '../../utils/serviceIcons';
 import { getToolsForService } from '../../data/heroServiceTools';
 import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportActivity';
+import { AnimatedHeading } from '../common/AnimatedHeading';
 
 export interface ShowcaseCarouselToolBadge {
   name: string;
@@ -318,12 +319,13 @@ const MobileServicesSection: React.FC<ShowcaseCardCarouselSectionProps> = ({
             <span className="truncate">{eyebrow}</span>
           </div>
 
-          <h2
+          <AnimatedHeading
+            as="h2"
             id={`${sectionId}-section-title`}
             className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[23px] min-[360px]:text-[26px] font-extrabold tracking-[-0.03em] text-[#1E3A8A] leading-[1.2] mb-1.5"
           >
             {heading}
-          </h2>
+          </AnimatedHeading>
 
           <p className="!font-['Inter','Plus_Jakarta_Sans',sans-serif] text-[13px] min-[360px]:text-[13.5px] text-slate-600 font-medium leading-[1.55]">
             {subtitle}

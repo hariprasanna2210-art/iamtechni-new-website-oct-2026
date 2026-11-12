@@ -56,6 +56,7 @@ import { CollaborateSection } from '../components/home/CollaborateSection';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 import { getCardColorToken } from '../utils/cardColorTokens';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 import { getServiceIcon, getIndustryIcon, getProcessStepIcon } from '../utils/serviceIcons';
 import { getAllUniqueTools } from '../data/heroServiceTools';
 import { useSectionInView, useIsWindowScrolling } from '../utils/useViewportActivity';
@@ -92,9 +93,9 @@ const LegacyServicesSection: React.FC<{ onNavigate: (route: PageRoute) => void }
           <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-2">
             Connected Capabilities
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
+          <AnimatedHeading as="h2" className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.12)]">
             Technology capabilities. One connected vision.
-          </h2>
+          </AnimatedHeading>
           <p className="text-sm bg-gradient-to-r from-[#100C2E] via-[#3A279E] to-[#2557D6] bg-clip-text text-transparent font-medium mt-2 leading-relaxed">
             From high-speed web experiences to autonomous robotics, explore our 18 specialized practices built to transform complex business requirements into working software.
           </p>

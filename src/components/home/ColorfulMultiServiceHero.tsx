@@ -25,6 +25,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { PageRoute } from '../../types';
+import { HeadingSpark } from '../common/HeadingSpark';
 
 interface ColorfulMultiServiceHeroProps {
   onNavigate: (route: PageRoute) => void;
@@ -914,6 +915,7 @@ export const ColorfulMultiServiceHero: React.FC<ColorfulMultiServiceHeroProps> =
               >
                 {current.headlineHighlight}
               </span>
+              <HeadingSpark isDark={current.colorTheme.isDark} />
             </h1>
 
             {/* Slide Description */}

@@ -21,6 +21,7 @@ import { PageRoute } from '../../types';
 import { COMPANY_CONTACT } from '../../data/companyInfo';
 import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../../constants/contact';
 import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportActivity';
+import { AnimatedHeading } from '../common/AnimatedHeading';
 
 interface CollaborateSectionProps {
   onNavigate: (route: PageRoute) => void;
@@ -266,9 +267,12 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                       <span>READY TO COLLABORATE</span>
                     </div>
 
-                    <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-[38px] font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] leading-[1.18]">
+                    <AnimatedHeading
+                      as="h2"
+                      className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-[38px] font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] leading-[1.18]"
+                    >
                       Have a challenge? Let’s engineer the solution.
-                    </h2>
+                    </AnimatedHeading>
 
                     <p className="text-[13.5px] sm:text-base text-slate-600 font-medium leading-relaxed max-w-xl">
                       Tell us what you want to build, improve or transform. Let’s explore the right technology and a practical path forward.

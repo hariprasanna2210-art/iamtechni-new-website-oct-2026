@@ -19,6 +19,7 @@ import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { IndustryItem, PageRoute } from '../types';
 import { IndustryIllustration } from '../components/common/TechIllustrations';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 
 interface IndustryDetailPageProps {
   industry: IndustryItem;
@@ -77,9 +78,9 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
                 <span>Specialized Domain Practice</span>
               </div>
 
-              <h1 className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-[#1E3A8A] tracking-[-0.015em] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              <AnimatedHeading as="h1" className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold text-[#1E3A8A] tracking-[-0.015em] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 {industry.name} Technology Solutions
-              </h1>
+              </AnimatedHeading>
 
               <p className="text-[13.5px] sm:text-base lg:text-[17px] text-slate-600 leading-relaxed max-w-2xl">
                 {industry.summary}
@@ -144,9 +145,9 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
                 <AlertCircle className="w-4 h-4" />
                 <span>Critical Domain Challenges</span>
               </div>
-              <h2 className="text-xl sm:text-3xl font-extrabold text-slate-900">
+              <AnimatedHeading as="h2" className="text-xl sm:text-3xl font-extrabold text-slate-900">
                 Operational friction we help solve.
-              </h2>
+              </AnimatedHeading>
               <div className="space-y-2.5 sm:space-y-4">
                 {industry.coreChallenges.map((challenge, idx) => (
                   <div
@@ -170,9 +171,9 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
                 <Sparkles className="w-4 h-4" />
                 <span>Transformation Opportunities</span>
               </div>
-              <h2 className="text-xl sm:text-3xl font-extrabold text-slate-900">
+              <AnimatedHeading as="h2" className="text-xl sm:text-3xl font-extrabold text-slate-900">
                 Where technology drives competitive edge.
-              </h2>
+              </AnimatedHeading>
               <div className="space-y-2.5 sm:space-y-4">
                 {industry.digitalOpportunities.map((opportunity, idx) => (
                   <div
@@ -200,9 +201,9 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
             <div className="text-xs font-mono uppercase tracking-widest text-[#1266E8] font-bold mb-1.5 sm:mb-2">
               Deliverables & Capabilities
             </div>
-            <h2 className="text-xl sm:text-3xl font-extrabold text-slate-900">
+            <AnimatedHeading as="h2" className="text-xl sm:text-3xl font-extrabold text-slate-900">
               What we build for {industry.name}
-            </h2>
+            </AnimatedHeading>
             <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2">
               Every deliverable is crafted to address industry regulations, usability expectations, and integration requirements.
             </p>
@@ -236,9 +237,9 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
       <section className="py-10 sm:py-20 bg-gradient-to-b from-[#F5F8FC] to-[#FFFFFF]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-[#EEF4FF] via-[#F5F9FF] to-[#ECFEFF] border border-[#DBEAFE] rounded-2xl p-5 sm:p-12 text-center space-y-4 sm:space-y-5 shadow-[0_8px_30px_rgba(37,99,235,0.08)]">
-            <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+            <AnimatedHeading as="h2" align="center" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
               Ready to engineer your {industry.name} digital transformation?
-            </h2>
+            </AnimatedHeading>
             <p className="text-[13.5px] sm:text-base text-slate-600 font-medium max-w-2xl mx-auto">
               Schedule an architectural discovery session with our senior engineering team to scope timelines, system integrations, and business impact.
             </p>

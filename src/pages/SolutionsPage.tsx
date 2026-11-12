@@ -8,6 +8,7 @@ import { getServiceIcon } from '../utils/serviceIcons';
 import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { ScrollReveal, ScrollRevealItem } from '../components/common/ScrollReveal';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { AnimatedHeading } from '../components/common/AnimatedHeading';
 
 interface SolutionsPageProps {
   slug?: string;
@@ -69,9 +70,9 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
               <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold">
                 Categorized Solutions
               </div>
-              <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A] mt-1 drop-shadow-[0_2px_8px_rgba(30,58,138,0.08)]">
+              <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A] mt-1 drop-shadow-[0_2px_8px_rgba(30,58,138,0.08)]">
                 Explore Implementation Blueprints
-              </h2>
+              </AnimatedHeading>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-xl shadow-2xs">
