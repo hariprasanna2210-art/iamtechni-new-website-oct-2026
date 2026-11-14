@@ -1,13 +1,34 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 
+const readEnvOrFallback = (envValue: unknown, fallback: string): string =>
+  typeof envValue === 'string' && envValue.trim() !== '' ? envValue.trim() : fallback;
+
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: readEnvOrFallback(
+    import.meta.env.VITE_FIREBASE_API_KEY,
+    'AIzaSyCsRbjm6nEe-XAENrm83955LZkfGeUkPwI'
+  ),
+  authDomain: readEnvOrFallback(
+    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    'iamtechni-website.firebaseapp.com'
+  ),
+  projectId: readEnvOrFallback(
+    import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    'iamtechni-website'
+  ),
+  storageBucket: readEnvOrFallback(
+    import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    'iamtechni-website.firebasestorage.app'
+  ),
+  messagingSenderId: readEnvOrFallback(
+    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    '356096026350'
+  ),
+  appId: readEnvOrFallback(
+    import.meta.env.VITE_FIREBASE_APP_ID,
+    '1:356096026350:web:73d49cefd916391a72b5ff'
+  ),
 };
 
 export const isFirebaseConfigured = Boolean(

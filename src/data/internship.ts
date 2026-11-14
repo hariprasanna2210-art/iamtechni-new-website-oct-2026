@@ -1,15 +1,105 @@
-export const INTERNSHIP_COURSES: string[] = [
+export const COURSES: string[] = [
   'Web Development',
+  'Full Stack Development',
   'AI & Machine Learning',
   'Python',
+  'Java',
   'Data Analytics',
+  'Data Science',
   'Mobile App Development',
   'Cloud & DevOps',
-  'Digital Marketing',
-  'UI/UX Design',
   'Cybersecurity',
+  'UI/UX Design',
+  'Digital Marketing',
+  'Other',
 ];
 
-export const INTERNSHIP_DURATIONS = [1, 2, 3, 6] as const;
+export const DURATIONS = [1, 2, 3, 4, 5, 6] as const;
 
-export const STUDENT_SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
+export const STATES: string[] = [
+  'Puducherry',
+  'Tamil Nadu',
+  'Andaman and Nicobar Islands',
+  'Andhra Pradesh',
+  'Arunachal Pradesh',
+  'Assam',
+  'Bihar',
+  'Chandigarh',
+  'Chhattisgarh',
+  'Dadra and Nagar Haveli and Daman and Diu',
+  'Delhi',
+  'Goa',
+  'Gujarat',
+  'Haryana',
+  'Himachal Pradesh',
+  'Jammu and Kashmir',
+  'Jharkhand',
+  'Karnataka',
+  'Kerala',
+  'Ladakh',
+  'Lakshadweep',
+  'Madhya Pradesh',
+  'Maharashtra',
+  'Manipur',
+  'Meghalaya',
+  'Mizoram',
+  'Nagaland',
+  'Odisha',
+  'Punjab',
+  'Rajasthan',
+  'Sikkim',
+  'Telangana',
+  'Tripura',
+  'Uttar Pradesh',
+  'Uttarakhand',
+  'West Bengal',
+];
+
+export const DEGREES: string[] = [
+  'B.E.',
+  'B.Tech',
+  'B.Sc',
+  'BCA',
+  'B.Com',
+  'BBA',
+  'B.A.',
+  'Diploma',
+  'M.E.',
+  'M.Tech',
+  'M.Sc',
+  'MCA',
+  'MBA',
+  'Other',
+];
+
+export const DEPARTMENTS: string[] = [
+  'Computer Science',
+  'Information Technology',
+  'AI & Data Science',
+  'AI & Machine Learning',
+  'Electronics & Communication',
+  'Electrical & Electronics',
+  'Mechanical',
+  'Civil',
+  'Computer Applications',
+  'Commerce',
+  'Management',
+  'Other',
+];
+
+export const SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8, 'Completed'] as const;
+
+export const QUALIFICATIONS: string[] = [
+  'Diploma',
+  'B.E. / B.Tech',
+  'B.Sc',
+  'BCA',
+  'B.Com',
+  'BBA',
+  'B.A.',
+  'M.E. / M.Tech',
+  'M.Sc',
+  'MCA',
+  'MBA',
+  'Other',
+];
