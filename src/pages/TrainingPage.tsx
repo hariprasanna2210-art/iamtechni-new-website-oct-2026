@@ -1341,6 +1341,76 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
       </section>
       </MobileSectionSkeletonWrapper>
 
+      {/* ======================================================================= */}
+      {/* 10. INTERNSHIPS SECTION                                                 */}
+      {/* ======================================================================= */}
+      <section className="py-14 sm:py-16 lg:py-20 bg-white border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-8 sm:mb-10">
+            <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
+              INTERNSHIPS
+            </div>
+            <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              Start your internship with IAMTECHNI
+            </AnimatedHeading>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            {/* Student Internship Card */}
+            <div className="bg-[#F4F8FF] border border-blue-200/80 rounded-2xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all">
+              <div className="space-y-3">
+                <div className="w-11 h-11 rounded-xl bg-[#2563EB] text-white flex items-center justify-center shadow-xs">
+                  <GraduationCap className="w-5 h-5" />
+                </div>
+                <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold text-[#1E3A8A]">
+                  Student Internship
+                </h3>
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                  For college students who want real project experience.
+                </p>
+              </div>
+
+              <div>
+                <Link
+                  to="/internship/student"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98]"
+                >
+                  <span>Apply as Student</span>
+                  <ArrowRight className="w-4 h-4 shrink-0" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Professional Internship Card */}
+            <div className="bg-[#F6F4FF] border border-violet-200/80 rounded-2xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-2xs hover:shadow-md hover:border-violet-300 transition-all">
+              <div className="space-y-3">
+                <div className="w-11 h-11 rounded-xl bg-[#1E3A8A] text-white flex items-center justify-center shadow-xs">
+                  <Briefcase className="w-5 h-5" />
+                </div>
+                <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold text-[#1E3A8A]">
+                  Professional Internship
+                </h3>
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                  For graduates and working professionals building industry skills.
+                </p>
+              </div>
+
+              <div>
+                <Link
+                  to="/internship/professional"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98]"
+                >
+                  <span>Apply as Professional</span>
+                  <ArrowRight className="w-4 h-4 shrink-0" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Floating WhatsApp Quick Action Button (Bottom-Right, non-colliding) */}
       <aside aria-label="WhatsApp Quick Contact" className="fixed bottom-24 right-4 sm:bottom-24 sm:right-6 z-40">
         <a

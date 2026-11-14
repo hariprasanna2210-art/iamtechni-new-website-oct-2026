@@ -481,6 +481,49 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     };
   }
 
+  // 9b. Internship Application Pages (/internship/student, /internship/professional)
+  if (cleanPath === '/internship/student') {
+    structuredData.push(
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Technical Training', path: '/training' },
+        { name: 'Student Internship', path: '/internship/student' },
+      ])
+    );
+    return {
+      ...baseMeta,
+      title: 'Student Internship Application | IAMTECHNI',
+      description: formatMetaDescription(
+        'Apply for the IAMTECHNI Student Internship program for college students seeking hands-on software, AI, and cloud project experience.'
+      ),
+      canonicalUrl,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData,
+    };
+  }
+
+  if (cleanPath === '/internship/professional') {
+    structuredData.push(
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Technical Training', path: '/training' },
+        { name: 'Professional Internship', path: '/internship/professional' },
+      ])
+    );
+    return {
+      ...baseMeta,
+      title: 'Professional Internship Application | IAMTECHNI',
+      description: formatMetaDescription(
+        'Apply for the IAMTECHNI Professional Internship program for graduates and working professionals building practical engineering and industry skills.'
+      ),
+      canonicalUrl,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData,
+    };
+  }
+
   // 10. Individual Insight Article Page (/insights/:slug)
   if (cleanPath.startsWith('/insights/')) {
     const slug = cleanPath.replace('/insights/', '');

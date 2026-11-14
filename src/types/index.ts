@@ -27,6 +27,8 @@ export type PageRoute =
   | '/services/cloud-devops'
   | '/services/training'
   | '/training'
+  | '/internship/student'
+  | '/internship/professional'
   | '/services/robotics'
   | '/industries'
   | '/industries/healthcare'

@@ -32,6 +32,7 @@ import { ConsultationPage } from './pages/ConsultationPage';
 import { FaqPage } from './pages/FaqPage';
 import { LegalPage } from './pages/LegalPages';
 import { TrainingPage } from './pages/TrainingPage';
+import { InternshipForm } from './components/internship/InternshipForm';
 import { LocationsPage } from './pages/LocationsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SeoHead } from './components/common/SeoHead';
@@ -687,6 +688,14 @@ export default function App() {
                 onOpenProjectModal={handleOpenProjectModal}
               />
             }
+          />
+          <Route
+            path="/internship/student"
+            element={<InternshipForm type="student" onNavigate={navigate} />}
+          />
+          <Route
+            path="/internship/professional"
+            element={<InternshipForm type="professional" onNavigate={navigate} />}
           />
 
           {/* 14. FAQ */}
