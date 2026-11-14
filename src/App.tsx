@@ -827,11 +827,13 @@ export default function App() {
         />
       )}
 
-      {/* IAMTECHNI Enterprise AI Chatbot */}
-      <IamtechniChatbot
-        onNavigate={navigate}
-        onOpenProjectModal={handleOpenProjectModal}
-      />
+      {/* IAMTECHNI Enterprise AI Chatbot (hidden on /admin) */}
+      {currentRoute !== '/admin' && (
+        <IamtechniChatbot
+          onNavigate={navigate}
+          onOpenProjectModal={handleOpenProjectModal}
+        />
+      )}
     </div>
   );
 }

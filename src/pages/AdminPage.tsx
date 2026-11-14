@@ -24,6 +24,7 @@ import {
   Check,
   CheckCircle2,
   Clock,
+  Copy,
   Download,
   FileText,
   GraduationCap,
@@ -190,6 +191,7 @@ const AdminPage: React.FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [actionErrorCode, setActionErrorCode] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isTouchOrMobileDevice, setIsTouchOrMobileDevice] = useState(false);
 
   const isAdmin = useMemo(() => {
     const userEmail = (user?.email ?? '').trim().toLowerCase();
@@ -303,6 +305,43 @@ const AdminPage: React.FC = () => {
     const timer = setTimeout(() => setToastMessage(null), 3500);
     return () => clearTimeout(timer);
   }, [toastMessage]);
+
+  // Detect phone/tablet (touch devices or viewport < 768px) for Call action behavior
+  useEffect(() => {
+    const checkDevice = () => {
+      if (typeof window === 'undefined') return;
+      const isNarrow = window.innerWidth < 768;
+      const isCoarsePointer =
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(pointer: coarse)').matches;
+      setIsTouchOrMobileDevice(isNarrow || isCoarsePointer);
+    };
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
+  const copyToClipboard = async (text: string, successToast: string) => {
+    if (!text) return;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        throw new Error('Clipboard API unavailable');
+      }
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+    setToastMessage(successToast);
+  };
 
   const handleGoogleSignIn = async () => {
     setAuthErrorCode(null);
@@ -628,9 +667,27 @@ const AdminPage: React.FC = () => {
     );
   }
 
-  const whatsappDigits = selectedApp
-    ? selectedApp.phone.replace(/^\+/, '').replace(/\D/g, '')
+  const rawPhoneDigits = selectedApp
+    ? selectedApp.phone.replace(/\D/g, '')
     : '';
+  const whatsappDigits = rawPhoneDigits
+    ? rawPhoneDigits.startsWith('91') && rawPhoneDigits.length >= 12
+      ? rawPhoneDigits
+      : `91${rawPhoneDigits.replace(/^0+/, '').slice(-10)}`
+    : '';
+  const gmailComposeUrl = selectedApp
+    ? `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+        selectedApp.email
+      )}&su=${encodeURIComponent(
+        `IAMTECHNI Internship – ${selectedApp.applicationId}`
+      )}`
+    : '#';
+  const whatsappUrl =
+    selectedApp && whatsappDigits
+      ? `https://wa.me/${whatsappDigits}?text=${encodeURIComponent(
+          `Hi ${selectedApp.fullName}, this is IAMTECHNI regarding your internship application ${selectedApp.applicationId}.`
+        )}`
+      : '#';
 
   // Verified Admin Dashboard
   return (
@@ -1027,23 +1084,54 @@ const AdminPage: React.FC = () => {
             {/* Panel Body */}
             <div className="p-4 sm:p-6 space-y-6 flex-1">
               {/* Quick Contact Links */}
-              <div className="grid grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="flex items-stretch gap-1.5">
+                  <a
+                    href={gmailComposeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 min-h-[44px] px-3 py-2 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <Mail className="w-4 h-4 shrink-0" />
+                    <span>Email</span>
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(selectedApp.email, 'Email copied')}
+                    aria-label="Copy email address"
+                    title="Copy email"
+                    className="min-h-[44px] min-w-[44px] px-2.5 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                  >
+                    <Copy className="w-4 h-4 shrink-0" />
+                  </button>
+                </div>
+
+                {isTouchOrMobileDevice ? (
+                  <a
+                    href={`tel:${selectedApp.phone}`}
+                    className="min-h-[44px] px-3 py-2 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <Phone className="w-4 h-4 shrink-0" />
+                    <span>Call</span>
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        selectedApp.phone,
+                        `Phone number copied: ${selectedApp.phone}`
+                      )
+                    }
+                    className="min-h-[44px] px-3 py-2 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Phone className="w-4 h-4 shrink-0" />
+                    <span>Call</span>
+                  </button>
+                )}
+
                 <a
-                  href={`mailto:${selectedApp.email}`}
-                  className="min-h-[44px] px-3 py-2 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <Mail className="w-4 h-4 shrink-0" />
-                  <span>Email</span>
-                </a>
-                <a
-                  href={`tel:${selectedApp.phone}`}
-                  className="min-h-[44px] px-3 py-2 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <Phone className="w-4 h-4 shrink-0" />
-                  <span>Call</span>
-                </a>
-                <a
-                  href={`https://wa.me/${whatsappDigits}`}
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="min-h-[44px] px-3 py-2 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors"
