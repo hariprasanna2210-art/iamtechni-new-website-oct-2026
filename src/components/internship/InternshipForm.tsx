@@ -20,7 +20,7 @@ import {
 import type { IndiaPincode } from 'india-pincode/browser';
 import { PageRoute } from '../../types';
 import { db, isFirebaseConfigured } from '../../lib/firebase';
-import { formatIndiaSubmittedAt, sendInternshipEmails } from '../../lib/email';
+import { formatIndiaSubmittedAt, sendInternshipEmail } from '../../lib/email';
 import {
   COURSES,
   DEGREES,
@@ -1422,11 +1422,16 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
 
       const orDash = (v: string) => (v.trim() ? v.trim() : '-');
       const monthsNum = Number(durationMonths);
+      const tenDigits = phone.replace(/\D/g, '').slice(-10);
+      const emailFormattedPhone =
+        tenDigits.length === 10
+          ? `+91 ${tenDigits.slice(0, 5)} ${tenDigits.slice(5)}`
+          : formattedPhone;
 
-      sendInternshipEmails({
+      sendInternshipEmail({
         full_name: orDash(fullName),
         email: orDash(email),
-        phone: formattedPhone,
+        phone: emailFormattedPhone,
         type_label: isStudent ? 'Student Internship' : 'Professional Internship',
         application_id: generatedId,
         course: orDash(resolvedCourse),
@@ -1438,15 +1443,28 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
         city: orDash(resolvedCity),
         state: orDash(stateName),
         pincode: orDash(String(resolvedPincode || '').replace(/\D/g, '').slice(0, 6)),
-        college: isStudent ? orDash(college) : '-',
-        degree: isStudent ? orDash(resolvedDegree) : '-',
-        department: isStudent ? orDash(resolvedDepartment) : '-',
-        semester: isStudent ? orDash(String(semester || '')) : '-',
-        qualification: !isStudent ? orDash(resolvedQualification) : '-',
-        currently_working: !isStudent ? orDash(currentlyWorking) : '-',
-        company: !isStudent && currentlyWorking === 'Yes' ? orDash(company) : '-',
-        designation: !isStudent && currentlyWorking === 'Yes' ? orDash(designation) : '-',
         submitted_at: formatIndiaSubmittedAt(),
+        ...(isStudent
+          ? {
+              info1_label: 'College',
+              info1_value: orDash(college),
+              info2_label: 'Degree',
+              info2_value: orDash(resolvedDegree),
+              info3_label: 'Department',
+              info3_value: orDash(resolvedDepartment),
+              info4_label: 'Semester',
+              info4_value: orDash(String(semester || '')),
+            }
+          : {
+              info1_label: 'Qualification',
+              info1_value: orDash(resolvedQualification),
+              info2_label: 'Currently working',
+              info2_value: orDash(currentlyWorking),
+              info3_label: 'Company',
+              info3_value: currentlyWorking === 'Yes' ? orDash(company) : '-',
+              info4_label: 'Designation',
+              info4_value: currentlyWorking === 'Yes' ? orDash(designation) : '-',
+            }),
       });
 
       setSubmittedApplicationId(generatedId);
@@ -1776,7 +1794,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                   </div>
 
                   <p className="text-sm sm:text-base text-slate-600 max-w-md mx-auto leading-relaxed">
-                    Please save this ID. A confirmation email has been sent to {email.trim()}.
+                    Please save this ID. A confirmation email has been sent to {email.trim()}. If you don&apos;t see it, please check your Spam folder.
                   </p>
 
                   <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
