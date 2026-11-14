@@ -855,6 +855,20 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     };
   }
 
+  // Admin Console (/admin) — noindex, nofollow
+  if (cleanPath === '/admin') {
+    return {
+      ...baseMeta,
+      title: 'Admin | IAMTECHNI',
+      description: 'IAMTECHNI private administration console.',
+      canonicalUrl,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData: [],
+      noIndex: true,
+    };
+  }
+
   // Fallback (404 / Unknown Route)
   return {
     ...baseMeta,

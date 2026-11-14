@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const readEnvOrFallback = (envValue: unknown, fallback: string): string =>
   typeof envValue === 'string' && envValue.trim() !== '' ? envValue.trim() : fallback;
@@ -44,4 +45,5 @@ if (isFirebaseConfigured) {
 }
 
 export const db = firestoreDb as Firestore;
+export const auth = getAuth(app as FirebaseApp);
 export { app };

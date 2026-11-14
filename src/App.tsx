@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import {
   Routes,
   Route,
@@ -36,6 +36,8 @@ import { InternshipForm } from './components/internship/InternshipForm';
 import { LocationsPage } from './pages/LocationsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SeoHead } from './components/common/SeoHead';
+
+const AdminPage = lazy(() => import('./pages/AdminPage'));
 
 import { servicesData, getCanonicalServiceSlug } from './data/servicesData';
 import {
@@ -696,6 +698,20 @@ export default function App() {
           <Route
             path="/internship/professional"
             element={<InternshipForm type="professional" onNavigate={navigate} />}
+          />
+          <Route
+            path="/admin"
+            element={
+              <Suspense
+                fallback={
+                  <div className="min-h-[70vh] flex items-center justify-center bg-[#F4F7FC] text-sm font-medium text-slate-600">
+                    Loading admin console…
+                  </div>
+                }
+              >
+                <AdminPage />
+              </Suspense>
+            }
           />
 
           {/* 14. FAQ */}
