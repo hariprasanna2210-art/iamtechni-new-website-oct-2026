@@ -5,7 +5,7 @@ const readEnvOrFallback = (envValue: unknown, fallback: string): string =>
 
 const EMAILJS_PUBLIC_KEY = readEnvOrFallback(
   import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-  'v3LZ4pG_OjG6ROP8g'
+  'gM0rPsN-3hzgsp6z9'
 );
 const EMAILJS_SERVICE_ID = readEnvOrFallback(
   import.meta.env.VITE_EMAILJS_SERVICE_ID,
