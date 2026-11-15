@@ -4,6 +4,7 @@ export interface LoadingSpinnerProps {
   size?: number;
   color?: string;
   label?: string;
+  showStatusRole?: boolean;
   className?: string;
 }
 
@@ -13,14 +14,15 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 48,
   color = '#4D19EA',
   label,
+  showStatusRole = true,
   className = '',
 }) => {
   const halfSize = size / 2;
 
   return (
     <div
-      role="status"
-      aria-live="polite"
+      role={showStatusRole ? 'status' : undefined}
+      aria-live={showStatusRole ? 'polite' : undefined}
       className={`loading-spinner-root inline-flex flex-col items-center justify-center shrink-0 ${
         label ? 'gap-3' : ''
       } ${className}`}
@@ -50,13 +52,13 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         ))}
       </div>
 
-      {label && (
+      {label ? (
         <span className="text-[14px] leading-snug font-medium text-[#334155] text-center">
           {label}
         </span>
+      ) : (
+        <span className="sr-only">Loading…</span>
       )}
-
-      <span className="sr-only">Loading…</span>
     </div>
   );
 };

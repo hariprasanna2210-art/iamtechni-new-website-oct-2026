@@ -38,6 +38,9 @@ export interface InternshipFormProps {
   onNavigate?: (route: PageRoute) => void;
 }
 
+const wait = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 function addMonthsToDateString(dateStr: string, months: number): string {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return '';
   const [yStr, mStr, dStr] = dateStr.split('-');
@@ -508,6 +511,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
   const areaAutofillRef = useRef<HTMLInputElement>(null);
   const areaOtherRef = useRef<HTMLInputElement>(null);
 
+  const formCardRef = useRef<HTMLDivElement>(null);
   const personalSectionRef = useRef<HTMLDivElement>(null);
   const internshipSectionRef = useRef<HTMLDivElement>(null);
   const specificSectionRef = useRef<HTMLDivElement>(null);
@@ -561,9 +565,22 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isReviewing, setIsReviewing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loadingOverlayLabel, setLoadingOverlayLabel] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submittedApplicationId, setSubmittedApplicationId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState(false);
+
+  const isBusy = isSubmitting || Boolean(loadingOverlayLabel);
+
+  const scrollToFormCardTop = () => {
+    requestAnimationFrame(() => {
+      if (formCardRef.current) {
+        formCardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  };
 
   const clearFieldError = (field: string) => {
     setErrors((prev) => {
@@ -1328,8 +1345,9 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
     return nextErrors;
   };
 
-  const handleContinue = (e: React.FormEvent) => {
+  const handleContinue = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isBusy) return;
     setSubmitError(null);
 
     if (website.trim() !== '') {
@@ -1345,9 +1363,15 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
       return;
     }
 
-    setIsReviewing(true);
-    setActiveStep(4);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setLoadingOverlayLabel('Preparing your review…');
+    try {
+      await wait(1200);
+      setIsReviewing(true);
+      setActiveStep(4);
+      scrollToFormCardTop();
+    } finally {
+      setLoadingOverlayLabel(null);
+    }
   };
 
   const resolvedCity =
@@ -1362,6 +1386,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
     qualification === 'Other' ? qualificationOther.trim() : qualification;
 
   const handleFinalSubmit = async () => {
+    if (isBusy) return;
     setSubmitError(null);
 
     if (website.trim() !== '') {
@@ -1377,12 +1402,9 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
     }
 
     setIsSubmitting(true);
+    setLoadingOverlayLabel('Submitting your application…');
 
     try {
-      if (!isFirebaseConfigured || !db) {
-        throw new Error('Firebase is not configured.');
-      }
-
       const generatedId = generateApplicationId(type);
       const formattedPhone = `+91${phone.replace(/\D/g, '').slice(-10)}`;
 
@@ -1421,7 +1443,21 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
             designation: currentlyWorking === 'Yes' ? designation.trim() : '',
           };
 
-      await addDoc(collection(db, 'internshipApplications'), payload);
+      const saveToFirestore = async () => {
+        if (!isFirebaseConfigured || !db) {
+          throw new Error('Firebase is not configured.');
+        }
+        await addDoc(collection(db, 'internshipApplications'), payload);
+      };
+
+      const [saveResult] = await Promise.allSettled([
+        saveToFirestore(),
+        wait(2500),
+      ]);
+
+      if (saveResult.status === 'rejected') {
+        throw saveResult.reason;
+      }
 
       const orDash = (v: string) => (v.trim() ? v.trim() : '-');
       const monthsNum = Number(durationMonths);
@@ -1472,7 +1508,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
 
       setSubmittedApplicationId(generatedId);
       setIsReviewing(false);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToFormCardTop();
     } catch (err: unknown) {
       const fbError = err as { code?: string; message?: string };
       console.error(
@@ -1483,14 +1519,40 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
       setSubmitError('Something went wrong. Please try again or contact us.');
     } finally {
       setIsSubmitting(false);
+      setLoadingOverlayLabel(null);
     }
   };
 
-  const jumpToFormSection = (
+  const handlePreviousFromReview = async () => {
+    if (isBusy) return;
+    setSubmitError(null);
+    setLoadingOverlayLabel('Loading your details…');
+    try {
+      await wait(1200);
+      setIsReviewing(false);
+      setActiveStep(1);
+      scrollToFormCardTop();
+    } finally {
+      setLoadingOverlayLabel(null);
+    }
+  };
+
+  const jumpToFormSection = async (
     section: 'personal' | 'internship' | 'specific' | 'confirmed'
   ) => {
+    if (isBusy) return;
     setSubmitError(null);
-    setIsReviewing(false);
+
+    if (isReviewing) {
+      setLoadingOverlayLabel('Loading your details…');
+      try {
+        await wait(1200);
+        setIsReviewing(false);
+      } finally {
+        setLoadingOverlayLabel(null);
+      }
+    }
+
     setTimeout(() => {
       if (section === 'confirmed') {
         const confirmedEl = document.getElementById('internship-confirmed');
@@ -1505,6 +1567,17 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
           : specificSectionRef.current;
       target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 60);
+  };
+
+  const handleBackToTraining = async () => {
+    if (isBusy) return;
+    setLoadingOverlayLabel('Loading…');
+    try {
+      await wait(1000);
+      handleNavigate('/training');
+    } finally {
+      setLoadingOverlayLabel(null);
+    }
   };
 
   const handleCopyApplicationId = async () => {
@@ -1694,15 +1767,21 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
         }`}
       >
         {isReviewing && !submittedApplicationId ? (
-          <div className="relative max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 rounded-2xl">
-            {isSubmitting && (
+          <div
+            ref={formCardRef}
+            className="relative max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 rounded-2xl scroll-mt-24"
+          >
+            {loadingOverlayLabel && (
               <div
-                className="absolute inset-0 z-20 rounded-2xl bg-[rgba(255,255,255,0.72)] backdrop-blur-[2px] flex items-center justify-center p-6"
+                role="status"
+                aria-live="polite"
                 aria-busy="true"
+                className="absolute inset-0 z-20 rounded-2xl bg-[rgba(255,255,255,0.72)] backdrop-blur-[2px] flex items-center justify-center p-6"
               >
                 <LoadingSpinner
                   size={52}
-                  label="Submitting your application…"
+                  label={loadingOverlayLabel}
+                  showStatusRole={false}
                 />
               </div>
             )}
@@ -1771,8 +1850,9 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                   </h2>
                   <button
                     type="button"
+                    disabled={isBusy}
                     onClick={() => jumpToFormSection('personal')}
-                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center"
+                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Edit
                   </button>
@@ -1862,8 +1942,9 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                   </h2>
                   <button
                     type="button"
+                    disabled={isBusy}
                     onClick={() => jumpToFormSection('internship')}
-                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center"
+                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Edit
                   </button>
@@ -1925,8 +2006,9 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                     </h2>
                     <button
                       type="button"
+                      disabled={isBusy}
                       onClick={() => jumpToFormSection('specific')}
-                      className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center"
+                      className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Edit
                     </button>
@@ -1978,8 +2060,9 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                     </h2>
                     <button
                       type="button"
+                      disabled={isBusy}
                       onClick={() => jumpToFormSection('specific')}
-                      className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center"
+                      className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Edit
                     </button>
@@ -2037,8 +2120,9 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                   </h2>
                   <button
                     type="button"
+                    disabled={isBusy}
                     onClick={() => jumpToFormSection('confirmed')}
-                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center"
+                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Edit
                   </button>
@@ -2080,12 +2164,8 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
               <div className="pt-2 grid grid-cols-2 sm:flex sm:items-center sm:justify-between gap-3">
                 <button
                   type="button"
-                  disabled={isSubmitting}
-                  onClick={() => {
-                    setSubmitError(null);
-                    setIsReviewing(false);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
+                  disabled={isBusy}
+                  onClick={handlePreviousFromReview}
                   className="w-full sm:w-auto sm:min-w-[140px] h-12 min-h-[48px] px-3 sm:px-6 rounded-xl border-2 border-[#1C35EA] bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-sm transition-colors inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
                 >
                   <ArrowLeft className="w-4 h-4 shrink-0" />
@@ -2094,7 +2174,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
 
                 <button
                   type="button"
-                  disabled={isSubmitting}
+                  disabled={isBusy}
                   onClick={handleFinalSubmit}
                   className="w-full sm:w-auto sm:min-w-[180px] h-12 min-h-[48px] px-3 sm:px-6 rounded-xl text-white font-semibold text-[13px] sm:text-sm shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] motion-reduce:hover:translate-y-0 active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 whitespace-nowrap"
                   style={{
@@ -2125,7 +2205,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                     <li key={step.num} className="min-w-0">
                       <button
                         type="button"
-                        disabled={!canClick}
+                        disabled={!canClick || isBusy}
                         onClick={() => {
                           if (!canClick) return;
                           if (step.num === 1) jumpToFormSection('personal');
@@ -2172,7 +2252,10 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
           )}
 
           {/* Form Card */}
-          <div className="relative bg-white rounded-2xl border border-slate-200 shadow-[0_12px_36px_-10px_rgba(28,53,234,0.12)]">
+          <div
+            ref={formCardRef}
+            className="relative bg-white rounded-2xl border border-slate-200 shadow-[0_12px_36px_-10px_rgba(28,53,234,0.12)] scroll-mt-24"
+          >
             {/* Thin brand-gradient line along top edge */}
             <div
               className="h-1.5 w-full rounded-t-2xl"
@@ -2181,14 +2264,17 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
               }}
             />
 
-            {isSubmitting && !submittedApplicationId && (
+            {loadingOverlayLabel && (
               <div
-                className="absolute inset-0 z-20 rounded-2xl bg-[rgba(255,255,255,0.72)] backdrop-blur-[2px] flex items-center justify-center p-6"
+                role="status"
+                aria-live="polite"
                 aria-busy="true"
+                className="absolute inset-0 z-20 rounded-2xl bg-[rgba(255,255,255,0.72)] backdrop-blur-[2px] flex items-center justify-center p-6"
               >
                 <LoadingSpinner
                   size={52}
-                  label="Submitting your application…"
+                  label={loadingOverlayLabel}
+                  showStatusRole={false}
                 />
               </div>
             )}
@@ -2217,8 +2303,9 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                     <div className="pt-1">
                       <button
                         type="button"
+                        disabled={isBusy}
                         onClick={handleCopyApplicationId}
-                        className="inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-white border border-[#1C35EA]/30 text-[#1C35EA] hover:bg-[#EEF4FF] text-sm font-semibold transition-colors cursor-pointer"
+                        className="inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-white border border-[#1C35EA]/30 text-[#1C35EA] hover:bg-[#EEF4FF] text-sm font-semibold transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                       >
                         {copiedId ? (
                           <>
@@ -2240,9 +2327,11 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                   </p>
 
                   <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
-                    <Link
-                      to="/training"
-                      className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-xl text-white font-semibold text-sm shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] motion-reduce:hover:translate-y-0 active:scale-[0.98]"
+                    <button
+                      type="button"
+                      disabled={isBusy}
+                      onClick={handleBackToTraining}
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-xl text-white font-semibold text-sm shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] motion-reduce:hover:translate-y-0 active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                       style={{
                         background:
                           'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
@@ -2250,7 +2339,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                     >
                       <ArrowLeft className="w-4 h-4 shrink-0" />
                       <span>Back to Training</span>
-                    </Link>
+                    </button>
                   </div>
                 </div>
               ) : (
@@ -3719,7 +3808,8 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full sm:w-auto sm:min-w-[220px] py-3 px-6 min-h-[48px] rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-md hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] motion-reduce:hover:translate-y-0 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+                      disabled={isBusy}
+                      className="w-full sm:w-auto sm:min-w-[220px] py-3 px-6 min-h-[48px] rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-md hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] motion-reduce:hover:translate-y-0 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                       style={{
                         background:
                           'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
