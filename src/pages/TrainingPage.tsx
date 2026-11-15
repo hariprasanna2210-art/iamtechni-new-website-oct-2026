@@ -33,7 +33,7 @@ import {
   Laptop,
   MapPin,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PageRoute, CourseItem } from '../types';
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import {
@@ -52,6 +52,7 @@ import { TrainingHeroVisual } from '../components/heroes/TrainingHeroVisual';
 import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 import { AnimatedHeading } from '../components/common/AnimatedHeading';
+import { FullScreenLoader } from '../components/common/FullScreenLoader';
 
 const COURSE_LOCATION_LINKS: Record<string, { city: string; path: string; label: string }[]> = {
   aws: [
@@ -127,12 +128,34 @@ function WhatsAppIcon({ className = 'w-4 h-4' }: { className?: string }) {
 }
 
 export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNavigate, onOpenProjectModal }) => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedCourseForForm, setSelectedCourseForForm] = useState<string>(coursesData[0].title);
   const [openFaq, setOpenFaq] = useState<Record<number, boolean>>({ 0: true, 1: true });
+  const [internshipLoaderMessage, setInternshipLoaderMessage] = useState<string | null>(null);
+  const internshipNavTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const enquiryFormRef = useRef<HTMLDivElement>(null);
   const catalogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (internshipNavTimerRef.current) {
+        clearTimeout(internshipNavTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleApplyInternship = (path: string, message: string) => {
+    if (internshipLoaderMessage) return;
+    setInternshipLoaderMessage(message);
+    internshipNavTimerRef.current = setTimeout(() => {
+      internshipNavTimerRef.current = null;
+      setInternshipLoaderMessage(null);
+      navigate(path);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 1500);
+  };
 
   // Form State
   const [formData, setFormData] = useState({
@@ -1371,14 +1394,20 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
               </div>
 
               <div>
-                <Link
-                  to="/internship/student"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98]"
+                <button
+                  type="button"
+                  disabled={Boolean(internshipLoaderMessage)}
+                  onClick={() =>
+                    handleApplyInternship(
+                      '/internship/student',
+                      'Opening Student Internship application…'
+                    )
+                  }
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <span>Apply as Student</span>
                   <ArrowRight className="w-4 h-4 shrink-0" />
-                </Link>
+                </button>
               </div>
             </div>
 
@@ -1397,14 +1426,20 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
               </div>
 
               <div>
-                <Link
-                  to="/internship/professional"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98]"
+                <button
+                  type="button"
+                  disabled={Boolean(internshipLoaderMessage)}
+                  onClick={() =>
+                    handleApplyInternship(
+                      '/internship/professional',
+                      'Opening Professional Internship application…'
+                    )
+                  }
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <span>Apply as Professional</span>
                   <ArrowRight className="w-4 h-4 shrink-0" />
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -1426,6 +1461,11 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
           </span>
         </a>
       </aside>
+
+      <FullScreenLoader
+        isOpen={Boolean(internshipLoaderMessage)}
+        message={internshipLoaderMessage ?? ''}
+      />
     </div>
   );
 };

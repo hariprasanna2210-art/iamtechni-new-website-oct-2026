@@ -32,6 +32,7 @@ import {
 import { Breadcrumbs } from '../layout/Breadcrumbs';
 import { AnimatedHeading } from '../common/AnimatedHeading';
 import { LoadingSpinner } from '../common/LoadingSpinner';
+import { FullScreenLoader } from '../common/FullScreenLoader';
 
 export interface InternshipFormProps {
   type: 'student' | 'professional';
@@ -563,6 +564,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
   // Step, validation & submission state
   const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4>(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isInitialFormLoading, setIsInitialFormLoading] = useState(true);
   const [isReviewing, setIsReviewing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingOverlayLabel, setLoadingOverlayLabel] = useState<string | null>(null);
@@ -570,7 +572,10 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
   const [submittedApplicationId, setSubmittedApplicationId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState(false);
 
-  const isBusy = isSubmitting || Boolean(loadingOverlayLabel);
+  const isBusy = isInitialFormLoading || isSubmitting || Boolean(loadingOverlayLabel);
+  const activeLoaderMessage = isInitialFormLoading
+    ? 'Loading application form…'
+    : loadingOverlayLabel;
 
   const scrollToFormCardTop = () => {
     requestAnimationFrame(() => {
@@ -594,26 +599,43 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
   // Dynamically load india-pincode/browser and /data/pincodes.json.gz only on internship form pages
   useEffect(() => {
     let active = true;
+    let timedOut = false;
+
+    const minWaitPromise = wait(1000);
+    const maxTimeoutId = setTimeout(() => {
+      if (!active) return;
+      timedOut = true;
+      setIndiaPincode(null);
+      setLocationsLoadFailed(true);
+      setIsLocationsLoading(false);
+      setIsInitialFormLoading(false);
+    }, 6000);
+
     (async () => {
+      let loadedInstance: IndiaPincode | null = null;
+      let failed = false;
+
       try {
         const { getIndiaPincode } = await import('india-pincode/browser');
-        const instance = await getIndiaPincode('/data/pincodes.json.gz');
-        if (!active) return;
-        setIndiaPincode(instance);
-        setLocationsLoadFailed(false);
+        loadedInstance = await getIndiaPincode('/data/pincodes.json.gz');
       } catch {
-        if (!active) return;
-        setIndiaPincode(null);
-        setLocationsLoadFailed(true);
-      } finally {
-        if (active) {
-          setIsLocationsLoading(false);
-        }
+        loadedInstance = null;
+        failed = true;
       }
+
+      await minWaitPromise;
+
+      if (!active || timedOut) return;
+      clearTimeout(maxTimeoutId);
+      setIndiaPincode(loadedInstance);
+      setLocationsLoadFailed(failed);
+      setIsLocationsLoading(false);
+      setIsInitialFormLoading(false);
     })();
 
     return () => {
       active = false;
+      clearTimeout(maxTimeoutId);
     };
   }, []);
 
@@ -1771,21 +1793,6 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
             ref={formCardRef}
             className="relative max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 rounded-2xl scroll-mt-24"
           >
-            {loadingOverlayLabel && (
-              <div
-                role="status"
-                aria-live="polite"
-                aria-busy="true"
-                className="absolute inset-0 z-20 rounded-2xl bg-[rgba(255,255,255,0.72)] backdrop-blur-[2px] flex items-center justify-center p-6"
-              >
-                <LoadingSpinner
-                  size={52}
-                  label={loadingOverlayLabel}
-                  showStatusRole={false}
-                />
-              </div>
-            )}
-
             <div className="space-y-8 sm:space-y-10">
               {/* Top of the Review Step */}
               <div className="space-y-6 pb-6 border-b border-[#E2E8F0]">
@@ -2263,21 +2270,6 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                 background: 'linear-gradient(90deg, #00B0F0 0%, #1C35EA 50%, #4D19EA 100%)',
               }}
             />
-
-            {loadingOverlayLabel && (
-              <div
-                role="status"
-                aria-live="polite"
-                aria-busy="true"
-                className="absolute inset-0 z-20 rounded-2xl bg-[rgba(255,255,255,0.72)] backdrop-blur-[2px] flex items-center justify-center p-6"
-              >
-                <LoadingSpinner
-                  size={52}
-                  label={loadingOverlayLabel}
-                  showStatusRole={false}
-                />
-              </div>
-            )}
 
             <div className="p-4 sm:p-8 lg:p-10">
               {submittedApplicationId ? (
@@ -3826,6 +3818,11 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
         </div>
         )}
       </section>
+
+      <FullScreenLoader
+        isOpen={Boolean(activeLoaderMessage)}
+        message={activeLoaderMessage ?? ''}
+      />
     </div>
   );
 };

@@ -5,6 +5,7 @@ export interface LoadingSpinnerProps {
   color?: string;
   label?: string;
   showStatusRole?: boolean;
+  hideSrOnly?: boolean;
   className?: string;
 }
 
@@ -15,6 +16,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   color = '#4D19EA',
   label,
   showStatusRole = true,
+  hideSrOnly = false,
   className = '',
 }) => {
   const halfSize = size / 2;
@@ -57,7 +59,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
           {label}
         </span>
       ) : (
-        <span className="sr-only">Loading…</span>
+        !hideSrOnly && <span className="sr-only">Loading…</span>
       )}
     </div>
   );
