@@ -783,6 +783,40 @@ article h3:not(header *):not(nav *):not(footer *):not([data-chat] *):not(.chat-w
   }
 }
 
+/* 12-bar classic LoadingSpinner animation */
+@keyframes loading-spinner-fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+  }
+}
+
+.loading-spinner-root {
+  --spinner-duration: 1s;
+}
+
+.loading-spinner-root .loading-spinner-bar {
+  animation-name: loading-spinner-fade;
+  animation-duration: var(--spinner-duration);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-delay: calc((var(--spinner-index) - 11) * var(--spinner-duration) / 12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner-root {
+    --spinner-duration: 2s;
+  }
+  .loading-spinner-root .loading-spinner-bar {
+    animation-duration: 2s !important;
+    animation-iteration-count: infinite !important;
+    animation-delay: calc((var(--spinner-index) - 11) * 2s / 12) !important;
+  }
+}
+
+
 
 
 

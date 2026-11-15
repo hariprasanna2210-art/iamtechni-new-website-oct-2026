@@ -32,6 +32,7 @@ import {
 } from '../../data/internship';
 import { Breadcrumbs } from '../layout/Breadcrumbs';
 import { AnimatedHeading } from '../common/AnimatedHeading';
+import { LoadingSpinner } from '../common/LoadingSpinner';
 
 export interface InternshipFormProps {
   type: 'student' | 'professional';
@@ -186,6 +187,7 @@ interface SearchableSelectProps {
   searchPlaceholder: string;
   emptySearchMessage?: string;
   disabled?: boolean;
+  isLoading?: boolean;
   hasError?: boolean;
   isValid?: boolean;
   onFocusTrigger?: () => void;
@@ -203,6 +205,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
   searchPlaceholder,
   emptySearchMessage = 'No matching results found.',
   disabled = false,
+  isLoading = false,
   hasError = false,
   isValid = false,
   onFocusTrigger,
@@ -359,11 +362,12 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
           }`}
         >
           <span
-            className={`truncate ${
+            className={`inline-flex items-center gap-2 min-w-0 ${
               disabled || isPlaceholderShown ? 'text-slate-400' : 'text-slate-900'
             }`}
           >
-            {displayValue}
+            {isLoading && <LoadingSpinner size={18} />}
+            <span className="truncate">{displayValue}</span>
           </span>
         </button>
 
@@ -1751,6 +1755,18 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
               }}
             />
 
+            {isSubmitting && !submittedApplicationId && (
+              <div
+                className="absolute inset-0 z-20 rounded-2xl bg-[rgba(255,255,255,0.72)] backdrop-blur-[2px] flex items-center justify-center p-6"
+                aria-busy="true"
+              >
+                <LoadingSpinner
+                  size={52}
+                  label="Submitting your application…"
+                />
+              </div>
+            )}
+
             <div className="p-4 sm:p-8 lg:p-10">
               {submittedApplicationId ? (
                 /* Success Screen */
@@ -2433,6 +2449,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                             }
                             searchPlaceholder="Search city / district..."
                             disabled={!stateName || isLocationsLoading}
+                            isLoading={isLocationsLoading}
                             hasError={Boolean(errors.city)}
                             isValid={Boolean(city) && city !== '__OTHER__'}
                             onFocusTrigger={() => setActiveStep(1)}
@@ -2565,6 +2582,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                             }
                             searchPlaceholder="Search PIN code or area..."
                             disabled={!city || isLocationsLoading}
+                            isLoading={isLocationsLoading}
                             hasError={Boolean(errors.pincode)}
                             isValid={/^\d{6}$/.test(pincode)}
                             onFocusTrigger={() => setActiveStep(1)}
