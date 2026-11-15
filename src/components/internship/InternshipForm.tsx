@@ -13,7 +13,6 @@ import {
   ChevronDown,
   Copy,
   GraduationCap,
-  Pencil,
   Search,
   User,
 } from 'lucide-react';
@@ -1487,10 +1486,17 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
     }
   };
 
-  const jumpToFormSection = (section: 'personal' | 'internship' | 'specific') => {
+  const jumpToFormSection = (
+    section: 'personal' | 'internship' | 'specific' | 'confirmed'
+  ) => {
     setSubmitError(null);
     setIsReviewing(false);
     setTimeout(() => {
+      if (section === 'confirmed') {
+        const confirmedEl = document.getElementById('internship-confirmed');
+        confirmedEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
       const target =
         section === 'personal'
           ? personalSectionRef.current
@@ -1682,7 +1688,427 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
       </section>
 
       {/* Main Content */}
-      <section className="py-8 sm:py-12 lg:py-16 bg-[#F4F7FC]">
+      <section
+        className={`py-8 sm:py-12 lg:py-16 ${
+          isReviewing && !submittedApplicationId ? 'bg-white' : 'bg-[#F4F7FC]'
+        }`}
+      >
+        {isReviewing && !submittedApplicationId ? (
+          <div className="relative max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 rounded-2xl">
+            {isSubmitting && (
+              <div
+                className="absolute inset-0 z-20 rounded-2xl bg-[rgba(255,255,255,0.72)] backdrop-blur-[2px] flex items-center justify-center p-6"
+                aria-busy="true"
+              >
+                <LoadingSpinner
+                  size={52}
+                  label="Submitting your application…"
+                />
+              </div>
+            )}
+
+            <div className="space-y-8 sm:space-y-10">
+              {/* Top of the Review Step */}
+              <div className="space-y-6 pb-6 border-b border-[#E2E8F0]">
+                <p className="text-[15px] sm:text-base leading-relaxed">
+                  <span className="text-slate-500">You are applying for –</span>{' '}
+                  <span className="font-bold text-[#1C35EA]">
+                    {isStudent ? 'Student Internship' : 'Professional Internship'} · {resolvedCourse}
+                  </span>
+                </p>
+
+                {/* 4-dot Connected Progress Stepper */}
+                <nav aria-label="Application progress" className="w-full pt-1">
+                  <ol className="relative grid grid-cols-4 items-start">
+                    <div
+                      aria-hidden="true"
+                      className="absolute top-[11px] left-[12.5%] right-[12.5%] h-[2.5px] rounded-full"
+                      style={{
+                        background:
+                          'linear-gradient(90deg, #00B0F0 0%, #1C35EA 50%, #4D19EA 100%)',
+                      }}
+                    />
+                    {[
+                      'Personal Details',
+                      'Internship Details',
+                      isStudent ? 'College Details' : 'Work Details',
+                      'Review',
+                    ].map((stepLabel, index) => {
+                      const isReviewDot = index === 3;
+                      return (
+                        <li
+                          key={stepLabel}
+                          className="relative z-10 flex flex-col items-center text-center px-1 min-w-0"
+                          aria-current={isReviewDot ? 'step' : undefined}
+                        >
+                          <span className="h-6 flex items-center justify-center">
+                            <span
+                              className={
+                                isReviewDot
+                                  ? 'w-[18px] h-[18px] rounded-full bg-[#4D19EA] ring-4 ring-[#4D19EA]/20'
+                                  : 'w-3.5 h-3.5 rounded-full bg-[#4D19EA]'
+                              }
+                            />
+                          </span>
+                          <span className="mt-2 text-[13px] leading-[1.3] font-semibold text-[#4D19EA] break-words">
+                            {stepLabel}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                </nav>
+              </div>
+
+              {/* Section 1: Personal Details */}
+              <section className="pb-8 border-b border-[#E2E8F0]">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-5">
+                  <h2
+                    data-no-scroll-zoom
+                    className="!font-['Outfit','Plus_Jakarta_Sans',sans-serif] !text-[26px] sm:!text-[28px] !font-normal leading-[1.25] tracking-[-0.01em] text-[#14205A] after:!hidden after:!content-none"
+                  >
+                    Personal Details
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => jumpToFormSection('personal')}
+                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center"
+                  >
+                    Edit
+                  </button>
+                </div>
+
+                <dl className="space-y-5">
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      Full name
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                      {fullName.trim()}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      Email
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-all">
+                      {email.trim()}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      Phone
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5">
+                      {(() => {
+                        const digits = phone.replace(/\D/g, '').slice(-10);
+                        return digits.length === 10
+                          ? `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`
+                          : `+91 ${phone}`;
+                      })()}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      Address
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 whitespace-pre-line break-words">
+                      {address.trim()}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      Area / Locality
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                      {resolvedArea}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      City / District
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                      {resolvedCity}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      State
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                      {stateName}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      PIN code
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5">
+                      {resolvedPincode}
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+
+              {/* Section 2: Internship Details */}
+              <section className="pb-8 border-b border-[#E2E8F0]">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-5">
+                  <h2
+                    data-no-scroll-zoom
+                    className="!font-['Outfit','Plus_Jakarta_Sans',sans-serif] !text-[26px] sm:!text-[28px] !font-normal leading-[1.25] tracking-[-0.01em] text-[#14205A] after:!hidden after:!content-none"
+                  >
+                    Internship Details
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => jumpToFormSection('internship')}
+                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center"
+                  >
+                    Edit
+                  </button>
+                </div>
+
+                <dl className="space-y-5">
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      Internship type
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5">
+                      {isStudent ? 'Student Internship' : 'Professional Internship'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      Course / Domain
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                      {resolvedCourse}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      Duration
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5">
+                      {durationMonths} {Number(durationMonths) === 1 ? 'month' : 'months'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      Start date
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5">
+                      {formatDisplayDate(startDate)}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      End date
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5">
+                      {formatDisplayDate(endDate)}
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+
+              {/* Section 3: College Details (student) or Work Details (professional) */}
+              {isStudent ? (
+                <section className="pb-8 border-b border-[#E2E8F0]">
+                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-5">
+                    <h2
+                      data-no-scroll-zoom
+                      className="!font-['Outfit','Plus_Jakarta_Sans',sans-serif] !text-[26px] sm:!text-[28px] !font-normal leading-[1.25] tracking-[-0.01em] text-[#14205A] after:!hidden after:!content-none"
+                    >
+                      College Details
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={() => jumpToFormSection('specific')}
+                      className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center"
+                    >
+                      Edit
+                    </button>
+                  </div>
+
+                  <dl className="space-y-5">
+                    <div>
+                      <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                        College name
+                      </dt>
+                      <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                        {college.trim()}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                        Degree
+                      </dt>
+                      <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                        {resolvedDegree}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                        Department
+                      </dt>
+                      <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                        {resolvedDepartment}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                        Semester
+                      </dt>
+                      <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5">
+                        {semester === 'Completed' ? 'Completed' : `Semester ${semester}`}
+                      </dd>
+                    </div>
+                  </dl>
+                </section>
+              ) : (
+                <section className="pb-8 border-b border-[#E2E8F0]">
+                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-5">
+                    <h2
+                      data-no-scroll-zoom
+                      className="!font-['Outfit','Plus_Jakarta_Sans',sans-serif] !text-[26px] sm:!text-[28px] !font-normal leading-[1.25] tracking-[-0.01em] text-[#14205A] after:!hidden after:!content-none"
+                    >
+                      Work Details
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={() => jumpToFormSection('specific')}
+                      className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center"
+                    >
+                      Edit
+                    </button>
+                  </div>
+
+                  <dl className="space-y-5">
+                    <div>
+                      <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                        Highest qualification
+                      </dt>
+                      <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                        {resolvedQualification}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                        Currently working
+                      </dt>
+                      <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5">
+                        {currentlyWorking}
+                      </dd>
+                    </div>
+                    {currentlyWorking === 'Yes' && (
+                      <>
+                        <div>
+                          <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                            Company
+                          </dt>
+                          <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                            {company.trim()}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                            Designation
+                          </dt>
+                          <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5 break-words">
+                            {designation.trim()}
+                          </dd>
+                        </div>
+                      </>
+                    )}
+                  </dl>
+                </section>
+              )}
+
+              {/* Section 4: Declaration */}
+              <section className="pb-8 border-b border-[#E2E8F0]">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-5">
+                  <h2
+                    data-no-scroll-zoom
+                    className="!font-['Outfit','Plus_Jakarta_Sans',sans-serif] !text-[26px] sm:!text-[28px] !font-normal leading-[1.25] tracking-[-0.01em] text-[#14205A] after:!hidden after:!content-none"
+                  >
+                    Declaration
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => jumpToFormSection('confirmed')}
+                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center"
+                  >
+                    Edit
+                  </button>
+                </div>
+
+                <dl className="space-y-5">
+                  <div>
+                    <dt className="text-[15px] font-normal text-[#334155] leading-snug">
+                      I confirm these details are correct.
+                    </dt>
+                    <dd className="text-[15px] font-semibold text-[#14205A] leading-relaxed mt-0.5">
+                      Agreed
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+
+              {/* Certificate Name Note */}
+              <div className="rounded-xl bg-[#F0F5FF] border border-[#DBEAFE] px-5 py-4 sm:px-6 sm:py-5 space-y-1">
+                <p className="text-[14px] sm:text-[15px] font-normal text-[#334155]">
+                  Your name will appear on the certificate exactly as:
+                </p>
+                <div className="!font-['Outfit','Plus_Jakarta_Sans',sans-serif] text-xl sm:text-2xl font-bold text-[#14205A] break-words">
+                  {fullName.trim()}
+                </div>
+              </div>
+
+              {submitError && (
+                <div
+                  role="alert"
+                  className="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-sm flex items-start gap-2.5"
+                >
+                  <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                  <span>{submitError}</span>
+                </div>
+              )}
+
+              {/* Bottom Buttons */}
+              <div className="pt-2 grid grid-cols-2 sm:flex sm:items-center sm:justify-between gap-3">
+                <button
+                  type="button"
+                  disabled={isSubmitting}
+                  onClick={() => {
+                    setSubmitError(null);
+                    setIsReviewing(false);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="w-full sm:w-auto sm:min-w-[140px] h-12 min-h-[48px] px-3 sm:px-6 rounded-xl border-2 border-[#1C35EA] bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-sm transition-colors inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
+                >
+                  <ArrowLeft className="w-4 h-4 shrink-0" />
+                  <span>Previous</span>
+                </button>
+
+                <button
+                  type="button"
+                  disabled={isSubmitting}
+                  onClick={handleFinalSubmit}
+                  className="w-full sm:w-auto sm:min-w-[180px] h-12 min-h-[48px] px-3 sm:px-6 rounded-xl text-white font-semibold text-[13px] sm:text-sm shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] motion-reduce:hover:translate-y-0 active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 whitespace-nowrap"
+                  style={{
+                    background:
+                      'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
+                  }}
+                >
+                  <span>Submit application</span>
+                  <ArrowRight className="w-4 h-4 shrink-0 hidden sm:inline" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
         <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 space-y-6">
           {/* Step Progress Bar */}
           {!submittedApplicationId && (
@@ -1825,275 +2251,6 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                       <ArrowLeft className="w-4 h-4 shrink-0" />
                       <span>Back to Training</span>
                     </Link>
-                  </div>
-                </div>
-              ) : isReviewing ? (
-                /* Review Before Submit Screen */
-                <div className="space-y-8">
-                  <div className="space-y-1.5 border-b border-slate-200 pb-4">
-                    <div className="text-xs font-mono uppercase tracking-widest text-[#1C35EA] font-bold">
-                      REVIEW DETAILS
-                    </div>
-                    <h2 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#1E3A8A]">
-                      Review your application
-                    </h2>
-                  </div>
-
-                  {/* Certificate Name Card */}
-                  <div className="rounded-2xl bg-gradient-to-r from-[#00B0F0]/10 via-[#1C35EA]/10 to-[#4D19EA]/10 border border-[#1C35EA]/20 p-5 sm:p-6 space-y-1.5">
-                    <div className="text-xs font-mono uppercase tracking-wider text-[#1C35EA] font-bold">
-                      Full name
-                    </div>
-                    <div className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-bold text-[#1E3A8A] break-words">
-                      {fullName.trim()}
-                    </div>
-                    <p className="text-sm font-medium text-slate-700 pt-1">
-                      Your name will appear on the certificate exactly like this.
-                    </p>
-                  </div>
-
-                  {/* Review Section 1: Personal details */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                      <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base sm:text-lg font-bold text-[#1E3A8A] flex items-center gap-2.5">
-                        <span className="w-8 h-8 rounded-full bg-[#1C35EA]/10 text-[#1C35EA] flex items-center justify-center shrink-0">
-                          <User className="w-4 h-4" />
-                        </span>
-                        <span>Personal details</span>
-                      </h3>
-                      <button
-                        type="button"
-                        onClick={() => jumpToFormSection('personal')}
-                        className="min-h-[44px] px-2.5 inline-flex items-center gap-1 text-sm font-semibold text-[#1C35EA] hover:text-[#4D19EA] transition-colors cursor-pointer"
-                      >
-                        <Pencil className="w-3.5 h-3.5" />
-                        <span>Edit</span>
-                      </button>
-                    </div>
-                    <dl className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                        <dt className="text-xs font-semibold text-slate-500">Email</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5 break-all">
-                          {email.trim()}
-                        </dd>
-                      </div>
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                        <dt className="text-xs font-semibold text-slate-500">Phone</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5">+91 {phone}</dd>
-                      </div>
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80 md:col-span-2">
-                        <dt className="text-xs font-semibold text-slate-500">Address</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5 whitespace-pre-line break-words">
-                          {address.trim()}
-                        </dd>
-                      </div>
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                        <dt className="text-xs font-semibold text-slate-500">State</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5">{stateName}</dd>
-                      </div>
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                        <dt className="text-xs font-semibold text-slate-500">City / District</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5">{resolvedCity}</dd>
-                      </div>
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                        <dt className="text-xs font-semibold text-slate-500">PIN code</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5">{resolvedPincode}</dd>
-                      </div>
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                        <dt className="text-xs font-semibold text-slate-500">Area / Locality</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5">{resolvedArea}</dd>
-                      </div>
-                    </dl>
-                  </div>
-
-                  {/* Review Section 2: Internship details */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                      <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base sm:text-lg font-bold text-[#1E3A8A] flex items-center gap-2.5">
-                        <span className="w-8 h-8 rounded-full bg-[#1C35EA]/10 text-[#1C35EA] flex items-center justify-center shrink-0">
-                          <BookOpen className="w-4 h-4" />
-                        </span>
-                        <span>Internship details</span>
-                      </h3>
-                      <button
-                        type="button"
-                        onClick={() => jumpToFormSection('internship')}
-                        className="min-h-[44px] px-2.5 inline-flex items-center gap-1 text-sm font-semibold text-[#1C35EA] hover:text-[#4D19EA] transition-colors cursor-pointer"
-                      >
-                        <Pencil className="w-3.5 h-3.5" />
-                        <span>Edit</span>
-                      </button>
-                    </div>
-                    <dl className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                        <dt className="text-xs font-semibold text-slate-500">Course</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5">{resolvedCourse}</dd>
-                      </div>
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                        <dt className="text-xs font-semibold text-slate-500">Duration</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5">
-                          {durationMonths} {Number(durationMonths) === 1 ? 'Month' : 'Months'}
-                        </dd>
-                      </div>
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                        <dt className="text-xs font-semibold text-slate-500">Start date</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5">
-                          {formatDisplayDate(startDate)}
-                        </dd>
-                      </div>
-                      <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                        <dt className="text-xs font-semibold text-slate-500">End date</dt>
-                        <dd className="text-slate-900 font-medium mt-0.5">
-                          {formatDisplayDate(endDate)}
-                        </dd>
-                      </div>
-                    </dl>
-                  </div>
-
-                  {/* Review Section 3: College details OR Work details */}
-                  {isStudent ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                        <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base sm:text-lg font-bold text-[#1E3A8A] flex items-center gap-2.5">
-                          <span className="w-8 h-8 rounded-full bg-[#1C35EA]/10 text-[#1C35EA] flex items-center justify-center shrink-0">
-                            <GraduationCap className="w-4 h-4" />
-                          </span>
-                          <span>College details</span>
-                        </h3>
-                        <button
-                          type="button"
-                          onClick={() => jumpToFormSection('specific')}
-                          className="min-h-[44px] px-2.5 inline-flex items-center gap-1 text-sm font-semibold text-[#1C35EA] hover:text-[#4D19EA] transition-colors cursor-pointer"
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                          <span>Edit</span>
-                        </button>
-                      </div>
-                      <dl className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                          <dt className="text-xs font-semibold text-slate-500">College name</dt>
-                          <dd className="text-slate-900 font-medium mt-0.5">{college.trim()}</dd>
-                        </div>
-                        <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                          <dt className="text-xs font-semibold text-slate-500">Degree</dt>
-                          <dd className="text-slate-900 font-medium mt-0.5">{resolvedDegree}</dd>
-                        </div>
-                        <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                          <dt className="text-xs font-semibold text-slate-500">Department</dt>
-                          <dd className="text-slate-900 font-medium mt-0.5">
-                            {resolvedDepartment}
-                          </dd>
-                        </div>
-                        <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                          <dt className="text-xs font-semibold text-slate-500">Semester</dt>
-                          <dd className="text-slate-900 font-medium mt-0.5">
-                            {semester === 'Completed' ? 'Completed' : `Semester ${semester}`}
-                          </dd>
-                        </div>
-                      </dl>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                        <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base sm:text-lg font-bold text-[#1E3A8A] flex items-center gap-2.5">
-                          <span className="w-8 h-8 rounded-full bg-[#1C35EA]/10 text-[#1C35EA] flex items-center justify-center shrink-0">
-                            <Building2 className="w-4 h-4" />
-                          </span>
-                          <span>Work details</span>
-                        </h3>
-                        <button
-                          type="button"
-                          onClick={() => jumpToFormSection('specific')}
-                          className="min-h-[44px] px-2.5 inline-flex items-center gap-1 text-sm font-semibold text-[#1C35EA] hover:text-[#4D19EA] transition-colors cursor-pointer"
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                          <span>Edit</span>
-                        </button>
-                      </div>
-                      <dl className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                          <dt className="text-xs font-semibold text-slate-500">
-                            Highest qualification
-                          </dt>
-                          <dd className="text-slate-900 font-medium mt-0.5">
-                            {resolvedQualification}
-                          </dd>
-                        </div>
-                        <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                          <dt className="text-xs font-semibold text-slate-500">
-                            Currently working?
-                          </dt>
-                          <dd className="text-slate-900 font-medium mt-0.5">{currentlyWorking}</dd>
-                        </div>
-                        {currentlyWorking === 'Yes' && (
-                          <>
-                            <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                              <dt className="text-xs font-semibold text-slate-500">
-                                Current company
-                              </dt>
-                              <dd className="text-slate-900 font-medium mt-0.5">
-                                {company.trim()}
-                              </dd>
-                            </div>
-                            <div className="bg-[#F4F7FC] rounded-xl p-3.5 border border-slate-200/80">
-                              <dt className="text-xs font-semibold text-slate-500">Designation</dt>
-                              <dd className="text-slate-900 font-medium mt-0.5">
-                                {designation.trim()}
-                              </dd>
-                            </div>
-                          </>
-                        )}
-                      </dl>
-                    </div>
-                  )}
-
-                  {submitError && (
-                    <div
-                      role="alert"
-                      className="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-sm flex items-start gap-2.5"
-                    >
-                      <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                      <span>{submitError}</span>
-                    </div>
-                  )}
-
-                  <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                    <button
-                      type="button"
-                      disabled={isSubmitting}
-                      onClick={() => {
-                        setSubmitError(null);
-                        setIsReviewing(false);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className="min-h-[48px] px-6 py-3 rounded-xl border-2 border-[#1C35EA] bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-sm transition-colors inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                    >
-                      <ArrowLeft className="w-4 h-4 shrink-0" />
-                      <span>Edit details</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      disabled={isSubmitting}
-                      onClick={handleFinalSubmit}
-                      className="min-h-[48px] px-6 py-3 sm:min-w-[220px] rounded-xl text-white font-semibold text-sm shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] motion-reduce:hover:translate-y-0 active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-                      style={{
-                        background:
-                          'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
-                      }}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          <span>Submitting...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Submit application</span>
-                          <ArrowRight className="w-4 h-4 shrink-0" />
-                        </>
-                      )}
-                    </button>
                   </div>
                 </div>
               ) : (
@@ -3577,6 +3734,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
             </div>
           </div>
         </div>
+        )}
       </section>
     </div>
   );
