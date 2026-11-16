@@ -66,6 +66,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
   data,
   containerRef,
 }) => {
+  const [signatureLoadFailed, setSignatureLoadFailed] = React.useState(false);
   const isStudent = data.type === 'student';
   const displayName = data.fullName.trim() || 'Applicant Full Name';
   const displayCourse = data.course.trim() || 'Course Name';
@@ -716,7 +717,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           </span>
         </div>
 
-        {/* Right: Signature (fixed 56px height + 6px space before printed name) + Hari Prasanna.R + Founder & CEO */}
+        {/* Right: Signature (fixed 64px height + 6px space before printed name) + Hari Prasanna.R + Founder & CEO */}
         <div
           style={{
             width: '210px',
@@ -729,7 +730,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
         >
           <div
             style={{
-              height: '56px',
+              height: '64px',
               display: 'flex',
               alignItems: 'flex-end',
               justifyContent: 'flex-end',
@@ -737,13 +738,17 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
               boxSizing: 'border-box',
             }}
           >
-            {SIGNATURE_URL ? (
+            {SIGNATURE_URL && !signatureLoadFailed ? (
               <img
                 src={SIGNATURE_URL}
                 alt="Signature of Hari Prasanna.R"
-                crossOrigin="anonymous"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  setSignatureLoadFailed(true);
+                }}
                 style={{
-                  maxHeight: '52px',
+                  maxHeight: '62px',
+                  maxWidth: '190px',
                   width: 'auto',
                   objectFit: 'contain',
                   display: 'block',
