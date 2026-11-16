@@ -19,8 +19,7 @@ import {
   updateDoc,
   type Timestamp,
 } from 'firebase/firestore';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
+import { downloadCertificatePdf } from '../lib/certificatePdf';
 import {
   AlertCircle,
   Award,
@@ -245,28 +244,6 @@ function extractFirebaseErrorCode(err: unknown): string {
   if (code) return code;
   const msg = (err as { message?: string })?.message;
   return msg || 'unknown-error';
-}
-
-async function waitForImagesInContainer(container: HTMLElement): Promise<void> {
-  const images = Array.from(container.querySelectorAll('img'));
-  await Promise.all(
-    images.map(
-      (img) =>
-        new Promise<void>((resolve) => {
-          if (img.complete && img.naturalWidth > 0) {
-            resolve();
-            return;
-          }
-          const onDone = () => {
-            img.removeEventListener('load', onDone);
-            img.removeEventListener('error', onDone);
-            resolve();
-          };
-          img.addEventListener('load', onDone);
-          img.addEventListener('error', onDone);
-        })
-    )
-  );
 }
 
 const AdminPage: React.FC = () => {
@@ -1071,37 +1048,12 @@ const AdminPage: React.FC = () => {
         });
       });
 
-      if (typeof document !== 'undefined' && document.fonts?.ready) {
-        await document.fonts.ready;
-      }
-
       const captureElement = pdfCaptureRef.current;
       if (!captureElement) {
         throw new Error('Certificate capture element not ready.');
       }
 
-      await waitForImagesInContainer(captureElement);
-
-      const canvas = await html2canvas(captureElement, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#FFFFFF',
-        width: 794,
-        height: 1123,
-        windowWidth: 794,
-        windowHeight: 1123,
-      });
-
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      });
-
-      pdf.addImage(imgData, 'PNG', 0, 0, 210, 297, undefined, 'FAST');
-      pdf.save(`IAMTECHNI-Certificate-${targetId}.pdf`);
+      await downloadCertificatePdf(captureElement, targetId);
       setToastMessage(`Downloaded IAMTECHNI-Certificate-${targetId}.pdf`);
     } catch (err) {
       setCertFirebaseErrorCode(extractFirebaseErrorCode(err));

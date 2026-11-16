@@ -206,207 +206,24 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '54px 56px 36px 56px',
+          padding: '64px 56px 34px 56px',
           boxSizing: 'border-box',
           textAlign: 'center',
         }}
       >
-        {/* Top Headings Block */}
+        {/* Grouped Main Content Stack: Title/Subtitle, Recipient/Paragraph, Key Areas (evenly spread, max gap ~38px) */}
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: '100%',
-          }}
-        >
-          <div
-            style={{
-              fontFamily: FONT_NEWSREADER,
-              fontSize: '40px',
-              fontWeight: 600,
-              color: '#2A3366',
-              lineHeight: 1.15,
-              letterSpacing: '-0.01em',
-              marginBottom: '10px',
-            }}
-          >
-            Certificate of Internship
-          </div>
-
-          <div
-            style={{
-              fontFamily: FONT_NEWSREADER,
-              fontSize: '24px',
-              fontWeight: 500,
-              color: '#14205A',
-              lineHeight: 1.25,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {isStudent
-              ? 'Student Internship Program'
-              : 'Professional Internship Program'}
-          </div>
-
-          {/* Decorative subtle accent bar */}
-          <div
-            style={{
-              width: '72px',
-              height: '3px',
-              borderRadius: '999px',
-              background: BRAND_GRADIENT_HORIZONTAL,
-              marginTop: '18px',
-            }}
-          />
-        </div>
-
-        {/* Center Recipient & Paragraph Block with faint symbol watermark behind the name */}
-        <div
-          style={{
-            position: 'relative',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            padding: '10px 0',
+            flex: 1,
+            gap: '36px',
           }}
         >
-          {/* Faint watermark of /iamtechni-symbol.png (about 150px wide, opacity 0.06) centred behind the name */}
-          <img
-            src="/iamtechni-symbol.png"
-            alt=""
-            aria-hidden="true"
-            crossOrigin="anonymous"
-            style={{
-              position: 'absolute',
-              top: '48px',
-              left: '50%',
-              transform: 'translate(-50%, -25%)',
-              width: '150px',
-              height: 'auto',
-              opacity: 0.06,
-              pointerEvents: 'none',
-              zIndex: 0,
-            }}
-          />
-
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 1,
-              fontFamily: FONT_MANROPE,
-              fontSize: '15px',
-              fontWeight: 500,
-              color: '#3B4157',
-              lineHeight: 1.4,
-              marginBottom: '12px',
-            }}
-          >
-            This is to certify that
-          </div>
-
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 1,
-              fontFamily: FONT_NEWSREADER,
-              fontSize: '52px',
-              fontWeight: 600,
-              color: '#14205A',
-              lineHeight: 1.12,
-              letterSpacing: '-0.01em',
-              marginBottom: '20px',
-              maxWidth: '650px',
-              wordBreak: 'break-word',
-            }}
-          >
-            {displayName}
-          </div>
-
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 1,
-              fontFamily: FONT_MANROPE,
-              fontSize: '16px',
-              fontWeight: 400,
-              lineHeight: 1.6,
-              color: '#3B4157',
-              maxWidth: '560px',
-              margin: '0 auto',
-            }}
-          >
-            {isStudent ? (
-              <>
-                a student of{' '}
-                <strong style={{ fontWeight: 700, color: '#14205A' }}>
-                  {displayCollege}
-                </strong>
-                , has successfully completed a{' '}
-                <strong style={{ fontWeight: 700, color: '#14205A' }}>
-                  {durationNum}-month
-                </strong>{' '}
-                internship in{' '}
-                <strong style={{ fontWeight: 700, color: '#14205A' }}>
-                  {displayCourse}
-                </strong>{' '}
-                at{' '}
-                <strong style={{ fontWeight: 700, color: '#14205A' }}>
-                  IAMTECHNI
-                </strong>{' '}
-                from{' '}
-                <strong style={{ fontWeight: 600, color: '#14205A' }}>
-                  {formattedStart}
-                </strong>{' '}
-                to{' '}
-                <strong style={{ fontWeight: 600, color: '#14205A' }}>
-                  {formattedEnd}
-                </strong>
-                , demonstrating dedication, a strong learning attitude and
-                practical skills in real-world {displayCourse} projects.
-              </>
-            ) : (
-              <>
-                has successfully completed a{' '}
-                <strong style={{ fontWeight: 700, color: '#14205A' }}>
-                  {durationNum}-month
-                </strong>{' '}
-                Professional Internship in{' '}
-                <strong style={{ fontWeight: 700, color: '#14205A' }}>
-                  {displayCourse}
-                </strong>{' '}
-                at{' '}
-                <strong style={{ fontWeight: 700, color: '#14205A' }}>
-                  IAMTECHNI
-                </strong>{' '}
-                from{' '}
-                <strong style={{ fontWeight: 600, color: '#14205A' }}>
-                  {formattedStart}
-                </strong>{' '}
-                to{' '}
-                <strong style={{ fontWeight: 600, color: '#14205A' }}>
-                  {formattedEnd}
-                </strong>
-                , demonstrating dedication, a strong learning attitude and
-                practical skills in real-world {displayCourse} projects.
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Key Areas of Work + Issuing Date / Value ID Row */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: '100%',
-            gap: '26px',
-          }}
-        >
-          {/* KEY AREAS OF WORK */}
+          {/* 1. Title & Program Subtitle Block */}
           <div
             style={{
               display: 'flex',
@@ -417,9 +234,198 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           >
             <div
               style={{
+                fontFamily: FONT_NEWSREADER,
+                fontSize: '40px',
+                fontWeight: 600,
+                color: '#2A3366',
+                lineHeight: 1.15,
+                letterSpacing: '-0.01em',
+                marginBottom: '10px',
+              }}
+            >
+              Certificate of Internship
+            </div>
+
+            <div
+              style={{
+                fontFamily: FONT_NEWSREADER,
+                fontSize: '24px',
+                fontWeight: 500,
+                color: '#14205A',
+                lineHeight: 1.25,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {isStudent
+                ? 'Student Internship Program'
+                : 'Professional Internship Program'}
+            </div>
+
+            {/* Decorative subtle accent bar */}
+            <div
+              style={{
+                width: '72px',
+                height: '3px',
+                borderRadius: '999px',
+                background: BRAND_GRADIENT_HORIZONTAL,
+                marginTop: '16px',
+              }}
+            />
+          </div>
+
+          {/* 2. Center Recipient & Paragraph Block with faint symbol watermark behind the name */}
+          <div
+            style={{
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+            }}
+          >
+            {/* Faint watermark of /iamtechni-symbol.png (about 150px wide, opacity 0.06) centred behind the name */}
+            <img
+              src="/iamtechni-symbol.png"
+              alt=""
+              aria-hidden="true"
+              crossOrigin="anonymous"
+              style={{
+                position: 'absolute',
+                top: '56px',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '150px',
+                height: 'auto',
+                opacity: 0.06,
+                pointerEvents: 'none',
+                zIndex: 0,
+              }}
+            />
+
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                fontFamily: FONT_MANROPE,
+                fontSize: '15px',
+                fontWeight: 500,
+                color: '#3B4157',
+                lineHeight: 1.4,
+                marginBottom: '10px',
+              }}
+            >
+              This is to certify that
+            </div>
+
+            {/* Full Name with 16px space below before the paragraph */}
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                fontFamily: FONT_NEWSREADER,
+                fontSize: '52px',
+                fontWeight: 600,
+                color: '#14205A',
+                lineHeight: 1.12,
+                letterSpacing: '-0.01em',
+                marginBottom: '16px',
+                maxWidth: '650px',
+                wordBreak: 'break-word',
+              }}
+            >
+              {displayName}
+            </div>
+
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                fontFamily: FONT_MANROPE,
+                fontSize: '16px',
+                fontWeight: 400,
+                lineHeight: 1.6,
+                color: '#3B4157',
+                maxWidth: '560px',
+                margin: '0 auto',
+              }}
+            >
+              {isStudent ? (
+                <>
+                  a student of{' '}
+                  <strong style={{ fontWeight: 700, color: '#14205A' }}>
+                    {displayCollege}
+                  </strong>
+                  , has successfully completed a{' '}
+                  <strong style={{ fontWeight: 700, color: '#14205A' }}>
+                    {durationNum}-month
+                  </strong>{' '}
+                  internship in{' '}
+                  <strong style={{ fontWeight: 700, color: '#14205A' }}>
+                    {displayCourse}
+                  </strong>{' '}
+                  at{' '}
+                  <strong style={{ fontWeight: 700, color: '#14205A' }}>
+                    IAMTECHNI
+                  </strong>{' '}
+                  from{' '}
+                  <strong style={{ fontWeight: 600, color: '#14205A' }}>
+                    {formattedStart}
+                  </strong>{' '}
+                  to{' '}
+                  <strong style={{ fontWeight: 600, color: '#14205A' }}>
+                    {formattedEnd}
+                  </strong>
+                  , demonstrating dedication, a strong learning attitude and
+                  practical skills in real-world {displayCourse} projects.
+                </>
+              ) : (
+                <>
+                  has successfully completed a{' '}
+                  <strong style={{ fontWeight: 700, color: '#14205A' }}>
+                    {durationNum}-month
+                  </strong>{' '}
+                  Professional Internship in{' '}
+                  <strong style={{ fontWeight: 700, color: '#14205A' }}>
+                    {displayCourse}
+                  </strong>{' '}
+                  at{' '}
+                  <strong style={{ fontWeight: 700, color: '#14205A' }}>
+                    IAMTECHNI
+                  </strong>{' '}
+                  from{' '}
+                  <strong style={{ fontWeight: 600, color: '#14205A' }}>
+                    {formattedStart}
+                  </strong>{' '}
+                  to{' '}
+                  <strong style={{ fontWeight: 600, color: '#14205A' }}>
+                    {formattedEnd}
+                  </strong>
+                  , demonstrating dedication, a strong learning attitude and
+                  practical skills in real-world {displayCourse} projects.
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* 3. KEY AREAS OF WORK Block */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              width: '100%',
+            }}
+          >
+            <div
+              data-cert-key-areas-pill="true"
+              style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                height: '24px',
+                lineHeight: 1,
+                padding: '0 14px',
                 background: BRAND_GRADIENT_HORIZONTAL,
                 color: '#FFFFFF',
                 fontFamily: FONT_MANROPE,
@@ -427,14 +433,20 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 fontWeight: 700,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                padding: '6px 18px',
                 borderRadius: '9999px',
-                lineHeight: 1.2,
                 marginBottom: '18px',
                 boxShadow: '0 4px 12px rgba(28, 53, 234, 0.18)',
+                boxSizing: 'border-box',
               }}
             >
-              KEY AREAS OF WORK
+              <span
+                style={{
+                  display: 'inline-block',
+                  lineHeight: 1,
+                }}
+              >
+                KEY AREAS OF WORK
+              </span>
             </div>
 
             {visibleSkills.length > 0 && (
@@ -500,69 +512,69 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
               </div>
             )}
           </div>
+        </div>
 
-          {/* Issuing date & Value ID two-column row */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'space-between',
-              width: '100%',
-              maxWidth: '580px',
-              paddingTop: '8px',
-            }}
-          >
-            <div style={{ textAlign: 'left' }}>
-              <div
-                style={{
-                  fontFamily: FONT_MANROPE,
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#64748B',
-                  lineHeight: 1.3,
-                  marginBottom: '4px',
-                }}
-              >
-                Issuing date
-              </div>
-              <div
-                style={{
-                  fontFamily: FONT_MANROPE,
-                  fontSize: '15px',
-                  fontWeight: 700,
-                  color: '#14205A',
-                  lineHeight: 1.3,
-                }}
-              >
-                {formattedIssue}
-              </div>
+        {/* Issuing date & Value ID two-column row */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            width: '100%',
+            maxWidth: '580px',
+            paddingTop: '12px',
+          }}
+        >
+          <div style={{ textAlign: 'left' }}>
+            <div
+              style={{
+                fontFamily: FONT_MANROPE,
+                fontSize: '12px',
+                fontWeight: 500,
+                color: '#64748B',
+                lineHeight: 1.3,
+                marginBottom: '4px',
+              }}
+            >
+              Issuing date
             </div>
+            <div
+              style={{
+                fontFamily: FONT_MANROPE,
+                fontSize: '15px',
+                fontWeight: 700,
+                color: '#14205A',
+                lineHeight: 1.3,
+              }}
+            >
+              {formattedIssue}
+            </div>
+          </div>
 
-            <div style={{ textAlign: 'right' }}>
-              <div
-                style={{
-                  fontFamily: FONT_MANROPE,
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#64748B',
-                  lineHeight: 1.3,
-                  marginBottom: '4px',
-                }}
-              >
-                Value ID
-              </div>
-              <div
-                style={{
-                  fontFamily: FONT_MANROPE,
-                  fontSize: '15px',
-                  fontWeight: 700,
-                  color: '#14205A',
-                  lineHeight: 1.3,
-                  letterSpacing: '0.02em',
-                }}
-              >
-                {displayCertId}
-              </div>
+          <div style={{ textAlign: 'right' }}>
+            <div
+              style={{
+                fontFamily: FONT_MANROPE,
+                fontSize: '12px',
+                fontWeight: 500,
+                color: '#64748B',
+                lineHeight: 1.3,
+                marginBottom: '4px',
+              }}
+            >
+              Value ID
+            </div>
+            <div
+              style={{
+                fontFamily: FONT_MANROPE,
+                fontSize: '15px',
+                fontWeight: 700,
+                color: '#14205A',
+                lineHeight: 1.3,
+                letterSpacing: '0.02em',
+              }}
+            >
+              {displayCertId}
             </div>
           </div>
         </div>
@@ -663,7 +675,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           </span>
         </div>
 
-        {/* Right: Signature + Hari Prasanna.R + Founder & CEO */}
+        {/* Right: Signature (fixed 56px height + 6px space before printed name) + Hari Prasanna.R + Founder & CEO */}
         <div
           style={{
             width: '210px',
@@ -674,43 +686,44 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             textAlign: 'right',
           }}
         >
-          {SIGNATURE_URL ? (
-            <img
-              src={SIGNATURE_URL}
-              alt="Signature of Hari Prasanna.R"
-              crossOrigin="anonymous"
-              style={{
-                height: '46px',
-                width: 'auto',
-                objectFit: 'contain',
-                marginBottom: '4px',
-                display: 'block',
-              }}
-            />
-          ) : (
-            <div
-              style={{
-                fontFamily: FONT_GREAT_VIBES,
-                fontSize: '34px',
-                fontWeight: 400,
-                color: '#14205A',
-                lineHeight: 1.15,
-                marginBottom: '2px',
-                paddingRight: '2px',
-              }}
-            >
-              Hari Prasanna.R
-            </div>
-          )}
-
           <div
             style={{
-              width: '150px',
-              height: '1px',
-              backgroundColor: '#CBD5E1',
+              height: '56px',
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
               marginBottom: '6px',
+              boxSizing: 'border-box',
             }}
-          />
+          >
+            {SIGNATURE_URL ? (
+              <img
+                src={SIGNATURE_URL}
+                alt="Signature of Hari Prasanna.R"
+                crossOrigin="anonymous"
+                style={{
+                  maxHeight: '52px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  fontFamily: FONT_GREAT_VIBES,
+                  fontSize: '34px',
+                  fontWeight: 400,
+                  color: '#14205A',
+                  lineHeight: 1.15,
+                  paddingRight: '2px',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Hari Prasanna.R
+              </div>
+            )}
+          </div>
 
           <div
             style={{

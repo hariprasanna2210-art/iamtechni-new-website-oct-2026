@@ -233,6 +233,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               </li>
               <li>
                 <button
+                  onClick={() => onNavigate('/verify')}
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                >
+                  Verify Certificate
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => onNavigate('/careers')}
                   className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >

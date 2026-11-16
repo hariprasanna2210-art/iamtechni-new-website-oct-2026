@@ -216,6 +216,7 @@ async function generateSitemap() {
     '/careers',
     '/faq',
     '/locations',
+    '/verify',
   ];
   for (const page of mainPages) {
     addLink(page, 'weekly', 0.8);

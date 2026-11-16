@@ -29,6 +29,7 @@ export type PageRoute =
   | '/training'
   | '/internship/student'
   | '/internship/professional'
+  | '/verify'
   | '/services/robotics'
   | '/industries'
   | '/industries/healthcare'

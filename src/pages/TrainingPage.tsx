@@ -1443,6 +1443,18 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
               </div>
             </div>
           </div>
+
+          <div className="mt-6 text-sm text-slate-600">
+            Already completed your internship?{' '}
+            <Link
+              to="/verify"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="font-semibold text-[#1C35EA] hover:underline inline-flex items-center gap-1"
+            >
+              <span>Verify a certificate</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
       </section>
 

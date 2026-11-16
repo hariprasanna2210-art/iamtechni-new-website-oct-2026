@@ -38,6 +38,7 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { SeoHead } from './components/common/SeoHead';
 
 const AdminPage = lazy(() => import('./pages/AdminPage'));
+const VerifyCertificatePage = lazy(() => import('./pages/VerifyCertificatePage'));
 
 import { servicesData, getCanonicalServiceSlug } from './data/servicesData';
 import {
@@ -698,6 +699,34 @@ export default function App() {
           <Route
             path="/internship/professional"
             element={<InternshipForm type="professional" onNavigate={navigate} />}
+          />
+          <Route
+            path="/verify/:certificateId"
+            element={
+              <Suspense
+                fallback={
+                  <div className="min-h-[70vh] flex items-center justify-center bg-[#F4F7FC] text-sm font-medium text-slate-600">
+                    Loading certificate verification…
+                  </div>
+                }
+              >
+                <VerifyCertificatePage onNavigate={navigate} />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/verify"
+            element={
+              <Suspense
+                fallback={
+                  <div className="min-h-[70vh] flex items-center justify-center bg-[#F4F7FC] text-sm font-medium text-slate-600">
+                    Loading certificate verification…
+                  </div>
+                }
+              >
+                <VerifyCertificatePage onNavigate={navigate} />
+              </Suspense>
+            }
           />
           <Route
             path="/admin"

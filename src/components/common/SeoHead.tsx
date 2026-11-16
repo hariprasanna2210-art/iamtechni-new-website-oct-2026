@@ -855,6 +855,42 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     };
   }
 
+  // Public Certificate Verification (/verify and /verify/:certificateId)
+  if (cleanPath === '/verify') {
+    structuredData.push(
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Technical Training', path: '/training' },
+        { name: 'Verify Certificate', path: '/verify' },
+      ])
+    );
+    return {
+      ...baseMeta,
+      title: 'Verify Certificate | IAMTECHNI',
+      description: formatMetaDescription(
+        'Enter the certificate number to check that an IAMTECHNI internship or training certificate is genuine and officially issued.'
+      ),
+      canonicalUrl: `${BASE_URL}/verify`,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData,
+    };
+  }
+
+  if (cleanPath.startsWith('/verify/')) {
+    return {
+      ...baseMeta,
+      title: 'Verify Certificate | IAMTECHNI',
+      description:
+        'Enter the certificate number to check that an IAMTECHNI certificate is genuine.',
+      canonicalUrl: `${BASE_URL}/verify`,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData: [],
+      noIndex: true,
+    };
+  }
+
   // Admin Console (/admin) — noindex, nofollow
   if (cleanPath === '/admin') {
     return {
@@ -932,7 +968,12 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
     <Helmet prioritizeSeoTags>
       <title>{seo.title}</title>
       <meta name="description" content={seo.description} />
-      {seo.noIndex && <meta name="robots" content="noindex, nofollow" />}
+      {seo.noIndex && (
+        <meta
+          name="robots"
+          content={cleanPath.startsWith('/verify/') ? 'noindex' : 'noindex, nofollow'}
+        />
+      )}
       <link rel="canonical" href={seo.canonicalUrl} />
       <meta property="og:type" content={seo.ogType} />
       <meta property="og:title" content={seo.title} />
