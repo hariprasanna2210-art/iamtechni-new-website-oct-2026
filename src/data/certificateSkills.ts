@@ -45,7 +45,7 @@ import {
   Wind,
 } from 'lucide-react';
 
-export const SIGNATURE_URL = '/hari-signature.png';
+export const SIGNATURE_URL = '/hari-signature.svg';
 
 export interface CertificateSkillConfig {
   name: string;
