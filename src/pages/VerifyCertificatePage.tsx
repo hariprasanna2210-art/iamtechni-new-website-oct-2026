@@ -70,20 +70,43 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
   const [certScale, setCertScale] = useState<number>(1);
   const lastLookedUpRef = useRef<string | null>(null);
 
-  // Compute responsive scale for the 794x1123 certificate so it is full size on desktop and scaled down on mobile, never cut off
+  // Measure available width with ResizeObserver so the 794x1123 certificate scales smoothly without clipping or horizontal scroll
   useEffect(() => {
-    const updateScale = () => {
-      const wrapper = certContainerWrapperRef.current;
-      if (!wrapper) return;
-      const availableWidth = wrapper.clientWidth;
-      if (availableWidth > 0) {
-        const nextScale = Math.min(1, availableWidth / 794);
+    const wrapper = certContainerWrapperRef.current;
+    if (!wrapper) return;
+
+    const updateFromWidth = (width: number) => {
+      if (width > 0) {
+        const nextScale = Math.min(1, width / 794);
         setCertScale(nextScale);
       }
     };
-    updateScale();
-    window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
+
+    updateFromWidth(wrapper.getBoundingClientRect().width || wrapper.clientWidth);
+
+    let observer: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      observer = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const width =
+            entry.contentRect?.width ||
+            wrapper.getBoundingClientRect().width ||
+            wrapper.clientWidth;
+          updateFromWidth(width);
+        }
+      });
+      observer.observe(wrapper);
+    }
+
+    const handleWindowResize = () => {
+      updateFromWidth(wrapper.getBoundingClientRect().width || wrapper.clientWidth);
+    };
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      if (observer) observer.disconnect();
+      window.removeEventListener('resize', handleWindowResize);
+    };
   }, [verifiedData]);
 
   const performVerification = useCallback(async (rawId: string) => {
@@ -131,7 +154,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
         issueDate: String(d.issueDate ?? ''),
         college: String(d.college ?? ''),
         keyAreas: Array.isArray(d.keyAreas)
-          ? d.keyAreas.map((item) => String(item)).slice(0, 6)
+          ? d.keyAreas.map((item) => String(item)).slice(0, 12)
           : [],
         status: d.status === 'revoked' ? 'revoked' : 'valid',
       };
@@ -233,8 +256,19 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
     verifyLinkUrl
   )}`;
 
+  const scaledWidth = Math.floor(794 * certScale);
+  const scaledHeight = Math.ceil(1123 * certScale);
+
   return (
-    <div className="w-full min-w-0 bg-[#F4F7FC] min-h-[75vh] pb-16">
+    <div
+      className="w-full min-w-0 overflow-x-hidden bg-[#F4F7FC] min-h-[75vh] pb-16"
+      style={{
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
+        paddingBottom: 'calc(4rem + env(safe-area-inset-bottom))',
+        fontSize: 'clamp(14px, 0.95vw, 17px)',
+      }}
+    >
       <Helmet>
         <title>
           {isParamRoute
@@ -252,9 +286,26 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
         />
       </Helmet>
 
-      {/* Print-only stylesheet so window.print() prints the certificate cleanly */}
+      {/* Print-only stylesheet: prints ONLY the A4 portrait certificate full page with no site header/footer */}
       <style>{`
+        @page {
+          size: A4 portrait;
+          margin: 0;
+        }
         @media print {
+          html, body {
+            width: 210mm !important;
+            height: 297mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #ffffff !important;
+            overflow: hidden !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          header, footer, nav, aside {
+            display: none !important;
+          }
           body * {
             visibility: hidden !important;
           }
@@ -272,11 +323,12 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
             box-shadow: none !important;
             margin: 0 !important;
             padding: 0 !important;
+            z-index: 999999 !important;
           }
         }
       `}</style>
 
-      {/* Off-screen 1:1 unscaled render target for PDF export and Print */}
+      {/* Off-screen 1:1 unscaled render target (794 × 1123 px) for PDF export and Print */}
       {verifiedData && (
         <div
           id="iamtechni-printable-certificate"
@@ -287,6 +339,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
             top: 0,
             width: '794px',
             height: '1123px',
+            transform: 'none',
             pointerEvents: 'none',
             zIndex: -1,
             overflow: 'hidden',
@@ -311,7 +364,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
       <section className="relative overflow-hidden border-b border-slate-200 py-8 sm:py-12 bg-gradient-to-b from-[#F0F5FF] via-[#F8FAFF] to-white">
         <div className="absolute top-0 right-1/4 w-[420px] h-[260px] bg-gradient-to-tr from-[#00B0F0]/15 via-[#1C35EA]/12 to-[#4D19EA]/15 rounded-full blur-[90px] pointer-events-none" />
 
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+        <div className="relative w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
           <div className="inline-flex items-center gap-2 min-h-[32px] px-3.5 py-1 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(28,53,234,0.08)] text-xs font-mono font-bold text-[#1C35EA]">
             <ShieldCheck className="w-4 h-4 shrink-0" />
             <span>OFFICIAL CREDENTIAL VERIFICATION</span>
@@ -325,16 +378,19 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
             Verify Certificate
           </AnimatedHeading>
 
-          <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto leading-relaxed">
+          <p
+            className="text-slate-600 max-w-xl mx-auto leading-relaxed"
+            style={{ fontSize: 'clamp(14px, 1vw, 17px)' }}
+          >
             Enter the certificate number to check that an IAMTECHNI certificate is genuine.
           </p>
 
-          {/* Search Form */}
+          {/* Search Form: stacked full width below 480px, side-by-side from 480px */}
           <form
             onSubmit={handleFormSubmit}
-            className="pt-2 max-w-xl mx-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
+            className="pt-2 max-w-xl mx-auto flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center gap-3"
           >
-            <div className="relative flex-1">
+            <div className="relative flex-1 min-w-0">
               <Search
                 className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
                 aria-hidden="true"
@@ -345,14 +401,14 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                 onChange={(e) => setInputValue(e.target.value.toUpperCase())}
                 placeholder="e.g. IAMT-PRO-2026-CBVUZ"
                 aria-label="Certificate number"
-                className="w-full h-12 min-h-[48px] pl-11 pr-4 font-mono text-sm sm:text-base uppercase rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 placeholder:normal-case focus:bg-white focus:outline-hidden focus:border-[#1C35EA] focus:ring-4 focus:ring-[#1C35EA]/15 transition-all"
+                className="w-full h-12 min-h-[48px] pl-11 pr-4 font-mono text-[16px] uppercase rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 placeholder:normal-case focus:bg-white focus:outline-hidden focus:border-[#1C35EA] focus:ring-4 focus:ring-[#1C35EA]/15 transition-all"
               />
             </div>
 
             <button
               type="submit"
               disabled={!inputValue.trim() || isVerifying}
-              className="h-12 min-h-[48px] px-7 rounded-xl text-white font-semibold text-sm sm:text-base shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
+              className="w-full min-[480px]:w-auto h-12 min-h-[48px] px-7 rounded-xl text-white font-semibold text-[16px] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
               style={{
                 background:
                   'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
@@ -366,7 +422,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
       </section>
 
       {/* Verification Results Section */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 space-y-6">
+      <section className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 space-y-6">
         {/* c) Not Found */}
         {notFoundId && !isVerifying && (
           <div
@@ -374,13 +430,13 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
             className="bg-white rounded-2xl border border-amber-200 shadow-xs p-5 sm:p-6 flex items-start gap-3.5 text-slate-800"
           >
             <AlertCircle className="w-6 h-6 text-amber-600 shrink-0 mt-0.5" />
-            <div className="space-y-1">
+            <div className="space-y-1 min-w-0">
               <p className="text-sm sm:text-base font-semibold text-slate-900">
                 No certificate found with this number. Please check the number and try again.
               </p>
-              <p className="text-xs sm:text-sm text-slate-500">
+              <p className="text-xs sm:text-sm text-slate-500 break-all">
                 Searched for:{' '}
-                <code className="font-mono font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">
+                <code className="font-mono font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded break-all">
                   {notFoundId}
                 </code>
               </p>
@@ -395,13 +451,13 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
             className="bg-white rounded-2xl border border-rose-200 shadow-xs p-5 sm:p-6 flex items-start gap-3.5 text-rose-800"
           >
             <AlertCircle className="w-6 h-6 text-rose-600 shrink-0 mt-0.5" />
-            <div className="space-y-1">
+            <div className="space-y-1 min-w-0">
               <p className="text-sm sm:text-base font-semibold text-rose-900">
                 Could not verify the certificate at this moment. Please try again.
               </p>
-              <p className="text-xs text-rose-700">
+              <p className="text-xs text-rose-700 break-all">
                 Error code:{' '}
-                <code className="font-mono bg-rose-100 px-1.5 py-0.5 rounded">
+                <code className="font-mono bg-rose-100 px-1.5 py-0.5 rounded break-all">
                   {errorCode}
                 </code>
               </p>
@@ -446,57 +502,61 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                       : 'linear-gradient(90deg, #00B0F0 0%, #1C35EA 50%, #4D19EA 100%)',
                 }}
               />
-              <div className="p-5 sm:p-7 space-y-5">
+              <div className="p-4 sm:p-7 space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-xs font-mono uppercase tracking-wider font-bold text-[#1C35EA]">
                       Credential Summary
                     </div>
                     <h2
                       data-no-scroll-zoom
-                      className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#14205A] mt-0.5"
+                      className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl font-bold text-[#14205A] mt-0.5 break-words"
                     >
                       {verifiedData.fullName}
                     </h2>
                   </div>
 
-                  <div className="font-mono text-xs sm:text-sm font-bold px-3 py-1.5 rounded-xl bg-[#F4F7FC] border border-slate-200 text-[#14205A]">
+                  <div className="max-w-full overflow-x-auto font-mono text-xs sm:text-sm font-bold px-3 py-1.5 rounded-xl bg-[#F4F7FC] border border-slate-200 text-[#14205A] break-all">
                     {verifiedData.certificateId}
                   </div>
                 </div>
 
-                <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80">
+                {/* 3 columns on desktop, 2 on tablet, 1 on phones */}
+                <dl
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4"
+                  style={{ fontSize: 'clamp(14px, 0.95vw, 16px)' }}
+                >
+                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
                     <dt className="text-xs font-semibold text-slate-500">Name</dt>
-                    <dd className="text-slate-900 font-bold mt-1">
+                    <dd className="text-slate-900 font-bold mt-1 break-words">
                       {verifiedData.fullName}
                     </dd>
                   </div>
 
-                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80">
+                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
                     <dt className="text-xs font-semibold text-slate-500">Program</dt>
-                    <dd className="text-slate-900 font-semibold mt-1">
+                    <dd className="text-slate-900 font-semibold mt-1 break-words">
                       {verifiedData.type === 'student'
                         ? 'Student Internship'
                         : 'Professional Internship'}
                     </dd>
                   </div>
 
-                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80">
+                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
                     <dt className="text-xs font-semibold text-slate-500">Course</dt>
-                    <dd className="text-slate-900 font-semibold mt-1">
+                    <dd className="text-slate-900 font-semibold mt-1 break-words">
                       {verifiedData.course}
                     </dd>
                   </div>
 
-                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80">
+                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
                     <dt className="text-xs font-semibold text-slate-500">Duration</dt>
                     <dd className="text-slate-900 font-semibold mt-1">
                       {formatDurationLabel(verifiedData.durationMonths)}
                     </dd>
                   </div>
 
-                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80">
+                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
                     <dt className="text-xs font-semibold text-slate-500">
                       Internship period
                     </dt>
@@ -506,14 +566,14 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     </dd>
                   </div>
 
-                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80">
+                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
                     <dt className="text-xs font-semibold text-slate-500">Issue date</dt>
                     <dd className="text-slate-900 font-semibold mt-1">
                       {formatCertificateDate(verifiedData.issueDate)}
                     </dd>
                   </div>
 
-                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 sm:col-span-2 lg:col-span-3">
+                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 sm:col-span-2 lg:col-span-3 min-w-0 overflow-x-auto">
                     <dt className="text-xs font-semibold text-slate-500">
                       Certificate number
                     </dt>
@@ -523,14 +583,14 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                   </div>
                 </dl>
 
-                {/* Action Buttons */}
-                <div className="pt-2 flex flex-wrap items-center gap-3">
+                {/* Action Buttons: 2 × 2 grid on phones, neat flex-wrap row on sm+ */}
+                <div className="pt-2 grid grid-cols-2 sm:flex sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3">
                   {verifiedData.status !== 'revoked' && (
                     <button
                       type="button"
                       disabled={isDownloadingPdf}
                       onClick={handleDownloadPdf}
-                      className="min-h-[44px] px-5 py-2.5 rounded-xl text-white font-semibold text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="min-h-[44px] px-3 sm:px-5 py-2.5 rounded-xl text-white font-semibold text-xs sm:text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed text-center"
                       style={{
                         background:
                           'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
@@ -553,7 +613,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                   <button
                     type="button"
                     onClick={handleCopyVerifyLink}
-                    className="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-sm transition-colors inline-flex items-center justify-center gap-2 cursor-pointer"
+                    className="min-h-[44px] px-3 sm:px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-xs sm:text-sm transition-colors inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer text-center"
                   >
                     {copiedLink ? (
                       <>
@@ -572,7 +632,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     href={linkedInShareUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-sm transition-colors inline-flex items-center justify-center gap-2"
+                    className="min-h-[44px] px-3 sm:px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-xs sm:text-sm transition-colors inline-flex items-center justify-center gap-1.5 sm:gap-2 text-center"
                   >
                     <Share2 className="w-4 h-4 shrink-0" />
                     <span>Share on LinkedIn</span>
@@ -581,7 +641,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                   <button
                     type="button"
                     onClick={handlePrint}
-                    className="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-slate-700 hover:text-[#1C35EA] font-semibold text-sm transition-colors inline-flex items-center justify-center gap-2 cursor-pointer"
+                    className="min-h-[44px] px-3 sm:px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-slate-700 hover:text-[#1C35EA] font-semibold text-xs sm:text-sm transition-colors inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer text-center"
                   >
                     <Printer className="w-4 h-4 shrink-0" />
                     <span>Print</span>
@@ -590,19 +650,19 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
               </div>
             </div>
 
-            {/* Full Certificate Display (Full size on desktop, scaled to fit screen width on mobile, never cut off) */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-3 sm:p-6 flex flex-col items-center">
+            {/* Full Certificate Display: 16px side padding on phones (via outer section px-4 + p-0 on mobile), max 794px on desktop/TVs */}
+            <div className="sm:bg-white sm:rounded-2xl sm:border sm:border-slate-200 sm:shadow-xs p-0 sm:p-6 flex flex-col items-center">
               <div
                 ref={certContainerWrapperRef}
-                className="w-full flex justify-center overflow-hidden"
+                className="w-full max-w-[794px] mx-auto flex justify-center overflow-hidden"
               >
                 <div
                   style={{
-                    width: `${Math.round(794 * certScale)}px`,
-                    height: `${Math.round(1123 * certScale)}px`,
+                    width: `${scaledWidth}px`,
+                    height: `${scaledHeight}px`,
                     position: 'relative',
                   }}
-                  className="shadow-xl border border-slate-200/80"
+                  className="shadow-xl border border-slate-200/80 bg-white shrink-0"
                 >
                   <div
                     style={{

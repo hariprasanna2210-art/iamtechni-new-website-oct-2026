@@ -323,7 +323,9 @@ const AdminPage: React.FC = () => {
   const [pdfRenderData, setPdfRenderData] = useState<CertificateTemplateData | null>(null);
   const pdfCaptureRef = useRef<HTMLDivElement | null>(null);
   const previewWrapperRef = useRef<HTMLDivElement | null>(null);
-  const [previewScale, setPreviewScale] = useState<number>(0.52);
+  const [previewScale, setPreviewScale] = useState<number>(0.65);
+  const modalPreviewWrapperRef = useRef<HTMLDivElement | null>(null);
+  const [modalPreviewScale, setModalPreviewScale] = useState<number>(1);
 
   const isAdmin = useMemo(() => {
     const userEmail = (user?.email ?? '').trim().toLowerCase();
@@ -440,7 +442,7 @@ const AdminPage: React.FC = () => {
             issueDate: String(d.issueDate ?? ''),
             college: String(d.college ?? ''),
             keyAreas: Array.isArray(d.keyAreas)
-              ? d.keyAreas.map((item) => String(item)).slice(0, 6)
+              ? d.keyAreas.map((item) => String(item)).slice(0, 12)
               : [],
             status: d.status === 'revoked' ? 'revoked' : 'valid',
             applicationId: String(d.applicationId ?? ''),
@@ -460,22 +462,85 @@ const AdminPage: React.FC = () => {
     return () => unsubscribe();
   }, [authResolved, user, isAdmin]);
 
-  // Responsive scale calculation for live certificate preview
+  // Responsive scale calculation for live certificate preview via ResizeObserver
   useEffect(() => {
     if (activeTab !== 'certificates') return;
-    const updateScale = () => {
-      const el = previewWrapperRef.current;
-      if (!el) return;
-      const availableWidth = el.clientWidth - 24;
-      if (availableWidth > 0) {
-        const nextScale = Math.min(0.68, Math.max(0.28, availableWidth / 794));
+    const el = previewWrapperRef.current;
+    if (!el) return;
+
+    const updateFromWidth = (width: number) => {
+      if (width > 0) {
+        const nextScale = Math.min(1, width / 794);
         setPreviewScale(nextScale);
       }
     };
-    updateScale();
-    window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
+
+    updateFromWidth(el.getBoundingClientRect().width || el.clientWidth);
+
+    let observer: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      observer = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const width =
+            entry.contentRect?.width ||
+            el.getBoundingClientRect().width ||
+            el.clientWidth;
+          updateFromWidth(width);
+        }
+      });
+      observer.observe(el);
+    }
+
+    const handleResize = () => {
+      updateFromWidth(el.getBoundingClientRect().width || el.clientWidth);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      if (observer) observer.disconnect();
+      window.removeEventListener('resize', handleResize);
+    };
   }, [activeTab]);
+
+  // Responsive scale calculation for full-size preview modal via ResizeObserver
+  useEffect(() => {
+    if (!fullPreviewCert) return;
+    const el = modalPreviewWrapperRef.current;
+    if (!el) return;
+
+    const updateFromWidth = (width: number) => {
+      if (width > 0) {
+        const nextScale = Math.min(1, width / 794);
+        setModalPreviewScale(nextScale);
+      }
+    };
+
+    updateFromWidth(el.getBoundingClientRect().width || el.clientWidth);
+
+    let observer: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      observer = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const width =
+            entry.contentRect?.width ||
+            el.getBoundingClientRect().width ||
+            el.clientWidth;
+          updateFromWidth(width);
+        }
+      });
+      observer.observe(el);
+    }
+
+    const handleResize = () => {
+      updateFromWidth(el.getBoundingClientRect().width || el.clientWidth);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      if (observer) observer.disconnect();
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [fullPreviewCert]);
 
   // Sync draft note whenever a different application is opened
   useEffect(() => {
@@ -848,8 +913,8 @@ const AdminPage: React.FC = () => {
       if (prev.includes(skillName)) {
         return prev.filter((s) => s !== skillName);
       }
-      if (prev.length >= 6) {
-        setToastMessage('Maximum 6 key areas allowed.');
+      if (prev.length >= 12) {
+        setToastMessage('Maximum 12 key areas allowed.');
         return prev;
       }
       return [...prev, skillName];
@@ -863,8 +928,8 @@ const AdminPage: React.FC = () => {
       setCustomSkillInput('');
       return;
     }
-    if (certKeyAreas.length >= 6) {
-      setToastMessage('Maximum 6 key areas allowed.');
+    if (certKeyAreas.length >= 12) {
+      setToastMessage('Maximum 12 key areas allowed.');
       return;
     }
     setGeneratedCert(null);
@@ -911,8 +976,8 @@ const AdminPage: React.FC = () => {
       setCertFormError('Please enter the college name for Student Internship.');
       return;
     }
-    if (certKeyAreas.length === 0 || certKeyAreas.length > 6) {
-      setCertFormError('Please select between 1 and 6 key areas of work.');
+    if (certKeyAreas.length === 0 || certKeyAreas.length > 12) {
+      setCertFormError('Please select between 1 and 12 key areas of work.');
       return;
     }
 
@@ -962,7 +1027,7 @@ const AdminPage: React.FC = () => {
         endDate: certEndDate,
         issueDate: certIssueDate,
         college: certType === 'student' ? certCollege.trim() : '',
-        keyAreas: certKeyAreas.slice(0, 6),
+        keyAreas: certKeyAreas.slice(0, 12),
         status: 'valid' as const,
         applicationId: linkedAppPublicId || '',
         createdAt: serverTimestamp(),
@@ -1254,7 +1319,14 @@ const AdminPage: React.FC = () => {
 
   // Verified Admin Dashboard
   return (
-    <div className="min-h-[80vh] bg-[#F4F7FC] py-6 sm:py-10">
+    <div
+      className="min-h-[80vh] w-full min-w-0 overflow-x-hidden bg-[#F4F7FC] py-6 sm:py-10"
+      style={{
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
+        paddingBottom: 'calc(2.5rem + env(safe-area-inset-bottom))',
+      }}
+    >
       <Helmet>
         <title>Internship Applications Admin | IAMTECHNI</title>
         <meta name="robots" content="noindex, nofollow" />
@@ -1264,7 +1336,7 @@ const AdminPage: React.FC = () => {
         />
       </Helmet>
 
-      {/* Off-screen 1:1 unscaled render target for html2canvas + jsPDF */}
+      {/* Off-screen 1:1 unscaled render target (794 × 1123 px) for html2canvas + jsPDF */}
       <div
         aria-hidden="true"
         style={{
@@ -1273,6 +1345,7 @@ const AdminPage: React.FC = () => {
           top: 0,
           width: '794px',
           height: '1123px',
+          transform: 'none',
           pointerEvents: 'none',
           zIndex: -1,
           overflow: 'hidden',
@@ -1284,7 +1357,7 @@ const AdminPage: React.FC = () => {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Top Bar */}
         <header className="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-6 flex flex-col gap-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -1723,10 +1796,10 @@ const AdminPage: React.FC = () => {
           /* CERTIFICATES TAB                                                  */
           /* ================================================================= */
           <div className="space-y-8">
-            {/* Top Section: Form + Live Preview */}
+            {/* Top Section: Form on Left, Sticky Live Preview on Right (lg: 1024px+), Stacked below 1024px */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               {/* Left Column: Generate Certificate Form */}
-              <div className="lg:col-span-6 bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div className="lg:col-span-6 bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden min-w-0">
                 <div
                   className="h-1.5 w-full"
                   style={{
@@ -1735,7 +1808,7 @@ const AdminPage: React.FC = () => {
                   }}
                 />
 
-                <div className="p-5 sm:p-7 space-y-5">
+                <div className="p-4 sm:p-7 space-y-5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <h2
@@ -1752,7 +1825,7 @@ const AdminPage: React.FC = () => {
 
                   {linkedAppDocId && (
                     <div className="p-3.5 rounded-xl bg-[#EEF4FF] border border-[#1C35EA]/25 flex items-center justify-between gap-3">
-                      <div className="text-xs sm:text-sm text-[#1E3A8A]">
+                      <div className="text-xs sm:text-sm text-[#1E3A8A] min-w-0 break-all">
                         <span className="font-semibold">Pre-filled from application:</span>{' '}
                         <span className="font-mono font-bold text-[#1C35EA]">
                           {linkedAppPublicId || linkedAppDocId}
@@ -1761,7 +1834,7 @@ const AdminPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={handleClearLinkedApplication}
-                        className="text-xs font-semibold text-slate-600 hover:text-rose-600 px-2 py-1 rounded-lg hover:bg-white/80 transition-colors cursor-pointer"
+                        className="text-xs font-semibold text-slate-600 hover:text-rose-600 px-2.5 py-1.5 rounded-lg hover:bg-white/80 transition-colors cursor-pointer shrink-0"
                       >
                         Unlink
                       </button>
@@ -1784,7 +1857,7 @@ const AdminPage: React.FC = () => {
                       className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-start gap-2.5"
                     >
                       <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                      <div>
+                      <div className="min-w-0 break-all">
                         <span className="font-semibold">
                           Could not save or export certificate:
                         </span>{' '}
@@ -1854,7 +1927,7 @@ const AdminPage: React.FC = () => {
                           setGeneratedCert(null);
                         }}
                         placeholder="e.g. Hari Prasanna"
-                        className="w-full h-11 min-h-[44px] px-3.5 text-base rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                        className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
                       />
                     </div>
 
@@ -1871,7 +1944,7 @@ const AdminPage: React.FC = () => {
                           id="cert-course-select"
                           value={certCourseSelect}
                           onChange={(e) => handleCourseSelectChange(e.target.value)}
-                          className="w-full h-11 min-h-[44px] px-3.5 text-base rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA] cursor-pointer"
+                          className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA] cursor-pointer"
                         >
                           {COURSES.map((courseName) => (
                             <option key={courseName} value={courseName}>
@@ -1895,7 +1968,7 @@ const AdminPage: React.FC = () => {
                             setCertDurationMonths(Number(e.target.value));
                             setGeneratedCert(null);
                           }}
-                          className="w-full h-11 min-h-[44px] px-3.5 text-base rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA] cursor-pointer"
+                          className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA] cursor-pointer"
                         >
                           {CERTIFICATE_DURATIONS.map((m) => (
                             <option key={m} value={m}>
@@ -1925,12 +1998,12 @@ const AdminPage: React.FC = () => {
                             setGeneratedCert(null);
                           }}
                           placeholder="Enter custom course title…"
-                          className="w-full h-11 min-h-[44px] px-3.5 text-base rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                          className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
                         />
                       </div>
                     )}
 
-                    {/* Dates: Start, End, Issue Date */}
+                    {/* Dates: 3 in a row on desktop/tablet, stacked on phones */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div>
                         <label
@@ -1948,7 +2021,7 @@ const AdminPage: React.FC = () => {
                             setCertStartDate(e.target.value);
                             setGeneratedCert(null);
                           }}
-                          className="w-full h-11 min-h-[44px] px-3 text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                          className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
                         />
                       </div>
 
@@ -1968,7 +2041,7 @@ const AdminPage: React.FC = () => {
                             setCertEndDate(e.target.value);
                             setGeneratedCert(null);
                           }}
-                          className="w-full h-11 min-h-[44px] px-3 text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                          className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
                         />
                       </div>
 
@@ -1988,7 +2061,7 @@ const AdminPage: React.FC = () => {
                             setCertIssueDate(e.target.value);
                             setGeneratedCert(null);
                           }}
-                          className="w-full h-11 min-h-[44px] px-3 text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                          className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
                         />
                       </div>
                     </div>
@@ -2012,23 +2085,23 @@ const AdminPage: React.FC = () => {
                             setGeneratedCert(null);
                           }}
                           placeholder="e.g. Pondicherry Engineering College"
-                          className="w-full h-11 min-h-[44px] px-3.5 text-base rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                          className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
                         />
                       </div>
                     )}
 
-                    {/* Key Areas of Work (Multi-select chips, max 6) */}
+                    {/* Key Areas of Work (Multi-select chips, max 12) */}
                     <div>
                       <div className="flex items-center justify-between gap-2 mb-1.5">
                         <span className="text-xs font-semibold text-slate-700">
-                          Key areas of work (max 6) <span className="text-rose-500">*</span>
+                          Key areas of work (max 12) <span className="text-rose-500">*</span>
                         </span>
                         <span className="text-xs font-mono font-semibold text-[#1C35EA]">
-                          {certKeyAreas.length} / 6 selected
+                          {certKeyAreas.length} / 12 selected
                         </span>
                       </div>
 
-                      <div className="flex flex-wrap gap-1.5 p-3 rounded-xl border border-slate-200 bg-[#F8FAFF]">
+                      <div className="flex flex-wrap gap-1.5 p-3 rounded-xl border border-slate-200 bg-[#F8FAFF] max-h-[260px] overflow-y-auto">
                         {CERTIFICATE_SKILLS.map((skill) => {
                           const isSelected = certKeyAreas.includes(skill.name);
                           return (
@@ -2048,7 +2121,7 @@ const AdminPage: React.FC = () => {
                           );
                         })}
 
-                        {/* Any custom skills added that aren't in CERTIFICATE_SKILLS */}
+                        {/* Custom skills typed by the admin: added as chips and removable with ✕ */}
                         {certKeyAreas
                           .filter(
                             (name) =>
@@ -2061,16 +2134,22 @@ const AdminPage: React.FC = () => {
                               key={customName}
                               type="button"
                               onClick={() => handleToggleSkill(customName)}
-                              className="min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border bg-[#4D19EA] text-white border-[#4D19EA] shadow-2xs"
+                              aria-label={`Remove ${customName}`}
+                              className="min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border bg-[#4D19EA] text-white border-[#4D19EA] shadow-2xs hover:bg-[#3b11bd]"
                             >
-                              <Check className="w-3.5 h-3.5 shrink-0" />
                               <span>{customName}</span>
+                              <span
+                                aria-hidden="true"
+                                className="ml-0.5 text-white/90 hover:text-white font-bold leading-none"
+                              >
+                                ✕
+                              </span>
                             </button>
                           ))}
                       </div>
 
                       {/* Optional custom tool chip input */}
-                      <div className="flex items-center gap-2 mt-2">
+                      <div className="flex flex-col min-[420px]:flex-row items-stretch min-[420px]:items-center gap-2 mt-2">
                         <input
                           type="text"
                           value={customSkillInput}
@@ -2082,15 +2161,15 @@ const AdminPage: React.FC = () => {
                             }
                           }}
                           placeholder="Add another tool/skill (optional)…"
-                          className="flex-1 h-9 px-3 text-xs rounded-lg border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                          className="flex-1 h-11 min-h-[44px] px-3.5 text-[16px] sm:text-xs rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
                         />
                         <button
                           type="button"
                           onClick={handleAddCustomSkill}
-                          disabled={!customSkillInput.trim() || certKeyAreas.length >= 6}
-                          className="h-9 px-3 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          disabled={!customSkillInput.trim() || certKeyAreas.length >= 12}
+                          className="h-11 min-h-[44px] px-4 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                         >
-                          <Plus className="w-3.5 h-3.5" />
+                          <Plus className="w-4 h-4 shrink-0" />
                           <span>Add</span>
                         </button>
                       </div>
@@ -2114,11 +2193,11 @@ const AdminPage: React.FC = () => {
                           setGeneratedCert(null);
                         }}
                         placeholder="Leave blank to auto-generate (e.g. IAMT-INT-DA-2026-0041)"
-                        className="w-full h-11 min-h-[44px] px-3.5 font-mono text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                        className="w-full h-11 min-h-[44px] px-3.5 font-mono text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
                       />
                     </div>
 
-                    {/* Generate Submit Button */}
+                    {/* Generate Submit Button (Full width on phones and desktop) */}
                     <div className="pt-2">
                       <button
                         type="submit"
@@ -2218,13 +2297,10 @@ const AdminPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Right Column: Scaled Live Preview (Full size on click) */}
-              <div
-                ref={previewWrapperRef}
-                className="lg:col-span-6 bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-6 flex flex-col items-center space-y-3"
-              >
+              {/* Right Column: Scaled Live Preview (sticky on desktop lg:sticky lg:top-6, full width below form on <1024px) */}
+              <div className="lg:col-span-6 lg:sticky lg:top-6 bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-6 flex flex-col items-center space-y-3 min-w-0">
                 <div className="w-full flex items-center justify-between gap-2">
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-base font-bold text-[#1E3A8A]">
                       Live Certificate Preview
                     </h3>
@@ -2236,7 +2312,7 @@ const AdminPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setFullPreviewCert(generatedCert ?? livePreviewData)}
-                    className="min-h-[38px] px-3 py-1.5 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+                    className="min-h-[40px] px-3 py-1.5 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
                   >
                     <Maximize2 className="w-3.5 h-3.5" />
                     <span>Full size</span>
@@ -2254,25 +2330,30 @@ const AdminPage: React.FC = () => {
                       setFullPreviewCert(generatedCert ?? livePreviewData);
                     }
                   }}
-                  className="w-full bg-slate-100/80 rounded-xl border border-slate-200/90 p-3 flex items-center justify-center overflow-hidden cursor-zoom-in group"
+                  className="w-full bg-slate-100/80 rounded-xl border border-slate-200/90 p-2 sm:p-4 flex items-center justify-center overflow-hidden cursor-zoom-in group"
                 >
                   <div
-                    style={{
-                      width: `${Math.round(794 * previewScale)}px`,
-                      height: `${Math.round(1123 * previewScale)}px`,
-                      position: 'relative',
-                    }}
-                    className="shadow-lg transition-transform duration-200 group-hover:scale-[1.01]"
+                    ref={previewWrapperRef}
+                    className="w-full max-w-[794px] mx-auto flex justify-center overflow-hidden"
                   >
                     <div
                       style={{
-                        width: '794px',
-                        height: '1123px',
-                        transform: `scale(${previewScale})`,
-                        transformOrigin: 'top left',
+                        width: `${Math.floor(794 * previewScale)}px`,
+                        height: `${Math.ceil(1123 * previewScale)}px`,
+                        position: 'relative',
                       }}
+                      className="shadow-lg bg-white shrink-0"
                     >
-                      <CertificateTemplate data={generatedCert ?? livePreviewData} />
+                      <div
+                        style={{
+                          width: '794px',
+                          height: '1123px',
+                          transform: `scale(${previewScale})`,
+                          transformOrigin: 'top left',
+                        }}
+                      >
+                        <CertificateTemplate data={generatedCert ?? livePreviewData} />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2280,7 +2361,7 @@ const AdminPage: React.FC = () => {
             </div>
 
             {/* Bottom Section: All Certificates List */}
-            <section className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-4">
+            <section className="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-6 space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
                   <h2
@@ -2305,7 +2386,7 @@ const AdminPage: React.FC = () => {
                     onChange={(e) => setCertificateSearchQuery(e.target.value)}
                     placeholder="Search by name or certificate ID…"
                     aria-label="Search certificates"
-                    className="w-full h-11 min-h-[44px] pl-10 pr-3.5 text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                    className="w-full h-11 min-h-[44px] pl-10 pr-3.5 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
                   />
                 </div>
               </div>
@@ -2316,7 +2397,7 @@ const AdminPage: React.FC = () => {
                   className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-start gap-2.5"
                 >
                   <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                  <div>
+                  <div className="min-w-0 break-all">
                     <span className="font-semibold">Certificate operation error:</span>{' '}
                     <code className="font-mono text-xs bg-rose-100 px-1.5 py-0.5 rounded">
                       {certificatesErrorCode}
@@ -2341,8 +2422,8 @@ const AdminPage: React.FC = () => {
                 </div>
               ) : (
                 <>
-                  {/* Desktop Table */}
-                  <div className="hidden md:block overflow-x-auto border border-slate-200 rounded-xl">
+                  {/* Desktop Table (1024px and up) */}
+                  <div className="hidden lg:block overflow-x-auto border border-slate-200 rounded-xl">
                     <table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="bg-[#F8FAFF] border-b border-slate-200 text-xs font-mono uppercase tracking-wider text-slate-600">
@@ -2371,7 +2452,7 @@ const AdminPage: React.FC = () => {
                           };
                           return (
                             <tr key={cert.id} className="hover:bg-[#F8FAFF]">
-                              <td className="py-3.5 px-4 font-mono font-bold text-[#1E3A8A] whitespace-nowrap">
+                              <td className="py-3.5 px-4 font-mono font-bold text-[#1E3A8A] break-all max-w-[220px]">
                                 {cert.certificateId}
                               </td>
                               <td className="py-3.5 px-4">
@@ -2407,12 +2488,12 @@ const AdminPage: React.FC = () => {
                                   {cert.status === 'revoked' ? 'Revoked' : 'Valid'}
                                 </span>
                               </td>
-                              <td className="py-3.5 px-4 whitespace-nowrap text-right">
-                                <div className="inline-flex items-center justify-end gap-1.5">
+                              <td className="py-3.5 px-4 text-right">
+                                <div className="inline-flex flex-wrap items-center justify-end gap-1.5">
                                   <button
                                     type="button"
                                     onClick={() => setFullPreviewCert(certTemplateObj)}
-                                    className="min-h-[36px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
+                                    className="min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
                                   >
                                     <Eye className="w-3.5 h-3.5" />
                                     <span>View</span>
@@ -2424,7 +2505,7 @@ const AdminPage: React.FC = () => {
                                     onClick={() =>
                                       handleDownloadCertificatePdf(certTemplateObj)
                                     }
-                                    className="min-h-[36px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                                    className="min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer disabled:opacity-50"
                                   >
                                     {downloadingCertId === cert.certificateId ? (
                                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -2442,7 +2523,7 @@ const AdminPage: React.FC = () => {
                                         'Verification link copied!'
                                       )
                                     }
-                                    className="min-h-[36px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-slate-700 hover:text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
+                                    className="min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-slate-700 hover:text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
                                   >
                                     <Copy className="w-3.5 h-3.5" />
                                     <span>Copy link</span>
@@ -2452,7 +2533,7 @@ const AdminPage: React.FC = () => {
                                     type="button"
                                     disabled={updatingCertId === cert.certificateId}
                                     onClick={() => handleToggleCertificateStatus(cert)}
-                                    className={`min-h-[36px] px-2.5 py-1.5 rounded-lg border text-xs font-semibold inline-flex items-center gap-1 cursor-pointer disabled:opacity-50 ${
+                                    className={`min-h-[38px] px-2.5 py-1.5 rounded-lg border text-xs font-semibold inline-flex items-center gap-1 cursor-pointer disabled:opacity-50 ${
                                       cert.status === 'revoked'
                                         ? 'border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-700'
                                         : 'border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700'
@@ -2479,8 +2560,8 @@ const AdminPage: React.FC = () => {
                     </table>
                   </div>
 
-                  {/* Mobile Stacked Cards */}
-                  <div className="md:hidden space-y-3">
+                  {/* Stacked Cards on Phones and Small Tablets (below 1024px) */}
+                  <div className="lg:hidden space-y-3">
                     {filteredCertificates.map((cert) => {
                       const certTemplateObj: CertificateTemplateData = {
                         certificateId: cert.certificateId,
@@ -2498,14 +2579,14 @@ const AdminPage: React.FC = () => {
                       return (
                         <div
                           key={cert.id}
-                          className="rounded-xl border border-slate-200 p-4 space-y-3 bg-[#F8FAFF]"
+                          className="rounded-xl border border-slate-200 p-4 space-y-3 bg-[#F8FAFF] min-w-0"
                         >
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="font-mono text-xs font-bold text-[#1C35EA]">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <span className="font-mono text-xs font-bold text-[#1C35EA] break-all">
                               {cert.certificateId}
                             </span>
                             <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border shrink-0 ${
                                 cert.status === 'revoked'
                                   ? 'bg-rose-50 text-rose-700 border-rose-200'
                                   : 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -2515,9 +2596,11 @@ const AdminPage: React.FC = () => {
                             </span>
                           </div>
 
-                          <div>
-                            <div className="font-bold text-slate-900">{cert.fullName}</div>
-                            <div className="text-xs text-slate-600">
+                          <div className="min-w-0">
+                            <div className="font-bold text-slate-900 break-words">
+                              {cert.fullName}
+                            </div>
+                            <div className="text-xs text-slate-600 break-words">
                               {cert.course} ·{' '}
                               {cert.type === 'student' ? 'Student' : 'Professional'} (
                               {formatDuration(cert.durationMonths)})
@@ -2527,13 +2610,13 @@ const AdminPage: React.FC = () => {
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/80">
+                          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/80">
                             <button
                               type="button"
                               onClick={() => setFullPreviewCert(certTemplateObj)}
-                              className="min-h-[40px] px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                              className="flex-1 min-w-[115px] min-h-[44px] px-3 py-2 rounded-lg border border-slate-200 bg-white text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
                             >
-                              <Eye className="w-3.5 h-3.5" />
+                              <Eye className="w-3.5 h-3.5 shrink-0" />
                               <span>View</span>
                             </button>
 
@@ -2541,9 +2624,13 @@ const AdminPage: React.FC = () => {
                               type="button"
                               disabled={Boolean(downloadingCertId)}
                               onClick={() => handleDownloadCertificatePdf(certTemplateObj)}
-                              className="min-h-[40px] px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                              className="flex-1 min-w-[130px] min-h-[44px] px-3 py-2 rounded-lg border border-slate-200 bg-white text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                             >
-                              <Download className="w-3.5 h-3.5" />
+                              {downloadingCertId === cert.certificateId ? (
+                                <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+                              ) : (
+                                <Download className="w-3.5 h-3.5 shrink-0" />
+                              )}
                               <span>Download PDF</span>
                             </button>
 
@@ -2555,9 +2642,9 @@ const AdminPage: React.FC = () => {
                                   'Verification link copied!'
                                 )
                               }
-                              className="min-h-[40px] px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                              className="flex-1 min-w-[115px] min-h-[44px] px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
                             >
-                              <Copy className="w-3.5 h-3.5" />
+                              <Copy className="w-3.5 h-3.5 shrink-0" />
                               <span>Copy link</span>
                             </button>
 
@@ -2565,7 +2652,7 @@ const AdminPage: React.FC = () => {
                               type="button"
                               disabled={updatingCertId === cert.certificateId}
                               onClick={() => handleToggleCertificateStatus(cert)}
-                              className={`min-h-[40px] px-3 py-1.5 rounded-lg border text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 ${
+                              className={`flex-1 min-w-[115px] min-h-[44px] px-3 py-2 rounded-lg border text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 ${
                                 cert.status === 'revoked'
                                   ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
                                   : 'border-rose-200 bg-rose-50 text-rose-700'
@@ -2573,12 +2660,12 @@ const AdminPage: React.FC = () => {
                             >
                               {cert.status === 'revoked' ? (
                                 <>
-                                  <RotateCcw className="w-3.5 h-3.5" />
+                                  <RotateCcw className="w-3.5 h-3.5 shrink-0" />
                                   <span>Restore</span>
                                 </>
                               ) : (
                                 <>
-                                  <Ban className="w-3.5 h-3.5" />
+                                  <Ban className="w-3.5 h-3.5 shrink-0" />
                                   <span>Revoke</span>
                                 </>
                               )}
@@ -3095,7 +3182,7 @@ const AdminPage: React.FC = () => {
       {/* Full-Size Certificate Preview Modal */}
       {fullPreviewCert && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/65 backdrop-blur-[2px]"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-slate-900/65 backdrop-blur-[2px]"
           role="dialog"
           aria-modal="true"
           aria-label="Full-size certificate preview"
@@ -3103,7 +3190,7 @@ const AdminPage: React.FC = () => {
           <div className="relative w-full max-w-[860px] max-h-[94vh] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
             <div className="px-4 sm:px-6 py-3.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-white">
               <div className="min-w-0">
-                <div className="font-mono text-sm font-bold text-[#1C35EA] truncate">
+                <div className="font-mono text-sm font-bold text-[#1C35EA] break-all">
                   {fullPreviewCert.certificateId}
                 </div>
                 <div className="text-xs text-slate-500 truncate">
@@ -3112,12 +3199,12 @@ const AdminPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
                   disabled={Boolean(downloadingCertId)}
                   onClick={() => handleDownloadCertificatePdf(fullPreviewCert)}
-                  className="min-h-[40px] px-3.5 py-1.5 rounded-xl bg-[#1C35EA] hover:bg-[#172bc2] text-white text-xs sm:text-sm font-semibold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="min-h-[44px] px-3.5 py-1.5 rounded-xl bg-[#1C35EA] hover:bg-[#172bc2] text-white text-xs sm:text-sm font-semibold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
                   {downloadingCertId === fullPreviewCert.certificateId ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -3135,7 +3222,7 @@ const AdminPage: React.FC = () => {
                       'Verification link copied!'
                     )
                   }
-                  className="min-h-[40px] px-3 py-1.5 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs sm:text-sm font-semibold inline-flex items-center gap-1.5 cursor-pointer"
+                  className="min-h-[44px] px-3 py-1.5 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs sm:text-sm font-semibold inline-flex items-center gap-1.5 cursor-pointer"
                 >
                   <ExternalLink className="w-4 h-4" />
                   <span>Copy link</span>
@@ -3145,16 +3232,37 @@ const AdminPage: React.FC = () => {
                   type="button"
                   onClick={() => setFullPreviewCert(null)}
                   aria-label="Close preview"
-                  className="w-10 h-10 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 flex items-center justify-center cursor-pointer"
+                  className="w-11 h-11 min-h-[44px] min-w-[44px] rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 flex items-center justify-center cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
-            <div className="flex-1 overflow-auto p-4 sm:p-6 bg-slate-100 flex justify-center">
-              <div className="shadow-xl">
-                <CertificateTemplate data={fullPreviewCert} />
+            <div className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-6 bg-slate-100">
+              <div
+                ref={modalPreviewWrapperRef}
+                className="w-full max-w-[794px] mx-auto flex justify-center overflow-hidden"
+              >
+                <div
+                  style={{
+                    width: `${Math.floor(794 * modalPreviewScale)}px`,
+                    height: `${Math.ceil(1123 * modalPreviewScale)}px`,
+                    position: 'relative',
+                  }}
+                  className="shadow-xl bg-white shrink-0"
+                >
+                  <div
+                    style={{
+                      width: '794px',
+                      height: '1123px',
+                      transform: `scale(${modalPreviewScale})`,
+                      transformOrigin: 'top left',
+                    }}
+                  >
+                    <CertificateTemplate data={fullPreviewCert} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

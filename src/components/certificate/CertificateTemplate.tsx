@@ -81,7 +81,16 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
   const verifyUrl = `https://www.iamtechni.in/verify/${encodeURIComponent(
     displayCertId
   )}`;
-  const visibleSkills = (data.keyAreas ?? []).slice(0, 6);
+
+  const visibleSkills = (data.keyAreas ?? []).slice(0, 12);
+  const isTwoRowSkills = visibleSkills.length > 6;
+  const skillRows: string[][] = isTwoRowSkills
+    ? [
+        visibleSkills.slice(0, Math.ceil(visibleSkills.length / 2)),
+        visibleSkills.slice(Math.ceil(visibleSkills.length / 2)),
+      ]
+    : [visibleSkills];
+
   const isRevoked = data.status === 'revoked';
 
   return (
@@ -90,6 +99,10 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
       style={{
         width: '794px',
         height: '1123px',
+        minWidth: '794px',
+        minHeight: '1123px',
+        maxWidth: '794px',
+        maxHeight: '1123px',
         position: 'relative',
         overflow: 'hidden',
         backgroundColor: '#FFFFFF',
@@ -206,12 +219,14 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '64px 56px 34px 56px',
+          padding: isTwoRowSkills
+            ? '46px 52px 26px 52px'
+            : '60px 56px 32px 56px',
           boxSizing: 'border-box',
           textAlign: 'center',
         }}
       >
-        {/* Grouped Main Content Stack: Title/Subtitle, Recipient/Paragraph, Key Areas (evenly spread, max gap ~38px) */}
+        {/* Grouped Main Content Stack: Title/Subtitle, Recipient/Paragraph, Key Areas */}
         <div
           style={{
             display: 'flex',
@@ -220,7 +235,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             justifyContent: 'center',
             width: '100%',
             flex: 1,
-            gap: '36px',
+            gap: isTwoRowSkills ? '24px' : '34px',
           }}
         >
           {/* 1. Title & Program Subtitle Block */}
@@ -240,7 +255,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 color: '#2A3366',
                 lineHeight: 1.15,
                 letterSpacing: '-0.01em',
-                marginBottom: '10px',
+                marginBottom: '8px',
               }}
             >
               Certificate of Internship
@@ -268,7 +283,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 height: '3px',
                 borderRadius: '999px',
                 background: BRAND_GRADIENT_HORIZONTAL,
-                marginTop: '16px',
+                marginTop: '14px',
               }}
             />
           </div>
@@ -312,7 +327,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 fontWeight: 500,
                 color: '#3B4157',
                 lineHeight: 1.4,
-                marginBottom: '10px',
+                marginBottom: '8px',
               }}
             >
               This is to certify that
@@ -408,7 +423,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             </div>
           </div>
 
-          {/* 3. KEY AREAS OF WORK Block */}
+          {/* 3. KEY AREAS OF WORK Block (1–6 items: 1 row, 44px circles, 12px labels; 7–12 items: 2 rows, 38px circles, 11px labels, 12px row gap) */}
           <div
             style={{
               display: 'flex',
@@ -434,7 +449,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
                 borderRadius: '9999px',
-                marginBottom: '18px',
+                marginBottom: isTwoRowSkills ? '14px' : '18px',
                 boxShadow: '0 4px 12px rgba(28, 53, 234, 0.18)',
                 boxSizing: 'border-box',
               }}
@@ -453,62 +468,88 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
               <div
                 style={{
                   display: 'flex',
-                  alignItems: 'flex-start',
+                  flexDirection: 'column',
+                  alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '24px',
-                  flexWrap: 'nowrap',
+                  gap: '12px',
+                  width: '100%',
                 }}
               >
-                {visibleSkills.map((toolName) => {
-                  const skill = getCertificateSkillConfig(toolName);
-                  const IconComponent = skill.icon;
-                  return (
-                    <div
-                      key={toolName}
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        width: '72px',
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: '44px',
-                          height: '44px',
-                          borderRadius: '9999px',
-                          background: skill.useBrandGradient
-                            ? BRAND_GRADIENT_DIAGONAL
-                            : skill.bgColor,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          boxShadow: '0 4px 10px rgba(20, 32, 90, 0.12)',
-                          marginBottom: '8px',
-                        }}
-                      >
-                        <IconComponent
-                          size={22}
-                          color={skill.iconColor}
-                          strokeWidth={2.1}
-                        />
-                      </div>
-                      <span
-                        style={{
-                          fontFamily: FONT_MANROPE,
-                          fontSize: '12px',
-                          fontWeight: 600,
-                          color: '#14205A',
-                          lineHeight: 1.25,
-                          textAlign: 'center',
-                          wordBreak: 'break-word',
-                        }}
-                      >
-                        {toolName}
-                      </span>
-                    </div>
-                  );
-                })}
+                {skillRows.map((rowItems, rowIndex) => (
+                  <div
+                    key={rowIndex}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      justifyContent: 'center',
+                      gap: isTwoRowSkills ? '16px' : '20px',
+                      flexWrap: 'nowrap',
+                    }}
+                  >
+                    {rowItems.map((toolName) => {
+                      const skill = getCertificateSkillConfig(toolName);
+                      const IconComponent = skill.icon;
+                      const circleSize = isTwoRowSkills ? 38 : 44;
+                      const iconSize = isTwoRowSkills ? 19 : 22;
+                      const labelFontSize = isTwoRowSkills ? '11px' : '12px';
+
+                      return (
+                        <div
+                          key={toolName}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            width: isTwoRowSkills ? '86px' : '88px',
+                            minWidth: 0,
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: `${circleSize}px`,
+                              height: `${circleSize}px`,
+                              borderRadius: '9999px',
+                              background: skill.useBrandGradient
+                                ? BRAND_GRADIENT_DIAGONAL
+                                : skill.bgColor,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              boxShadow: '0 4px 10px rgba(20, 32, 90, 0.12)',
+                              marginBottom: isTwoRowSkills ? '5px' : '7px',
+                              flexShrink: 0,
+                            }}
+                          >
+                            <IconComponent
+                              size={iconSize}
+                              color={skill.iconColor}
+                              strokeWidth={2.1}
+                            />
+                          </div>
+                          <span
+                            style={{
+                              fontFamily: FONT_MANROPE,
+                              fontSize: labelFontSize,
+                              fontWeight: 600,
+                              color: '#14205A',
+                              lineHeight: 1.2,
+                              textAlign: 'center',
+                              maxWidth: '86px',
+                              maxHeight: isTwoRowSkills ? '26.4px' : '28.8px',
+                              overflow: 'hidden',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              wordBreak: 'break-word',
+                            }}
+                          >
+                            {toolName}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -522,7 +563,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             justifyContent: 'space-between',
             width: '100%',
             maxWidth: '580px',
-            paddingTop: '12px',
+            paddingTop: '8px',
           }}
         >
           <div style={{ textAlign: 'left' }}>
