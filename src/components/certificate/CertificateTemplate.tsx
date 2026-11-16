@@ -747,11 +747,12 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                   setSignatureLoadFailed(true);
                 }}
                 style={{
-                  maxHeight: '62px',
-                  maxWidth: '190px',
+                  height: '62px',
                   width: 'auto',
+                  maxWidth: '190px',
                   objectFit: 'contain',
                   display: 'block',
+                  flexShrink: 0,
                 }}
               />
             ) : (
