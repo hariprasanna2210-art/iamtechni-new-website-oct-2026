@@ -167,6 +167,21 @@ app.post('/api/course-enquiry', (req, res) => {
   }
 });
 
+app.all('/api/certificate-status', async (req, res) => {
+  const { default: handler } = await import('./api/certificate-status.js');
+  await handler(req as any, res as any);
+});
+
+app.all('/api/certificate-otp-send', async (req, res) => {
+  const { default: handler } = await import('./api/certificate-otp-send.js');
+  await handler(req as any, res as any);
+});
+
+app.all('/api/certificate-otp-verify', async (req, res) => {
+  const { default: handler } = await import('./api/certificate-otp-verify.js');
+  await handler(req as any, res as any);
+});
+
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
 import {
   AlertCircle,
   Award,
@@ -9,14 +8,16 @@ import {
   CheckCircle2,
   Copy,
   Download,
+  KeyRound,
   Loader2,
+  Mail,
   Printer,
+  RefreshCw,
   Search,
   Share2,
   ShieldCheck,
   XCircle,
 } from 'lucide-react';
-import { db, isFirebaseConfigured } from '../lib/firebase';
 import { downloadCertificatePdf } from '../lib/certificatePdf';
 import {
   CertificateTemplate,
@@ -32,14 +33,64 @@ export interface VerifyCertificatePageProps {
   onNavigate?: (route: PageRoute) => void;
 }
 
-const wait = (ms: number) =>
-  new Promise<void>((resolve) => setTimeout(resolve, ms));
+interface CertificateStatusSummary {
+  certificateId: string;
+  status: 'valid' | 'revoked';
+  fullName: string;
+  type: 'student' | 'professional';
+  course: string;
+}
 
-function extractFirebaseErrorCode(err: unknown): string {
-  const code = (err as { code?: string })?.code;
-  if (code) return code;
-  const msg = (err as { message?: string })?.message;
-  return msg || 'unknown-error';
+interface CachedVerifiedCertificate {
+  expiresAt: number;
+  data: CertificateTemplateData;
+}
+
+const SESSION_CACHE_PREFIX = 'iamtechni_verified_cert_v1_';
+const SESSION_TTL_MS = 30 * 60 * 1000; // 30 minutes
+const RESEND_COOLDOWN_SECONDS = 60;
+
+function getSessionCachedCertificate(
+  certificateId: string
+): CertificateTemplateData | null {
+  if (typeof window === 'undefined' || !certificateId) return null;
+  try {
+    const raw = window.sessionStorage.getItem(
+      `${SESSION_CACHE_PREFIX}${certificateId.toUpperCase()}`
+    );
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as CachedVerifiedCertificate;
+    if (
+      !parsed ||
+      typeof parsed.expiresAt !== 'number' ||
+      Date.now() > parsed.expiresAt ||
+      !parsed.data
+    ) {
+      window.sessionStorage.removeItem(
+        `${SESSION_CACHE_PREFIX}${certificateId.toUpperCase()}`
+      );
+      return null;
+    }
+    return parsed.data;
+  } catch {
+    return null;
+  }
+}
+
+function setSessionCachedCertificate(data: CertificateTemplateData): void {
+  if (typeof window === 'undefined' || !data?.certificateId) return;
+  try {
+    const payload: CachedVerifiedCertificate = {
+      expiresAt: Date.now() + SESSION_TTL_MS,
+      data,
+    };
+    window.sessionStorage.setItem(
+      `${SESSION_CACHE_PREFIX}${data.certificateId.toUpperCase()}`,
+      JSON.stringify(payload)
+    );
+  } catch {
+    // Ignore storage quota errors
+  }
 }
 
 function formatDurationLabel(months: number): string {
@@ -56,19 +107,43 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
   const [inputValue, setInputValue] = useState<string>(() =>
     (routeCertId ?? '').trim().toUpperCase()
   );
-  const [isVerifying, setIsVerifying] = useState<boolean>(false);
-  const [verifiedData, setVerifiedData] = useState<CertificateTemplateData | null>(
-    null
-  );
+
+  // Loader state: null when idle, or the exact message for FullScreenLoader
+  const [loaderMessage, setLoaderMessage] = useState<string | null>(null);
+
+  // Step 1 state: status summary from GET /api/certificate-status
+  const [statusSummary, setStatusSummary] =
+    useState<CertificateStatusSummary | null>(null);
   const [notFoundId, setNotFoundId] = useState<string | null>(null);
-  const [errorCode, setErrorCode] = useState<string | null>(null);
+  const [pageError, setPageError] = useState<string | null>(null);
+
+  // Step 1 -> Step 2 OTP state
+  const [emailInput, setEmailInput] = useState<string>('');
+  const [otpRequestId, setOtpRequestId] = useState<string | null>(null);
+  const [otpDigits, setOtpDigits] = useState<string[]>(['', '', '', '', '', '']);
+  const [otpError, setOtpError] = useState<string | null>(null);
+  const [resendSecondsLeft, setResendSecondsLeft] = useState<number>(0);
+
+  // Step 3 state: full verified certificate returned after OTP verification (or 30-min sessionStorage)
+  const [verifiedData, setVerifiedData] =
+    useState<CertificateTemplateData | null>(null);
   const [isDownloadingPdf, setIsDownloadingPdf] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
 
+  const otpInputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const certContainerWrapperRef = useRef<HTMLDivElement | null>(null);
   const pdfCaptureRef = useRef<HTMLDivElement | null>(null);
   const [certScale, setCertScale] = useState<number>(1);
   const lastLookedUpRef = useRef<string | null>(null);
+
+  // 60-second countdown timer for "Resend code"
+  useEffect(() => {
+    if (resendSecondsLeft <= 0) return;
+    const timer = window.setInterval(() => {
+      setResendSecondsLeft((prev) => (prev > 1 ? prev - 1 : 0));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [resendSecondsLeft]);
 
   // Measure available width with ResizeObserver so the 794x1123 certificate scales smoothly without clipping or horizontal scroll
   useEffect(() => {
@@ -109,85 +184,101 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
     };
   }, [verifiedData]);
 
-  const performVerification = useCallback(async (rawId: string) => {
+  // Step 1: Check certificate status via GET /api/certificate-status?id=XXX
+  const checkCertificateStatus = useCallback(async (rawId: string) => {
     const normalized = rawId.trim().toUpperCase();
     if (!normalized) return;
 
     setInputValue(normalized);
-    setIsVerifying(true);
     setNotFoundId(null);
-    setErrorCode(null);
+    setPageError(null);
+    setOtpError(null);
+    setOtpRequestId(null);
+    setOtpDigits(['', '', '', '', '', '']);
+
+    // Check 30-minute sessionStorage cache first
+    const cached = getSessionCachedCertificate(normalized);
+    if (cached && cached.status === 'valid') {
+      setStatusSummary({
+        certificateId: cached.certificateId,
+        status: cached.status,
+        fullName: cached.fullName,
+        type: cached.type,
+        course: cached.course,
+      });
+      setVerifiedData(cached);
+      return;
+    }
+
+    setVerifiedData(null);
+    setStatusSummary(null);
+    setLoaderMessage('Checking certificate…');
 
     try {
-      const lookupTask = async () => {
-        if (!isFirebaseConfigured || !db) {
-          throw new Error('Firebase is not configured.');
+      const response = await fetch(
+        `/api/certificate-status?id=${encodeURIComponent(normalized)}`,
+        {
+          method: 'GET',
+          headers: { Accept: 'application/json' },
         }
-        return getDoc(doc(db, 'certificates', normalized));
-      };
+      );
 
-      const [snapResult] = await Promise.allSettled([
-        lookupTask(),
-        wait(600),
-      ]);
-
-      if (snapResult.status === 'rejected') {
-        throw snapResult.reason;
+      let payload: Record<string, unknown> = {};
+      try {
+        payload = (await response.json()) as Record<string, unknown>;
+      } catch {
+        payload = {};
       }
 
-      const docSnap = snapResult.value;
-      if (!docSnap.exists()) {
-        setVerifiedData(null);
+      if (!response.ok) {
+        const message =
+          typeof payload.error === 'string' && payload.error
+            ? payload.error
+            : 'Could not verify the certificate at this moment. Please try again.';
+        setPageError(message);
+        return;
+      }
+
+      if (!payload.found) {
         setNotFoundId(normalized);
         return;
       }
 
-      const d = docSnap.data() as Record<string, unknown>;
-      const certData: CertificateTemplateData = {
-        certificateId: String(d.certificateId ?? docSnap.id).trim().toUpperCase(),
-        fullName: String(d.fullName ?? ''),
-        type: d.type === 'professional' ? 'professional' : 'student',
-        course: String(d.course ?? ''),
-        durationMonths: Number(d.durationMonths ?? 1),
-        startDate: String(d.startDate ?? ''),
-        endDate: String(d.endDate ?? ''),
-        issueDate: String(d.issueDate ?? ''),
-        college: String(d.college ?? ''),
-        keyAreas: Array.isArray(d.keyAreas)
-          ? d.keyAreas.map((item) => String(item)).slice(0, 12)
-          : [],
-        status: d.status === 'revoked' ? 'revoked' : 'valid',
-      };
-
-      setVerifiedData(certData);
-      setNotFoundId(null);
-    } catch (err) {
-      setVerifiedData(null);
-      setNotFoundId(null);
-      setErrorCode(extractFirebaseErrorCode(err));
+      const status = payload.status === 'revoked' ? 'revoked' : 'valid';
+      setStatusSummary({
+        certificateId: normalized,
+        status,
+        fullName: String(payload.fullName ?? ''),
+        type: payload.type === 'professional' ? 'professional' : 'student',
+        course: String(payload.course ?? ''),
+      });
+    } catch {
+      setPageError(
+        'Could not verify the certificate at this moment. Please try again.'
+      );
     } finally {
-      setIsVerifying(false);
+      setLoaderMessage(null);
     }
   }, []);
 
-  // Automatically verify when opening /verify/:certificateId
+  // Automatically check status when opening /verify/:certificateId
   useEffect(() => {
     const trimmedRouteId = (routeCertId ?? '').trim().toUpperCase();
     if (trimmedRouteId) {
       setInputValue(trimmedRouteId);
       if (lastLookedUpRef.current !== trimmedRouteId) {
         lastLookedUpRef.current = trimmedRouteId;
-        performVerification(trimmedRouteId);
+        checkCertificateStatus(trimmedRouteId);
       }
     } else {
       lastLookedUpRef.current = null;
     }
-  }, [routeCertId, performVerification]);
+  }, [routeCertId, checkCertificateStatus]);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const normalized = inputValue.trim().toUpperCase();
-    if (!normalized || isVerifying) return;
+    if (!normalized || Boolean(loaderMessage)) return;
     setInputValue(normalized);
     lastLookedUpRef.current = normalized;
 
@@ -195,7 +286,252 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
     if (currentParam !== normalized) {
       navigate(`/verify/${encodeURIComponent(normalized)}`);
     }
-    performVerification(normalized);
+    checkCertificateStatus(normalized);
+  };
+
+  // Step 1 -> Step 2: Send OTP to email
+  const sendOtpRequest = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!statusSummary || statusSummary.status === 'revoked' || Boolean(loaderMessage)) {
+      return;
+    }
+
+    const trimmedEmail = emailInput.trim().toLowerCase();
+    if (!trimmedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      setOtpError('Please enter a valid email address.');
+      return;
+    }
+
+    setOtpError(null);
+    setLoaderMessage('Sending code…');
+
+    try {
+      const response = await fetch('/api/certificate-otp-send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          certificateId: statusSummary.certificateId,
+          email: trimmedEmail,
+        }),
+      });
+
+      let payload: Record<string, unknown> = {};
+      try {
+        payload = (await response.json()) as Record<string, unknown>;
+      } catch {
+        payload = {};
+      }
+
+      if (!response.ok || typeof payload.requestId !== 'string') {
+        const message =
+          typeof payload.error === 'string' && payload.error
+            ? payload.error
+            : 'Could not send the verification code right now. Please try again.';
+        setOtpError(message);
+        return;
+      }
+
+      setEmailInput(trimmedEmail);
+      setOtpRequestId(payload.requestId);
+      setOtpDigits(['', '', '', '', '', '']);
+      setResendSecondsLeft(RESEND_COOLDOWN_SECONDS);
+
+      // Focus the first digit box after render
+      window.setTimeout(() => {
+        otpInputRefs.current[0]?.focus();
+      }, 60);
+    } catch {
+      setOtpError(
+        'Could not send the verification code right now. Please try again.'
+      );
+    } finally {
+      setLoaderMessage(null);
+    }
+  };
+
+  // Step 2 -> Step 3: Verify 6-digit OTP
+  const handleVerifyOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otpRequestId || Boolean(loaderMessage)) return;
+
+    const code = otpDigits.join('');
+    if (!/^\d{6}$/.test(code)) {
+      setOtpError('Please enter all 6 digits of your verification code.');
+      return;
+    }
+
+    setOtpError(null);
+    setLoaderMessage('Verifying code…');
+
+    try {
+      const response = await fetch('/api/certificate-otp-verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          requestId: otpRequestId,
+          otp: code,
+        }),
+      });
+
+      let payload: Record<string, unknown> = {};
+      try {
+        payload = (await response.json()) as Record<string, unknown>;
+      } catch {
+        payload = {};
+      }
+
+      if (!response.ok) {
+        const message =
+          typeof payload.error === 'string' && payload.error
+            ? payload.error
+            : 'Could not verify the code right now. Please try again.';
+        setOtpError(message);
+        return;
+      }
+
+      const fullCertData: CertificateTemplateData = {
+        certificateId: String(
+          payload.certificateId ?? statusSummary?.certificateId ?? ''
+        )
+          .trim()
+          .toUpperCase(),
+        fullName: String(payload.fullName ?? ''),
+        type: payload.type === 'professional' ? 'professional' : 'student',
+        course: String(payload.course ?? ''),
+        durationMonths: Number(payload.durationMonths ?? 1),
+        startDate: String(payload.startDate ?? ''),
+        endDate: String(payload.endDate ?? ''),
+        issueDate: String(payload.issueDate ?? ''),
+        college: String(payload.college ?? ''),
+        keyAreas: Array.isArray(payload.keyAreas)
+          ? payload.keyAreas.map((item) => String(item)).slice(0, 12)
+          : [],
+        status: payload.status === 'revoked' ? 'revoked' : 'valid',
+      };
+
+      setSessionCachedCertificate(fullCertData);
+      setVerifiedData(fullCertData);
+      setOtpError(null);
+    } catch {
+      setOtpError('Could not verify the code right now. Please try again.');
+    } finally {
+      setLoaderMessage(null);
+    }
+  };
+
+  const handleDigitChange = (index: number, rawValue: string) => {
+    setOtpError(null);
+    const digitsOnly = rawValue.replace(/\D/g, '');
+
+    if (!digitsOnly) {
+      setOtpDigits((prev) => {
+        const next = [...prev];
+        next[index] = '';
+        return next;
+      });
+      return;
+    }
+
+    // If user pasted or auto-filled multiple digits (e.g. one-time-code autocomplete)
+    if (digitsOnly.length > 1) {
+      const chars = digitsOnly.slice(0, 6).split('');
+      setOtpDigits((prev) => {
+        const next = [...prev];
+        for (let i = 0; i < 6; i += 1) {
+          if (index + i < 6 && chars[i] !== undefined) {
+            next[index + i] = chars[i];
+          }
+        }
+        return next;
+      });
+      const focusIdx = Math.min(5, index + chars.length - 1);
+      otpInputRefs.current[focusIdx]?.focus();
+      return;
+    }
+
+    const singleDigit = digitsOnly.slice(-1);
+    setOtpDigits((prev) => {
+      const next = [...prev];
+      next[index] = singleDigit;
+      return next;
+    });
+
+    if (index < 5) {
+      otpInputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleDigitKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === 'Backspace') {
+      if (otpDigits[index]) {
+        setOtpDigits((prev) => {
+          const next = [...prev];
+          next[index] = '';
+          return next;
+        });
+      } else if (index > 0) {
+        otpInputRefs.current[index - 1]?.focus();
+        setOtpDigits((prev) => {
+          const next = [...prev];
+          next[index - 1] = '';
+          return next;
+        });
+      }
+      e.preventDefault();
+    } else if (e.key === 'ArrowLeft' && index > 0) {
+      otpInputRefs.current[index - 1]?.focus();
+      e.preventDefault();
+    } else if (e.key === 'ArrowRight' && index < 5) {
+      otpInputRefs.current[index + 1]?.focus();
+      e.preventDefault();
+    }
+  };
+
+  const handleDigitPaste = (
+    index: number,
+    e: React.ClipboardEvent<HTMLInputElement>
+  ) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    if (!pasted) return;
+
+    setOtpError(null);
+    const chars = pasted.split('');
+    setOtpDigits((prev) => {
+      const next = [...prev];
+      if (index === 0 || chars.length === 6) {
+        for (let i = 0; i < 6; i += 1) {
+          next[i] = chars[i] ?? '';
+        }
+      } else {
+        for (let i = 0; i < chars.length && index + i < 6; i += 1) {
+          next[index + i] = chars[i];
+        }
+      }
+      return next;
+    });
+
+    const targetFocus =
+      index === 0 || chars.length === 6
+        ? Math.min(5, chars.length - 1)
+        : Math.min(5, index + chars.length - 1);
+    otpInputRefs.current[targetFocus]?.focus();
+  };
+
+  const handleChangeEmail = () => {
+    setOtpRequestId(null);
+    setOtpDigits(['', '', '', '', '', '']);
+    setOtpError(null);
+    setResendSecondsLeft(0);
   };
 
   const handleDownloadPdf = async () => {
@@ -206,11 +542,11 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
     if (!targetEl) return;
 
     setIsDownloadingPdf(true);
-    setErrorCode(null);
+    setPageError(null);
     try {
       await downloadCertificatePdf(targetEl, verifiedData.certificateId);
-    } catch (err) {
-      setErrorCode(extractFirebaseErrorCode(err));
+    } catch {
+      setPageError('Could not prepare the PDF right now. Please try again.');
     } finally {
       setIsDownloadingPdf(false);
     }
@@ -387,7 +723,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
 
           {/* Search Form: stacked full width below 480px, side-by-side from 480px */}
           <form
-            onSubmit={handleFormSubmit}
+            onSubmit={handleSearchSubmit}
             className="pt-2 max-w-xl mx-auto flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center gap-3"
           >
             <div className="relative flex-1 min-w-0">
@@ -407,7 +743,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
 
             <button
               type="submit"
-              disabled={!inputValue.trim() || isVerifying}
+              disabled={!inputValue.trim() || Boolean(loaderMessage)}
               className="w-full min-[480px]:w-auto h-12 min-h-[48px] px-7 rounded-xl text-white font-semibold text-[16px] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
               style={{
                 background:
@@ -423,8 +759,8 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
 
       {/* Verification Results Section */}
       <section className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 space-y-6">
-        {/* c) Not Found */}
-        {notFoundId && !isVerifying && (
+        {/* Not Found */}
+        {notFoundId && !loaderMessage && (
           <div
             role="alert"
             className="bg-white rounded-2xl border border-amber-200 shadow-xs p-5 sm:p-6 flex items-start gap-3.5 text-slate-800"
@@ -444,8 +780,8 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
           </div>
         )}
 
-        {/* d) Error */}
-        {errorCode && !isVerifying && (
+        {/* Server / Network Error */}
+        {pageError && !loaderMessage && (
           <div
             role="alert"
             className="bg-white rounded-2xl border border-rose-200 shadow-xs p-5 sm:p-6 flex items-start gap-3.5 text-rose-800"
@@ -453,20 +789,271 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
             <AlertCircle className="w-6 h-6 text-rose-600 shrink-0 mt-0.5" />
             <div className="space-y-1 min-w-0">
               <p className="text-sm sm:text-base font-semibold text-rose-900">
-                Could not verify the certificate at this moment. Please try again.
-              </p>
-              <p className="text-xs text-rose-700 break-all">
-                Error code:{' '}
-                <code className="font-mono bg-rose-100 px-1.5 py-0.5 rounded break-all">
-                  {errorCode}
-                </code>
+                {pageError}
               </p>
             </div>
           </div>
         )}
 
-        {/* a) & b) Found Certificate */}
-        {verifiedData && !isVerifying && (
+        {/* Revoked Certificate: Red badge + Name & Course. No OTP, no certificate. */}
+        {statusSummary && statusSummary.status === 'revoked' && !loaderMessage && (
+          <div className="space-y-5">
+            <div
+              role="status"
+              className="rounded-2xl bg-rose-50 border border-rose-200 p-4 sm:p-5 flex items-center gap-3 text-rose-800 shadow-2xs"
+            >
+              <XCircle className="w-6 h-6 text-rose-600 shrink-0" />
+              <span className="text-sm sm:text-base font-bold">
+                ✕ This certificate has been revoked and is no longer valid.
+              </span>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div className="h-1.5 w-full bg-rose-600" />
+              <div className="p-4 sm:p-6">
+                <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-sm">
+                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
+                    <dt className="text-xs font-semibold text-slate-500">Name</dt>
+                    <dd className="text-slate-900 font-bold mt-1 break-words">
+                      {statusSummary.fullName}
+                    </dd>
+                  </div>
+                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
+                    <dt className="text-xs font-semibold text-slate-500">Course</dt>
+                    <dd className="text-slate-900 font-semibold mt-1 break-words">
+                      {statusSummary.course}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Valid Certificate — Step 1 & Step 2 (Before OTP is verified) */}
+        {statusSummary &&
+          statusSummary.status === 'valid' &&
+          !verifiedData &&
+          !loaderMessage && (
+            <div className="space-y-6">
+              {/* Green Genuine Badge */}
+              <div
+                role="status"
+                className="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 sm:p-5 flex items-center gap-3 text-emerald-900 shadow-2xs"
+              >
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
+                <span className="text-sm sm:text-base font-bold">
+                  ✓ Genuine certificate issued by IAMTECHNI
+                </span>
+              </div>
+
+              {/* Small Summary Card: Name, Program, Course */}
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+                <div
+                  className="h-1.5 w-full"
+                  style={{
+                    background:
+                      'linear-gradient(90deg, #00B0F0 0%, #1C35EA 50%, #4D19EA 100%)',
+                  }}
+                />
+                <div className="p-4 sm:p-6">
+                  <dl
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-3.5"
+                    style={{ fontSize: 'clamp(14px, 0.95vw, 16px)' }}
+                  >
+                    <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
+                      <dt className="text-xs font-semibold text-slate-500">Name</dt>
+                      <dd className="text-slate-900 font-bold mt-1 break-words">
+                        {statusSummary.fullName}
+                      </dd>
+                    </div>
+
+                    <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
+                      <dt className="text-xs font-semibold text-slate-500">Program</dt>
+                      <dd className="text-slate-900 font-semibold mt-1 break-words">
+                        {statusSummary.type === 'student'
+                          ? 'Student Internship'
+                          : 'Professional Internship'}
+                      </dd>
+                    </div>
+
+                    <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
+                      <dt className="text-xs font-semibold text-slate-500">Course</dt>
+                      <dd className="text-slate-900 font-semibold mt-1 break-words">
+                        {statusSummary.course}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+
+              {/* Email OTP Box (Step 1: Email input, Step 2: 6-digit OTP input) */}
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-7 max-w-xl mx-auto space-y-5">
+                {!otpRequestId ? (
+                  /* STEP 1: Enter email and click "Send OTP" */
+                  <form onSubmit={sendOtpRequest} className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-[#EEF4FF] border border-[#DBEAFE] text-[#1C35EA] flex items-center justify-center shrink-0">
+                        <Mail className="w-5 h-5" />
+                      </div>
+                      <div className="space-y-1 min-w-0">
+                        <h2
+                          data-no-scroll-zoom
+                          className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-xl font-bold text-[#14205A]"
+                        >
+                          Verify Your Email
+                        </h2>
+                        <p className="text-sm text-slate-600 leading-relaxed">
+                          To view the full certificate and download it, verify your email.
+                        </p>
+                      </div>
+                    </div>
+
+                    {otpError && (
+                      <div
+                        role="alert"
+                        className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-2.5"
+                      >
+                        <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                        <span>{otpError}</span>
+                      </div>
+                    )}
+
+                    <div className="flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center gap-3">
+                      <input
+                        type="email"
+                        required
+                        autoComplete="email"
+                        value={emailInput}
+                        onChange={(e) => {
+                          setEmailInput(e.target.value);
+                          setOtpError(null);
+                        }}
+                        placeholder="you@example.com"
+                        aria-label="Email address"
+                        className="flex-1 min-w-0 h-12 min-h-[48px] px-4 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA] focus:ring-4 focus:ring-[#1C35EA]/15 transition-all"
+                      />
+
+                      <button
+                        type="submit"
+                        disabled={!emailInput.trim() || Boolean(loaderMessage)}
+                        className="w-full min-[480px]:w-auto h-12 min-h-[48px] px-6 rounded-xl text-white font-semibold text-[16px] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
+                        style={{
+                          background:
+                            'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
+                        }}
+                      >
+                        <Mail className="w-4 h-4 shrink-0" />
+                        <span>Send OTP</span>
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  /* STEP 2: Enter 6-digit OTP code */
+                  <form onSubmit={handleVerifyOtpSubmit} className="space-y-5">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-[#EEF4FF] border border-[#DBEAFE] text-[#1C35EA] flex items-center justify-center shrink-0">
+                        <KeyRound className="w-5 h-5" />
+                      </div>
+                      <div className="space-y-1 min-w-0">
+                        <h2
+                          data-no-scroll-zoom
+                          className="!font-['Outfit','Space_Grotesk',sans-serif] text-lg sm:text-xl font-bold text-[#14205A]"
+                        >
+                          Enter Verification Code
+                        </h2>
+                        <p className="text-sm text-slate-600 leading-relaxed break-words">
+                          We&apos;ve sent a 6-digit code to{' '}
+                          <span className="font-semibold text-[#14205A]">
+                            {emailInput}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+
+                    {otpError && (
+                      <div
+                        role="alert"
+                        className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-2.5"
+                      >
+                        <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                        <span>{otpError}</span>
+                      </div>
+                    )}
+
+                    {/* Six separate digit boxes */}
+                    <div
+                      role="group"
+                      aria-label="6-digit verification code"
+                      className="grid grid-cols-6 gap-1.5 sm:gap-2.5 max-w-[340px] mx-auto"
+                    >
+                      {otpDigits.map((digit, index) => (
+                        <input
+                          key={index}
+                          ref={(el) => {
+                            otpInputRefs.current[index] = el;
+                          }}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          autoComplete={index === 0 ? 'one-time-code' : 'off'}
+                          maxLength={index === 0 ? 6 : 1}
+                          value={digit}
+                          onChange={(e) => handleDigitChange(index, e.target.value)}
+                          onKeyDown={(e) => handleDigitKeyDown(index, e)}
+                          onPaste={(e) => handleDigitPaste(index, e)}
+                          aria-label={`Digit ${index + 1}`}
+                          className="w-full h-12 min-h-[48px] text-center font-mono text-[18px] sm:text-xl font-bold rounded-xl border border-slate-300 bg-[#F4F7FC] text-[#14205A] focus:bg-white focus:outline-hidden focus:border-[#1C35EA] focus:ring-4 focus:ring-[#1C35EA]/15 transition-all"
+                        />
+                      ))}
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={
+                        otpDigits.join('').length !== 6 || Boolean(loaderMessage)
+                      }
+                      className="w-full h-12 min-h-[48px] px-6 rounded-xl text-white font-semibold text-[16px] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                      style={{
+                        background:
+                          'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
+                      }}
+                    >
+                      <CheckCircle2 className="w-4 h-4 shrink-0" />
+                      <span>Verify</span>
+                    </button>
+
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs sm:text-sm">
+                      <button
+                        type="button"
+                        disabled={resendSecondsLeft > 0 || Boolean(loaderMessage)}
+                        onClick={() => sendOtpRequest()}
+                        className="min-h-[44px] px-2 font-semibold text-[#1C35EA] hover:underline inline-flex items-center gap-1.5 cursor-pointer disabled:text-slate-400 disabled:no-underline disabled:cursor-not-allowed"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5 shrink-0" />
+                        <span>
+                          {resendSecondsLeft > 0
+                            ? `Resend code (${resendSecondsLeft}s)`
+                            : 'Resend code'}
+                        </span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleChangeEmail}
+                        className="min-h-[44px] px-2 font-semibold text-slate-600 hover:text-[#1C35EA] hover:underline cursor-pointer"
+                      >
+                        Change email
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </div>
+          )}
+
+        {/* Step 3: Full Certificate View (after OTP verification or 30-min sessionStorage cache) */}
+        {verifiedData && !loaderMessage && (
           <div className="space-y-6">
             {/* Status Badge */}
             {verifiedData.status === 'revoked' ? (
@@ -486,7 +1073,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
               >
                 <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
                 <span className="text-sm sm:text-base font-bold">
-                  ✓ Verified – This certificate is genuine and was issued by IAMTECHNI.
+                  ✓ Genuine certificate issued by IAMTECHNI
                 </span>
               </div>
             )}
@@ -650,7 +1237,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
               </div>
             </div>
 
-            {/* Full Certificate Display: 16px side padding on phones (via outer section px-4 + p-0 on mobile), max 794px on desktop/TVs */}
+            {/* Full Certificate Display: 16px side padding on phones, max 794px on desktop/TVs */}
             <div className="sm:bg-white sm:rounded-2xl sm:border sm:border-slate-200 sm:shadow-xs p-0 sm:p-6 flex flex-col items-center">
               <div
                 ref={certContainerWrapperRef}
@@ -682,8 +1269,8 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
       </section>
 
       <FullScreenLoader
-        isOpen={isVerifying}
-        message="Verifying certificate…"
+        isOpen={Boolean(loaderMessage)}
+        message={loaderMessage ?? 'Checking certificate…'}
       />
     </div>
   );
