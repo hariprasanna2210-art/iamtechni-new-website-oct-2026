@@ -46,13 +46,12 @@ import {
 } from '../data/coursesData';
 import { COMPANY_CONTACT } from '../data/companyInfo';
 import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../constants/contact';
-import { getCardColorToken } from '../utils/cardColorTokens';
 import { ScrollReveal, ScrollRevealItem, ScrollRevealSection } from '../components/common/ScrollReveal';
 import { TrainingHeroVisual } from '../components/heroes/TrainingHeroVisual';
-import { ServiceCardThumbnail } from '../components/common/ServiceVisualMockups';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
 import { AnimatedHeading } from '../components/common/AnimatedHeading';
 import { FullScreenLoader } from '../components/common/FullScreenLoader';
+import { CoursesCarousel } from '../components/training/CoursesCarousel';
 
 const COURSE_LOCATION_LINKS: Record<string, { city: string; path: string; label: string }[]> = {
   aws: [
@@ -445,128 +444,15 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
             </div>
           </div>
 
-          {/* Staggered Course Cards Grid */}
-          <ScrollReveal
-            key={selectedCategory}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8"
-            staggerChildren={0.06}
-            amount="some"
-          >
-            {filteredCourses.map((course, idx) => {
-              const color = getCardColorToken(course.colorIndex);
-              const CourseIcon = getCourseIconComponent(course.iconName);
-
-              return (
-                <ScrollRevealItem key={course.id} className="h-full">
-                  <div
-                    id={`course-${course.id}`}
-                    className={`${color.cardBg} ${color.cardBorder} h-full border rounded-2xl p-4 sm:p-7 flex flex-col justify-between ${color.cardHoverBorder} ${color.cardHoverShadow} transition-all duration-200 shadow-2xs interactive-card-lift group`}
-                  >
-                    <div>
-                      {/* Visual Lab / Curriculum Preview */}
-                      <ServiceCardThumbnail slug={course.title} category={course.category} className="mb-3 sm:mb-4" />
-
-                      {/* Top Meta Bar */}
-                      <div className="flex items-center justify-between text-xs mb-3 sm:mb-4">
-                        <span
-                          className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold ${color.badgeBg} ${color.badgeText} border ${color.badgeBorder}`}
-                        >
-                          {course.category.toUpperCase()}
-                        </span>
-                        <div
-                          className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl ${color.iconBg} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform shrink-0`}
-                        >
-                          <CourseIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                        </div>
-                      </div>
-
-                      <h3 className="text-lg sm:text-xl font-bold text-[#1E3A8A] mb-1.5 sm:mb-2 leading-snug">
-                        {course.title}
-                      </h3>
-
-                      <p className="text-[13px] sm:text-sm text-slate-600 leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-none">
-                        {course.subtitle}
-                      </p>
-
-                      {/* Course Key Highlights */}
-                      <div className="space-y-1.5 sm:space-y-2 pt-2.5 sm:pt-3 border-t border-slate-200/70 mb-4 sm:mb-5">
-                        <div className="text-[11px] font-mono uppercase text-slate-500 font-bold tracking-wider mb-1 sm:mb-1.5">
-                          Key Curriculum Highlights
-                        </div>
-                        {course.highlights.map((hl, hIdx) => (
-                          <div
-                            key={hIdx}
-                            className={`${hIdx >= 2 ? 'hidden sm:flex' : 'flex'} items-start gap-2 text-[13px] sm:text-[13.5px] text-slate-700`}
-                          >
-                            <Check className={`w-3.5 h-3.5 ${color.accentText} shrink-0 mt-0.5`} />
-                            <span className="leading-snug">{hl}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Matching Regional Location Pages */}
-                    {(() => {
-                      const regional = COURSE_LOCATION_LINKS[course.id];
-                      if (!regional || regional.length === 0) return null;
-                      return (
-                        <div className="pt-2.5 pb-1 border-t border-slate-200/60">
-                          <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 mb-1.5">
-                            <span className="font-bold text-slate-700 flex items-center gap-1">
-                              <MapPin className="w-3 h-3 text-[#1266E8]" /> Location Pages:
-                            </span>
-                            <Link to="/locations" className="text-[#1266E8] hover:underline">
-                              All locations →
-                            </Link>
-                          </div>
-                          <div className="flex flex-wrap items-center gap-1.5">
-                            {regional.map((loc) => (
-                              <Link
-                                key={loc.path}
-                                to={loc.path}
-                                className="text-[11.5px] font-medium px-2 py-0.5 rounded-md bg-white border border-slate-200 hover:border-[#1266E8] hover:text-[#1266E8] text-slate-700 transition-colors shadow-2xs"
-                              >
-                                {loc.city}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      );
-                    })()}
-
-                    {/* Card Footer Actions: Enquire Now + WhatsApp Option */}
-                    <div className="pt-3 sm:pt-4 border-t border-slate-200/70 space-y-2.5">
-                      <div className="text-[11px] font-mono text-slate-500 flex items-center justify-between">
-                        <span>Mode: Live Online, Instructor-Led</span>
-                        <span className="text-[#2563EB] font-bold">Batches Open</span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                          onClick={() => handleSelectCourseForEnquiry(course.title)}
-                          className="w-full py-2.5 px-3 min-h-[44px] min-w-[44px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
-                        >
-                          <span>Enquire Now</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
-
-                        <a
-                          href={getCourseWhatsAppUrl(course.title)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-full py-2.5 px-3 min-h-[44px] min-w-[44px] bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-900 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer active:scale-98"
-                          title={`Enquire about ${course.title} on WhatsApp`}
-                        >
-                          <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>WhatsApp</span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </ScrollRevealItem>
-              );
-            })}
-          </ScrollReveal>
+          {/* Horizontal Course Cards Carousel */}
+          <CoursesCarousel
+            courses={filteredCourses}
+            selectedCategory={selectedCategory}
+            focusedCourseId={courseSlug}
+            locationLinks={COURSE_LOCATION_LINKS}
+            onEnquire={handleSelectCourseForEnquiry}
+            getCourseIconComponent={getCourseIconComponent}
+          />
         </div>
       </section>
       </MobileSectionSkeletonWrapper>
