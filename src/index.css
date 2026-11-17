@@ -249,7 +249,8 @@
   .skeleton-shimmer-light,
   .skeleton-shimmer-subtle,
   .skeleton-shimmer-dark,
-  .animate-mobile-section-reveal {
+  .animate-mobile-section-reveal,
+  .animate-enrollment-marquee {
     animation: none !important;
   }
   .interactive-card-lift:hover {
@@ -287,6 +288,13 @@
   display: flex;
   width: max-content;
   animation: tech-marquee 26s linear infinite;
+}
+
+.animate-enrollment-marquee {
+  display: flex;
+  width: max-content;
+  animation: tech-marquee 24s linear infinite;
+  will-change: transform;
 }
 
 .animate-tech-marquee-reverse {

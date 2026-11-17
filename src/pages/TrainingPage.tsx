@@ -52,6 +52,7 @@ import { MobileSectionSkeletonWrapper } from '../components/common/MobileSection
 import { AnimatedHeading } from '../components/common/AnimatedHeading';
 import { FullScreenLoader } from '../components/common/FullScreenLoader';
 import { CoursesCarousel } from '../components/training/CoursesCarousel';
+import { EnrollmentStepsMarquee } from '../components/training/EnrollmentStepsMarquee';
 
 const COURSE_LOCATION_LINKS: Record<string, { city: string; path: string; label: string }[]> = {
   aws: [
@@ -1095,47 +1096,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl bg-[#F4F8FF] border border-blue-200/80 space-y-2.5">
-              <span className="text-xs font-mono font-bold text-[#2563EB] bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
-                STEP 01
-              </span>
-              <h3 className="text-base font-bold text-[#1E3A8A]">Select a Course</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Browse our 13 technology programs across software engineering, cloud, AI, and DevOps.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-[#F2FAFD] border border-cyan-200/80 space-y-2.5">
-              <span className="text-xs font-mono font-bold text-[#0284C7] bg-cyan-50 px-2.5 py-0.5 rounded border border-cyan-200">
-                STEP 02
-              </span>
-              <h3 className="text-base font-bold text-[#1E3A8A]">Submit Details</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Fill the enquiry form or message us on WhatsApp with your preferred schedule and learning mode.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-[#F6F4FF] border border-violet-200/80 space-y-2.5">
-              <span className="text-xs font-mono font-bold text-[#7C3AED] bg-violet-50 px-2.5 py-0.5 rounded border border-violet-200">
-                STEP 03
-              </span>
-              <h3 className="text-base font-bold text-[#1E3A8A]">Receive Syllabus &amp; Fee</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Our academic advisor shares the complete syllabus breakdown, upcoming batch timings, and fee structure.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-[#F1FBF8] border border-teal-200/80 space-y-2.5">
-              <span className="text-xs font-mono font-bold text-[#0D9488] bg-teal-50 px-2.5 py-0.5 rounded border border-teal-200">
-                STEP 04
-              </span>
-              <h3 className="text-base font-bold text-[#1E3A8A]">Confirm &amp; Start Labs</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Join your batch cohort, access our code repos, and begin hands-on practical lab sessions.
-              </p>
-            </div>
-          </div>
+          <EnrollmentStepsMarquee />
         </div>
       </section>
       </MobileSectionSkeletonWrapper>
