@@ -375,7 +375,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
       {/* 2. COURSE CATALOG (13 Individual Colorful Cards)                       */}
       {/* ======================================================================= */}
       <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={0} cardCount={3}>
-      <section ref={catalogRef} id="courses-catalog" className="py-10 sm:py-16 lg:py-20 bg-[#F4F7FC] border-b border-slate-200">
+      <section ref={catalogRef} id="courses-catalog" className="py-10 sm:py-16 lg:py-20 bg-[#F4F7FC] border-b border-slate-200 overflow-x-clip">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
           {/* Active Course Regional Location Training Banner if accessed via /training/:slug */}
           {courseSlug && COURSE_LOCATION_LINKS[courseSlug] && (
