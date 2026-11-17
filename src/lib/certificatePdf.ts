@@ -3,6 +3,7 @@ import { jsPDF } from 'jspdf';
 
 const CERTIFICATE_WIDTH_PX = 794;
 const CERTIFICATE_HEIGHT_PX = 1123;
+const CAPTURE_PIXEL_RATIO = 3;
 const A4_WIDTH_MM = 210;
 const A4_HEIGHT_MM = 297;
 const RECIPIENT_NAME_MAX_WIDTH = 640;
@@ -11,9 +12,9 @@ const PDF_ERROR_MESSAGE = 'Could not create the PDF. Please try again.';
 const TRANSPARENT_PIXEL_PNG =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
-// Same Google Fonts stylesheet loaded in index.html for the rest of the site
+// Exact site Google Fonts families & weights used on the certificate (from index.html)
 const SITE_GOOGLE_FONTS_URL =
-  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap';
+  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=Outfit:wght@800&display=swap';
 
 const CERTIFICATE_FONT_DESCRIPTORS = [
   '400 40px "DM Serif Display"',
@@ -64,13 +65,22 @@ function blobToDataUrl(blob: Blob): Promise<string> {
   });
 }
 
+function extractLatinFontFaces(cssText: string): string {
+  const subsetBlocks = cssText.match(/\/\*\s*latin(?:-ext)?\s*\*\/\s*@font-face\s*\{[^}]*\}/g);
+  if (subsetBlocks && subsetBlocks.length > 0) {
+    return subsetBlocks.join('\n');
+  }
+  return cssText;
+}
+
 async function buildEmbeddedSiteFontsCss(): Promise<string | undefined> {
   try {
     const cssResponse = await fetch(SITE_GOOGLE_FONTS_URL, { mode: 'cors' });
     if (!cssResponse.ok) return undefined;
-    const cssText = await cssResponse.text();
-    if (!cssText) return undefined;
+    const rawCssText = await cssResponse.text();
+    if (!rawCssText) return undefined;
 
+    const cssText = extractLatinFontFaces(rawCssText);
     const urlMatches = Array.from(
       cssText.matchAll(/url\((['"]?)(https?:\/\/[^)'"]+)\1\)/g)
     );
@@ -176,16 +186,16 @@ async function waitForImagesInContainer(container: HTMLElement): Promise<void> {
   );
 }
 
-async function verifyPngDataUrl(dataUrl: string): Promise<void> {
+async function verifyAndFlattenPngDataUrl(dataUrl: string): Promise<string> {
   if (!dataUrl || !dataUrl.startsWith('data:image/png;base64,') || dataUrl.length < 500) {
     throw new Error('Generated certificate PNG data URL is invalid or empty.');
   }
 
-  await new Promise<void>((resolve, reject) => {
+  const decodedImg = await new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
       if (img.naturalWidth > 0 && img.naturalHeight > 0) {
-        resolve();
+        resolve(img);
       } else {
         reject(new Error('Generated certificate PNG has zero dimensions.'));
       }
@@ -193,6 +203,22 @@ async function verifyPngDataUrl(dataUrl: string): Promise<void> {
     img.onerror = () => reject(new Error('Generated certificate PNG failed to decode.'));
     img.src = dataUrl;
   });
+
+  const targetWidth = CERTIFICATE_WIDTH_PX * CAPTURE_PIXEL_RATIO;
+  const targetHeight = CERTIFICATE_HEIGHT_PX * CAPTURE_PIXEL_RATIO;
+  const canvas = document.createElement('canvas');
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    return dataUrl;
+  }
+
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, targetWidth, targetHeight);
+  ctx.drawImage(decodedImg, 0, 0, targetWidth, targetHeight);
+  return canvas.toDataURL('image/png');
 }
 
 function lockUnscaledCertificateBox(element: HTMLElement): () => void {
@@ -362,7 +388,7 @@ export async function downloadCertificatePdf(
         height: captureHeight,
         canvasWidth: captureWidth,
         canvasHeight: captureHeight,
-        pixelRatio: 3,
+        pixelRatio: CAPTURE_PIXEL_RATIO,
         cacheBust: true,
         skipAutoScale: true,
         backgroundColor: '#ffffff',
@@ -413,7 +439,7 @@ export async function downloadCertificatePdf(
       restoreStyles();
     }
 
-    await verifyPngDataUrl(pngDataUrl);
+    const finalPngDataUrl = await verifyAndFlattenPngDataUrl(pngDataUrl);
 
     const pdf = new jsPDF({
       orientation: 'portrait',
@@ -422,7 +448,7 @@ export async function downloadCertificatePdf(
       compress: true,
     });
 
-    pdf.addImage(pngDataUrl, 'PNG', 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM);
+    pdf.addImage(finalPngDataUrl, 'PNG', 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM);
 
     const pdfBlob = pdf.output('blob');
     if (!pdfBlob || pdfBlob.size === 0) {
