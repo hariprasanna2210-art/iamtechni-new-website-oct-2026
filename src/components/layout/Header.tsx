@@ -22,9 +22,12 @@ import {
   GraduationCap,
   Briefcase,
 } from 'lucide-react';
+import { onAuthStateChanged } from 'firebase/auth';
 import { IamtechniLogo } from '../common/IamtechniLogo';
 import { PageRoute } from '../../types';
 import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../../constants/contact';
+import { auth } from '../../lib/firebase';
+import { ADMIN_EMAILS } from '../../config/admins';
 
 interface HeaderProps {
   currentRoute: PageRoute;
@@ -45,6 +48,24 @@ export const Header: React.FC<HeaderProps> = ({
   const megaMenuTimeout = useRef<NodeJS.Timeout | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(64);
+  const [isAdminUser, setIsAdminUser] = useState(false);
+
+  // Show navbar Admin link only when signed in as an authorized admin email
+  useEffect(() => {
+    if (!auth) return;
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      const userEmail = (currentUser?.email ?? '').trim().toLowerCase();
+      setIsAdminUser(
+        Boolean(
+          userEmail &&
+            ADMIN_EMAILS.some(
+              (allowed) => allowed.trim().toLowerCase() === userEmail
+            )
+        )
+      );
+    });
+    return () => unsubscribe();
+  }, []);
 
   // Measure header height dynamically for exact mobile panel and 100svh hero alignment
   useEffect(() => {
@@ -750,6 +771,23 @@ export const Header: React.FC<HeaderProps> = ({
               <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
             </button>
 
+            {/* Small Admin link at far right next to Start a Project (signed-in admin only) */}
+            {isAdminUser && (
+              <button
+                type="button"
+                onClick={() => handleLinkClick('/admin')}
+                aria-label="Admin"
+                title="Admin"
+                className={`inline-flex items-center justify-center h-[44px] px-2 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer rounded-md focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] ${
+                  currentRoute === '/admin'
+                    ? 'text-[#1266E8]'
+                    : 'text-slate-600 hover:text-[#1266E8]'
+                }`}
+              >
+                Admin
+              </button>
+            )}
+
             {/* Accessible Mobile Menu Hamburger Toggle (Below 1280px) */}
             <button
               type="button"
@@ -1135,6 +1173,24 @@ export const Header: React.FC<HeaderProps> = ({
                     <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
                   )}
                 </button>
+
+                {/* 10. Admin (signed-in admin only) */}
+                {isAdminUser && (
+                  <button
+                    type="button"
+                    onClick={() => handleLinkClick('/admin')}
+                    className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
+                      currentRoute === '/admin'
+                        ? 'text-[#1266E8] bg-blue-50/70 font-bold'
+                        : 'text-slate-900 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span>Admin</span>
+                    {currentRoute === '/admin' && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
+                    )}
+                  </button>
+                )}
               </div>
             </div>
 
