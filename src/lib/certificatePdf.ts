@@ -3,6 +3,8 @@ import { jsPDF } from 'jspdf';
 
 const CERTIFICATE_WIDTH_PX = 794;
 const CERTIFICATE_HEIGHT_PX = 1123;
+const A4_WIDTH_MM = 210;
+const A4_HEIGHT_MM = 297;
 const RECIPIENT_NAME_MAX_WIDTH = 640;
 const RECIPIENT_NAME_MIN_FONT_SIZE = 24;
 const PDF_ERROR_MESSAGE = 'Could not create the PDF. Please try again.';
@@ -35,6 +37,13 @@ interface SavedStyleSnapshot {
   minHeight: string;
   maxWidth: string;
   maxHeight: string;
+  margin: string;
+  padding: string;
+  borderWidth: string;
+  boxShadow: string;
+  boxSizing: string;
+  backgroundColor: string;
+  overflow: string;
   transform: string;
   transformOrigin: string;
   zoom: string;
@@ -199,6 +208,13 @@ function lockUnscaledCertificateBox(element: HTMLElement): () => void {
       minHeight: s.minHeight,
       maxWidth: s.maxWidth,
       maxHeight: s.maxHeight,
+      margin: s.margin,
+      padding: s.padding,
+      borderWidth: s.borderWidth,
+      boxShadow: s.boxShadow,
+      boxSizing: s.boxSizing,
+      backgroundColor: s.backgroundColor,
+      overflow: s.overflow,
       transform: s.transform,
       transformOrigin: s.transformOrigin,
       zoom: s.zoom,
@@ -212,6 +228,13 @@ function lockUnscaledCertificateBox(element: HTMLElement): () => void {
   element.style.minHeight = `${CERTIFICATE_HEIGHT_PX}px`;
   element.style.maxWidth = `${CERTIFICATE_WIDTH_PX}px`;
   element.style.maxHeight = `${CERTIFICATE_HEIGHT_PX}px`;
+  element.style.margin = '0';
+  element.style.padding = '0';
+  element.style.borderWidth = '0';
+  element.style.boxShadow = 'none';
+  element.style.boxSizing = 'border-box';
+  element.style.backgroundColor = '#ffffff';
+  element.style.overflow = 'hidden';
   element.style.transform = 'none';
   element.style.transformOrigin = 'top left';
   element.style.zoom = '1';
@@ -271,6 +294,13 @@ function lockUnscaledCertificateBox(element: HTMLElement): () => void {
       s.minHeight = snap.minHeight;
       s.maxWidth = snap.maxWidth;
       s.maxHeight = snap.maxHeight;
+      s.margin = snap.margin;
+      s.padding = snap.padding;
+      s.borderWidth = snap.borderWidth;
+      s.boxShadow = snap.boxShadow;
+      s.boxSizing = snap.boxSizing;
+      s.backgroundColor = snap.backgroundColor;
+      s.overflow = snap.overflow;
       s.transform = snap.transform;
       s.transformOrigin = snap.transformOrigin;
       s.zoom = snap.zoom;
@@ -317,13 +347,24 @@ export async function downloadCertificatePdf(
         requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
       });
 
+      const rect = element.getBoundingClientRect();
+      const captureWidth =
+        Math.round(rect.width) === CERTIFICATE_WIDTH_PX
+          ? CERTIFICATE_WIDTH_PX
+          : Math.round(rect.width) || CERTIFICATE_WIDTH_PX;
+      const captureHeight =
+        Math.round(rect.height) === CERTIFICATE_HEIGHT_PX
+          ? CERTIFICATE_HEIGHT_PX
+          : Math.round(rect.height) || CERTIFICATE_HEIGHT_PX;
+
       pngDataUrl = await toPng(element, {
-        width: CERTIFICATE_WIDTH_PX,
-        height: CERTIFICATE_HEIGHT_PX,
-        canvasWidth: CERTIFICATE_WIDTH_PX,
-        canvasHeight: CERTIFICATE_HEIGHT_PX,
+        width: captureWidth,
+        height: captureHeight,
+        canvasWidth: captureWidth,
+        canvasHeight: captureHeight,
         pixelRatio: 3,
         cacheBust: true,
+        skipAutoScale: true,
         backgroundColor: '#ffffff',
         preferredFontFormat: 'woff2',
         ...(fontEmbedCSS ? { fontEmbedCSS } : {}),
@@ -347,13 +388,25 @@ export async function downloadCertificatePdf(
         style: {
           transform: 'none',
           transformOrigin: 'top left',
-          width: `${CERTIFICATE_WIDTH_PX}px`,
-          height: `${CERTIFICATE_HEIGHT_PX}px`,
-          minWidth: `${CERTIFICATE_WIDTH_PX}px`,
-          minHeight: `${CERTIFICATE_HEIGHT_PX}px`,
-          maxWidth: `${CERTIFICATE_WIDTH_PX}px`,
-          maxHeight: `${CERTIFICATE_HEIGHT_PX}px`,
+          zoom: '1',
+          position: 'relative',
+          top: '0px',
+          left: '0px',
+          right: 'auto',
+          bottom: 'auto',
+          width: `${captureWidth}px`,
+          height: `${captureHeight}px`,
+          minWidth: `${captureWidth}px`,
+          minHeight: `${captureHeight}px`,
+          maxWidth: `${captureWidth}px`,
+          maxHeight: `${captureHeight}px`,
           margin: '0',
+          padding: '0',
+          border: '0',
+          boxShadow: 'none',
+          boxSizing: 'border-box',
+          overflow: 'hidden',
+          backgroundColor: '#ffffff',
         },
       });
     } finally {
@@ -365,13 +418,11 @@ export async function downloadCertificatePdf(
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: 'a4',
+      format: [A4_WIDTH_MM, A4_HEIGHT_MM],
       compress: true,
     });
 
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    pdf.addImage(pngDataUrl, 'PNG', 0, 0, pageWidth, pageHeight);
+    pdf.addImage(pngDataUrl, 'PNG', 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM);
 
     const pdfBlob = pdf.output('blob');
     if (!pdfBlob || pdfBlob.size === 0) {
