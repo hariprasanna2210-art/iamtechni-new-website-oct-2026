@@ -18,7 +18,6 @@ import {
   Globe,
   Layers,
   ChevronDown,
-  Compass,
   Check,
   Send,
   HelpCircle,
@@ -26,11 +25,9 @@ import {
   MessageCircle,
   Clock,
   Calendar,
-  Users,
   GraduationCap,
   Briefcase,
   AlertCircle,
-  Laptop,
   MapPin,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -53,6 +50,10 @@ import { AnimatedHeading } from '../components/common/AnimatedHeading';
 import { FullScreenLoader } from '../components/common/FullScreenLoader';
 import { CoursesCarousel } from '../components/training/CoursesCarousel';
 import { EnrollmentStepsMarquee } from '../components/training/EnrollmentStepsMarquee';
+import {
+  PracticalApproachMarquee,
+  WhoCanJoinMarquee,
+} from '../components/training/TrainingCardMarquee';
 
 const COURSE_LOCATION_LINKS: Record<string, { city: string; path: string; label: string }[]> = {
   aws: [
@@ -625,47 +626,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-            <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2 sm:space-y-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 text-[#1266E8] flex items-center justify-center border border-blue-200">
-                <Terminal className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">Hands-on Code Labs</h3>
-              <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 sm:line-clamp-none">
-                Every session includes guided code-along labs and exercises pushed directly to your personal GitHub repository.
-              </p>
-            </div>
-
-            <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2 sm:space-y-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-cyan-50 text-[#0284C7] flex items-center justify-center border border-cyan-200">
-                <Laptop className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">Production Capstone</h3>
-              <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 sm:line-clamp-none">
-                Build a real-world end-to-end project that mirrors industry standards, ready to showcase to hiring engineering managers.
-              </p>
-            </div>
-
-            <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2 sm:space-y-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-violet-50 text-[#7C3AED] flex items-center justify-center border border-violet-200">
-                <Users className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">Code Reviews &amp; Mentoring</h3>
-              <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 sm:line-clamp-none">
-                Receive direct constructive code reviews from senior developers on code structure, readability, and performance.
-              </p>
-            </div>
-
-            <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2 sm:space-y-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-teal-50 text-[#0D9488] flex items-center justify-center border border-teal-200">
-                <Briefcase className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">Interview &amp; Skill Prep</h3>
-              <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 sm:line-clamp-none">
-                Learn how software companies evaluate engineers, structure technical portfolios, and conduct coding reviews.
-              </p>
-            </div>
-          </div>
+          <PracticalApproachMarquee />
         </div>
       </section>
       </MobileSectionSkeletonWrapper>
@@ -688,47 +649,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-            <div className="bg-[#EAF3FF] p-4 sm:p-6 rounded-2xl border border-blue-200/90 shadow-2xs space-y-2 sm:space-y-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#1266E8] text-white flex items-center justify-center shadow-xs">
-                <GraduationCap className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">College Students</h3>
-              <p className="text-xs text-slate-700 leading-relaxed line-clamp-3 sm:line-clamp-none">
-                Gain practical programming, database, and cloud skills ahead of campus interviews and academic capstone projects.
-              </p>
-            </div>
-
-            <div className="bg-[#E4FAFF] p-4 sm:p-6 rounded-2xl border border-cyan-200/90 shadow-2xs space-y-2 sm:space-y-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0284C7] text-white flex items-center justify-center shadow-xs">
-                <Briefcase className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">Fresh Graduates</h3>
-              <p className="text-xs text-slate-700 leading-relaxed line-clamp-3 sm:line-clamp-none">
-                Bridge the gap between college curricula and real industry expectations with production-ready code repositories.
-              </p>
-            </div>
-
-            <div className="bg-[#F0EAFF] p-4 sm:p-6 rounded-2xl border border-violet-200/90 shadow-2xs space-y-2 sm:space-y-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#7C3AED] text-white flex items-center justify-center shadow-xs">
-                <Workflow className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">Working Professionals</h3>
-              <p className="text-xs text-slate-700 leading-relaxed line-clamp-3 sm:line-clamp-none">
-                Upskill into high-growth disciplines like Cloud (AWS/Azure), Generative AI, or DevOps containerization via weekend batches.
-              </p>
-            </div>
-
-            <div className="bg-[#E1F8F2] p-4 sm:p-6 rounded-2xl border border-teal-200/90 shadow-2xs space-y-2 sm:space-y-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0D9488] text-white flex items-center justify-center shadow-xs">
-                <Compass className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">Career Changers</h3>
-              <p className="text-xs text-slate-700 leading-relaxed line-clamp-3 sm:line-clamp-none">
-                Transition smoothly from non-technical fields into software development through structured step-by-step guidance.
-              </p>
-            </div>
-          </div>
+          <WhoCanJoinMarquee />
         </div>
       </section>
       </MobileSectionSkeletonWrapper>
