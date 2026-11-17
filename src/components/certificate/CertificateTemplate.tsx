@@ -221,8 +221,8 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: isTwoRowSkills
-            ? '46px 52px 26px 52px'
-            : '60px 56px 32px 56px',
+            ? '34px 48px 22px 48px'
+            : '54px 56px 30px 56px',
           boxSizing: 'border-box',
           textAlign: 'center',
         }}
@@ -236,7 +236,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             justifyContent: 'center',
             width: '100%',
             flex: 1,
-            gap: isTwoRowSkills ? '24px' : '34px',
+            gap: isTwoRowSkills ? '18px' : '30px',
           }}
         >
           {/* 1. Title & Program Subtitle Block */}
@@ -424,13 +424,14 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             </div>
           </div>
 
-          {/* 3. KEY AREAS OF WORK Block (1–6 items: 1 row, 44px circles, 12px labels; 7–12 items: 2 rows, 38px circles, 11px labels, 12px row gap) */}
+          {/* 3. KEY AREAS OF WORK Block (56px icon circles, >=36px tall labels with overflow visible) */}
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               width: '100%',
+              overflow: 'visible',
             }}
           >
             <div
@@ -450,7 +451,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
                 borderRadius: '9999px',
-                marginBottom: isTwoRowSkills ? '14px' : '18px',
+                marginBottom: isTwoRowSkills ? '12px' : '16px',
                 boxShadow: '0 4px 12px rgba(28, 53, 234, 0.18)',
                 boxSizing: 'border-box',
               }}
@@ -472,8 +473,9 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '12px',
+                  gap: isTwoRowSkills ? '10px' : '12px',
                   width: '100%',
+                  overflow: 'visible',
                 }}
               >
                 {skillRows.map((rowItems, rowIndex) => (
@@ -485,14 +487,15 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                       justifyContent: 'center',
                       gap: isTwoRowSkills ? '16px' : '20px',
                       flexWrap: 'nowrap',
+                      overflow: 'visible',
                     }}
                   >
                     {rowItems.map((toolName) => {
                       const skill = getCertificateSkillConfig(toolName);
                       const IconComponent = skill.icon;
-                      const circleSize = isTwoRowSkills ? 38 : 44;
-                      const iconSize = isTwoRowSkills ? 19 : 22;
-                      const labelFontSize = isTwoRowSkills ? '11px' : '12px';
+                      const circleSize = 56;
+                      const iconSize = isTwoRowSkills ? 24 : 26;
+                      const labelFontSize = isTwoRowSkills ? '11.5px' : '12.5px';
 
                       return (
                         <div
@@ -501,8 +504,9 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            width: isTwoRowSkills ? '86px' : '88px',
+                            width: isTwoRowSkills ? '90px' : '92px',
                             minWidth: 0,
+                            overflow: 'visible',
                           }}
                         >
                           <div
@@ -517,7 +521,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                               alignItems: 'center',
                               justifyContent: 'center',
                               boxShadow: '0 4px 10px rgba(20, 32, 90, 0.12)',
-                              marginBottom: isTwoRowSkills ? '5px' : '7px',
+                              marginBottom: isTwoRowSkills ? '6px' : '8px',
                               flexShrink: 0,
                             }}
                           >
@@ -533,15 +537,16 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                               fontSize: labelFontSize,
                               fontWeight: 600,
                               color: '#14205A',
-                              lineHeight: 1.2,
+                              lineHeight: 1.3,
                               textAlign: 'center',
-                              maxWidth: '86px',
-                              maxHeight: isTwoRowSkills ? '26.4px' : '28.8px',
-                              overflow: 'hidden',
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
+                              width: '100%',
+                              maxWidth: '92px',
+                              minHeight: '36px',
+                              overflow: 'visible',
+                              display: 'block',
                               wordBreak: 'break-word',
+                              overflowWrap: 'anywhere',
+                              paddingBottom: '2px',
                             }}
                           >
                             {toolName}

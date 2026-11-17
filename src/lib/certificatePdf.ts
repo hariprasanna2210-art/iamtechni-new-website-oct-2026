@@ -1,9 +1,24 @@
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 
 const CERTIFICATE_WIDTH_PX = 794;
 const CERTIFICATE_HEIGHT_PX = 1123;
 const PDF_ERROR_MESSAGE = 'Could not create the PDF. Please try again.';
+const TRANSPARENT_PIXEL_PNG =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
+interface SavedStyleSnapshot {
+  element: HTMLElement;
+  width: string;
+  height: string;
+  minWidth: string;
+  minHeight: string;
+  maxWidth: string;
+  maxHeight: string;
+  transform: string;
+  transformOrigin: string;
+  zoom: string;
+}
 
 async function waitForImagesInContainer(container: HTMLElement): Promise<void> {
   const images = Array.from(container.querySelectorAll('img'));
@@ -46,9 +61,107 @@ async function waitForImagesInContainer(container: HTMLElement): Promise<void> {
   );
 }
 
+async function verifyPngDataUrl(dataUrl: string): Promise<void> {
+  if (!dataUrl || !dataUrl.startsWith('data:image/png;base64,') || dataUrl.length < 500) {
+    throw new Error('Generated certificate PNG data URL is invalid or empty.');
+  }
+
+  await new Promise<void>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+        resolve();
+      } else {
+        reject(new Error('Generated certificate PNG has zero dimensions.'));
+      }
+    };
+    img.onerror = () => reject(new Error('Generated certificate PNG failed to decode.'));
+    img.src = dataUrl;
+  });
+}
+
+function lockUnscaledCertificateBox(element: HTMLElement): () => void {
+  const snapshots: SavedStyleSnapshot[] = [];
+
+  const captureStyle = (el: HTMLElement) => {
+    const s = el.style;
+    snapshots.push({
+      element: el,
+      width: s.width,
+      height: s.height,
+      minWidth: s.minWidth,
+      minHeight: s.minHeight,
+      maxWidth: s.maxWidth,
+      maxHeight: s.maxHeight,
+      transform: s.transform,
+      transformOrigin: s.transformOrigin,
+      zoom: s.zoom,
+    });
+  };
+
+  captureStyle(element);
+  element.style.width = `${CERTIFICATE_WIDTH_PX}px`;
+  element.style.height = `${CERTIFICATE_HEIGHT_PX}px`;
+  element.style.minWidth = `${CERTIFICATE_WIDTH_PX}px`;
+  element.style.minHeight = `${CERTIFICATE_HEIGHT_PX}px`;
+  element.style.maxWidth = `${CERTIFICATE_WIDTH_PX}px`;
+  element.style.maxHeight = `${CERTIFICATE_HEIGHT_PX}px`;
+  element.style.transform = 'none';
+  element.style.transformOrigin = 'top left';
+  element.style.zoom = '1';
+
+  // Neutralize any ancestor transform/scale wrapper if an on-screen scaled container is passed
+  let parent = element.parentElement;
+  while (parent && parent !== document.body && parent !== document.documentElement) {
+    const computedTransform = window.getComputedStyle(parent).transform;
+    if (
+      (computedTransform && computedTransform !== 'none') ||
+      (parent.style.transform && parent.style.transform !== 'none') ||
+      (parent.style.zoom && parent.style.zoom !== '1')
+    ) {
+      captureStyle(parent);
+      parent.style.transform = 'none';
+      parent.style.transformOrigin = 'top left';
+      parent.style.zoom = '1';
+    }
+    parent = parent.parentElement;
+  }
+
+  return () => {
+    for (let i = snapshots.length - 1; i >= 0; i -= 1) {
+      const snap = snapshots[i];
+      const s = snap.element.style;
+      s.width = snap.width;
+      s.height = snap.height;
+      s.minWidth = snap.minWidth;
+      s.minHeight = snap.minHeight;
+      s.maxWidth = snap.maxWidth;
+      s.maxHeight = snap.maxHeight;
+      s.transform = snap.transform;
+      s.transformOrigin = snap.transformOrigin;
+      s.zoom = snap.zoom;
+    }
+  };
+}
+
+function triggerBlobDownload(blob: Blob, fileName: string): void {
+  const blobUrl = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = blobUrl;
+  link.download = fileName;
+  link.rel = 'noopener';
+  link.style.display = 'none';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.setTimeout(() => {
+    URL.revokeObjectURL(blobUrl);
+  }, 60_000);
+}
+
 /**
- * Captures a 794x1123 CertificateTemplate DOM element and saves it as a full-bleed
- * A4 portrait (210 x 297 mm) PDF named IAMTECHNI-Certificate-<certificateId>.pdf.
+ * Captures a 794x1123 CertificateTemplate DOM element using html-to-image (toPng)
+ * and saves it as a full-bleed A4 portrait PDF named IAMTECHNI-Certificate-<certificateId>.pdf.
  */
 export async function downloadCertificatePdf(
   element: HTMLElement,
@@ -61,91 +174,77 @@ export async function downloadCertificatePdf(
 
     await waitForImagesInContainer(element);
 
-    // Wait one animation frame so fonts, images, and QRCodeCanvas have painted
-    await new Promise<void>((resolve) => {
-      requestAnimationFrame(() => resolve());
-    });
+    let pngDataUrl = '';
+    const restoreStyles = lockUnscaledCertificateBox(element);
 
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: false,
-      backgroundColor: '#ffffff',
-      width: CERTIFICATE_WIDTH_PX,
-      height: CERTIFICATE_HEIGHT_PX,
-      windowWidth: CERTIFICATE_WIDTH_PX,
-      windowHeight: CERTIFICATE_HEIGHT_PX,
-      x: 0,
-      y: 0,
-      scrollX: 0,
-      scrollY: 0,
-      onclone: (clonedDoc, clonedElement) => {
-        // Ensure cloned document root uses plain hex colors rather than Tailwind CSS v4 oklch/oklab
-        clonedDoc.documentElement.style.backgroundColor = '#ffffff';
-        clonedDoc.body.style.backgroundColor = '#ffffff';
-        clonedDoc.body.style.color = '#14205A';
+    try {
+      // Wait two animation frames so unscaled 794x1123 layout, fonts, images, and QR canvas settle
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      });
 
-        // Bring off-screen fixed wrapper to (0, 0) inside the cloned viewport
-        const parent = clonedElement.parentElement;
-        if (parent instanceof HTMLElement && parent !== clonedDoc.body) {
-          parent.style.position = 'fixed';
-          parent.style.left = '0px';
-          parent.style.top = '0px';
-          parent.style.width = `${CERTIFICATE_WIDTH_PX}px`;
-          parent.style.height = `${CERTIFICATE_HEIGHT_PX}px`;
-          parent.style.transform = 'none';
-          parent.style.overflow = 'hidden';
-          parent.style.zIndex = '99999';
-          parent.style.visibility = 'visible';
-          parent.style.opacity = '1';
-        }
-
-        if (clonedElement instanceof HTMLElement) {
-          clonedElement.style.transform = 'none';
-          clonedElement.style.width = `${CERTIFICATE_WIDTH_PX}px`;
-          clonedElement.style.height = `${CERTIFICATE_HEIGHT_PX}px`;
-        }
-
-        // Skip any image that failed to load so it cannot break the canvas export
-        const clonedImgs = Array.from(clonedElement.querySelectorAll('img'));
-        for (const img of clonedImgs) {
-          if (img.complete && img.naturalWidth === 0) {
-            img.style.display = 'none';
+      pngDataUrl = await toPng(element, {
+        width: CERTIFICATE_WIDTH_PX,
+        height: CERTIFICATE_HEIGHT_PX,
+        canvasWidth: CERTIFICATE_WIDTH_PX,
+        canvasHeight: CERTIFICATE_HEIGHT_PX,
+        pixelRatio: 3,
+        cacheBust: true,
+        backgroundColor: '#ffffff',
+        imagePlaceholder: TRANSPARENT_PIXEL_PNG,
+        onImageErrorHandler: () => {
+          // Skip failed images without aborting the entire capture
+        },
+        filter: (domNode) => {
+          if (domNode instanceof HTMLLinkElement) {
+            return false;
           }
-        }
-
-        const pillText = clonedDoc.querySelector('[data-cert-key-areas-pill]');
-        if (pillText instanceof HTMLElement) {
-          pillText.style.display = 'inline-flex';
-          pillText.style.alignItems = 'center';
-          pillText.style.justifyContent = 'center';
-          pillText.style.height = '24px';
-          pillText.style.lineHeight = '1';
-          pillText.style.padding = '0 14px';
-        }
-      },
-    });
-
-    if (!canvas || canvas.width <= 0 || canvas.height <= 0) {
-      throw new Error('Captured certificate canvas is empty.');
+          if (
+            domNode instanceof HTMLImageElement &&
+            domNode.complete &&
+            domNode.naturalWidth === 0
+          ) {
+            return false;
+          }
+          return true;
+        },
+        style: {
+          transform: 'none',
+          transformOrigin: 'top left',
+          width: `${CERTIFICATE_WIDTH_PX}px`,
+          height: `${CERTIFICATE_HEIGHT_PX}px`,
+          minWidth: `${CERTIFICATE_WIDTH_PX}px`,
+          minHeight: `${CERTIFICATE_HEIGHT_PX}px`,
+          maxWidth: `${CERTIFICATE_WIDTH_PX}px`,
+          maxHeight: `${CERTIFICATE_HEIGHT_PX}px`,
+          margin: '0',
+        },
+      });
+    } finally {
+      restoreStyles();
     }
 
-    const imgData = canvas.toDataURL('image/png');
-    if (!imgData || !imgData.startsWith('data:image/png')) {
-      throw new Error('Captured certificate PNG data URL is invalid.');
-    }
+    await verifyPngDataUrl(pngDataUrl);
 
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
+      compress: true,
     });
 
-    pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    pdf.addImage(pngDataUrl, 'PNG', 0, 0, pageWidth, pageHeight);
+
+    const pdfBlob = pdf.output('blob');
+    if (!pdfBlob || pdfBlob.size === 0) {
+      throw new Error('Generated PDF blob is empty.');
+    }
 
     const safeId = (certificateId || 'Certificate').trim() || 'Certificate';
     const fileName = `IAMTECHNI-Certificate-${safeId}.pdf`;
-    await pdf.save(fileName, { returnPromise: true });
+    triggerBlobDownload(pdfBlob, fileName);
   } catch (err) {
     console.error('[certificatePdf] Failed to generate certificate PDF:', err);
     throw new Error(PDF_ERROR_MESSAGE);
