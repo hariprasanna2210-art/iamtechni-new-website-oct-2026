@@ -3,9 +3,29 @@ import { jsPDF } from 'jspdf';
 
 const CERTIFICATE_WIDTH_PX = 794;
 const CERTIFICATE_HEIGHT_PX = 1123;
+const RECIPIENT_NAME_MAX_WIDTH = 640;
+const RECIPIENT_NAME_MIN_FONT_SIZE = 24;
 const PDF_ERROR_MESSAGE = 'Could not create the PDF. Please try again.';
 const TRANSPARENT_PIXEL_PNG =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
+// Same Google Fonts stylesheet loaded in index.html for the rest of the site
+const SITE_GOOGLE_FONTS_URL =
+  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap';
+
+const CERTIFICATE_FONT_DESCRIPTORS = [
+  '400 40px "DM Serif Display"',
+  '400 24px "DM Serif Display"',
+  '400 52px "DM Serif Display"',
+  'italic 400 30px "DM Serif Display"',
+  '400 16px "Inter"',
+  '500 15px "Inter"',
+  '600 14px "Inter"',
+  '700 16px "Inter"',
+  '800 116px "Outfit"',
+];
+
+let cachedFontEmbedCssPromise: Promise<string | undefined> | null = null;
 
 interface SavedStyleSnapshot {
   element: HTMLElement;
@@ -18,6 +38,92 @@ interface SavedStyleSnapshot {
   transform: string;
   transformOrigin: string;
   zoom: string;
+}
+
+function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === 'string' && reader.result.startsWith('data:')) {
+        resolve(reader.result);
+      } else {
+        reject(new Error('Failed to convert font blob to data URL.'));
+      }
+    };
+    reader.onerror = () => reject(reader.error ?? new Error('FileReader error'));
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function buildEmbeddedSiteFontsCss(): Promise<string | undefined> {
+  try {
+    const cssResponse = await fetch(SITE_GOOGLE_FONTS_URL, { mode: 'cors' });
+    if (!cssResponse.ok) return undefined;
+    const cssText = await cssResponse.text();
+    if (!cssText) return undefined;
+
+    const urlMatches = Array.from(
+      cssText.matchAll(/url\((['"]?)(https?:\/\/[^)'"]+)\1\)/g)
+    );
+    if (urlMatches.length === 0) return cssText;
+
+    const uniqueUrls = Array.from(new Set(urlMatches.map((m) => m[2])));
+    const urlToDataUrl = new Map<string, string>();
+
+    await Promise.all(
+      uniqueUrls.map(async (fontUrl) => {
+        try {
+          const res = await fetch(fontUrl, { mode: 'cors' });
+          if (!res.ok) return;
+          const blob = await res.blob();
+          const dataUrl = await blobToDataUrl(blob);
+          urlToDataUrl.set(fontUrl, dataUrl);
+        } catch {
+          // Leave remote URL intact if a single font subset fails to fetch
+        }
+      })
+    );
+
+    if (urlToDataUrl.size === 0) return undefined;
+
+    return cssText.replace(
+      /url\((['"]?)(https?:\/\/[^)'"]+)\1\)/g,
+      (fullMatch, _quote, matchedUrl: string) => {
+        const inlined = urlToDataUrl.get(matchedUrl);
+        return inlined ? `url("${inlined}")` : fullMatch;
+      }
+    );
+  } catch {
+    return undefined;
+  }
+}
+
+async function getEmbeddedSiteFontsCss(): Promise<string | undefined> {
+  if (!cachedFontEmbedCssPromise) {
+    cachedFontEmbedCssPromise = buildEmbeddedSiteFontsCss().then((css) => {
+      if (!css) {
+        cachedFontEmbedCssPromise = null;
+      }
+      return css;
+    });
+  }
+  return cachedFontEmbedCssPromise;
+}
+
+async function ensureCertificateFontsLoaded(): Promise<void> {
+  if (typeof document === 'undefined' || !document.fonts) return;
+
+  if (typeof document.fonts.load === 'function') {
+    await Promise.allSettled(
+      CERTIFICATE_FONT_DESCRIPTORS.map((descriptor) =>
+        document.fonts.load(descriptor)
+      )
+    );
+  }
+
+  if (document.fonts.ready) {
+    await document.fonts.ready;
+  }
 }
 
 async function waitForImagesInContainer(container: HTMLElement): Promise<void> {
@@ -127,7 +233,35 @@ function lockUnscaledCertificateBox(element: HTMLElement): () => void {
     parent = parent.parentElement;
   }
 
+  // Ensure the recipient name fits cleanly on a single line inside the unscaled 794px box
+  let restoreNameFontSize: (() => void) | null = null;
+  const recipientNameEl = element.querySelector<HTMLElement>(
+    '[data-cert-recipient-name="true"]'
+  );
+  if (recipientNameEl) {
+    const originalFontSize = recipientNameEl.style.fontSize;
+    let parsedSize = parseFloat(window.getComputedStyle(recipientNameEl).fontSize);
+    if (Number.isFinite(parsedSize) && parsedSize > RECIPIENT_NAME_MIN_FONT_SIZE) {
+      let currentSize = Math.round(parsedSize);
+      while (
+        currentSize > RECIPIENT_NAME_MIN_FONT_SIZE &&
+        recipientNameEl.scrollWidth > RECIPIENT_NAME_MAX_WIDTH
+      ) {
+        currentSize -= 1;
+        recipientNameEl.style.fontSize = `${currentSize}px`;
+      }
+      if (recipientNameEl.style.fontSize !== originalFontSize) {
+        restoreNameFontSize = () => {
+          recipientNameEl.style.fontSize = originalFontSize;
+        };
+      }
+    }
+  }
+
   return () => {
+    if (restoreNameFontSize) {
+      restoreNameFontSize();
+    }
     for (let i = snapshots.length - 1; i >= 0; i -= 1) {
       const snap = snapshots[i];
       const s = snap.element.style;
@@ -168,11 +302,11 @@ export async function downloadCertificatePdf(
   certificateId: string
 ): Promise<void> {
   try {
-    if (typeof document !== 'undefined' && document.fonts?.ready) {
-      await document.fonts.ready;
-    }
-
-    await waitForImagesInContainer(element);
+    const [, , fontEmbedCSS] = await Promise.all([
+      ensureCertificateFontsLoaded(),
+      waitForImagesInContainer(element),
+      getEmbeddedSiteFontsCss(),
+    ]);
 
     let pngDataUrl = '';
     const restoreStyles = lockUnscaledCertificateBox(element);
@@ -191,6 +325,8 @@ export async function downloadCertificatePdf(
         pixelRatio: 3,
         cacheBust: true,
         backgroundColor: '#ffffff',
+        preferredFontFormat: 'woff2',
+        ...(fontEmbedCSS ? { fontEmbedCSS } : {}),
         imagePlaceholder: TRANSPARENT_PIXEL_PNG,
         onImageErrorHandler: () => {
           // Skip failed images without aborting the entire capture

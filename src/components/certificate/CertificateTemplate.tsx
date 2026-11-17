@@ -58,17 +58,63 @@ const BRAND_GRADIENT_VERTICAL =
 const BRAND_GRADIENT_DIAGONAL =
   'linear-gradient(135deg, #00B0F0 0%, #1C35EA 50%, #4D19EA 100%)';
 
-const FONT_NEWSREADER = "'Newsreader', Georgia, 'Times New Roman', serif";
-const FONT_MANROPE = "'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
-const FONT_GREAT_VIBES = "'Great Vibes', cursive";
+const FONT_SERIF = "'DM Serif Display', Georgia, 'Times New Roman', serif";
+const FONT_SANS = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
+const FONT_DISPLAY =
+  "'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif";
+
+const RECIPIENT_NAME_MAX_WIDTH = 640;
+const RECIPIENT_NAME_MAX_FONT_SIZE = 52;
+const RECIPIENT_NAME_MIN_FONT_SIZE = 28;
 
 export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
   data,
   containerRef,
 }) => {
   const [signatureLoadFailed, setSignatureLoadFailed] = React.useState(false);
+  const recipientNameRef = React.useRef<HTMLDivElement | null>(null);
+  const [nameFontSize, setNameFontSize] = React.useState<number>(
+    RECIPIENT_NAME_MAX_FONT_SIZE
+  );
   const isStudent = data.type === 'student';
   const displayName = data.fullName.trim() || 'Applicant Full Name';
+
+  const adjustRecipientNameSize = React.useCallback(() => {
+    const el = recipientNameRef.current;
+    if (!el) return;
+
+    const prevFontSize = el.style.fontSize;
+    let nextSize = RECIPIENT_NAME_MAX_FONT_SIZE;
+    el.style.fontSize = `${nextSize}px`;
+
+    while (
+      nextSize > RECIPIENT_NAME_MIN_FONT_SIZE &&
+      el.scrollWidth > RECIPIENT_NAME_MAX_WIDTH
+    ) {
+      nextSize -= 1;
+      el.style.fontSize = `${nextSize}px`;
+    }
+
+    el.style.fontSize = prevFontSize;
+    setNameFontSize((current) => (current === nextSize ? current : nextSize));
+  }, []);
+
+  React.useLayoutEffect(() => {
+    let active = true;
+    adjustRecipientNameSize();
+
+    if (typeof document !== 'undefined' && document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        if (active) {
+          adjustRecipientNameSize();
+        }
+      });
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [displayName, adjustRecipientNameSize]);
   const displayCourse = data.course.trim() || 'Course Name';
   const displayCollege = (data.college ?? '').trim() || 'College / University';
   const durationNum =
@@ -108,17 +154,12 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
         overflow: 'hidden',
         backgroundColor: '#FFFFFF',
         color: '#14205A',
-        fontFamily: FONT_MANROPE,
+        fontFamily: FONT_SANS,
         boxSizing: 'border-box',
         userSelect: 'none',
         WebkitFontSmoothing: 'antialiased',
       }}
     >
-      {/* Ensure Google Fonts are loaded whenever CertificateTemplate is rendered */}
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap"
-      />
 
       {/* Top ~78% light tint #F5F9FF (876px of 1123px is 78.0%) */}
       <div
@@ -225,6 +266,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             : '54px 56px 30px 56px',
           boxSizing: 'border-box',
           textAlign: 'center',
+          overflow: 'hidden',
         }}
       >
         {/* Grouped Main Content Stack: Title/Subtitle, Recipient/Paragraph, Key Areas */}
@@ -236,6 +278,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             justifyContent: 'center',
             width: '100%',
             flex: 1,
+            minHeight: 0,
             gap: isTwoRowSkills ? '18px' : '30px',
           }}
         >
@@ -250,13 +293,14 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           >
             <div
               style={{
-                fontFamily: FONT_NEWSREADER,
+                fontFamily: FONT_SERIF,
                 fontSize: '40px',
-                fontWeight: 600,
+                fontWeight: 400,
                 color: '#2A3366',
                 lineHeight: 1.15,
                 letterSpacing: '-0.01em',
                 marginBottom: '8px',
+                whiteSpace: 'nowrap',
               }}
             >
               Certificate of Internship
@@ -264,9 +308,9 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
 
             <div
               style={{
-                fontFamily: FONT_NEWSREADER,
+                fontFamily: FONT_SERIF,
                 fontSize: '24px',
-                fontWeight: 500,
+                fontWeight: 400,
                 color: '#14205A',
                 lineHeight: 1.25,
                 whiteSpace: 'nowrap',
@@ -323,7 +367,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
               style={{
                 position: 'relative',
                 zIndex: 1,
-                fontFamily: FONT_MANROPE,
+                fontFamily: FONT_SANS,
                 fontSize: '15px',
                 fontWeight: 500,
                 color: '#3B4157',
@@ -336,18 +380,20 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
 
             {/* Full Name with 16px space below before the paragraph */}
             <div
+              ref={recipientNameRef}
+              data-cert-recipient-name="true"
               style={{
                 position: 'relative',
                 zIndex: 1,
-                fontFamily: FONT_NEWSREADER,
-                fontSize: '52px',
-                fontWeight: 600,
+                fontFamily: FONT_SERIF,
+                fontSize: `${nameFontSize}px`,
+                fontWeight: 400,
                 color: '#14205A',
                 lineHeight: 1.12,
                 letterSpacing: '-0.01em',
                 marginBottom: '16px',
-                maxWidth: '650px',
-                wordBreak: 'break-word',
+                maxWidth: '646px',
+                whiteSpace: 'nowrap',
               }}
             >
               {displayName}
@@ -357,7 +403,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
               style={{
                 position: 'relative',
                 zIndex: 1,
-                fontFamily: FONT_MANROPE,
+                fontFamily: FONT_SANS,
                 fontSize: '16px',
                 fontWeight: 400,
                 lineHeight: 1.6,
@@ -445,11 +491,12 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 padding: '0 14px',
                 background: BRAND_GRADIENT_HORIZONTAL,
                 color: '#FFFFFF',
-                fontFamily: FONT_MANROPE,
+                fontFamily: FONT_SANS,
                 fontSize: '11px',
                 fontWeight: 700,
-                letterSpacing: '0.12em',
+                letterSpacing: '0.03em',
                 textTransform: 'uppercase',
+                whiteSpace: 'nowrap',
                 borderRadius: '9999px',
                 marginBottom: isTwoRowSkills ? '12px' : '16px',
                 boxShadow: '0 4px 12px rgba(28, 53, 234, 0.18)',
@@ -460,6 +507,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 style={{
                   display: 'inline-block',
                   lineHeight: 1,
+                  whiteSpace: 'nowrap',
                 }}
               >
                 KEY AREAS OF WORK
@@ -533,7 +581,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                           </div>
                           <span
                             style={{
-                              fontFamily: FONT_MANROPE,
+                              fontFamily: FONT_SANS,
                               fontSize: labelFontSize,
                               fontWeight: 600,
                               color: '#14205A',
@@ -570,12 +618,13 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             width: '100%',
             maxWidth: '580px',
             paddingTop: '8px',
+            flexShrink: 0,
           }}
         >
           <div style={{ textAlign: 'left' }}>
             <div
               style={{
-                fontFamily: FONT_MANROPE,
+                fontFamily: FONT_SANS,
                 fontSize: '12px',
                 fontWeight: 500,
                 color: '#64748B',
@@ -587,7 +636,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             </div>
             <div
               style={{
-                fontFamily: FONT_MANROPE,
+                fontFamily: FONT_SANS,
                 fontSize: '15px',
                 fontWeight: 700,
                 color: '#14205A',
@@ -601,7 +650,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           <div style={{ textAlign: 'right' }}>
             <div
               style={{
-                fontFamily: FONT_MANROPE,
+                fontFamily: FONT_SANS,
                 fontSize: '12px',
                 fontWeight: 500,
                 color: '#64748B',
@@ -613,7 +662,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             </div>
             <div
               style={{
-                fontFamily: FONT_MANROPE,
+                fontFamily: FONT_SANS,
                 fontSize: '15px',
                 fontWeight: 700,
                 color: '#14205A',
@@ -656,6 +705,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           justifyContent: 'space-between',
           padding: '0 52px',
           boxSizing: 'border-box',
+          overflow: 'hidden',
         }}
       >
         {/* Left: /logo-on-white.png (about 170px wide) */}
@@ -711,7 +761,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           <span
             style={{
               marginTop: '6px',
-              fontFamily: FONT_MANROPE,
+              fontFamily: FONT_SANS,
               fontSize: '11px',
               fontWeight: 500,
               color: '#64748B',
@@ -765,8 +815,9 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             ) : (
               <div
                 style={{
-                  fontFamily: FONT_GREAT_VIBES,
-                  fontSize: '34px',
+                  fontFamily: FONT_SERIF,
+                  fontStyle: 'italic',
+                  fontSize: '30px',
                   fontWeight: 400,
                   color: '#14205A',
                   lineHeight: 1.15,
@@ -781,7 +832,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
 
           <div
             style={{
-              fontFamily: FONT_MANROPE,
+              fontFamily: FONT_SANS,
               fontSize: '14px',
               fontWeight: 600,
               color: '#14205A',
@@ -793,7 +844,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
 
           <div
             style={{
-              fontFamily: FONT_MANROPE,
+              fontFamily: FONT_SANS,
               fontSize: '12px',
               fontWeight: 600,
               color: '#1C35EA',
@@ -823,7 +874,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           <div
             style={{
               transform: 'rotate(-35deg)',
-              fontFamily: FONT_MANROPE,
+              fontFamily: FONT_DISPLAY,
               fontSize: '116px',
               fontWeight: 800,
               letterSpacing: '0.14em',
