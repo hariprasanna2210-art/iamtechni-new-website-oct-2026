@@ -133,7 +133,12 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
   const otpInputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const certContainerWrapperRef = useRef<HTMLDivElement | null>(null);
   const pdfCaptureRef = useRef<HTMLDivElement | null>(null);
-  const [certScale, setCertScale] = useState<number>(1);
+  const [certScale, setCertScale] = useState<number>(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 820) {
+      return Math.min(1, Math.max(0.25, (window.innerWidth - 36) / 794));
+    }
+    return 1;
+  });
   const lastLookedUpRef = useRef<string | null>(null);
 
   // 60-second countdown timer for "Resend code"
@@ -145,14 +150,19 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
     return () => window.clearInterval(timer);
   }, [resendSecondsLeft]);
 
-  // Measure available width with ResizeObserver so the 794x1123 certificate scales smoothly without clipping or horizontal scroll
+  // Measure available width with ResizeObserver so the 794x1123 certificate scales smoothly below 820px without sideways scroll
   useEffect(() => {
     const wrapper = certContainerWrapperRef.current;
     if (!wrapper) return;
 
     const updateFromWidth = (width: number) => {
       if (width > 0) {
-        const nextScale = Math.min(1, width / 794);
+        const available =
+          typeof window !== 'undefined' && window.innerWidth < 820
+            ? Math.min(width, window.innerWidth - 32)
+            : width;
+        const nextScale =
+          available >= 794 ? 1 : Math.max(0.25, (available - 2) / 794);
         setCertScale(nextScale);
       }
     };
@@ -706,7 +716,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
         <div className="absolute top-0 right-1/4 w-[420px] h-[260px] bg-gradient-to-tr from-[#00B0F0]/15 via-[#1C35EA]/12 to-[#4D19EA]/15 rounded-full blur-[90px] pointer-events-none" />
 
         <div className="relative w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <div className="inline-flex items-center gap-2 min-h-[32px] px-3.5 py-1 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(28,53,234,0.08)] text-xs font-mono font-bold text-[#1C35EA]">
+          <div className="inline-flex items-center gap-2 min-h-[32px] px-3.5 py-1 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(28,53,234,0.08)] text-sm font-mono font-bold text-[#1C35EA]">
             <ShieldCheck className="w-4 h-4 shrink-0" />
             <span>OFFICIAL CREDENTIAL VERIFICATION</span>
           </div>
@@ -726,10 +736,10 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
             Enter the certificate number to check that an IAMTECHNI certificate is genuine.
           </p>
 
-          {/* Search Form: stacked full width below 480px, side-by-side from 480px */}
+          {/* Search Form: stacked full width on mobile, side-by-side from 640px */}
           <form
             onSubmit={handleSearchSubmit}
-            className="pt-2 max-w-xl mx-auto flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center gap-3"
+            className="pt-2 max-w-xl mx-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
           >
             <div className="relative flex-1 min-w-0">
               <Search
@@ -749,7 +759,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
             <button
               type="submit"
               disabled={!inputValue.trim() || Boolean(loaderMessage)}
-              className="w-full min-[480px]:w-auto h-12 min-h-[48px] px-7 rounded-xl text-white font-semibold text-[16px] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
+              className="w-full sm:w-auto h-12 min-h-[48px] px-7 rounded-xl text-white font-semibold text-[16px] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
               style={{
                 background:
                   'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
@@ -775,7 +785,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
               <p className="text-sm sm:text-base font-semibold text-slate-900">
                 No certificate found with this number. Please check the number and try again.
               </p>
-              <p className="text-xs sm:text-sm text-slate-500 break-all">
+              <p className="text-sm text-slate-500 break-all">
                 Searched for:{' '}
                 <code className="font-mono font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded break-all">
                   {notFoundId}
@@ -818,13 +828,13 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
               <div className="p-4 sm:p-6">
                 <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-sm">
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                    <dt className="text-xs font-semibold text-slate-500">Name</dt>
+                    <dt className="text-sm font-semibold text-slate-500">Name</dt>
                     <dd className="text-slate-900 font-bold mt-1 break-words">
                       {statusSummary.fullName}
                     </dd>
                   </div>
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                    <dt className="text-xs font-semibold text-slate-500">Course</dt>
+                    <dt className="text-sm font-semibold text-slate-500">Course</dt>
                     <dd className="text-slate-900 font-semibold mt-1 break-words">
                       {statusSummary.course}
                     </dd>
@@ -867,14 +877,14 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     style={{ fontSize: 'clamp(14px, 0.95vw, 16px)' }}
                   >
                     <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                      <dt className="text-xs font-semibold text-slate-500">Name</dt>
+                      <dt className="text-sm font-semibold text-slate-500">Name</dt>
                       <dd className="text-slate-900 font-bold mt-1 break-words">
                         {statusSummary.fullName}
                       </dd>
                     </div>
 
                     <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                      <dt className="text-xs font-semibold text-slate-500">Program</dt>
+                      <dt className="text-sm font-semibold text-slate-500">Program</dt>
                       <dd className="text-slate-900 font-semibold mt-1 break-words">
                         {statusSummary.type === 'student'
                           ? 'Student Internship'
@@ -883,7 +893,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     </div>
 
                     <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                      <dt className="text-xs font-semibold text-slate-500">Course</dt>
+                      <dt className="text-sm font-semibold text-slate-500">Course</dt>
                       <dd className="text-slate-900 font-semibold mt-1 break-words">
                         {statusSummary.course}
                       </dd>
@@ -917,14 +927,14 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     {otpError && (
                       <div
                         role="alert"
-                        className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-2.5"
+                        className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-start gap-2.5"
                       >
                         <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                         <span>{otpError}</span>
                       </div>
                     )}
 
-                    <div className="flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center gap-3">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                       <input
                         type="email"
                         required
@@ -942,7 +952,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                       <button
                         type="submit"
                         disabled={!emailInput.trim() || Boolean(loaderMessage)}
-                        className="w-full min-[480px]:w-auto h-12 min-h-[48px] px-6 rounded-xl text-white font-semibold text-[16px] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
+                        className="w-full sm:w-auto h-12 min-h-[48px] px-6 rounded-xl text-white font-semibold text-[16px] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-4px_rgba(28,53,234,0.38)] active:scale-[0.98] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
                         style={{
                           background:
                             'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
@@ -979,7 +989,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     {otpError && (
                       <div
                         role="alert"
-                        className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-2.5"
+                        className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-start gap-2.5"
                       >
                         <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                         <span>{otpError}</span>
@@ -1028,7 +1038,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                       <span>Verify</span>
                     </button>
 
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs sm:text-sm">
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-sm">
                       <button
                         type="button"
                         disabled={resendSecondsLeft > 0 || Boolean(loaderMessage)}
@@ -1097,7 +1107,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
               <div className="p-4 sm:p-7 space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
                   <div className="min-w-0">
-                    <div className="text-xs font-mono uppercase tracking-wider font-bold text-[#1C35EA]">
+                    <div className="text-sm font-mono uppercase tracking-wider font-bold text-[#1C35EA]">
                       Credential Summary
                     </div>
                     <h2
@@ -1108,7 +1118,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     </h2>
                   </div>
 
-                  <div className="max-w-full overflow-x-auto font-mono text-xs sm:text-sm font-bold px-3 py-1.5 rounded-xl bg-[#F4F7FC] border border-slate-200 text-[#14205A] break-all">
+                  <div className="max-w-full overflow-x-auto font-mono text-sm font-bold px-3 py-1.5 rounded-xl bg-[#F4F7FC] border border-slate-200 text-[#14205A] break-all">
                     {verifiedData.certificateId}
                   </div>
                 </div>
@@ -1119,14 +1129,14 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                   style={{ fontSize: 'clamp(14px, 0.95vw, 16px)' }}
                 >
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                    <dt className="text-xs font-semibold text-slate-500">Name</dt>
+                    <dt className="text-sm font-semibold text-slate-500">Name</dt>
                     <dd className="text-slate-900 font-bold mt-1 break-words">
                       {verifiedData.fullName}
                     </dd>
                   </div>
 
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                    <dt className="text-xs font-semibold text-slate-500">Program</dt>
+                    <dt className="text-sm font-semibold text-slate-500">Program</dt>
                     <dd className="text-slate-900 font-semibold mt-1 break-words">
                       {verifiedData.type === 'student'
                         ? 'Student Internship'
@@ -1135,21 +1145,21 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                   </div>
 
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                    <dt className="text-xs font-semibold text-slate-500">Course</dt>
+                    <dt className="text-sm font-semibold text-slate-500">Course</dt>
                     <dd className="text-slate-900 font-semibold mt-1 break-words">
                       {verifiedData.course}
                     </dd>
                   </div>
 
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                    <dt className="text-xs font-semibold text-slate-500">Duration</dt>
+                    <dt className="text-sm font-semibold text-slate-500">Duration</dt>
                     <dd className="text-slate-900 font-semibold mt-1">
                       {formatDurationLabel(verifiedData.durationMonths)}
                     </dd>
                   </div>
 
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                    <dt className="text-xs font-semibold text-slate-500">
+                    <dt className="text-sm font-semibold text-slate-500">
                       Internship period
                     </dt>
                     <dd className="text-slate-900 font-semibold mt-1">
@@ -1159,14 +1169,14 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                   </div>
 
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                    <dt className="text-xs font-semibold text-slate-500">Issue date</dt>
+                    <dt className="text-sm font-semibold text-slate-500">Issue date</dt>
                     <dd className="text-slate-900 font-semibold mt-1">
                       {formatCertificateDate(verifiedData.issueDate)}
                     </dd>
                   </div>
 
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 sm:col-span-2 lg:col-span-3 min-w-0 overflow-x-auto">
-                    <dt className="text-xs font-semibold text-slate-500">
+                    <dt className="text-sm font-semibold text-slate-500">
                       Certificate number
                     </dt>
                     <dd className="font-mono text-slate-900 font-bold mt-1 break-all">
@@ -1175,14 +1185,14 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                   </div>
                 </dl>
 
-                {/* Action Buttons: 2 × 2 grid on phones, neat flex-wrap row on sm+ */}
-                <div className="pt-2 grid grid-cols-2 sm:flex sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3">
+                {/* Action Buttons: stacked full-width on narrow phones, 2-col on wider phones, flex-wrap row on sm+ */}
+                <div className="pt-2 grid grid-cols-1 min-[420px]:grid-cols-2 sm:flex sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3">
                   {verifiedData.status !== 'revoked' && (
                     <button
                       type="button"
                       disabled={isDownloadingPdf}
                       onClick={handleDownloadPdf}
-                      className="min-h-[44px] px-3 sm:px-5 py-2.5 rounded-xl text-white font-semibold text-xs sm:text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed text-center"
+                      className="min-h-[44px] px-4 sm:px-5 py-2.5 rounded-xl text-white font-semibold text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed text-center"
                       style={{
                         background:
                           'linear-gradient(135deg, #00B0F0 0%, #1C35EA 35%, #4D19EA 100%)',
@@ -1205,7 +1215,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                   <button
                     type="button"
                     onClick={handleCopyVerifyLink}
-                    className="min-h-[44px] px-3 sm:px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-xs sm:text-sm transition-colors inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer text-center"
+                    className="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-sm transition-colors inline-flex items-center justify-center gap-2 cursor-pointer text-center"
                   >
                     {copiedLink ? (
                       <>
@@ -1224,7 +1234,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     href={linkedInShareUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="min-h-[44px] px-3 sm:px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-xs sm:text-sm transition-colors inline-flex items-center justify-center gap-1.5 sm:gap-2 text-center"
+                    className="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] font-semibold text-sm transition-colors inline-flex items-center justify-center gap-2 text-center"
                   >
                     <Share2 className="w-4 h-4 shrink-0" />
                     <span>Share on LinkedIn</span>
@@ -1233,7 +1243,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                   <button
                     type="button"
                     onClick={handlePrint}
-                    className="min-h-[44px] px-3 sm:px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-slate-700 hover:text-[#1C35EA] font-semibold text-xs sm:text-sm transition-colors inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer text-center"
+                    className="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-slate-700 hover:text-[#1C35EA] font-semibold text-sm transition-colors inline-flex items-center justify-center gap-2 cursor-pointer text-center"
                   >
                     <Printer className="w-4 h-4 shrink-0" />
                     <span>Print</span>
@@ -1243,7 +1253,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
             </div>
 
             {/* Full Certificate Display: 16px side padding on phones, max 794px on desktop/TVs */}
-            <div className="sm:bg-white sm:rounded-2xl sm:border sm:border-slate-200 sm:shadow-xs p-0 sm:p-6 flex flex-col items-center">
+            <div className="sm:bg-white sm:rounded-2xl sm:border sm:border-slate-200 sm:shadow-xs p-0 sm:p-6 flex flex-col items-center w-full min-w-0">
               <div
                 ref={certContainerWrapperRef}
                 className="w-full max-w-[794px] mx-auto flex justify-center overflow-hidden"
@@ -1254,7 +1264,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     height: `${scaledHeight}px`,
                     position: 'relative',
                   }}
-                  className="shadow-xl border border-slate-200/80 bg-white shrink-0"
+                  className="shadow-xl border border-slate-200/80 bg-white shrink-0 box-border overflow-hidden"
                 >
                   <div
                     style={{

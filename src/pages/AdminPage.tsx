@@ -324,9 +324,19 @@ const AdminPage: React.FC = () => {
   const [pdfRenderData, setPdfRenderData] = useState<CertificateTemplateData | null>(null);
   const pdfCaptureRef = useRef<HTMLDivElement | null>(null);
   const previewWrapperRef = useRef<HTMLDivElement | null>(null);
-  const [previewScale, setPreviewScale] = useState<number>(0.65);
+  const [previewScale, setPreviewScale] = useState<number>(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 820) {
+      return Math.min(1, Math.max(0.25, (window.innerWidth - 68) / 794));
+    }
+    return 0.65;
+  });
   const modalPreviewWrapperRef = useRef<HTMLDivElement | null>(null);
-  const [modalPreviewScale, setModalPreviewScale] = useState<number>(1);
+  const [modalPreviewScale, setModalPreviewScale] = useState<number>(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 820) {
+      return Math.min(1, Math.max(0.25, (window.innerWidth - 48) / 794));
+    }
+    return 1;
+  });
 
   const isAdmin = useMemo(() => {
     const userEmail = (user?.email ?? '').trim().toLowerCase();
@@ -471,7 +481,12 @@ const AdminPage: React.FC = () => {
 
     const updateFromWidth = (width: number) => {
       if (width > 0) {
-        const nextScale = Math.min(1, width / 794);
+        const available =
+          typeof window !== 'undefined' && window.innerWidth < 820
+            ? Math.min(width, window.innerWidth - 64)
+            : width;
+        const nextScale =
+          available >= 794 ? 1 : Math.max(0.25, (available - 2) / 794);
         setPreviewScale(nextScale);
       }
     };
@@ -511,7 +526,12 @@ const AdminPage: React.FC = () => {
 
     const updateFromWidth = (width: number) => {
       if (width > 0) {
-        const nextScale = Math.min(1, width / 794);
+        const available =
+          typeof window !== 'undefined' && window.innerWidth < 820
+            ? Math.min(width, window.innerWidth - 40)
+            : width;
+        const nextScale =
+          available >= 794 ? 1 : Math.max(0.25, (available - 2) / 794);
         setModalPreviewScale(nextScale);
       }
     };
@@ -2590,10 +2610,15 @@ const AdminPage: React.FC = () => {
                           key={cert.id}
                           className="rounded-xl border border-slate-200 p-4 space-y-3 bg-[#F8FAFF] min-w-0"
                         >
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <span className="font-mono text-xs font-bold text-[#1C35EA] break-all">
-                              {cert.certificateId}
-                            </span>
+                          <div className="flex flex-wrap items-start justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                              <div className="font-bold text-slate-900 break-words">
+                                {cert.fullName}
+                              </div>
+                              <div className="font-mono text-xs font-bold text-[#1C35EA] break-all mt-0.5">
+                                {cert.certificateId}
+                              </div>
+                            </div>
                             <span
                               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border shrink-0 ${
                                 cert.status === 'revoked'
@@ -2606,9 +2631,6 @@ const AdminPage: React.FC = () => {
                           </div>
 
                           <div className="min-w-0">
-                            <div className="font-bold text-slate-900 break-words">
-                              {cert.fullName}
-                            </div>
                             <div className="text-xs text-slate-600 break-words">
                               {cert.course} ·{' '}
                               {cert.type === 'student' ? 'Student' : 'Professional'} (
@@ -2619,11 +2641,11 @@ const AdminPage: React.FC = () => {
                             </div>
                           </div>
 
-                          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/80">
+                          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/80">
                             <button
                               type="button"
                               onClick={() => setFullPreviewCert(certTemplateObj)}
-                              className="flex-1 min-w-[115px] min-h-[44px] px-3 py-2 rounded-lg border border-slate-200 bg-white text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                              className="w-full min-h-[44px] px-3 py-2 rounded-lg border border-slate-200 bg-white text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
                             >
                               <Eye className="w-3.5 h-3.5 shrink-0" />
                               <span>View</span>
@@ -2633,7 +2655,7 @@ const AdminPage: React.FC = () => {
                               type="button"
                               disabled={Boolean(downloadingCertId)}
                               onClick={() => handleDownloadCertificatePdf(certTemplateObj)}
-                              className="flex-1 min-w-[130px] min-h-[44px] px-3 py-2 rounded-lg border border-slate-200 bg-white text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                              className="w-full min-h-[44px] px-3 py-2 rounded-lg border border-slate-200 bg-white text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                             >
                               {downloadingCertId === cert.certificateId ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
@@ -2651,7 +2673,7 @@ const AdminPage: React.FC = () => {
                                   'Verification link copied!'
                                 )
                               }
-                              className="flex-1 min-w-[115px] min-h-[44px] px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                              className="w-full min-h-[44px] px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
                             >
                               <Copy className="w-3.5 h-3.5 shrink-0" />
                               <span>Copy link</span>
@@ -2661,7 +2683,7 @@ const AdminPage: React.FC = () => {
                               type="button"
                               disabled={updatingCertId === cert.certificateId}
                               onClick={() => handleToggleCertificateStatus(cert)}
-                              className={`flex-1 min-w-[115px] min-h-[44px] px-3 py-2 rounded-lg border text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 ${
+                              className={`w-full min-h-[44px] px-3 py-2 rounded-lg border text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 ${
                                 cert.status === 'revoked'
                                   ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
                                   : 'border-rose-200 bg-rose-50 text-rose-700'
