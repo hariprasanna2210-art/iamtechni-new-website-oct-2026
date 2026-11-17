@@ -320,6 +320,7 @@ const AdminPage: React.FC = () => {
     null
   );
   const [downloadingCertId, setDownloadingCertId] = useState<string | null>(null);
+  const [pdfError, setPdfError] = useState<string | null>(null);
   const [pdfRenderData, setPdfRenderData] = useState<CertificateTemplateData | null>(null);
   const pdfCaptureRef = useRef<HTMLDivElement | null>(null);
   const previewWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -574,6 +575,12 @@ const AdminPage: React.FC = () => {
     const timer = setTimeout(() => setToastMessage(null), 3500);
     return () => clearTimeout(timer);
   }, [toastMessage]);
+
+  useEffect(() => {
+    if (!pdfError) return;
+    const timer = setTimeout(() => setPdfError(null), 6000);
+    return () => clearTimeout(timer);
+  }, [pdfError]);
 
   // Detect phone/tablet (touch devices or viewport < 768px) for Call action behavior
   useEffect(() => {
@@ -1100,6 +1107,7 @@ const AdminPage: React.FC = () => {
     if (downloadingCertId) return;
     const targetId = certData.certificateId || 'Preview';
     setDownloadingCertId(targetId);
+    setPdfError(null);
 
     try {
       setPdfRenderData(certData);
@@ -1121,7 +1129,8 @@ const AdminPage: React.FC = () => {
       await downloadCertificatePdf(captureElement, targetId);
       setToastMessage(`Downloaded IAMTECHNI-Certificate-${targetId}.pdf`);
     } catch (err) {
-      setCertFirebaseErrorCode(extractFirebaseErrorCode(err));
+      console.error('[AdminPage] Certificate PDF download failed:', err);
+      setPdfError('Could not create the PDF. Please try again.');
     } finally {
       setDownloadingCertId(null);
     }
@@ -3266,6 +3275,17 @@ const AdminPage: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* PDF Error Toast */}
+      {pdfError && (
+        <div
+          role="alert"
+          className="fixed bottom-5 right-5 z-[60] bg-rose-600 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 text-sm font-semibold"
+        >
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{pdfError}</span>
         </div>
       )}
 

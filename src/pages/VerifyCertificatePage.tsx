@@ -539,14 +539,19 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
       return;
     }
     const targetEl = pdfCaptureRef.current;
-    if (!targetEl) return;
+    if (!targetEl) {
+      console.error('[VerifyCertificatePage] Certificate PDF capture element not ready.');
+      setPageError('Could not create the PDF. Please try again.');
+      return;
+    }
 
     setIsDownloadingPdf(true);
     setPageError(null);
     try {
       await downloadCertificatePdf(targetEl, verifiedData.certificateId);
-    } catch {
-      setPageError('Could not prepare the PDF right now. Please try again.');
+    } catch (err) {
+      console.error('[VerifyCertificatePage] PDF download failed:', err);
+      setPageError('Could not create the PDF. Please try again.');
     } finally {
       setIsDownloadingPdf(false);
     }

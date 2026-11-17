@@ -742,13 +742,15 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
               <img
                 src={SIGNATURE_URL}
                 alt="Signature of Hari Prasanna.R"
+                width={121}
+                height={62}
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                   setSignatureLoadFailed(true);
                 }}
                 style={{
+                  width: '121px',
                   height: '62px',
-                  width: 'auto',
                   maxWidth: '190px',
                   objectFit: 'contain',
                   display: 'block',
