@@ -377,12 +377,12 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
       {/* 2. COURSE CATALOG (13 Individual Colorful Cards)                       */}
       {/* ======================================================================= */}
       <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={0} cardCount={3}>
-      <section ref={catalogRef} id="courses-catalog" className="py-10 sm:py-16 lg:py-20 bg-[#F4F7FC] border-b border-slate-200 overflow-x-clip">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+      <section ref={catalogRef} id="courses-catalog" className="py-4 sm:py-5 lg:py-5 bg-[#F4F7FC] border-b border-slate-200 overflow-x-clip">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2.5 sm:space-y-3">
           {/* Active Course Regional Location Training Banner if accessed via /training/:slug */}
           {courseSlug && COURSE_LOCATION_LINKS[courseSlug] && (
-            <div className="bg-white rounded-2xl border border-blue-200/90 p-4 sm:p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="space-y-1">
+            <div className="bg-white rounded-2xl border border-blue-200/90 p-3 sm:p-3.5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="space-y-0.5">
                 <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#1266E8] uppercase">
                   <MapPin className="w-3.5 h-3.5" /> Regional Online Training Pages
                 </div>
@@ -398,7 +398,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                   <Link
                     key={loc.path}
                     to={loc.path}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-[#1266E8] text-xs font-semibold transition-colors"
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-[#1266E8] text-xs font-semibold transition-colors"
                   >
                     <MapPin className="w-3 h-3" />
                     <span>{loc.label}</span>
@@ -415,26 +415,26 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
           )}
 
           {/* Header & Filter Bar */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 pb-3 sm:pb-4 border-b border-slate-200">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-2 sm:gap-3 pb-2 border-b border-slate-200">
             <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#2563EB] font-bold mb-1">
+              <div className="text-[10.5px] font-mono uppercase tracking-widest text-[#2563EB] font-bold">
                 Technology Curriculum
               </div>
-              <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-bold tracking-[-0.015em] text-[#1E3A8A] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
+              <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl lg:text-[26px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-tight drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 Explore Our Courses
               </AnimatedHeading>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
+              <p className="text-xs text-slate-600 mt-0.5 max-w-2xl leading-tight">
                 Choose from 13 comprehensive training tracks. Tap <strong>Enquire Now</strong> for complete syllabus details, duration, batch schedules, and learning modes.
               </p>
             </div>
 
             {/* Filter Pills */}
-            <div className="flex flex-nowrap sm:flex-wrap items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-xl shadow-2xs w-full md:w-auto overflow-x-auto">
+            <div className="flex flex-nowrap sm:flex-wrap items-center gap-1 p-1 bg-white border border-slate-200 rounded-xl shadow-2xs w-full md:w-auto overflow-x-auto">
               {courseCategories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center justify-center px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer shrink-0 ${
+                  className={`min-h-[40px] min-w-[40px] lg:min-h-0 lg:min-w-0 inline-flex items-center justify-center px-3 py-1 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer shrink-0 ${
                     selectedCategory === cat
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
