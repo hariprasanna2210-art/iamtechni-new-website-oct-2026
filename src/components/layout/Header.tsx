@@ -77,9 +77,13 @@ export const Header: React.FC<HeaderProps> = ({
       }
     };
     updateHeaderHeight();
+    const timer = window.setTimeout(updateHeaderHeight, 220);
     window.addEventListener('resize', updateHeaderHeight);
-    return () => window.removeEventListener('resize', updateHeaderHeight);
-  }, []);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('resize', updateHeaderHeight);
+    };
+  }, [isScrolled]);
 
   // Track scroll state with hysteresis to prevent jitter near threshold
   useEffect(() => {
@@ -115,10 +119,10 @@ export const Header: React.FC<HeaderProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isMobileMenuOpen, activeMegaMenu]);
 
-  // Automatically close mobile menu when expanding to desktop viewport (xl: >= 1280px)
+  // Automatically close mobile menu when expanding to desktop viewport (>= 1100px)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1280) {
+      if (window.innerWidth >= 1100) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -142,6 +146,21 @@ export const Header: React.FC<HeaderProps> = ({
     setIsMobileMenuOpen(false);
     onNavigate(route);
   };
+
+  // Active route for the Gradient Pill Menu (defaults to highlighting Training NEW when on Home '/')
+  const activeNavRoute = currentRoute === '/' ? '/training' : currentRoute;
+  const isServicesActive = activeNavRoute.startsWith('/services');
+  const isSolutionsActive = activeNavRoute === '/solutions';
+  const isTrainingActive = activeNavRoute === '/training' || activeNavRoute === '/courses';
+  const isIndustriesActive = activeNavRoute === '/industries';
+  const isPortfolioActive = activeNavRoute === '/portfolio';
+  const isTechnologyActive = activeNavRoute === '/technology';
+  const isInsightsActive = activeNavRoute.startsWith('/insights');
+  const isAboutActive = activeNavRoute === '/about';
+  const isJobFinderActive =
+    activeNavRoute === '/job-finder-pro' ||
+    activeNavRoute === '/job-finder' ||
+    activeNavRoute === '/jobs';
 
   // Structured Services list for mobile submenu
   const servicesList = [
@@ -295,38 +314,49 @@ export const Header: React.FC<HeaderProps> = ({
     },
   ];
 
+  const pillItemBase =
+    'inline-flex items-center justify-center rounded-full !text-[14px] font-medium leading-none tracking-[-0.02em] min-[1440px]:tracking-[-0.01em] whitespace-nowrap shrink-0 cursor-pointer transition-all duration-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] px-1 min-[1200px]:px-1.5 min-[1366px]:px-2 min-[1440px]:px-2.5 2xl:px-3 py-1.5';
+  const pillItemActive =
+    'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white font-semibold shadow-[0_2px_10px_rgba(28,53,234,0.28)]';
+  const pillItemInactive =
+    'text-[#14205A] hover:text-[#1C35EA] hover:bg-[#1C35EA]/[0.05]';
+
   return (
     <>
       <header
         ref={headerRef}
-        className={`sticky top-0 z-40 w-full transition-all duration-200 border-b ${
+        className={`sticky top-0 z-40 w-full transition-all duration-200 border-b border-[#14205A]/10 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md border-slate-200/90 shadow-[0_6px_24px_-4px_rgba(15,23,42,0.08),0_2px_8px_-2px_rgba(15,23,42,0.04)]'
-            : 'bg-white border-slate-200/70 shadow-[0_4px_16px_-2px_rgba(15,23,42,0.06),0_2px_6px_-1px_rgba(15,23,42,0.04)]'
+            ? 'bg-white/95 backdrop-blur-md shadow-[0_2px_12px_rgba(20,32,90,0.08)]'
+            : 'bg-white/95 backdrop-blur-sm shadow-[0_2px_12px_rgba(20,32,90,0.08)]'
         }`}
       >
-        {/* Main Navbar Row — Fluid rem container + safe areas, visible Phone & Start CTA at every width */}
-        <div className="relative w-full max-w-[92.5rem] mx-auto pl-[max(0.625rem,env(safe-area-inset-left))] pr-[max(0.625rem,env(safe-area-inset-right))] sm:px-6 lg:px-8 xl:px-10 py-2 xl:py-3 flex items-center justify-between gap-1.5 min-[375px]:gap-2 lg:gap-2.5 xl:gap-3 2xl:gap-4 whitespace-nowrap">
-          {/* Zone 1: Brand Wordmark / Logo */}
+        {/* Main Navbar Row — Logo Left, Rounded Pill Menu Center, Tech Badge + Actions Right */}
+        <div
+          className={`relative w-full max-w-[92.5rem] mx-auto pl-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] sm:px-4 min-[1100px]:px-2 min-[1280px]:px-2.5 min-[1366px]:px-4 2xl:px-8 flex items-center justify-between gap-1 min-[1366px]:gap-2 whitespace-nowrap transition-all duration-200 ${
+            isScrolled ? 'py-1.5' : 'py-2.5'
+          }`}
+        >
+          {/* Zone 1: Brand Wordmark / Logo (Unchanged image & size) */}
           <div className="shrink-0 flex items-center">
             <button
               type="button"
               onClick={() => handleLinkClick('/')}
-              className="h-[44px] flex items-center gap-2 text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-lg group cursor-pointer"
+              className="h-[42px] flex items-center gap-2 text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] rounded-lg group cursor-pointer"
               aria-label="IAMTECHNI Home"
             >
               <IamtechniLogo size="md" />
             </button>
           </div>
 
-          {/* Zone 2: Navigation Links (Zero-Wrap Enforced on 1280px+ Viewports) */}
+          {/* Zone 2: Center Rounded White Pill Menu (Visible at >= 1100px, fits in one view on desktop) */}
           <nav
             aria-label="Primary Navigation"
-            className="hidden xl:flex items-center justify-center gap-1 min-[1360px]:gap-2.5 min-[1440px]:gap-4 2xl:gap-6 text-[11.5px] min-[1360px]:text-[12.5px] min-[1440px]:text-[13px] font-medium text-slate-600 shrink-0 h-[44px]"
+            className="hidden min-[1100px]:flex items-center justify-center bg-white rounded-full border border-[#14205A]/12 shadow-[0_2px_10px_rgba(20,32,90,0.05)] p-0.5 min-[1366px]:p-1 gap-0 min-[1440px]:gap-0.5 shrink-0"
           >
-            {/* Services with Mega Menu */}
+            {/* 1. Services (Dropdown) */}
             <div
-              className="h-full flex items-center py-1"
+              className="relative flex items-center"
               onMouseEnter={() => handleMouseEnter('services')}
               onMouseLeave={handleMouseLeave}
             >
@@ -339,24 +369,29 @@ export const Header: React.FC<HeaderProps> = ({
                     setActiveMegaMenu('services');
                   }
                 }}
-                className={`inline-flex items-center gap-1 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
-                  currentRoute.startsWith('/services') ? 'text-[#1266E8] font-semibold' : ''
+                className={`${pillItemBase} gap-0.5 ${
+                  isServicesActive ? pillItemActive : pillItemInactive
                 }`}
                 aria-expanded={activeMegaMenu === 'services'}
                 aria-haspopup="true"
               >
                 <span className="leading-none">Services</span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 text-slate-400 shrink-0 self-center transition-transform duration-150 ${
-                    activeMegaMenu === 'services' ? 'rotate-180 text-[#1266E8]' : ''
+                  className={`w-3 h-3 min-[1366px]:w-3.5 min-[1366px]:h-3.5 shrink-0 self-center transition-transform duration-150 ${
+                    isServicesActive
+                      ? 'text-white'
+                      : activeMegaMenu === 'services'
+                      ? 'rotate-180 text-[#1C35EA]'
+                      : 'text-[#14205A]/70'
                   }`}
                 />
               </button>
 
-              {/* Services Mega Menu Dropdown — Clamped inside viewport */}
+              {/* Services Mega Menu Dropdown — Unchanged Contents */}
               {activeMegaMenu === 'services' && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 pointer-events-auto before:absolute before:-top-4 before:-left-16 before:-right-16 before:h-8 before:content-['']"
+                  className="fixed left-1/2 -translate-x-1/2 pt-3 z-50 pointer-events-auto before:absolute before:-top-4 before:-left-16 before:-right-16 before:h-8 before:content-['']"
+                  style={{ top: `${headerHeight}px` }}
                   role="menu"
                 >
                   <div className="w-[57.5rem] xl:w-[65rem] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-slate-200/90 p-5 xl:p-6 whitespace-normal animate-in fade-in zoom-in-95 duration-150">
@@ -546,9 +581,9 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </div>
 
-            {/* Solutions with Mega Menu */}
+            {/* 2. Solutions (Dropdown) */}
             <div
-              className="h-full flex items-center py-1"
+              className="relative flex items-center"
               onMouseEnter={() => handleMouseEnter('solutions')}
               onMouseLeave={handleMouseLeave}
             >
@@ -561,24 +596,29 @@ export const Header: React.FC<HeaderProps> = ({
                     setActiveMegaMenu('solutions');
                   }
                 }}
-                className={`inline-flex items-center gap-1 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
-                  currentRoute === '/solutions' ? 'text-[#1266E8] font-semibold' : ''
+                className={`${pillItemBase} gap-0.5 ${
+                  isSolutionsActive ? pillItemActive : pillItemInactive
                 }`}
                 aria-expanded={activeMegaMenu === 'solutions'}
                 aria-haspopup="true"
               >
                 <span className="leading-none">Solutions</span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 text-slate-400 shrink-0 self-center transition-transform duration-150 ${
-                    activeMegaMenu === 'solutions' ? 'rotate-180 text-[#1266E8]' : ''
+                  className={`w-3 h-3 min-[1366px]:w-3.5 min-[1366px]:h-3.5 shrink-0 self-center transition-transform duration-150 ${
+                    isSolutionsActive
+                      ? 'text-white'
+                      : activeMegaMenu === 'solutions'
+                      ? 'rotate-180 text-[#1C35EA]'
+                      : 'text-[#14205A]/70'
                   }`}
                 />
               </button>
 
-              {/* Solutions Dropdown — Clamped inside viewport */}
+              {/* Solutions Dropdown — Unchanged Contents */}
               {activeMegaMenu === 'solutions' && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 pointer-events-auto before:absolute before:-top-4 before:-left-20 before:-right-20 before:h-8 before:content-['']"
+                  className="fixed left-1/2 -translate-x-1/2 pt-3 z-50 pointer-events-auto before:absolute before:-top-4 before:-left-20 before:-right-20 before:h-8 before:content-['']"
+                  style={{ top: `${headerHeight}px` }}
                   role="menu"
                 >
                   <div className="w-[36.25rem] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-slate-200/90 p-5 xl:p-6 whitespace-normal animate-in fade-in zoom-in-95 duration-150">
@@ -651,166 +691,224 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </div>
 
+            {/* 3. Training NEW */}
             <button
               type="button"
               onClick={() => handleLinkClick('/training')}
-              className={`hover:text-slate-900 transition-colors inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
-                currentRoute === '/training' || currentRoute === '/courses'
-                  ? 'text-[#1266E8] font-semibold'
-                  : ''
+              className={`${pillItemBase} gap-0.5 min-[1366px]:gap-1 ${
+                isTrainingActive ? pillItemActive : pillItemInactive
               }`}
             >
               <span className="leading-none">Training</span>
-              <span className="inline-flex items-center justify-center text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold leading-none self-center">
+              <span
+                className={`inline-flex items-center justify-center text-[9px] font-mono px-1 py-0.5 rounded-full font-bold leading-none self-center ${
+                  isTrainingActive
+                    ? 'bg-white/20 text-white border border-white/35'
+                    : 'bg-[#00B0F0]/15 text-[#14205A] border border-[#00B0F0]/40'
+                }`}
+              >
                 NEW
               </span>
             </button>
 
+            {/* 4. Industries */}
             <button
               type="button"
               onClick={() => handleLinkClick('/industries')}
-              className={`hover:text-slate-900 transition-colors inline-flex items-center whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
-                currentRoute === '/industries' ? 'text-[#1266E8] font-semibold' : ''
+              className={`${pillItemBase} ${
+                isIndustriesActive ? pillItemActive : pillItemInactive
               }`}
             >
               Industries
             </button>
 
+            {/* 5. Portfolio */}
             <button
               type="button"
               onClick={() => handleLinkClick('/portfolio')}
-              className={`hover:text-slate-900 transition-colors inline-flex items-center whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
-                currentRoute === '/portfolio' ? 'text-[#1266E8] font-semibold' : ''
+              className={`${pillItemBase} ${
+                isPortfolioActive ? pillItemActive : pillItemInactive
               }`}
             >
               Portfolio
             </button>
 
+            {/* 6. Technology */}
             <button
               type="button"
               onClick={() => handleLinkClick('/technology')}
-              className={`hover:text-slate-900 transition-colors inline-flex items-center whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
-                currentRoute === '/technology' ? 'text-[#1266E8] font-semibold' : ''
+              className={`${pillItemBase} ${
+                isTechnologyActive ? pillItemActive : pillItemInactive
               }`}
             >
               Technology
             </button>
 
+            {/* 7. Insights */}
             <button
               type="button"
               onClick={() => handleLinkClick('/insights')}
-              className={`hover:text-slate-900 transition-colors inline-flex items-center whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
-                currentRoute.startsWith('/insights') ? 'text-[#1266E8] font-semibold' : ''
+              className={`${pillItemBase} ${
+                isInsightsActive ? pillItemActive : pillItemInactive
               }`}
             >
               Insights
             </button>
 
+            {/* 8. About */}
             <button
               type="button"
               onClick={() => handleLinkClick('/about')}
-              className={`hover:text-slate-900 transition-colors inline-flex items-center whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
-                currentRoute === '/about' ? 'text-[#1266E8] font-semibold' : ''
+              className={`${pillItemBase} ${
+                isAboutActive ? pillItemActive : pillItemInactive
               }`}
             >
               About
             </button>
 
+            {/* 9. Job Finder Pro APP */}
             <button
               type="button"
               onClick={() => handleLinkClick('/job-finder-pro')}
-              className={`hover:text-slate-900 transition-colors inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] rounded-md px-1 py-1 leading-none ${
-                currentRoute === '/job-finder-pro' || currentRoute === '/job-finder' || currentRoute === '/jobs'
-                  ? 'text-[#1266E8] font-semibold'
-                  : ''
+              className={`${pillItemBase} gap-0.5 min-[1366px]:gap-1 ${
+                isJobFinderActive ? pillItemActive : pillItemInactive
               }`}
             >
               <span className="leading-none">Job Finder Pro</span>
-              <span className="inline-flex items-center justify-center text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-blue-50 text-blue-700 border border-blue-200 font-bold leading-none self-center">
+              <span
+                className={`inline-flex items-center justify-center text-[9px] font-mono px-1 py-0.5 rounded-full font-bold leading-none self-center ${
+                  isJobFinderActive
+                    ? 'bg-white/20 text-white border border-white/35'
+                    : 'bg-[#1C35EA]/10 text-[#1C35EA] border border-[#1C35EA]/25'
+                }`}
+              >
                 APP
               </span>
             </button>
           </nav>
 
-          {/* Zone 3: Action Buttons & Mobile Menu Toggle */}
-          <div className="flex items-center gap-1.5 sm:gap-2 xl:gap-2 shrink-0">
-            {/* AI Advisor Chatbot Trigger — Unified Soft Pastel Secondary Button */}
+          {/* Zone 3: Tech Badge (React + TypeScript 20px) + Action Buttons & Mobile Menu Toggle */}
+          <div className="flex items-center gap-1 min-[1366px]:gap-1.5 2xl:gap-2 shrink-0">
+            {/* Official React & TypeScript 20px Tech Badge (Placed just before AI Advisor) */}
+            <div
+              className="hidden min-[1240px]:inline-flex items-center gap-1 px-1.5 py-1 rounded-full bg-white border border-[#14205A]/12 shadow-[0_1px_4px_rgba(20,32,90,0.05)] hover:border-[#00B0F0]/55 hover:shadow-[0_2px_10px_rgba(0,176,240,0.14)] transition-all duration-200 shrink-0"
+              title="Built with React & TypeScript"
+              aria-label="React and TypeScript stack badge"
+            >
+              {/* Official React Logo (20px) */}
+              <span className="inline-flex items-center justify-center w-5 h-5 transition-transform duration-300 hover:rotate-45 hover:scale-110">
+                <svg
+                  viewBox="-11.5 -10.23174 23 20.46348"
+                  width="20"
+                  height="20"
+                  className="w-5 h-5"
+                  aria-hidden="true"
+                >
+                  <circle cx="0" cy="0" r="2.05" fill="#00B0F0" />
+                  <g stroke="#00B0F0" strokeWidth="1.15" fill="none">
+                    <ellipse rx="11" ry="4.2" />
+                    <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+                    <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+                  </g>
+                </svg>
+              </span>
+
+              {/* Official TypeScript Logo (20px) */}
+              <span className="inline-flex items-center justify-center w-5 h-5 transition-transform duration-200 hover:scale-110">
+                <svg
+                  viewBox="0 0 128 128"
+                  width="20"
+                  height="20"
+                  className="w-5 h-5 rounded-[3px]"
+                  aria-hidden="true"
+                >
+                  <rect width="128" height="128" rx="16" fill="#1C35EA" />
+                  <path
+                    fill="#FFFFFF"
+                    d="M56.6 63.6h16.2v46.9h11.6V63.6h16.2V53.9H56.6v9.7zm61.3 1.4c-2.6-2.9-6.6-4.8-12.5-4.8-5.1 0-9.1 1.4-12.1 3.9-2.8 2.4-4.4 5.9-4.4 10.1 0 4.9 2.2 8.7 6.5 11.4 2.1 1.3 5.2 2.5 9.1 3.7 3.9 1.2 6.3 2.2 7.3 3.1 1.3 1.1 1.9 2.5 1.9 4.3 0 2-0.8 3.6-2.4 4.8-1.6 1.2-3.9 1.8-6.9 1.8-4.5 0-8.6-1.8-12.2-5.4l-5.7 7.7c4.3 4.8 10.3 7.2 17.8 7.2 6 0 10.9-1.5 14.4-4.4 3.6-2.9 5.4-6.8 5.4-11.6 0-3.8-1.2-7-3.5-9.5-2.3-2.5-6.4-4.6-12.2-6.4-4.1-1.3-6.7-2.4-7.9-3.3-1.2-0.9-1.8-2.2-1.8-3.8 0-1.6 0.6-2.9 1.9-3.8 1.3-1 3.1-1.5 5.4-1.5 3.6 0 6.9 1.4 9.9 4.1l6.1-7.2z"
+                  />
+                </svg>
+              </span>
+            </div>
+
+            {/* AI Advisor Button (14px font, Sparkles line icon) */}
             <button
               type="button"
               onClick={() => {
                 window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
               }}
-              className="hidden lg:inline-flex items-center justify-center gap-1.5 h-[44px] text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] transition-all px-2.5 min-[1360px]:px-3 rounded-lg border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] whitespace-nowrap cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="hidden min-[1100px]:inline-flex items-center justify-center gap-1 h-[36px] min-[1366px]:h-[38px] !text-[14px] font-semibold tracking-[-0.015em] text-[#14205A] hover:text-[#1C35EA] bg-white hover:bg-[#1C35EA]/[0.04] transition-all px-2 min-[1366px]:px-2.5 rounded-full border border-[#14205A]/15 shadow-[0_1px_4px_rgba(20,32,90,0.05)] whitespace-nowrap cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
               title="Chat with IAMTECHNI AI Solutions Advisor"
+              aria-label="AI Advisor"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
-              <span>AI Advisor</span>
+              <Sparkles className="w-3.5 h-3.5 min-[1366px]:w-4 min-[1366px]:h-4 text-[#1C35EA] shrink-0" />
+              <span className="hidden min-[1240px]:inline">AI Advisor</span>
             </button>
 
-            {/* Direct Phone Call Button — Visible at every width without clipping */}
+            {/* Direct Phone Call Button (14px font, Phone line icon) */}
             <a
               href={`tel:${PRIMARY_PHONE_LINK}`}
-              className="inline-flex items-center justify-center gap-1.5 h-[44px] w-[44px] min-[1440px]:w-auto min-[1440px]:px-3.5 text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-white hover:bg-[#F5F8FC] transition-all rounded-lg border border-[#DBEAFE]/90 shadow-2xs whitespace-nowrap shrink-0 active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="inline-flex items-center justify-center gap-1.5 h-[40px] w-[40px] min-[1100px]:h-[36px] min-[1100px]:w-[36px] min-[1366px]:h-[38px] min-[1366px]:w-[38px] min-[1600px]:w-auto min-[1600px]:px-3.5 !text-[14px] font-semibold text-[#14205A] hover:text-[#1C35EA] bg-white hover:bg-[#1C35EA]/[0.04] transition-all rounded-full border border-[#14205A]/15 shadow-[0_1px_4px_rgba(20,32,90,0.05)] whitespace-nowrap shrink-0 active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
               title={`Call ${PRIMARY_PHONE}`}
               aria-label={`Call ${PRIMARY_PHONE}`}
             >
-              <Phone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span className="hidden min-[1440px]:inline">{PRIMARY_PHONE}</span>
+              <Phone className="w-3.5 h-3.5 min-[1366px]:w-4 min-[1366px]:h-4 text-[#1C35EA] shrink-0" />
+              <span className="hidden min-[1600px]:inline">{PRIMARY_PHONE}</span>
             </a>
 
-            {/* Start a Project CTA Button — Visible at every width */}
+            {/* Start a Project CTA Button (14px font, visible at every width on phones, tablets, desktops) */}
             <button
               type="button"
               onClick={onStartProject}
               aria-label="Start a Project"
               title="Start a Project"
-              className="inline-flex items-center justify-center gap-1.5 px-2.5 min-[375px]:px-3 sm:px-4 h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="inline-flex items-center justify-center gap-1 min-[1366px]:gap-1.5 px-2.5 min-[1366px]:px-3 2xl:px-3.5 h-[40px] min-[1100px]:h-[36px] min-[1366px]:h-[38px] rounded-full bg-gradient-to-r from-[#14205A] via-[#1C35EA] to-[#4D19EA] hover:from-[#1C35EA] hover:to-[#4D19EA] text-white font-semibold tracking-[-0.015em] !text-[14px] shadow-[0_2px_10px_rgba(28,53,234,0.22)] hover:shadow-[0_4px_14px_rgba(28,53,234,0.32)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
             >
-              <span className="hidden min-[420px]:inline">Start a Project</span>
-              <span className="min-[420px]:hidden">Start</span>
+              <span className="hidden min-[400px]:inline">Start a Project</span>
+              <span className="min-[400px]:hidden">Start</span>
               <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
             </button>
 
-            {/* Small Admin link at far right next to Start a Project (signed-in admin only) */}
+            {/* Admin link (Hidden from normal visitors; visible only when signed in as admin) */}
             {isAdminUser && (
               <button
                 type="button"
                 onClick={() => handleLinkClick('/admin')}
                 aria-label="Admin"
                 title="Admin"
-                className={`hidden min-[380px]:inline-flex items-center justify-center h-[44px] px-2 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer rounded-md focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] ${
+                className={`hidden min-[380px]:inline-flex items-center justify-center h-[38px] px-2 !text-[14px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer rounded-full focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] ${
                   currentRoute === '/admin'
-                    ? 'text-[#1266E8]'
-                    : 'text-slate-600 hover:text-[#1266E8]'
+                    ? 'text-[#1C35EA]'
+                    : 'text-[#14205A] hover:text-[#1C35EA]'
                 }`}
               >
                 Admin
               </button>
             )}
 
-            {/* Accessible Mobile Menu Hamburger Toggle (Below 1280px) */}
+            {/* Accessible Mobile & Tablet Hamburger Toggle (Below 1100px) */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="xl:hidden min-w-[44px] min-h-[44px] h-[44px] w-[44px] p-2.5 flex items-center justify-center text-slate-700 hover:text-slate-900 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8]"
+              className="min-[1100px]:hidden min-w-[44px] min-h-[44px] h-[44px] w-[44px] p-2.5 flex items-center justify-center text-[#14205A] hover:text-[#1C35EA] rounded-full border border-[#14205A]/15 bg-white hover:bg-slate-50 transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
               aria-label={isMobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation-panel"
             >
               {isMobileMenuOpen ? (
-                <X className="w-5 h-5 text-slate-800" />
+                <X className="w-5 h-5 text-[#14205A]" />
               ) : (
-                <Menu className="w-5 h-5 text-slate-800" />
+                <Menu className="w-5 h-5 text-[#14205A]" />
               )}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Accessible Full-Height Slide-In Mobile & Tablet Navigation Panel (<1280px) */}
+      {/* Accessible Full-Height Slide-In Mobile & Tablet Navigation Drawer (<1100px) */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-x-0 bottom-0 z-50 xl:hidden flex justify-end"
+          className="fixed inset-x-0 bottom-0 z-50 min-[1100px]:hidden flex justify-end"
           style={{ top: `${headerHeight}px` }}
         >
           {/* Tap-outside Backdrop Overlay */}
@@ -833,14 +931,14 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6 divide-y divide-slate-100">
               {/* Header Status & Quick Close */}
               <div className="pb-3 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2 text-slate-500 font-mono uppercase tracking-wider font-semibold">
-                  <span className="w-2 h-2 rounded-full bg-[#1266E8] animate-pulse" />
+                <div className="flex items-center gap-2 text-[#14205A] font-mono uppercase tracking-wider font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-[#1C35EA] animate-pulse" />
                   <span>IAMTECHNI Navigation</span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="min-h-[44px] px-3 py-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+                  className="min-h-[44px] px-3 py-1.5 inline-flex items-center gap-1.5 !text-[14px] font-medium text-[#14205A] bg-slate-100 hover:bg-slate-200 rounded-full transition-colors cursor-pointer"
                   aria-label="Close navigation menu"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -854,7 +952,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div
                   className={`rounded-xl border transition-all ${
                     isServicesOpen
-                      ? 'border-blue-200/90 bg-blue-50/30'
+                      ? 'border-[#1C35EA]/25 bg-[#1C35EA]/[0.03]'
                       : 'border-transparent hover:bg-slate-50/80'
                   }`}
                 >
@@ -862,18 +960,23 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       type="button"
                       onClick={() => handleLinkClick('/services')}
-                      className={`flex-1 min-h-[44px] py-2.5 px-3.5 text-left text-base font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-                        currentRoute.startsWith('/services')
-                          ? 'text-[#1266E8]'
-                          : 'text-slate-900 hover:text-[#1266E8]'
+                      className={`flex-1 min-h-[44px] py-2.5 px-3.5 text-left !text-[14px] font-semibold flex items-center justify-between transition-colors cursor-pointer rounded-l-xl ${
+                        isServicesActive
+                          ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white'
+                          : 'text-[#14205A] hover:text-[#1C35EA]'
                       }`}
                     >
                       <span className="flex items-center gap-2">
-                        <Code2 className="w-4 h-4 text-[#1266E8]" />
+                        <Code2 className={`w-4 h-4 ${isServicesActive ? 'text-white' : 'text-[#1C35EA]'}`} />
                         <span>Services</span>
                       </span>
-                      <span className="text-[11px] font-mono text-slate-400 font-normal pr-1">
-                        Directory ↗
+                      <span
+                        className={`text-[11px] font-mono font-normal pr-1 inline-flex items-center gap-1 ${
+                          isServicesActive ? 'text-white/85' : 'text-slate-400'
+                        }`}
+                      >
+                        <span>Directory</span>
+                        <ArrowRight className="w-3 h-3" />
                       </span>
                     </button>
 
@@ -883,7 +986,7 @@ export const Header: React.FC<HeaderProps> = ({
                         e.stopPropagation();
                         setIsServicesOpen((prev) => !prev);
                       }}
-                      className="min-w-[44px] min-h-[44px] p-2.5 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-200/60 rounded-r-xl transition-colors cursor-pointer border-l border-slate-200/50"
+                      className="min-w-[44px] min-h-[44px] p-2.5 flex items-center justify-center text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-200/60 rounded-r-xl transition-colors cursor-pointer border-l border-slate-200/50"
                       aria-expanded={isServicesOpen}
                       aria-controls="mobile-services-submenu"
                       aria-label={
@@ -892,7 +995,7 @@ export const Header: React.FC<HeaderProps> = ({
                     >
                       <ChevronDown
                         className={`w-5 h-5 transition-transform duration-200 ease-out ${
-                          isServicesOpen ? 'rotate-180 text-[#1266E8]' : 'text-slate-400'
+                          isServicesOpen ? 'rotate-180 text-[#1C35EA]' : 'text-slate-400'
                         }`}
                       />
                     </button>
@@ -908,7 +1011,7 @@ export const Header: React.FC<HeaderProps> = ({
                       <button
                         type="button"
                         onClick={() => handleLinkClick('/services')}
-                        className="w-full min-h-[44px] text-left py-2 px-3 rounded-lg text-xs font-bold text-[#1266E8] bg-blue-100/70 hover:bg-blue-100 flex items-center justify-between transition-colors cursor-pointer"
+                        className="w-full min-h-[44px] text-left py-2 px-3 rounded-lg text-xs font-bold text-[#1C35EA] bg-blue-100/70 hover:bg-blue-100 flex items-center justify-between transition-colors cursor-pointer"
                       >
                         <span className="flex items-center gap-2">
                           <Code2 className="w-3.5 h-3.5" />
@@ -920,16 +1023,16 @@ export const Header: React.FC<HeaderProps> = ({
                       <button
                         type="button"
                         onClick={() => handleLinkClick('/locations')}
-                        className="w-full min-h-[44px] text-left py-2 px-3 rounded-lg text-xs font-bold text-[#1266E8] bg-slate-50 hover:bg-slate-100 flex items-center justify-between transition-colors cursor-pointer border border-slate-200/80"
+                        className="w-full min-h-[44px] text-left py-2 px-3 rounded-lg text-xs font-bold text-[#1C35EA] bg-slate-50 hover:bg-slate-100 flex items-center justify-between transition-colors cursor-pointer border border-slate-200/80"
                       >
                         <span className="flex items-center gap-2">
-                          <Globe className="w-3.5 h-3.5 text-[#1266E8]" />
+                          <Globe className="w-3.5 h-3.5 text-[#1C35EA]" />
                           <span>Locations We Serve (Puducherry, Chennai &amp; TN)</span>
                         </span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
 
-                      <div className="pt-1 space-y-1 border-l-2 border-[#1266E8]/30 ml-2 pl-2.5">
+                      <div className="pt-1 space-y-1 border-l-2 border-[#1C35EA]/30 ml-2 pl-2.5">
                         {servicesList.map((service, idx) => {
                           const Icon = service.icon;
                           const isCurrent = currentRoute === service.route;
@@ -939,12 +1042,12 @@ export const Header: React.FC<HeaderProps> = ({
                               type="button"
                               onClick={() => handleLinkClick(service.route)}
                               className={`w-full min-h-[44px] text-left py-2 px-2.5 rounded-lg transition-colors group cursor-pointer block ${
-                                isCurrent ? 'bg-blue-100/60 text-[#1266E8]' : 'hover:bg-white'
+                                isCurrent ? 'bg-blue-100/60 text-[#1C35EA]' : 'hover:bg-white'
                               }`}
                             >
                               <div className="flex items-center gap-2">
-                                <Icon className="w-3.5 h-3.5 text-[#1266E8] shrink-0" />
-                                <span className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8] leading-snug">
+                                <Icon className="w-3.5 h-3.5 text-[#1C35EA] shrink-0" />
+                                <span className="text-xs font-semibold text-[#14205A] group-hover:text-[#1C35EA] leading-snug">
                                   {service.title}
                                 </span>
                               </div>
@@ -963,7 +1066,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div
                   className={`rounded-xl border transition-all ${
                     isSolutionsOpen
-                      ? 'border-blue-200/90 bg-blue-50/30'
+                      ? 'border-[#1C35EA]/25 bg-[#1C35EA]/[0.03]'
                       : 'border-transparent hover:bg-slate-50/80'
                   }`}
                 >
@@ -971,18 +1074,23 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       type="button"
                       onClick={() => handleLinkClick('/solutions')}
-                      className={`flex-1 min-h-[44px] py-2.5 px-3.5 text-left text-base font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-                        currentRoute === '/solutions'
-                          ? 'text-[#1266E8]'
-                          : 'text-slate-900 hover:text-[#1266E8]'
+                      className={`flex-1 min-h-[44px] py-2.5 px-3.5 text-left !text-[14px] font-semibold flex items-center justify-between transition-colors cursor-pointer rounded-l-xl ${
+                        isSolutionsActive
+                          ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white'
+                          : 'text-[#14205A] hover:text-[#1C35EA]'
                       }`}
                     >
                       <span className="flex items-center gap-2">
-                        <Layers className="w-4 h-4 text-[#1266E8]" />
+                        <Layers className={`w-4 h-4 ${isSolutionsActive ? 'text-white' : 'text-[#1C35EA]'}`} />
                         <span>Solutions</span>
                       </span>
-                      <span className="text-[11px] font-mono text-slate-400 font-normal pr-1">
-                        Overview ↗
+                      <span
+                        className={`text-[11px] font-mono font-normal pr-1 inline-flex items-center gap-1 ${
+                          isSolutionsActive ? 'text-white/85' : 'text-slate-400'
+                        }`}
+                      >
+                        <span>Overview</span>
+                        <ArrowRight className="w-3 h-3" />
                       </span>
                     </button>
 
@@ -992,7 +1100,7 @@ export const Header: React.FC<HeaderProps> = ({
                         e.stopPropagation();
                         setIsSolutionsOpen((prev) => !prev);
                       }}
-                      className="min-w-[44px] min-h-[44px] p-2.5 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-200/60 rounded-r-xl transition-colors cursor-pointer border-l border-slate-200/50"
+                      className="min-w-[44px] min-h-[44px] p-2.5 flex items-center justify-center text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-200/60 rounded-r-xl transition-colors cursor-pointer border-l border-slate-200/50"
                       aria-expanded={isSolutionsOpen}
                       aria-controls="mobile-solutions-submenu"
                       aria-label={
@@ -1001,7 +1109,7 @@ export const Header: React.FC<HeaderProps> = ({
                     >
                       <ChevronDown
                         className={`w-5 h-5 transition-transform duration-200 ease-out ${
-                          isSolutionsOpen ? 'rotate-180 text-[#1266E8]' : 'text-slate-400'
+                          isSolutionsOpen ? 'rotate-180 text-[#1C35EA]' : 'text-slate-400'
                         }`}
                       />
                     </button>
@@ -1017,7 +1125,7 @@ export const Header: React.FC<HeaderProps> = ({
                       <button
                         type="button"
                         onClick={() => handleLinkClick('/solutions')}
-                        className="w-full min-h-[44px] text-left py-2 px-3 rounded-lg text-xs font-bold text-[#1266E8] bg-blue-100/70 hover:bg-blue-100 flex items-center justify-between transition-colors cursor-pointer"
+                        className="w-full min-h-[44px] text-left py-2 px-3 rounded-lg text-xs font-bold text-[#1C35EA] bg-blue-100/70 hover:bg-blue-100 flex items-center justify-between transition-colors cursor-pointer"
                       >
                         <span className="flex items-center gap-2">
                           <Layers className="w-3.5 h-3.5" />
@@ -1026,7 +1134,7 @@ export const Header: React.FC<HeaderProps> = ({
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
 
-                      <div className="pt-1 space-y-1 border-l-2 border-[#1266E8]/30 ml-2 pl-2.5">
+                      <div className="pt-1 space-y-1 border-l-2 border-[#1C35EA]/30 ml-2 pl-2.5">
                         {solutionsList.map((sol, idx) => (
                           <button
                             key={idx}
@@ -1035,7 +1143,7 @@ export const Header: React.FC<HeaderProps> = ({
                             className="w-full min-h-[44px] text-left py-2 px-2.5 rounded-lg hover:bg-white transition-colors group cursor-pointer block"
                           >
                             <div className="flex items-center justify-between gap-2">
-                              <span className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8] leading-snug">
+                              <span className="text-xs font-semibold text-[#14205A] group-hover:text-[#1C35EA] leading-snug">
                                 {sol.title}
                               </span>
                               <span className="text-[9px] font-mono font-medium px-1.5 py-0.5 rounded-sm bg-slate-100 text-slate-600 shrink-0">
@@ -1056,122 +1164,113 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   type="button"
                   onClick={() => handleLinkClick('/training')}
-                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
-                    currentRoute === '/training' || currentRoute === '/courses'
-                      ? 'text-[#1266E8] bg-blue-50/70 font-bold'
-                      : 'text-slate-900 hover:bg-slate-50'
+                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
+                    isTrainingActive
+                      ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white shadow-[0_2px_10px_rgba(28,53,234,0.25)]'
+                      : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
                   }`}
                 >
                   <div className="flex items-center gap-2">
                     <span>Training</span>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-100 text-emerald-800 font-bold">
+                    <span
+                      className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full font-bold ${
+                        isTrainingActive
+                          ? 'bg-white/20 text-white border border-white/35'
+                          : 'bg-[#00B0F0]/15 text-[#14205A] border border-[#00B0F0]/40'
+                      }`}
+                    >
                       NEW
                     </span>
                   </div>
-                  {(currentRoute === '/training' || currentRoute === '/courses') && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
-                  )}
                 </button>
 
                 {/* 4. Industries */}
                 <button
                   type="button"
                   onClick={() => handleLinkClick('/industries')}
-                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
-                    currentRoute === '/industries'
-                      ? 'text-[#1266E8] bg-blue-50/70 font-bold'
-                      : 'text-slate-900 hover:bg-slate-50'
+                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
+                    isIndustriesActive
+                      ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white shadow-[0_2px_10px_rgba(28,53,234,0.25)]'
+                      : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
                   }`}
                 >
                   <span>Industries</span>
-                  {currentRoute === '/industries' && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
-                  )}
                 </button>
 
                 {/* 5. Portfolio */}
                 <button
                   type="button"
                   onClick={() => handleLinkClick('/portfolio')}
-                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
-                    currentRoute === '/portfolio'
-                      ? 'text-[#1266E8] bg-blue-50/70 font-bold'
-                      : 'text-slate-900 hover:bg-slate-50'
+                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
+                    isPortfolioActive
+                      ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white shadow-[0_2px_10px_rgba(28,53,234,0.25)]'
+                      : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
                   }`}
                 >
                   <span>Portfolio</span>
-                  {currentRoute === '/portfolio' && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
-                  )}
                 </button>
 
                 {/* 6. Technology */}
                 <button
                   type="button"
                   onClick={() => handleLinkClick('/technology')}
-                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
-                    currentRoute === '/technology'
-                      ? 'text-[#1266E8] bg-blue-50/70 font-bold'
-                      : 'text-slate-900 hover:bg-slate-50'
+                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
+                    isTechnologyActive
+                      ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white shadow-[0_2px_10px_rgba(28,53,234,0.25)]'
+                      : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
                   }`}
                 >
                   <span>Technology</span>
-                  {currentRoute === '/technology' && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
-                  )}
                 </button>
 
                 {/* 7. Insights */}
                 <button
                   type="button"
                   onClick={() => handleLinkClick('/insights')}
-                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
-                    currentRoute.startsWith('/insights')
-                      ? 'text-[#1266E8] bg-blue-50/70 font-bold'
-                      : 'text-slate-900 hover:bg-slate-50'
+                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
+                    isInsightsActive
+                      ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white shadow-[0_2px_10px_rgba(28,53,234,0.25)]'
+                      : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
                   }`}
                 >
                   <span>Insights</span>
-                  {currentRoute.startsWith('/insights') && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
-                  )}
                 </button>
 
                 {/* 8. About */}
                 <button
                   type="button"
                   onClick={() => handleLinkClick('/about')}
-                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
-                    currentRoute === '/about'
-                      ? 'text-[#1266E8] bg-blue-50/70 font-bold'
-                      : 'text-slate-900 hover:bg-slate-50'
+                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
+                    isAboutActive
+                      ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white shadow-[0_2px_10px_rgba(28,53,234,0.25)]'
+                      : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
                   }`}
                 >
                   <span>About</span>
-                  {currentRoute === '/about' && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
-                  )}
                 </button>
 
                 {/* 9. Job Finder Pro Android App */}
                 <button
                   type="button"
                   onClick={() => handleLinkClick('/job-finder-pro')}
-                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
-                    currentRoute === '/job-finder-pro'
-                      ? 'text-[#1266E8] bg-blue-50/70 font-bold'
-                      : 'text-slate-900 hover:bg-slate-50'
+                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
+                    isJobFinderActive
+                      ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white shadow-[0_2px_10px_rgba(28,53,234,0.25)]'
+                      : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
                   }`}
                 >
                   <div className="flex items-center gap-2">
                     <span>Job Finder Pro</span>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-blue-100 text-blue-800 font-bold">
+                    <span
+                      className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full font-bold ${
+                        isJobFinderActive
+                          ? 'bg-white/20 text-white border border-white/35'
+                          : 'bg-[#1C35EA]/10 text-[#1C35EA] border border-[#1C35EA]/25'
+                      }`}
+                    >
                       APP
                     </span>
                   </div>
-                  {currentRoute === '/job-finder-pro' && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
-                  )}
                 </button>
 
                 {/* 10. Admin (signed-in admin only) */}
@@ -1179,16 +1278,13 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => handleLinkClick('/admin')}
-                    className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-between cursor-pointer ${
+                    className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
                       currentRoute === '/admin'
-                        ? 'text-[#1266E8] bg-blue-50/70 font-bold'
-                        : 'text-slate-900 hover:bg-slate-50'
+                        ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white'
+                        : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
                     }`}
                   >
                     <span>Admin</span>
-                    {currentRoute === '/admin' && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#1266E8]" />
-                    )}
                   </button>
                 )}
               </div>
@@ -1204,18 +1300,18 @@ export const Header: React.FC<HeaderProps> = ({
                     setIsMobileMenuOpen(false);
                     window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
                   }}
-                  className="min-h-[44px] px-3 py-2 text-xs font-semibold text-[#0F52BA] bg-blue-50 hover:bg-blue-100 rounded-xl flex items-center justify-center gap-1.5 border border-blue-200/90 shadow-2xs transition-colors cursor-pointer"
+                  className="min-h-[44px] px-3 py-2 !text-[14px] font-semibold text-[#14205A] hover:text-[#1C35EA] bg-white hover:bg-blue-50/50 rounded-full flex items-center justify-center gap-1.5 border border-[#14205A]/15 shadow-2xs transition-colors cursor-pointer"
                 >
-                  <Sparkles className="w-4 h-4 text-[#1266E8] shrink-0" />
+                  <Sparkles className="w-4 h-4 text-[#1C35EA] shrink-0" />
                   <span>AI Advisor</span>
                 </button>
 
                 {/* Direct Phone Button */}
                 <a
                   href={`tel:${PRIMARY_PHONE_LINK}`}
-                  className="min-h-[44px] px-3 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 rounded-xl flex items-center justify-center gap-1.5 border border-slate-200/90 shadow-2xs transition-colors"
+                  className="min-h-[44px] px-3 py-2 !text-[14px] font-semibold text-[#14205A] hover:text-[#1C35EA] bg-white hover:bg-slate-100 rounded-full flex items-center justify-center gap-1.5 border border-[#14205A]/15 shadow-2xs transition-colors"
                 >
-                  <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <Phone className="w-4 h-4 text-[#1C35EA] shrink-0" />
                   <span className="truncate">{PRIMARY_PHONE}</span>
                 </a>
               </div>
@@ -1227,7 +1323,7 @@ export const Header: React.FC<HeaderProps> = ({
                   setIsMobileMenuOpen(false);
                   onStartProject();
                 }}
-                className="w-full min-h-[46px] py-2.5 text-xs sm:text-sm font-semibold text-white bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 active:scale-[0.98] rounded-lg flex items-center justify-center gap-2 shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 cursor-pointer"
+                className="w-full min-h-[46px] py-2.5 !text-[14px] font-semibold text-white bg-gradient-to-r from-[#14205A] via-[#1C35EA] to-[#4D19EA] hover:from-[#1C35EA] hover:to-[#4D19EA] active:scale-[0.98] rounded-full flex items-center justify-center gap-2 shadow-[0_2px_10px_rgba(28,53,234,0.24)] hover:shadow-[0_4px_14px_rgba(28,53,234,0.32)] transition-all duration-200 cursor-pointer"
               >
                 <span>Start a Project</span>
                 <ArrowRight className="w-4 h-4 text-white" />
