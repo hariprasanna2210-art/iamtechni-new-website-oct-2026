@@ -942,6 +942,11 @@ const STATIC_PAGE_HEADINGS = {
     intro:
       'Headquartered in Puducherry, IAMTECHNI delivers modern software development, web engineering, digital marketing, and live instructor-led online technical training to clients across Chennai and major Tamil Nadu commercial hubs.',
   },
+  '/verify': {
+    h1: 'Verify Internship & Training Certificate',
+    intro:
+      'Authenticate official IAMTECHNI internship and professional training certificates using the unique credential ID or QR verification code.',
+  },
 };
 
 async function loadSeoHelperBundle() {

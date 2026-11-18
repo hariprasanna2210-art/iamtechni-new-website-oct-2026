@@ -30,13 +30,15 @@ const PORT = parseInt(process.env.PORT || '3000', 10);
 const app = express();
 app.use(express.json());
 
-// Auto-sync /public/sitemap.xml on startup from data files
-try {
-  const sitemapPath = path.resolve(__dirname, 'public', 'sitemap.xml');
-  fs.writeFileSync(sitemapPath, generateSitemapXml(), 'utf-8');
-} catch (err) {
-  console.warn('Could not write public/sitemap.xml on startup:', err);
-}
+// Auto-sync /public/sitemap.xml asynchronously after startup
+setImmediate(() => {
+  try {
+    const sitemapPath = path.resolve(__dirname, 'public', 'sitemap.xml');
+    fs.writeFileSync(sitemapPath, generateSitemapXml(), 'utf-8');
+  } catch (err) {
+    console.warn('Could not write public/sitemap.xml on startup:', err);
+  }
+});
 
 // Serve /robots.txt as real text/plain file (never index.html)
 app.get('/robots.txt', (_req, res) => {
@@ -192,12 +194,30 @@ app.get('/api/health', (_req, res) => {
 async function startServer() {
   if (!isProduction) {
     app.use(express.static(path.resolve(__dirname, 'public')));
-    const { createServer: createViteServer } = await import('vite');
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'spa',
+
+    let viteMiddleware: express.RequestHandler | null = null;
+    const viteReady = (async () => {
+      const { createServer: createViteServer } = await import('vite');
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: 'spa',
+      });
+      viteMiddleware = vite.middlewares;
+    })();
+
+    app.use(async (req, res, next) => {
+      try {
+        if (!viteMiddleware) {
+          await viteReady;
+        }
+        if (viteMiddleware) {
+          return viteMiddleware(req, res, next);
+        }
+        return next();
+      } catch (err) {
+        return next(err);
+      }
     });
-    app.use(vite.middlewares);
   } else {
     app.use(express.static(path.resolve(__dirname, 'dist')));
     app.get('*', (_req, res) => {
