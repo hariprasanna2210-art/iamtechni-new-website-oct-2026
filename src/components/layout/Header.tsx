@@ -85,11 +85,11 @@ export const Header: React.FC<HeaderProps> = ({
     };
   }, [isScrolled]);
 
-  // Track scroll state with hysteresis to prevent jitter near threshold
+  // Track scroll state: navbar becomes slightly shorter after scrolling 80px
   useEffect(() => {
     const handleScroll = () => {
       const y = window.scrollY;
-      setIsScrolled((prev) => (prev ? y > 8 : y > 24));
+      setIsScrolled((prev) => (prev ? y > 64 : y > 80));
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -315,11 +315,11 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   const pillItemBase =
-    'inline-flex items-center justify-center rounded-full !text-[14px] font-medium leading-none tracking-[-0.02em] min-[1440px]:tracking-[-0.01em] whitespace-nowrap shrink-0 cursor-pointer transition-all duration-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] px-1 min-[1200px]:px-1.5 min-[1366px]:px-2 min-[1440px]:px-2.5 2xl:px-3 py-1.5';
+    'relative inline-flex items-center justify-center h-[32px] rounded-full !text-[13.5px] min-[1440px]:!text-[14px] font-medium leading-none tracking-[-0.015em] min-[1440px]:tracking-[-0.01em] whitespace-nowrap shrink-0 cursor-pointer transition-all duration-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]';
   const pillItemActive =
-    'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white font-semibold shadow-[0_2px_10px_rgba(28,53,234,0.28)]';
+    'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white font-semibold shadow-[0_2px_10px_rgba(28,53,234,0.28)] px-2.5';
   const pillItemInactive =
-    'text-[#14205A] hover:text-[#1C35EA] hover:bg-[#1C35EA]/[0.05]';
+    "px-0.5 text-[#14205A] hover:text-[#1C35EA] hover:bg-[#EEF4FF] after:content-[''] after:absolute after:bottom-1 after:left-0.5 after:right-0.5 after:h-[1.5px] after:rounded-full after:bg-[#1C35EA] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200";
 
   return (
     <>
@@ -331,32 +331,32 @@ export const Header: React.FC<HeaderProps> = ({
             : 'bg-white/95 backdrop-blur-sm shadow-[0_2px_12px_rgba(20,32,90,0.08)]'
         }`}
       >
-        {/* Main Navbar Row — Logo Left, Rounded Pill Menu Center, Tech Badge + Actions Right */}
+        {/* Main Navbar Row — Vertically Centred, 16px Even Gap Between Logo, Menu Pill & Right Buttons */}
         <div
-          className={`relative w-full max-w-[92.5rem] mx-auto pl-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] sm:px-4 min-[1100px]:px-2 min-[1280px]:px-2.5 min-[1366px]:px-4 2xl:px-8 flex items-center justify-between gap-1 min-[1366px]:gap-2 whitespace-nowrap transition-all duration-200 ${
+          className={`relative w-full max-w-[96rem] mx-auto px-2 sm:px-4 min-[1100px]:px-2 min-[1366px]:px-4 2xl:px-8 flex items-center justify-between min-[1100px]:justify-center gap-[16px] whitespace-nowrap transition-all duration-200 ${
             isScrolled ? 'py-1.5' : 'py-2.5'
           }`}
         >
-          {/* Zone 1: Brand Wordmark / Logo (Unchanged image & size) */}
-          <div className="shrink-0 flex items-center">
+          {/* Zone 1: Brand Wordmark / Logo (40px height, #EEF4FF 10px radius 8px padding 2% scale-up hover, unchanged logo image) */}
+          <div className="shrink-0 flex items-center h-[40px]">
             <button
               type="button"
               onClick={() => handleLinkClick('/')}
-              className="h-[42px] flex items-center gap-2 text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] rounded-lg group cursor-pointer"
+              className="relative h-[40px] p-[8px] rounded-[10px] bg-transparent hover:bg-[#EEF4FF] hover:scale-[1.02] transition-all duration-200 flex items-center justify-center text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] cursor-pointer before:content-[''] before:absolute before:-inset-y-1 before:inset-x-0 before:rounded-[10px] before:bg-transparent hover:before:bg-[#EEF4FF] before:transition-colors before:duration-200 before:-z-10"
               aria-label="IAMTECHNI Home"
             >
               <IamtechniLogo size="md" />
             </button>
           </div>
 
-          {/* Zone 2: Center Rounded White Pill Menu (Visible at >= 1100px, fits in one view on desktop) */}
+          {/* Zone 2: Center Rounded White Pill Menu (40px height, 14px spacing between menu items) */}
           <nav
             aria-label="Primary Navigation"
-            className="hidden min-[1100px]:flex items-center justify-center bg-white rounded-full border border-[#14205A]/12 shadow-[0_2px_10px_rgba(20,32,90,0.05)] p-0.5 min-[1366px]:p-1 gap-0 min-[1440px]:gap-0.5 shrink-0"
+            className="hidden min-[1100px]:flex items-center justify-center h-[40px] bg-white rounded-full border border-[#14205A]/12 shadow-[0_2px_10px_rgba(20,32,90,0.05)] px-2 gap-[7px] min-[1340px]:gap-[14px] shrink-0"
           >
             {/* 1. Services (Dropdown) */}
             <div
-              className="relative flex items-center"
+              className="relative flex items-center h-[32px]"
               onMouseEnter={() => handleMouseEnter('services')}
               onMouseLeave={handleMouseLeave}
             >
@@ -377,7 +377,7 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <span className="leading-none">Services</span>
                 <ChevronDown
-                  className={`w-3 h-3 min-[1366px]:w-3.5 min-[1366px]:h-3.5 shrink-0 self-center transition-transform duration-150 ${
+                  className={`w-3.5 h-3.5 shrink-0 self-center transition-transform duration-150 ${
                     isServicesActive
                       ? 'text-white'
                       : activeMegaMenu === 'services'
@@ -583,7 +583,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* 2. Solutions (Dropdown) */}
             <div
-              className="relative flex items-center"
+              className="relative flex items-center h-[32px]"
               onMouseEnter={() => handleMouseEnter('solutions')}
               onMouseLeave={handleMouseLeave}
             >
@@ -604,7 +604,7 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <span className="leading-none">Solutions</span>
                 <ChevronDown
-                  className={`w-3 h-3 min-[1366px]:w-3.5 min-[1366px]:h-3.5 shrink-0 self-center transition-transform duration-150 ${
+                  className={`w-3.5 h-3.5 shrink-0 self-center transition-transform duration-150 ${
                     isSolutionsActive
                       ? 'text-white'
                       : activeMegaMenu === 'solutions'
@@ -691,22 +691,14 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </div>
 
-            {/* 3. Training NEW */}
+            {/* 3. Training NEW (Active Gradient Pill) */}
             <button
               type="button"
               onClick={() => handleLinkClick('/training')}
-              className={`${pillItemBase} gap-0.5 min-[1366px]:gap-1 ${
-                isTrainingActive ? pillItemActive : pillItemInactive
-              }`}
+              className={`${pillItemBase} ${pillItemActive} gap-1`}
             >
               <span className="leading-none">Training</span>
-              <span
-                className={`inline-flex items-center justify-center text-[9px] font-mono px-1 py-0.5 rounded-full font-bold leading-none self-center ${
-                  isTrainingActive
-                    ? 'bg-white/20 text-white border border-white/35'
-                    : 'bg-[#00B0F0]/15 text-[#14205A] border border-[#00B0F0]/40'
-                }`}
-              >
+              <span className="inline-flex items-center justify-center text-[9px] font-mono px-1.5 py-0.5 rounded-full font-bold leading-none self-center bg-white/20 text-white border border-white/35">
                 NEW
               </span>
             </button>
@@ -770,7 +762,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => handleLinkClick('/job-finder-pro')}
-              className={`${pillItemBase} gap-0.5 min-[1366px]:gap-1 ${
+              className={`${pillItemBase} gap-1 ${
                 isJobFinderActive ? pillItemActive : pillItemInactive
               }`}
             >
@@ -787,110 +779,66 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </nav>
 
-          {/* Zone 3: Tech Badge (React + TypeScript 20px) + Action Buttons & Mobile Menu Toggle */}
-          <div className="flex items-center gap-1 min-[1366px]:gap-1.5 2xl:gap-2 shrink-0">
-            {/* Official React & TypeScript 20px Tech Badge (Placed just before AI Advisor) */}
-            <div
-              className="hidden min-[1240px]:inline-flex items-center gap-1 px-1.5 py-1 rounded-full bg-white border border-[#14205A]/12 shadow-[0_1px_4px_rgba(20,32,90,0.05)] hover:border-[#00B0F0]/55 hover:shadow-[0_2px_10px_rgba(0,176,240,0.14)] transition-all duration-200 shrink-0"
-              title="Built with React & TypeScript"
-              aria-label="React and TypeScript stack badge"
-            >
-              {/* Official React Logo (20px) */}
-              <span className="inline-flex items-center justify-center w-5 h-5 transition-transform duration-300 hover:rotate-45 hover:scale-110">
-                <svg
-                  viewBox="-11.5 -10.23174 23 20.46348"
-                  width="20"
-                  height="20"
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                >
-                  <circle cx="0" cy="0" r="2.05" fill="#00B0F0" />
-                  <g stroke="#00B0F0" strokeWidth="1.15" fill="none">
-                    <ellipse rx="11" ry="4.2" />
-                    <ellipse rx="11" ry="4.2" transform="rotate(60)" />
-                    <ellipse rx="11" ry="4.2" transform="rotate(120)" />
-                  </g>
-                </svg>
-              </span>
-
-              {/* Official TypeScript Logo (20px) */}
-              <span className="inline-flex items-center justify-center w-5 h-5 transition-transform duration-200 hover:scale-110">
-                <svg
-                  viewBox="0 0 128 128"
-                  width="20"
-                  height="20"
-                  className="w-5 h-5 rounded-[3px]"
-                  aria-hidden="true"
-                >
-                  <rect width="128" height="128" rx="16" fill="#1C35EA" />
-                  <path
-                    fill="#FFFFFF"
-                    d="M56.6 63.6h16.2v46.9h11.6V63.6h16.2V53.9H56.6v9.7zm61.3 1.4c-2.6-2.9-6.6-4.8-12.5-4.8-5.1 0-9.1 1.4-12.1 3.9-2.8 2.4-4.4 5.9-4.4 10.1 0 4.9 2.2 8.7 6.5 11.4 2.1 1.3 5.2 2.5 9.1 3.7 3.9 1.2 6.3 2.2 7.3 3.1 1.3 1.1 1.9 2.5 1.9 4.3 0 2-0.8 3.6-2.4 4.8-1.6 1.2-3.9 1.8-6.9 1.8-4.5 0-8.6-1.8-12.2-5.4l-5.7 7.7c4.3 4.8 10.3 7.2 17.8 7.2 6 0 10.9-1.5 14.4-4.4 3.6-2.9 5.4-6.8 5.4-11.6 0-3.8-1.2-7-3.5-9.5-2.3-2.5-6.4-4.6-12.2-6.4-4.1-1.3-6.7-2.4-7.9-3.3-1.2-0.9-1.8-2.2-1.8-3.8 0-1.6 0.6-2.9 1.9-3.8 1.3-1 3.1-1.5 5.4-1.5 3.6 0 6.9 1.4 9.9 4.1l6.1-7.2z"
-                  />
-                </svg>
-              </span>
-            </div>
-
-            {/* AI Advisor Button (14px font, Sparkles line icon) */}
+          {/* Zone 3: Right-Side Action Buttons (All 40px height, vertically centred on same row) */}
+          <div className="flex items-center gap-1.5 min-[1366px]:gap-2 h-[40px] shrink-0">
+            {/* AI Advisor Button (40px height) */}
             <button
               type="button"
               onClick={() => {
                 window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
               }}
-              className="hidden min-[1100px]:inline-flex items-center justify-center gap-1 h-[36px] min-[1366px]:h-[38px] !text-[14px] font-semibold tracking-[-0.015em] text-[#14205A] hover:text-[#1C35EA] bg-white hover:bg-[#1C35EA]/[0.04] transition-all px-2 min-[1366px]:px-2.5 rounded-full border border-[#14205A]/15 shadow-[0_1px_4px_rgba(20,32,90,0.05)] whitespace-nowrap cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
+              className="hidden min-[1100px]:inline-flex items-center justify-center gap-1 min-[1366px]:gap-1.5 h-[40px] px-2 min-[1366px]:px-2.5 min-[1440px]:px-3 rounded-full bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] !text-[13.5px] min-[1440px]:!text-[14px] font-semibold tracking-[-0.01em] border border-[#14205A]/15 shadow-[0_1px_4px_rgba(20,32,90,0.05)] transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
               title="Chat with IAMTECHNI AI Solutions Advisor"
               aria-label="AI Advisor"
             >
               <Sparkles className="w-3.5 h-3.5 min-[1366px]:w-4 min-[1366px]:h-4 text-[#1C35EA] shrink-0" />
-              <span className="hidden min-[1240px]:inline">AI Advisor</span>
+              <span>AI Advisor</span>
             </button>
 
-            {/* Direct Phone Call Button (14px font, Phone line icon) */}
+            {/* Direct Phone Call Button (40px height) */}
             <a
               href={`tel:${PRIMARY_PHONE_LINK}`}
-              className="inline-flex items-center justify-center gap-1.5 h-[40px] w-[40px] min-[1100px]:h-[36px] min-[1100px]:w-[36px] min-[1366px]:h-[38px] min-[1366px]:w-[38px] min-[1600px]:w-auto min-[1600px]:px-3.5 !text-[14px] font-semibold text-[#14205A] hover:text-[#1C35EA] bg-white hover:bg-[#1C35EA]/[0.04] transition-all rounded-full border border-[#14205A]/15 shadow-[0_1px_4px_rgba(20,32,90,0.05)] whitespace-nowrap shrink-0 active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
+              className="inline-flex items-center justify-center gap-1.5 h-[40px] w-[40px] min-[1720px]:w-auto min-[1720px]:px-3.5 rounded-full bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] !text-[13.5px] min-[1440px]:!text-[14px] font-semibold border border-[#14205A]/15 shadow-[0_1px_4px_rgba(20,32,90,0.05)] transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
               title={`Call ${PRIMARY_PHONE}`}
               aria-label={`Call ${PRIMARY_PHONE}`}
             >
-              <Phone className="w-3.5 h-3.5 min-[1366px]:w-4 min-[1366px]:h-4 text-[#1C35EA] shrink-0" />
-              <span className="hidden min-[1600px]:inline">{PRIMARY_PHONE}</span>
+              <Phone className="w-4 h-4 text-[#1C35EA] shrink-0" />
+              <span className="hidden min-[1720px]:inline">{PRIMARY_PHONE}</span>
             </a>
 
-            {/* Start a Project CTA Button (14px font, visible at every width on phones, tablets, desktops) */}
+            {/* Start a Project CTA Button (40px height, visible at every width) */}
             <button
               type="button"
               onClick={onStartProject}
               aria-label="Start a Project"
               title="Start a Project"
-              className="inline-flex items-center justify-center gap-1 min-[1366px]:gap-1.5 px-2.5 min-[1366px]:px-3 2xl:px-3.5 h-[40px] min-[1100px]:h-[36px] min-[1366px]:h-[38px] rounded-full bg-gradient-to-r from-[#14205A] via-[#1C35EA] to-[#4D19EA] hover:from-[#1C35EA] hover:to-[#4D19EA] text-white font-semibold tracking-[-0.015em] !text-[14px] shadow-[0_2px_10px_rgba(28,53,234,0.22)] hover:shadow-[0_4px_14px_rgba(28,53,234,0.32)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
+              className="inline-flex items-center justify-center gap-1 min-[1366px]:gap-1.5 h-[40px] px-2.5 min-[1366px]:px-3 min-[1440px]:px-3.5 rounded-full bg-gradient-to-r from-[#14205A] via-[#1C35EA] to-[#4D19EA] hover:from-[#1C35EA] hover:to-[#4D19EA] text-white font-semibold tracking-[-0.01em] !text-[13.5px] min-[1440px]:!text-[14px] shadow-[0_2px_10px_rgba(28,53,234,0.22)] hover:shadow-[0_4px_14px_rgba(28,53,234,0.32)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
             >
               <span className="hidden min-[400px]:inline">Start a Project</span>
               <span className="min-[400px]:hidden">Start</span>
               <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
             </button>
 
-            {/* Admin link (Hidden from normal visitors; visible only when signed in as admin) */}
-            {isAdminUser && (
-              <button
-                type="button"
-                onClick={() => handleLinkClick('/admin')}
-                aria-label="Admin"
-                title="Admin"
-                className={`hidden min-[380px]:inline-flex items-center justify-center h-[38px] px-2 !text-[14px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer rounded-full focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] ${
-                  currentRoute === '/admin'
-                    ? 'text-[#1C35EA]'
-                    : 'text-[#14205A] hover:text-[#1C35EA]'
-                }`}
-              >
-                Admin
-              </button>
-            )}
+            {/* Admin Link (40px height, fully visible inside screen) */}
+            <button
+              type="button"
+              onClick={() => handleLinkClick('/admin')}
+              aria-label="Admin"
+              title="Admin"
+              className={`hidden min-[1100px]:inline-flex items-center justify-center h-[40px] px-1.5 min-[1366px]:px-2 rounded-full !text-[13.5px] min-[1440px]:!text-[14px] font-semibold transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] ${
+                currentRoute === '/admin'
+                  ? 'bg-[#EEF4FF] text-[#1C35EA]'
+                  : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-[#EEF4FF]'
+              }`}
+            >
+              Admin
+            </button>
 
-            {/* Accessible Mobile & Tablet Hamburger Toggle (Below 1100px) */}
+            {/* Accessible Mobile & Tablet Hamburger Toggle (Below 1100px, 40px height) */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="min-[1100px]:hidden min-w-[44px] min-h-[44px] h-[44px] w-[44px] p-2.5 flex items-center justify-center text-[#14205A] hover:text-[#1C35EA] rounded-full border border-[#14205A]/15 bg-white hover:bg-slate-50 transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
+              className="min-[1100px]:hidden h-[40px] w-[40px] p-2 flex items-center justify-center text-[#14205A] hover:text-[#1C35EA] rounded-full border border-[#14205A]/15 bg-white hover:bg-[#EEF4FF] transition-colors cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
               aria-label={isMobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation-panel"
