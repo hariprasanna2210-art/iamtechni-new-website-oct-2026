@@ -255,14 +255,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                   Contact
                 </button>
               </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('/admin')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
-                >
-                  Admin
-                </button>
-              </li>
             </ul>
           </motion.div>
 

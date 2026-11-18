@@ -933,31 +933,50 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
 
   const seo = resolveRouteSeo(currentRoute);
 
-  // Remove initial static description/canonical/og/twitter tags and prerendered route JSON-LD once react-helmet-async mounts its managed tags
+  // Remove initial static description/robots/canonical/og/twitter tags and prerendered route JSON-LD once react-helmet-async mounts its managed tags
   useEffect(() => {
-    const selectors = [
-      'meta[name="description"]',
-      'link[rel="canonical"]',
-      'meta[property="og:title"]',
-      'meta[property="og:description"]',
-      'meta[property="og:url"]',
-      'meta[name="twitter:title"]',
-      'meta[name="twitter:description"]',
-      'meta[name="twitter:url"]',
-    ];
-    for (const sel of selectors) {
-      if (document.head.querySelector(`${sel}[data-rh]`)) {
+    const robotsValue = seo.noIndex
+      ? cleanPath.startsWith('/verify/')
+        ? 'noindex'
+        : 'noindex, nofollow'
+      : 'index, follow';
+
+    const cleanupStaticTags = () => {
+      document.head
+        .querySelectorAll('meta[name="robots"]')
+        .forEach((el) => {
+          if (!el.hasAttribute('data-rh')) {
+            el.setAttribute('content', robotsValue);
+          }
+        });
+
+      const selectors = [
+        'meta[name="description"]',
+        'link[rel="canonical"]',
+        'meta[property="og:title"]',
+        'meta[property="og:description"]',
+        'meta[property="og:url"]',
+        'meta[name="twitter:title"]',
+        'meta[name="twitter:description"]',
+        'meta[name="twitter:url"]',
+      ];
+      for (const sel of selectors) {
+        if (document.head.querySelector(`${sel}[data-rh]`)) {
+          document.head
+            .querySelectorAll(`${sel}:not([data-rh])`)
+            .forEach((el) => el.remove());
+        }
+      }
+      if (document.head.querySelector('script[type="application/ld+json"][data-rh]')) {
         document.head
-          .querySelectorAll(`${sel}:not([data-rh])`)
+          .querySelectorAll('script.prerender-jsonld:not([data-rh])')
           .forEach((el) => el.remove());
       }
-    }
-    if (document.head.querySelector('script[type="application/ld+json"][data-rh]')) {
-      document.head
-        .querySelectorAll('script.prerender-jsonld:not([data-rh])')
-        .forEach((el) => el.remove());
-    }
-  }, [currentRoute]);
+    };
+    cleanupStaticTags();
+    const timer = window.setTimeout(cleanupStaticTags, 50);
+    return () => window.clearTimeout(timer);
+  }, [currentRoute, seo.noIndex, cleanPath]);
 
   // Individual service pages, location landing pages, and /locations render their own <Helmet> directly
   if (isSeoServiceRoute || isLocationRoute || isLocationsDirectory) {
@@ -968,12 +987,16 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
     <Helmet prioritizeSeoTags>
       <title>{seo.title}</title>
       <meta name="description" content={seo.description} />
-      {seo.noIndex && (
-        <meta
-          name="robots"
-          content={cleanPath.startsWith('/verify/') ? 'noindex' : 'noindex, nofollow'}
-        />
-      )}
+      <meta
+        name="robots"
+        content={
+          seo.noIndex
+            ? cleanPath.startsWith('/verify/')
+              ? 'noindex'
+              : 'noindex, nofollow'
+            : 'index, follow'
+        }
+      />
       <link rel="canonical" href={seo.canonicalUrl} />
       <meta property="og:type" content={seo.ogType} />
       <meta property="og:title" content={seo.title} />

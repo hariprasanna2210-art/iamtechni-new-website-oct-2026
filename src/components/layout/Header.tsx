@@ -4,11 +4,10 @@ import {
   Menu,
   X,
   ArrowRight,
+  Award,
   Sparkles,
   Code2,
   Cloud,
-  Phone,
-  Mail,
   Layers,
   Globe,
   Palette,
@@ -22,12 +21,8 @@ import {
   GraduationCap,
   Briefcase,
 } from 'lucide-react';
-import { onAuthStateChanged } from 'firebase/auth';
 import { IamtechniLogo } from '../common/IamtechniLogo';
 import { PageRoute } from '../../types';
-import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../../constants/contact';
-import { auth } from '../../lib/firebase';
-import { ADMIN_EMAILS } from '../../config/admins';
 
 interface HeaderProps {
   currentRoute: PageRoute;
@@ -48,24 +43,6 @@ export const Header: React.FC<HeaderProps> = ({
   const megaMenuTimeout = useRef<NodeJS.Timeout | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(64);
-  const [isAdminUser, setIsAdminUser] = useState(false);
-
-  // Show navbar Admin link only when signed in as an authorized admin email
-  useEffect(() => {
-    if (!auth) return;
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      const userEmail = (currentUser?.email ?? '').trim().toLowerCase();
-      setIsAdminUser(
-        Boolean(
-          userEmail &&
-            ADMIN_EMAILS.some(
-              (allowed) => allowed.trim().toLowerCase() === userEmail
-            )
-        )
-      );
-    });
-    return () => unsubscribe();
-  }, []);
 
   // Measure header height dynamically for exact mobile panel and 100svh hero alignment
   useEffect(() => {
@@ -155,12 +132,8 @@ export const Header: React.FC<HeaderProps> = ({
   const isIndustriesActive = activeNavRoute === '/industries';
   const isPortfolioActive = activeNavRoute === '/portfolio';
   const isTechnologyActive = activeNavRoute === '/technology';
-  const isInsightsActive = activeNavRoute.startsWith('/insights');
   const isAboutActive = activeNavRoute === '/about';
-  const isJobFinderActive =
-    activeNavRoute === '/job-finder-pro' ||
-    activeNavRoute === '/job-finder' ||
-    activeNavRoute === '/jobs';
+  const isVerifyActive = activeNavRoute.startsWith('/verify');
 
   // Structured Services list for mobile submenu
   const servicesList = [
@@ -315,11 +288,11 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   const pillItemBase =
-    'relative inline-flex items-center justify-center h-[32px] rounded-full !text-[13.5px] min-[1440px]:!text-[14px] font-medium leading-none tracking-[-0.015em] min-[1440px]:tracking-[-0.01em] whitespace-nowrap shrink-0 cursor-pointer transition-all duration-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]';
+    'relative inline-flex items-center justify-center h-[32px] rounded-full !text-[14px] font-medium leading-none tracking-[-0.01em] whitespace-nowrap shrink-0 cursor-pointer transition-all duration-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]';
   const pillItemActive =
-    'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white font-semibold shadow-[0_2px_10px_rgba(28,53,234,0.28)] px-2.5';
+    'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white font-semibold shadow-[0_2px_10px_rgba(28,53,234,0.28)] px-3';
   const pillItemInactive =
-    "px-0.5 text-[#14205A] hover:text-[#1C35EA] hover:bg-[#EEF4FF] after:content-[''] after:absolute after:bottom-1 after:left-0.5 after:right-0.5 after:h-[1.5px] after:rounded-full after:bg-[#1C35EA] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200";
+    "px-1 text-[#14205A] hover:text-[#1C35EA] hover:bg-[#EEF4FF] after:content-[''] after:absolute after:bottom-1 after:left-1 after:right-1 after:h-[1.5px] after:rounded-full after:bg-[#1C35EA] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200";
 
   return (
     <>
@@ -331,9 +304,9 @@ export const Header: React.FC<HeaderProps> = ({
             : 'bg-white/95 backdrop-blur-sm shadow-[0_2px_12px_rgba(20,32,90,0.08)]'
         }`}
       >
-        {/* Main Navbar Row — Vertically Centred, 16px Even Gap Between Logo, Menu Pill & Right Buttons */}
+        {/* Main Navbar Row — Vertically Centred, Evenly Aligned & Spaced */}
         <div
-          className={`relative w-full max-w-[96rem] mx-auto px-2 sm:px-4 min-[1100px]:px-2 min-[1366px]:px-4 2xl:px-8 flex items-center justify-between min-[1100px]:justify-center gap-[16px] whitespace-nowrap transition-all duration-200 ${
+          className={`relative w-full max-w-[82rem] mx-auto px-3 sm:px-5 min-[1100px]:px-3 min-[1200px]:px-6 xl:px-8 flex items-center justify-between gap-2 min-[1280px]:gap-[16px] whitespace-nowrap transition-all duration-200 ${
             isScrolled ? 'py-1.5' : 'py-2.5'
           }`}
         >
@@ -349,10 +322,10 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </div>
 
-          {/* Zone 2: Center Rounded White Pill Menu (40px height, 14px spacing between menu items) */}
+          {/* Zone 2: Center Rounded White Pill Menu (7 items, 40px height, 14px spacing) */}
           <nav
             aria-label="Primary Navigation"
-            className="hidden min-[1100px]:flex items-center justify-center h-[40px] bg-white rounded-full border border-[#14205A]/12 shadow-[0_2px_10px_rgba(20,32,90,0.05)] px-2 gap-[7px] min-[1340px]:gap-[14px] shrink-0"
+            className="hidden min-[1100px]:flex items-center justify-center h-[40px] bg-white rounded-full border border-[#14205A]/12 shadow-[0_2px_10px_rgba(20,32,90,0.05)] px-2 min-[1200px]:px-3 gap-[6px] min-[1200px]:gap-[10px] min-[1280px]:gap-[14px] shrink-0"
           >
             {/* 1. Services (Dropdown) */}
             <div
@@ -736,18 +709,7 @@ export const Header: React.FC<HeaderProps> = ({
               Technology
             </button>
 
-            {/* 7. Insights */}
-            <button
-              type="button"
-              onClick={() => handleLinkClick('/insights')}
-              className={`${pillItemBase} ${
-                isInsightsActive ? pillItemActive : pillItemInactive
-              }`}
-            >
-              Insights
-            </button>
-
-            {/* 8. About */}
+            {/* 7. About */}
             <button
               type="button"
               onClick={() => handleLinkClick('/about')}
@@ -758,53 +720,27 @@ export const Header: React.FC<HeaderProps> = ({
               About
             </button>
 
-            {/* 9. Job Finder Pro APP */}
-            <button
-              type="button"
-              onClick={() => handleLinkClick('/job-finder-pro')}
-              className={`${pillItemBase} gap-1 ${
-                isJobFinderActive ? pillItemActive : pillItemInactive
-              }`}
-            >
-              <span className="leading-none">Job Finder Pro</span>
-              <span
-                className={`inline-flex items-center justify-center text-[9px] font-mono px-1 py-0.5 rounded-full font-bold leading-none self-center ${
-                  isJobFinderActive
-                    ? 'bg-white/20 text-white border border-white/35'
-                    : 'bg-[#1C35EA]/10 text-[#1C35EA] border border-[#1C35EA]/25'
-                }`}
-              >
-                APP
-              </span>
-            </button>
+            {/* Hidden from navbar (pages & routes remain active): Insights, Job Finder Pro */}
           </nav>
 
-          {/* Zone 3: Right-Side Action Buttons (All 40px height, vertically centred on same row) */}
-          <div className="flex items-center gap-1.5 min-[1366px]:gap-2 h-[40px] shrink-0">
-            {/* AI Advisor Button (40px height) */}
+          {/* Zone 3: Right-Side Action Buttons (Verify Certificate + Start a Project, all 40px height) */}
+          {/* Hidden from navbar (functionality preserved): AI Advisor, Phone Call button, Admin link */}
+          <div className="flex items-center gap-1.5 min-[1200px]:gap-2.5 h-[40px] shrink-0">
+            {/* Verify Certificate Light Outline Button (40px height, desktop right side before Start a Project) */}
             <button
               type="button"
-              onClick={() => {
-                window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
-              }}
-              className="hidden min-[1100px]:inline-flex items-center justify-center gap-1 min-[1366px]:gap-1.5 h-[40px] px-2 min-[1366px]:px-2.5 min-[1440px]:px-3 rounded-full bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] !text-[13.5px] min-[1440px]:!text-[14px] font-semibold tracking-[-0.01em] border border-[#14205A]/15 shadow-[0_1px_4px_rgba(20,32,90,0.05)] transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
-              title="Chat with IAMTECHNI AI Solutions Advisor"
-              aria-label="AI Advisor"
+              onClick={() => handleLinkClick('/verify')}
+              aria-label="Verify Certificate"
+              title="Verify Certificate"
+              className={`hidden min-[1100px]:inline-flex items-center justify-center gap-1.5 h-[40px] px-2.5 min-[1200px]:px-3.5 rounded-full border shadow-[0_1px_4px_rgba(20,32,90,0.05)] !text-[14px] font-semibold tracking-[-0.01em] transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] ${
+                isVerifyActive
+                  ? 'bg-[#EEF4FF] text-[#1C35EA] border-[#1C35EA]/40'
+                  : 'bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] border-[#14205A]/18 hover:border-[#1C35EA]/35'
+              }`}
             >
-              <Sparkles className="w-3.5 h-3.5 min-[1366px]:w-4 min-[1366px]:h-4 text-[#1C35EA] shrink-0" />
-              <span>AI Advisor</span>
+              <Award className="w-4 h-4 text-[#1C35EA] shrink-0" />
+              <span>Verify Certificate</span>
             </button>
-
-            {/* Direct Phone Call Button (40px height) */}
-            <a
-              href={`tel:${PRIMARY_PHONE_LINK}`}
-              className="inline-flex items-center justify-center gap-1.5 h-[40px] w-[40px] min-[1720px]:w-auto min-[1720px]:px-3.5 rounded-full bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] !text-[13.5px] min-[1440px]:!text-[14px] font-semibold border border-[#14205A]/15 shadow-[0_1px_4px_rgba(20,32,90,0.05)] transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
-              title={`Call ${PRIMARY_PHONE}`}
-              aria-label={`Call ${PRIMARY_PHONE}`}
-            >
-              <Phone className="w-4 h-4 text-[#1C35EA] shrink-0" />
-              <span className="hidden min-[1720px]:inline">{PRIMARY_PHONE}</span>
-            </a>
 
             {/* Start a Project CTA Button (40px height, visible at every width) */}
             <button
@@ -812,26 +748,11 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onStartProject}
               aria-label="Start a Project"
               title="Start a Project"
-              className="inline-flex items-center justify-center gap-1 min-[1366px]:gap-1.5 h-[40px] px-2.5 min-[1366px]:px-3 min-[1440px]:px-3.5 rounded-full bg-gradient-to-r from-[#14205A] via-[#1C35EA] to-[#4D19EA] hover:from-[#1C35EA] hover:to-[#4D19EA] text-white font-semibold tracking-[-0.01em] !text-[13.5px] min-[1440px]:!text-[14px] shadow-[0_2px_10px_rgba(28,53,234,0.22)] hover:shadow-[0_4px_14px_rgba(28,53,234,0.32)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
+              className="inline-flex items-center justify-center gap-1.5 h-[40px] px-2.5 min-[1200px]:px-3.5 rounded-full bg-gradient-to-r from-[#14205A] via-[#1C35EA] to-[#4D19EA] hover:from-[#1C35EA] hover:to-[#4D19EA] text-white font-semibold tracking-[-0.01em] !text-[14px] shadow-[0_2px_10px_rgba(28,53,234,0.22)] hover:shadow-[0_4px_14px_rgba(28,53,234,0.32)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
             >
               <span className="hidden min-[400px]:inline">Start a Project</span>
               <span className="min-[400px]:hidden">Start</span>
               <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
-            </button>
-
-            {/* Admin Link (40px height, fully visible inside screen) */}
-            <button
-              type="button"
-              onClick={() => handleLinkClick('/admin')}
-              aria-label="Admin"
-              title="Admin"
-              className={`hidden min-[1100px]:inline-flex items-center justify-center h-[40px] px-1.5 min-[1366px]:px-2 rounded-full !text-[13.5px] min-[1440px]:!text-[14px] font-semibold transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] ${
-                currentRoute === '/admin'
-                  ? 'bg-[#EEF4FF] text-[#1C35EA]'
-                  : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-[#EEF4FF]'
-              }`}
-            >
-              Admin
             </button>
 
             {/* Accessible Mobile & Tablet Hamburger Toggle (Below 1100px, 40px height) */}
@@ -895,7 +816,21 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
 
               {/* Vertical Primary Navigation Items (All >=44px tall) */}
-              <div className="py-2 space-y-1">
+              <div className="py-2 space-y-1.5">
+                {/* Verify Certificate (Top of Hamburger Menu on Mobile) */}
+                <button
+                  type="button"
+                  onClick={() => handleLinkClick('/verify')}
+                  className={`w-full min-h-[44px] py-2.5 px-3.5 rounded-full border !text-[14px] font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer mb-2 ${
+                    isVerifyActive
+                      ? 'bg-[#EEF4FF] text-[#1C35EA] border-[#1C35EA]/40'
+                      : 'bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] border-[#14205A]/18 hover:border-[#1C35EA]/35 shadow-2xs'
+                  }`}
+                >
+                  <Award className="w-4 h-4 text-[#1C35EA] shrink-0" />
+                  <span>Verify Certificate</span>
+                </button>
+
                 {/* 1. Services Accordion */}
                 <div
                   className={`rounded-xl border transition-all ${
@@ -1171,20 +1106,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>Technology</span>
                 </button>
 
-                {/* 7. Insights */}
-                <button
-                  type="button"
-                  onClick={() => handleLinkClick('/insights')}
-                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
-                    isInsightsActive
-                      ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white shadow-[0_2px_10px_rgba(28,53,234,0.25)]'
-                      : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
-                  }`}
-                >
-                  <span>Insights</span>
-                </button>
-
-                {/* 8. About */}
+                {/* 7. About */}
                 <button
                   type="button"
                   onClick={() => handleLinkClick('/about')}
@@ -1197,73 +1119,12 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>About</span>
                 </button>
 
-                {/* 9. Job Finder Pro Android App */}
-                <button
-                  type="button"
-                  onClick={() => handleLinkClick('/job-finder-pro')}
-                  className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
-                    isJobFinderActive
-                      ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white shadow-[0_2px_10px_rgba(28,53,234,0.25)]'
-                      : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <span>Job Finder Pro</span>
-                    <span
-                      className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full font-bold ${
-                        isJobFinderActive
-                          ? 'bg-white/20 text-white border border-white/35'
-                          : 'bg-[#1C35EA]/10 text-[#1C35EA] border border-[#1C35EA]/25'
-                      }`}
-                    >
-                      APP
-                    </span>
-                  </div>
-                </button>
-
-                {/* 10. Admin (signed-in admin only) */}
-                {isAdminUser && (
-                  <button
-                    type="button"
-                    onClick={() => handleLinkClick('/admin')}
-                    className={`w-full min-h-[44px] text-left py-2.5 px-3.5 rounded-full !text-[14px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
-                      currentRoute === '/admin'
-                        ? 'bg-gradient-to-r from-[#1C35EA] to-[#4D19EA] text-white'
-                        : 'text-[#14205A] hover:text-[#1C35EA] hover:bg-slate-50'
-                    }`}
-                  >
-                    <span>Admin</span>
-                  </button>
-                )}
+                {/* Hidden from mobile menu (pages & routes remain active): Insights, Job Finder Pro, Admin */}
               </div>
             </div>
 
-            {/* Pinned Bottom Actions: AI Advisor, Phone, and Start a Project */}
-            <div className="p-4 sm:px-6 pb-[max(1rem,env(safe-area-inset-bottom))] bg-slate-50/90 border-t border-slate-200/80 space-y-2.5 shrink-0">
-              <div className="grid grid-cols-2 gap-2">
-                {/* AI Advisor Button */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
-                  }}
-                  className="min-h-[44px] px-3 py-2 !text-[14px] font-semibold text-[#14205A] hover:text-[#1C35EA] bg-white hover:bg-blue-50/50 rounded-full flex items-center justify-center gap-1.5 border border-[#14205A]/15 shadow-2xs transition-colors cursor-pointer"
-                >
-                  <Sparkles className="w-4 h-4 text-[#1C35EA] shrink-0" />
-                  <span>AI Advisor</span>
-                </button>
-
-                {/* Direct Phone Button */}
-                <a
-                  href={`tel:${PRIMARY_PHONE_LINK}`}
-                  className="min-h-[44px] px-3 py-2 !text-[14px] font-semibold text-[#14205A] hover:text-[#1C35EA] bg-white hover:bg-slate-100 rounded-full flex items-center justify-center gap-1.5 border border-[#14205A]/15 shadow-2xs transition-colors"
-                >
-                  <Phone className="w-4 h-4 text-[#1C35EA] shrink-0" />
-                  <span className="truncate">{PRIMARY_PHONE}</span>
-                </a>
-              </div>
-
+            {/* Pinned Bottom Action: Start a Project (AI Advisor and Phone hidden per navbar update) */}
+            <div className="p-4 sm:px-6 pb-[max(1rem,env(safe-area-inset-bottom))] bg-slate-50/90 border-t border-slate-200/80 shrink-0">
               {/* Start a Project Primary CTA */}
               <button
                 type="button"
