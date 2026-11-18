@@ -14,9 +14,10 @@ import { HERO_SERVICE_SLIDES, HeroServiceSlide } from './heroCarouselData';
 import { HeroDarkBackground } from './HeroDarkBackground';
 import { HeroContent } from './HeroContent';
 import { HeroServiceVisuals } from './HeroServiceVisuals';
-import { RobotScene } from '../layout/RobotScene';
 import { RobotSpeechControls } from './RobotSpeechControls';
 import { ROBOT_SPEECH_DATA } from '../../data/robotScript';
+
+const RobotScene = React.lazy(() => import('../layout/RobotScene'));
 
 export interface HeroSectionProps {
   onNavigate: (route: PageRoute) => void;
@@ -529,15 +530,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="relative w-full flex-1 min-h-[250px] self-stretch flex items-center justify-center">
               <div className="absolute inset-0">
                 {isDesktop && (
-                  <RobotScene
-                    activeServiceId={activeSlide.robotServiceId}
-                    animationState={effectiveAnimationState}
-                    isSpeaking={isVoiceSpeaking}
-                    speechEnergy={speechEnergy}
-                    greetTriggerCount={greetTriggerCount}
-                    isVisible={isHeroVisible}
-                    onRobotClick={handleToggleVoiceGuide}
-                  />
+                  <React.Suspense fallback={null}>
+                    <RobotScene
+                      activeServiceId={activeSlide.robotServiceId}
+                      animationState={effectiveAnimationState}
+                      isSpeaking={isVoiceSpeaking}
+                      speechEnergy={speechEnergy}
+                      greetTriggerCount={greetTriggerCount}
+                      isVisible={isHeroVisible}
+                      onRobotClick={handleToggleVoiceGuide}
+                    />
+                  </React.Suspense>
                 )}
               </div>
 
@@ -599,15 +602,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="relative w-full max-w-[380px] sm:max-w-[440px] h-[180px] sm:h-[240px] self-stretch mx-auto">
               <div className="absolute inset-0">
                 {!isDesktop && (
-                  <RobotScene
-                    activeServiceId={activeSlide.robotServiceId}
-                    animationState={effectiveAnimationState}
-                    isSpeaking={isVoiceSpeaking}
-                    speechEnergy={speechEnergy}
-                    greetTriggerCount={greetTriggerCount}
-                    isVisible={isHeroVisible}
-                    onRobotClick={handleToggleVoiceGuide}
-                  />
+                  <React.Suspense fallback={null}>
+                    <RobotScene
+                      activeServiceId={activeSlide.robotServiceId}
+                      animationState={effectiveAnimationState}
+                      isSpeaking={isVoiceSpeaking}
+                      speechEnergy={speechEnergy}
+                      greetTriggerCount={greetTriggerCount}
+                      isVisible={isHeroVisible}
+                      onRobotClick={handleToggleVoiceGuide}
+                    />
+                  </React.Suspense>
                 )}
               </div>
 
