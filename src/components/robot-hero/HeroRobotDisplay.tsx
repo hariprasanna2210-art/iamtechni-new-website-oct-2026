@@ -297,7 +297,7 @@ export const HeroRobotDisplay: React.FC<HeroRobotDisplayProps> = ({
           y: prefersReducedMotion ? 0 : parallaxOffset.y * 6,
         }}
       >
-        <div className="relative w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] lg:w-[430px] lg:h-[430px]">
+        <div className="relative w-[260px] h-[260px] min-[375px]:w-[300px] min-[375px]:h-[300px] sm:w-[400px] sm:h-[400px] lg:w-[430px] lg:h-[430px]">
           <svg
             className="w-full h-full"
             viewBox="0 0 500 500"

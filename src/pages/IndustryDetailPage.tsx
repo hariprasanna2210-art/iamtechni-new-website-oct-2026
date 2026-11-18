@@ -119,7 +119,7 @@ export const IndustryDetailPage: React.FC<IndustryDetailPageProps> = ({
                     <button
                       key={idx}
                       onClick={() => onNavigate(service.route as PageRoute)}
-                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/80 hover:border-blue-200 transition-all text-left flex items-center justify-between group cursor-pointer"
+                      className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/80 hover:border-blue-200 transition-all text-left flex items-center justify-between group cursor-pointer"
                     >
                       <span className="text-xs font-semibold text-slate-900 group-hover:text-[#1266E8] truncate">
                         {service.name}

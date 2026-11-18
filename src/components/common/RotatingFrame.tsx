@@ -515,7 +515,7 @@ export const RotatingFrame: React.FC<RotatingFrameProps> = ({
                 aria-label={`Show ${scene.title}`}
                 aria-selected={isActive}
                 role="tab"
-                className="min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 flex items-center justify-center cursor-pointer"
+                className="min-w-[44px] min-h-[44px] lg:min-w-0 lg:min-h-0 flex items-center justify-center cursor-pointer"
               >
                 <span
                   className={`relative block h-2.5 rounded-full overflow-hidden transition-all duration-300 ${

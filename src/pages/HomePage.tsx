@@ -455,7 +455,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           </p>
 
           {/* 4. Upper Feature Boxes: Strongly Typed & Multi-Cloud */}
-          <div className="mt-5 sm:mt-8 grid grid-cols-2 gap-2.5 sm:gap-5 w-full max-w-[720px] mx-auto">
+          <div className="mt-5 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-5 w-full max-w-[720px] mx-auto">
             <div className="rounded-2xl p-3 sm:p-5 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE] shadow-[0_4px_16px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-left transition-all duration-200 hover:border-[#93C5FD] hover:shadow-[0_8px_24px_rgba(30,58,138,0.12)]">
               <div className="flex items-center gap-1.5 sm:gap-2 text-[#1E3A8A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-xs sm:text-[15px] mb-1 sm:mb-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2563EB] shrink-0" />
@@ -539,7 +539,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
 
                 {/* Mobile (<md): Compact 3-Column Core Stack Grid (12 primary tools) */}
-                <div className="grid grid-cols-3 md:hidden gap-2 w-full">
+                <div className="grid grid-cols-2 min-[375px]:grid-cols-3 md:hidden gap-2 w-full">
                   {toolRows.flat().slice(0, 12).map((tool) => {
                     const ToolIcon = tool.icon;
                     const displayLabel =
@@ -1493,7 +1493,7 @@ const PrinciplesScrollSection: React.FC<PrinciplesScrollSectionProps> = ({
           </p>
 
           {/* Buttons — Dark Blue (#1E3A8A) with Softer Hover (#1E3A8A/80) */}
-          <div className="mt-4 sm:mt-6 grid grid-cols-2 sm:flex sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3 w-full sm:w-auto max-w-[330px] sm:max-w-none">
+          <div className="mt-4 sm:mt-6 grid grid-cols-1 min-[360px]:grid-cols-2 sm:flex sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3 w-full sm:w-auto max-w-[330px] sm:max-w-none">
             <a
               href="/contact"
               onClick={(e) => {

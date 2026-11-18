@@ -468,7 +468,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                         <button
                           type="button"
                           onClick={() => onNavigate('/privacy-policy')}
-                          className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline text-[#1266E8] underline"
+                          className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline text-[#1266E8] underline"
                         >
                           Privacy Policy
                         </button>.
@@ -519,14 +519,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                     <div className="text-[10px] font-mono text-slate-500 uppercase font-bold">Direct Phone Line</div>
                     <a
                       href={`tel:${PRIMARY_PHONE_LINK}`}
-                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-sm font-mono font-bold text-slate-900 hover:text-[#1266E8] transition-colors flex items-center gap-1.5"
+                      className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 text-sm font-mono font-bold text-slate-900 hover:text-[#1266E8] transition-colors flex items-center gap-1.5"
                     >
                       <Phone className="w-3.5 h-3.5 text-[#0D9488] shrink-0" />
                       <span>Primary: {PRIMARY_PHONE}</span>
                     </a>
                     <a
                       href={`tel:${SECONDARY_PHONE_LINK}`}
-                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-sm font-mono font-bold text-slate-700 hover:text-[#1266E8] transition-colors flex items-center gap-1.5"
+                      className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 text-sm font-mono font-bold text-slate-700 hover:text-[#1266E8] transition-colors flex items-center gap-1.5"
                     >
                       <Phone className="w-3.5 h-3.5 text-[#0D9488] shrink-0" />
                       <span>Secondary: {SECONDARY_PHONE}</span>
@@ -537,7 +537,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                     <div className="text-[10px] font-mono text-slate-500 uppercase font-bold">Official Business Email</div>
                     <a
                       href={COMPANY_CONTACT.emailMailto}
-                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-sm font-mono font-bold text-slate-900 hover:text-[#1266E8] transition-colors flex items-center gap-1.5 break-all"
+                      className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 text-sm font-mono font-bold text-slate-900 hover:text-[#1266E8] transition-colors flex items-center gap-1.5 break-all"
                     >
                       <Mail className="w-3.5 h-3.5 text-[#1266E8]" />
                       <span>{COMPANY_CONTACT.email}</span>
@@ -550,7 +550,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                       href={COMPANY_CONTACT.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-xs font-mono font-bold text-[#1266E8] hover:underline flex items-center gap-1.5"
+                      className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 text-xs font-mono font-bold text-[#1266E8] hover:underline flex items-center gap-1.5"
                     >
                       <Globe className="w-3.5 h-3.5 text-[#04C8E8]" />
                       <span>{COMPANY_CONTACT.website}</span>

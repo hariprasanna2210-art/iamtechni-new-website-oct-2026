@@ -63,7 +63,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
             </div>
 
             {/* 4 Quadrants Grid with Coordinated Tinted Colors */}
-            <div className="grid grid-cols-2 gap-3 my-auto py-2">
+            <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-3 my-auto py-2">
               <div className="p-3 bg-[#EAF3FF] rounded-xl border border-blue-200 space-y-1">
                 <div className="text-[10px] font-mono text-[#1266E8] font-bold">EXPERIENCES</div>
                 <div className="text-xs font-bold text-slate-900">Web &amp; E-Commerce</div>
@@ -119,7 +119,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`min-h-[44px] min-w-[44px] md:min-h-[38px] md:min-w-0 px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                  className={`min-h-[44px] min-w-[44px] lg:min-h-[38px] lg:min-w-0 px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
                     selectedCategory === cat
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
@@ -221,7 +221,7 @@ export const ServicesDirectoryPage: React.FC<ServicesDirectoryPageProps> = ({
                             e.stopPropagation();
                             onStartProject(service.title);
                           }}
-                          className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-2 md:px-0 text-[11px] font-mono text-slate-500 hover:text-slate-900 cursor-pointer"
+                          className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center justify-center px-2 lg:px-0 text-[11px] font-mono text-slate-500 hover:text-slate-900 cursor-pointer"
                         >
                           Quick Brief
                         </button>

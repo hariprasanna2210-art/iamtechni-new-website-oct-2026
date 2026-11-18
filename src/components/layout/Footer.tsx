@@ -38,8 +38,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
   return (
     <footer className="bg-[#13243D] text-white">
       {/* Main Footer Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-9 pb-7 sm:pt-[56px] sm:pb-[40px]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-[1.2fr_0.95fr_0.85fr_1.05fr_1.2fr] gap-8 md:gap-8 lg:gap-8 xl:gap-10 items-start">
+      <div className="max-w-7xl mx-auto pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] sm:px-6 lg:px-8 pt-9 pb-7 sm:pt-[56px] sm:pb-[40px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-[1.2fr_0.95fr_0.85fr_1.05fr_1.2fr] gap-8 lg:gap-8 xl:gap-10 items-start">
           {/* COLUMN 1 – Brand */}
           <motion.div
             custom={0}
@@ -60,7 +60,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="IAMTECHNI Google Reviews"
-                className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#1B3152] border border-white/15 hover:border-[#5CE1E6]/60 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] transition-all duration-200 whitespace-nowrap"
+                className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#1B3152] border border-white/15 hover:border-[#5CE1E6]/60 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] transition-all duration-200 whitespace-nowrap"
               >
                 {/* Multicolour Google "G" Icon */}
                 <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
@@ -124,11 +124,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
             <h4 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#5CE1E6] mb-3.5 sm:mb-[20px] leading-none whitespace-nowrap">
               SERVICES
             </h4>
-            <ul className="space-y-1 md:space-y-[12px] text-[13px] sm:text-[14px] text-white/85">
+            <ul className="space-y-1 lg:space-y-[12px] text-[13px] sm:text-[14px] text-white/85">
               <li>
                 <button
                   onClick={() => onNavigate('/services/web-development')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Web Development
                 </button>
@@ -136,7 +136,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/services/custom-software')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Custom Software
                 </button>
@@ -144,7 +144,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/services/mobile-apps')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Mobile Applications
                 </button>
@@ -152,7 +152,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/services/ai-machine-learning')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   AI &amp; Machine Learning
                 </button>
@@ -160,7 +160,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/services/cloud-devops')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Cloud &amp; DevOps
                 </button>
@@ -168,7 +168,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/services/ecommerce')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   E-commerce Development
                 </button>
@@ -176,7 +176,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/services')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap text-[#5CE1E6] font-semibold hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap text-[#5CE1E6] font-semibold hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   All 13 Practices →
                 </button>
@@ -195,11 +195,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
             <h4 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#5CE1E6] mb-3.5 sm:mb-[20px] leading-none whitespace-nowrap">
               COMPANY
             </h4>
-            <ul className="space-y-1 md:space-y-[12px] text-[13px] sm:text-[14px] text-white/85">
+            <ul className="space-y-1 lg:space-y-[12px] text-[13px] sm:text-[14px] text-white/85">
               <li>
                 <button
                   onClick={() => onNavigate('/about')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   About IAMTECHNI
                 </button>
@@ -207,7 +207,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/portfolio')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Portfolio
                 </button>
@@ -215,7 +215,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/insights')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Insights
                 </button>
@@ -223,7 +223,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/training')}
-                  className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-2 whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center gap-2 whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   <span>Training</span>
                   <span className="inline-flex items-center text-[9px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold leading-none">
@@ -234,7 +234,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/verify')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Verify Certificate
                 </button>
@@ -242,7 +242,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/careers')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Careers
                 </button>
@@ -250,7 +250,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/contact')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Contact
                 </button>
@@ -258,7 +258,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <button
                   onClick={() => onNavigate('/admin')}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left cursor-pointer"
                 >
                   Admin
                 </button>
@@ -277,11 +277,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
             <h4 className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#5CE1E6] mb-3.5 sm:mb-[20px] leading-none whitespace-nowrap">
               LOCATIONS
             </h4>
-            <ul className="space-y-1 md:space-y-[12px] text-[13px] sm:text-[14px] text-white/85">
+            <ul className="space-y-1 lg:space-y-[12px] text-[13px] sm:text-[14px] text-white/85">
               <li>
                 <Link
                   to="/web-development-company-pondicherry/"
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
                 >
                   Web Development Pondicherry
                 </Link>
@@ -289,7 +289,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <Link
                   to="/software-development-company-pondicherry/"
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
                 >
                   Software Development Pondicherry
                 </Link>
@@ -297,7 +297,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <Link
                   to="/digital-marketing-agency-pondicherry/"
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
                 >
                   Digital Marketing Pondicherry
                 </Link>
@@ -305,7 +305,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <Link
                   to="/web-development-company-chennai/"
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
                 >
                   Web Development Chennai
                 </Link>
@@ -313,7 +313,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <Link
                   to="/aws-training-pondicherry/"
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 text-left"
                 >
                   AWS Training Pondicherry
                 </Link>
@@ -321,7 +321,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <li>
                 <Link
                   to="/locations"
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap text-[#5CE1E6] font-semibold hover:translate-x-[2px] transition-all duration-200 text-left"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap text-[#5CE1E6] font-semibold hover:translate-x-[2px] transition-all duration-200 text-left"
                 >
                   View all locations →
                 </Link>
@@ -342,11 +342,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               GET IN TOUCH
             </h4>
 
-            <div className="space-y-1.5 md:space-y-[12px] text-[13px] sm:text-[14px]">
+            <div className="space-y-1.5 lg:space-y-[12px] text-[13px] sm:text-[14px]">
               <div>
                 <a
                   href={`tel:${PRIMARY_PHONE_LINK}`}
-                  className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1.5 whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
+                  className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center gap-1.5 whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#5CE1E6] shrink-0" />
                   <span>Enquiries: {PRIMARY_PHONE}</span>
@@ -356,7 +356,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <div>
                 <a
                   href={`tel:${SECONDARY_PHONE_LINK}`}
-                  className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1.5 whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
+                  className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center gap-1.5 whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#5CE1E6] shrink-0" />
                   <span>Direct Line: {SECONDARY_PHONE}</span>
@@ -366,7 +366,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <div>
                 <a
                   href={COMPANY_CONTACT.emailMailto}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline-block whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline-block whitespace-nowrap text-[#5CE1E6] font-medium hover:underline hover:translate-x-[2px] transition-all duration-200"
                 >
                   {COMPANY_CONTACT.email}
                 </a>
@@ -375,7 +375,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
               <div>
                 <button
                   onClick={() => onNavigate('/contact')}
-                  className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1 whitespace-nowrap text-white/85 font-semibold hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center gap-1 whitespace-nowrap text-white/85 font-semibold hover:text-[#5CE1E6] hover:translate-x-[2px] transition-all duration-200 cursor-pointer"
                 >
                   <span>Let&apos;s talk</span>
                   <span aria-hidden="true">↗</span>
@@ -390,7 +390,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                   rel="noopener noreferrer"
                   aria-label="IAMTECHNI Website"
                   title="IAMTECHNI Website"
-                  className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-9 md:h-9 md:min-w-0 md:min-h-0 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-9 lg:h-9 lg:min-w-0 lg:min-h-0 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200"
                 >
                   <Globe className="w-4 h-4" />
                 </a>
@@ -398,7 +398,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                   href={COMPANY_CONTACT.emailMailto}
                   aria-label="Email Inquiries"
                   title="Email Inquiries"
-                  className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-9 md:h-9 md:min-w-0 md:min-h-0 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-9 lg:h-9 lg:min-w-0 lg:min-h-0 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200"
                 >
                   <Mail className="w-4 h-4" />
                 </a>
@@ -406,7 +406,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                   href={`tel:${PRIMARY_PHONE_LINK}`}
                   aria-label={`Call IAMTECHNI (${PRIMARY_PHONE})`}
                   title={`Phone Line (${PRIMARY_PHONE})`}
-                  className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-9 md:h-9 md:min-w-0 md:min-h-0 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-9 lg:h-9 lg:min-w-0 lg:min-h-0 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200"
                 >
                   <Phone className="w-4 h-4" />
                 </a>
@@ -414,7 +414,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                   onClick={() => window.dispatchEvent(new CustomEvent('iamtechni:open-chat'))}
                   aria-label="AI Architecture Advisor"
                   title="AI Architecture Advisor"
-                  className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-9 md:h-9 md:min-w-0 md:min-h-0 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200 cursor-pointer"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-9 lg:h-9 lg:min-w-0 lg:min-h-0 shrink-0 rounded-full bg-[#1B3152] border border-white/15 text-white hover:border-[#5CE1E6] hover:text-[#5CE1E6] hover:-translate-y-0.5 flex items-center justify-center transition-all duration-200 cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4" />
                 </button>
@@ -425,7 +425,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                 <button
                   type="button"
                   onClick={() => (onStartProject ? onStartProject() : onNavigate('/contact/consultation'))}
-                  className="group w-full sm:w-auto min-h-[44px] md:min-h-0 inline-flex items-center justify-center gap-2.5 px-4 py-2 rounded-full bg-[#1B3152] border border-white/15 hover:border-[#5CE1E6]/60 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] text-white font-bold text-sm tracking-tight transition-all duration-200 whitespace-nowrap cursor-pointer"
+                  className="group w-full sm:w-auto min-h-[44px] lg:min-h-0 inline-flex items-center justify-center gap-2.5 px-4 py-2 rounded-full bg-[#1B3152] border border-white/15 hover:border-[#5CE1E6]/60 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] text-white font-bold text-sm tracking-tight transition-all duration-200 whitespace-nowrap cursor-pointer"
                 >
                   <span className="text-white font-bold text-sm tracking-tight">Start a Project</span>
                   <ArrowUpRight className="w-4 h-4 shrink-0 text-white transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -434,7 +434,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
                 <button
                   type="button"
                   onClick={() => onNavigate('/contact')}
-                  className="w-full sm:w-auto min-h-[44px] md:min-h-0 inline-flex items-center justify-center gap-2.5 px-4 py-2 rounded-full bg-[#1B3152] border border-white/15 hover:border-[#5CE1E6]/60 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] text-white font-bold text-sm tracking-tight transition-all duration-200 whitespace-nowrap cursor-pointer"
+                  className="w-full sm:w-auto min-h-[44px] lg:min-h-0 inline-flex items-center justify-center gap-2.5 px-4 py-2 rounded-full bg-[#1B3152] border border-white/15 hover:border-[#5CE1E6]/60 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] text-white font-bold text-sm tracking-tight transition-all duration-200 whitespace-nowrap cursor-pointer"
                 >
                   <span className="text-white font-bold text-sm tracking-tight">Contact IAMTECHNI</span>
                 </button>
@@ -446,7 +446,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
 
       {/* Bottom Bar – Full Width Softer Navy #101F36 */}
       <div className="bg-[#101F36] w-full border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20 lg:pb-4 lg:pr-56 flex flex-col lg:flex-row items-center justify-between gap-3 text-[13px] text-white/85 text-center lg:text-left">
+        <div className="max-w-7xl mx-auto pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] sm:px-6 lg:px-8 pt-4 pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-[max(1rem,env(safe-area-inset-bottom))] lg:pr-56 flex flex-col lg:flex-row items-center justify-between gap-3 text-[13px] text-white/85 text-center lg:text-left">
           {/* Left: Copyright */}
           <div className="text-white/85">
             © 2026 IAMTECHNI. All rights reserved.
@@ -456,14 +456,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onStartProject }) =>
           <div className="flex items-center justify-center lg:justify-end gap-x-2.5 whitespace-nowrap">
             <button
               onClick={() => onNavigate('/privacy-policy')}
-              className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center hover:text-[#5CE1E6] transition-colors cursor-pointer"
+              className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center justify-center hover:text-[#5CE1E6] transition-colors cursor-pointer"
             >
               Privacy Policy
             </button>
             <span className="text-white/30" aria-hidden="true">|</span>
             <button
               onClick={() => onNavigate('/terms')}
-              className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center hover:text-[#5CE1E6] transition-colors cursor-pointer"
+              className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center justify-center hover:text-[#5CE1E6] transition-colors cursor-pointer"
             >
               Terms of Use
             </button>

@@ -308,7 +308,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12 items-center">
             {/* Left Column: Typography & Learning Value Proposition */}
             <div className="lg:col-span-7 space-y-4 sm:space-y-6">
-              <div className="inline-flex items-center gap-2 h-[32px] sm:h-[34px] px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono font-semibold text-slate-800">
+              <div className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 min-h-[32px] sm:min-h-[34px] h-auto max-w-full px-3 sm:px-4 py-1 rounded-full bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-xs font-mono font-semibold text-slate-800">
                 <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse" />
                 <span className="text-[#2563EB] font-bold">PROFESSIONAL SKILL DEVELOPMENT</span>
                 <span className="text-slate-300">|</span>
@@ -434,7 +434,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer shrink-0 ${
+                  className={`min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center justify-center px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer shrink-0 ${
                     selectedCategory === cat
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
@@ -511,7 +511,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                 <div className="pt-3.5 mt-3.5 sm:pt-5 sm:mt-5 border-t border-blue-200/70">
                   <button
                     onClick={() => handleSelectCourseForEnquiry('Full Stack Development')}
-                    className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-xs sm:text-[13px] font-bold text-[#1266E8] hover:underline flex items-center gap-1 cursor-pointer py-1"
+                    className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 text-xs sm:text-[13px] font-bold text-[#1266E8] hover:underline flex items-center gap-1 cursor-pointer py-1"
                   >
                     <span>Enquire About Full Stack Track</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -553,7 +553,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                 <div className="pt-3.5 mt-3.5 sm:pt-5 sm:mt-5 border-t border-cyan-200/70">
                   <button
                     onClick={() => handleSelectCourseForEnquiry('Amazon Web Services (AWS)')}
-                    className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-xs sm:text-[13px] font-bold text-[#0284C7] hover:underline flex items-center gap-1 cursor-pointer py-1"
+                    className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 text-xs sm:text-[13px] font-bold text-[#0284C7] hover:underline flex items-center gap-1 cursor-pointer py-1"
                   >
                     <span>Enquire About Cloud Track</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -595,7 +595,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                 <div className="pt-3.5 mt-3.5 sm:pt-5 sm:mt-5 border-t border-violet-200/70">
                   <button
                     onClick={() => handleSelectCourseForEnquiry('Generative AI')}
-                    className="min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 text-xs sm:text-[13px] font-bold text-[#7C3AED] hover:underline flex items-center gap-1 cursor-pointer py-1"
+                    className="min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 text-xs sm:text-[13px] font-bold text-[#7C3AED] hover:underline flex items-center gap-1 cursor-pointer py-1"
                   >
                     <span>Enquire About AI Track</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -960,7 +960,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                         <button
                           type="button"
                           onClick={() => onNavigate('/privacy-policy')}
-                          className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline text-[#1266E8] hover:underline"
+                          className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline text-[#1266E8] hover:underline"
                         >
                           Privacy Policy
                         </button>
@@ -1227,7 +1227,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
       </section>
 
       {/* Floating WhatsApp Quick Action Button (Bottom-Right, non-colliding) */}
-      <aside aria-label="WhatsApp Quick Contact" className="fixed bottom-24 right-4 sm:bottom-24 sm:right-6 z-40">
+      <aside aria-label="WhatsApp Quick Contact" className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] sm:bottom-[calc(5.75rem+env(safe-area-inset-bottom))] sm:right-[max(1.5rem,env(safe-area-inset-right))] z-40">
         <a
           href={getCourseWhatsAppUrl()}
           target="_blank"

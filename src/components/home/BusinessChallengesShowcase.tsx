@@ -868,7 +868,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                     type="button"
                     aria-label="Previous"
                     onClick={() => handlePrev(true)}
-                    className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-10 md:h-10 md:min-w-0 md:min-h-0 rounded-xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-700 hover:text-slate-950 shadow-2xs flex items-center justify-center transition-all active:scale-[0.96] cursor-pointer"
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-10 lg:h-10 lg:min-w-0 lg:min-h-0 rounded-xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-700 hover:text-slate-950 shadow-2xs flex items-center justify-center transition-all active:scale-[0.96] cursor-pointer"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
@@ -876,7 +876,7 @@ export const BusinessChallengesShowcase: React.FC<BusinessChallengesShowcaseProp
                     type="button"
                     aria-label="Next"
                     onClick={() => handleNext(true)}
-                    className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-10 md:h-10 md:min-w-0 md:min-h-0 rounded-xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-700 hover:text-slate-950 shadow-2xs flex items-center justify-center transition-all active:scale-[0.96] cursor-pointer"
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-10 lg:h-10 lg:min-w-0 lg:min-h-0 rounded-xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-700 hover:text-slate-950 shadow-2xs flex items-center justify-center transition-all active:scale-[0.96] cursor-pointer"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>

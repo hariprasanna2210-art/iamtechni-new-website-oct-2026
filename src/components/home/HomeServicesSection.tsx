@@ -569,7 +569,7 @@ const MobileServicesSection: React.FC<ShowcaseCardCarouselSectionProps> = ({
               <button
                 type="button"
                 onClick={onAllItemsClick}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[44px] lg:min-h-[36px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0"
               >
                 <Layers className="w-3.5 h-3.5 shrink-0" />
                 <span>{allItemsLabel}</span>
@@ -985,7 +985,7 @@ const DesktopShowcaseCarousel: React.FC<ShowcaseCardCarouselSectionProps> = ({
                     aria-selected={isActive}
                     aria-controls={`${sectionId}-card-${item.slug || item.id}`}
                     onClick={() => handleSelectItem(index, true, true)}
-                    className={`relative inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[40px] rounded-xl text-xs sm:text-[13px] font-semibold transition-colors duration-200 whitespace-nowrap shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
+                    className={`relative inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[44px] lg:min-h-[40px] rounded-xl text-xs sm:text-[13px] font-semibold transition-colors duration-200 whitespace-nowrap shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A] ${
                       isActive
                         ? 'text-white font-bold shadow-[0_4px_12px_rgba(30,58,138,0.25)] bg-[#1E3A8A]'
                         : 'text-[#1E3A8A]/85 hover:text-[#1E3A8A] hover:bg-white/70'
@@ -1286,8 +1286,8 @@ const DesktopShowcaseCarousel: React.FC<ShowcaseCardCarouselSectionProps> = ({
                             }}
                             className={`inline-flex items-center gap-1.5 text-xs font-bold transition-all duration-200 group/link cursor-pointer ${
                               isCenter
-                                ? 'px-3.5 py-2 min-h-[38px] rounded-lg bg-white text-[#1E3A8A] hover:bg-[#EEF4FF] shadow-xs'
-                                : 'py-1.5 text-[#1E3A8A] hover:text-[#2563EB]'
+                                ? 'px-3.5 py-2 min-h-[44px] lg:min-h-[38px] rounded-lg bg-white text-[#1E3A8A] hover:bg-[#EEF4FF] shadow-xs'
+                                : 'py-1.5 min-h-[44px] lg:min-h-0 text-[#1E3A8A] hover:text-[#2563EB]'
                             }`}
                           >
                             <span>{item.ctaLabel}</span>
@@ -1309,7 +1309,7 @@ const DesktopShowcaseCarousel: React.FC<ShowcaseCardCarouselSectionProps> = ({
           </div>
 
           {/* 4. DYNAMIC INTERACTIVE PLAYBACK & PROGRESS DOCK */}
-          <div className="mt-5 flex flex-row items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.06)] max-w-3xl mx-auto">
+          <div className="mt-5 flex flex-col sm:flex-row sm:flex-wrap items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-[#EEF4FF]/90 via-[#F5F9FF]/95 to-[#ECFEFF]/90 border border-[#DBEAFE]/90 shadow-[0_2px_12px_rgba(37,99,235,0.06)] max-w-3xl mx-auto">
             {/* Left: Active Item Counter & Dynamic Title */}
             <div className="flex items-center justify-start gap-2 min-w-0 max-w-full">
               <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-[#1E3A8A] text-white font-mono text-xs font-bold tabular-nums shrink-0">
@@ -1376,7 +1376,7 @@ const DesktopShowcaseCarousel: React.FC<ShowcaseCardCarouselSectionProps> = ({
                 onClick={() => setIsPausedByUser((p) => !p)}
                 aria-label={isPausedByUser ? 'Resume auto-slide' : 'Pause auto-slide'}
                 title={isPausedByUser ? 'Resume auto-slide' : 'Pause auto-slide'}
-                className="w-8 h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-8 lg:h-8 lg:min-w-0 lg:min-h-0 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
               >
                 {isPausedByUser ? (
                   <Play className="w-3.5 h-3.5 fill-current" />
@@ -1389,7 +1389,7 @@ const DesktopShowcaseCarousel: React.FC<ShowcaseCardCarouselSectionProps> = ({
                 type="button"
                 onClick={handlePrev}
                 aria-label="Previous slide"
-                className="flex w-8 h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] items-center justify-center transition-colors cursor-pointer"
+                className="flex w-11 h-11 min-w-[44px] min-h-[44px] lg:w-8 lg:h-8 lg:min-w-0 lg:min-h-0 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] items-center justify-center transition-colors cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -1398,7 +1398,7 @@ const DesktopShowcaseCarousel: React.FC<ShowcaseCardCarouselSectionProps> = ({
                 type="button"
                 onClick={handleNext}
                 aria-label="Next slide"
-                className="flex w-8 h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] items-center justify-center transition-colors cursor-pointer"
+                className="flex w-11 h-11 min-w-[44px] min-h-[44px] lg:w-8 lg:h-8 lg:min-w-0 lg:min-h-0 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] items-center justify-center transition-colors cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -1408,7 +1408,7 @@ const DesktopShowcaseCarousel: React.FC<ShowcaseCardCarouselSectionProps> = ({
               <button
                 type="button"
                 onClick={onAllItemsClick}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[44px] lg:min-h-[36px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
               >
                 <Layers className="w-3.5 h-3.5 shrink-0" />
                 <span>{allItemsLabel}</span>

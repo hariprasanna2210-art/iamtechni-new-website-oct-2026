@@ -53,7 +53,7 @@ const StepCard: React.FC<{ item: EnrollmentStep; isDuplicate?: boolean }> = ({
   isDuplicate = false,
 }) => (
   <div
-    className={`w-[296px] shrink-0 p-6 rounded-2xl space-y-2.5 ${item.cardClass} ${
+    className={`w-[min(296px,calc(100vw-3.5rem))] sm:w-[296px] shrink-0 p-5 sm:p-6 rounded-2xl space-y-2.5 ${item.cardClass} ${
       isDuplicate ? '' : 'snap-start'
     }`}
   >

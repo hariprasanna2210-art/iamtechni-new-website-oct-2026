@@ -1500,7 +1500,7 @@ const AdminPage: React.FC = () => {
             {/* 4 Stat Cards */}
             <section
               aria-label="Application statistics"
-              className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
+              className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
             >
               <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs">
                 <div className="flex items-center justify-between gap-2">
@@ -2138,7 +2138,7 @@ const AdminPage: React.FC = () => {
                               key={skill.name}
                               type="button"
                               onClick={() => handleToggleSkill(skill.name)}
-                              className={`min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border ${
+                              className={`min-h-[44px] lg:min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border ${
                                 isSelected
                                   ? 'bg-[#1C35EA] text-white border-[#1C35EA] shadow-2xs'
                                   : 'bg-white text-slate-700 border-slate-200 hover:border-[#1C35EA]/40'
@@ -2164,7 +2164,7 @@ const AdminPage: React.FC = () => {
                               type="button"
                               onClick={() => handleToggleSkill(customName)}
                               aria-label={`Remove ${customName}`}
-                              className="min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border bg-[#4D19EA] text-white border-[#4D19EA] shadow-2xs hover:bg-[#3b11bd]"
+                              className="min-h-[44px] lg:min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border bg-[#4D19EA] text-white border-[#4D19EA] shadow-2xs hover:bg-[#3b11bd]"
                             >
                               <span>{customName}</span>
                               <span
@@ -2341,7 +2341,7 @@ const AdminPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setFullPreviewCert(generatedCert ?? livePreviewData)}
-                    className="min-h-[40px] px-3 py-1.5 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+                    className="min-h-[44px] lg:min-h-[40px] px-3 py-1.5 rounded-xl border border-slate-200 bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
                   >
                     <Maximize2 className="w-3.5 h-3.5" />
                     <span>Full size</span>
@@ -2522,7 +2522,7 @@ const AdminPage: React.FC = () => {
                                   <button
                                     type="button"
                                     onClick={() => setFullPreviewCert(certTemplateObj)}
-                                    className="min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
+                                    className="min-h-[44px] lg:min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
                                   >
                                     <Eye className="w-3.5 h-3.5" />
                                     <span>View</span>
@@ -2534,7 +2534,7 @@ const AdminPage: React.FC = () => {
                                     onClick={() =>
                                       handleDownloadCertificatePdf(certTemplateObj)
                                     }
-                                    className="min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                                    className="min-h-[44px] lg:min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer disabled:opacity-50"
                                   >
                                     {downloadingCertId === cert.certificateId ? (
                                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -2552,7 +2552,7 @@ const AdminPage: React.FC = () => {
                                         'Verification link copied!'
                                       )
                                     }
-                                    className="min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-slate-700 hover:text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
+                                    className="min-h-[44px] lg:min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-[#EEF4FF] text-slate-700 hover:text-[#1C35EA] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
                                   >
                                     <Copy className="w-3.5 h-3.5" />
                                     <span>Copy link</span>
@@ -2562,7 +2562,7 @@ const AdminPage: React.FC = () => {
                                     type="button"
                                     disabled={updatingCertId === cert.certificateId}
                                     onClick={() => handleToggleCertificateStatus(cert)}
-                                    className={`min-h-[38px] px-2.5 py-1.5 rounded-lg border text-xs font-semibold inline-flex items-center gap-1 cursor-pointer disabled:opacity-50 ${
+                                    className={`min-h-[44px] lg:min-h-[38px] px-2.5 py-1.5 rounded-lg border text-xs font-semibold inline-flex items-center gap-1 cursor-pointer disabled:opacity-50 ${
                                       cert.status === 'revoked'
                                         ? 'border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-700'
                                         : 'border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700'

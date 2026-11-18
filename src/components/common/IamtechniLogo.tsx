@@ -23,10 +23,10 @@ export const IamtechniLogo: React.FC<IamtechniLogoProps> = ({
   variant = 'default',
 }) => {
   const heightClasses = {
-    sm: 'h-8 sm:h-9',
-    md: 'h-9 sm:h-10',
-    lg: 'h-12 sm:h-14',
-    xl: 'h-16 sm:h-20',
+    sm: 'h-7 min-[375px]:h-8 sm:h-9',
+    md: 'h-7 min-[375px]:h-9 sm:h-10',
+    lg: 'h-10 min-[375px]:h-12 sm:h-14',
+    xl: 'h-14 min-[375px]:h-16 sm:h-20',
   }[size];
 
   // Symbol only (for icons, chatbot avatar, compact buttons)

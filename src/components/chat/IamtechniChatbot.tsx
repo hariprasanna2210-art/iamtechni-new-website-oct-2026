@@ -383,7 +383,7 @@ export const IamtechniChatbot: React.FC<IamtechniChatbotProps> = ({
     <>
       {/* Floating Chat Trigger Button */}
       {!isOpen && (
-        <div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 lg:bottom-6 lg:right-6 z-40 flex items-center gap-3">
+        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] sm:bottom-[max(1.25rem,env(safe-area-inset-bottom))] sm:right-[max(1.25rem,env(safe-area-inset-right))] lg:bottom-6 lg:right-6 z-40 flex items-center gap-3">
           {/* Subtle invitation tooltip on desktop only (hidden on mobile & tablet) */}
           <div className="hidden lg:flex items-center gap-2 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-full border border-slate-200/90 shadow-lg text-xs font-medium text-slate-700 pointer-events-none animate-pulse">
             <Sparkles className="w-3.5 h-3.5 text-[#0F52BA]" />
@@ -413,8 +413,8 @@ export const IamtechniChatbot: React.FC<IamtechniChatbotProps> = ({
           data-chat="true"
           className={`chat-window fixed z-40 transition-all duration-300 ease-out flex flex-col bg-white border border-slate-200/90 shadow-2xl overflow-hidden rounded-2xl ${
             isMinimized
-              ? 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-80 h-16'
-              : 'inset-2 sm:inset-auto sm:bottom-6 sm:right-6 w-[calc(100vw-1rem)] sm:w-[440px] h-[calc(100dvh-1rem)] sm:h-[640px] sm:max-h-[calc(100vh-var(--header-height,74px)-1.5rem)]'
+              ? 'bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:right-[max(1.5rem,env(safe-area-inset-right))] w-[calc(100vw-2rem)] sm:w-80 h-16'
+              : 'top-[max(0.5rem,env(safe-area-inset-top))] bottom-[max(0.5rem,env(safe-area-inset-bottom))] left-[max(0.5rem,env(safe-area-inset-left))] right-[max(0.5rem,env(safe-area-inset-right))] sm:top-auto sm:left-auto sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:right-[max(1.5rem,env(safe-area-inset-right))] sm:w-[440px] sm:h-[640px] sm:max-h-[calc(100vh-var(--header-height,74px)-1.5rem)]'
           }`}
         >
           {/* Header */}
@@ -438,7 +438,7 @@ export const IamtechniChatbot: React.FC<IamtechniChatbotProps> = ({
               <button
                 onClick={handleClearHistory}
                 title="Reset conversation"
-                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                className="min-w-[44px] min-h-[44px] lg:min-w-0 lg:min-h-0 lg:w-9 lg:h-9 flex items-center justify-center rounded-lg hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
                 aria-label="Clear chat"
               >
                 <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -447,7 +447,7 @@ export const IamtechniChatbot: React.FC<IamtechniChatbotProps> = ({
               <button
                 onClick={() => setIsMinimized(!isMinimized)}
                 title={isMinimized ? 'Expand' : 'Minimize'}
-                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                className="min-w-[44px] min-h-[44px] lg:min-w-0 lg:min-h-0 lg:w-9 lg:h-9 flex items-center justify-center rounded-lg hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
                 aria-label="Minimize chat"
               >
                 {isMinimized ? <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
@@ -456,7 +456,7 @@ export const IamtechniChatbot: React.FC<IamtechniChatbotProps> = ({
               <button
                 onClick={() => setIsOpen(false)}
                 title="Close chat"
-                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                className="min-w-[44px] min-h-[44px] lg:min-w-0 lg:min-h-0 lg:w-9 lg:h-9 flex items-center justify-center rounded-lg hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
                 aria-label="Close chat"
               >
                 <X className="w-4 h-4 sm:w-4.5 sm:h-4.5" />

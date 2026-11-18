@@ -59,7 +59,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
                     HIRING ACTIVE
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-2.5 sm:gap-3 text-xs">
+                <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-2.5 sm:gap-3 text-xs">
                   <div className="p-2.5 sm:p-3 rounded-xl bg-blue-50/70 border border-blue-100 space-y-1">
                     <div className="text-[10px] font-mono text-[#1266E8] font-bold">STACK</div>
                     <div className="font-bold text-slate-900">TypeScript &amp; Python</div>
@@ -207,7 +207,7 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigate }) => {
               </div>
               <button
                 onClick={() => setIsApplying(false)}
-                className="min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 p-1.5 flex items-center justify-center text-blue-200 hover:text-white rounded-lg hover:bg-white/10"
+                className="min-w-[44px] min-h-[44px] lg:min-w-0 lg:min-h-0 p-1.5 flex items-center justify-center text-blue-200 hover:text-white rounded-lg hover:bg-white/10"
                 aria-label="Close application modal"
               >
                 <X className="w-5 h-5" />

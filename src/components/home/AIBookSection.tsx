@@ -1762,7 +1762,7 @@ const DesktopAIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
             onClick={() => handlePrevSpread()}
             disabled={Boolean(turnState?.isTurning)}
             aria-label="Previous book page"
-            className="min-h-[40px] h-10 px-3.5 rounded-xl bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] shadow-2xs flex items-center justify-center gap-1.5 text-xs font-semibold transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
+            className="min-h-[44px] h-11 lg:min-h-[40px] lg:h-10 px-3.5 rounded-xl bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] shadow-2xs flex items-center justify-center gap-1.5 text-xs font-semibold transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
           >
             <ChevronLeft className="w-4 h-4 text-[#2563EB]" />
             <span>Prev</span>
@@ -1804,7 +1804,7 @@ const DesktopAIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
                   onClick={() => triggerTurn(page.idx)}
                   aria-label={page.ariaLabel}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`min-h-[40px] h-10 px-3 sm:px-3.5 rounded-xl border text-xs transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB] ${
+                  className={`min-h-[44px] h-11 lg:min-h-[40px] lg:h-10 px-3 sm:px-3.5 rounded-xl border text-xs transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB] ${
                     isActive
                       ? 'bg-[#1E3A8A] text-white border-[#1E3A8A] font-bold shadow-[0_4px_14px_rgba(30,58,138,0.22)]'
                       : 'bg-[#F8FAFF] text-[#1E3A8A]/85 hover:text-[#1E3A8A] hover:bg-[#EEF4FF] border-[#DBEAFE] font-medium'
@@ -1830,7 +1830,7 @@ const DesktopAIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
             onClick={() => handleNextSpread()}
             disabled={Boolean(turnState?.isTurning)}
             aria-label="Next book page"
-            className="min-h-[40px] h-10 px-3.5 rounded-xl bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] shadow-2xs flex items-center justify-center gap-1.5 text-xs font-semibold transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
+            className="min-h-[44px] h-11 lg:min-h-[40px] lg:h-10 px-3.5 rounded-xl bg-[#F8FAFF] hover:bg-[#EEF4FF] text-[#1E3A8A] border border-[#DBEAFE] shadow-2xs flex items-center justify-center gap-1.5 text-xs font-semibold transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
           >
             <span>Next</span>
             <ChevronRight className="w-4 h-4 text-[#2563EB]" />
@@ -1847,7 +1847,7 @@ const DesktopAIBookSection: React.FC<AIBookSectionProps> = ({ onNavigate }) => {
           <button
             type="button"
             onClick={() => onNavigate('/services/ai-machine-learning')}
-            className="min-h-[44px] min-w-[44px] sm:min-h-[40px] sm:min-w-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] shrink-0 cursor-pointer"
+            className="min-h-[44px] min-w-[44px] lg:min-h-[40px] lg:min-w-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-4.5 sm:py-2.5 rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/80 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.28)] transition-all duration-200 active:scale-[0.98] shrink-0 cursor-pointer"
           >
             <span>Explore AI &amp; Machine Learning Practice</span>
             <ArrowRight className="w-3.5 h-3.5 text-white" />

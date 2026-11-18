@@ -115,10 +115,10 @@ export const Header: React.FC<HeaderProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isMobileMenuOpen, activeMegaMenu]);
 
-  // Automatically close mobile menu when expanding to desktop viewport
+  // Automatically close mobile menu when expanding to desktop viewport (xl: >= 1280px)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
+      if (window.innerWidth >= 1280) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -305,8 +305,8 @@ export const Header: React.FC<HeaderProps> = ({
             : 'bg-white border-slate-200/70 shadow-[0_4px_16px_-2px_rgba(15,23,42,0.06),0_2px_6px_-1px_rgba(15,23,42,0.04)]'
         }`}
       >
-        {/* Main Navbar Row — Aligned with Hero Container (w-full max-w-[1480px] mx-auto px-3.5 sm:px-6 lg:px-8 xl:px-10) */}
-        <div className="relative w-full max-w-[1480px] mx-auto px-3.5 sm:px-6 lg:px-8 xl:px-10 py-2.5 xl:py-3 flex items-center justify-between gap-2 lg:gap-2.5 xl:gap-4 whitespace-nowrap">
+        {/* Main Navbar Row — Fluid rem container + safe areas, visible Phone & Start CTA at every width */}
+        <div className="relative w-full max-w-[92.5rem] mx-auto pl-[max(0.625rem,env(safe-area-inset-left))] pr-[max(0.625rem,env(safe-area-inset-right))] sm:px-6 lg:px-8 xl:px-10 py-2 xl:py-3 flex items-center justify-between gap-1.5 min-[375px]:gap-2 lg:gap-2.5 xl:gap-3 2xl:gap-4 whitespace-nowrap">
           {/* Zone 1: Brand Wordmark / Logo */}
           <div className="shrink-0 flex items-center">
             <button
@@ -322,7 +322,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Zone 2: Navigation Links (Zero-Wrap Enforced on 1280px+ Viewports) */}
           <nav
             aria-label="Primary Navigation"
-            className="hidden xl:flex items-center justify-center gap-1.5 min-[1340px]:gap-2.5 min-[1440px]:gap-5 2xl:gap-6 text-[12px] xl:text-[13px] font-medium text-slate-600 shrink-0 h-[44px]"
+            className="hidden xl:flex items-center justify-center gap-1 min-[1360px]:gap-2.5 min-[1440px]:gap-4 2xl:gap-6 text-[11.5px] min-[1360px]:text-[12.5px] min-[1440px]:text-[13px] font-medium text-slate-600 shrink-0 h-[44px]"
           >
             {/* Services with Mega Menu */}
             <div
@@ -359,7 +359,7 @@ export const Header: React.FC<HeaderProps> = ({
                   className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 pointer-events-auto before:absolute before:-top-4 before:-left-16 before:-right-16 before:h-8 before:content-['']"
                   role="menu"
                 >
-                  <div className="w-[920px] xl:w-[1040px] max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-xl border border-slate-200/90 p-5 xl:p-6 whitespace-normal animate-in fade-in zoom-in-95 duration-150">
+                  <div className="w-[57.5rem] xl:w-[65rem] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-slate-200/90 p-5 xl:p-6 whitespace-normal animate-in fade-in zoom-in-95 duration-150">
                     <div className="grid grid-cols-3 gap-5 xl:gap-6">
                       {/* Column 1: Experiences */}
                       <div>
@@ -581,7 +581,7 @@ export const Header: React.FC<HeaderProps> = ({
                   className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 pointer-events-auto before:absolute before:-top-4 before:-left-20 before:-right-20 before:h-8 before:content-['']"
                   role="menu"
                 >
-                  <div className="w-[580px] max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-xl border border-slate-200/90 p-5 xl:p-6 whitespace-normal animate-in fade-in zoom-in-95 duration-150">
+                  <div className="w-[36.25rem] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-slate-200/90 p-5 xl:p-6 whitespace-normal animate-in fade-in zoom-in-95 duration-150">
                     <div className="grid grid-cols-2 gap-4">
                       <button
                         type="button"
@@ -733,24 +733,24 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
 
           {/* Zone 3: Action Buttons & Mobile Menu Toggle */}
-          <div className="flex items-center gap-1.5 sm:gap-2 xl:gap-2.5 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 xl:gap-2 shrink-0">
             {/* AI Advisor Chatbot Trigger — Unified Soft Pastel Secondary Button */}
             <button
               type="button"
               onClick={() => {
                 window.dispatchEvent(new CustomEvent('iamtechni:open-chat'));
               }}
-              className="hidden lg:inline-flex items-center justify-center gap-1.5 h-[44px] text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] transition-all px-3 rounded-lg border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] whitespace-nowrap cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="hidden lg:inline-flex items-center justify-center gap-1.5 h-[44px] text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 hover:from-white hover:to-[#F0F9FF] transition-all px-2.5 min-[1360px]:px-3 rounded-lg border border-[#DBEAFE]/90 shadow-[0_2px_10px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] whitespace-nowrap cursor-pointer active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
               title="Chat with IAMTECHNI AI Solutions Advisor"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
               <span>AI Advisor</span>
             </button>
 
-            {/* Direct Phone Call Button — Unified Soft Secondary Button */}
+            {/* Direct Phone Call Button — Visible at every width without clipping */}
             <a
               href={`tel:${PRIMARY_PHONE_LINK}`}
-              className="hidden xl:inline-flex items-center justify-center gap-1.5 h-[44px] w-[44px] min-[1440px]:w-auto min-[1440px]:px-3.5 text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-white hover:bg-[#F5F8FC] transition-all rounded-lg border border-[#DBEAFE]/90 shadow-2xs whitespace-nowrap active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="inline-flex items-center justify-center gap-1.5 h-[44px] w-[44px] min-[1440px]:w-auto min-[1440px]:px-3.5 text-xs font-semibold text-[#1E3A8A] hover:text-[#2563EB] bg-white hover:bg-[#F5F8FC] transition-all rounded-lg border border-[#DBEAFE]/90 shadow-2xs whitespace-nowrap shrink-0 active:scale-[0.98] focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
               title={`Call ${PRIMARY_PHONE}`}
               aria-label={`Call ${PRIMARY_PHONE}`}
             >
@@ -758,16 +758,16 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="hidden min-[1440px]:inline">{PRIMARY_PHONE}</span>
             </a>
 
-            {/* Start a Project CTA Button — Matching Hero Primary Button Layout & Lighter/Softer Hover */}
+            {/* Start a Project CTA Button — Visible at every width */}
             <button
               type="button"
               onClick={onStartProject}
               aria-label="Start a Project"
               title="Start a Project"
-              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+              className="inline-flex items-center justify-center gap-1.5 px-2.5 min-[375px]:px-3 sm:px-4 h-[44px] rounded-lg bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-xs sm:text-[13px] shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#2563EB]"
             >
-              <span className="hidden min-[380px]:inline">Start a Project</span>
-              <span className="min-[380px]:hidden">Start</span>
+              <span className="hidden min-[420px]:inline">Start a Project</span>
+              <span className="min-[420px]:hidden">Start</span>
               <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
             </button>
 
@@ -778,7 +778,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => handleLinkClick('/admin')}
                 aria-label="Admin"
                 title="Admin"
-                className={`inline-flex items-center justify-center h-[44px] px-2 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer rounded-md focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] ${
+                className={`hidden min-[380px]:inline-flex items-center justify-center h-[44px] px-2 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer rounded-md focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1266E8] ${
                   currentRoute === '/admin'
                     ? 'text-[#1266E8]'
                     : 'text-slate-600 hover:text-[#1266E8]'
@@ -1195,7 +1195,7 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Pinned Bottom Actions: AI Advisor, Phone, and Start a Project */}
-            <div className="p-4 sm:px-6 bg-slate-50/90 border-t border-slate-200/80 space-y-2.5 shrink-0">
+            <div className="p-4 sm:px-6 pb-[max(1rem,env(safe-area-inset-bottom))] bg-slate-50/90 border-t border-slate-200/80 space-y-2.5 shrink-0">
               <div className="grid grid-cols-2 gap-2">
                 {/* AI Advisor Button */}
                 <button

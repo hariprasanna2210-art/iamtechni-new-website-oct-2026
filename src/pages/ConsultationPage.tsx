@@ -147,7 +147,7 @@ export const ConsultationPage: React.FC<ConsultationPageProps> = ({ onNavigate }
                     <label className="block text-sm font-bold text-[#1E3A8A]">
                       1. Which technology discipline are you seeking advisory on? *
                     </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 min-[375px]:grid-cols-2 sm:grid-cols-3 gap-2">
                       {servicesList.map((service) => (
                         <button
                           type="button"

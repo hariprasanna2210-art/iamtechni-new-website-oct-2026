@@ -62,7 +62,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onNavigate }) => {
                 <h2 className="text-lg font-bold text-slate-900 mb-2">1. Overview & Commitment</h2>
                 <p>
                   IAMTECHNI (“we,” “our,” or “us”) operates the website at{' '}
-                  <a href="https://iamtechni.in" className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline text-[#1266E8] underline">
+                  <a href="https://iamtechni.in" className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline text-[#1266E8] underline">
                     https://iamtechni.in
                   </a>
                   . We respect the privacy of every client, partner, and visitor. This Privacy Policy details the limited data we collect, how we protect it, and your rights regarding your personal information.
@@ -106,7 +106,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onNavigate }) => {
                 <p>
                   We retain inquiry records only as long as necessary to fulfill project communication or regulatory obligations. To request data deletion or review, contact our privacy officer at{' '}
                   <span className="font-mono text-slate-900">info@iamtechni.in</span> or via our official website at{' '}
-                  <a href="https://iamtechni.in" className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline text-[#1266E8] underline">
+                  <a href="https://iamtechni.in" className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline text-[#1266E8] underline">
                     https://iamtechni.in
                   </a>.
                 </p>
@@ -120,7 +120,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onNavigate }) => {
                 <h2 className="text-lg font-bold text-slate-900 mb-2">1. Acceptance of Terms</h2>
                 <p>
                   By accessing or browsing{' '}
-                  <a href="https://iamtechni.in" className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline text-[#1266E8] underline">
+                  <a href="https://iamtechni.in" className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline text-[#1266E8] underline">
                     https://iamtechni.in
                   </a>{' '}
                   (“Site”), you agree to be bound by these Terms and Conditions and all applicable laws and regulations. If you do not agree, you are prohibited from using or accessing this site.
@@ -152,7 +152,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ type, onNavigate }) => {
                 <h2 className="text-lg font-bold text-slate-900 mb-2">5. Governing Law</h2>
                 <p>
                   These Terms are governed by and construed in accordance with the laws of India, without regard to its conflict of law principles. Inquiries regarding these terms may be directed through{' '}
-                  <a href="https://iamtechni.in" className="min-h-[44px] min-w-[44px] inline-flex items-center md:min-h-0 md:min-w-0 md:inline text-[#1266E8] underline">
+                  <a href="https://iamtechni.in" className="min-h-[44px] min-w-[44px] inline-flex items-center lg:min-h-0 lg:min-w-0 lg:inline text-[#1266E8] underline">
                     https://iamtechni.in
                   </a>.
                 </p>

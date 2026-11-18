@@ -480,7 +480,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       />
 
       {/* Main Hero Container */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex-1 min-h-0 flex flex-col justify-between">
+      <div className="relative z-10 w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex-1 min-h-0 flex flex-col justify-between">
         {/* ===================================================================
             DESKTOP 3-COLUMN COMPOSITION (xl: >= 1280px)
             Left (~38%): Dynamic Service Information
@@ -675,7 +675,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   aria-selected={isActive}
                   aria-label={`Service ${idx + 1}: ${item.categoryLabel}`}
                   onClick={() => handleSelectSlide(idx)}
-                  className={`group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all duration-200 cursor-pointer shrink-0 min-h-[38px] ${
+                  className={`group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all duration-200 cursor-pointer shrink-0 min-h-[44px] lg:min-h-[38px] ${
                     isActive
                       ? 'bg-[#0A1F44] text-white border border-[#00D2FF]/65 shadow-[0_0_14px_rgba(0,210,255,0.25)]'
                       : 'bg-white/[0.04] text-slate-400 hover:text-white border border-white/10'
@@ -703,7 +703,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               type="button"
               onClick={handlePrevSlide}
               aria-label="Previous service"
-              className="w-8 h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer active:scale-95"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-8 lg:h-8 lg:min-w-0 lg:min-h-0 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer active:scale-95"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -712,7 +712,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               type="button"
               onClick={() => setIsAutoPlaying((prev) => !prev)}
               aria-label={isAutoPlaying ? 'Pause service rotation' : 'Resume service rotation'}
-              className="w-8 h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer active:scale-95"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-8 lg:h-8 lg:min-w-0 lg:min-h-0 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer active:scale-95"
             >
               {isAutoPlaying ? (
                 <Pause className="w-3.5 h-3.5" />
@@ -725,7 +725,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               type="button"
               onClick={handleNextSlide}
               aria-label="Next service"
-              className="w-8 h-8 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer active:scale-95"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-8 lg:h-8 lg:min-w-0 lg:min-h-0 rounded-full bg-[#081632]/90 hover:bg-[#0E244D] border border-white/15 hover:border-[#00D2FF]/60 flex items-center justify-center text-slate-200 hover:text-[#00D2FF] transition-colors cursor-pointer active:scale-95"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

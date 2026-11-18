@@ -700,7 +700,7 @@ export const PageHeroVisual: React.FC<PageHeroVisualProps> = ({ type }) => {
                 <span>GITOPS CI/CD PIPELINE</span>
                 <span className="text-emerald-600 font-bold">BUILD #412 PASSED</span>
               </div>
-              <div className="grid grid-cols-4 gap-1 text-center text-[9px] font-mono font-bold">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 text-center text-[9px] font-mono font-bold">
                 <span className="p-1 rounded bg-emerald-100 text-emerald-800">Lint: OK</span>
                 <span className="p-1 rounded bg-emerald-100 text-emerald-800">Test: 100%</span>
                 <span className="p-1 rounded bg-emerald-100 text-emerald-800">Docker: OK</span>

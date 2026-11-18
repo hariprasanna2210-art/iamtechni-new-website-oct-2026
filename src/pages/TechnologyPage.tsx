@@ -51,7 +51,7 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
           <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-xl max-w-3xl shadow-2xs">
             <button
               onClick={() => setActiveCategory('all')}
-              className={`min-h-[44px] min-w-[44px] md:min-h-[38px] md:min-w-0 px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+              className={`min-h-[44px] min-w-[44px] lg:min-h-[38px] lg:min-w-0 px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 activeCategory === 'all'
                   ? 'bg-[#1E3A8A] text-white shadow-xs'
                   : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'
@@ -65,7 +65,7 @@ export const TechnologyPage: React.FC<TechnologyPageProps> = ({
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`min-h-[44px] min-w-[44px] md:min-h-[38px] md:min-w-0 px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                  className={`min-h-[44px] min-w-[44px] lg:min-h-[38px] lg:min-w-0 px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
                     activeCategory === cat.id
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'

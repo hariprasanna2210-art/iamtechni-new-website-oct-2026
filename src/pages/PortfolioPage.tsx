@@ -67,7 +67,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({
                 <button
                   key={flt}
                   onClick={() => setSelectedFilter(flt)}
-                  className={`min-h-[44px] min-w-[44px] md:min-h-[38px] md:min-w-0 px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`min-h-[44px] min-w-[44px] lg:min-h-[38px] lg:min-w-0 px-3.5 py-2 text-xs sm:text-[13px] font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                     selectedFilter === flt
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-[#1E3A8A] hover:bg-[#F5F8FC]'

@@ -159,7 +159,7 @@ export const IndustriesPage: React.FC<IndustriesPageProps> = ({
                           <button
                             key={sIdx}
                             onClick={() => onNavigate(srv.route)}
-                            className={`min-h-[44px] min-w-[44px] inline-flex items-center px-2 md:px-0 md:min-h-0 md:min-w-0 ${color.accentText} font-semibold hover:underline cursor-pointer`}
+                            className={`min-h-[44px] min-w-[44px] inline-flex items-center px-2 lg:px-0 lg:min-h-0 lg:min-w-0 ${color.accentText} font-semibold hover:underline cursor-pointer`}
                           >
                             {srv.name}
                           </button>

@@ -191,7 +191,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                 type="button"
                 onClick={handlePrevSlide}
                 aria-label="Previous slide"
-                className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-10 md:h-10 md:min-w-0 md:min-h-0 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-10 lg:h-10 lg:min-w-0 lg:min-h-0 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -199,7 +199,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                 type="button"
                 onClick={handleNextSlide}
                 aria-label="Next slide"
-                className="w-11 h-11 min-w-[44px] min-h-[44px] md:w-10 md:h-10 md:min-w-0 md:min-h-0 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-10 lg:h-10 lg:min-w-0 lg:min-h-0 rounded-full bg-white border border-[#E2E8F0] text-[#0F1B3D] hover:border-[#04C8E8] hover:text-[#0891B2] shadow-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -207,7 +207,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
           </div>
 
           {/* Mobile-Only (<md) Named Slide Selector Pills for Instant Discoverability */}
-          <div className="grid grid-cols-3 gap-2 md:hidden">
+          <div className="flex flex-wrap gap-2 md:hidden">
             {[
               { idx: 0, label: '01. Collaborate' },
               { idx: 1, label: '02. How We Work' },
@@ -219,7 +219,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                   key={tab.idx}
                   type="button"
                   onClick={() => setActiveSlide(tab.idx)}
-                  className={`min-h-[44px] min-w-[44px] px-2.5 py-2 rounded-xl text-[11px] font-bold transition-all cursor-pointer truncate flex items-center justify-center ${
+                  className={`flex-1 min-w-[104px] min-h-[44px] px-2.5 py-2 rounded-xl text-[11px] font-bold transition-all cursor-pointer flex items-center justify-center text-center whitespace-nowrap ${
                     isCurrent
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'bg-white/90 text-[#1E3A8A] border border-[#DBEAFE]'
@@ -371,12 +371,12 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
                         return (
                           <div key={item.id} className="flex items-stretch gap-3 sm:gap-4">
                             {/* Stepper Node & Connecting Line */}
-                            <div className="flex flex-col items-center shrink-0 w-11 md:w-8">
+                            <div className="flex flex-col items-center shrink-0 w-11 lg:w-8">
                               <button
                                 type="button"
                                 onClick={() => handleSelectAccordion(idx)}
                                 aria-label={`Select step ${idx + 1}: ${item.title}`}
-                                className={`w-11 h-11 min-w-[44px] min-h-[44px] md:w-8 md:h-8 md:min-w-0 md:min-h-0 rounded-full flex items-center justify-center font-mono text-xs font-bold shrink-0 transition-all duration-300 z-10 cursor-pointer ${
+                                className={`w-11 h-11 min-w-[44px] min-h-[44px] lg:w-8 lg:h-8 lg:min-w-0 lg:min-h-0 rounded-full flex items-center justify-center font-mono text-xs font-bold shrink-0 transition-all duration-300 z-10 cursor-pointer ${
                                   isCompleted
                                     ? 'bg-[#1266E8] text-white shadow-xs'
                                     : isActive
@@ -1047,7 +1047,7 @@ export const CollaborateSection: React.FC<CollaborateSectionProps> = ({
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             aria-label="Go to IAMTECHNI homepage"
-            className="group min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-transparent border border-transparent text-xs text-slate-400 font-mono hover:bg-[#1B3152] hover:border-[#5CE1E6]/60 hover:text-white hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] focus-visible:bg-[#1B3152] focus-visible:border-[#5CE1E6]/60 focus-visible:text-white focus-visible:-translate-y-0.5 focus-visible:shadow-[0_6px_20px_rgba(92,225,230,0.18)] focus:outline-hidden transition-all duration-200 whitespace-nowrap cursor-pointer"
+            className="group min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-transparent border border-transparent text-xs text-slate-400 font-mono hover:bg-[#1B3152] hover:border-[#5CE1E6]/60 hover:text-white hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(92,225,230,0.18)] focus-visible:bg-[#1B3152] focus-visible:border-[#5CE1E6]/60 focus-visible:text-white focus-visible:-translate-y-0.5 focus-visible:shadow-[0_6px_20px_rgba(92,225,230,0.18)] focus:outline-hidden transition-all duration-200 whitespace-nowrap cursor-pointer"
           >
             <span>IAMTECHNI // https://iamtechni.in</span>
             <span

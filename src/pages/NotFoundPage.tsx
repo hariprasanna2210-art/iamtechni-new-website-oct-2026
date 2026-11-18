@@ -28,7 +28,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Quick Sitelink Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-left max-w-lg mx-auto">
+        <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:grid-cols-3 gap-3 text-left max-w-lg mx-auto">
           <button
             onClick={() => onNavigate('/')}
             className="min-h-[44px] min-w-[44px] p-3.5 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 transition-all text-xs font-semibold text-slate-800 flex items-center justify-between group shadow-2xs"

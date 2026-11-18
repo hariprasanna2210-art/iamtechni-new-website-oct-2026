@@ -986,7 +986,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                                 if (didDragMoveRef.current) return;
                                 onEnquire(course.title);
                               }}
-                              className={`group/btn w-full py-2 px-3 min-h-[40px] rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 ${
+                              className={`group/btn w-full py-2 px-3 min-h-[44px] lg:min-h-[40px] rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 ${
                                 isCenter
                                   ? 'bg-white text-[#1E3A8A] hover:bg-[#EEF4FF] shadow-[0_6px_18px_rgba(255,255,255,0.22)]'
                                   : 'bg-[#14205A] hover:bg-[#1C35EA] text-white shadow-2xs group-hover:shadow-[0_6px_16px_rgba(28,53,234,0.25)]'
@@ -1001,7 +1001,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => e.stopPropagation()}
-                              className={`w-full py-2 px-3 min-h-[40px] rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 border ${
+                              className={`w-full py-2 px-3 min-h-[44px] lg:min-h-[40px] rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 border ${
                                 isCenter
                                   ? 'bg-emerald-500/20 border-emerald-300/40 hover:bg-emerald-500/30 text-white'
                                   : 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100 text-emerald-900'
@@ -1104,7 +1104,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               onClick={() => setIsPausedByUser((p) => !p)}
               aria-label={isPausedByUser ? 'Resume auto-slide' : 'Pause auto-slide'}
               title={isPausedByUser ? 'Resume auto-slide' : 'Pause auto-slide'}
-              className="w-8 h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] lg:w-8 lg:h-8 lg:min-w-0 lg:min-h-0 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] flex items-center justify-center transition-colors cursor-pointer"
             >
               {isPausedByUser ? (
                 <Play className="w-3.5 h-3.5 fill-current" />
@@ -1117,7 +1117,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               type="button"
               onClick={handlePrev}
               aria-label="Previous course"
-              className="flex w-8 h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] items-center justify-center transition-colors cursor-pointer"
+              className="flex w-11 h-11 min-w-[44px] min-h-[44px] lg:w-8 lg:h-8 lg:min-w-0 lg:min-h-0 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] items-center justify-center transition-colors cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -1126,7 +1126,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               type="button"
               onClick={handleNext}
               aria-label="Next course"
-              className="flex w-8 h-8 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] items-center justify-center transition-colors cursor-pointer"
+              className="flex w-11 h-11 min-w-[44px] min-h-[44px] lg:w-8 lg:h-8 lg:min-w-0 lg:min-h-0 rounded-lg bg-white hover:bg-[#1E3A8A] text-[#1E3A8A] hover:text-white border border-[#DBEAFE] items-center justify-center transition-colors cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

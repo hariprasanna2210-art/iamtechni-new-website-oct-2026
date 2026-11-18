@@ -266,7 +266,7 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`min-h-[44px] min-w-[44px] md:min-h-[38px] md:min-w-0 px-3.5 py-2 rounded-lg text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${
+                  className={`min-h-[44px] min-w-[44px] lg:min-h-[38px] lg:min-w-0 px-3.5 py-2 rounded-lg text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${
                     selectedCategory === cat
                       ? 'bg-[#1E3A8A] text-white shadow-xs'
                       : 'bg-white hover:bg-[#F5F8FC] text-slate-600 hover:text-[#1E3A8A] border border-slate-200'
@@ -341,7 +341,7 @@ export const CaseStudiesPage: React.FC<CaseStudiesPageProps> = ({
 
                       <button
                         onClick={() => onNavigate(`/case-studies/${project.id}` as PageRoute)}
-                        className={`min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 inline-flex items-center gap-1 text-xs font-bold ${color.accentText} hover:underline group-hover:translate-x-1 transition-all cursor-pointer`}
+                        className={`min-h-[44px] min-w-[44px] lg:min-h-0 lg:min-w-0 inline-flex items-center gap-1 text-xs font-bold ${color.accentText} hover:underline group-hover:translate-x-1 transition-all cursor-pointer`}
                       >
                         <span>Read Study</span>
                         <ArrowRight className="w-3.5 h-3.5" />

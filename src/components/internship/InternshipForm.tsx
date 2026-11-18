@@ -1859,7 +1859,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                     type="button"
                     disabled={isBusy}
                     onClick={() => jumpToFormSection('personal')}
-                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[44px] lg:min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Edit
                   </button>
@@ -1951,7 +1951,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                     type="button"
                     disabled={isBusy}
                     onClick={() => jumpToFormSection('internship')}
-                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[44px] lg:min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Edit
                   </button>
@@ -2015,7 +2015,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                       type="button"
                       disabled={isBusy}
                       onClick={() => jumpToFormSection('specific')}
-                      className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[44px] lg:min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Edit
                     </button>
@@ -2069,7 +2069,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                       type="button"
                       disabled={isBusy}
                       onClick={() => jumpToFormSection('specific')}
-                      className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[44px] lg:min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Edit
                     </button>
@@ -2129,7 +2129,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
                     type="button"
                     disabled={isBusy}
                     onClick={() => jumpToFormSection('confirmed')}
-                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="text-[15px] font-bold text-[#1C35EA] hover:underline focus-visible:underline cursor-pointer bg-transparent border-0 p-1 min-h-[44px] lg:min-h-[36px] inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Edit
                   </button>
@@ -2200,7 +2200,7 @@ export const InternshipForm: React.FC<InternshipFormProps> = ({
           {/* Step Progress Bar */}
           {!submittedApplicationId && (
             <nav aria-label="Application progress" className="w-full">
-              <ol className="grid grid-cols-4 gap-1.5 sm:gap-3">
+              <ol className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-3">
                 {steps.map((step) => {
                   const isCurrent = activeStep === step.num;
                   const isFinished =

@@ -394,7 +394,7 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
       {page.courseDetails && (
         <section className="bg-sky-50 border-b border-sky-100 py-6">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-white border border-sky-200/80 rounded-xl p-3.5 shadow-2xs">
                 <div className="text-[11px] font-mono text-sky-700 font-bold uppercase flex items-center gap-1.5 mb-1">
                   <Clock className="w-3.5 h-3.5 text-sky-600" />

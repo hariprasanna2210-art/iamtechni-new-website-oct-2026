@@ -162,7 +162,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
                         Zero Technical Debt
                       </span>
                     </div>
-                    <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                    <div className="grid grid-cols-1 min-[360px]:grid-cols-3 gap-1.5 text-center text-[10px]">
                       <div className="p-1.5 rounded bg-blue-50/80 border border-blue-100 text-slate-800 font-semibold">
                         01. Scoped
                       </div>
@@ -199,7 +199,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
                         Global Resilience
                       </span>
                     </div>
-                    <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                    <div className="grid grid-cols-1 min-[360px]:grid-cols-3 gap-1.5 text-center text-[10px]">
                       <div className="p-1.5 rounded bg-purple-50/80 border border-purple-100 text-slate-800 font-semibold">
                         Craft
                       </div>
@@ -237,7 +237,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
                 We combine modern frontend architecture, robust backend systems, and containerized cloud pipelines to deliver software that scales predictably. Our teams operate with automated test suites, typed contracts, and continuous security scanning.
               </p>
 
-              <div className="grid grid-cols-2 gap-2.5 sm:gap-4 pt-1 sm:pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 pt-1 sm:pt-2">
                 <div className="p-3 sm:p-4 rounded-xl bg-[#F5F8FC] border border-slate-200 space-y-1 sm:space-y-1.5">
                   <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-[13px] font-bold text-[#1E3A8A]">
                     <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0" />
@@ -268,7 +268,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onStartProject
                   </span>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                <div className="grid grid-cols-1 min-[360px]:grid-cols-3 gap-2 text-center text-xs">
                   <div className="p-2.5 sm:p-3 bg-white/10 rounded-xl border border-white/15">
                     <div className="text-[10px] text-blue-100/80">CI/CD Gate</div>
                     <div className="text-sm font-bold text-emerald-300">100% Pass</div>

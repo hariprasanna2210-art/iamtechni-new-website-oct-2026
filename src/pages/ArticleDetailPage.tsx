@@ -54,7 +54,7 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
 
             <button
               onClick={handleCopyLink}
-              className="inline-flex items-center gap-1.5 min-h-[44px] min-w-[44px] md:min-h-[38px] md:min-w-0 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-[44px] min-w-[44px] lg:min-h-[38px] lg:min-w-0 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
               aria-label="Copy article link"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
@@ -132,7 +132,7 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({
                   <a
                     key={item.id}
                     href={`#${item.id}`}
-                    className="min-h-[44px] min-w-[44px] flex items-center md:min-h-0 md:min-w-0 md:block text-[13px] sm:text-sm text-slate-600 hover:text-[#1266E8] transition-colors leading-snug py-1"
+                    className="min-h-[44px] min-w-[44px] flex items-center lg:min-h-0 lg:min-w-0 lg:block text-[13px] sm:text-sm text-slate-600 hover:text-[#1266E8] transition-colors leading-snug py-1"
                   >
                     {item.title}
                   </a>
