@@ -377,8 +377,8 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
       {/* 2. COURSE CATALOG (13 Individual Colorful Cards)                       */}
       {/* ======================================================================= */}
       <MobileSectionSkeletonWrapper variant="cards-grid" sectionIndex={0} cardCount={3}>
-      <section ref={catalogRef} id="courses-catalog" className="py-4 sm:py-5 lg:py-5 bg-[#F4F7FC] border-b border-slate-200 overflow-x-clip">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2.5 sm:space-y-3">
+      <section ref={catalogRef} id="courses-catalog" className="pt-4 pb-16 sm:pt-5 sm:pb-20 lg:pt-5 lg:pb-24 bg-[#F4F7FC] border-b border-slate-200 overflow-x-clip">
+        <div className="max-w-[1440px] mx-auto px-3 sm:px-5 lg:px-6 space-y-2.5 sm:space-y-3">
           {/* Active Course Regional Location Training Banner if accessed via /training/:slug */}
           {courseSlug && COURSE_LOCATION_LINKS[courseSlug] && (
             <div className="bg-white rounded-2xl border border-blue-200/90 p-3 sm:p-3.5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -417,13 +417,13 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
           {/* Header & Filter Bar */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-2 sm:gap-3 pb-2 border-b border-slate-200">
             <div>
-              <div className="text-[10.5px] font-mono uppercase tracking-widest text-[#2563EB] font-bold">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-[#2563EB] font-bold">
                 Technology Curriculum
               </div>
               <AnimatedHeading as="h2" className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl sm:text-2xl lg:text-[26px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-tight drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)]">
                 Explore Our Courses
               </AnimatedHeading>
-              <p className="text-xs text-slate-600 mt-0.5 max-w-2xl leading-tight">
+              <p className="text-xs sm:text-[13px] text-slate-600 mt-0.5 max-w-2xl leading-snug">
                 Choose from 13 comprehensive training tracks. Tap <strong>Enquire Now</strong> for complete syllabus details, duration, batch schedules, and learning modes.
               </p>
             </div>
