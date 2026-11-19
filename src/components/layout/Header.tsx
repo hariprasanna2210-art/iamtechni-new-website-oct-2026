@@ -676,6 +676,45 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </button>
 
+            {/* React & TypeScript Official Logo Badges (22px each, vertically centred between Training and Industries) */}
+            <div
+              aria-hidden="true"
+              data-testid="navbar-react-ts-badges"
+              className="inline-flex items-center gap-1 self-center shrink-0"
+            >
+              {/* React Official Atom Badge (22px) */}
+              <span
+                title="React"
+                className="w-[22px] h-[22px] rounded-[6px] bg-[#20232A] border border-[#61DAFB]/35 inline-flex items-center justify-center shrink-0 shadow-[0_1px_3px_rgba(20,32,90,0.12)]"
+              >
+                <svg
+                  viewBox="-11.5 -10.23174 23 20.46348"
+                  className="w-[15px] h-[15px]"
+                  fill="none"
+                >
+                  <circle cx="0" cy="0" r="2.05" fill="#61DAFB" />
+                  <g stroke="#61DAFB" strokeWidth="1.15" fill="none">
+                    <ellipse rx="11" ry="4.2" />
+                    <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+                    <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+                  </g>
+                </svg>
+              </span>
+
+              {/* TypeScript Official Blue Square Badge (22px) */}
+              <span
+                title="TypeScript"
+                className="w-[22px] h-[22px] rounded-[5px] bg-[#3178C6] inline-flex items-center justify-center shrink-0 shadow-[0_1px_3px_rgba(20,32,90,0.12)]"
+              >
+                <svg viewBox="0 0 24 24" className="w-[16px] h-[16px]" fill="none">
+                  <path
+                    d="M5.2 11.2h6.8v1.9H9.6v7.1H7.5v-7.1H5.2v-1.9zm13.4 2.1c-.5-.4-1.2-.7-2-.7-.9 0-1.5.4-1.5 1 0 .7.5.9 1.7 1.4 1.7.6 2.6 1.4 2.6 2.8 0 1.7-1.4 2.7-3.4 2.7-1.2 0-2.3-.4-3-.9l.9-1.6c.6.5 1.4.8 2.1.8.9 0 1.4-.3 1.4-.9 0-.6-.4-.9-1.6-1.3-1.7-.6-2.7-1.3-2.7-2.8 0-1.6 1.3-2.7 3.4-2.7 1.1 0 2.1.3 2.8.8l-.7 1.4z"
+                    fill="#FFFFFF"
+                  />
+                </svg>
+              </span>
+            </div>
+
             {/* 4. Industries */}
             <button
               type="button"

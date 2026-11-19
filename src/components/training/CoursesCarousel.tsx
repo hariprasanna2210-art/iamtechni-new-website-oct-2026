@@ -4,8 +4,10 @@ import {
   ArrowRight,
   Calendar,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   Laptop,
   MapPin,
   Pause,
@@ -19,6 +21,8 @@ import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportA
 interface CourseCardTheme {
   name: string;
   headerBg: string;
+  hoverOverlayBg: string;
+  solidAccentHex: string;
   progressBarGradient: string;
   iconColor: string;
   iconBadgeBg: string;
@@ -33,6 +37,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'cyan',
     headerBg: 'linear-gradient(135deg, #0284C7 0%, #00B0F0 100%)',
+    hoverOverlayBg: 'rgba(2, 132, 199, 0.86)',
+    solidAccentHex: '#0284C7',
     progressBarGradient: 'linear-gradient(90deg, #BAE6FD 0%, #FFFFFF 100%)',
     iconColor: '#0284C7',
     iconBadgeBg: '#FFFFFF',
@@ -45,6 +51,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'blue',
     headerBg: 'linear-gradient(135deg, #1E3A8A 0%, #1C35EA 100%)',
+    hoverOverlayBg: 'rgba(28, 53, 234, 0.86)',
+    solidAccentHex: '#1C35EA',
     progressBarGradient: 'linear-gradient(90deg, #93C5FD 0%, #FFFFFF 100%)',
     iconColor: '#1C35EA',
     iconBadgeBg: '#FFFFFF',
@@ -57,6 +65,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'purple',
     headerBg: 'linear-gradient(135deg, #4D19EA 0%, #6D28D9 100%)',
+    hoverOverlayBg: 'rgba(77, 25, 234, 0.86)',
+    solidAccentHex: '#4D19EA',
     progressBarGradient: 'linear-gradient(90deg, #DDD6FE 0%, #FFFFFF 100%)',
     iconColor: '#4D19EA',
     iconBadgeBg: '#FFFFFF',
@@ -69,6 +79,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'teal',
     headerBg: 'linear-gradient(135deg, #0F766E 0%, #0D9488 100%)',
+    hoverOverlayBg: 'rgba(13, 148, 136, 0.86)',
+    solidAccentHex: '#0D9488',
     progressBarGradient: 'linear-gradient(90deg, #99F6E4 0%, #FFFFFF 100%)',
     iconColor: '#0D9488',
     iconBadgeBg: '#FFFFFF',
@@ -81,6 +93,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'navy',
     headerBg: 'linear-gradient(135deg, #14205A 0%, #1E3A8A 100%)',
+    hoverOverlayBg: 'rgba(20, 32, 90, 0.86)',
+    solidAccentHex: '#14205A',
     progressBarGradient: 'linear-gradient(90deg, #7DD3FC 0%, #FFFFFF 100%)',
     iconColor: '#14205A',
     iconBadgeBg: '#FFFFFF',
@@ -93,6 +107,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'amber',
     headerBg: 'linear-gradient(135deg, #B45309 0%, #D97706 100%)',
+    hoverOverlayBg: 'rgba(180, 83, 9, 0.86)',
+    solidAccentHex: '#B45309',
     progressBarGradient: 'linear-gradient(90deg, #FDE68A 0%, #FFFFFF 100%)',
     iconColor: '#D97706',
     iconBadgeBg: '#FFFFFF',
@@ -105,6 +121,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'rose',
     headerBg: 'linear-gradient(135deg, #BE123C 0%, #E11D48 100%)',
+    hoverOverlayBg: 'rgba(190, 18, 60, 0.86)',
+    solidAccentHex: '#BE123C',
     progressBarGradient: 'linear-gradient(90deg, #FECDD3 0%, #FFFFFF 100%)',
     iconColor: '#E11D48',
     iconBadgeBg: '#FFFFFF',
@@ -378,12 +396,12 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               : `course-${course.id}`
             : undefined
         }
-        className="group relative w-full h-full min-h-[600px] md:min-h-[620px] lg:min-h-[605px] flex flex-col bg-white rounded-[16px] overflow-hidden shadow-[0_10px_28px_-6px_rgba(15,23,42,0.12)] hover:shadow-[0_18px_38px_-8px_rgba(15,23,42,0.18)] transition-shadow duration-300"
+        className="group relative w-full h-full min-h-[550px] md:min-h-[560px] lg:min-h-[520px] flex flex-col bg-white rounded-[16px] overflow-hidden shadow-[0_10px_28px_-6px_rgba(15,23,42,0.12)] hover:shadow-[0_18px_38px_-8px_rgba(15,23,42,0.18)] transition-shadow duration-300"
       >
-        {/* Solid Colour Header (~150 px) */}
+        {/* Solid Colour Header (~120 px) */}
         <div
           data-testid={`course-card-header-${course.id}`}
-          className="relative h-[150px] shrink-0 px-5 pt-4 pb-3.5 flex flex-col justify-between overflow-hidden"
+          className="relative h-[120px] shrink-0 px-4 pt-3 pb-2.5 flex flex-col justify-between overflow-hidden"
           style={{ background: theme.headerBg }}
         >
           {/* Auto-Slide Progress Bar on Active Card */}
@@ -403,77 +421,77 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
             </div>
           )}
 
-          {/* Top Row: 56px Bright Icon Badge with White Glow + Course Number & Category */}
-          <div className="relative z-10 flex items-start justify-between gap-3">
+          {/* Top Row: 48px White Rounded Icon Badge + Course Number & Category */}
+          <div className="relative z-10 flex items-center justify-between gap-2">
             <div
               data-testid={`course-icon-badge-${course.id}`}
-              className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105"
+              className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105"
               style={{
                 backgroundColor: theme.iconBadgeBg,
                 color: theme.iconColor,
                 boxShadow:
-                  '0 0 24px rgba(255, 255, 255, 0.55), 0 6px 16px rgba(15, 23, 42, 0.18)',
+                  '0 0 18px rgba(255, 255, 255, 0.5), 0 4px 12px rgba(15, 23, 42, 0.16)',
               }}
             >
-              <CourseIcon className="w-7 h-7 stroke-[2.25]" />
+              <CourseIcon className="w-6 h-6 stroke-[2.25]" />
             </div>
 
-            <div className="flex items-center gap-1.5 text-[11px] font-bold tracking-wide min-w-0 mt-1">
+            <div className="flex items-center gap-1.5 text-[11px] font-bold tracking-wide min-w-0">
               <span className="font-mono tabular-nums text-white/90">
                 {formattedNumber}
               </span>
               <span aria-hidden="true" className="text-white/60">
                 ·
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase truncate max-w-[165px] bg-white/20 text-white backdrop-blur-xs">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase truncate max-w-[145px] bg-white/20 text-white backdrop-blur-xs">
                 {course.category.toUpperCase()}
               </span>
             </div>
           </div>
 
-          {/* Course Title: White, Bold, 22 px */}
-          <h3 className="relative z-10 !text-[22px] !leading-[1.22] font-bold text-white line-clamp-2">
+          {/* Course Title: White, Bold, 19 px */}
+          <h3 className="relative z-10 !text-[19px] !leading-[1.22] font-bold text-white line-clamp-2">
             {course.title}
           </h3>
         </div>
 
-        {/* Clean White Card Body */}
-        <div className="p-5 flex-1 flex flex-col justify-between bg-white">
+        {/* Clean White Card Body (14 px text, 1.45 line spacing) */}
+        <div className="p-4 flex-1 flex flex-col justify-between bg-white">
           <div>
-            {/* Course Description (15 px) */}
-            <p className="!text-[15px] !leading-[1.48] text-slate-600 mb-3">
+            {/* Course Description (14 px, 1.45 line-height) */}
+            <p className="!text-[14px] !leading-[1.45] text-slate-600 mb-2.5">
               {course.subtitle}
             </p>
 
             {/* Mode & Batches Open Chips */}
-            <div className="flex flex-wrap items-center gap-1.5 mb-3.5">
+            <div className="flex flex-wrap items-center gap-1.5 mb-3">
               <span
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11.5px] font-medium whitespace-nowrap ${theme.chipBg} ${theme.chipText}`}
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-medium whitespace-nowrap ${theme.chipBg} ${theme.chipText}`}
               >
-                <Laptop className="w-3.5 h-3.5 shrink-0" />
+                <Laptop className="w-3 h-3 shrink-0" />
                 <span>Mode: Live Online, Instructor-Led</span>
               </span>
               <span
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11.5px] font-semibold whitespace-nowrap shrink-0 ${theme.chipBg} ${theme.chipText}`}
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-semibold whitespace-nowrap shrink-0 ${theme.chipBg} ${theme.chipText}`}
               >
-                <Calendar className="w-3.5 h-3.5 shrink-0" />
+                <Calendar className="w-3 h-3 shrink-0" />
                 <span>Batches Open</span>
               </span>
             </div>
 
-            {/* Key Curriculum Highlights (15 px with Coloured Tick) */}
+            {/* Key Curriculum Highlights (14 px, 1.45 line-height with Coloured Tick) */}
             <div>
-              <div className="text-[11px] font-mono uppercase font-bold tracking-wider text-slate-400 mb-2">
+              <div className="text-[10.5px] font-mono uppercase font-bold tracking-wider text-slate-400 mb-1.5">
                 Key Curriculum Highlights
               </div>
-              <div className="grid grid-cols-1 gap-y-2">
+              <div className="grid grid-cols-1 gap-y-1.5">
                 {course.highlights.map((hl, hIdx) => (
                   <div
                     key={hIdx}
-                    className="flex items-start gap-2 !text-[15px] !leading-[1.45] text-slate-700"
+                    className="flex items-start gap-1.5 !text-[14px] !leading-[1.45] text-slate-700"
                   >
                     <Check
-                      className={`w-4 h-4 shrink-0 mt-1 stroke-[2.5] ${theme.checkColor}`}
+                      className={`w-3.5 h-3.5 shrink-0 mt-1 stroke-[2.5] ${theme.checkColor}`}
                     />
                     <span>{hl}</span>
                   </div>
@@ -482,19 +500,19 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
             </div>
           </div>
 
-          {/* Bottom Block: Location Links + Action Buttons (Slide Up on Hover on Desktop, Always Visible on Mobile/Tablet) */}
-          <div className="mt-auto pt-3 space-y-2.5">
+          {/* Bottom Block: Location Links + Mobile/Tablet Always-Visible Action Buttons */}
+          <div className="mt-auto pt-2.5 space-y-2">
             {regional && regional.length > 0 && (
-              <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[11px] leading-tight">
+              <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[10.5px] leading-tight">
                 <span className="font-mono font-bold inline-flex items-center gap-0.5 text-slate-700">
-                  <MapPin className="w-3 h-3 shrink-0 text-[#1C35EA]" /> Location Pages:
+                  <MapPin className="w-2.5 h-2.5 shrink-0 text-[#1C35EA]" /> Location Pages:
                 </span>
                 {regional.map((loc) => (
                   <Link
                     key={loc.path}
                     to={loc.path}
                     onClick={(e) => e.stopPropagation()}
-                    className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-[#1C35EA] transition-colors"
+                    className="text-[10.5px] font-medium px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-[#1C35EA] transition-colors"
                   >
                     {loc.city}
                   </Link>
@@ -509,10 +527,10 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               </div>
             )}
 
-            {/* Action Buttons: Always visible on phones/tablets (< 1024px); hidden until card hover on desktop (>= 1024px) with 250ms slide-up */}
+            {/* Mobile & Tablet (< 1024px): Enquire Now and WhatsApp Always Visible at Bottom */}
             <div
-              data-testid={`course-card-actions-${course.id}`}
-              className="grid grid-cols-2 gap-2.5 w-full opacity-100 translate-y-0 pointer-events-auto lg:opacity-0 lg:translate-y-3 lg:pointer-events-none lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-hover:pointer-events-auto lg:group-focus-within:opacity-100 lg:group-focus-within:translate-y-0 lg:group-focus-within:pointer-events-auto transition-all duration-[250ms] ease-out"
+              data-testid={`course-card-mobile-actions-${course.id}`}
+              className="lg:hidden grid grid-cols-2 gap-2 w-full"
             >
               <button
                 type="button"
@@ -521,10 +539,10 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                   if (didDragMoveRef.current) return;
                   onEnquire(course.title);
                 }}
-                className={`group/btn w-full h-[44px] lg:h-[42px] px-3 rounded-xl text-xs font-bold text-white transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 ${theme.primaryBtnBg}`}
+                className={`w-full h-[40px] px-3 rounded-xl text-xs font-bold text-white transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 ${theme.primaryBtnBg}`}
               >
                 <span>Enquire Now</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
 
               <a
@@ -532,13 +550,60 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="w-full h-[44px] lg:h-[42px] px-3 rounded-xl text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98"
+                className="w-full h-[40px] px-3 rounded-xl text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98"
                 title={`Enquire about ${course.title} on WhatsApp`}
               >
                 <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
                 <span>WhatsApp</span>
               </a>
             </div>
+          </div>
+        </div>
+
+        {/* Desktop (>= 1024px) Translucent Theme-Coloured Hover Overlay (~85% Opacity, 300ms Fade) */}
+        <div
+          data-testid={`course-card-hover-overlay-${course.id}`}
+          style={{ backgroundColor: theme.hoverOverlayBg }}
+          className="hidden lg:flex absolute inset-0 z-30 rounded-[16px] flex-col items-center justify-between py-6 px-5 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity duration-[300ms] ease-out backdrop-blur-[2px]"
+        >
+          {/* White Up-Chevron at Top */}
+          <div aria-hidden="true" className="flex items-center justify-center">
+            <ChevronUp className="w-6 h-6 text-white stroke-[2.25]" />
+          </div>
+
+          {/* Two Small 36px Rounded Buttons in Middle (White Text on Card Colour) */}
+          <div className="flex flex-col items-center justify-center gap-2.5 w-full max-w-[210px]">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (didDragMoveRef.current) return;
+                onEnquire(course.title);
+              }}
+              style={{ backgroundColor: theme.solidAccentHex }}
+              className="w-full h-[36px] px-4 rounded-full text-xs font-bold text-white border border-white/60 shadow-[0_6px_18px_rgba(0,0,0,0.22)] hover:brightness-110 transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98"
+            >
+              <span>Enquire Now</span>
+              <ArrowRight className="w-3.5 h-3.5 text-white" />
+            </button>
+
+            <a
+              href={getCourseWhatsAppUrl(course.title)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              style={{ backgroundColor: theme.solidAccentHex }}
+              className="w-full h-[36px] px-4 rounded-full text-xs font-bold text-white border border-white/60 shadow-[0_6px_18px_rgba(0,0,0,0.22)] hover:brightness-110 transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98"
+              title={`Enquire about ${course.title} on WhatsApp`}
+            >
+              <WhatsAppIcon className="w-3.5 h-3.5 text-white" />
+              <span>WhatsApp</span>
+            </a>
+          </div>
+
+          {/* White Down-Chevron at Bottom */}
+          <div aria-hidden="true" className="flex items-center justify-center">
+            <ChevronDown className="w-6 h-6 text-white stroke-[2.25]" />
           </div>
         </div>
       </article>
@@ -556,17 +621,17 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
       className="relative w-full focus:outline-none"
     >
       {/* =================================================================== */}
-      {/* MOBILE CAROUSEL (< 768px): 1 Card Visible                           */}
+      {/* MOBILE CAROUSEL (< 768px): 1 Card Visible (88% Screen Width)        */}
       {/* =================================================================== */}
       <div className="md:hidden">
-        <div className="relative px-3 sm:px-5 py-1">
+        <div className="relative py-1">
           {totalItems > 1 && (
             <>
               <button
                 type="button"
                 onClick={handlePrev}
                 aria-label="Previous course"
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white/95 border border-[#DBEAFE] text-[#1E3A8A] hover:text-[#2563EB] active:scale-95 transition-transform flex items-center justify-center cursor-pointer after:content-[''] after:absolute after:-inset-[8px]"
+                className="absolute left-0.5 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white/95 border border-[#DBEAFE] text-[#1E3A8A] hover:text-[#2563EB] active:scale-95 transition-transform flex items-center justify-center cursor-pointer after:content-[''] after:absolute after:-inset-[8px]"
                 style={{ boxShadow: '0 4px 14px rgba(15,23,42,0.18)' }}
               >
                 <ChevronLeft className="w-4 h-4 stroke-[2.25]" />
@@ -576,7 +641,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                 type="button"
                 onClick={handleNext}
                 aria-label="Next course"
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white/95 border border-[#DBEAFE] text-[#1E3A8A] hover:text-[#2563EB] active:scale-95 transition-transform flex items-center justify-center cursor-pointer after:content-[''] after:absolute after:-inset-[8px]"
+                className="absolute right-0.5 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white/95 border border-[#DBEAFE] text-[#1E3A8A] hover:text-[#2563EB] active:scale-95 transition-transform flex items-center justify-center cursor-pointer after:content-[''] after:absolute after:-inset-[8px]"
                 style={{ boxShadow: '0 4px 14px rgba(15,23,42,0.18)' }}
               >
                 <ChevronRight className="w-4 h-4 stroke-[2.25]" />
@@ -589,7 +654,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
             onTouchStart={handleMobileTouchStart}
             onTouchEnd={handleMobileTouchEnd}
             onTouchCancel={() => setIsTouching(false)}
-            className="w-full overflow-hidden rounded-[16px] touch-pan-y py-3 px-1"
+            className="w-full overflow-hidden rounded-[16px] touch-pan-y py-3"
           >
             <div
               className="flex items-stretch w-full"
@@ -603,9 +668,11 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               {courses.map((course, idx) => (
                 <div
                   key={`${course.id}-${idx}`}
-                  className="w-full shrink-0 px-1.5 flex flex-col"
+                  className="w-full shrink-0 flex justify-center"
                 >
-                  {renderCardContent(course, idx, idx === currentIndex, true)}
+                  <div className="w-[88vw] max-w-[96%] flex flex-col">
+                    {renderCardContent(course, idx, idx === currentIndex, true)}
+                  </div>
                 </div>
               ))}
             </div>
@@ -614,7 +681,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
       </div>
 
       {/* =================================================================== */}
-      {/* TABLET (2 Cards) & DESKTOP (3 Cards): Equal Height, Clean Layout    */}
+      {/* TABLET (2 Cards, ~280px) & DESKTOP (3 Cards, ~300px): Equal Height  */}
       {/* =================================================================== */}
       <div
         className="hidden md:block relative w-full mx-auto px-11 lg:px-14"
@@ -669,7 +736,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               isDragging ? 'cursor-grabbing' : 'cursor-grab'
             }`}
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 items-stretch">
+            <div className="flex items-stretch justify-center gap-5 lg:gap-6">
               {desktopOffsets.map((offset) => {
                 const targetIndex = (currentIndex + offset + totalItems) % totalItems;
                 const course = courses[targetIndex];
@@ -696,7 +763,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                         setCurrentIndex(targetIndex);
                       }
                     }}
-                    className={`w-full flex-col transition-transform duration-300 hover:-translate-y-1 ${visibilityClasses}`}
+                    className={`md:w-[280px] lg:w-[300px] shrink-0 flex-col transition-transform duration-300 hover:-translate-y-1 ${visibilityClasses}`}
                   >
                     {renderCardContent(course, targetIndex, isCenter, false)}
                   </div>
