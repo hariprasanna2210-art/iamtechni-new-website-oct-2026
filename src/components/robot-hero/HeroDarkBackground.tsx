@@ -23,19 +23,19 @@ export const HeroDarkBackground: React.FC<HeroDarkBackgroundProps> = ({
         }}
       />
 
-      {/* 2. Subtle Ambient Cyan / Electric Blue Left & Center-Stage Illumination */}
+      {/* 2. Subtle Ambient Cyan / Electric Blue Left & Center-Stage Illumination (slow & light animated gradient) */}
       <div
-        className="absolute -top-[18%] left-[4%] w-[46rem] h-[46rem] rounded-full opacity-25 blur-2xl lg:blur-[130px] transition-colors duration-1000"
+        className="absolute -top-[18%] left-[4%] w-[46rem] h-[46rem] rounded-full opacity-25 blur-2xl lg:blur-[130px] transition-colors duration-1000 animate-hero-ambient"
         style={{
-          background: `radial-gradient(circle, ${activeAccentHex} 0%, rgba(8, 123, 250, 0.25) 48%, transparent 74%)`,
+          background: `radial-gradient(circle, ${activeAccentHex} 0%, rgba(0, 176, 240, 0.28) 48%, transparent 74%)`,
         }}
       />
 
-      {/* 3. Restrained Purple Accent Illumination on Upper-Right Visual Stage */}
+      {/* 3. Restrained Purple Accent Illumination on Upper-Right Visual Stage (slow & light animated gradient) */}
       <div
-        className="absolute top-[8%] right-[2%] w-[42rem] h-[42rem] rounded-full opacity-20 blur-2xl lg:blur-[140px] transition-colors duration-1000"
+        className="absolute top-[8%] right-[2%] w-[42rem] h-[42rem] rounded-full opacity-20 blur-2xl lg:blur-[140px] transition-colors duration-1000 animate-hero-ambient-reverse"
         style={{
-          background: `radial-gradient(circle, ${activeSecondaryHex} 0%, rgba(124, 58, 237, 0.22) 45%, transparent 72%)`,
+          background: `radial-gradient(circle, ${activeSecondaryHex} 0%, rgba(77, 25, 234, 0.24) 45%, transparent 72%)`,
         }}
       />
 

@@ -16,10 +16,18 @@ import { Link } from 'react-router-dom';
 import { CourseItem } from '../../types';
 import { getCourseWhatsAppUrl } from '../../data/coursesData';
 import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportActivity';
+import {
+  ReactLogoBadge,
+  TypeScriptLogoBadge,
+  hasReactMention,
+  hasTypeScriptMention,
+} from '../common/TechLogoBadge';
 
 interface CourseCardTheme {
   name: string;
   headerBg: string;
+  cardBodyBg: string;
+  baseBorder: string;
   hoverBorder: string;
   progressBarGradient: string;
   iconColor: string;
@@ -36,114 +44,82 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   // 0: Brand Cyan (#00B0F0)
   {
     name: 'cyan',
-    headerBg: 'linear-gradient(135deg, #0284C7 0%, #00B0F0 100%)',
+    headerBg: 'linear-gradient(135deg, #00B0F0 0%, #1C35EA 100%)',
+    cardBodyBg: 'bg-gradient-to-b from-white via-[#F7FCFF] to-[#EEF9FF]',
+    baseBorder: 'border-[#00B0F0]/22',
     hoverBorder: 'hover:border-[#00B0F0]',
     progressBarGradient: 'linear-gradient(90deg, #BAE6FD 0%, #FFFFFF 100%)',
-    iconColor: '#0284C7',
+    iconColor: '#00B0F0',
     iconBadgeBg: '#FFFFFF',
-    checkColor: 'text-[#0284C7]',
-    chipBg: 'bg-sky-50',
-    chipText: 'text-[#0369A1]',
-    primaryBtnBg: 'bg-[#0284C7] hover:bg-[#0369A1] text-white',
-    secondaryBtnBg: 'bg-sky-50 hover:bg-sky-100 text-[#0369A1]',
+    checkColor: 'text-[#00B0F0]',
+    chipBg: 'bg-[#E8F8FF]',
+    chipText: 'text-[#14205A]',
+    primaryBtnBg:
+      'btn-sheen bg-gradient-to-r from-[#00B0F0] to-[#1C35EA] text-white shadow-[0_6px_16px_-4px_rgba(0,176,240,0.38)] hover:shadow-[0_10px_22px_-4px_rgba(0,176,240,0.52)] hover:-translate-y-0.5 hover:brightness-110',
+    secondaryBtnBg:
+      'bg-white hover:bg-[#F0FAFF] text-[#14205A] hover:text-[#1C35EA] border border-[#00B0F0]/45 hover:border-[#00B0F0] hover:-translate-y-0.5 hover:brightness-105',
     curriculumOutlineBtn:
-      'border-[#0284C7]/60 text-[#0284C7] hover:bg-sky-50 hover:border-[#0284C7]',
+      'border-[#00B0F0]/55 text-[#14205A] hover:bg-[#F0FAFF] hover:border-[#00B0F0] hover:-translate-y-0.5',
   },
   // 1: Brand Blue (#1C35EA)
   {
     name: 'blue',
-    headerBg: 'linear-gradient(135deg, #1E3A8A 0%, #1C35EA 100%)',
+    headerBg: 'linear-gradient(135deg, #14205A 0%, #1C35EA 100%)',
+    cardBodyBg: 'bg-gradient-to-b from-white via-[#F7FAFF] to-[#EEF4FF]',
+    baseBorder: 'border-[#1C35EA]/20',
     hoverBorder: 'hover:border-[#1C35EA]',
     progressBarGradient: 'linear-gradient(90deg, #93C5FD 0%, #FFFFFF 100%)',
     iconColor: '#1C35EA',
     iconBadgeBg: '#FFFFFF',
     checkColor: 'text-[#1C35EA]',
-    chipBg: 'bg-blue-50',
-    chipText: 'text-[#1E40AF]',
-    primaryBtnBg: 'bg-[#1C35EA] hover:bg-[#1E3A8A] text-white',
-    secondaryBtnBg: 'bg-blue-50 hover:bg-blue-100 text-[#1C35EA]',
+    chipBg: 'bg-[#EEF4FF]',
+    chipText: 'text-[#14205A]',
+    primaryBtnBg:
+      'btn-sheen bg-gradient-to-r from-[#00B0F0] to-[#1C35EA] text-white shadow-[0_6px_16px_-4px_rgba(28,53,234,0.36)] hover:shadow-[0_10px_22px_-4px_rgba(0,176,240,0.5)] hover:-translate-y-0.5 hover:brightness-110',
+    secondaryBtnBg:
+      'bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] border border-[#1C35EA]/35 hover:border-[#00B0F0] hover:-translate-y-0.5 hover:brightness-105',
     curriculumOutlineBtn:
-      'border-[#1C35EA]/60 text-[#1C35EA] hover:bg-blue-50 hover:border-[#1C35EA]',
+      'border-[#1C35EA]/45 text-[#1C35EA] hover:bg-[#EEF4FF] hover:border-[#1C35EA] hover:-translate-y-0.5',
   },
   // 2: Brand Purple (#4D19EA)
   {
     name: 'purple',
-    headerBg: 'linear-gradient(135deg, #4D19EA 0%, #6D28D9 100%)',
+    headerBg: 'linear-gradient(135deg, #1C35EA 0%, #4D19EA 100%)',
+    cardBodyBg: 'bg-gradient-to-b from-white via-[#F8F6FF] to-[#F2EEFF]',
+    baseBorder: 'border-[#4D19EA]/20',
     hoverBorder: 'hover:border-[#4D19EA]',
     progressBarGradient: 'linear-gradient(90deg, #DDD6FE 0%, #FFFFFF 100%)',
     iconColor: '#4D19EA',
     iconBadgeBg: '#FFFFFF',
     checkColor: 'text-[#4D19EA]',
-    chipBg: 'bg-violet-50',
-    chipText: 'text-[#5B21B6]',
-    primaryBtnBg: 'bg-[#4D19EA] hover:bg-[#3B189F] text-white',
-    secondaryBtnBg: 'bg-violet-50 hover:bg-violet-100 text-[#4D19EA]',
+    chipBg: 'bg-[#F2EEFF]',
+    chipText: 'text-[#14205A]',
+    primaryBtnBg:
+      'btn-sheen bg-gradient-to-r from-[#00B0F0] to-[#1C35EA] text-white shadow-[0_6px_16px_-4px_rgba(28,53,234,0.36)] hover:shadow-[0_10px_22px_-4px_rgba(0,176,240,0.5)] hover:-translate-y-0.5 hover:brightness-110',
+    secondaryBtnBg:
+      'bg-white hover:bg-[#F3EFFF] text-[#14205A] hover:text-[#4D19EA] border border-[#4D19EA]/35 hover:border-[#4D19EA] hover:-translate-y-0.5 hover:brightness-105',
     curriculumOutlineBtn:
-      'border-[#4D19EA]/60 text-[#4D19EA] hover:bg-violet-50 hover:border-[#4D19EA]',
+      'border-[#4D19EA]/45 text-[#4D19EA] hover:bg-[#F3EFFF] hover:border-[#4D19EA] hover:-translate-y-0.5',
   },
-  // 3: Complementary Teal (#0D9488)
-  {
-    name: 'teal',
-    headerBg: 'linear-gradient(135deg, #0F766E 0%, #0D9488 100%)',
-    hoverBorder: 'hover:border-[#0D9488]',
-    progressBarGradient: 'linear-gradient(90deg, #99F6E4 0%, #FFFFFF 100%)',
-    iconColor: '#0D9488',
-    iconBadgeBg: '#FFFFFF',
-    checkColor: 'text-[#0D9488]',
-    chipBg: 'bg-teal-50',
-    chipText: 'text-[#115E59]',
-    primaryBtnBg: 'bg-[#0D9488] hover:bg-[#0F766E] text-white',
-    secondaryBtnBg: 'bg-teal-50 hover:bg-teal-100 text-[#0F766E]',
-    curriculumOutlineBtn:
-      'border-[#0D9488]/60 text-[#0D9488] hover:bg-teal-50 hover:border-[#0D9488]',
-  },
-  // 4: Brand Navy (#14205A)
+  // 3: Brand Navy (#14205A) & Cyan (#00B0F0)
   {
     name: 'navy',
-    headerBg: 'linear-gradient(135deg, #14205A 0%, #1E3A8A 100%)',
+    headerBg: 'linear-gradient(135deg, #14205A 0%, #00B0F0 100%)',
+    cardBodyBg: 'bg-gradient-to-b from-white via-[#F6FAFF] to-[#EBF5FF]',
+    baseBorder: 'border-[#14205A]/18',
     hoverBorder: 'hover:border-[#14205A]',
     progressBarGradient: 'linear-gradient(90deg, #7DD3FC 0%, #FFFFFF 100%)',
     iconColor: '#14205A',
     iconBadgeBg: '#FFFFFF',
-    checkColor: 'text-[#14205A]',
-    chipBg: 'bg-indigo-50',
+    checkColor: 'text-[#1C35EA]',
+    chipBg: 'bg-[#EEF4FF]',
     chipText: 'text-[#14205A]',
-    primaryBtnBg: 'bg-[#14205A] hover:bg-[#1E3A8A] text-white',
-    secondaryBtnBg: 'bg-indigo-50 hover:bg-indigo-100 text-[#14205A]',
+    primaryBtnBg:
+      'btn-sheen bg-gradient-to-r from-[#00B0F0] to-[#1C35EA] text-white shadow-[0_6px_16px_-4px_rgba(28,53,234,0.36)] hover:shadow-[0_10px_22px_-4px_rgba(0,176,240,0.5)] hover:-translate-y-0.5 hover:brightness-110',
+    secondaryBtnBg:
+      'bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] border border-[#14205A]/30 hover:border-[#00B0F0] hover:-translate-y-0.5 hover:brightness-105',
     curriculumOutlineBtn:
-      'border-[#14205A]/60 text-[#14205A] hover:bg-indigo-50 hover:border-[#14205A]',
-  },
-  // 5: Complementary Amber (#D97706)
-  {
-    name: 'amber',
-    headerBg: 'linear-gradient(135deg, #B45309 0%, #D97706 100%)',
-    hoverBorder: 'hover:border-[#D97706]',
-    progressBarGradient: 'linear-gradient(90deg, #FDE68A 0%, #FFFFFF 100%)',
-    iconColor: '#D97706',
-    iconBadgeBg: '#FFFFFF',
-    checkColor: 'text-[#D97706]',
-    chipBg: 'bg-amber-50',
-    chipText: 'text-[#92400E]',
-    primaryBtnBg: 'bg-[#D97706] hover:bg-[#B45309] text-white',
-    secondaryBtnBg: 'bg-amber-50 hover:bg-amber-100 text-[#92400E]',
-    curriculumOutlineBtn:
-      'border-[#D97706]/60 text-[#D97706] hover:bg-amber-50 hover:border-[#D97706]',
-  },
-  // 6: Complementary Coral Rose (#E11D48)
-  {
-    name: 'rose',
-    headerBg: 'linear-gradient(135deg, #BE123C 0%, #E11D48 100%)',
-    hoverBorder: 'hover:border-[#E11D48]',
-    progressBarGradient: 'linear-gradient(90deg, #FECDD3 0%, #FFFFFF 100%)',
-    iconColor: '#E11D48',
-    iconBadgeBg: '#FFFFFF',
-    checkColor: 'text-[#E11D48]',
-    chipBg: 'bg-rose-50',
-    chipText: 'text-[#9F1239]',
-    primaryBtnBg: 'bg-[#E11D48] hover:bg-[#BE123C] text-white',
-    secondaryBtnBg: 'bg-rose-50 hover:bg-rose-100 text-[#9F1239]',
-    curriculumOutlineBtn:
-      'border-[#E11D48]/60 text-[#E11D48] hover:bg-rose-50 hover:border-[#E11D48]',
+      'border-[#14205A]/45 text-[#14205A] hover:bg-[#EEF4FF] hover:border-[#14205A] hover:-translate-y-0.5',
   },
 ];
 
@@ -427,6 +403,10 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
     const isCurriculumOpen = openCurriculumKey === cardInstanceKey;
     const curriculumPanelId = `course-curriculum-${cardInstanceKey}`;
 
+    const courseFullText = `${course.title} ${course.subtitle} ${course.highlights.join(' ')}`;
+    const courseMentionsReact = hasReactMention(courseFullText);
+    const courseMentionsTS = hasTypeScriptMention(courseFullText);
+
     return (
       <article
         id={
@@ -438,7 +418,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
         }
         onMouseEnter={() => handleCardMouseEnter(cardInstanceKey)}
         onMouseLeave={() => handleCardMouseLeave(cardInstanceKey)}
-        className={`group relative w-full h-full flex flex-col bg-white rounded-[16px] overflow-hidden border border-transparent ${theme.hoverBorder} shadow-[0_10px_28px_-6px_rgba(15,23,42,0.12)] hover:shadow-[0_20px_42px_-8px_rgba(15,23,42,0.22)] transition-all duration-300`}
+        className={`card-sheen group relative w-full h-full flex flex-col ${theme.cardBodyBg} rounded-[16px] overflow-hidden border ${theme.baseBorder} ${theme.hoverBorder} shadow-[0_10px_28px_-8px_rgba(20,32,90,0.1)] hover:shadow-[0_18px_38px_-8px_rgba(28,53,234,0.18)] transition-all duration-300`}
       >
         {/* Solid Colour Header (~100 px) */}
         <div
@@ -465,17 +445,25 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
 
           {/* Top Row: White Rounded Icon Badge + Course Number & Category */}
           <div className="relative z-10 flex items-center justify-between gap-2">
-            <div
-              data-testid={`course-icon-badge-${course.id}`}
-              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105"
-              style={{
-                backgroundColor: theme.iconBadgeBg,
-                color: theme.iconColor,
-                boxShadow:
-                  '0 0 18px rgba(255, 255, 255, 0.5), 0 4px 12px rgba(15, 23, 42, 0.16)',
-              }}
-            >
-              <CourseIcon className="w-5 h-5 stroke-[2.25]" />
+            <div className="flex items-center gap-1.5">
+              <div
+                data-testid={`course-icon-badge-${course.id}`}
+                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105"
+                style={{
+                  backgroundColor: theme.iconBadgeBg,
+                  color: theme.iconColor,
+                  boxShadow:
+                    '0 0 18px rgba(255, 255, 255, 0.5), 0 4px 12px rgba(15, 23, 42, 0.16)',
+                }}
+              >
+                <CourseIcon className="w-5 h-5 stroke-[2.25]" />
+              </div>
+              {(courseMentionsReact || courseMentionsTS) && (
+                <div className="inline-flex items-center gap-1" aria-hidden="true">
+                  {courseMentionsReact && <ReactLogoBadge size={20} className="!bg-white/95" />}
+                  {courseMentionsTS && <TypeScriptLogoBadge size={20} />}
+                </div>
+              )}
             </div>
 
             <div className="flex items-center gap-1 text-[10.5px] font-bold tracking-wide min-w-0">
@@ -497,11 +485,11 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
           </h3>
         </div>
 
-        {/* Clean White Card Body (14 px text, 1.45 line spacing) */}
-        <div className="p-3.5 flex-1 flex flex-col justify-between bg-white">
+        {/* Subtle Brand-Gradient Card Body (14 px text, 1.45 line spacing) */}
+        <div className={`p-3.5 flex-1 flex flex-col justify-between ${theme.cardBodyBg}`}>
           <div>
             {/* Course Description (14 px, 1.45 line-height) */}
-            <p className="!text-[14px] !leading-[1.45] text-slate-600 mb-2">
+            <p className="!text-[14px] !leading-[1.45] text-slate-700 mb-2">
               {course.subtitle}
             </p>
 
@@ -531,7 +519,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               }}
               aria-expanded={isCurriculumOpen}
               aria-controls={curriculumPanelId}
-              className={`w-full h-[36px] px-3 rounded-lg border bg-white !text-[13px] font-semibold leading-none flex items-center justify-between gap-2 transition-colors duration-200 motion-reduce:transition-none cursor-pointer ${theme.curriculumOutlineBtn}`}
+              className={`w-full h-[36px] px-3 rounded-lg border bg-white !text-[13px] font-semibold leading-none flex items-center justify-between gap-2 transition-all duration-200 motion-reduce:transition-none cursor-pointer ${theme.curriculumOutlineBtn}`}
             >
               <span>View Curriculum</span>
               <ChevronDown
@@ -554,17 +542,27 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                     Key Curriculum Highlights
                   </div>
                   <div className="grid grid-cols-1 gap-y-1.5">
-                    {course.highlights.map((hl, hIdx) => (
-                      <div
-                        key={hIdx}
-                        className="flex items-start gap-1.5 !text-[14px] !leading-[1.45] text-slate-700"
-                      >
-                        <Check
-                          className={`w-3.5 h-3.5 shrink-0 mt-1 stroke-[2.5] ${theme.checkColor}`}
-                        />
-                        <span>{hl}</span>
-                      </div>
-                    ))}
+                    {course.highlights.map((hl, hIdx) => {
+                      const hlHasReact = hasReactMention(hl);
+                      const hlHasTS = hasTypeScriptMention(hl);
+                      return (
+                        <div
+                          key={hIdx}
+                          className="flex items-start gap-1.5 !text-[14px] !leading-[1.45] text-slate-700"
+                        >
+                          <Check
+                            className={`w-3.5 h-3.5 shrink-0 mt-1 stroke-[2.5] ${theme.checkColor}`}
+                          />
+                          <span className="flex-1">{hl}</span>
+                          {(hlHasReact || hlHasTS) && (
+                            <span className="inline-flex items-center gap-1 shrink-0 mt-0.5" aria-hidden="true">
+                              {hlHasReact && <ReactLogoBadge size={20} />}
+                              {hlHasTS && <TypeScriptLogoBadge size={20} />}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -613,8 +611,8 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                 }}
                 className={`group/btn w-full h-[38px] px-3 rounded-full !text-[13px] font-semibold leading-none transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer active:scale-98 ${theme.primaryBtnBg}`}
               >
-                <span>Enquire Now</span>
-                <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover/btn:translate-x-[3px]" />
+                <span className="relative z-10">Enquire Now</span>
+                <ArrowRight className="relative z-10 w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover/btn:translate-x-[3px]" />
               </button>
 
               {/* Row 2: "WhatsApp" and "Know More" Side-by-Side (Half Width Each, 8px Gap) */}
@@ -624,10 +622,10 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="group/btn w-full h-[38px] px-3 rounded-full !text-[13px] font-semibold leading-none bg-emerald-50 hover:bg-emerald-100 text-emerald-900 transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer active:scale-98"
+                  className="group/btn w-full h-[38px] px-3 rounded-full !text-[13px] font-semibold leading-none bg-white hover:bg-[#F0FAFF] text-[#14205A] hover:text-[#1C35EA] border border-[#00B0F0]/45 hover:border-[#00B0F0] hover:-translate-y-0.5 hover:brightness-105 transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer active:scale-98"
                   title={`Enquire about ${course.title} on WhatsApp`}
                 >
-                  <WhatsAppIcon className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
+                  <WhatsAppIcon className="w-3.5 h-3.5 shrink-0 text-[#00B0F0]" />
                   <span>WhatsApp</span>
                 </a>
 

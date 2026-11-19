@@ -676,24 +676,24 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </button>
 
-            {/* React & TypeScript Official Logo Badges (22px each, vertically centred between Training and Industries) */}
+            {/* React & TypeScript Official Logo Badges (22px each, vertically centred between Training and Industries, with soft glow) */}
             <div
               aria-hidden="true"
               data-testid="navbar-react-ts-badges"
-              className="inline-flex items-center gap-1 self-center shrink-0"
+              className="inline-flex items-center gap-1.5 self-center shrink-0"
             >
-              {/* React Official Atom Badge (22px) */}
+              {/* React Official Cyan Atom Badge (22px with soft cyan glow) */}
               <span
                 title="React"
-                className="w-[22px] h-[22px] rounded-[6px] bg-[#20232A] border border-[#61DAFB]/35 inline-flex items-center justify-center shrink-0 shadow-[0_1px_3px_rgba(20,32,90,0.12)]"
+                className="w-[22px] h-[22px] rounded-[6px] bg-[#00B0F0]/15 border border-[#00B0F0]/45 inline-flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(0,176,240,0.42)] transition-transform duration-200 hover:scale-105"
               >
                 <svg
                   viewBox="-11.5 -10.23174 23 20.46348"
                   className="w-[15px] h-[15px]"
                   fill="none"
                 >
-                  <circle cx="0" cy="0" r="2.05" fill="#61DAFB" />
-                  <g stroke="#61DAFB" strokeWidth="1.15" fill="none">
+                  <circle cx="0" cy="0" r="2.05" fill="#00B0F0" />
+                  <g stroke="#00B0F0" strokeWidth="1.35" fill="none">
                     <ellipse rx="11" ry="4.2" />
                     <ellipse rx="11" ry="4.2" transform="rotate(60)" />
                     <ellipse rx="11" ry="4.2" transform="rotate(120)" />
@@ -701,10 +701,10 @@ export const Header: React.FC<HeaderProps> = ({
                 </svg>
               </span>
 
-              {/* TypeScript Official Blue Square Badge (22px) */}
+              {/* TypeScript Official Blue Square Badge (22px with soft blue glow) */}
               <span
                 title="TypeScript"
-                className="w-[22px] h-[22px] rounded-[5px] bg-[#3178C6] inline-flex items-center justify-center shrink-0 shadow-[0_1px_3px_rgba(20,32,90,0.12)]"
+                className="w-[22px] h-[22px] rounded-[6px] bg-gradient-to-br from-[#00B0F0]/25 to-[#1C35EA] border border-[#00B0F0]/40 inline-flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(28,53,234,0.45)] transition-transform duration-200 hover:scale-105"
               >
                 <svg viewBox="0 0 24 24" className="w-[16px] h-[16px]" fill="none">
                   <path
@@ -765,33 +765,33 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Zone 3: Right-Side Action Buttons (Verify Certificate + Start a Project, all 40px height) */}
           {/* Hidden from navbar (functionality preserved): AI Advisor, Phone Call button, Admin link */}
           <div className="flex items-center gap-1.5 min-[1200px]:gap-2.5 h-[40px] shrink-0">
-            {/* Verify Certificate Light Outline Button (40px height, desktop right side before Start a Project) */}
+            {/* Verify Certificate Clean Outline Secondary Button (40px height, 2px lift & brighten on hover) */}
             <button
               type="button"
               onClick={() => handleLinkClick('/verify')}
               aria-label="Verify Certificate"
               title="Verify Certificate"
-              className={`hidden min-[1100px]:inline-flex items-center justify-center gap-1.5 h-[40px] px-2.5 min-[1200px]:px-3.5 rounded-full border shadow-[0_1px_4px_rgba(20,32,90,0.05)] !text-[14px] font-semibold tracking-[-0.01em] transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] ${
+              className={`hidden min-[1100px]:inline-flex items-center justify-center gap-1.5 h-[40px] px-2.5 min-[1200px]:px-3.5 rounded-full border shadow-[0_2px_8px_rgba(20,32,90,0.06)] !text-[14px] font-semibold tracking-[-0.01em] hover:-translate-y-0.5 hover:brightness-105 transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA] ${
                 isVerifyActive
-                  ? 'bg-[#EEF4FF] text-[#1C35EA] border-[#1C35EA]/40'
-                  : 'bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] border-[#14205A]/18 hover:border-[#1C35EA]/35'
+                  ? 'bg-[#EEF4FF] text-[#1C35EA] border-[#00B0F0]'
+                  : 'bg-white hover:bg-[#F2F8FF] text-[#14205A] hover:text-[#1C35EA] border-[#1C35EA]/30 hover:border-[#00B0F0]'
               }`}
             >
               <Award className="w-4 h-4 text-[#1C35EA] shrink-0" />
               <span>Verify Certificate</span>
             </button>
 
-            {/* Start a Project CTA Button (40px height, visible at every width) */}
+            {/* Start a Project Primary CTA Button (Cyan #00B0F0 to Blue #1C35EA gradient, soft sheen, 2px lift & brighten on hover) */}
             <button
               type="button"
               onClick={onStartProject}
               aria-label="Start a Project"
               title="Start a Project"
-              className="inline-flex items-center justify-center gap-1.5 h-[40px] px-2.5 min-[1200px]:px-3.5 rounded-full bg-gradient-to-r from-[#14205A] via-[#1C35EA] to-[#4D19EA] hover:from-[#1C35EA] hover:to-[#4D19EA] text-white font-semibold tracking-[-0.01em] !text-[14px] shadow-[0_2px_10px_rgba(28,53,234,0.22)] hover:shadow-[0_4px_14px_rgba(28,53,234,0.32)] transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1C35EA]"
+              className="btn-sheen inline-flex items-center justify-center gap-1.5 h-[40px] px-2.5 min-[1200px]:px-3.5 rounded-full bg-gradient-to-r from-[#00B0F0] to-[#1C35EA] text-white font-semibold tracking-[-0.01em] !text-[14px] shadow-[0_4px_14px_rgba(0,176,240,0.3)] hover:shadow-[0_8px_20px_rgba(0,176,240,0.45)] hover:-translate-y-0.5 hover:brightness-110 transition-all duration-200 active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#00B0F0]"
             >
-              <span className="hidden min-[400px]:inline">Start a Project</span>
-              <span className="min-[400px]:hidden">Start</span>
-              <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
+              <span className="relative z-10 hidden min-[400px]:inline">Start a Project</span>
+              <span className="relative z-10 min-[400px]:hidden">Start</span>
+              <ArrowRight className="relative z-10 w-3.5 h-3.5 text-white shrink-0" />
             </button>
 
             {/* Accessible Mobile & Tablet Hamburger Toggle (Below 1100px, 40px height) */}
@@ -862,8 +862,8 @@ export const Header: React.FC<HeaderProps> = ({
                   onClick={() => handleLinkClick('/verify')}
                   className={`w-full min-h-[44px] py-2.5 px-3.5 rounded-full border !text-[14px] font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer mb-2 ${
                     isVerifyActive
-                      ? 'bg-[#EEF4FF] text-[#1C35EA] border-[#1C35EA]/40'
-                      : 'bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] border-[#14205A]/18 hover:border-[#1C35EA]/35 shadow-2xs'
+                      ? 'bg-[#EEF4FF] text-[#1C35EA] border-[#00B0F0]'
+                      : 'bg-white hover:bg-[#EEF4FF] text-[#14205A] hover:text-[#1C35EA] border-[#1C35EA]/30 hover:border-[#00B0F0] shadow-2xs'
                   }`}
                 >
                   <Award className="w-4 h-4 text-[#1C35EA] shrink-0" />
@@ -1162,7 +1162,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Pinned Bottom Action: Start a Project (AI Advisor and Phone hidden per navbar update) */}
+            {/* Pinned Bottom Action: Start a Project (Cyan #00B0F0 to Blue #1C35EA gradient + soft sheen) */}
             <div className="p-4 sm:px-6 pb-[max(1rem,env(safe-area-inset-bottom))] bg-slate-50/90 border-t border-slate-200/80 shrink-0">
               {/* Start a Project Primary CTA */}
               <button
@@ -1171,10 +1171,10 @@ export const Header: React.FC<HeaderProps> = ({
                   setIsMobileMenuOpen(false);
                   onStartProject();
                 }}
-                className="w-full min-h-[46px] py-2.5 !text-[14px] font-semibold text-white bg-gradient-to-r from-[#14205A] via-[#1C35EA] to-[#4D19EA] hover:from-[#1C35EA] hover:to-[#4D19EA] active:scale-[0.98] rounded-full flex items-center justify-center gap-2 shadow-[0_2px_10px_rgba(28,53,234,0.24)] hover:shadow-[0_4px_14px_rgba(28,53,234,0.32)] transition-all duration-200 cursor-pointer"
+                className="btn-sheen w-full min-h-[46px] py-2.5 !text-[14px] font-semibold text-white bg-gradient-to-r from-[#00B0F0] to-[#1C35EA] hover:brightness-110 active:scale-[0.98] rounded-full flex items-center justify-center gap-2 shadow-[0_4px_14px_rgba(0,176,240,0.28)] hover:shadow-[0_6px_18px_rgba(0,176,240,0.4)] transition-all duration-200 cursor-pointer"
               >
-                <span>Start a Project</span>
-                <ArrowRight className="w-4 h-4 text-white" />
+                <span className="relative z-10">Start a Project</span>
+                <ArrowRight className="relative z-10 w-4 h-4 text-white" />
               </button>
             </div>
           </div>

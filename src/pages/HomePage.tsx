@@ -456,22 +456,37 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           {/* 4. Upper Feature Boxes: Strongly Typed & Multi-Cloud */}
           <div className="mt-5 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-5 w-full max-w-[720px] mx-auto">
-            <div className="rounded-2xl p-3 sm:p-5 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE] shadow-[0_4px_16px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-left transition-all duration-200 hover:border-[#93C5FD] hover:shadow-[0_8px_24px_rgba(30,58,138,0.12)]">
-              <div className="flex items-center gap-1.5 sm:gap-2 text-[#1E3A8A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-xs sm:text-[15px] mb-1 sm:mb-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2563EB] shrink-0" />
-                <span>Strongly Typed</span>
+            <div className="card-sheen rounded-[16px] p-3 sm:p-5 bg-gradient-to-br from-white via-[#F5F9FF] to-[#EEF4FF] backdrop-blur-md border border-[#1C35EA]/20 shadow-[0_10px_28px_-8px_rgba(20,32,90,0.08)] text-left transition-all duration-200 hover:border-[#00B0F0]/55 hover:shadow-[0_14px_32px_-8px_rgba(28,53,234,0.14)]">
+              <div className="flex items-center justify-between gap-2 mb-1 sm:mb-1.5">
+                <div className="flex items-center gap-1.5 sm:gap-2 text-[#14205A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-xs sm:text-[15px]">
+                  <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#1C35EA] shrink-0" />
+                  <span>Strongly Typed</span>
+                </div>
+                <span
+                  aria-hidden="true"
+                  title="TypeScript"
+                  className="inline-flex items-center justify-center w-[22px] h-[22px] rounded-md bg-gradient-to-br from-[#00B0F0]/25 to-[#1C35EA] border border-[#00B0F0]/40 text-white shadow-[0_0_12px_rgba(28,53,234,0.42)] shrink-0"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 3H21V21H3V3Z" fill="#1C35EA" />
+                    <path
+                      d="M13.5 11.2H11.1V18.5H9.1V11.2H6.7V9.6H13.5V11.2ZM14.5 16.4C15.1 16.8 15.9 17.1 16.7 17.1C17.5 17.1 18 16.8 18 16.3C18 15.7 17.4 15.5 16.3 15.1C14.8 14.5 14.1 13.8 14.1 12.4C14.1 10.8 15.4 9.5 17.4 9.5C18.4 9.5 19.2 9.7 19.8 10.1L19.2 11.6C18.7 11.3 18.1 11.1 17.4 11.1C16.6 11.1 16.1 11.5 16.1 12C16.1 12.5 16.6 12.8 17.8 13.2C19.3 13.8 20 14.5 20 15.9C20 17.6 18.7 18.7 16.5 18.7C15.4 18.7 14.4 18.4 13.8 17.9L14.5 16.4Z"
+                      fill="#FFFFFF"
+                    />
+                  </svg>
+                </span>
               </div>
-              <p className="text-[11px] sm:text-sm text-slate-600 font-medium leading-snug sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
+              <p className="text-[11px] sm:text-sm text-slate-700 font-medium leading-snug sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
                 TypeScript strict mode across API &amp; client contracts.
               </p>
             </div>
 
-            <div className="rounded-2xl p-3 sm:p-5 bg-gradient-to-r from-[#EEF4FF]/95 via-[#F5F9FF]/95 to-[#ECFEFF]/90 backdrop-blur-md border border-[#DBEAFE] shadow-[0_4px_16px_rgba(37,99,235,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] text-left transition-all duration-200 hover:border-[#93C5FD] hover:shadow-[0_8px_24px_rgba(30,58,138,0.12)]">
-              <div className="flex items-center gap-1.5 sm:gap-2 text-[#1E3A8A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-xs sm:text-[15px] mb-1 sm:mb-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2563EB] shrink-0" />
+            <div className="card-sheen rounded-[16px] p-3 sm:p-5 bg-gradient-to-br from-white via-[#F4FBFF] to-[#E8F8FF] backdrop-blur-md border border-[#00B0F0]/22 shadow-[0_10px_28px_-8px_rgba(20,32,90,0.08)] text-left transition-all duration-200 hover:border-[#00B0F0]/55 hover:shadow-[0_14px_32px_-8px_rgba(0,176,240,0.14)]">
+              <div className="flex items-center gap-1.5 sm:gap-2 text-[#14205A] font-['Plus_Jakarta_Sans',sans-serif] font-bold text-xs sm:text-[15px] mb-1 sm:mb-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00B0F0] shrink-0" />
                 <span>Multi-Cloud</span>
               </div>
-              <p className="text-[11px] sm:text-sm text-slate-600 font-medium leading-snug sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
+              <p className="text-[11px] sm:text-sm text-slate-700 font-medium leading-snug sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
                 Zero vendor lock-in across AWS &amp; Azure runtimes.
               </p>
             </div>
@@ -489,6 +504,8 @@ export const HomePage: React.FC<HomePageProps> = ({
               const ToolIcon = tool.icon;
               const displayLabel =
                 tool.name === 'Azure' ? 'Microsoft Azure' : tool.name;
+              const isReact = tool.name === 'React';
+              const isTS = tool.name === 'TypeScript';
 
               return (
                 <div
@@ -498,21 +515,55 @@ export const HomePage: React.FC<HomePageProps> = ({
                   title={displayLabel}
                   className="inline-flex items-center gap-2 md:gap-2 lg:gap-2.5 h-[30px] md:h-[32px] lg:h-[38px] shrink-0 select-none transition-transform duration-200 hover:scale-108 cursor-default"
                 >
-                  <span
-                    className="flex items-center justify-center shrink-0"
-                    style={{ color: tool.brandColor }}
-                  >
-                    <ToolIcon className="w-[20px] h-[20px] md:w-[22px] md:h-[22px] lg:w-[30px] lg:h-[30px]" />
-                  </span>
+                  {isReact ? (
+                    <span
+                      aria-hidden="true"
+                      className="inline-flex items-center justify-center w-[24px] h-[24px] rounded-md bg-[#00B0F0]/15 border border-[#00B0F0]/45 text-[#00B0F0] shadow-[0_0_12px_rgba(0,176,240,0.42)] shrink-0"
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="-11.5 -10.23174 23 20.46348"
+                        fill="none"
+                      >
+                        <circle cx="0" cy="0" r="2.05" fill="#00B0F0" />
+                        <g stroke="#00B0F0" strokeWidth="1.35" fill="none">
+                          <ellipse rx="11" ry="4.2" />
+                          <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+                          <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+                        </g>
+                      </svg>
+                    </span>
+                  ) : isTS ? (
+                    <span
+                      aria-hidden="true"
+                      className="inline-flex items-center justify-center w-[24px] h-[24px] rounded-md bg-gradient-to-br from-[#00B0F0]/25 to-[#1C35EA] border border-[#00B0F0]/40 text-white shadow-[0_0_12px_rgba(28,53,234,0.45)] shrink-0"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 3H21V21H3V3Z" fill="#1C35EA" />
+                        <path
+                          d="M13.5 11.2H11.1V18.5H9.1V11.2H6.7V9.6H13.5V11.2ZM14.5 16.4C15.1 16.8 15.9 17.1 16.7 17.1C17.5 17.1 18 16.8 18 16.3C18 15.7 17.4 15.5 16.3 15.1C14.8 14.5 14.1 13.8 14.1 12.4C14.1 10.8 15.4 9.5 17.4 9.5C18.4 9.5 19.2 9.7 19.8 10.1L19.2 11.6C18.7 11.3 18.1 11.1 17.4 11.1C16.6 11.1 16.1 11.5 16.1 12C16.1 12.5 16.6 12.8 17.8 13.2C19.3 13.8 20 14.5 20 15.9C20 17.6 18.7 18.7 16.5 18.7C15.4 18.7 14.4 18.4 13.8 17.9L14.5 16.4Z"
+                          fill="#FFFFFF"
+                        />
+                      </svg>
+                    </span>
+                  ) : (
+                    <span
+                      className="flex items-center justify-center shrink-0"
+                      style={{ color: tool.brandColor }}
+                    >
+                      <ToolIcon className="w-[20px] h-[20px] md:w-[22px] md:h-[22px] lg:w-[30px] lg:h-[30px]" />
+                    </span>
+                  )}
                   <span
                     className="!font-['Plus_Jakarta_Sans','Inter',sans-serif] text-[13.5px] md:text-[14.5px] lg:text-[18px] font-bold tracking-tight whitespace-nowrap"
                     style={{
                       color:
                         tool.name === 'React'
-                          ? '#00B4D8'
+                          ? '#00B0F0'
                           : tool.name === 'TypeScript'
-                          ? '#3178C6'
-                          : '#1E3A8A',
+                          ? '#1C35EA'
+                          : '#14205A',
                     }}
                   >
                     {displayLabel}
@@ -548,20 +599,56 @@ export const HomePage: React.FC<HomePageProps> = ({
                         : tool.name === 'Tailwind CSS'
                         ? 'Tailwind'
                         : tool.name;
+                    const isReact = tool.name === 'React';
+                    const isTS = tool.name === 'TypeScript';
                     return (
                       <div
                         key={`tech-mobile-grid-${tool.name}`}
-                        className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-white/90 border border-[#DBEAFE] shadow-[0_2px_10px_rgba(30,58,138,0.05)] min-w-0"
+                        className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-white/95 border border-[#1C35EA]/18 shadow-[0_2px_10px_rgba(20,32,90,0.06)] min-w-0"
                       >
-                        {ToolIcon && (
+                        {isReact ? (
                           <span
-                            className="shrink-0 flex items-center justify-center"
-                            style={{ color: tool.brandColor || '#2563EB' }}
+                            aria-hidden="true"
+                            className="inline-flex items-center justify-center w-[20px] h-[20px] rounded-md bg-[#00B0F0]/15 border border-[#00B0F0]/45 text-[#00B0F0] shadow-[0_0_10px_rgba(0,176,240,0.4)] shrink-0"
                           >
-                            <ToolIcon className="w-3.5 h-3.5" />
+                            <svg
+                              width="13"
+                              height="13"
+                              viewBox="-11.5 -10.23174 23 20.46348"
+                              fill="none"
+                            >
+                              <circle cx="0" cy="0" r="2.05" fill="#00B0F0" />
+                              <g stroke="#00B0F0" strokeWidth="1.35" fill="none">
+                                <ellipse rx="11" ry="4.2" />
+                                <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+                                <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+                              </g>
+                            </svg>
                           </span>
+                        ) : isTS ? (
+                          <span
+                            aria-hidden="true"
+                            className="inline-flex items-center justify-center w-[20px] h-[20px] rounded-md bg-gradient-to-br from-[#00B0F0]/25 to-[#1C35EA] border border-[#00B0F0]/40 text-white shadow-[0_0_10px_rgba(28,53,234,0.42)] shrink-0"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                              <path d="M3 3H21V21H3V3Z" fill="#1C35EA" />
+                              <path
+                                d="M13.5 11.2H11.1V18.5H9.1V11.2H6.7V9.6H13.5V11.2ZM14.5 16.4C15.1 16.8 15.9 17.1 16.7 17.1C17.5 17.1 18 16.8 18 16.3C18 15.7 17.4 15.5 16.3 15.1C14.8 14.5 14.1 13.8 14.1 12.4C14.1 10.8 15.4 9.5 17.4 9.5C18.4 9.5 19.2 9.7 19.8 10.1L19.2 11.6C18.7 11.3 18.1 11.1 17.4 11.1C16.6 11.1 16.1 11.5 16.1 12C16.1 12.5 16.6 12.8 17.8 13.2C19.3 13.8 20 14.5 20 15.9C20 17.6 18.7 18.7 16.5 18.7C15.4 18.7 14.4 18.4 13.8 17.9L14.5 16.4Z"
+                                fill="#FFFFFF"
+                              />
+                            </svg>
+                          </span>
+                        ) : (
+                          ToolIcon && (
+                            <span
+                              className="shrink-0 flex items-center justify-center"
+                              style={{ color: tool.brandColor || '#1C35EA' }}
+                            >
+                              <ToolIcon className="w-3.5 h-3.5" />
+                            </span>
+                          )
                         )}
-                        <span className="text-[11px] font-bold text-[#1E3A8A] truncate">
+                        <span className="text-[11px] font-bold text-[#14205A] truncate">
                           {displayLabel}
                         </span>
                       </div>
