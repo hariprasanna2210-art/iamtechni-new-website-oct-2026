@@ -4,10 +4,8 @@ import {
   ArrowRight,
   Calendar,
   Check,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronUp,
   Laptop,
   MapPin,
   Pause,
@@ -21,8 +19,7 @@ import { useSectionInView, useIsWindowScrolling } from '../../utils/useViewportA
 interface CourseCardTheme {
   name: string;
   headerBg: string;
-  hoverOverlayBg: string;
-  solidAccentHex: string;
+  hoverBorder: string;
   progressBarGradient: string;
   iconColor: string;
   iconBadgeBg: string;
@@ -38,8 +35,7 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'cyan',
     headerBg: 'linear-gradient(135deg, #0284C7 0%, #00B0F0 100%)',
-    hoverOverlayBg: 'rgba(2, 132, 199, 0.86)',
-    solidAccentHex: '#0284C7',
+    hoverBorder: 'hover:border-[#00B0F0]',
     progressBarGradient: 'linear-gradient(90deg, #BAE6FD 0%, #FFFFFF 100%)',
     iconColor: '#0284C7',
     iconBadgeBg: '#FFFFFF',
@@ -53,8 +49,7 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'blue',
     headerBg: 'linear-gradient(135deg, #1E3A8A 0%, #1C35EA 100%)',
-    hoverOverlayBg: 'rgba(28, 53, 234, 0.86)',
-    solidAccentHex: '#1C35EA',
+    hoverBorder: 'hover:border-[#1C35EA]',
     progressBarGradient: 'linear-gradient(90deg, #93C5FD 0%, #FFFFFF 100%)',
     iconColor: '#1C35EA',
     iconBadgeBg: '#FFFFFF',
@@ -68,8 +63,7 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'purple',
     headerBg: 'linear-gradient(135deg, #4D19EA 0%, #6D28D9 100%)',
-    hoverOverlayBg: 'rgba(77, 25, 234, 0.86)',
-    solidAccentHex: '#4D19EA',
+    hoverBorder: 'hover:border-[#4D19EA]',
     progressBarGradient: 'linear-gradient(90deg, #DDD6FE 0%, #FFFFFF 100%)',
     iconColor: '#4D19EA',
     iconBadgeBg: '#FFFFFF',
@@ -83,8 +77,7 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'teal',
     headerBg: 'linear-gradient(135deg, #0F766E 0%, #0D9488 100%)',
-    hoverOverlayBg: 'rgba(13, 148, 136, 0.86)',
-    solidAccentHex: '#0D9488',
+    hoverBorder: 'hover:border-[#0D9488]',
     progressBarGradient: 'linear-gradient(90deg, #99F6E4 0%, #FFFFFF 100%)',
     iconColor: '#0D9488',
     iconBadgeBg: '#FFFFFF',
@@ -98,8 +91,7 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'navy',
     headerBg: 'linear-gradient(135deg, #14205A 0%, #1E3A8A 100%)',
-    hoverOverlayBg: 'rgba(20, 32, 90, 0.86)',
-    solidAccentHex: '#14205A',
+    hoverBorder: 'hover:border-[#14205A]',
     progressBarGradient: 'linear-gradient(90deg, #7DD3FC 0%, #FFFFFF 100%)',
     iconColor: '#14205A',
     iconBadgeBg: '#FFFFFF',
@@ -113,8 +105,7 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'amber',
     headerBg: 'linear-gradient(135deg, #B45309 0%, #D97706 100%)',
-    hoverOverlayBg: 'rgba(180, 83, 9, 0.86)',
-    solidAccentHex: '#B45309',
+    hoverBorder: 'hover:border-[#D97706]',
     progressBarGradient: 'linear-gradient(90deg, #FDE68A 0%, #FFFFFF 100%)',
     iconColor: '#D97706',
     iconBadgeBg: '#FFFFFF',
@@ -128,8 +119,7 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
   {
     name: 'rose',
     headerBg: 'linear-gradient(135deg, #BE123C 0%, #E11D48 100%)',
-    hoverOverlayBg: 'rgba(190, 18, 60, 0.86)',
-    solidAccentHex: '#BE123C',
+    hoverBorder: 'hover:border-[#E11D48]',
     progressBarGradient: 'linear-gradient(90deg, #FECDD3 0%, #FFFFFF 100%)',
     iconColor: '#E11D48',
     iconBadgeBg: '#FFFFFF',
@@ -404,7 +394,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               : `course-${course.id}`
             : undefined
         }
-        className="group relative w-full h-full min-h-[530px] md:min-h-[545px] lg:min-h-[525px] flex flex-col bg-white rounded-[16px] overflow-hidden shadow-[0_10px_28px_-6px_rgba(15,23,42,0.12)] hover:shadow-[0_18px_38px_-8px_rgba(15,23,42,0.18)] transition-shadow duration-300"
+        className={`group relative w-full h-full min-h-[530px] md:min-h-[545px] lg:min-h-[525px] flex flex-col bg-white rounded-[16px] overflow-hidden border border-transparent ${theme.hoverBorder} shadow-[0_10px_28px_-6px_rgba(15,23,42,0.12)] hover:shadow-[0_20px_42px_-8px_rgba(15,23,42,0.22)] transition-all duration-300`}
       >
         {/* Solid Colour Header (~100 px) */}
         <div
@@ -582,23 +572,6 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Desktop (>= 1024px) Translucent Theme-Coloured Hover Overlay (~85% Opacity, 300ms Fade) */}
-        <div
-          data-testid={`course-card-hover-overlay-${course.id}`}
-          style={{ backgroundColor: theme.hoverOverlayBg }}
-          className="hidden lg:flex absolute inset-0 z-30 rounded-[16px] flex-col items-center justify-between pt-5 pb-26 px-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity duration-[300ms] ease-out backdrop-blur-[2px]"
-        >
-          {/* White Up-Chevron at Top */}
-          <div aria-hidden="true" className="flex items-center justify-center">
-            <ChevronUp className="w-6 h-6 text-white stroke-[2.25]" />
-          </div>
-
-          {/* White Down-Chevron at Bottom (above the bottom 3-button action bar) */}
-          <div aria-hidden="true" className="flex items-center justify-center">
-            <ChevronDown className="w-6 h-6 text-white stroke-[2.25]" />
           </div>
         </div>
       </article>
