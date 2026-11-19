@@ -535,12 +535,12 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               </div>
             )}
 
-            {/* Three Small Rounded Buttons in One Row at Bottom (36px tall, 13px label, shift right on hover) */}
+            {/* Two-Row Action Buttons at Bottom of Every Card (38px tall, 13px label, 12px horizontal padding, 8px gap) */}
             <div
               data-testid={`course-card-bottom-actions-${course.id}`}
-              className="relative z-40 flex items-center justify-between gap-1 w-full"
+              className="relative z-40 flex flex-col gap-2 w-full"
             >
-              {/* 1. Enquire Now with right arrow */}
+              {/* Row 1: Main Full-Width "Enquire Now" Button with Right Arrow */}
               <button
                 type="button"
                 onClick={(e) => {
@@ -548,38 +548,39 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                   if (didDragMoveRef.current) return;
                   onEnquire(course.title);
                 }}
-                className={`group/btn flex-1 min-w-0 h-[36px] px-1.5 rounded-full !text-[13px] font-semibold leading-none tracking-[-0.02em] transition-all duration-200 hover:translate-x-0.5 flex items-center justify-center gap-0.5 whitespace-nowrap cursor-pointer active:scale-98 ${theme.primaryBtnBg}`}
+                className={`group/btn w-full h-[38px] px-3 rounded-full !text-[13px] font-semibold leading-none transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer active:scale-98 ${theme.primaryBtnBg}`}
               >
                 <span>Enquire Now</span>
-                <ArrowRight className="w-3 h-3 shrink-0 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
+                <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover/btn:translate-x-[3px]" />
               </button>
 
-              {/* 2. WhatsApp with chat icon */}
-              <a
-                href={getCourseWhatsAppUrl(course.title)}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="group/btn shrink-0 h-[36px] px-1.5 rounded-full !text-[13px] font-semibold leading-none tracking-[-0.02em] bg-emerald-50 hover:bg-emerald-100 text-emerald-900 transition-all duration-200 hover:translate-x-0.5 flex items-center justify-center gap-0.5 whitespace-nowrap cursor-pointer active:scale-98"
-                title={`Enquire about ${course.title} on WhatsApp`}
-              >
-                <WhatsAppIcon className="w-3 h-3 shrink-0 text-emerald-600" />
-                <span>WhatsApp</span>
-              </a>
+              {/* Row 2: "WhatsApp" and "Know More" Side-by-Side (Half Width Each, 8px Gap) */}
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <a
+                  href={getCourseWhatsAppUrl(course.title)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="group/btn w-full h-[38px] px-3 rounded-full !text-[13px] font-semibold leading-none bg-emerald-50 hover:bg-emerald-100 text-emerald-900 transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer active:scale-98"
+                  title={`Enquire about ${course.title} on WhatsApp`}
+                >
+                  <WhatsAppIcon className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
+                  <span>WhatsApp</span>
+                </a>
 
-              {/* 3. Know More with right arrow */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (didDragMoveRef.current) return;
-                  onEnquire(course.title);
-                }}
-                className={`group/btn flex-1 min-w-0 h-[36px] px-1.5 rounded-full !text-[13px] font-semibold leading-none tracking-[-0.02em] transition-all duration-200 hover:translate-x-0.5 flex items-center justify-center gap-0.5 whitespace-nowrap cursor-pointer active:scale-98 ${theme.secondaryBtnBg}`}
-              >
-                <span>Know More</span>
-                <ArrowRight className="w-3 h-3 shrink-0 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
-              </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (didDragMoveRef.current) return;
+                    onEnquire(course.title);
+                  }}
+                  className={`group/btn w-full h-[38px] px-3 rounded-full !text-[13px] font-semibold leading-none transition-all duration-200 flex items-center justify-center gap-1 whitespace-nowrap cursor-pointer active:scale-98 ${theme.secondaryBtnBg}`}
+                >
+                  <span>Know More</span>
+                  <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover/btn:translate-x-[3px]" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -588,7 +589,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
         <div
           data-testid={`course-card-hover-overlay-${course.id}`}
           style={{ backgroundColor: theme.hoverOverlayBg }}
-          className="hidden lg:flex absolute inset-0 z-30 rounded-[16px] flex-col items-center justify-between pt-5 pb-14 px-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity duration-[300ms] ease-out backdrop-blur-[2px]"
+          className="hidden lg:flex absolute inset-0 z-30 rounded-[16px] flex-col items-center justify-between pt-5 pb-26 px-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity duration-[300ms] ease-out backdrop-blur-[2px]"
         >
           {/* White Up-Chevron at Top */}
           <div aria-hidden="true" className="flex items-center justify-center">
