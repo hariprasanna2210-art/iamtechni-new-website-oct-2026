@@ -378,35 +378,26 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
     }
   };
 
-  const [openCurriculumIds, setOpenCurriculumIds] = useState<Record<string, boolean>>({});
+  const [openCurriculumKey, setOpenCurriculumKey] = useState<string | null>(null);
 
   const isFineHoverDevice = () =>
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
     window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  const toggleCurriculum = (courseId: string) => {
-    setOpenCurriculumIds((prev) => ({
-      ...prev,
-      [courseId]: !prev[courseId],
-    }));
+  const toggleCurriculum = (cardInstanceKey: string) => {
+    setOpenCurriculumKey((prev) => (prev === cardInstanceKey ? null : cardInstanceKey));
   };
 
-  const handleCardMouseEnter = (courseId: string) => {
+  const handleCardMouseEnter = (cardInstanceKey: string) => {
     if (!isTouchInteractionRef.current && isFineHoverDevice()) {
-      setOpenCurriculumIds((prev) => ({
-        ...prev,
-        [courseId]: true,
-      }));
+      setOpenCurriculumKey(cardInstanceKey);
     }
   };
 
-  const handleCardMouseLeave = (courseId: string) => {
+  const handleCardMouseLeave = (cardInstanceKey: string) => {
     if (!isTouchInteractionRef.current && isFineHoverDevice()) {
-      setOpenCurriculumIds((prev) => ({
-        ...prev,
-        [courseId]: false,
-      }));
+      setOpenCurriculumKey((prev) => (prev === cardInstanceKey ? null : prev));
     }
   };
 
@@ -426,14 +417,15 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
     course: CourseItem,
     courseIndex: number,
     isActiveProgressCard: boolean,
-    isMobileCard: boolean
+    isMobileCard: boolean,
+    cardInstanceKey: string
   ) => {
     const theme = COURSE_CARD_THEMES[courseIndex % COURSE_CARD_THEMES.length];
     const CourseIcon = getCourseIconComponent(course.iconName);
     const regional = locationLinks[course.id];
     const formattedNumber = String(courseIndex + 1).padStart(2, '0');
-    const isCurriculumOpen = Boolean(openCurriculumIds[course.id]);
-    const curriculumPanelId = `course-curriculum-${isMobileCard ? 'mobile-' : ''}${course.id}`;
+    const isCurriculumOpen = openCurriculumKey === cardInstanceKey;
+    const curriculumPanelId = `course-curriculum-${cardInstanceKey}`;
 
     return (
       <article
@@ -444,8 +436,8 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               : `course-${course.id}`
             : undefined
         }
-        onMouseEnter={() => handleCardMouseEnter(course.id)}
-        onMouseLeave={() => handleCardMouseLeave(course.id)}
+        onMouseEnter={() => handleCardMouseEnter(cardInstanceKey)}
+        onMouseLeave={() => handleCardMouseLeave(cardInstanceKey)}
         className={`group relative w-full h-full flex flex-col bg-white rounded-[16px] overflow-hidden border border-transparent ${theme.hoverBorder} shadow-[0_10px_28px_-6px_rgba(15,23,42,0.12)] hover:shadow-[0_20px_42px_-8px_rgba(15,23,42,0.22)] transition-all duration-300`}
       >
         {/* Solid Colour Header (~100 px) */}
@@ -535,7 +527,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               onClick={(e) => {
                 e.stopPropagation();
                 if (didDragMoveRef.current) return;
-                toggleCurriculum(course.id);
+                toggleCurriculum(cardInstanceKey);
               }}
               aria-expanded={isCurriculumOpen}
               aria-controls={curriculumPanelId}
@@ -720,7 +712,13 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                   className="w-full shrink-0 flex justify-center"
                 >
                   <div className="w-[85vw] max-w-[96%] flex flex-col">
-                    {renderCardContent(course, idx, idx === currentIndex, true)}
+                    {renderCardContent(
+                      course,
+                      idx,
+                      idx === currentIndex,
+                      true,
+                      `mobile-${course.id}-${idx}`
+                    )}
                   </div>
                 </div>
               ))}
@@ -785,7 +783,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               isDragging ? 'cursor-grabbing' : 'cursor-grab'
             }`}
           >
-            <div className="flex items-stretch justify-center gap-5 lg:gap-6">
+            <div className="flex items-start justify-center gap-5 lg:gap-6">
               {desktopOffsets.map((offset) => {
                 const targetIndex = (currentIndex + offset + totalItems) % totalItems;
                 const course = courses[targetIndex];
@@ -814,7 +812,13 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                     }}
                     className={`md:w-[250px] lg:w-[270px] shrink-0 flex-col transition-transform duration-300 hover:-translate-y-1 ${visibilityClasses}`}
                   >
-                    {renderCardContent(course, targetIndex, isCenter, false)}
+                    {renderCardContent(
+                      course,
+                      targetIndex,
+                      isCenter,
+                      false,
+                      `desktop-${course.id}-${targetIndex}-slot-${offset}`
+                    )}
                   </div>
                 );
               })}
