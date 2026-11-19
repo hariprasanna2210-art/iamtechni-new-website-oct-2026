@@ -4,6 +4,7 @@ import {
   ArrowRight,
   Calendar,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Laptop,
@@ -28,6 +29,7 @@ interface CourseCardTheme {
   chipText: string;
   primaryBtnBg: string;
   secondaryBtnBg: string;
+  curriculumOutlineBtn: string;
 }
 
 const COURSE_CARD_THEMES: CourseCardTheme[] = [
@@ -44,6 +46,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipText: 'text-[#0369A1]',
     primaryBtnBg: 'bg-[#0284C7] hover:bg-[#0369A1] text-white',
     secondaryBtnBg: 'bg-sky-50 hover:bg-sky-100 text-[#0369A1]',
+    curriculumOutlineBtn:
+      'border-[#0284C7]/60 text-[#0284C7] hover:bg-sky-50 hover:border-[#0284C7]',
   },
   // 1: Brand Blue (#1C35EA)
   {
@@ -58,6 +62,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipText: 'text-[#1E40AF]',
     primaryBtnBg: 'bg-[#1C35EA] hover:bg-[#1E3A8A] text-white',
     secondaryBtnBg: 'bg-blue-50 hover:bg-blue-100 text-[#1C35EA]',
+    curriculumOutlineBtn:
+      'border-[#1C35EA]/60 text-[#1C35EA] hover:bg-blue-50 hover:border-[#1C35EA]',
   },
   // 2: Brand Purple (#4D19EA)
   {
@@ -72,6 +78,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipText: 'text-[#5B21B6]',
     primaryBtnBg: 'bg-[#4D19EA] hover:bg-[#3B189F] text-white',
     secondaryBtnBg: 'bg-violet-50 hover:bg-violet-100 text-[#4D19EA]',
+    curriculumOutlineBtn:
+      'border-[#4D19EA]/60 text-[#4D19EA] hover:bg-violet-50 hover:border-[#4D19EA]',
   },
   // 3: Complementary Teal (#0D9488)
   {
@@ -86,6 +94,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipText: 'text-[#115E59]',
     primaryBtnBg: 'bg-[#0D9488] hover:bg-[#0F766E] text-white',
     secondaryBtnBg: 'bg-teal-50 hover:bg-teal-100 text-[#0F766E]',
+    curriculumOutlineBtn:
+      'border-[#0D9488]/60 text-[#0D9488] hover:bg-teal-50 hover:border-[#0D9488]',
   },
   // 4: Brand Navy (#14205A)
   {
@@ -100,6 +110,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipText: 'text-[#14205A]',
     primaryBtnBg: 'bg-[#14205A] hover:bg-[#1E3A8A] text-white',
     secondaryBtnBg: 'bg-indigo-50 hover:bg-indigo-100 text-[#14205A]',
+    curriculumOutlineBtn:
+      'border-[#14205A]/60 text-[#14205A] hover:bg-indigo-50 hover:border-[#14205A]',
   },
   // 5: Complementary Amber (#D97706)
   {
@@ -114,6 +126,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipText: 'text-[#92400E]',
     primaryBtnBg: 'bg-[#D97706] hover:bg-[#B45309] text-white',
     secondaryBtnBg: 'bg-amber-50 hover:bg-amber-100 text-[#92400E]',
+    curriculumOutlineBtn:
+      'border-[#D97706]/60 text-[#D97706] hover:bg-amber-50 hover:border-[#D97706]',
   },
   // 6: Complementary Coral Rose (#E11D48)
   {
@@ -128,6 +142,8 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipText: 'text-[#9F1239]',
     primaryBtnBg: 'bg-[#E11D48] hover:bg-[#BE123C] text-white',
     secondaryBtnBg: 'bg-rose-50 hover:bg-rose-100 text-[#9F1239]',
+    curriculumOutlineBtn:
+      'border-[#E11D48]/60 text-[#E11D48] hover:bg-rose-50 hover:border-[#E11D48]',
   },
 ];
 
@@ -362,6 +378,15 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
     }
   };
 
+  const [openCurriculumIds, setOpenCurriculumIds] = useState<Record<string, boolean>>({});
+
+  const toggleCurriculum = (courseId: string) => {
+    setOpenCurriculumIds((prev) => ({
+      ...prev,
+      [courseId]: !prev[courseId],
+    }));
+  };
+
   if (totalItems === 0) return null;
 
   const activeCourse = courses[currentIndex] || courses[0];
@@ -384,6 +409,8 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
     const CourseIcon = getCourseIconComponent(course.iconName);
     const regional = locationLinks[course.id];
     const formattedNumber = String(courseIndex + 1).padStart(2, '0');
+    const isCurriculumOpen = Boolean(openCurriculumIds[course.id]);
+    const curriculumPanelId = `course-curriculum-${isMobileCard ? 'mobile-' : ''}${course.id}`;
 
     return (
       <article
@@ -394,7 +421,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               : `course-${course.id}`
             : undefined
         }
-        className={`group relative w-full h-full min-h-[530px] md:min-h-[545px] lg:min-h-[525px] flex flex-col bg-white rounded-[16px] overflow-hidden border border-transparent ${theme.hoverBorder} shadow-[0_10px_28px_-6px_rgba(15,23,42,0.12)] hover:shadow-[0_20px_42px_-8px_rgba(15,23,42,0.22)] transition-all duration-300`}
+        className={`group relative w-full h-full flex flex-col bg-white rounded-[16px] overflow-hidden border border-transparent ${theme.hoverBorder} shadow-[0_10px_28px_-6px_rgba(15,23,42,0.12)] hover:shadow-[0_20px_42px_-8px_rgba(15,23,42,0.22)] transition-all duration-300`}
       >
         {/* Solid Colour Header (~100 px) */}
         <div
@@ -477,23 +504,52 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               </span>
             </div>
 
-            {/* Key Curriculum Highlights (14 px, 1.45 line-height with Coloured Tick) */}
-            <div>
-              <div className="text-[10px] font-mono uppercase font-bold tracking-wider text-slate-400 mb-1.5">
-                Key Curriculum Highlights
-              </div>
-              <div className="grid grid-cols-1 gap-y-1.5">
-                {course.highlights.map((hl, hIdx) => (
-                  <div
-                    key={hIdx}
-                    className="flex items-start gap-1.5 !text-[14px] !leading-[1.45] text-slate-700"
-                  >
-                    <Check
-                      className={`w-3.5 h-3.5 shrink-0 mt-1 stroke-[2.5] ${theme.checkColor}`}
-                    />
-                    <span>{hl}</span>
+            {/* View / Hide Curriculum Toggle Button (36 px tall, 13 px label, outline style in card colour) */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (didDragMoveRef.current) return;
+                toggleCurriculum(course.id);
+              }}
+              aria-expanded={isCurriculumOpen}
+              aria-controls={curriculumPanelId}
+              className={`w-full h-[36px] px-3 rounded-lg border bg-white !text-[13px] font-semibold leading-none flex items-center justify-between gap-2 transition-colors duration-200 motion-reduce:transition-none cursor-pointer ${theme.curriculumOutlineBtn}`}
+            >
+              <span>{isCurriculumOpen ? 'Hide Curriculum' : 'View Curriculum'}</span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 shrink-0 transition-transform duration-300 motion-reduce:transition-none ${
+                  isCurriculumOpen ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+
+            {/* Collapsible Key Curriculum Highlights (always present in HTML for SEO) */}
+            <div
+              id={curriculumPanelId}
+              className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none ${
+                isCurriculumOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+              }`}
+            >
+              <div className="overflow-hidden">
+                <div className="pt-2.5">
+                  <div className="text-[10px] font-mono uppercase font-bold tracking-wider text-slate-400 mb-1.5">
+                    Key Curriculum Highlights
                   </div>
-                ))}
+                  <div className="grid grid-cols-1 gap-y-1.5">
+                    {course.highlights.map((hl, hIdx) => (
+                      <div
+                        key={hIdx}
+                        className="flex items-start gap-1.5 !text-[14px] !leading-[1.45] text-slate-700"
+                      >
+                        <Check
+                          className={`w-3.5 h-3.5 shrink-0 mt-1 stroke-[2.5] ${theme.checkColor}`}
+                        />
+                        <span>{hl}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
