@@ -458,7 +458,6 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ])
     );
     structuredData.push({
-      '@context': 'https://schema.org',
       '@type': 'ItemList',
       name: 'IAMTECHNI Technical Training Programs',
       itemListElement: coursesData.map((course, idx) => ({
@@ -468,6 +467,21 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
         url: `${BASE_URL}/training/${course.id}`,
       })),
     });
+    for (const course of coursesData) {
+      structuredData.push({
+        '@type': 'Course',
+        '@id': `${BASE_URL}/training/${course.id}#course`,
+        name: course.title,
+        description: course.description,
+        url: `${BASE_URL}/training/${course.id}`,
+        provider: {
+          '@type': 'Organization',
+          '@id': `${BASE_URL}/#organization`,
+          name: COMPANY_CONTACT.name,
+          url: `${BASE_URL}/`,
+        },
+      });
+    }
     return {
       ...baseMeta,
       title: `IT Training Courses — Full Stack, AI, Cloud & DevOps (${coursesData.length} Programs) | IAMTECHNI`,
@@ -942,41 +956,69 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
       : 'index, follow';
 
     const cleanupStaticTags = () => {
-      document.head
-        .querySelectorAll('meta[name="robots"]')
-        .forEach((el) => {
-          if (!el.hasAttribute('data-rh')) {
-            el.setAttribute('content', robotsValue);
-          }
-        });
+      document.title = seo.title;
 
-      const selectors = [
-        'meta[name="description"]',
-        'link[rel="canonical"]',
-        'meta[property="og:title"]',
-        'meta[property="og:description"]',
-        'meta[property="og:url"]',
-        'meta[name="twitter:title"]',
-        'meta[name="twitter:description"]',
-        'meta[name="twitter:url"]',
-      ];
-      for (const sel of selectors) {
-        if (document.head.querySelector(`${sel}[data-rh]`)) {
-          document.head
-            .querySelectorAll(`${sel}:not([data-rh])`)
-            .forEach((el) => el.remove());
+      const ensureSingleHeadTag = (
+        selector: string,
+        attrName: 'content' | 'href',
+        attrValue: string
+      ) => {
+        const matches = Array.from(document.head.querySelectorAll(selector));
+        if (matches.length > 0) {
+          matches[0].setAttribute(attrName, attrValue);
+          matches.slice(1).forEach((el) => el.remove());
         }
-      }
-      if (document.head.querySelector('script[type="application/ld+json"][data-rh]')) {
-        document.head
-          .querySelectorAll('script.prerender-jsonld:not([data-rh])')
-          .forEach((el) => el.remove());
+      };
+
+      ensureSingleHeadTag('meta[name="robots"]', 'content', robotsValue);
+      ensureSingleHeadTag('meta[name="description"]', 'content', seo.description);
+      ensureSingleHeadTag('link[rel="canonical"]', 'href', seo.canonicalUrl);
+      ensureSingleHeadTag('meta[property="og:type"]', 'content', seo.ogType);
+      ensureSingleHeadTag('meta[property="og:title"]', 'content', seo.title);
+      ensureSingleHeadTag('meta[property="og:description"]', 'content', seo.description);
+      ensureSingleHeadTag('meta[property="og:url"]', 'content', seo.canonicalUrl);
+      ensureSingleHeadTag('meta[name="twitter:title"]', 'content', seo.title);
+      ensureSingleHeadTag('meta[name="twitter:description"]', 'content', seo.description);
+      ensureSingleHeadTag('meta[name="twitter:url"]', 'content', seo.canonicalUrl);
+
+      // Remove any duplicate or prerendered route JSON-LD scripts (keep #organization-jsonld untouched)
+      document.head
+        .querySelectorAll(
+          'script[type="application/ld+json"]:not([id="organization-jsonld"]):not([id="route-jsonld"])'
+        )
+        .forEach((el) => el.remove());
+
+      let routeJsonLdEl = document.head.querySelector(
+        'script#route-jsonld[type="application/ld+json"]'
+      ) as HTMLScriptElement | null;
+      if (seo.structuredData.length > 0) {
+        if (!routeJsonLdEl) {
+          routeJsonLdEl = document.createElement('script');
+          routeJsonLdEl.type = 'application/ld+json';
+          routeJsonLdEl.id = 'route-jsonld';
+          document.head.appendChild(routeJsonLdEl);
+        }
+        routeJsonLdEl.textContent = JSON.stringify({
+          '@context': 'https://schema.org',
+          '@graph': seo.structuredData,
+        });
+      } else if (routeJsonLdEl) {
+        routeJsonLdEl.remove();
       }
     };
     cleanupStaticTags();
     const timer = window.setTimeout(cleanupStaticTags, 50);
     return () => window.clearTimeout(timer);
-  }, [currentRoute, seo.noIndex, cleanPath]);
+  }, [
+    currentRoute,
+    seo.noIndex,
+    cleanPath,
+    seo.title,
+    seo.description,
+    seo.canonicalUrl,
+    seo.ogType,
+    seo.structuredData,
+  ]);
 
   // Individual service pages, location landing pages, and /locations render their own <Helmet> directly
   if (isSeoServiceRoute || isLocationRoute || isLocationsDirectory) {
@@ -1005,14 +1047,6 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
       <meta name="twitter:title" content={seo.title} />
       <meta name="twitter:description" content={seo.description} />
       <meta name="twitter:url" content={seo.canonicalUrl} />
-      {seo.structuredData.length > 0 && (
-        <script type="application/ld+json">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@graph': seo.structuredData,
-          })}
-        </script>
-      )}
     </Helmet>
   );
 };

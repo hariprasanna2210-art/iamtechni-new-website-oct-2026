@@ -820,6 +820,37 @@ function renderGeneralPageHtml(templateHtml, page) {
         </ul>
       </section>
     `;
+  } else if (page.canonicalUrl && page.canonicalUrl.endsWith('/training')) {
+    const coursesHtml = Array.isArray(page.coursesData)
+      ? page.coursesData
+          .map(
+            (course) => `
+          <article>
+            <h3>${escapeHtml(course.title)}</h3>
+            <p>${escapeHtml(course.description)}</p>
+          </article>`
+          )
+          .join('')
+      : '';
+    extraContentHtml = `
+      <section>
+        <h2>Explore Our Courses</h2>
+        <div role="region" aria-roledescription="carousel" aria-label="Explore Our Courses">${coursesHtml}
+        </div>
+      </section>
+      <section>
+        <h2>Start your internship with IAMTECHNI</h2>
+      </section>
+      <section>
+        <h2>Practical Learning Approach</h2>
+      </section>
+      <section>
+        <h2>Who Can Join IAMTECHNI Training?</h2>
+      </section>
+      <section>
+        <h2>How Enquiry &amp; Enrollment Works</h2>
+      </section>
+    `;
   } else if (page.canonicalUrl && page.canonicalUrl.endsWith('/training/aws')) {
     extraContentHtml = `
       <section>
@@ -1093,6 +1124,7 @@ async function main() {
       structuredData: seo.structuredData,
       h1: h1 || seo.title,
       intro: intro || seo.description,
+      coursesData: routePath === '/training' ? coursesData : undefined,
     };
 
     // Calculate disk output path: dist/<path-segments>/index.html
