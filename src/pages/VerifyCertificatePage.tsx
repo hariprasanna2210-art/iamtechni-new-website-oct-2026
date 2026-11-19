@@ -27,6 +27,7 @@ import {
 import { FullScreenLoader } from '../components/common/FullScreenLoader';
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
 import { AnimatedHeading } from '../components/common/AnimatedHeading';
+import { formatSeoTitle, formatMetaDescription } from '../components/common/SeoHead';
 import { PageRoute } from '../types';
 
 export interface VerifyCertificatePageProps {
@@ -622,13 +623,17 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
     >
       <Helmet>
         <title>
-          {isParamRoute
-            ? `Verify Certificate ${routeCertId?.trim().toUpperCase()} | IAMTECHNI`
-            : 'Verify Certificate | IAMTECHNI'}
+          {formatSeoTitle(
+            isParamRoute
+              ? `Verify Certificate ${routeCertId?.trim().toUpperCase()} | IAMTECHNI`
+              : 'Verify Internship & Training Certificate | IAMTECHNI'
+          )}
         </title>
         <meta
           name="description"
-          content="Enter the certificate number to check that an IAMTECHNI internship certificate is genuine."
+          content={formatMetaDescription(
+            'Enter the certificate number to check that an IAMTECHNI internship or training certificate is genuine. Verify official student and professional credentials online.'
+          )}
         />
         {isParamRoute && <meta name="robots" content="noindex" />}
         <link

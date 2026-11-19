@@ -18,6 +18,7 @@ import { PageHero } from '../components/common/PageHero';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { ServiceVisualDispatcher } from '../components/common/ServiceVisualMockups';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
+import { formatSeoTitle, formatMetaDescription } from '../components/common/SeoHead';
 
 export interface ServicePageProps extends ServicePageData {
   service?: ServiceItem;
@@ -183,6 +184,9 @@ export const ServicePage: React.FC<ServicePageProps> = ({
     }
   }, [canonicalSlug]);
 
+  const formattedSeoTitle = formatSeoTitle(seoTitle);
+  const formattedMetaDesc = formatMetaDescription(metaDescription);
+
   // 1. Service JSON-LD Schema
   const serviceSchema = {
     '@context': 'https://schema.org',
@@ -190,7 +194,7 @@ export const ServicePage: React.FC<ServicePageProps> = ({
     '@id': `${canonicalUrl}#service`,
     name: h1,
     serviceType: service?.category || h1,
-    description: metaDescription,
+    description: formattedMetaDesc,
     url: canonicalUrl,
     provider: {
       '@type': 'Organization',
@@ -201,7 +205,7 @@ export const ServicePage: React.FC<ServicePageProps> = ({
       url: `${BASE_URL}/`,
     },
     areaServed: [
-      { '@type': 'AdministrativeArea', name: 'Puducherry' },
+      { '@type': 'AdministrativeArea', name: 'Pondicherry' },
       { '@type': 'AdministrativeArea', name: 'Tamil Nadu' },
       { '@type': 'Country', name: 'India' },
     ],
@@ -253,15 +257,15 @@ export const ServicePage: React.FC<ServicePageProps> = ({
   return (
     <div className="w-full">
       <Helmet prioritizeSeoTags>
-        <title>{seoTitle}</title>
-        <meta name="description" content={metaDescription} />
+        <title>{formattedSeoTitle}</title>
+        <meta name="description" content={formattedMetaDesc} />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={metaDescription} />
+        <meta property="og:title" content={formattedSeoTitle} />
+        <meta property="og:description" content={formattedMetaDesc} />
         <meta property="og:url" content={canonicalUrl} />
-        <meta name="twitter:title" content={seoTitle} />
-        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:title" content={formattedSeoTitle} />
+        <meta name="twitter:description" content={formattedMetaDesc} />
         <meta name="twitter:url" content={canonicalUrl} />
         <script type="application/ld+json">{JSON.stringify(serviceSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>

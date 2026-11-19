@@ -89,43 +89,158 @@ export interface SeoMetadata {
   noIndex?: boolean;
 }
 
+const DESCRIPTION_FILLER_SENTENCES = [
+  'Enquire.',
+  'Call us.',
+  'Book now.',
+  'Get a quote.',
+  'Enquire now.',
+  'Contact us today.',
+  'Built by IAMTECHNI.',
+  'Enquire with IAMTECHNI.',
+  'Delivered by IAMTECHNI.',
+  'Built for scale and speed.',
+  'Engineered by IAMTECHNI.',
+  'Connect with IAMTECHNI today.',
+  'Schedule a consultation today.',
+  'Partner with IAMTECHNI today.',
+  'Built in Pondicherry & Tamil Nadu.',
+  'Explore tailored solutions at IAMTECHNI.',
+  'Delivered across Pondicherry & Tamil Nadu.',
+  'Partner with IAMTECHNI in Pondicherry & Tamil Nadu.',
+  'Engineer resilient digital platforms with IAMTECHNI.',
+  'Partner with IAMTECHNI for custom software, AI, and cloud.',
+  'Partner with IAMTECHNI in Pondicherry & Tamil Nadu for software & AI.',
+];
+
+function splitIntoSentences(text: string): string[] {
+  const clean = String(text || '')
+    .replace(/Puducherry/gi, 'Pondicherry')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!clean) return [];
+  const matches = clean.match(/[^.!?]+[.!?]+(?=\s|$)/g);
+  if (!matches) {
+    return [/[.!?]$/.test(clean) ? clean : `${clean}.`];
+  }
+  const lastMatch = matches[matches.length - 1];
+  const lastIdx = clean.lastIndexOf(lastMatch);
+  const remainder = clean.slice(lastIdx + lastMatch.length).trim();
+  const result = matches.map((s) => s.trim());
+  if (remainder) {
+    result.push(/[.!?]$/.test(remainder) ? remainder : `${remainder}.`);
+  }
+  return result;
+}
+
 /**
- * Formats any page description so that it is concise and search-engine friendly (120-160 characters).
+ * Formats any page title to 60 characters or fewer, removing generic suffixes,
+ * removing hard-coded counts, using "Pondicherry", and keeping the main keyword first.
+ */
+export function formatSeoTitle(rawTitle: string): string {
+  let t = String(rawTitle || '')
+    .replace(/Puducherry/gi, 'Pondicherry')
+    .replace(/\s*\(\d+\s+(?:Programs|Openings)\)/gi, '')
+    .replace(
+      /\s*[—–-]\s*(?:Business Solution|Software Development|Cloud Computing|AI & Data|DevOps & Security|Case Study)/gi,
+      ''
+    )
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (t.length <= 60) {
+    return t;
+  }
+
+  const pipeParts = t.split('|').map((s) => s.trim());
+  if (pipeParts.length >= 3) {
+    const collapsed = `${pipeParts[0]} | IAMTECHNI`;
+    if (collapsed.length <= 60) {
+      return collapsed;
+    }
+  }
+
+  const suffix = ' | IAMTECHNI';
+  const mainKeyword = pipeParts[0].replace(/\s+\|\s+IAMTECHNI.*$/i, '').trim();
+  if (`${mainKeyword}${suffix}`.length <= 60) {
+    return `${mainKeyword}${suffix}`;
+  }
+
+  const maxMainLen = 60 - suffix.length;
+  let shortened = mainKeyword.slice(0, maxMainLen);
+  const clauseSep = Math.max(
+    shortened.lastIndexOf(':'),
+    shortened.lastIndexOf('—'),
+    shortened.lastIndexOf('–'),
+    shortened.lastIndexOf(',')
+  );
+  if (clauseSep >= 22) {
+    shortened = shortened.slice(0, clauseSep).trim();
+  } else {
+    const lastSpace = shortened.lastIndexOf(' ');
+    if (lastSpace > 15) {
+      shortened = shortened.slice(0, lastSpace).trim();
+    }
+  }
+  shortened = shortened.replace(/[,;:\-–—&\s]+$/, '');
+  return `${shortened}${suffix}`;
+}
+
+/**
+ * Formats any page description so that it ends on a full sentence at 150 to 160 characters
+ * without mid-sentence hard-cuts or ellipses, and uses "Pondicherry" consistently.
  */
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
-  const baseSuffix = extraContext
-    ? ` ${extraContext} Partner with IAMTECHNI for custom software, AI, and cloud engineering.`
-    : ' Partner with IAMTECHNI in Puducherry & Tamil Nadu for enterprise software, AI, and cloud engineering.';
+  const raw = extraContext ? `${primaryText} ${extraContext}` : primaryText;
+  const sentences = splitIntoSentences(raw);
+  let accumulated = '';
 
-  let combined = primaryText.replace(/\s+/g, ' ').trim();
-  if (combined.length < 150) {
-    if (!/[.!?]$/.test(combined)) {
-      combined += '.';
+  for (const sentence of sentences) {
+    const candidate = accumulated ? `${accumulated} ${sentence}` : sentence;
+    if (candidate.length <= 160) {
+      accumulated = candidate;
+    } else if (!accumulated) {
+      // Single sentence longer than 160 chars: shorten cleanly at a natural clause boundary and end with a full period
+      const clauseWindow = sentence.slice(0, 159);
+      const sepIndex = Math.max(
+        clauseWindow.lastIndexOf(','),
+        clauseWindow.lastIndexOf(';'),
+        clauseWindow.lastIndexOf(' and '),
+        clauseWindow.lastIndexOf(' with ')
+      );
+      if (sepIndex >= 110) {
+        accumulated = `${clauseWindow.slice(0, sepIndex).replace(/[,;:\s]+$/, '')}.`;
+      } else {
+        const lastSpace = clauseWindow.lastIndexOf(' ');
+        accumulated = `${clauseWindow.slice(0, lastSpace).replace(/[,;:\s]+$/, '')}.`;
+      }
+      break;
+    } else {
+      break;
     }
-    combined = `${combined}${baseSuffix}`.replace(/\s+/g, ' ').trim();
-  }
-  while (combined.length < 150) {
-    combined = `${combined} Explore scalable architectures at IAMTECHNI.`.replace(/\s+/g, ' ').trim();
   }
 
-  if (combined.length >= 150 && combined.length <= 160) {
-    return combined;
+  if (accumulated.length >= 150 && accumulated.length <= 160) {
+    return accumulated;
   }
 
-  const slice159 = combined.slice(0, 159);
-  const lastSpace = slice159.lastIndexOf(' ');
-  if (lastSpace >= 150) {
-    const trimmed = slice159.slice(0, lastSpace).replace(/[,;:\-–—\s]+$/, '');
-    if (trimmed.length >= 150 && trimmed.length <= 159) {
-      return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+  for (const filler of DESCRIPTION_FILLER_SENTENCES) {
+    const candidate = `${accumulated} ${filler}`;
+    if (candidate.length >= 150 && candidate.length <= 160) {
+      return candidate;
     }
   }
 
-  const exact = combined.slice(0, 156).replace(/[,;:\-–—.\s]+$/, '');
-  if (exact.length >= 147) {
-    return `${exact}...`;
+  for (const filler1 of DESCRIPTION_FILLER_SENTENCES) {
+    for (const filler2 of DESCRIPTION_FILLER_SENTENCES) {
+      const candidate = `${accumulated} ${filler1} ${filler2}`;
+      if (candidate.length >= 150 && candidate.length <= 160) {
+        return candidate;
+      }
+    }
   }
-  return `${combined.slice(0, 157)}...`;
+
+  return accumulated;
 }
 
 export function resolveOgImageUrl(item?: unknown): string {
@@ -174,17 +289,107 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     twitterCard: 'summary_large_image' as const,
   };
 
-  // 1. Home Page (/) — Synchronized with root index.html
+  // 1. Home Page (/) — Synchronized with root index.html (<= 60 chars, 150-160 char full sentence)
   if (cleanPath === '/') {
     return {
       ...baseMeta,
-      title: 'IAMTECHNI | Web Development, Custom Software & AI in Pondicherry',
-      description:
-        'IAMTECHNI delivers custom web development, e-commerce, mobile apps, enterprise software, AI, Cloud DevOps & digital marketing in Pondicherry & Tamil Nadu.',
+      title: formatSeoTitle('Web Development, Software & AI Pondicherry | IAMTECHNI'),
+      description: formatMetaDescription(
+        'IAMTECHNI delivers custom web development, e-commerce, mobile apps, enterprise software, AI, Cloud DevOps & digital marketing in Pondicherry & Tamil Nadu.'
+      ),
       canonicalUrl: 'https://www.iamtechni.in/',
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
       structuredData: [],
+    };
+  }
+
+  // 1b. Location-Based SEO Landing Pages (/:location-slug)
+  const locationPage = getLocationSeoPageBySlug(cleanPath);
+  if (locationPage) {
+    const locCanonical = `${BASE_URL}/${locationPage.slug}`;
+    const formattedDesc = formatMetaDescription(locationPage.metaDescription);
+    const breadcrumbCategoryPath =
+      locationPage.category === 'Training' ? '/training' : '/services';
+    const breadcrumbCategoryName =
+      locationPage.category === 'Training' ? 'Training & Courses' : 'Services';
+
+    structuredData.push(
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: breadcrumbCategoryName, path: breadcrumbCategoryPath },
+        { name: locationPage.h1, path: `/${locationPage.slug}` },
+      ])
+    );
+
+    if (locationPage.schemaType === 'Course') {
+      structuredData.push({
+        '@type': 'Course',
+        '@id': `${locCanonical}#course`,
+        name: locationPage.h1,
+        description: formattedDesc,
+        url: locCanonical,
+        provider: {
+          '@type': 'Organization',
+          '@id': `${BASE_URL}/#organization`,
+          name: COMPANY_CONTACT.name,
+          telephone: SCHEMA_TELEPHONE,
+          email: COMPANY_CONTACT.email,
+          url: `${BASE_URL}/`,
+        },
+        hasCourseInstance: {
+          '@type': 'CourseInstance',
+          courseMode: ['online'],
+          courseWorkload: locationPage.courseDetails?.duration || '8–10 Weeks',
+        },
+      });
+    } else {
+      structuredData.push({
+        '@type': 'Service',
+        '@id': `${locCanonical}#service`,
+        name: locationPage.h1,
+        serviceType: locationPage.h1,
+        description: formattedDesc,
+        url: locCanonical,
+        provider: {
+          '@type': 'Organization',
+          '@id': `${BASE_URL}/#organization`,
+          name: COMPANY_CONTACT.name,
+          telephone: SCHEMA_TELEPHONE,
+          email: COMPANY_CONTACT.email,
+          url: `${BASE_URL}/`,
+        },
+        areaServed: [
+          { '@type': 'City', name: locationPage.targetLocation.city },
+          { '@type': 'AdministrativeArea', name: locationPage.targetLocation.region },
+          { '@type': 'AdministrativeArea', name: locationPage.targetLocation.state },
+          { '@type': 'Country', name: 'India' },
+        ],
+      });
+    }
+
+    if (locationPage.faqs && locationPage.faqs.length > 0) {
+      structuredData.push({
+        '@type': 'FAQPage',
+        mainEntity: locationPage.faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer,
+          },
+        })),
+      });
+    }
+
+    return {
+      ...baseMeta,
+      title: formatSeoTitle(locationPage.seoTitle),
+      description: formattedDesc,
+      canonicalUrl: locCanonical,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      structuredData,
     };
   }
 
@@ -199,6 +404,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       const serviceCanonicalUrl = `${BASE_URL}${serviceCanonicalPath}`;
       const pageTitle = seoPage?.h1 || service?.title || canonicalSlug;
       const pageFaqs = seoPage?.faqs || service?.faqs || [];
+      const formattedDesc = formatMetaDescription(
+        seoPage?.metaDescription || `${pageTitle}: ${service?.summary || ''}`
+      );
 
       structuredData.push(
         buildBreadcrumbSchema([
@@ -214,7 +422,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
         '@id': `${serviceCanonicalUrl}#service`,
         name: pageTitle,
         serviceType: service?.category || pageTitle,
-        description: seoPage?.metaDescription || service?.summary || service?.tagline,
+        description: formattedDesc,
         url: serviceCanonicalUrl,
         provider: {
           '@type': 'Organization',
@@ -225,7 +433,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
           url: `${BASE_URL}/`,
         },
         areaServed: [
-          { '@type': 'AdministrativeArea', name: 'Puducherry' },
+          { '@type': 'AdministrativeArea', name: 'Pondicherry' },
           { '@type': 'AdministrativeArea', name: 'Tamil Nadu' },
           { '@type': 'Country', name: 'India' },
         ],
@@ -248,13 +456,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
 
       return {
         ...baseMeta,
-        title: seoPage?.seoTitle || `${pageTitle} Services | IAMTECHNI`,
-        description:
-          seoPage?.metaDescription ||
-          formatMetaDescription(
-            `${pageTitle}: ${service?.summary || ''} ${service?.tagline || ''}`,
-            service?.category
-          ),
+        title: formatSeoTitle(seoPage?.seoTitle || `${pageTitle} Services | IAMTECHNI`),
+        description: formattedDesc,
         canonicalUrl: serviceCanonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(service),
@@ -273,9 +476,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Services Directory — AI, Web, Cloud & Custom Software | IAMTECHNI',
+      title: formatSeoTitle('Engineering Services — Web, AI & Cloud | IAMTECHNI'),
       description: formatMetaDescription(
-        `Explore IAMTECHNI's ${servicesData.length} engineering disciplines across Web Development, AI & Machine Learning, Custom Software, Cloud & DevOps, and Technical SEO.`
+        'Explore IAMTECHNI engineering services across Web Development, AI & Machine Learning, Custom Software, Cloud & DevOps, and Technical SEO in Pondicherry.'
       ),
       canonicalUrl,
       ogType: 'website',
@@ -312,11 +515,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       });
       return {
         ...baseMeta,
-        title: `${solution.title} — Business Solution | IAMTECHNI`,
-        description: formatMetaDescription(
-          `${solution.title}: ${solution.summary} ${solution.proposedApproach}`,
-          `${solution.category} architecture by IAMTECHNI.`
-        ),
+        title: formatSeoTitle(`${solution.title} | IAMTECHNI`),
+        description: formatMetaDescription(`${solution.title}: ${solution.summary}`),
         canonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(solution),
@@ -335,9 +535,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Enterprise Digital Solutions & Business Automation | IAMTECHNI',
+      title: formatSeoTitle('Enterprise Digital Solutions & Automation | IAMTECHNI'),
       description: formatMetaDescription(
-        'End-to-end business solutions including AI document intelligence, workflow automation, cloud infrastructure modernization, and custom KPI dashboards by IAMTECHNI.'
+        'End-to-end business solutions including AI document intelligence, workflow automation, cloud infrastructure modernization, and KPI dashboards by IAMTECHNI.'
       ),
       canonicalUrl,
       ogType: 'website',
@@ -360,11 +560,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       );
       return {
         ...baseMeta,
-        title: `${industry.name} Technology Solutions | IAMTECHNI`,
-        description: formatMetaDescription(
-          `${industry.name}: ${industry.summary}`,
-          industry.iamtechniSolutions[0]
-        ),
+        title: formatSeoTitle(`${industry.name} Technology Solutions | IAMTECHNI`),
+        description: formatMetaDescription(`${industry.name}: ${industry.summary}`),
         canonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(industry),
@@ -383,9 +580,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Industry Technology Solutions & Vertical Architectures | IAMTECHNI',
+      title: formatSeoTitle('Industry Technology Solutions & Practices | IAMTECHNI'),
       description: formatMetaDescription(
-        `Tailored digital platforms, AI automation, and cloud engineering across ${industriesData.map((i) => i.name).join(', ')} delivered by IAMTECHNI.`
+        'Tailored digital platforms, workflow automation, and cloud engineering for education, retail, healthcare, manufacturing, startups, and SMEs by IAMTECHNI.'
       ),
       canonicalUrl,
       ogType: 'website',
@@ -423,10 +620,10 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
           courseMode: ['online', 'onsite'],
           location: {
             '@type': 'Place',
-            name: 'Puducherry & Tamil Nadu (Live Online & Classroom)',
+            name: 'Pondicherry & Tamil Nadu (Live Online & Classroom)',
             address: {
               '@type': 'PostalAddress',
-              addressLocality: 'Puducherry',
+              addressLocality: 'Pondicherry',
               addressRegion: 'Tamil Nadu',
               addressCountry: 'IN',
             },
@@ -435,11 +632,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       });
       return {
         ...baseMeta,
-        title: `${course.title} Training Course — ${course.category} | IAMTECHNI`,
-        description: formatMetaDescription(
-          `${course.title} Training: ${course.description} ${course.subtitle}`,
-          `${course.category} course at IAMTECHNI.`
-        ),
+        title: formatSeoTitle(`${course.title} Training Course | IAMTECHNI`),
+        description: formatMetaDescription(`${course.title} Training: ${course.description}`),
         canonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(course),
@@ -484,9 +678,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     }
     return {
       ...baseMeta,
-      title: `IT Training Courses — Full Stack, AI, Cloud & DevOps (${coursesData.length} Programs) | IAMTECHNI`,
+      title: formatSeoTitle('IT Training Courses — Full Stack, AI & Cloud | IAMTECHNI'),
       description: formatMetaDescription(
-        `Hands-on technical training and corporate upskilling across ${coursesData.length} programs including Full Stack Development, AI & Machine Learning, AWS Cloud, and DevOps.`
+        'Hands-on technical training and corporate upskilling across Full Stack Development, AI & Machine Learning, AWS Cloud, DevOps, and Cybersecurity programs.'
       ),
       canonicalUrl: trainingCanonical,
       ogType: 'website',
@@ -506,7 +700,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Student Internship Application | IAMTECHNI',
+      title: formatSeoTitle('Student Internship Application | IAMTECHNI'),
       description: formatMetaDescription(
         'Apply for the IAMTECHNI Student Internship program for college students seeking hands-on software, AI, and cloud project experience.'
       ),
@@ -527,7 +721,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Professional Internship Application | IAMTECHNI',
+      title: formatSeoTitle('Professional Internship Application | IAMTECHNI'),
       description: formatMetaDescription(
         'Apply for the IAMTECHNI Professional Internship program for graduates and working professionals building practical engineering and industry skills.'
       ),
@@ -566,11 +760,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       });
       return {
         ...baseMeta,
-        title: `${article.title} | IAMTECHNI Insights`,
-        description: formatMetaDescription(
-          article.excerpt,
-          `${article.category} engineering insights by ${article.author.name}.`
-        ),
+        title: formatSeoTitle(`${article.title} | IAMTECHNI`),
+        description: formatMetaDescription(article.excerpt),
         canonicalUrl,
         ogType: 'article',
         ogImage: resolveOgImageUrl(article),
@@ -589,9 +780,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Engineering Insights, AI Architecture & Cloud Field Notes | IAMTECHNI',
+      title: formatSeoTitle('Engineering Insights, AI & Cloud Field Notes | IAMTECHNI'),
       description: formatMetaDescription(
-        'Deep-dive technical articles on enterprise RAG architectures, cloud FinOps optimization, Core Web Vitals performance, and modern software engineering by IAMTECHNI.'
+        'Deep-dive technical articles on enterprise RAG architectures, cloud FinOps optimization, Core Web Vitals performance, and modern software engineering.'
       ),
       canonicalUrl,
       ogType: 'website',
@@ -614,11 +805,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       );
       return {
         ...baseMeta,
-        title: `${project.title} — Case Study | IAMTECHNI`,
-        description: formatMetaDescription(
-          `${project.title}: ${project.tagline} ${project.challenge}`,
-          `${project.industry} case study.`
-        ),
+        title: formatSeoTitle(`${project.title} | IAMTECHNI`),
+        description: formatMetaDescription(`${project.title}: ${project.tagline}`),
         canonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(project),
@@ -637,7 +825,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Engineering Case Studies & Reference Architectures | IAMTECHNI',
+      title: formatSeoTitle('Engineering Case Studies & Architectures | IAMTECHNI'),
       description: formatMetaDescription(
         `Explore ${projectsData.length} technical case studies covering headless commerce, enterprise AI assistants, cloud migrations, and high-speed web platforms by IAMTECHNI.`
       ),
@@ -658,7 +846,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Portfolio & Engineered Digital Products | IAMTECHNI',
+      title: formatSeoTitle('Portfolio & Engineered Digital Products | IAMTECHNI'),
       description: formatMetaDescription(
         `Review ${projectsData.length} production architectures and software solutions delivered by IAMTECHNI across AI, e-commerce, cloud, and enterprise portals.`
       ),
@@ -679,7 +867,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Technology Stack — React, Next.js, Python, AI & Cloud | IAMTECHNI',
+      title: formatSeoTitle('Technology Stack — React, Python, AI & Cloud | IAMTECHNI'),
       description: formatMetaDescription(
         'Explore the production technologies powering IAMTECHNI solutions: React, Next.js, TypeScript, Python, FastAPI, LangChain, AWS, Azure, Docker, and Kubernetes.'
       ),
@@ -700,7 +888,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'About IAMTECHNI — Software, AI & Cloud Engineering Practice',
+      title: formatSeoTitle('About IAMTECHNI — Software, AI & Cloud Engineering Practice'),
       description: formatMetaDescription(
         'Learn about IAMTECHNI’s engineering principles, 7-stage agile delivery lifecycle, and commitment to building resilient software, AI, and cloud platforms.'
       ),
@@ -721,9 +909,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: `Careers & Open Engineering Roles (${careersData.length} Openings) | IAMTECHNI`,
+      title: formatSeoTitle('Careers & Open Engineering Roles | IAMTECHNI'),
       description: formatMetaDescription(
-        `Join IAMTECHNI's engineering team in Puducherry & Tamil Nadu. Explore ${careersData.length} open roles across Full-Stack Development, AI & RAG Engineering, and Cloud DevOps.`
+        `Join IAMTECHNI's engineering team in Pondicherry & Tamil Nadu. Explore ${careersData.length} open roles across Full-Stack Development, AI & RAG Engineering, and Cloud DevOps.`
       ),
       canonicalUrl,
       ogType: 'website',
@@ -743,7 +931,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Request an Architecture & Engineering Consultation | IAMTECHNI',
+      title: formatSeoTitle('Request an Architecture & Tech Consultation | IAMTECHNI'),
       description: formatMetaDescription(
         `Schedule a 1-on-1 technical discovery session with IAMTECHNI architects for software, AI, and cloud projects. Call ${PRIMARY_PHONE} or email ${COMPANY_CONTACT.email}.`
       ),
@@ -763,9 +951,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Contact IAMTECHNI — Start Your Software, AI or Cloud Project',
+      title: formatSeoTitle('Contact IAMTECHNI — Start Your Software, AI or Cloud Project'),
       description: formatMetaDescription(
-        `Get in touch with IAMTECHNI in Puducherry & Tamil Nadu, India. Call ${PRIMARY_PHONE} or email ${COMPANY_CONTACT.email} for software, AI, and cloud inquiries.`
+        `Get in touch with IAMTECHNI in Pondicherry & Tamil Nadu, India. Call ${PRIMARY_PHONE} or email ${COMPANY_CONTACT.email} for software, AI, and cloud inquiries.`
       ),
       canonicalUrl,
       ogType: 'website',
@@ -796,7 +984,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     });
     return {
       ...baseMeta,
-      title: 'Frequently Asked Questions (FAQ) | IAMTECHNI Engineering',
+      title: formatSeoTitle('Frequently Asked Questions (FAQ) | IAMTECHNI Engineering'),
       description: formatMetaDescription(
         'Find transparent answers about IAMTECHNI’s software engineering services, 100% IP ownership, 7-stage delivery lifecycle, AI data privacy, and engagement models.'
       ),
@@ -817,9 +1005,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Locations We Serve | IAMTECHNI – Puducherry, Chennai & Tamil Nadu',
+      title: formatSeoTitle('Locations We Serve in Pondicherry & Tamil Nadu | IAMTECHNI'),
       description: formatMetaDescription(
-        'Explore IAMTECHNI services across Puducherry, Chennai, Coimbatore, Madurai, Trichy, Salem, Erode, Vellore, Cuddalore, and Villupuram. Software, web development, digital marketing, and live online training.'
+        'Explore IAMTECHNI software, web development, digital marketing, and live online IT training across Pondicherry, Chennai, Coimbatore, Madurai, and Tamil Nadu.'
       ),
       canonicalUrl: `${BASE_URL}/locations`,
       ogType: 'website',
@@ -838,9 +1026,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Privacy Policy & Data Protection Standards | IAMTECHNI',
+      title: formatSeoTitle('Privacy Policy & Data Protection Standards | IAMTECHNI'),
       description: formatMetaDescription(
-        'Read IAMTECHNI’s Privacy Policy detailing how we collect, protect, and process inquiry data, cookies, security safeguards, and enterprise client confidentiality.'
+        'Read IAMTECHNI’s Privacy Policy detailing how we collect, protect, and process inquiry data, cookies, security safeguards, and client confidentiality.'
       ),
       canonicalUrl,
       ogType: 'website',
@@ -858,9 +1046,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Terms of Use & Service Conditions | IAMTECHNI',
+      title: formatSeoTitle('Terms of Use & Service Conditions | IAMTECHNI'),
       description: formatMetaDescription(
-        'Review IAMTECHNI’s Terms of Use governing website access, intellectual property ownership, software engineering deliverables, and professional technology services.'
+        'Review IAMTECHNI’s Terms of Use governing website access, intellectual property ownership, software engineering deliverables, and technology services.'
       ),
       canonicalUrl,
       ogType: 'website',
@@ -880,7 +1068,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: 'Verify Certificate | IAMTECHNI',
+      title: formatSeoTitle('Verify Certificate | IAMTECHNI'),
       description: formatMetaDescription(
         'Enter the certificate number to check that an IAMTECHNI internship or training certificate is genuine and officially issued.'
       ),
@@ -894,9 +1082,10 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
   if (cleanPath.startsWith('/verify/')) {
     return {
       ...baseMeta,
-      title: 'Verify Certificate | IAMTECHNI',
-      description:
-        'Enter the certificate number to check that an IAMTECHNI certificate is genuine.',
+      title: formatSeoTitle('Verify Certificate | IAMTECHNI'),
+      description: formatMetaDescription(
+        'Enter the certificate number to check that an IAMTECHNI internship or training certificate is genuine and officially issued.'
+      ),
       canonicalUrl: `${BASE_URL}/verify`,
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
@@ -923,8 +1112,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
   return {
     ...baseMeta,
     title: '404 Page Not Found | IAMTECHNI',
-    description:
-      'The requested page could not be found in the IAMTECHNI directory. Explore our web development, custom software, AI, and digital marketing services.',
+    description: formatMetaDescription(
+      'The requested page could not be found in the IAMTECHNI directory. Explore our web development, custom software, AI, and digital marketing services.'
+    ),
     canonicalUrl: `${BASE_URL}/`,
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
@@ -939,15 +1129,9 @@ export interface SeoHeadProps {
 
 export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
   const cleanPath = currentRoute === '/' ? '/' : currentRoute.replace(/\/+$/, '');
-  const isSeoServiceRoute =
-    cleanPath.startsWith('/services/') &&
-    Boolean(getSeoServicePageBySlug(cleanPath.replace('/services/', '')));
-  const isLocationRoute = Boolean(getLocationSeoPageBySlug(cleanPath));
-  const isLocationsDirectory = cleanPath === '/locations';
-
   const seo = resolveRouteSeo(currentRoute);
 
-  // Remove initial static description/robots/canonical/og/twitter tags and prerendered route JSON-LD once react-helmet-async mounts its managed tags
+  // Synchronize head tags and route JSON-LD across all pages from the shared SeoHead template
   useEffect(() => {
     const robotsValue = seo.noIndex
       ? cleanPath.startsWith('/verify/')
@@ -1019,11 +1203,6 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
     seo.ogType,
     seo.structuredData,
   ]);
-
-  // Individual service pages, location landing pages, and /locations render their own <Helmet> directly
-  if (isSeoServiceRoute || isLocationRoute || isLocationsDirectory) {
-    return null;
-  }
 
   return (
     <Helmet prioritizeSeoTags>

@@ -29,6 +29,7 @@ import {
 } from '../../constants/contact';
 import { getCardColorToken } from '../../utils/cardColorTokens';
 import { AnimatedHeading } from '../common/AnimatedHeading';
+import { formatSeoTitle, formatMetaDescription } from '../common/SeoHead';
 
 export interface LocationLandingPageProps {
   page: LocationSeoPageData;
@@ -105,16 +106,20 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
     }
   }, [page.slug]);
 
+  const canonicalUrl = (page.canonicalUrl || `${BASE_URL}/${page.slug}`).replace(/\/+$/, '');
+  const formattedSeoTitle = formatSeoTitle(page.seoTitle);
+  const formattedMetaDesc = formatMetaDescription(page.metaDescription);
+
   // 1. Primary schema (Service or Course)
   const primarySchema =
     page.schemaType === 'Course'
       ? {
           '@context': 'https://schema.org',
           '@type': 'Course',
-          '@id': `${page.canonicalUrl}#course`,
+          '@id': `${canonicalUrl}#course`,
           name: page.h1,
-          description: page.metaDescription,
-          url: page.canonicalUrl,
+          description: formattedMetaDesc,
+          url: canonicalUrl,
           provider: {
             '@type': 'Organization',
             '@id': `${BASE_URL}/#organization`,
@@ -132,11 +137,11 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
       : {
           '@context': 'https://schema.org',
           '@type': 'Service',
-          '@id': `${page.canonicalUrl}#service`,
+          '@id': `${canonicalUrl}#service`,
           name: page.h1,
           serviceType: page.h1,
-          description: page.metaDescription,
-          url: page.canonicalUrl,
+          description: formattedMetaDesc,
+          url: canonicalUrl,
           provider: {
             '@type': 'Organization',
             '@id': `${BASE_URL}/#organization`,
@@ -146,9 +151,9 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
             url: `${BASE_URL}/`,
           },
           areaServed: [
-            { '@type': 'City', name: page.targetLocation.city },
-            { '@type': 'AdministrativeArea', name: page.targetLocation.region },
-            { '@type': 'AdministrativeArea', name: page.targetLocation.state },
+            { '@type': 'City', name: page.targetLocation.city.replace(/\bPuducherry\b/gi, 'Pondicherry') },
+            { '@type': 'AdministrativeArea', name: page.targetLocation.region.replace(/\bPuducherry\b/gi, 'Pondicherry') },
+            { '@type': 'AdministrativeArea', name: page.targetLocation.state.replace(/\bPuducherry\b/gi, 'Pondicherry') },
             { '@type': 'Country', name: 'India' },
           ],
         };
@@ -179,7 +184,7 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
         '@type': 'ListItem',
         position: 3,
         name: page.h1,
-        item: page.canonicalUrl,
+        item: canonicalUrl,
       },
     ],
   };
@@ -204,16 +209,16 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
   return (
     <div className="w-full">
       <Helmet prioritizeSeoTags>
-        <title>{page.seoTitle}</title>
-        <meta name="description" content={page.metaDescription} />
-        <link rel="canonical" href={page.canonicalUrl} />
+        <title>{formattedSeoTitle}</title>
+        <meta name="description" content={formattedMetaDesc} />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={page.seoTitle} />
-        <meta property="og:description" content={page.metaDescription} />
-        <meta property="og:url" content={page.canonicalUrl} />
-        <meta name="twitter:title" content={page.seoTitle} />
-        <meta name="twitter:description" content={page.metaDescription} />
-        <meta name="twitter:url" content={page.canonicalUrl} />
+        <meta property="og:title" content={formattedSeoTitle} />
+        <meta property="og:description" content={formattedMetaDesc} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta name="twitter:title" content={formattedSeoTitle} />
+        <meta name="twitter:description" content={formattedMetaDesc} />
+        <meta name="twitter:url" content={canonicalUrl} />
         <script type="application/ld+json">{JSON.stringify(primarySchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
         {faqSchema && (

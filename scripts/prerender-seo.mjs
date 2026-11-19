@@ -172,14 +172,14 @@ function buildStaticRootHtml(page) {
   return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n${introHtml}${sectionsHtml}\n${locationsHtml}${faqsHtml}\n      </main>\n    `;
 }
 
-function buildJsonLdScripts(page, canonicalUrl) {
+function buildJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
     '@id': `${canonicalUrl}#service`,
     name: page.h1,
     serviceType: page.h1,
-    description: page.metaDescription,
+    description: formattedMetaDesc || page.metaDescription,
     url: canonicalUrl,
     provider: {
       '@type': 'Organization',
@@ -190,7 +190,7 @@ function buildJsonLdScripts(page, canonicalUrl) {
       url: `${BASE_URL}/`,
     },
     areaServed: [
-      { '@type': 'AdministrativeArea', name: 'Puducherry' },
+      { '@type': 'AdministrativeArea', name: 'Pondicherry' },
       { '@type': 'AdministrativeArea', name: 'Tamil Nadu' },
       { '@type': 'Country', name: 'India' },
     ],
@@ -245,10 +245,12 @@ function buildJsonLdScripts(page, canonicalUrl) {
   return scripts.join('\n    ');
 }
 
-function renderServiceHtml(templateHtml, page) {
+function renderServiceHtml(templateHtml, page, formatSeoTitle, formatMetaDescription) {
   const canonicalUrl = `${BASE_URL}/services/${page.slug}`;
-  const escapedTitle = escapeHtml(page.seoTitle);
-  const escapedDesc = escapeHtml(page.metaDescription);
+  const formattedTitle = formatSeoTitle ? formatSeoTitle(page.seoTitle) : page.seoTitle;
+  const formattedDesc = formatMetaDescription ? formatMetaDescription(page.metaDescription) : page.metaDescription;
+  const escapedTitle = escapeHtml(formattedTitle);
+  const escapedDesc = escapeHtml(formattedDesc);
   const escapedUrl = escapeHtml(canonicalUrl);
 
   let html = templateHtml;
@@ -309,7 +311,7 @@ function renderServiceHtml(templateHtml, page) {
   );
 
   // 6. Inject JSON-LD scripts before </head>
-  const jsonLdScripts = buildJsonLdScripts(page, canonicalUrl);
+  const jsonLdScripts = buildJsonLdScripts(page, canonicalUrl, formattedDesc);
   html = html.replace('</head>', `    ${jsonLdScripts}\n  </head>`);
 
   // 7. Insert static HTML inside <div id="root">...</div>
@@ -377,7 +379,7 @@ function buildLocationStaticRootHtml(page) {
   return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n        <p class="intro">${escapeHtml(page.intro)}</p>\n${contactDetailsHtml}\n${courseLinkHtml}\n      <section>\n        <h2>Key Capabilities &amp; Advantages</h2>\n${highlightsHtml}\n      </section>\n${sectionsHtml}\n      <section>\n        <h2>Delivery Lifecycle</h2>\n${processHtml}\n      </section>\n${localContextHtml}\n${faqsHtml}\n${internalLinksHtml}\n      </main>\n    `;
 }
 
-function buildLocationJsonLdScripts(page, canonicalUrl) {
+function buildLocationJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
   const primarySchema =
     page.schemaType === 'Course'
       ? {
@@ -385,7 +387,7 @@ function buildLocationJsonLdScripts(page, canonicalUrl) {
           '@type': 'Course',
           '@id': `${canonicalUrl}#course`,
           name: page.h1,
-          description: page.metaDescription,
+          description: formattedMetaDesc || page.metaDescription,
           url: canonicalUrl,
           provider: {
             '@type': 'Organization',
@@ -407,7 +409,7 @@ function buildLocationJsonLdScripts(page, canonicalUrl) {
           '@id': `${canonicalUrl}#service`,
           name: page.h1,
           serviceType: page.h1,
-          description: page.metaDescription,
+          description: formattedMetaDesc || page.metaDescription,
           url: canonicalUrl,
           provider: {
             '@type': 'Organization',
@@ -418,9 +420,9 @@ function buildLocationJsonLdScripts(page, canonicalUrl) {
             url: `${BASE_URL}/`,
           },
           areaServed: [
-            { '@type': 'City', name: page.targetLocation.city },
-            { '@type': 'AdministrativeArea', name: page.targetLocation.region },
-            { '@type': 'AdministrativeArea', name: page.targetLocation.state },
+            { '@type': 'City', name: String(page.targetLocation.city || '').replace(/\bPuducherry\b/gi, 'Pondicherry') },
+            { '@type': 'AdministrativeArea', name: String(page.targetLocation.region || '').replace(/\bPuducherry\b/gi, 'Pondicherry') },
+            { '@type': 'AdministrativeArea', name: String(page.targetLocation.state || '').replace(/\bPuducherry\b/gi, 'Pondicherry') },
             { '@type': 'Country', name: 'India' },
           ],
         };
@@ -477,11 +479,13 @@ function buildLocationJsonLdScripts(page, canonicalUrl) {
   return scripts.join('\n    ');
 }
 
-function renderLocationHtml(templateHtml, page) {
-  // Canonical URL strictly uses trailing slash
-  const canonicalUrl = page.canonicalUrl;
-  const escapedTitle = escapeHtml(page.seoTitle);
-  const escapedDesc = escapeHtml(page.metaDescription);
+function renderLocationHtml(templateHtml, page, formatSeoTitle, formatMetaDescription) {
+  // Canonical URL uses uniform trailing-slash style (no trailing slash on sub-routes)
+  const canonicalUrl = (page.canonicalUrl || `${BASE_URL}/${page.slug}`).replace(/\/+$/, '');
+  const formattedTitle = formatSeoTitle ? formatSeoTitle(page.seoTitle) : page.seoTitle;
+  const formattedDesc = formatMetaDescription ? formatMetaDescription(page.metaDescription) : page.metaDescription;
+  const escapedTitle = escapeHtml(formattedTitle);
+  const escapedDesc = escapeHtml(formattedDesc);
   const escapedUrl = escapeHtml(canonicalUrl);
 
   let html = templateHtml;
@@ -542,7 +546,7 @@ function renderLocationHtml(templateHtml, page) {
   );
 
   // 6. Inject JSON-LD scripts before </head>
-  const jsonLdScripts = buildLocationJsonLdScripts(page, canonicalUrl);
+  const jsonLdScripts = buildLocationJsonLdScripts(page, canonicalUrl, formattedDesc);
   html = html.replace('</head>', `    ${jsonLdScripts}\n  </head>`);
 
   // 7. Insert static HTML inside <div id="root">...</div>
@@ -559,10 +563,14 @@ function normalizeSitemapUrl(rawUrl) {
     url = `https://${url.replace(/^\/+/, '')}`;
   }
   url = url.replace(/^https:\/\/iamtechni\.in/i, 'https://www.iamtechni.in');
-  return url;
+  if (url === BASE_URL || url === `${BASE_URL}/`) {
+    return `${BASE_URL}/`;
+  }
+  return url.replace(/\/+$/, '');
 }
 
 function mergeSitemapXml(locationPages = []) {
+  const today = new Date().toISOString().split('T')[0];
   const distSitemapPath = path.join(DIST_DIR, 'sitemap.xml');
   const publicSitemapPath = path.join(ROOT_DIR, 'public', 'sitemap.xml');
   let sourceXml = '';
@@ -595,7 +603,7 @@ function mergeSitemapXml(locationPages = []) {
         loc: normalizedLoc,
         changefreq: changefreqMatch ? changefreqMatch[1].trim() : 'weekly',
         priority: priorityMatch ? priorityMatch[1].trim() : '0.8',
-        lastmod: lastmodMatch ? lastmodMatch[1].trim() : undefined,
+        lastmod: lastmodMatch ? lastmodMatch[1].trim() : today,
       });
     }
   }
@@ -605,6 +613,7 @@ function mergeSitemapXml(locationPages = []) {
   if (!urlMap.has(homeUrl)) {
     urlMap.set(homeUrl, {
       loc: homeUrl,
+      lastmod: today,
       changefreq: 'daily',
       priority: '1.0',
     });
@@ -612,18 +621,19 @@ function mergeSitemapXml(locationPages = []) {
     const homeEntry = urlMap.get(homeUrl);
     homeEntry.priority = '1.0';
     homeEntry.changefreq = 'daily';
+    homeEntry.lastmod = homeEntry.lastmod || today;
   }
 
   // 2. Append and de-duplicate location pages from location-pages.json
   for (const page of locationPages) {
-    const canonical = normalizeSitemapUrl(
-      page.canonicalUrl || `${BASE_URL}/${page.slug}/`
+    const normalizedLoc = normalizeSitemapUrl(
+      page.canonicalUrl || `${BASE_URL}/${page.slug}`
     );
-    const trailingSlashUrl = canonical.endsWith('/') ? canonical : `${canonical}/`;
 
-    if (!urlMap.has(trailingSlashUrl)) {
-      urlMap.set(trailingSlashUrl, {
-        loc: trailingSlashUrl,
+    if (!urlMap.has(normalizedLoc)) {
+      urlMap.set(normalizedLoc, {
+        loc: normalizedLoc,
+        lastmod: today,
         changefreq: 'weekly',
         priority: '0.8',
       });
@@ -634,10 +644,11 @@ function mergeSitemapXml(locationPages = []) {
   const entries = Array.from(urlMap.values());
   const formattedEntries = entries
     .map((entry) => {
-      const lines = [`  <url>`, `    <loc>${entry.loc}</loc>`];
-      if (entry.lastmod) {
-        lines.push(`    <lastmod>${entry.lastmod}</lastmod>`);
-      }
+      const lines = [
+        `  <url>`,
+        `    <loc>${entry.loc}</loc>`,
+        `    <lastmod>${entry.lastmod || today}</lastmod>`,
+      ];
       if (entry.changefreq) {
         lines.push(`    <changefreq>${entry.changefreq}</changefreq>`);
       }
@@ -986,7 +997,7 @@ async function loadSeoHelperBundle() {
   esbuild.buildSync({
     stdin: {
       contents: `
-        export { resolveRouteSeo } from './src/components/common/SeoHead';
+        export { resolveRouteSeo, formatSeoTitle, formatMetaDescription } from './src/components/common/SeoHead';
         export { solutionsData } from './src/data/solutionsData';
         export { industriesData } from './src/data/industriesData';
         export { coursesData } from './src/data/coursesData';
@@ -1016,11 +1027,24 @@ async function main() {
     ? JSON.parse(fs.readFileSync(LOCATION_PAGES_JSON_PATH, 'utf-8'))
     : [];
 
+  // Load helper bundle for SEO metadata and data records
+  const seoHelper = await loadSeoHelperBundle();
+  const {
+    resolveRouteSeo,
+    formatSeoTitle,
+    formatMetaDescription,
+    solutionsData,
+    industriesData,
+    coursesData,
+    insightsData,
+    projectsData,
+  } = seoHelper;
+
   // 1. Prerender Service pages into dist/services/<slug>/index.html
   for (const page of servicePages) {
     const outDir = path.join(DIST_DIR, 'services', page.slug);
     fs.mkdirSync(outDir, { recursive: true });
-    const renderedHtml = renderServiceHtml(templateHtml, page);
+    const renderedHtml = renderServiceHtml(templateHtml, page, formatSeoTitle, formatMetaDescription);
     fs.writeFileSync(path.join(outDir, 'index.html'), renderedHtml, 'utf-8');
   }
 
@@ -1028,7 +1052,7 @@ async function main() {
   for (const page of locationPages) {
     const outDir = path.join(DIST_DIR, page.slug);
     fs.mkdirSync(outDir, { recursive: true });
-    const renderedHtml = renderLocationHtml(templateHtml, page);
+    const renderedHtml = renderLocationHtml(templateHtml, page, formatSeoTitle, formatMetaDescription);
     fs.writeFileSync(path.join(outDir, 'index.html'), renderedHtml, 'utf-8');
   }
 
@@ -1041,17 +1065,12 @@ async function main() {
     fs.writeFileSync(publicSitemapPath, sitemapXml, 'utf-8');
   }
 
-  // 4. Load helper bundle for SEO metadata and data records
-  const seoHelper = await loadSeoHelperBundle();
-  const { resolveRouteSeo, solutionsData, industriesData, coursesData, insightsData, projectsData } = seoHelper;
-
   // Track URLs already handled
   const serviceUrlSet = new Set(servicePages.map((p) => `${BASE_URL}/services/${p.slug}`));
   const locationUrlSet = new Set(
-    locationPages.map((p) => {
-      const canonical = p.canonicalUrl || `${BASE_URL}/${p.slug}/`;
-      return canonical.endsWith('/') ? canonical : `${canonical}/`;
-    })
+    locationPages.map((p) =>
+      normalizeSitemapUrl(p.canonicalUrl || `${BASE_URL}/${p.slug}`)
+    )
   );
   const homeUrl = `${BASE_URL}/`;
 

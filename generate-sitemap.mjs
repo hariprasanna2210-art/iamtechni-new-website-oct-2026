@@ -181,6 +181,7 @@ async function generateSitemap() {
     loadTsDataModule('src/data/projectsData.ts'),
   ]);
 
+  const today = new Date().toISOString().split('T')[0];
   const seenUrls = new Set();
   const links = [];
 
@@ -190,12 +191,10 @@ async function generateSitemap() {
     seenUrls.add(normalized);
     const linkItem = {
       url: normalized,
+      lastmod: lastmod || today,
       changefreq,
       priority,
     };
-    if (lastmod) {
-      linkItem.lastmod = lastmod;
-    }
     links.push(linkItem);
   };
 
@@ -286,20 +285,12 @@ async function generateSitemap() {
     }
   }
 
-  // 7. Location-Based SEO Landing Pages (strictly with trailing slashes)
+  // 7. Location-Based SEO Landing Pages (uniform trailing-slash style + lastmod)
   const locationPagesJsonPath = path.resolve(__dirname, 'src/data/location-seo/location-pages.json');
   if (fs.existsSync(locationPagesJsonPath)) {
     const locationPages = JSON.parse(fs.readFileSync(locationPagesJsonPath, 'utf-8'));
     for (const locPage of locationPages) {
-      const trailingSlashPath = locPage.path.endsWith('/') ? locPage.path : `${locPage.path}/`;
-      if (!seenUrls.has(trailingSlashPath)) {
-        seenUrls.add(trailingSlashPath);
-        links.push({
-          url: trailingSlashPath,
-          changefreq: 'weekly',
-          priority: 0.8,
-        });
-      }
+      addLink(locPage.path || `/${locPage.slug}`, 'weekly', 0.8);
     }
   }
 

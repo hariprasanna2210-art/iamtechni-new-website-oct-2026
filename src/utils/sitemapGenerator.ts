@@ -42,6 +42,7 @@ export function getSitemapEntries(): SitemapEntry[] {
     { path: '/careers', changefreq: 'weekly', priority: '0.8' },
     { path: '/faq', changefreq: 'weekly', priority: '0.8' },
     { path: '/locations', changefreq: 'weekly', priority: '0.8' },
+    { path: '/verify', changefreq: 'weekly', priority: '0.8' },
   ];
 
   const contactRoutes: { path: string; changefreq: SitemapEntry['changefreq']; priority: string }[] = [
@@ -61,21 +62,15 @@ export function getSitemapEntries(): SitemapEntry[] {
     path: string,
     changefreq: SitemapEntry['changefreq'],
     priority: string,
-    preserveTrailingSlash = false
+    customLastmod?: string
   ) => {
     const rawPath = path.startsWith('/') ? path : `/${path}`;
-    const cleanPath =
-      rawPath === '/'
-        ? '/'
-        : preserveTrailingSlash
-          ? `${rawPath.replace(/\/+$/, '')}/`
-          : rawPath.replace(/\/+$/, '');
-    const dedupeKey = rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '');
-    if (seenPaths.has(dedupeKey)) return;
-    seenPaths.add(dedupeKey);
+    const cleanPath = rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '');
+    if (seenPaths.has(cleanPath)) return;
+    seenPaths.add(cleanPath);
     entries.push({
       loc: `${BASE_SITE_URL}${cleanPath}`,
-      lastmod: today,
+      lastmod: customLastmod || today,
       changefreq,
       priority,
     });
@@ -132,7 +127,14 @@ export function getSitemapEntries(): SitemapEntry[] {
   for (const article of insightsData) {
     const slug = (article.slug || '').trim();
     if (slug) {
-      addRoute(`/insights/${slug}`, 'weekly', '0.7');
+      let articleDate: string | undefined;
+      if (article.publishedDate) {
+        const parsed = new Date(article.publishedDate);
+        if (!isNaN(parsed.getTime())) {
+          articleDate = parsed.toISOString().split('T')[0];
+        }
+      }
+      addRoute(`/insights/${slug}`, 'weekly', '0.7', articleDate);
     }
   }
 
@@ -144,11 +146,11 @@ export function getSitemapEntries(): SitemapEntry[] {
     }
   }
 
-  // 10. Dynamically add all 30 location SEO pages with canonical trailing slash (0.8 weekly)
+  // 10. Dynamically add all 30 location SEO pages with uniform trailing-slash style (0.8 weekly)
   for (const locPage of ALL_LOCATION_PAGES) {
     const slug = (locPage.slug || '').trim().replace(/^\/+|\/+$/g, '');
     if (slug) {
-      addRoute(`/${slug}/`, 'weekly', '0.8', true);
+      addRoute(`/${slug}`, 'weekly', '0.8');
     }
   }
 

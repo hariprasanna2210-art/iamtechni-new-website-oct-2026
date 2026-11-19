@@ -20,6 +20,7 @@ import { PageHero } from '../components/common/PageHero';
 import { ALL_LOCATION_PAGES, LocationSeoPageData } from '../data/location-seo';
 import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../constants/contact';
 import { COMPANY_CONTACT } from '../data/companyInfo';
+import { formatSeoTitle, formatMetaDescription } from '../components/common/SeoHead';
 
 interface LocationsPageProps {
   onNavigate?: (route: PageRoute) => void;
@@ -27,9 +28,12 @@ interface LocationsPageProps {
 }
 
 const CANONICAL_URL = 'https://www.iamtechni.in/locations';
-const SEO_TITLE = 'Locations We Serve | IAMTECHNI – Puducherry, Chennai & Tamil Nadu';
-const META_DESCRIPTION =
-  'Explore IAMTECHNI services across Puducherry, Chennai, Coimbatore, Madurai, Trichy, Salem, Erode, Vellore, Cuddalore, and Villupuram. Software, web development, digital marketing, and live online training.';
+const SEO_TITLE = formatSeoTitle(
+  'Locations We Serve in Pondicherry & Tamil Nadu | IAMTECHNI'
+);
+const META_DESCRIPTION = formatMetaDescription(
+  'Explore IAMTECHNI services across Pondicherry, Chennai, Coimbatore, Madurai, Trichy, Salem, Erode, Vellore, Cuddalore, and Villupuram. We deliver software, web development, digital marketing, and live online training.'
+);
 
 // 4 Groups as specified
 const GROUP_DEFINITIONS = [
@@ -184,7 +188,7 @@ export const LocationsPage: React.FC<LocationsPageProps> = ({
           '@type': 'ListItem',
           position: index + 1,
           name: page.h1,
-          url: page.canonicalUrl,
+          url: page.canonicalUrl.replace(/\/+$/, ''),
         })),
       },
     ],
