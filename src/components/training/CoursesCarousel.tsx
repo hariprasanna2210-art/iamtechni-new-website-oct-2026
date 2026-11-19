@@ -380,11 +380,34 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
 
   const [openCurriculumIds, setOpenCurriculumIds] = useState<Record<string, boolean>>({});
 
+  const isFineHoverDevice = () =>
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
   const toggleCurriculum = (courseId: string) => {
     setOpenCurriculumIds((prev) => ({
       ...prev,
       [courseId]: !prev[courseId],
     }));
+  };
+
+  const handleCardMouseEnter = (courseId: string) => {
+    if (!isTouchInteractionRef.current && isFineHoverDevice()) {
+      setOpenCurriculumIds((prev) => ({
+        ...prev,
+        [courseId]: true,
+      }));
+    }
+  };
+
+  const handleCardMouseLeave = (courseId: string) => {
+    if (!isTouchInteractionRef.current && isFineHoverDevice()) {
+      setOpenCurriculumIds((prev) => ({
+        ...prev,
+        [courseId]: false,
+      }));
+    }
   };
 
   if (totalItems === 0) return null;
@@ -421,6 +444,8 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               : `course-${course.id}`
             : undefined
         }
+        onMouseEnter={() => handleCardMouseEnter(course.id)}
+        onMouseLeave={() => handleCardMouseLeave(course.id)}
         className={`group relative w-full h-full flex flex-col bg-white rounded-[16px] overflow-hidden border border-transparent ${theme.hoverBorder} shadow-[0_10px_28px_-6px_rgba(15,23,42,0.12)] hover:shadow-[0_20px_42px_-8px_rgba(15,23,42,0.22)] transition-all duration-300`}
       >
         {/* Solid Colour Header (~100 px) */}
@@ -504,7 +529,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               </span>
             </div>
 
-            {/* View / Hide Curriculum Toggle Button (36 px tall, 13 px label, outline style in card colour) */}
+            {/* View Curriculum Toggle Button (36 px tall, 13 px label, outline style in card colour) */}
             <button
               type="button"
               onClick={(e) => {
@@ -516,9 +541,9 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
               aria-controls={curriculumPanelId}
               className={`w-full h-[36px] px-3 rounded-lg border bg-white !text-[13px] font-semibold leading-none flex items-center justify-between gap-2 transition-colors duration-200 motion-reduce:transition-none cursor-pointer ${theme.curriculumOutlineBtn}`}
             >
-              <span>{isCurriculumOpen ? 'Hide Curriculum' : 'View Curriculum'}</span>
+              <span>View Curriculum</span>
               <ChevronDown
-                className={`w-3.5 h-3.5 shrink-0 transition-transform duration-300 motion-reduce:transition-none ${
+                className={`w-3.5 h-3.5 shrink-0 transition-transform duration-[250ms] ease-out motion-reduce:transition-none ${
                   isCurriculumOpen ? 'rotate-180' : ''
                 }`}
               />
@@ -527,7 +552,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
             {/* Collapsible Key Curriculum Highlights (always present in HTML for SEO) */}
             <div
               id={curriculumPanelId}
-              className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none ${
+              className={`grid transition-[grid-template-rows,opacity] duration-[250ms] ease-out motion-reduce:transition-none ${
                 isCurriculumOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
               }`}
             >
