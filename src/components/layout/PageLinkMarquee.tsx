@@ -61,7 +61,7 @@ export const PageLinkMarquee: React.FC = () => {
               >
                 <span
                   aria-hidden="true"
-                  className="w-1.5 h-1.5 rounded-full bg-[#00B0F0] mr-2 shrink-0"
+                  className="w-1.5 h-1.5 rounded-full bg-[#4D19EA] shadow-[0_0_8px_rgba(77,25,234,0.85)] mr-2 shrink-0"
                 />
                 {item.name}
               </Link>
@@ -101,7 +101,7 @@ export const PageLinkMarquee: React.FC = () => {
                   </Link>
                   <span
                     aria-hidden="true"
-                    className="w-1.5 h-1.5 rounded-full bg-[#00B0F0] shrink-0 mx-1"
+                    className="w-1.5 h-1.5 rounded-full bg-[#4D19EA] shadow-[0_0_8px_rgba(77,25,234,0.85)] shrink-0 mx-1"
                   />
                 </li>
               ))}
@@ -120,7 +120,7 @@ export const PageLinkMarquee: React.FC = () => {
                   </Link>
                   <span
                     aria-hidden="true"
-                    className="w-1.5 h-1.5 rounded-full bg-[#00B0F0] shrink-0 mx-1"
+                    className="w-1.5 h-1.5 rounded-full bg-[#4D19EA] shadow-[0_0_8px_rgba(77,25,234,0.85)] shrink-0 mx-1"
                   />
                 </div>
               ))}
