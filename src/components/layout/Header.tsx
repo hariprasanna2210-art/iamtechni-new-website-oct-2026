@@ -676,45 +676,6 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </button>
 
-            {/* React & TypeScript Official Logo Badges (22px each, vertically centred between Training and Industries, with soft glow) */}
-            <div
-              aria-hidden="true"
-              data-testid="navbar-react-ts-badges"
-              className="inline-flex items-center gap-1.5 self-center shrink-0"
-            >
-              {/* React Official Cyan Atom Badge (22px with soft cyan glow) */}
-              <span
-                title="React"
-                className="w-[22px] h-[22px] rounded-[6px] bg-[#00B0F0]/15 border border-[#00B0F0]/45 inline-flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(0,176,240,0.42)] transition-transform duration-200 hover:scale-105"
-              >
-                <svg
-                  viewBox="-11.5 -10.23174 23 20.46348"
-                  className="w-[15px] h-[15px]"
-                  fill="none"
-                >
-                  <circle cx="0" cy="0" r="2.05" fill="#00B0F0" />
-                  <g stroke="#00B0F0" strokeWidth="1.35" fill="none">
-                    <ellipse rx="11" ry="4.2" />
-                    <ellipse rx="11" ry="4.2" transform="rotate(60)" />
-                    <ellipse rx="11" ry="4.2" transform="rotate(120)" />
-                  </g>
-                </svg>
-              </span>
-
-              {/* TypeScript Official Blue Square Badge (22px with soft blue glow) */}
-              <span
-                title="TypeScript"
-                className="w-[22px] h-[22px] rounded-[6px] bg-gradient-to-br from-[#00B0F0]/25 to-[#1C35EA] border border-[#00B0F0]/40 inline-flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(28,53,234,0.45)] transition-transform duration-200 hover:scale-105"
-              >
-                <svg viewBox="0 0 24 24" className="w-[16px] h-[16px]" fill="none">
-                  <path
-                    d="M5.2 11.2h6.8v1.9H9.6v7.1H7.5v-7.1H5.2v-1.9zm13.4 2.1c-.5-.4-1.2-.7-2-.7-.9 0-1.5.4-1.5 1 0 .7.5.9 1.7 1.4 1.7.6 2.6 1.4 2.6 2.8 0 1.7-1.4 2.7-3.4 2.7-1.2 0-2.3-.4-3-.9l.9-1.6c.6.5 1.4.8 2.1.8.9 0 1.4-.3 1.4-.9 0-.6-.4-.9-1.6-1.3-1.7-.6-2.7-1.3-2.7-2.8 0-1.6 1.3-2.7 3.4-2.7 1.1 0 2.1.3 2.8.8l-.7 1.4z"
-                    fill="#FFFFFF"
-                  />
-                </svg>
-              </span>
-            </div>
-
             {/* 4. Industries */}
             <button
               type="button"
