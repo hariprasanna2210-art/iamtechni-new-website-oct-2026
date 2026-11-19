@@ -34,6 +34,10 @@ interface CourseCardTheme {
   chipBg: string;
   chipText: string;
   chipBorder: string;
+  panelAccentHex: string;
+  panelSecondaryHex: string;
+  panelLightBorder: string;
+  panelLightSurface: string;
 }
 
 const COURSE_CARD_THEMES: CourseCardTheme[] = [
@@ -59,6 +63,10 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipBg: 'bg-sky-50/95',
     chipText: 'text-[#0369A1]',
     chipBorder: 'border-sky-200/90',
+    panelAccentHex: '#0284C7',
+    panelSecondaryHex: '#00B0F0',
+    panelLightBorder: 'border-sky-200/85',
+    panelLightSurface: 'linear-gradient(135deg, rgba(255,255,255,0.78) 0%, rgba(224,246,254,0.62) 100%)',
   },
   // 1: Brand Blue (#1C35EA)
   {
@@ -82,6 +90,10 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipBg: 'bg-blue-50/95',
     chipText: 'text-[#1E40AF]',
     chipBorder: 'border-blue-200/90',
+    panelAccentHex: '#1C35EA',
+    panelSecondaryHex: '#2563EB',
+    panelLightBorder: 'border-blue-200/85',
+    panelLightSurface: 'linear-gradient(135deg, rgba(255,255,255,0.78) 0%, rgba(235,242,255,0.65) 100%)',
   },
   // 2: Brand Purple (#4D19EA)
   {
@@ -105,6 +117,10 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipBg: 'bg-violet-50/95',
     chipText: 'text-[#5B21B6]',
     chipBorder: 'border-violet-200/90',
+    panelAccentHex: '#4D19EA',
+    panelSecondaryHex: '#7C3AED',
+    panelLightBorder: 'border-violet-200/85',
+    panelLightSurface: 'linear-gradient(135deg, rgba(255,255,255,0.78) 0%, rgba(240,235,255,0.65) 100%)',
   },
   // 3: Complementary Teal (#0D9488)
   {
@@ -128,6 +144,10 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipBg: 'bg-teal-50/95',
     chipText: 'text-[#115E59]',
     chipBorder: 'border-teal-200/90',
+    panelAccentHex: '#0D9488',
+    panelSecondaryHex: '#0F766E',
+    panelLightBorder: 'border-teal-200/85',
+    panelLightSurface: 'linear-gradient(135deg, rgba(255,255,255,0.78) 0%, rgba(228,248,242,0.65) 100%)',
   },
   // 4: Brand Navy (#14205A)
   {
@@ -151,6 +171,10 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipBg: 'bg-indigo-50/95',
     chipText: 'text-[#14205A]',
     chipBorder: 'border-indigo-200/90',
+    panelAccentHex: '#14205A',
+    panelSecondaryHex: '#2563EB',
+    panelLightBorder: 'border-indigo-200/85',
+    panelLightSurface: 'linear-gradient(135deg, rgba(255,255,255,0.78) 0%, rgba(233,238,249,0.65) 100%)',
   },
   // 5: Complementary Amber (#D97706)
   {
@@ -174,6 +198,10 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipBg: 'bg-amber-50/95',
     chipText: 'text-[#92400E]',
     chipBorder: 'border-amber-200/90',
+    panelAccentHex: '#B45309',
+    panelSecondaryHex: '#D97706',
+    panelLightBorder: 'border-amber-200/85',
+    panelLightSurface: 'linear-gradient(135deg, rgba(255,255,255,0.78) 0%, rgba(254,243,199,0.60) 100%)',
   },
   // 6: Complementary Coral Rose (#E11D48)
   {
@@ -197,8 +225,385 @@ const COURSE_CARD_THEMES: CourseCardTheme[] = [
     chipBg: 'bg-rose-50/95',
     chipText: 'text-[#9F1239]',
     chipBorder: 'border-rose-200/90',
+    panelAccentHex: '#BE123C',
+    panelSecondaryHex: '#E11D48',
+    panelLightBorder: 'border-rose-200/85',
+    panelLightSurface: 'linear-gradient(135deg, rgba(255,255,255,0.78) 0%, rgba(255,228,234,0.60) 100%)',
   },
 ];
+
+type TechIconKey =
+  | 'python'
+  | 'sql'
+  | 'react'
+  | 'typescript'
+  | 'aws'
+  | 'docker'
+  | 'git'
+  | 'figma'
+  | 'powerbi'
+  | 'azure'
+  | 'kubernetes'
+  | 'dotnet'
+  | 'neural'
+  | 'lock'
+  | 'code'
+  | 'analytics';
+
+/**
+ * Per-course technology icon mapping (stored in component file only; no data file changes)
+ */
+const COURSE_TECH_ICONS_MAP: Record<string, TechIconKey[]> = {
+  'full-stack-development': ['react', 'typescript', 'sql', 'git'],
+  'advanced-python': ['python', 'sql', 'docker', 'git'],
+  'dotnet-development': ['dotnet', 'sql', 'azure', 'git'],
+  'programming-languages': ['typescript', 'python', 'code', 'git'],
+  aws: ['aws', 'docker', 'sql', 'kubernetes'],
+  azure: ['azure', 'docker', 'sql', 'git'],
+  'cloud-computing': ['aws', 'azure', 'docker', 'kubernetes'],
+  'artificial-intelligence': ['python', 'neural', 'sql', 'aws'],
+  'machine-learning': ['python', 'powerbi', 'sql', 'neural'],
+  'generative-ai': ['python', 'neural', 'typescript', 'sql'],
+  'devops-engineering': ['docker', 'kubernetes', 'git', 'aws'],
+  cybersecurity: ['lock', 'docker', 'sql', 'git'],
+  'digital-marketing': ['powerbi', 'figma', 'analytics', 'sql'],
+};
+
+const DEFAULT_TECH_ICONS: TechIconKey[] = ['react', 'python', 'sql', 'git'];
+
+/**
+ * Pure outline SVG technology icons (zero text nodes, zero emojis)
+ */
+function TechOutlineSvg({ icon, className = 'w-4 h-4' }: { icon: TechIconKey; className?: string }) {
+  switch (icon) {
+    case 'python':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <path d="M12 3c-3.5 0-4 1.5-4 3.5V9h4.5v1H6.5C4.5 10 3 11.2 3 14c0 2.8 1.5 4 3.5 4H8v-2.2c0-1.8 1.4-3.3 3.2-3.3h4.6c1.4 0 2.2-.9 2.2-2.2V6.5C18 4.5 15.5 3 12 3z" />
+          <path d="M12 21c3.5 0 4-1.5 4-3.5V15h-4.5v-1h6c2 0 3.5-1.2 3.5-4 0-2.8-1.5-4-3.5-4H16v2.2c0 1.8-1.4 3.3-3.2 3.3H8.2C6.8 11.5 6 12.4 6 13.7v3.8C6 19.5 8.5 21 12 21z" />
+          <circle cx="10" cy="6" r="0.7" fill="currentColor" />
+          <circle cx="14" cy="18" r="0.7" fill="currentColor" />
+        </svg>
+      );
+    case 'sql':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <ellipse cx="12" cy="5" rx="7.5" ry="2.8" />
+          <path d="M4.5 5v14c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8V5" />
+          <path d="M4.5 12c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8" />
+        </svg>
+      );
+    case 'react':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <circle cx="12" cy="12" r="1.6" />
+          <ellipse cx="12" cy="12" rx="9.5" ry="3.8" />
+          <ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(60 12 12)" />
+          <ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(120 12 12)" />
+        </svg>
+      );
+    case 'typescript':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <rect x="3.5" y="3.5" width="17" height="17" rx="3.5" />
+          <path d="M7.5 10.5h5M10 10.5v6.5" />
+          <path d="M17.5 11.2c-.4-.5-1.1-.7-1.8-.7-1 0-1.7.5-1.7 1.3 0 1.8 3.6 1.2 3.6 3.2 0 1.1-.9 1.8-2.1 1.8-.9 0-1.6-.3-2.1-.9" />
+        </svg>
+      );
+    case 'aws':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <path d="M6.5 15.5a4 4 0 0 1-.4-7.98A5.5 5.5 0 0 1 16.8 6.3a3.8 3.8 0 0 1 .7 7.54H6.5z" />
+          <path d="M5.5 18.2c3.8 2.4 9.2 2.4 13 0" />
+          <path d="M16.8 17.5l2 .6-.5 2" />
+        </svg>
+      );
+    case 'docker':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <rect x="4.5" y="9" width="3" height="2.8" rx="0.4" />
+          <rect x="7.5" y="9" width="3" height="2.8" rx="0.4" />
+          <rect x="10.5" y="9" width="3" height="2.8" rx="0.4" />
+          <rect x="7.5" y="6.2" width="3" height="2.8" rx="0.4" />
+          <rect x="10.5" y="6.2" width="3" height="2.8" rx="0.4" />
+          <path d="M3 12.5h13.5c1.6 0 2.7-.7 3.5-1.8.8.4 1.8.4 2.5-.1-.4 1.8-1.6 3-3.2 3.3-.8 3.2-4 5.1-8.5 5.1-4.8 0-7.8-2.3-7.8-6.5z" />
+        </svg>
+      );
+    case 'git':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <circle cx="6.5" cy="6.5" r="2.2" />
+          <circle cx="6.5" cy="17.5" r="2.2" />
+          <circle cx="17.5" cy="9.5" r="2.2" />
+          <path d="M6.5 8.7v6.6" />
+          <path d="M15.3 9.5H11a4.5 4.5 0 0 1-4.5-4.5" />
+        </svg>
+      );
+    case 'figma':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <path d="M9.2 3.5h2.8v5.5H9.2a2.75 2.75 0 1 1 0-5.5z" />
+          <path d="M12 3.5h2.8a2.75 2.75 0 1 1 0 5.5H12V3.5z" />
+          <path d="M9.2 9h2.8v5.5H9.2a2.75 2.75 0 1 1 0-5.5z" />
+          <circle cx="14.8" cy="11.75" r="2.75" />
+          <path d="M9.2 14.5h2.8v2.75a2.75 2.75 0 1 1-2.8-2.75z" />
+        </svg>
+      );
+    case 'powerbi':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <rect x="4.5" y="13" width="3.5" height="7" rx="1" />
+          <rect x="10.25" y="9" width="3.5" height="11" rx="1" />
+          <rect x="16" y="4.5" width="3.5" height="15.5" rx="1" />
+          <path d="M5.5 9.5l5-3.5 4.5 1.5" />
+        </svg>
+      );
+    case 'azure':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <path d="M13.2 4L5 18h4.8l5.8-10.2L13.2 4z" />
+          <path d="M14.2 9.5L19.5 19H9.2l4.2-3.4 2.4-2.1-1.6-4z" />
+        </svg>
+      );
+    case 'kubernetes':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <polygon points="12 3 19.5 7.3 19.5 16.7 12 21 4.5 16.7 4.5 7.3" />
+          <circle cx="12" cy="12" r="2.6" />
+          <path d="M12 5.5v3.9M12 14.6v3.9M6.4 8.8l3.4 1.9M14.2 13.3l3.4 1.9M17.6 8.8l-3.4 1.9M9.8 13.3l-3.4 1.9" />
+        </svg>
+      );
+    case 'dotnet':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <polygon points="12 2.8 20 7.4 20 16.6 12 21.2 4 16.6 4 7.4" />
+          <path d="M10.5 9.5a3 3 0 1 0 0 5" />
+          <path d="M13.5 10.5h3.5M13.5 13.5h3.5M14.4 9v6M16.4 9v6" />
+        </svg>
+      );
+    case 'neural':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <circle cx="5.5" cy="7.5" r="2" />
+          <circle cx="5.5" cy="16.5" r="2" />
+          <circle cx="12" cy="5.5" r="2" />
+          <circle cx="12" cy="12" r="2" />
+          <circle cx="12" cy="18.5" r="2" />
+          <circle cx="18.5" cy="12" r="2.2" />
+          <path d="M7.3 8.2l2.9 2.9M7.3 6.8l2.8-1M7.3 15.8l2.9-2.9M7.3 17.2l2.8 1M13.8 6.4l3.2 4.1M14 12h2.3M13.8 17.6l3.2-4.1" />
+        </svg>
+      );
+    case 'lock':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <rect x="5" y="11" width="14" height="9.5" rx="2.5" />
+          <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
+          <circle cx="12" cy="15.5" r="1.2" />
+        </svg>
+      );
+    case 'code':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <path d="M8 8l-4 4 4 4" />
+          <path d="M16 8l4 4-4 4" />
+          <path d="M13.5 6.5l-3 11" />
+        </svg>
+      );
+    case 'analytics':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className}>
+          <circle cx="10.5" cy="10.5" r="6" />
+          <path d="M15 15l4.5 4.5" />
+          <path d="M8 12l2-2 1.8 1.5 2.2-2.5" />
+        </svg>
+      );
+  }
+}
+
+/**
+ * Decorative Frosted-Glass Visual Panel between Key Curriculum Highlights and Action Buttons
+ */
+function CourseVisualPanel({
+  courseId,
+  CourseIcon,
+  theme,
+  isDark,
+  prefersReducedMotion,
+}: {
+  courseId: string;
+  CourseIcon: React.ComponentType<{ className?: string }>;
+  theme: CourseCardTheme;
+  isDark: boolean;
+  prefersReducedMotion: boolean | null;
+}) {
+  const techIcons = COURSE_TECH_ICONS_MAP[courseId] || DEFAULT_TECH_ICONS;
+
+  // Positions around the central soft-glow category icon
+  const nodePositions = [
+    'left-[12%] top-[18%]',
+    'right-[12%] top-[18%]',
+    'left-[16%] bottom-[16%]',
+    'right-[16%] bottom-[16%]',
+  ];
+
+  return (
+    <div
+      aria-hidden="true"
+      data-testid={`course-visual-panel-${courseId}`}
+      className={`relative w-full flex-1 min-h-[106px] md:min-h-[116px] lg:min-h-[134px] my-1.5 rounded-xl overflow-hidden backdrop-blur-md border flex items-center justify-center select-none pointer-events-none transition-colors duration-300 ${
+        isDark
+          ? 'bg-white/[0.08] border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]'
+          : `${theme.panelLightBorder} shadow-[inset_0_1px_0_rgba(255,255,255,0.92),0_4px_12px_rgba(15,23,42,0.03)]`
+      }`}
+      style={
+        !isDark
+          ? {
+              background: theme.panelLightSurface,
+            }
+          : undefined
+      }
+    >
+      {/* Faint Dot & Architectural Grid Pattern Behind Icons */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: isDark
+            ? 'radial-gradient(rgba(165, 243, 252, 0.24) 1px, transparent 1px), linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px)'
+            : `radial-gradient(${theme.panelAccentHex}26 1px, transparent 1px), linear-gradient(to right, ${theme.panelAccentHex}10 1px, transparent 1px), linear-gradient(to bottom, ${theme.panelAccentHex}10 1px, transparent 1px)`,
+          backgroundSize: '14px 14px, 28px 28px, 28px 28px',
+          backgroundPosition: 'center center',
+        }}
+      />
+
+      {/* Soft Radial Glow Halo in Center */}
+      <div
+        className="absolute w-28 h-28 lg:w-32 lg:h-32 rounded-full blur-2xl"
+        style={{
+          background: isDark
+            ? 'radial-gradient(circle, rgba(103, 232, 249, 0.36) 0%, rgba(255, 255, 255, 0.08) 65%, transparent 100%)'
+            : `radial-gradient(circle, ${theme.activeGlow} 0%, transparent 72%)`,
+        }}
+      />
+
+      {/* Decorative Orbital Rings & Connector Lines */}
+      <svg
+        viewBox="0 0 260 120"
+        fill="none"
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <ellipse
+          cx="130"
+          cy="60"
+          rx="76"
+          ry="36"
+          stroke={isDark ? 'rgba(103, 232, 249, 0.24)' : theme.panelAccentHex}
+          strokeOpacity={isDark ? 1 : 0.18}
+          strokeWidth="1"
+          strokeDasharray="3 3"
+        />
+        <circle
+          cx="130"
+          cy="60"
+          r="34"
+          stroke={isDark ? 'rgba(255, 255, 255, 0.22)' : theme.panelAccentHex}
+          strokeOpacity={isDark ? 1 : 0.2}
+          strokeWidth="1"
+        />
+        <line
+          x1="56"
+          y1="30"
+          x2="130"
+          y2="60"
+          stroke={isDark ? 'rgba(103, 232, 249, 0.22)' : theme.panelAccentHex}
+          strokeOpacity={isDark ? 1 : 0.16}
+          strokeWidth="1"
+        />
+        <line
+          x1="204"
+          y1="30"
+          x2="130"
+          y2="60"
+          stroke={isDark ? 'rgba(255, 255, 255, 0.22)' : theme.panelAccentHex}
+          strokeOpacity={isDark ? 1 : 0.16}
+          strokeWidth="1"
+        />
+        <line
+          x1="66"
+          y1="92"
+          x2="130"
+          y2="60"
+          stroke={isDark ? 'rgba(255, 255, 255, 0.22)' : theme.panelAccentHex}
+          strokeOpacity={isDark ? 1 : 0.16}
+          strokeWidth="1"
+        />
+        <line
+          x1="194"
+          y1="92"
+          x2="130"
+          y2="60"
+          stroke={isDark ? 'rgba(103, 232, 249, 0.22)' : theme.panelAccentHex}
+          strokeOpacity={isDark ? 1 : 0.16}
+          strokeWidth="1"
+        />
+      </svg>
+
+      {/* Surrounding 4 Floating Technology Outline Icons */}
+      {techIcons.slice(0, 4).map((techKey, idx) => {
+        const isCyanOnDark = idx % 2 === 1;
+        return (
+          <div
+            key={`${courseId}-${techKey}-${idx}`}
+            style={{
+              animation: prefersReducedMotion
+                ? 'none'
+                : `float-delayed ${3.8 + idx * 0.2}s ease-in-out infinite`,
+              animationDelay: `${idx * 0.55}s`,
+              color: isDark
+                ? isCyanOnDark
+                  ? '#67E8F9'
+                  : '#FFFFFF'
+                : idx % 2 === 0
+                ? theme.panelAccentHex
+                : theme.panelSecondaryHex,
+            }}
+            className={`motion-reduce:!animate-none absolute ${nodePositions[idx]} w-8 h-8 md:w-8.5 md:h-8.5 lg:w-9 lg:h-9 rounded-xl backdrop-blur-md border flex items-center justify-center ${
+              isDark
+                ? isCyanOnDark
+                  ? 'bg-cyan-400/[0.14] border-cyan-300/35 shadow-[0_4px_14px_rgba(0,176,240,0.22)]'
+                  : 'bg-white/[0.14] border-white/30 shadow-[0_4px_14px_rgba(15,23,42,0.22)]'
+                : `bg-white/90 ${theme.panelLightBorder} shadow-[0_4px_12px_rgba(15,23,42,0.06)]`
+            }`}
+          >
+            <TechOutlineSvg icon={techKey} className="w-4 h-4 lg:w-4.5 lg:h-4.5" />
+          </div>
+        );
+      })}
+
+      {/* Central Large Soft-Glow Category Icon Emblem */}
+      <div
+        style={{
+          animation: prefersReducedMotion ? 'none' : 'float-slow 4s ease-in-out infinite',
+          color: isDark ? '#FFFFFF' : theme.panelAccentHex,
+          boxShadow: isDark
+            ? '0 0 28px rgba(103, 232, 249, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.35)'
+            : `0 8px 22px -4px ${theme.activeGlow}, inset 0 1px 0 rgba(255, 255, 255, 0.95)`,
+        }}
+        className={`motion-reduce:!animate-none relative z-10 w-12 h-12 md:w-13 md:h-13 lg:w-14 lg:h-14 rounded-2xl backdrop-blur-md border flex items-center justify-center ${
+          isDark
+            ? 'bg-gradient-to-br from-white/25 to-cyan-300/15 border-cyan-200/45'
+            : `bg-white/95 ${theme.panelLightBorder}`
+        }`}
+      >
+        <CourseIcon
+          className={`w-6 h-6 lg:w-7 lg:h-7 ${
+            isDark ? 'text-white drop-shadow-[0_0_8px_rgba(103,232,249,0.7)]' : ''
+          }`}
+        />
+      </div>
+    </div>
+  );
+}
 
 function WhatsAppIcon({ className = 'w-4 h-4' }: { className?: string }) {
   return (
@@ -657,7 +1062,7 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
 
                         {/* Curriculum Highlights */}
                         <div
-                          className={`pt-1.5 border-t mb-2 ${
+                          className={`pt-1.5 border-t ${
                             isActive ? 'border-white/15' : 'border-slate-200/75'
                           }`}
                         >
@@ -687,7 +1092,16 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                           </div>
                         </div>
 
-                        {/* Bottom Block: Pushed to bottom with mt-auto so buttons always align */}
+                        {/* Modern Decorative Frosted-Glass Visual Panel */}
+                        <CourseVisualPanel
+                          courseId={course.id}
+                          CourseIcon={CourseIcon}
+                          theme={theme}
+                          isDark={isActive}
+                          prefersReducedMotion={prefersReducedMotion}
+                        />
+
+                        {/* Bottom Block: Kept at bottom so buttons always align */}
                         <div
                           className={`mt-auto pt-1.5 border-t space-y-1.5 ${
                             isActive ? 'border-white/15' : 'border-slate-200/80'
@@ -1057,8 +1471,17 @@ export const CoursesCarousel: React.FC<CoursesCarouselProps> = ({
                           </div>
                         </div>
 
-                        {/* Bottom Section: Pushed to bottom with mt-auto so buttons always sit at exact same line */}
-                        <div className="mt-auto pt-2 space-y-1.5">
+                        {/* Modern Decorative Frosted-Glass Visual Panel */}
+                        <CourseVisualPanel
+                          courseId={course.id}
+                          CourseIcon={CourseIcon}
+                          theme={theme}
+                          isDark={isCenter}
+                          prefersReducedMotion={prefersReducedMotion}
+                        />
+
+                        {/* Bottom Section: Anchored at bottom so buttons always sit at exact same line */}
+                        <div className="mt-auto pt-1.5 space-y-1.5">
                           {regional && regional.length > 0 && (
                             <div
                               className={`pt-1.5 border-t flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] leading-tight ${
