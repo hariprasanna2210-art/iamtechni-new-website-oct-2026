@@ -1193,22 +1193,69 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
             </AnimatedHeading>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-            {/* Student Internship Card */}
-            <div className="bg-[#F4F8FF] border border-blue-200/80 rounded-2xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all">
-              <div className="space-y-3">
-                <div className="w-11 h-11 rounded-xl bg-[#2563EB] text-white flex items-center justify-center shadow-xs">
-                  <GraduationCap className="w-5 h-5" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+            {/* Student Internship Card (Cyan to Blue Gradient Header) */}
+            <div className="group relative bg-white border border-sky-200/80 hover:border-[#00B0F0] rounded-2xl overflow-hidden flex flex-col justify-between shadow-[0_8px_24px_-6px_rgba(2,132,199,0.10)] hover:shadow-[0_18px_40px_-8px_rgba(0,176,240,0.26)] hover:-translate-y-1.5 motion-reduce:hover:translate-y-0 transition-all duration-300 motion-reduce:transition-none">
+              <div>
+                {/* Gradient Header Panel: Cyan (#00B0F0) to Blue (#1C35EA) */}
+                <div
+                  className="relative px-6 sm:px-8 pt-6 pb-6 overflow-hidden flex items-start justify-between gap-4"
+                  style={{
+                    background: 'linear-gradient(135deg, #00B0F0 0%, #0284C7 45%, #1C35EA 100%)',
+                  }}
+                >
+                  {/* Subtle Decorative Pattern (Soft Circles & Dot Grid) Behind Icon */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 opacity-20"
+                    style={{
+                      backgroundImage:
+                        'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.85) 1.25px, transparent 0)',
+                      backgroundSize: '18px 18px',
+                    }}
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -top-10 -left-10 w-36 h-36 rounded-full bg-white/15 blur-xl"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -bottom-12 right-8 w-40 h-40 rounded-full border border-white/20 bg-white/5"
+                  />
+
+                  {/* Large Rounded White Icon Badge (~64 px) with Soft Glow */}
+                  <div
+                    className="relative z-10 w-16 h-16 rounded-2xl bg-white flex items-center justify-center shrink-0 transition-transform duration-300 motion-reduce:transition-none group-hover:scale-105"
+                    style={{
+                      boxShadow:
+                        '0 0 24px rgba(255, 255, 255, 0.55), 0 8px 20px rgba(15, 23, 42, 0.16)',
+                    }}
+                  >
+                    <GraduationCap className="w-8 h-8 text-[#0284C7] stroke-[2.2]" />
+                  </div>
+
+                  {/* Top-Right Pill Tag in Light Tint of Card Colour */}
+                  <span
+                    aria-hidden="true"
+                    className="relative z-10 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-sky-50/95 text-[#0369A1] border border-white/60 shadow-2xs"
+                  >
+                    Student
+                  </span>
                 </div>
-                <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold text-[#1E3A8A]">
-                  Student Internship
-                </h3>
-                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  For college students who want real project experience.
-                </p>
+
+                {/* Card Body Content */}
+                <div className="relative px-6 sm:px-8 pt-6 pb-4 space-y-2.5">
+                  <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] !text-[24px] !leading-[1.25] font-bold text-[#1E3A8A]">
+                    Student Internship
+                  </h3>
+                  <p className="!text-[16px] !leading-[1.6] text-slate-600">
+                    For college students who want real project experience.
+                  </p>
+                </div>
               </div>
 
-              <div>
+              {/* Full-Width 48px Gradient CTA Button */}
+              <div className="px-6 sm:px-8 pb-6 sm:pb-8 pt-2">
                 <button
                   type="button"
                   disabled={Boolean(internshipLoaderMessage)}
@@ -1218,29 +1265,79 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       'Opening Student Internship application…'
                     )
                   }
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  style={{
+                    background: 'linear-gradient(135deg, #00B0F0 0%, #0284C7 50%, #1C35EA 100%)',
+                  }}
+                  className="group/btn w-full h-[48px] px-6 rounded-xl text-white font-semibold text-sm sm:text-[15px] shadow-[0_6px_18px_rgba(2,132,199,0.22)] hover:shadow-[0_10px_24px_rgba(0,176,240,0.34)] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 transition-all duration-300 motion-reduce:transition-none active:scale-[0.99] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <span>Apply as Student</span>
-                  <ArrowRight className="w-4 h-4 shrink-0" />
+                  <ArrowRight className="w-4 h-4 shrink-0 transition-transform duration-300 motion-reduce:transition-none group-hover/btn:translate-x-[4px]" />
                 </button>
               </div>
             </div>
 
-            {/* Professional Internship Card */}
-            <div className="bg-[#F6F4FF] border border-violet-200/80 rounded-2xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-2xs hover:shadow-md hover:border-violet-300 transition-all">
-              <div className="space-y-3">
-                <div className="w-11 h-11 rounded-xl bg-[#1E3A8A] text-white flex items-center justify-center shadow-xs">
-                  <Briefcase className="w-5 h-5" />
+            {/* Professional Internship Card (Purple to Navy Gradient Header) */}
+            <div className="group relative bg-white border border-violet-200/80 hover:border-[#4D19EA] rounded-2xl overflow-hidden flex flex-col justify-between shadow-[0_8px_24px_-6px_rgba(77,25,234,0.10)] hover:shadow-[0_18px_40px_-8px_rgba(77,25,234,0.26)] hover:-translate-y-1.5 motion-reduce:hover:translate-y-0 transition-all duration-300 motion-reduce:transition-none">
+              <div>
+                {/* Gradient Header Panel: Purple (#4D19EA) to Navy (#14205A) */}
+                <div
+                  className="relative px-6 sm:px-8 pt-6 pb-6 overflow-hidden flex items-start justify-between gap-4"
+                  style={{
+                    background: 'linear-gradient(135deg, #4D19EA 0%, #3730A3 50%, #14205A 100%)',
+                  }}
+                >
+                  {/* Subtle Decorative Pattern (Soft Circles & Dot Grid) Behind Icon */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 opacity-20"
+                    style={{
+                      backgroundImage:
+                        'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.85) 1.25px, transparent 0)',
+                      backgroundSize: '18px 18px',
+                    }}
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -top-10 -left-10 w-36 h-36 rounded-full bg-white/15 blur-xl"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -bottom-12 right-8 w-40 h-40 rounded-full border border-white/20 bg-white/5"
+                  />
+
+                  {/* Large Rounded White Icon Badge (~64 px) with Soft Glow */}
+                  <div
+                    className="relative z-10 w-16 h-16 rounded-2xl bg-white flex items-center justify-center shrink-0 transition-transform duration-300 motion-reduce:transition-none group-hover:scale-105"
+                    style={{
+                      boxShadow:
+                        '0 0 24px rgba(255, 255, 255, 0.55), 0 8px 20px rgba(15, 23, 42, 0.16)',
+                    }}
+                  >
+                    <Briefcase className="w-8 h-8 text-[#4D19EA] stroke-[2.2]" />
+                  </div>
+
+                  {/* Top-Right Pill Tag in Light Tint of Card Colour */}
+                  <span
+                    aria-hidden="true"
+                    className="relative z-10 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-violet-50/95 text-[#4D19EA] border border-white/60 shadow-2xs"
+                  >
+                    Professional
+                  </span>
                 </div>
-                <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] text-xl font-bold text-[#1E3A8A]">
-                  Professional Internship
-                </h3>
-                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  For graduates and working professionals building industry skills.
-                </p>
+
+                {/* Card Body Content */}
+                <div className="relative px-6 sm:px-8 pt-6 pb-4 space-y-2.5">
+                  <h3 className="!font-['Outfit','Space_Grotesk',sans-serif] !text-[24px] !leading-[1.25] font-bold text-[#1E3A8A]">
+                    Professional Internship
+                  </h3>
+                  <p className="!text-[16px] !leading-[1.6] text-slate-600">
+                    For graduates and working professionals building industry skills.
+                  </p>
+                </div>
               </div>
 
-              <div>
+              {/* Full-Width 48px Gradient CTA Button */}
+              <div className="px-6 sm:px-8 pb-6 sm:pb-8 pt-2">
                 <button
                   type="button"
                   disabled={Boolean(internshipLoaderMessage)}
@@ -1250,24 +1347,27 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
                       'Opening Professional Internship application…'
                     )
                   }
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A]/85 text-white font-semibold text-sm shadow-xs hover:shadow-[0_4px_14px_rgba(30,58,138,0.24)] transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  style={{
+                    background: 'linear-gradient(135deg, #4D19EA 0%, #3730A3 50%, #14205A 100%)',
+                  }}
+                  className="group/btn w-full h-[48px] px-6 rounded-xl text-white font-semibold text-sm sm:text-[15px] shadow-[0_6px_18px_rgba(77,25,234,0.22)] hover:shadow-[0_10px_24px_rgba(77,25,234,0.34)] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 transition-all duration-300 motion-reduce:transition-none active:scale-[0.99] inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <span>Apply as Professional</span>
-                  <ArrowRight className="w-4 h-4 shrink-0" />
+                  <ArrowRight className="w-4 h-4 shrink-0 transition-transform duration-300 motion-reduce:transition-none group-hover/btn:translate-x-[4px]" />
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 text-sm text-slate-600">
-            Already completed your internship?{' '}
+          <div className="mt-6 text-sm text-slate-600 flex flex-wrap items-center gap-2">
+            <span>Already completed your internship?</span>
             <Link
               to="/verify"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="font-semibold text-[#1C35EA] hover:underline inline-flex items-center gap-1"
+              className="group/verify inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 hover:bg-blue-100/90 border border-blue-200/80 font-semibold text-[#1C35EA] transition-all duration-200 motion-reduce:transition-none"
             >
               <span>Verify a certificate</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 motion-reduce:transition-none group-hover/verify:translate-x-0.5" />
             </Link>
           </div>
         </div>
