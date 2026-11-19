@@ -10,6 +10,7 @@ import {
 import { PageRoute, ProjectItem } from './types';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
+import { PageLinkMarquee } from './components/layout/PageLinkMarquee';
 import { ProjectModal } from './components/common/ProjectModal';
 import { CaseStudyModal } from './components/common/CaseStudyModal';
 import { IamtechniChatbot } from './components/chat/IamtechniChatbot';
@@ -832,6 +833,9 @@ export default function App() {
           />
         </Routes>
       </main>
+
+      {/* Continuous Page-Link Marquee Strip Above Footer */}
+      <PageLinkMarquee />
 
       {/* Shared Global Footer */}
       <Footer
