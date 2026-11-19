@@ -132,7 +132,8 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedCourseForForm, setSelectedCourseForForm] = useState<string>(coursesData[0].title);
-  const [openFaq, setOpenFaq] = useState<Record<number, boolean>>({ 0: true, 1: true });
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [focusedFaqIndex, setFocusedFaqIndex] = useState<number | null>(null);
   const [internshipLoaderMessage, setInternshipLoaderMessage] = useState<string | null>(null);
   const internshipNavTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -284,8 +285,35 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
     }
   };
 
+  const isFineHoverDevice = () =>
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
   const toggleFaq = (index: number) => {
-    setOpenFaq((prev) => ({ ...prev, [index]: !prev[index] }));
+    setOpenFaqIndex((prev) => (prev === index ? null : index));
+  };
+
+  const handleFaqMouseEnter = (index: number) => {
+    if (isFineHoverDevice()) {
+      setOpenFaqIndex(index);
+    }
+  };
+
+  const handleFaqMouseLeave = (index: number) => {
+    if (isFineHoverDevice()) {
+      setOpenFaqIndex((prev) => {
+        if (focusedFaqIndex === index) {
+          return index;
+        }
+        return prev === index ? null : prev;
+      });
+    }
+  };
+
+  const handleFaqBlur = (index: number) => {
+    setFocusedFaqIndex((prev) => (prev === index ? null : prev));
+    setOpenFaqIndex((prev) => (prev === index ? null : prev));
   };
 
   return (
@@ -1042,35 +1070,54 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
 
           <div className="space-y-3 pt-4">
             {trainingFaqs.map((faq, idx) => {
-              const isOpen = !!openFaq[idx];
+              const isOpen = openFaqIndex === idx;
               return (
                 <div
                   key={idx}
-                  className={`rounded-2xl border transition-all duration-200 ${
+                  onMouseEnter={() => handleFaqMouseEnter(idx)}
+                  onMouseLeave={() => handleFaqMouseLeave(idx)}
+                  className={`group rounded-2xl border transition-all duration-200 motion-reduce:transition-none ${
                     isOpen
                       ? 'border-blue-200 bg-white shadow-md'
-                      : 'border-slate-200/90 bg-white shadow-2xs hover:border-slate-300'
+                      : 'border-slate-200/90 bg-white shadow-2xs hover:border-blue-200'
                   }`}
                 >
                   <button
+                    type="button"
                     onClick={() => toggleFaq(idx)}
-                    className="w-full min-h-[48px] p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors cursor-pointer"
+                    onFocus={() => setFocusedFaqIndex(idx)}
+                    onBlur={() => handleFaqBlur(idx)}
+                    className={`w-full min-h-[48px] p-5 text-left flex items-center justify-between gap-4 rounded-2xl transition-colors duration-200 motion-reduce:transition-none cursor-pointer hover:bg-[#EFF6FF] group-hover:bg-[#EFF6FF] ${
+                      isOpen ? 'bg-[#EFF6FF]/70 rounded-b-none' : ''
+                    }`}
                     aria-expanded={isOpen}
+                    aria-controls={`training-faq-answer-${idx}`}
+                    id={`training-faq-question-${idx}`}
                   >
                     <span className="text-sm sm:text-base font-bold text-[#1E3A8A]">
                       {faq.question}
                     </span>
                     <ChevronDown
-                      className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
+                      className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-[250ms] ease-out motion-reduce:transition-none ${
                         isOpen ? 'rotate-180 text-[#2563EB]' : ''
                       }`}
                     />
                   </button>
-                  {isOpen && (
-                    <div className="px-5 pb-5 pt-2 text-sm sm:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100">
-                      {faq.answer}
+                  <div
+                    id={`training-faq-answer-${idx}`}
+                    role="region"
+                    aria-labelledby={`training-faq-question-${idx}`}
+                    aria-hidden={!isOpen}
+                    className={`grid transition-[grid-template-rows,opacity] duration-[250ms] ease-out motion-reduce:transition-none ${
+                      isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="px-5 pb-5 pt-2 text-sm sm:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100">
+                        {faq.answer}
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
               );
             })}
