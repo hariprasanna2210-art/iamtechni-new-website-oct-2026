@@ -4,7 +4,7 @@ export const digitalMarketingSeoPage: ServicePageData = {
   slug: 'digital-marketing',
   seoTitle: 'Digital Marketing & Technical SEO Services | Organic Growth | IAMTECHNI',
   metaDescription:
-    'Accelerate qualified inbound leads with IAMTECHNI Digital Marketing & Technical SEO services. Core Web Vitals optimization, Schema.org JSON-LD, and conversion funnels.',
+    'Digital marketing and technical SEO services in Pondicherry and Tamil Nadu by IAMTECHNI. Local SEO, conversion-focused campaigns and full-funnel analytics.',
   h1: 'Digital Marketing & SEO',
   sections: [
     {
