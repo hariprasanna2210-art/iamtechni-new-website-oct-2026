@@ -6,7 +6,7 @@ import {
 } from '../../data/certificateSkills';
 
 export type CertificateType = 'student' | 'professional' | 'course_completion';
-export type CertificateLogoOption = 'none' | 'aws';
+export type CertificateLogoOption = 'none' | 'aws' | 'custom';
 
 export interface CertificateTemplateData {
   certificateId: string;
@@ -20,6 +20,7 @@ export interface CertificateTemplateData {
   college?: string;
   keyAreas?: string[];
   logo?: CertificateLogoOption;
+  customLogoUrl?: string;
   status?: 'valid' | 'revoked';
 }
 
@@ -83,6 +84,10 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
   const isStudent = data.type === 'student';
   const isCourseCompletion = data.type === 'course_completion';
   const showAwsLogo = isCourseCompletion && data.logo === 'aws';
+  const customLogoSrc = (data.customLogoUrl ?? '').trim();
+  const showCustomLogo =
+    isCourseCompletion && data.logo === 'custom' && customLogoSrc.length > 0;
+  const showAnyCourseLogo = showAwsLogo || showCustomLogo;
   const displayName = data.fullName.trim() || 'Applicant Full Name';
 
   const adjustRecipientNameSize = React.useCallback(() => {
@@ -296,11 +301,11 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             minHeight: 0,
             gap: isCourseCompletion
               ? isTwoRowSkills
-                ? showAwsLogo
+                ? showAnyCourseLogo
                   ? '18px'
                   : '22px'
                 : visibleSkills.length > 0
-                  ? showAwsLogo
+                  ? showAnyCourseLogo
                     ? '24px'
                     : '30px'
                   : '44px'
@@ -655,7 +660,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           </div>
           )}
 
-          {/* 3b. Optional AWS logo in lower body (same position as Key Areas of Work icons, above Issuing date & Value ID) */}
+          {/* 3b. Optional AWS or Custom logo in lower body (same position as Key Areas of Work icons, above Issuing date & Value ID) */}
           {showAwsLogo && (
             <div
               data-cert-aws-logo="true"
@@ -685,6 +690,44 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                   d="M578.59 368.94c-70.03 51.72-171.69 79.25-258.49 79.25A469.127 469.127 0 0 1 2.83 327.46c-6.53-5.89-.77-13.96 7.17-9.47a637.37 637.37 0 0 0 316.88 84.12 630.22 630.22 0 0 0 241.59-49.55c11.78-5 21.77 7.8 10.12 16.38zM607.78 335.65c-8.96-11.52-59.28-5.38-81.81-2.69-6.79.77-7.94-5.12-1.79-9.47 40.07-28.17 105.88-20.1 113.44-10.63 7.55 9.47-2.05 75.41-39.56 106.91-5.76 4.87-11.27 2.3-8.71-4.1 8.44-21.25 27.39-68.49 18.43-80.02z"
                 />
               </svg>
+            </div>
+          )}
+
+          {showCustomLogo && (
+            <div
+              data-cert-custom-logo="true"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+              }}
+            >
+              <div
+                style={{
+                  width: '94px',
+                  height: '58px',
+                  padding: '2px',
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <img
+                  src={customLogoSrc}
+                  alt="Organization Logo"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    width: 'auto',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    objectPosition: 'center',
+                    display: 'block',
+                  }}
+                />
+              </div>
             </div>
           )}
         </div>

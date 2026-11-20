@@ -46,6 +46,8 @@ import {
   Search,
   ShieldAlert,
   Sparkles,
+  Trash2,
+  Upload,
   User,
   Users,
   X,
@@ -117,6 +119,7 @@ interface CertificateRecord {
   college: string;
   keyAreas: string[];
   logo: CertificateLogoOption;
+  customLogoUrl: string;
   status: CertificateStatus;
   applicationId: string;
   createdAt: Timestamp | Date | null;
@@ -297,6 +300,16 @@ const AdminPage: React.FC = () => {
   const [certFullName, setCertFullName] = useState('');
   const [certCourseName, setCertCourseName] = useState('');
   const [certLogo, setCertLogo] = useState<CertificateLogoOption>('none');
+  const [customLogoPreviewUrl, setCustomLogoPreviewUrl] = useState<string>('');
+  const [customLogoDataUrl, setCustomLogoDataUrl] = useState<string>('');
+  const [customLogoFileName, setCustomLogoFileName] = useState<string>('');
+  const [customLogoDimensions, setCustomLogoDimensions] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
+  const [customLogoError, setCustomLogoError] = useState<string | null>(null);
+  const customLogoObjectUrlRef = useRef<string | null>(null);
+  const customLogoFileInputRef = useRef<HTMLInputElement | null>(null);
   const [certCourseSelect, setCertCourseSelect] = useState<string>('Data Analytics');
   const [certCourseOther, setCertCourseOther] = useState('');
   const [certDurationMonths, setCertDurationMonths] = useState<number>(3);
@@ -474,7 +487,10 @@ const AdminPage: React.FC = () => {
             keyAreas: Array.isArray(d.keyAreas)
               ? d.keyAreas.map((item) => String(item)).slice(0, 12)
               : [],
-            logo: d.logo === 'aws' ? 'aws' : 'none',
+            logo:
+              d.logo === 'aws' ? 'aws' : d.logo === 'custom' ? 'custom' : 'none',
+            customLogoUrl:
+              typeof d.customLogoUrl === 'string' ? d.customLogoUrl : '',
             status: d.status === 'revoked' ? 'revoked' : 'valid',
             applicationId: String(d.applicationId ?? ''),
             createdAt: (d.createdAt as Timestamp | Date | null) ?? null,
@@ -781,6 +797,10 @@ const AdminPage: React.FC = () => {
       college: certType === 'student' ? certCollege : '',
       keyAreas: isCourseCompletionCert ? certCourseKeyAreas : certKeyAreas,
       logo: isCourseCompletionCert ? certLogo : 'none',
+      customLogoUrl:
+        isCourseCompletionCert && certLogo === 'custom'
+          ? customLogoDataUrl || customLogoPreviewUrl
+          : '',
       status: 'valid',
     }),
     [
@@ -797,6 +817,8 @@ const AdminPage: React.FC = () => {
       certKeyAreas,
       certCourseKeyAreas,
       certLogo,
+      customLogoDataUrl,
+      customLogoPreviewUrl,
     ]
   );
 
@@ -1030,6 +1052,146 @@ const AdminPage: React.FC = () => {
     setCourseCustomSkillInput('');
   };
 
+  useEffect(() => {
+    return () => {
+      if (customLogoObjectUrlRef.current) {
+        URL.revokeObjectURL(customLogoObjectUrlRef.current);
+        customLogoObjectUrlRef.current = null;
+      }
+    };
+  }, []);
+
+  const handleRemoveCustomLogo = () => {
+    if (customLogoObjectUrlRef.current) {
+      URL.revokeObjectURL(customLogoObjectUrlRef.current);
+      customLogoObjectUrlRef.current = null;
+    }
+    setCustomLogoPreviewUrl('');
+    setCustomLogoDataUrl('');
+    setCustomLogoFileName('');
+    setCustomLogoDimensions(null);
+    setCustomLogoError(null);
+    setGeneratedCert(null);
+    if (customLogoFileInputRef.current) {
+      customLogoFileInputRef.current.value = '';
+    }
+  };
+
+  const handleCustomLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setCustomLogoError(null);
+    setCertFormError(null);
+
+    const allowedMimeTypes = new Set([
+      'image/png',
+      'image/jpeg',
+      'image/jpg',
+      'image/svg+xml',
+      'image/webp',
+    ]);
+    const hasAllowedExt = /\.(png|jpe?g|svg|webp)$/i.test(file.name);
+
+    if (!allowedMimeTypes.has(file.type.toLowerCase()) && !hasAllowedExt) {
+      setCustomLogoError(
+        'Invalid file type. Please upload a PNG, JPG, JPEG, SVG, or WebP image.'
+      );
+      e.target.value = '';
+      return;
+    }
+
+    const MAX_LOGO_FILE_BYTES = 5 * 1024 * 1024;
+    if (file.size > MAX_LOGO_FILE_BYTES) {
+      setCustomLogoError('File is too large. Maximum allowed file size is 5 MB.');
+      e.target.value = '';
+      return;
+    }
+
+    const tempObjectUrl = URL.createObjectURL(file);
+    const img = new Image();
+
+    img.onload = () => {
+      const naturalW = img.naturalWidth || img.width || 94;
+      const naturalH = img.naturalHeight || img.height || 58;
+
+      if (naturalW <= 0 || naturalH <= 0) {
+        URL.revokeObjectURL(tempObjectUrl);
+        setCustomLogoError('Could not detect image dimensions. Please choose a valid logo file.');
+        return;
+      }
+
+      // Clean up any previous object URL before storing the new one
+      if (customLogoObjectUrlRef.current) {
+        URL.revokeObjectURL(customLogoObjectUrlRef.current);
+      }
+      customLogoObjectUrlRef.current = tempObjectUrl;
+
+      setCustomLogoDimensions({ width: naturalW, height: naturalH });
+      setCustomLogoFileName(file.name);
+      setCustomLogoPreviewUrl(tempObjectUrl);
+      setGeneratedCert(null);
+
+      const isSvg =
+        file.type.toLowerCase() === 'image/svg+xml' || /\.svg$/i.test(file.name);
+
+      if (isSvg && file.size <= 150 * 1024) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === 'string' && reader.result.startsWith('data:')) {
+            setCustomLogoDataUrl(reader.result);
+          }
+        };
+        reader.readAsDataURL(file);
+        return;
+      }
+
+      // Automatically resize within 3x of the 94x58 display box (282x174) while preserving aspect ratio & transparency
+      const TARGET_MAX_W = 94 * 3;
+      const TARGET_MAX_H = 58 * 3;
+      const scale = Math.min(1, TARGET_MAX_W / naturalW, TARGET_MAX_H / naturalH);
+      const outW = Math.max(1, Math.round(naturalW * scale));
+      const outH = Math.max(1, Math.round(naturalH * scale));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = outW;
+      canvas.height = outH;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, outW, outH);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, outW, outH);
+        const isJpeg =
+          file.type.toLowerCase() === 'image/jpeg' ||
+          file.type.toLowerCase() === 'image/jpg' ||
+          /\.jpe?g$/i.test(file.name);
+        const normalizedDataUrl = isJpeg
+          ? canvas.toDataURL('image/jpeg', 0.92)
+          : canvas.toDataURL('image/png');
+        setCustomLogoDataUrl(normalizedDataUrl);
+      } else {
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === 'string') {
+            setCustomLogoDataUrl(reader.result);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(tempObjectUrl);
+      setCustomLogoError('Could not read the selected image file. Please try another logo.');
+      if (customLogoFileInputRef.current) {
+        customLogoFileInputRef.current.value = '';
+      }
+    };
+
+    img.src = tempObjectUrl;
+  };
+
   const handleGenerateCertificate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !db || isGeneratingCert) return;
@@ -1059,6 +1221,12 @@ const AdminPage: React.FC = () => {
     if (isCourseCert) {
       if (certCourseKeyAreas.length > 12) {
         setCertFormError('Maximum 12 key areas of work allowed.');
+        return;
+      }
+      if (certLogo === 'custom' && !customLogoDataUrl && !customLogoPreviewUrl) {
+        setCertFormError(
+          'Please upload a custom logo image, or select None or AWS.'
+        );
         return;
       }
     } else {
@@ -1124,6 +1292,11 @@ const AdminPage: React.FC = () => {
         }
       }
 
+      const resolvedCustomLogoUrl =
+        isCourseCert && certLogo === 'custom'
+          ? customLogoDataUrl || customLogoPreviewUrl
+          : '';
+
       const publicCertificatePayload = isCourseCert
         ? {
             certificateId: finalCertificateId,
@@ -1137,6 +1310,7 @@ const AdminPage: React.FC = () => {
             college: '',
             keyAreas: certCourseKeyAreas.slice(0, 12),
             logo: certLogo,
+            customLogoUrl: resolvedCustomLogoUrl,
             status: 'valid' as const,
             applicationId: '',
             createdAt: serverTimestamp(),
@@ -1154,6 +1328,7 @@ const AdminPage: React.FC = () => {
             college: certType === 'student' ? certCollege.trim() : '',
             keyAreas: certKeyAreas.slice(0, 12),
             logo: 'none' as const,
+            customLogoUrl: '',
             status: 'valid' as const,
             applicationId: linkedAppPublicId || '',
             createdAt: serverTimestamp(),
@@ -1183,6 +1358,7 @@ const AdminPage: React.FC = () => {
         college: publicCertificatePayload.college,
         keyAreas: publicCertificatePayload.keyAreas,
         logo: publicCertificatePayload.logo,
+        customLogoUrl: publicCertificatePayload.customLogoUrl,
         status: 'valid',
       };
 
@@ -2226,17 +2402,18 @@ const AdminPage: React.FC = () => {
                           />
                         </div>
 
-                        {/* Optional Logo Choice (None or AWS) */}
+                        {/* Optional Logo Choice (None, AWS, or Upload Custom Logo) */}
                         <div>
                           <span className="block text-xs font-semibold text-slate-700 mb-1.5">
                             Logo{' '}
                             <span className="text-slate-400 font-normal">(optional)</span>
                           </span>
-                          <div className="grid grid-cols-2 gap-2.5">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                             <button
                               type="button"
                               onClick={() => {
                                 setCertLogo('none');
+                                setCustomLogoError(null);
                                 setGeneratedCert(null);
                               }}
                               className={`min-h-[44px] px-4 py-2 rounded-xl border text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
@@ -2252,6 +2429,7 @@ const AdminPage: React.FC = () => {
                               type="button"
                               onClick={() => {
                                 setCertLogo('aws');
+                                setCustomLogoError(null);
                                 setGeneratedCert(null);
                               }}
                               className={`min-h-[44px] px-4 py-2 rounded-xl border text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
@@ -2262,7 +2440,124 @@ const AdminPage: React.FC = () => {
                             >
                               <span>AWS</span>
                             </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCertLogo('custom');
+                                setCustomLogoError(null);
+                                setGeneratedCert(null);
+                              }}
+                              className={`min-h-[44px] px-4 py-2 rounded-xl border text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
+                                certLogo === 'custom'
+                                  ? 'border-[#1C35EA] bg-[#EEF4FF] text-[#1C35EA]'
+                                  : 'border-slate-200 bg-[#F4F7FC] text-slate-700 hover:bg-slate-100'
+                              }`}
+                            >
+                              <span>Upload Custom Logo</span>
+                            </button>
                           </div>
+
+                          {certLogo === 'custom' && (
+                            <div className="mt-2.5 p-3.5 rounded-xl border border-slate-200 bg-[#F8FAFF] space-y-3">
+                              <input
+                                ref={customLogoFileInputRef}
+                                id="cert-custom-logo-input"
+                                type="file"
+                                accept=".png,.jpg,.jpeg,.svg,.webp,image/png,image/jpeg,image/svg+xml,image/webp"
+                                onChange={handleCustomLogoFileChange}
+                                className="sr-only"
+                              />
+
+                              {!customLogoPreviewUrl && !customLogoDataUrl ? (
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
+                                  <div className="min-w-0">
+                                    <p className="text-xs font-semibold text-slate-700">
+                                      Upload organization or company logo
+                                    </p>
+                                    <p className="text-[11px] text-slate-500 mt-0.5">
+                                      PNG, JPG, JPEG, SVG, or WebP (max 5 MB) · Auto-resized to 94×58 px
+                                    </p>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => customLogoFileInputRef.current?.click()}
+                                    className="min-h-[44px] lg:min-h-[38px] px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                                  >
+                                    <Upload className="w-3.5 h-3.5 shrink-0" />
+                                    <span>Choose Logo File</span>
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                  <div className="flex items-center gap-3 min-w-0">
+                                    <div
+                                      style={{
+                                        width: '94px',
+                                        height: '58px',
+                                        padding: '2px',
+                                        boxSizing: 'border-box',
+                                      }}
+                                      className="rounded-lg border border-slate-200 bg-white flex items-center justify-center shrink-0 overflow-hidden"
+                                    >
+                                      <img
+                                        src={customLogoPreviewUrl || customLogoDataUrl}
+                                        alt="Uploaded custom logo preview"
+                                        style={{
+                                          maxWidth: '100%',
+                                          maxHeight: '100%',
+                                          width: 'auto',
+                                          height: 'auto',
+                                          objectFit: 'contain',
+                                          objectPosition: 'center',
+                                          display: 'block',
+                                        }}
+                                      />
+                                    </div>
+                                    <div className="min-w-0">
+                                      <p className="text-xs font-semibold text-slate-800 truncate">
+                                        {customLogoFileName || 'Custom logo uploaded'}
+                                      </p>
+                                      <p className="text-[11px] text-slate-500 mt-0.5">
+                                        {customLogoDimensions
+                                          ? `Original ${customLogoDimensions.width}×${customLogoDimensions.height} px · Auto-fitted to 94×58 px`
+                                          : 'Auto-fitted to 94×58 px'}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    <button
+                                      type="button"
+                                      onClick={() => customLogoFileInputRef.current?.click()}
+                                      className="min-h-[44px] lg:min-h-[36px] px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                                    >
+                                      <Upload className="w-3.5 h-3.5 shrink-0" />
+                                      <span>Replace</span>
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={handleRemoveCustomLogo}
+                                      className="min-h-[44px] lg:min-h-[36px] px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5 shrink-0" />
+                                      <span>Remove</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+
+                              {customLogoError && (
+                                <div
+                                  role="alert"
+                                  className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2"
+                                >
+                                  <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                                  <span>{customLogoError}</span>
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </>
                     ) : (
@@ -2787,6 +3082,7 @@ const AdminPage: React.FC = () => {
                             college: cert.college,
                             keyAreas: cert.keyAreas,
                             logo: cert.logo,
+                            customLogoUrl: cert.customLogoUrl,
                             status: cert.status,
                           };
                           return (
@@ -2915,6 +3211,7 @@ const AdminPage: React.FC = () => {
                         college: cert.college,
                         keyAreas: cert.keyAreas,
                         logo: cert.logo,
+                        customLogoUrl: cert.customLogoUrl,
                         status: cert.status,
                       };
                       return (
