@@ -4,7 +4,7 @@ export const webDevelopmentSeoPage: ServicePageData = {
   slug: 'web-development',
   seoTitle: 'Web Development Services | Custom Next.js & React Websites | IAMTECHNI',
   metaDescription:
-    'Enterprise web development services by IAMTECHNI. We architect fast, responsive, SEO-ready corporate websites and React/Next.js web applications built to convert.',
+    'Web development services in Pondicherry and Tamil Nadu by IAMTECHNI. Custom React, Next.js and TypeScript websites built to convert visitors into clients.',
   h1: 'Web Development Services',
   sections: [
     {

@@ -189,7 +189,15 @@ export function formatSeoTitle(rawTitle: string): string {
  * Formats any page description so that it ends on a full sentence at 150 to 160 characters
  * without mid-sentence hard-cuts or ellipses, and uses "Pondicherry" consistently.
  */
+const EXACT_META_DESCRIPTIONS = new Set<string>([
+  'Web development services in Pondicherry and Tamil Nadu by IAMTECHNI. Custom React, Next.js and TypeScript websites built to convert visitors into clients.',
+  'Full Stack Development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn front-end and back-end skills through hands-on, instructor-led projects.',
+]);
+
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
+  if (!extraContext && EXACT_META_DESCRIPTIONS.has(primaryText)) {
+    return primaryText;
+  }
   const raw = extraContext ? `${primaryText} ${extraContext}` : primaryText;
   const sentences = splitIntoSentences(raw);
   let accumulated = '';
@@ -632,7 +640,10 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       return {
         ...baseMeta,
         title: formatSeoTitle(`${course.title} Training Course | IAMTECHNI`),
-        description: formatMetaDescription(`${course.title} Training: ${course.description}`),
+        description:
+          slug === 'full-stack-development'
+            ? 'Full Stack Development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn front-end and back-end skills through hands-on, instructor-led projects.'
+            : formatMetaDescription(`${course.title} Training: ${course.description}`),
         canonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(course),
