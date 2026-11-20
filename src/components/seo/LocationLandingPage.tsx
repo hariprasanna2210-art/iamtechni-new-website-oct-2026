@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -18,18 +17,15 @@ import {
 import { PageRoute } from '../../types';
 import { LocationSeoPageData } from '../../data/location-seo/types';
 import { ALL_LOCATION_PAGES } from '../../data/location-seo';
-import { COMPANY_CONTACT } from '../../data/companyInfo';
 import {
   PRIMARY_PHONE,
   PRIMARY_PHONE_LINK,
   SECONDARY_PHONE,
   SECONDARY_PHONE_LINK,
   WHATSAPP_LINK,
-  SCHEMA_TELEPHONE,
 } from '../../constants/contact';
 import { getCardColorToken } from '../../utils/cardColorTokens';
 import { AnimatedHeading } from '../common/AnimatedHeading';
-import { formatSeoTitle, formatMetaDescription } from '../common/SeoHead';
 
 export interface LocationLandingPageProps {
   page: LocationSeoPageData;
@@ -80,151 +76,13 @@ export const LocationLandingPage: React.FC<LocationLandingPageProps> = ({
     setOpenFaqIndex(openFaqIndex === idx ? null : idx);
   };
 
-  // Remove initial static meta/canonical tags and prerender JSON-LD once react-helmet-async mounts its managed tags
-  useEffect(() => {
-    const selectors = [
-      'meta[name="description"]',
-      'link[rel="canonical"]',
-      'meta[property="og:title"]',
-      'meta[property="og:description"]',
-      'meta[property="og:url"]',
-      'meta[name="twitter:title"]',
-      'meta[name="twitter:description"]',
-      'meta[name="twitter:url"]',
-    ];
-    for (const sel of selectors) {
-      if (document.head.querySelector(`${sel}[data-rh]`)) {
-        document.head
-          .querySelectorAll(`${sel}:not([data-rh])`)
-          .forEach((el) => el.remove());
-      }
-    }
-    if (document.head.querySelector('script[type="application/ld+json"][data-rh]')) {
-      document.head
-        .querySelectorAll('script.prerender-jsonld:not([data-rh])')
-        .forEach((el) => el.remove());
-    }
-  }, [page.slug]);
-
-  const canonicalUrl = (page.canonicalUrl || `${BASE_URL}/${page.slug}`).replace(/\/+$/, '');
-  const formattedSeoTitle = formatSeoTitle(page.seoTitle);
-  const formattedMetaDesc = formatMetaDescription(page.metaDescription);
-
-  // 1. Primary schema (Service or Course)
-  const primarySchema =
-    page.schemaType === 'Course'
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'Course',
-          '@id': `${canonicalUrl}#course`,
-          name: page.h1,
-          description: formattedMetaDesc,
-          url: canonicalUrl,
-          provider: {
-            '@type': 'Organization',
-            '@id': `${BASE_URL}/#organization`,
-            name: COMPANY_CONTACT.name,
-            telephone: SCHEMA_TELEPHONE,
-            email: COMPANY_CONTACT.email,
-            url: `${BASE_URL}/`,
-          },
-          hasCourseInstance: {
-            '@type': 'CourseInstance',
-            courseMode: ['online'],
-            courseWorkload: page.courseDetails?.duration || '8–10 Weeks',
-          },
-        }
-      : {
-          '@context': 'https://schema.org',
-          '@type': 'Service',
-          '@id': `${canonicalUrl}#service`,
-          name: page.h1,
-          serviceType: page.h1,
-          description: formattedMetaDesc,
-          url: canonicalUrl,
-          provider: {
-            '@type': 'Organization',
-            '@id': `${BASE_URL}/#organization`,
-            name: COMPANY_CONTACT.name,
-            telephone: SCHEMA_TELEPHONE,
-            email: COMPANY_CONTACT.email,
-            url: `${BASE_URL}/`,
-          },
-          areaServed: [
-            { '@type': 'City', name: page.targetLocation.city.replace(/\bPuducherry\b/gi, 'Pondicherry') },
-            { '@type': 'AdministrativeArea', name: page.targetLocation.region.replace(/\bPuducherry\b/gi, 'Pondicherry') },
-            { '@type': 'AdministrativeArea', name: page.targetLocation.state.replace(/\bPuducherry\b/gi, 'Pondicherry') },
-            { '@type': 'Country', name: 'India' },
-          ],
-        };
-
-  // 2. Breadcrumb schema
   const breadcrumbCategoryPath =
     page.category === 'Training' ? '/training' : '/services';
   const breadcrumbCategoryName =
     page.category === 'Training' ? 'Training & Courses' : 'Services';
 
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: `${BASE_URL}/`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: breadcrumbCategoryName,
-        item: `${BASE_URL}${breadcrumbCategoryPath}`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: page.h1,
-        item: canonicalUrl,
-      },
-    ],
-  };
-
-  // 3. FAQPage schema
-  const faqSchema =
-    page.faqs && page.faqs.length > 0
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: page.faqs.map((faq) => ({
-            '@type': 'Question',
-            name: faq.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: faq.answer,
-            },
-          })),
-        }
-      : null;
-
   return (
     <div className="w-full">
-      <Helmet prioritizeSeoTags>
-        <title>{formattedSeoTitle}</title>
-        <meta name="description" content={formattedMetaDesc} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={formattedSeoTitle} />
-        <meta property="og:description" content={formattedMetaDesc} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta name="twitter:title" content={formattedSeoTitle} />
-        <meta name="twitter:description" content={formattedMetaDesc} />
-        <meta name="twitter:url" content={canonicalUrl} />
-        <script type="application/ld+json">{JSON.stringify(primarySchema)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-        {faqSchema && (
-          <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-        )}
-      </Helmet>
 
       {/* ========================================================================= */}
       {/* 1. HERO SECTION                                                           */}

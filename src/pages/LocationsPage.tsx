@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import {
   MapPin,
@@ -20,20 +19,11 @@ import { PageHero } from '../components/common/PageHero';
 import { ALL_LOCATION_PAGES, LocationSeoPageData } from '../data/location-seo';
 import { PRIMARY_PHONE, PRIMARY_PHONE_LINK } from '../constants/contact';
 import { COMPANY_CONTACT } from '../data/companyInfo';
-import { formatSeoTitle, formatMetaDescription } from '../components/common/SeoHead';
 
 interface LocationsPageProps {
   onNavigate?: (route: PageRoute) => void;
   onStartProject?: (serviceName?: string) => void;
 }
-
-const CANONICAL_URL = 'https://www.iamtechni.in/locations';
-const SEO_TITLE = formatSeoTitle(
-  'Locations We Serve in Pondicherry & Tamil Nadu | IAMTECHNI'
-);
-const META_DESCRIPTION = formatMetaDescription(
-  'Explore IAMTECHNI services across Pondicherry, Chennai, Coimbatore, Madurai, Trichy, Salem, Erode, Vellore, Cuddalore, and Villupuram. We deliver software, web development, digital marketing, and live online training.'
-);
 
 // 4 Groups as specified
 const GROUP_DEFINITIONS = [
@@ -125,31 +115,8 @@ export const LocationsPage: React.FC<LocationsPageProps> = ({
   onNavigate,
   onStartProject,
 }) => {
-  // Sync head metadata with react-helmet-async and clean up static prerendered tags
   useEffect(() => {
     window.scrollTo(0, 0);
-    const selectors = [
-      'meta[name="description"]',
-      'link[rel="canonical"]',
-      'meta[property="og:title"]',
-      'meta[property="og:description"]',
-      'meta[property="og:url"]',
-      'meta[name="twitter:title"]',
-      'meta[name="twitter:description"]',
-      'meta[name="twitter:url"]',
-    ];
-    for (const sel of selectors) {
-      if (document.head.querySelector(`${sel}[data-rh]`)) {
-        document.head
-          .querySelectorAll(`${sel}:not([data-rh])`)
-          .forEach((el) => el.remove());
-      }
-    }
-    if (document.head.querySelector('script[type="application/ld+json"][data-rh]')) {
-      document.head
-        .querySelectorAll('script.prerender-jsonld:not([data-rh])')
-        .forEach((el) => el.remove());
-    }
   }, []);
 
   // Map slug to full page data
@@ -158,59 +125,8 @@ export const LocationsPage: React.FC<LocationsPageProps> = ({
     pageMap.set(p.slug, p);
   }
 
-  // Structured schema for the locations directory
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Home',
-            item: 'https://www.iamtechni.in/',
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'Locations We Serve',
-            item: CANONICAL_URL,
-          },
-        ],
-      },
-      {
-        '@type': 'ItemList',
-        name: 'IAMTECHNI Locations We Serve',
-        description: META_DESCRIPTION,
-        numberOfItems: ALL_LOCATION_PAGES.length,
-        itemListElement: ALL_LOCATION_PAGES.map((page, index) => ({
-          '@type': 'ListItem',
-          position: index + 1,
-          name: page.h1,
-          url: page.canonicalUrl.replace(/\/+$/, ''),
-        })),
-      },
-    ],
-  };
-
   return (
     <div className="bg-[#FAFBFD] min-h-screen">
-      <Helmet>
-        <title>{SEO_TITLE}</title>
-        <meta name="description" content={META_DESCRIPTION} />
-        <link rel="canonical" href={CANONICAL_URL} />
-        <meta property="og:title" content={SEO_TITLE} />
-        <meta property="og:description" content={META_DESCRIPTION} />
-        <meta property="og:url" content={CANONICAL_URL} />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://www.iamtechni.in/og-image.png" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={SEO_TITLE} />
-        <meta name="twitter:description" content={META_DESCRIPTION} />
-        <meta name="twitter:image" content="https://www.iamtechni.in/og-image.png" />
-        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
-      </Helmet>
 
       {/* Top PageHero using existing design tokens */}
       <PageHero

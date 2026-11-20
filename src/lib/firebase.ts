@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { getAuth, type Auth } from 'firebase/auth';
 
 const readEnvOrFallback = (envValue: unknown, fallback: string): string =>
   typeof envValue === 'string' && envValue.trim() !== '' ? envValue.trim() : fallback;
@@ -38,12 +38,18 @@ export const isFirebaseConfigured = Boolean(
 
 let app: FirebaseApp | null = null;
 let firestoreDb: Firestore | null = null;
+let firebaseAuth: Auth | null = null;
 
 if (isFirebaseConfigured) {
-  app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-  firestoreDb = getFirestore(app);
+  try {
+    app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+    firestoreDb = getFirestore(app);
+    firebaseAuth = getAuth(app);
+  } catch (err) {
+    console.warn('Firebase initialization skipped:', err);
+  }
 }
 
 export const db = firestoreDb as Firestore;
-export const auth = getAuth(app as FirebaseApp);
+export const auth = firebaseAuth as Auth;
 export { app };

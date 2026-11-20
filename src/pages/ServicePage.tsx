@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -12,13 +11,10 @@ import {
 import { PageRoute, ServiceItem } from '../types';
 import { ServicePageData } from '../data/seo-pages/types';
 import { servicesData, getCanonicalServiceSlug } from '../data/servicesData';
-import { COMPANY_CONTACT } from '../data/companyInfo';
-import { SCHEMA_TELEPHONE } from '../constants/contact';
 import { PageHero } from '../components/common/PageHero';
 import { getCardColorToken } from '../utils/cardColorTokens';
 import { ServiceVisualDispatcher } from '../components/common/ServiceVisualMockups';
 import { MobileSectionSkeletonWrapper } from '../components/common/MobileSectionSkeleton';
-import { formatSeoTitle, formatMetaDescription } from '../components/common/SeoHead';
 
 export interface ServicePageProps extends ServicePageData {
   service?: ServiceItem;
@@ -158,121 +154,8 @@ export const ServicePage: React.FC<ServicePageProps> = ({
     setOpenFaqIndex(openFaqIndex === idx ? null : idx);
   };
 
-  // Remove initial static meta/canonical tags and prerender JSON-LD once react-helmet-async mounts its managed tags
-  useEffect(() => {
-    const selectors = [
-      'meta[name="description"]',
-      'link[rel="canonical"]',
-      'meta[property="og:title"]',
-      'meta[property="og:description"]',
-      'meta[property="og:url"]',
-      'meta[name="twitter:title"]',
-      'meta[name="twitter:description"]',
-      'meta[name="twitter:url"]',
-    ];
-    for (const sel of selectors) {
-      if (document.head.querySelector(`${sel}[data-rh]`)) {
-        document.head
-          .querySelectorAll(`${sel}:not([data-rh])`)
-          .forEach((el) => el.remove());
-      }
-    }
-    if (document.head.querySelector('script[type="application/ld+json"][data-rh]')) {
-      document.head
-        .querySelectorAll('script.prerender-jsonld:not([data-rh])')
-        .forEach((el) => el.remove());
-    }
-  }, [canonicalSlug]);
-
-  const formattedSeoTitle = formatSeoTitle(seoTitle);
-  const formattedMetaDesc = formatMetaDescription(metaDescription);
-
-  // 1. Service JSON-LD Schema
-  const serviceSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    '@id': `${canonicalUrl}#service`,
-    name: h1,
-    serviceType: service?.category || h1,
-    description: formattedMetaDesc,
-    url: canonicalUrl,
-    provider: {
-      '@type': 'Organization',
-      '@id': `${BASE_URL}/#organization`,
-      name: COMPANY_CONTACT.name,
-      telephone: SCHEMA_TELEPHONE,
-      email: COMPANY_CONTACT.email,
-      url: `${BASE_URL}/`,
-    },
-    areaServed: [
-      { '@type': 'AdministrativeArea', name: 'Pondicherry' },
-      { '@type': 'AdministrativeArea', name: 'Tamil Nadu' },
-      { '@type': 'Country', name: 'India' },
-    ],
-  };
-
-  // 2. BreadcrumbList JSON-LD Schema (Home > Services > Page)
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: `${BASE_URL}/`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Services',
-        item: `${BASE_URL}/services`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: h1,
-        item: canonicalUrl,
-      },
-    ],
-  };
-
-  // 3. FAQPage JSON-LD Schema built from the faqs array
-  const faqSchema =
-    faqs && faqs.length > 0
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: faqs.map((faq) => ({
-            '@type': 'Question',
-            name: faq.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: faq.answer,
-            },
-          })),
-        }
-      : null;
-
   return (
     <div className="w-full">
-      <Helmet prioritizeSeoTags>
-        <title>{formattedSeoTitle}</title>
-        <meta name="description" content={formattedMetaDesc} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={formattedSeoTitle} />
-        <meta property="og:description" content={formattedMetaDesc} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta name="twitter:title" content={formattedSeoTitle} />
-        <meta name="twitter:description" content={formattedMetaDesc} />
-        <meta name="twitter:url" content={canonicalUrl} />
-        <script type="application/ld+json">{JSON.stringify(serviceSchema)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-        {faqSchema && (
-          <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-        )}
-      </Helmet>
 
       {/* ========================================================================= */}
       {/* UNIFIED PAGE HERO COMPONENT (Single H1 & Color-Coordinated Accents)       */}

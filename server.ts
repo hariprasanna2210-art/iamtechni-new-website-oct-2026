@@ -195,29 +195,17 @@ async function startServer() {
   if (!isProduction) {
     app.use(express.static(path.resolve(__dirname, 'public')));
 
-    let viteMiddleware: express.RequestHandler | null = null;
-    const viteReady = (async () => {
-      const { createServer: createViteServer } = await import('vite');
-      const vite = await createViteServer({
-        server: { middlewareMode: true },
-        appType: 'spa',
-      });
-      viteMiddleware = vite.middlewares;
-    })();
-
-    app.use(async (req, res, next) => {
-      try {
-        if (!viteMiddleware) {
-          await viteReady;
-        }
-        if (viteMiddleware) {
-          return viteMiddleware(req, res, next);
-        }
-        return next();
-      } catch (err) {
-        return next(err);
-      }
+    const disableHmr = process.env.DISABLE_HMR === 'true';
+    const { createServer: createViteServer } = await import('vite');
+    const vite = await createViteServer({
+      server: {
+        middlewareMode: true,
+        ...(disableHmr ? { hmr: false, ws: false } : {}),
+      },
+      appType: 'spa',
     });
+
+    app.use(vite.middlewares);
   } else {
     app.use(express.static(path.resolve(__dirname, 'dist')));
     app.get('*', (_req, res) => {
@@ -230,4 +218,7 @@ async function startServer() {
   });
 }
 
-startServer();
+startServer().catch((err) => {
+  console.error('Failed to start IAMTECHNI server:', err);
+  process.exit(1);
+});
