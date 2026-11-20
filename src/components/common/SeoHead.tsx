@@ -293,7 +293,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
   if (cleanPath === '/') {
     return {
       ...baseMeta,
-      title: formatSeoTitle('Web Development, Software & AI Pondicherry | IAMTECHNI'),
+      title: formatSeoTitle('Web Development & AI Company in Pondicherry | IAMTECHNI'),
       description: formatMetaDescription(
         'IAMTECHNI delivers custom web development, e-commerce, mobile apps, enterprise software, AI, Cloud DevOps & digital marketing in Pondicherry & Tamil Nadu.'
       ),
