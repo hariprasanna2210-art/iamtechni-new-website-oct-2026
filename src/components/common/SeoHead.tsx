@@ -692,7 +692,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       ...baseMeta,
       title: formatSeoTitle('IT Training Courses — Full Stack, AI & Cloud | IAMTECHNI'),
       description: formatMetaDescription(
-        'Hands-on technical training and corporate upskilling across Full Stack Development, AI & Machine Learning, AWS Cloud, DevOps, and Cybersecurity programs.'
+        'Live online, instructor-led, hands-on technical training in Pondicherry and Tamil Nadu by IAMTECHNI. Full Stack, AWS, DevOps, AI and Cybersecurity programs.'
       ),
       canonicalUrl: trainingCanonical,
       ogType: 'website',
