@@ -2,9 +2,9 @@ import { ServicePageData } from './types';
 
 export const roboticsSeoPage: ServicePageData = {
   slug: 'robotics',
-  seoTitle: 'Robotics & Emerging Technologies | ROS2, Edge AI & IoT Telemetry | IAMTECHNI',
+  seoTitle: 'Robotics & Intelligent Edge Systems | IAMTECHNI',
   metaDescription:
-    'Robotics software engineering and industrial IoT telemetry by IAMTECHNI. ROS2 middleware, edge computer vision, WebRTC teleoperation, and real-time fleet dashboards.',
+    'Robotics and edge AI systems in Pondicherry and Tamil Nadu by IAMTECHNI. Edge computer vision, ROS 2 middleware, IoT telemetry and WebRTC teleoperation.',
   h1: 'Robotics & Emerging Technologies',
   sections: [
     {

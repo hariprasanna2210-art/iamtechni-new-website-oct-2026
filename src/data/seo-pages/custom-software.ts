@@ -2,9 +2,9 @@ import { ServicePageData } from './types';
 
 export const customSoftwareSeoPage: ServicePageData = {
   slug: 'custom-software',
-  seoTitle: 'Custom Software Development Services | Enterprise Portals & APIs | IAMTECHNI',
+  seoTitle: 'Custom Enterprise Software Development | IAMTECHNI',
   metaDescription:
-    'Tailored custom software development by IAMTECHNI. We engineer enterprise web portals, workflow automation engines, and scalable APIs with 100% IP ownership.',
+    'Custom business software in Pondicherry and Tamil Nadu by IAMTECHNI. Tailored SaaS platforms, internal portals, ERP and CRM integrations and scalable APIs.',
   h1: 'Custom Software Development',
   sections: [
     {

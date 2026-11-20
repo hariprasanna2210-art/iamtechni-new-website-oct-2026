@@ -2,9 +2,9 @@ import { ServicePageData } from './types';
 
 export const mobileAppsSeoPage: ServicePageData = {
   slug: 'mobile-apps',
-  seoTitle: 'Mobile App Development Services | iOS, Android & PWA Engineering | IAMTECHNI',
+  seoTitle: 'Mobile App Development Services | IAMTECHNI',
   metaDescription:
-    'Custom iOS, Android, and cross-platform mobile app development by IAMTECHNI. High-performance React Native apps and offline-capable Progressive Web Apps.',
+    'iOS, Android and cross-platform mobile app development in Pondicherry and Tamil Nadu by IAMTECHNI. Native-grade apps built with React Native and Flutter.',
   h1: 'Mobile App Development',
   sections: [
     {

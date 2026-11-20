@@ -2,9 +2,9 @@ import { ServicePageData } from './types';
 
 export const trainingSeoPage: ServicePageData = {
   slug: 'training',
-  seoTitle: 'Technical Training & Skill Development | Full Stack, AI & Cloud | IAMTECHNI',
+  seoTitle: 'Technical Training & Skill Development | IAMTECHNI',
   metaDescription:
-    'Hands-on technical training and corporate developer upskilling by IAMTECHNI. Project-driven programs in Full Stack React/TypeScript, Python, AI/RAG, and Cloud DevOps.',
+    'Live online, instructor-led, hands-on technical training in Pondicherry and Tamil Nadu by IAMTECHNI. Full Stack, AWS, DevOps, AI and Cybersecurity programs.',
   h1: 'Technical Training & Skill Development',
   sections: [
     {

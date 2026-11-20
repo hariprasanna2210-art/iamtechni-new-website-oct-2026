@@ -2,9 +2,9 @@ import { ServicePageData } from './types';
 
 export const itConsultingSeoPage: ServicePageData = {
   slug: 'it-consulting',
-  seoTitle: 'IT Consulting & Technology Roadmaps | Architecture Audits | IAMTECHNI',
+  seoTitle: 'IT Consulting & Architecture Advisory | IAMTECHNI',
   metaDescription:
-    'Strategic IT consulting and architecture advisory by IAMTECHNI. Vendor-neutral codebase audits, modernization roadmaps, build-vs-buy analysis, and tech governance.',
+    'Vendor-neutral IT consulting in Pondicherry and Tamil Nadu by IAMTECHNI. Codebase audits, legacy modernization roadmaps and technical due diligence.',
   h1: 'IT Consulting & Technology Roadmaps',
   sections: [
     {

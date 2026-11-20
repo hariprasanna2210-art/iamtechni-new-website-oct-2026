@@ -192,6 +192,7 @@ export function formatSeoTitle(rawTitle: string): string {
 const EXACT_META_DESCRIPTIONS = new Set<string>([
   'Web development services in Pondicherry and Tamil Nadu by IAMTECHNI. Custom React, Next.js and TypeScript websites built to convert visitors into clients.',
   'Full Stack Development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn front-end and back-end skills through hands-on, instructor-led projects.',
+  'Vendor-neutral IT consulting in Pondicherry and Tamil Nadu by IAMTECHNI. Codebase audits, legacy modernization roadmaps and technical due diligence.',
 ]);
 
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
