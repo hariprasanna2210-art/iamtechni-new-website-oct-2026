@@ -4,7 +4,7 @@ export const cybersecuritySeoPage: ServicePageData = {
   slug: 'cybersecurity',
   seoTitle: 'Cybersecurity & Hardening Services | OWASP Audits & Security | IAMTECHNI',
   metaDescription:
-    'Protect your applications and cloud infrastructure with IAMTECHNI Cybersecurity & Hardening services. OWASP security audits, RBAC governance, and server hardening.',
+    'Cybersecurity and app hardening in Pondicherry and Tamil Nadu by IAMTECHNI. OWASP Top-10 audits, vulnerability assessment and role-based access control.',
   h1: 'Cybersecurity & Hardening',
   sections: [
     {
