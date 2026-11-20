@@ -297,10 +297,10 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           justifyContent: 'space-between',
           padding: isTwoRowSkills
             ? showCourseSeal
-              ? '24px 48px 18px 48px'
+              ? '24px 48px 22px 48px'
               : '34px 48px 22px 48px'
             : showCourseSeal
-              ? '42px 56px 26px 56px'
+              ? '36px 56px 30px 56px'
               : '54px 56px 30px 56px',
           boxSizing: 'border-box',
           textAlign: 'center',
@@ -317,25 +317,26 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             width: '100%',
             flex: 1,
             minHeight: 0,
+            paddingBottom: showCourseSeal ? '12px' : undefined,
             gap: isCourseCompletion
               ? isTwoRowSkills
                 ? showAnyCourseLogo
                   ? showCourseSeal
-                    ? '12px'
+                    ? '14px'
                     : '18px'
                   : showCourseSeal
-                    ? '16px'
+                    ? '18px'
                     : '22px'
                 : visibleSkills.length > 0
                   ? showAnyCourseLogo
                     ? showCourseSeal
-                      ? '18px'
+                      ? '20px'
                       : '24px'
                     : showCourseSeal
-                      ? '22px'
+                      ? '24px'
                       : '30px'
                   : showCourseSeal
-                    ? '32px'
+                    ? '34px'
                     : '44px'
               : isTwoRowSkills
                 ? '18px'
@@ -760,7 +761,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           )}
         </div>
 
-        {/* Course Completion only: 120px round seal aligned with left edge of Issuing date & Value ID row */}
+        {/* Course Completion only: 96px round seal aligned with left edge of Issuing date text (12px gap below = 4px + 8px row paddingTop) */}
         {showCourseSeal && (
           <div
             data-cert-course-seal="true"
@@ -770,15 +771,15 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
               justifyContent: 'flex-start',
               width: '100%',
               maxWidth: '580px',
-              marginTop: isTwoRowSkills ? '12px' : '16px',
-              marginBottom: isTwoRowSkills ? '4px' : '8px',
+              marginTop: '12px',
+              marginBottom: '4px',
               flexShrink: 0,
             }}
           >
             <div
               style={{
-                width: '120px',
-                height: '120px',
+                width: '96px',
+                height: '96px',
                 borderRadius: '9999px',
                 overflow: 'hidden',
                 display: 'flex',
@@ -793,12 +794,12 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 src={resolvedSealUrl}
                 alt="IAMTECHNI Certificate of Excellence Seal"
                 crossOrigin="anonymous"
-                width={120}
-                height={120}
+                width={96}
+                height={96}
                 onError={() => setSealLoadFailed(true)}
                 style={{
-                  width: '120px',
-                  height: '120px',
+                  width: '96px',
+                  height: '96px',
                   objectFit: 'contain',
                   display: 'block',
                   borderRadius: '9999px',
