@@ -4,7 +4,7 @@ export const ecommerceSeoPage: ServicePageData = {
   slug: 'ecommerce',
   seoTitle: 'E-commerce Development Services | Custom Online Storefronts | IAMTECHNI',
   metaDescription:
-    'Build high-converting online stores with IAMTECHNI e-commerce development services. Custom B2B and D2C storefronts, secure payment gateways, and live inventory sync.',
+    'E-commerce website development in Pondicherry and Tamil Nadu by IAMTECHNI. Custom B2B and D2C online stores, headless commerce and secure payment gateways.',
   h1: 'E-commerce Development',
   sections: [
     {
