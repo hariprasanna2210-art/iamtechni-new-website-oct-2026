@@ -201,6 +201,7 @@ export default async function handler(req: VercelRequestLike, res: VercelRespons
       keyAreas: Array.isArray(d.keyAreas)
         ? d.keyAreas.map((item) => String(item)).slice(0, 12)
         : [],
+      logo: d.logo === 'aws' ? 'aws' : 'none',
       status: d.status === 'revoked' ? 'revoked' : 'valid',
     });
   } catch (err: unknown) {

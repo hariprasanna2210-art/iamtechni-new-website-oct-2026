@@ -435,6 +435,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
         keyAreas: Array.isArray(payload.keyAreas)
           ? payload.keyAreas.map((item) => String(item)).slice(0, 12)
           : [],
+        logo: payload.logo === 'aws' ? 'aws' : 'none',
         status: payload.status === 'revoked' ? 'revoked' : 'valid',
       };
 

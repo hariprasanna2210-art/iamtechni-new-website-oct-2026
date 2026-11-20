@@ -63,6 +63,7 @@ import {
 import {
   CertificateTemplate,
   formatCertificateDate,
+  type CertificateLogoOption,
   type CertificateTemplateData,
   type CertificateType,
 } from '../components/certificate/CertificateTemplate';
@@ -115,6 +116,7 @@ interface CertificateRecord {
   issueDate: string;
   college: string;
   keyAreas: string[];
+  logo: CertificateLogoOption;
   status: CertificateStatus;
   applicationId: string;
   createdAt: Timestamp | Date | null;
@@ -294,6 +296,7 @@ const AdminPage: React.FC = () => {
   const [certType, setCertType] = useState<CertificateType>('student');
   const [certFullName, setCertFullName] = useState('');
   const [certCourseName, setCertCourseName] = useState('');
+  const [certLogo, setCertLogo] = useState<CertificateLogoOption>('none');
   const [certCourseSelect, setCertCourseSelect] = useState<string>('Data Analytics');
   const [certCourseOther, setCertCourseOther] = useState('');
   const [certDurationMonths, setCertDurationMonths] = useState<number>(3);
@@ -469,6 +472,7 @@ const AdminPage: React.FC = () => {
             keyAreas: Array.isArray(d.keyAreas)
               ? d.keyAreas.map((item) => String(item)).slice(0, 12)
               : [],
+            logo: d.logo === 'aws' ? 'aws' : 'none',
             status: d.status === 'revoked' ? 'revoked' : 'valid',
             applicationId: String(d.applicationId ?? ''),
             createdAt: (d.createdAt as Timestamp | Date | null) ?? null,
@@ -774,6 +778,7 @@ const AdminPage: React.FC = () => {
       issueDate: certIssueDate,
       college: certType === 'student' ? certCollege : '',
       keyAreas: isCourseCompletionCert ? [] : certKeyAreas,
+      logo: isCourseCompletionCert ? certLogo : 'none',
       status: 'valid',
     }),
     [
@@ -788,6 +793,7 @@ const AdminPage: React.FC = () => {
       certIssueDate,
       certCollege,
       certKeyAreas,
+      certLogo,
     ]
   );
 
@@ -1092,6 +1098,7 @@ const AdminPage: React.FC = () => {
             issueDate: certIssueDate,
             college: '',
             keyAreas: [] as string[],
+            logo: certLogo,
             status: 'valid' as const,
             applicationId: '',
             createdAt: serverTimestamp(),
@@ -1108,6 +1115,7 @@ const AdminPage: React.FC = () => {
             issueDate: certIssueDate,
             college: certType === 'student' ? certCollege.trim() : '',
             keyAreas: certKeyAreas.slice(0, 12),
+            logo: 'none' as const,
             status: 'valid' as const,
             applicationId: linkedAppPublicId || '',
             createdAt: serverTimestamp(),
@@ -1136,6 +1144,7 @@ const AdminPage: React.FC = () => {
         issueDate: publicCertificatePayload.issueDate,
         college: publicCertificatePayload.college,
         keyAreas: publicCertificatePayload.keyAreas,
+        logo: publicCertificatePayload.logo,
         status: 'valid',
       };
 
@@ -2091,6 +2100,45 @@ const AdminPage: React.FC = () => {
                             className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
                           />
                         </div>
+
+                        {/* Optional Logo Choice (None or AWS) */}
+                        <div>
+                          <span className="block text-xs font-semibold text-slate-700 mb-1.5">
+                            Logo{' '}
+                            <span className="text-slate-400 font-normal">(optional)</span>
+                          </span>
+                          <div className="grid grid-cols-2 gap-2.5">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCertLogo('none');
+                                setGeneratedCert(null);
+                              }}
+                              className={`min-h-[44px] px-4 py-2 rounded-xl border text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
+                                certLogo === 'none'
+                                  ? 'border-[#1C35EA] bg-[#EEF4FF] text-[#1C35EA]'
+                                  : 'border-slate-200 bg-[#F4F7FC] text-slate-700 hover:bg-slate-100'
+                              }`}
+                            >
+                              <span>None</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCertLogo('aws');
+                                setGeneratedCert(null);
+                              }}
+                              className={`min-h-[44px] px-4 py-2 rounded-xl border text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
+                                certLogo === 'aws'
+                                  ? 'border-[#1C35EA] bg-[#EEF4FF] text-[#1C35EA]'
+                                  : 'border-slate-200 bg-[#F4F7FC] text-slate-700 hover:bg-slate-100'
+                              }`}
+                            >
+                              <span>AWS</span>
+                            </button>
+                          </div>
+                        </div>
                       </>
                     ) : (
                       <>
@@ -2613,6 +2661,7 @@ const AdminPage: React.FC = () => {
                             issueDate: cert.issueDate,
                             college: cert.college,
                             keyAreas: cert.keyAreas,
+                            logo: cert.logo,
                             status: cert.status,
                           };
                           return (
@@ -2740,6 +2789,7 @@ const AdminPage: React.FC = () => {
                         issueDate: cert.issueDate,
                         college: cert.college,
                         keyAreas: cert.keyAreas,
+                        logo: cert.logo,
                         status: cert.status,
                       };
                       return (
