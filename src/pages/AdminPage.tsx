@@ -308,6 +308,8 @@ const AdminPage: React.FC = () => {
     getDefaultSkillsForCourse('Data Analytics')
   );
   const [customSkillInput, setCustomSkillInput] = useState('');
+  const [certCourseKeyAreas, setCertCourseKeyAreas] = useState<string[]>([]);
+  const [courseCustomSkillInput, setCourseCustomSkillInput] = useState('');
   const [certCustomId, setCertCustomId] = useState('');
   const [previewRandomCode, setPreviewRandomCode] = useState<string>(() =>
     generateRandomCode(5)
@@ -777,7 +779,7 @@ const AdminPage: React.FC = () => {
       endDate: isCourseCompletionCert ? '' : certEndDate,
       issueDate: certIssueDate,
       college: certType === 'student' ? certCollege : '',
-      keyAreas: isCourseCompletionCert ? [] : certKeyAreas,
+      keyAreas: isCourseCompletionCert ? certCourseKeyAreas : certKeyAreas,
       logo: isCourseCompletionCert ? certLogo : 'none',
       status: 'valid',
     }),
@@ -793,6 +795,7 @@ const AdminPage: React.FC = () => {
       certIssueDate,
       certCollege,
       certKeyAreas,
+      certCourseKeyAreas,
       certLogo,
     ]
   );
@@ -997,6 +1000,36 @@ const AdminPage: React.FC = () => {
     setCustomSkillInput('');
   };
 
+  const handleToggleCourseSkill = (skillName: string) => {
+    setGeneratedCert(null);
+    setCertCourseKeyAreas((prev) => {
+      if (prev.includes(skillName)) {
+        return prev.filter((s) => s !== skillName);
+      }
+      if (prev.length >= 12) {
+        setToastMessage('Maximum 12 key areas allowed.');
+        return prev;
+      }
+      return [...prev, skillName];
+    });
+  };
+
+  const handleAddCourseCustomSkill = () => {
+    const trimmed = courseCustomSkillInput.trim();
+    if (!trimmed) return;
+    if (certCourseKeyAreas.some((s) => s.toLowerCase() === trimmed.toLowerCase())) {
+      setCourseCustomSkillInput('');
+      return;
+    }
+    if (certCourseKeyAreas.length >= 12) {
+      setToastMessage('Maximum 12 key areas allowed.');
+      return;
+    }
+    setGeneratedCert(null);
+    setCertCourseKeyAreas((prev) => [...prev, trimmed]);
+    setCourseCustomSkillInput('');
+  };
+
   const handleGenerateCertificate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !db || isGeneratingCert) return;
@@ -1023,7 +1056,12 @@ const AdminPage: React.FC = () => {
       return;
     }
 
-    if (!isCourseCert) {
+    if (isCourseCert) {
+      if (certCourseKeyAreas.length > 12) {
+        setCertFormError('Maximum 12 key areas of work allowed.');
+        return;
+      }
+    } else {
       if (
         !Number.isFinite(certDurationMonths) ||
         certDurationMonths < 1 ||
@@ -1097,7 +1135,7 @@ const AdminPage: React.FC = () => {
             endDate: '',
             issueDate: certIssueDate,
             college: '',
-            keyAreas: [] as string[],
+            keyAreas: certCourseKeyAreas.slice(0, 12),
             logo: certLogo,
             status: 'valid' as const,
             applicationId: '',
@@ -2078,6 +2116,93 @@ const AdminPage: React.FC = () => {
                               <option key={courseItem.id} value={courseItem.title} />
                             ))}
                           </datalist>
+                        </div>
+
+                        {/* Key Areas of Work (Course Completion, optional, max 12) */}
+                        <div>
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <span className="text-xs font-semibold text-slate-700">
+                              Key areas of work (max 12){' '}
+                              <span className="text-slate-400 font-normal">(optional)</span>
+                            </span>
+                            <span className="text-xs font-mono font-semibold text-[#1C35EA]">
+                              {certCourseKeyAreas.length} / 12 selected
+                            </span>
+                          </div>
+
+                          <div className="flex flex-wrap gap-1.5 p-3 rounded-xl border border-slate-200 bg-[#F8FAFF] max-h-[260px] overflow-y-auto">
+                            {CERTIFICATE_SKILLS.map((skill) => {
+                              const isSelected = certCourseKeyAreas.includes(skill.name);
+                              return (
+                                <button
+                                  key={skill.name}
+                                  type="button"
+                                  onClick={() => handleToggleCourseSkill(skill.name)}
+                                  className={`min-h-[44px] lg:min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border ${
+                                    isSelected
+                                      ? 'bg-[#1C35EA] text-white border-[#1C35EA] shadow-2xs'
+                                      : 'bg-white text-slate-700 border-slate-200 hover:border-[#1C35EA]/40'
+                                  }`}
+                                >
+                                  {isSelected && <Check className="w-3.5 h-3.5 shrink-0" />}
+                                  <span>{skill.name}</span>
+                                </button>
+                              );
+                            })}
+
+                            {certCourseKeyAreas
+                              .filter(
+                                (name) =>
+                                  !CERTIFICATE_SKILLS.some(
+                                    (s) => s.name.toLowerCase() === name.toLowerCase()
+                                  )
+                              )
+                              .map((customName) => (
+                                <button
+                                  key={customName}
+                                  type="button"
+                                  onClick={() => handleToggleCourseSkill(customName)}
+                                  aria-label={`Remove ${customName}`}
+                                  className="min-h-[44px] lg:min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border bg-[#4D19EA] text-white border-[#4D19EA] shadow-2xs hover:bg-[#3b11bd]"
+                                >
+                                  <span>{customName}</span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="ml-0.5 text-white/90 hover:text-white font-bold leading-none"
+                                  >
+                                    ✕
+                                  </span>
+                                </button>
+                              ))}
+                          </div>
+
+                          <div className="flex flex-col min-[420px]:flex-row items-stretch min-[420px]:items-center gap-2 mt-2">
+                            <input
+                              type="text"
+                              value={courseCustomSkillInput}
+                              onChange={(e) => setCourseCustomSkillInput(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  handleAddCourseCustomSkill();
+                                }
+                              }}
+                              placeholder="Add another tool/skill (optional)…"
+                              className="flex-1 h-11 min-h-[44px] px-3.5 text-[16px] sm:text-xs rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleAddCourseCustomSkill}
+                              disabled={
+                                !courseCustomSkillInput.trim() ||
+                                certCourseKeyAreas.length >= 12
+                              }
+                              className="h-11 min-h-[44px] px-4 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                            >
+                              <Plus className="w-4 h-4 shrink-0" />
+                              <span>Add</span>
+                            </button>
+                          </div>
                         </div>
 
                         {/* Issue Date (Course Completion) */}

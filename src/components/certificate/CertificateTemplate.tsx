@@ -143,7 +143,8 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
     displayCertId
   )}`;
 
-  const visibleSkills = isCourseCompletion ? [] : (data.keyAreas ?? []).slice(0, 12);
+  const visibleSkills = (data.keyAreas ?? []).slice(0, 12);
+  const showKeyAreasBlock = !isCourseCompletion || visibleSkills.length > 0;
   const isTwoRowSkills = visibleSkills.length > 6;
   const skillRows: string[][] = isTwoRowSkills
     ? [
@@ -293,7 +294,19 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             width: '100%',
             flex: 1,
             minHeight: 0,
-            gap: isCourseCompletion ? '44px' : isTwoRowSkills ? '18px' : '30px',
+            gap: isCourseCompletion
+              ? isTwoRowSkills
+                ? showAwsLogo
+                  ? '18px'
+                  : '22px'
+                : visibleSkills.length > 0
+                  ? showAwsLogo
+                    ? '24px'
+                    : '30px'
+                  : '44px'
+              : isTwoRowSkills
+                ? '18px'
+                : '30px',
           }}
         >
           {/* 1. Title & Program Subtitle Block */}
@@ -502,8 +515,8 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             </div>
           </div>
 
-          {/* 3. KEY AREAS OF WORK Block (internship certificates only; omitted for Course Completion) */}
-          {!isCourseCompletion && (
+          {/* 3. KEY AREAS OF WORK Block (always shown for internship; shown for Course Completion only when areas are selected) */}
+          {showKeyAreasBlock && (
           <div
             style={{
               display: 'flex',
