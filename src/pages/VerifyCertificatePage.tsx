@@ -23,6 +23,7 @@ import {
   CertificateTemplate,
   formatCertificateDate,
   type CertificateTemplateData,
+  type CertificateType,
 } from '../components/certificate/CertificateTemplate';
 import { FullScreenLoader } from '../components/common/FullScreenLoader';
 import { Breadcrumbs } from '../components/layout/Breadcrumbs';
@@ -38,8 +39,15 @@ interface CertificateStatusSummary {
   certificateId: string;
   status: 'valid' | 'revoked';
   fullName: string;
-  type: 'student' | 'professional';
+  type: CertificateType;
   course: string;
+  issueDate?: string;
+}
+
+function normalizeCertificateType(raw: unknown): CertificateType {
+  if (raw === 'course_completion') return 'course_completion';
+  if (raw === 'professional') return 'professional';
+  return 'student';
 }
 
 interface CachedVerifiedCertificate {
@@ -214,8 +222,9 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
         certificateId: cached.certificateId,
         status: cached.status,
         fullName: cached.fullName,
-        type: cached.type,
+        type: normalizeCertificateType(cached.type),
         course: cached.course,
+        issueDate: cached.issueDate,
       });
       setVerifiedData(cached);
       return;
@@ -260,8 +269,9 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
         certificateId: normalized,
         status,
         fullName: String(payload.fullName ?? ''),
-        type: payload.type === 'professional' ? 'professional' : 'student',
+        type: normalizeCertificateType(payload.type),
         course: String(payload.course ?? ''),
+        issueDate: String(payload.issueDate ?? ''),
       });
     } catch {
       setPageError(
@@ -406,6 +416,7 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
         return;
       }
 
+      const certType = normalizeCertificateType(payload.type);
       const fullCertData: CertificateTemplateData = {
         certificateId: String(
           payload.certificateId ?? statusSummary?.certificateId ?? ''
@@ -413,9 +424,10 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
           .trim()
           .toUpperCase(),
         fullName: String(payload.fullName ?? ''),
-        type: payload.type === 'professional' ? 'professional' : 'student',
+        type: certType,
         course: String(payload.course ?? ''),
-        durationMonths: Number(payload.durationMonths ?? 1),
+        durationMonths:
+          certType === 'course_completion' ? 0 : Number(payload.durationMonths ?? 1),
         startDate: String(payload.startDate ?? ''),
         endDate: String(payload.endDate ?? ''),
         issueDate: String(payload.issueDate ?? ''),
@@ -878,7 +890,11 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                 />
                 <div className="p-4 sm:p-6">
                   <dl
-                    className="grid grid-cols-1 sm:grid-cols-3 gap-3.5"
+                    className={`grid grid-cols-1 gap-3.5 ${
+                      statusSummary.type === 'course_completion'
+                        ? 'sm:grid-cols-2 lg:grid-cols-4'
+                        : 'sm:grid-cols-3'
+                    }`}
                     style={{ fontSize: 'clamp(14px, 0.95vw, 16px)' }}
                   >
                     <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
@@ -891,9 +907,11 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
                       <dt className="text-sm font-semibold text-slate-500">Program</dt>
                       <dd className="text-slate-900 font-semibold mt-1 break-words">
-                        {statusSummary.type === 'student'
-                          ? 'Student Internship'
-                          : 'Professional Internship'}
+                        {statusSummary.type === 'course_completion'
+                          ? 'Course Completion'
+                          : statusSummary.type === 'student'
+                            ? 'Student Internship'
+                            : 'Professional Internship'}
                       </dd>
                     </div>
 
@@ -903,6 +921,15 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                         {statusSummary.course}
                       </dd>
                     </div>
+
+                    {statusSummary.type === 'course_completion' && (
+                      <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
+                        <dt className="text-sm font-semibold text-slate-500">Issue date</dt>
+                        <dd className="text-slate-900 font-semibold mt-1 break-words">
+                          {formatCertificateDate(statusSummary.issueDate ?? '')}
+                        </dd>
+                      </div>
+                    )}
                   </dl>
                 </div>
               </div>
@@ -1143,9 +1170,11 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
                     <dt className="text-sm font-semibold text-slate-500">Program</dt>
                     <dd className="text-slate-900 font-semibold mt-1 break-words">
-                      {verifiedData.type === 'student'
-                        ? 'Student Internship'
-                        : 'Professional Internship'}
+                      {verifiedData.type === 'course_completion'
+                        ? 'Course Completion'
+                        : verifiedData.type === 'student'
+                          ? 'Student Internship'
+                          : 'Professional Internship'}
                     </dd>
                   </div>
 
@@ -1156,22 +1185,26 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
                     </dd>
                   </div>
 
-                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                    <dt className="text-sm font-semibold text-slate-500">Duration</dt>
-                    <dd className="text-slate-900 font-semibold mt-1">
-                      {formatDurationLabel(verifiedData.durationMonths)}
-                    </dd>
-                  </div>
+                  {verifiedData.type !== 'course_completion' && (
+                    <>
+                      <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
+                        <dt className="text-sm font-semibold text-slate-500">Duration</dt>
+                        <dd className="text-slate-900 font-semibold mt-1">
+                          {formatDurationLabel(verifiedData.durationMonths ?? 1)}
+                        </dd>
+                      </div>
 
-                  <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
-                    <dt className="text-sm font-semibold text-slate-500">
-                      Internship period
-                    </dt>
-                    <dd className="text-slate-900 font-semibold mt-1">
-                      {formatCertificateDate(verifiedData.startDate)} –{' '}
-                      {formatCertificateDate(verifiedData.endDate)}
-                    </dd>
-                  </div>
+                      <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
+                        <dt className="text-sm font-semibold text-slate-500">
+                          Internship period
+                        </dt>
+                        <dd className="text-slate-900 font-semibold mt-1">
+                          {formatCertificateDate(verifiedData.startDate ?? '')} –{' '}
+                          {formatCertificateDate(verifiedData.endDate ?? '')}
+                        </dd>
+                      </div>
+                    </>
+                  )}
 
                   <div className="bg-[#F8FAFF] rounded-xl p-3.5 border border-slate-200/80 min-w-0">
                     <dt className="text-sm font-semibold text-slate-500">Issue date</dt>

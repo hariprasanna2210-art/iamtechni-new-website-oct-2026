@@ -178,14 +178,22 @@ export default async function handler(req: VercelRequestLike, res: VercelRespons
       userAgent,
     });
 
+    const certType =
+      d.type === 'course_completion'
+        ? 'course_completion'
+        : d.type === 'professional'
+          ? 'professional'
+          : 'student';
+
     return res.status(200).json({
       certificateId: String(d.certificateId ?? certSnap.id)
         .trim()
         .toUpperCase(),
       fullName: String(d.fullName ?? ''),
-      type: d.type === 'professional' ? 'professional' : 'student',
+      type: certType,
       course: String(d.course ?? ''),
-      durationMonths: Number(d.durationMonths ?? 1),
+      durationMonths:
+        certType === 'course_completion' ? 0 : Number(d.durationMonths ?? 1),
       startDate: String(d.startDate ?? ''),
       endDate: String(d.endDate ?? ''),
       issueDate: String(d.issueDate ?? ''),

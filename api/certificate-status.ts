@@ -61,12 +61,19 @@ export default async function handler(req: VercelRequestLike, res: VercelRespons
     }
 
     const d = (docSnap.data() ?? {}) as Record<string, unknown>;
+    const certType =
+      d.type === 'course_completion'
+        ? 'course_completion'
+        : d.type === 'professional'
+          ? 'professional'
+          : 'student';
     return res.status(200).json({
       found: true,
       status: d.status === 'revoked' ? 'revoked' : 'valid',
       fullName: String(d.fullName ?? ''),
-      type: d.type === 'professional' ? 'professional' : 'student',
+      type: certType,
       course: String(d.course ?? ''),
+      issueDate: String(d.issueDate ?? ''),
     });
   } catch (err: unknown) {
     if (err instanceof MissingEnvVariableError) {

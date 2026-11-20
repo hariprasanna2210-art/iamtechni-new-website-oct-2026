@@ -5,17 +5,19 @@ import {
   getCertificateSkillConfig,
 } from '../../data/certificateSkills';
 
+export type CertificateType = 'student' | 'professional' | 'course_completion';
+
 export interface CertificateTemplateData {
   certificateId: string;
   fullName: string;
-  type: 'student' | 'professional';
+  type: CertificateType;
   course: string;
-  durationMonths: number;
-  startDate: string;
-  endDate: string;
+  durationMonths?: number;
+  startDate?: string;
+  endDate?: string;
   issueDate: string;
   college?: string;
-  keyAreas: string[];
+  keyAreas?: string[];
   status?: 'valid' | 'revoked';
 }
 
@@ -77,6 +79,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
     RECIPIENT_NAME_MAX_FONT_SIZE
   );
   const isStudent = data.type === 'student';
+  const isCourseCompletion = data.type === 'course_completion';
   const displayName = data.fullName.trim() || 'Applicant Full Name';
 
   const adjustRecipientNameSize = React.useCallback(() => {
@@ -118,18 +121,26 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
   const displayCourse = data.course.trim() || 'Course Name';
   const displayCollege = (data.college ?? '').trim() || 'College / University';
   const durationNum =
-    Number.isFinite(data.durationMonths) && data.durationMonths > 0
+    typeof data.durationMonths === 'number' &&
+    Number.isFinite(data.durationMonths) &&
+    data.durationMonths > 0
       ? data.durationMonths
       : 1;
-  const formattedStart = formatCertificateDate(data.startDate);
-  const formattedEnd = formatCertificateDate(data.endDate);
+  const formattedStart = formatCertificateDate(data.startDate ?? '');
+  const formattedEnd = formatCertificateDate(data.endDate ?? '');
   const formattedIssue = formatCertificateDate(data.issueDate);
-  const displayCertId = data.certificateId.trim() || 'IAMT-STU-2026-XXXXX';
+  const displayCertId =
+    data.certificateId.trim() ||
+    (isCourseCompletion
+      ? 'IAMT-CRS-2026-XXXXX'
+      : isStudent
+        ? 'IAMT-STU-2026-XXXXX'
+        : 'IAMT-PRO-2026-XXXXX');
   const verifyUrl = `https://www.iamtechni.in/verify/${encodeURIComponent(
     displayCertId
   )}`;
 
-  const visibleSkills = (data.keyAreas ?? []).slice(0, 12);
+  const visibleSkills = isCourseCompletion ? [] : (data.keyAreas ?? []).slice(0, 12);
   const isTwoRowSkills = visibleSkills.length > 6;
   const skillRows: string[][] = isTwoRowSkills
     ? [
@@ -279,7 +290,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             width: '100%',
             flex: 1,
             minHeight: 0,
-            gap: isTwoRowSkills ? '18px' : '30px',
+            gap: isCourseCompletion ? '44px' : isTwoRowSkills ? '18px' : '30px',
           }}
         >
           {/* 1. Title & Program Subtitle Block */}
@@ -303,7 +314,9 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 whiteSpace: 'nowrap',
               }}
             >
-              Certificate of Internship
+              {isCourseCompletion
+                ? 'Certification of Completion'
+                : 'Certificate of Internship'}
             </div>
 
             <div
@@ -313,12 +326,15 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 fontWeight: 400,
                 color: '#14205A',
                 lineHeight: 1.25,
-                whiteSpace: 'nowrap',
+                whiteSpace: isCourseCompletion ? 'normal' : 'nowrap',
+                maxWidth: isCourseCompletion ? '620px' : undefined,
               }}
             >
-              {isStudent
-                ? 'Student Internship Program'
-                : 'Professional Internship Program'}
+              {isCourseCompletion
+                ? displayCourse
+                : isStudent
+                  ? 'Student Internship Program'
+                  : 'Professional Internship Program'}
             </div>
 
             {/* Decorative subtle accent bar */}
@@ -412,7 +428,20 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 margin: '0 auto',
               }}
             >
-              {isStudent ? (
+              {isCourseCompletion ? (
+                <>
+                  Has successfully completed all coursework and project
+                  requirements for the{' '}
+                  <strong style={{ fontWeight: 700, color: '#14205A' }}>
+                    {displayCourse}
+                  </strong>{' '}
+                  program as prescribed by{' '}
+                  <strong style={{ fontWeight: 700, color: '#14205A' }}>
+                    IAMTECHNI
+                  </strong>
+                  .
+                </>
+              ) : isStudent ? (
                 <>
                   a student of{' '}
                   <strong style={{ fontWeight: 700, color: '#14205A' }}>
@@ -470,7 +499,8 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             </div>
           </div>
 
-          {/* 3. KEY AREAS OF WORK Block (56px icon circles, >=36px tall labels with overflow visible) */}
+          {/* 3. KEY AREAS OF WORK Block (internship certificates only; omitted for Course Completion) */}
+          {!isCourseCompletion && (
           <div
             style={{
               display: 'flex',
@@ -607,6 +637,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
               </div>
             )}
           </div>
+          )}
         </div>
 
         {/* Issuing date & Value ID two-column row */}
@@ -852,7 +883,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
               marginTop: '2px',
             }}
           >
-            Founder &amp; CEO
+            {isCourseCompletion ? 'Manager' : 'Founder & CEO'}
           </div>
         </div>
       </div>

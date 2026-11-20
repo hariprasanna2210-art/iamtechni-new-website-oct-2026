@@ -55,6 +55,7 @@ import { auth, db } from '../lib/firebase';
 import { ADMIN_EMAILS } from '../config/admins';
 import { IamtechniLogo } from '../components/common/IamtechniLogo';
 import { COURSES } from '../data/internship';
+import { coursesData } from '../data/coursesData';
 import {
   CERTIFICATE_SKILLS,
   getDefaultSkillsForCourse,
@@ -63,6 +64,7 @@ import {
   CertificateTemplate,
   formatCertificateDate,
   type CertificateTemplateData,
+  type CertificateType,
 } from '../components/certificate/CertificateTemplate';
 
 type ApplicationStatus = 'pending' | 'approved' | 'rejected' | 'completed';
@@ -105,7 +107,7 @@ interface CertificateRecord {
   id: string;
   certificateId: string;
   fullName: string;
-  type: 'student' | 'professional';
+  type: CertificateType;
   course: string;
   durationMonths: number;
   startDate: string;
@@ -132,11 +134,16 @@ function generateRandomCode(length = 5): string {
 }
 
 function buildAutoCertificateId(
-  type: 'student' | 'professional',
+  type: CertificateType,
   issueDateStr: string,
   code: string
 ): string {
-  const prefix = type === 'student' ? 'STU' : 'PRO';
+  const prefix =
+    type === 'course_completion'
+      ? 'CRS'
+      : type === 'student'
+        ? 'STU'
+        : 'PRO';
   const year = /^\d{4}/.test(issueDateStr)
     ? issueDateStr.slice(0, 4)
     : String(new Date().getFullYear());
@@ -284,8 +291,9 @@ const AdminPage: React.FC = () => {
   const [certificateSearchQuery, setCertificateSearchQuery] = useState('');
 
   // Certificate Generator Form state
-  const [certType, setCertType] = useState<'student' | 'professional'>('student');
+  const [certType, setCertType] = useState<CertificateType>('student');
   const [certFullName, setCertFullName] = useState('');
+  const [certCourseName, setCertCourseName] = useState('');
   const [certCourseSelect, setCertCourseSelect] = useState<string>('Data Analytics');
   const [certCourseOther, setCertCourseOther] = useState('');
   const [certDurationMonths, setCertDurationMonths] = useState<number>(3);
@@ -445,9 +453,15 @@ const AdminPage: React.FC = () => {
             id: docSnap.id,
             certificateId: String(d.certificateId ?? docSnap.id),
             fullName: String(d.fullName ?? ''),
-            type: d.type === 'professional' ? 'professional' : 'student',
+            type:
+              d.type === 'course_completion'
+                ? 'course_completion'
+                : d.type === 'professional'
+                  ? 'professional'
+                  : 'student',
             course: String(d.course ?? ''),
-            durationMonths: Number(d.durationMonths ?? 1),
+            durationMonths:
+              d.type === 'course_completion' ? 0 : Number(d.durationMonths ?? 1),
             startDate: String(d.startDate ?? ''),
             endDate: String(d.endDate ?? ''),
             issueDate: String(d.issueDate ?? ''),
@@ -727,14 +741,26 @@ const AdminPage: React.FC = () => {
     );
   }, [certificates, certificateSearchQuery]);
 
-  const resolvedCertCourse =
-    certCourseSelect === 'Other' ? certCourseOther.trim() : certCourseSelect.trim();
+  const isCourseCompletionCert = certType === 'course_completion';
+
+  const resolvedCertCourse = isCourseCompletionCert
+    ? certCourseName.trim()
+    : certCourseSelect === 'Other'
+      ? certCourseOther.trim()
+      : certCourseSelect.trim();
 
   const previewCertificateId = useMemo(() => {
-    if (certCustomId.trim()) return certCustomId.trim();
+    if (!isCourseCompletionCert && certCustomId.trim()) return certCustomId.trim();
     if (generatedCert?.certificateId) return generatedCert.certificateId;
     return buildAutoCertificateId(certType, certIssueDate, previewRandomCode);
-  }, [certCustomId, generatedCert?.certificateId, certType, certIssueDate, previewRandomCode]);
+  }, [
+    isCourseCompletionCert,
+    certCustomId,
+    generatedCert?.certificateId,
+    certType,
+    certIssueDate,
+    previewRandomCode,
+  ]);
 
   const livePreviewData: CertificateTemplateData = useMemo(
     () => ({
@@ -742,12 +768,12 @@ const AdminPage: React.FC = () => {
       fullName: certFullName,
       type: certType,
       course: resolvedCertCourse,
-      durationMonths: certDurationMonths,
-      startDate: certStartDate,
-      endDate: certEndDate,
+      durationMonths: isCourseCompletionCert ? 0 : certDurationMonths,
+      startDate: isCourseCompletionCert ? '' : certStartDate,
+      endDate: isCourseCompletionCert ? '' : certEndDate,
       issueDate: certIssueDate,
       college: certType === 'student' ? certCollege : '',
-      keyAreas: certKeyAreas,
+      keyAreas: isCourseCompletionCert ? [] : certKeyAreas,
       status: 'valid',
     }),
     [
@@ -755,6 +781,7 @@ const AdminPage: React.FC = () => {
       certFullName,
       certType,
       resolvedCertCourse,
+      isCourseCompletionCert,
       certDurationMonths,
       certStartDate,
       certEndDate,
@@ -971,48 +998,57 @@ const AdminPage: React.FC = () => {
     setCertFormError(null);
     setCertFirebaseErrorCode(null);
 
+    const isCourseCert = certType === 'course_completion';
+
     if (!certFullName.trim()) {
       setCertFormError('Please enter the recipient full name.');
       return;
     }
     if (!resolvedCertCourse) {
-      setCertFormError('Please select or enter a course name.');
-      return;
-    }
-    if (
-      !Number.isFinite(certDurationMonths) ||
-      certDurationMonths < 1 ||
-      certDurationMonths > 12
-    ) {
-      setCertFormError('Duration must be between 1 and 12 months.');
-      return;
-    }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(certStartDate)) {
-      setCertFormError('Please select a valid start date.');
-      return;
-    }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(certEndDate)) {
-      setCertFormError('Please select a valid end date.');
+      setCertFormError(
+        isCourseCert
+          ? 'Please enter the course name.'
+          : 'Please select or enter a course name.'
+      );
       return;
     }
     if (!/^\d{4}-\d{2}-\d{2}$/.test(certIssueDate)) {
       setCertFormError('Please select a valid issue date.');
       return;
     }
-    if (certType === 'student' && !certCollege.trim()) {
-      setCertFormError('Please enter the college name for Student Internship.');
-      return;
-    }
-    if (certKeyAreas.length === 0 || certKeyAreas.length > 12) {
-      setCertFormError('Please select between 1 and 12 key areas of work.');
-      return;
+
+    if (!isCourseCert) {
+      if (
+        !Number.isFinite(certDurationMonths) ||
+        certDurationMonths < 1 ||
+        certDurationMonths > 12
+      ) {
+        setCertFormError('Duration must be between 1 and 12 months.');
+        return;
+      }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(certStartDate)) {
+        setCertFormError('Please select a valid start date.');
+        return;
+      }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(certEndDate)) {
+        setCertFormError('Please select a valid end date.');
+        return;
+      }
+      if (certType === 'student' && !certCollege.trim()) {
+        setCertFormError('Please enter the college name for Student Internship.');
+        return;
+      }
+      if (certKeyAreas.length === 0 || certKeyAreas.length > 12) {
+        setCertFormError('Please select between 1 and 12 key areas of work.');
+        return;
+      }
     }
 
     setIsGeneratingCert(true);
 
     try {
       let finalCertificateId = '';
-      const trimmedCustom = certCustomId.trim();
+      const trimmedCustom = isCourseCert ? '' : certCustomId.trim();
 
       if (trimmedCustom) {
         const existingSnap = await getDoc(doc(db, 'certificates', trimmedCustom));
@@ -1044,27 +1080,44 @@ const AdminPage: React.FC = () => {
         }
       }
 
-      const publicCertificatePayload = {
-        certificateId: finalCertificateId,
-        fullName: certFullName.trim(),
-        type: certType,
-        course: resolvedCertCourse,
-        durationMonths: Number(certDurationMonths),
-        startDate: certStartDate,
-        endDate: certEndDate,
-        issueDate: certIssueDate,
-        college: certType === 'student' ? certCollege.trim() : '',
-        keyAreas: certKeyAreas.slice(0, 12),
-        status: 'valid' as const,
-        applicationId: linkedAppPublicId || '',
-        createdAt: serverTimestamp(),
-        createdBy: user.email || '',
-      };
+      const publicCertificatePayload = isCourseCert
+        ? {
+            certificateId: finalCertificateId,
+            fullName: certFullName.trim(),
+            type: 'course_completion' as const,
+            course: resolvedCertCourse,
+            durationMonths: 0,
+            startDate: '',
+            endDate: '',
+            issueDate: certIssueDate,
+            college: '',
+            keyAreas: [] as string[],
+            status: 'valid' as const,
+            applicationId: '',
+            createdAt: serverTimestamp(),
+            createdBy: user.email || '',
+          }
+        : {
+            certificateId: finalCertificateId,
+            fullName: certFullName.trim(),
+            type: certType,
+            course: resolvedCertCourse,
+            durationMonths: Number(certDurationMonths),
+            startDate: certStartDate,
+            endDate: certEndDate,
+            issueDate: certIssueDate,
+            college: certType === 'student' ? certCollege.trim() : '',
+            keyAreas: certKeyAreas.slice(0, 12),
+            status: 'valid' as const,
+            applicationId: linkedAppPublicId || '',
+            createdAt: serverTimestamp(),
+            createdBy: user.email || '',
+          };
 
       await setDoc(doc(db, 'certificates', finalCertificateId), publicCertificatePayload);
 
-      // If generated from an existing application, update ONLY certificateId, reviewedAt, reviewedBy
-      if (linkedAppDocId) {
+      // If generated from an existing internship application, update ONLY certificateId, reviewedAt, reviewedBy
+      if (!isCourseCert && linkedAppDocId) {
         await updateDoc(doc(db, 'internshipApplications', linkedAppDocId), {
           certificateId: finalCertificateId,
           reviewedAt: serverTimestamp(),
@@ -1160,6 +1213,9 @@ const AdminPage: React.FC = () => {
     const verifyLink = `https://www.iamtechni.in/verify/${encodeURIComponent(
       certData.certificateId
     )}`;
+    if (certData.type === 'course_completion') {
+      return `Hi ${certData.fullName}, congratulations on completing the ${certData.course} program at IAMTECHNI! Your Certificate ID is ${certData.certificateId}. Verify your certificate here: ${verifyLink}`;
+    }
     return `Hi ${certData.fullName}, congratulations on completing your ${certData.course} internship at IAMTECHNI! Your Certificate ID is ${certData.certificateId}. Verify your certificate here: ${verifyLink}`;
   };
 
@@ -1177,7 +1233,10 @@ const AdminPage: React.FC = () => {
   };
 
   const buildGmailShareUrl = (certData: CertificateTemplateData): string => {
-    const subject = `IAMTECHNI Internship Certificate – ${certData.certificateId}`;
+    const subject =
+      certData.type === 'course_completion'
+        ? `IAMTECHNI Course Completion Certificate – ${certData.certificateId}`
+        : `IAMTECHNI Internship Certificate – ${certData.certificateId}`;
     const body = buildShareMessage(certData);
     const toParam = linkedAppEmail
       ? `&to=${encodeURIComponent(linkedAppEmail)}`
@@ -1847,7 +1906,9 @@ const AdminPage: React.FC = () => {
                         Generate Certificate
                       </h2>
                       <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                        Create a verifiable A4 internship certificate with QR code.
+                        {isCourseCompletionCert
+                          ? 'Create a verifiable A4 course completion certificate with QR code.'
+                          : 'Create a verifiable A4 internship certificate with QR code.'}
                       </p>
                     </div>
                   </div>
@@ -1898,19 +1959,20 @@ const AdminPage: React.FC = () => {
                   )}
 
                   <form onSubmit={handleGenerateCertificate} className="space-y-4">
-                    {/* Internship Type */}
+                    {/* Certificate Type */}
                     <div>
                       <span className="block text-xs font-semibold text-slate-700 mb-1.5">
-                        Internship type
+                        Certificate type
                       </span>
-                      <div className="grid grid-cols-2 gap-2.5">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                         <button
                           type="button"
                           onClick={() => {
                             setCertType('student');
+                            setCertFormError(null);
                             setGeneratedCert(null);
                           }}
-                          className={`min-h-[44px] px-4 py-2 rounded-xl border text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
+                          className={`min-h-[44px] px-3.5 py-2 rounded-xl border text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
                             certType === 'student'
                               ? 'border-[#1C35EA] bg-[#EEF4FF] text-[#1C35EA]'
                               : 'border-slate-200 bg-[#F4F7FC] text-slate-700 hover:bg-slate-100'
@@ -1924,9 +1986,10 @@ const AdminPage: React.FC = () => {
                           type="button"
                           onClick={() => {
                             setCertType('professional');
+                            setCertFormError(null);
                             setGeneratedCert(null);
                           }}
-                          className={`min-h-[44px] px-4 py-2 rounded-xl border text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
+                          className={`min-h-[44px] px-3.5 py-2 rounded-xl border text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
                             certType === 'professional'
                               ? 'border-[#1C35EA] bg-[#EEF4FF] text-[#1C35EA]'
                               : 'border-slate-200 bg-[#F4F7FC] text-slate-700 hover:bg-slate-100'
@@ -1934,6 +1997,24 @@ const AdminPage: React.FC = () => {
                         >
                           <Briefcase className="w-4 h-4 shrink-0" />
                           <span>Professional</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCertType('course_completion');
+                            setCertFormError(null);
+                            setGeneratedCert(null);
+                            handleClearLinkedApplication();
+                          }}
+                          className={`min-h-[44px] px-3.5 py-2 rounded-xl border text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
+                            certType === 'course_completion'
+                              ? 'border-[#1C35EA] bg-[#EEF4FF] text-[#1C35EA]'
+                              : 'border-slate-200 bg-[#F4F7FC] text-slate-700 hover:bg-slate-100'
+                          }`}
+                        >
+                          <Award className="w-4 h-4 shrink-0" />
+                          <span>Course Completion</span>
                         </button>
                       </div>
                     </div>
@@ -1960,271 +2041,326 @@ const AdminPage: React.FC = () => {
                       />
                     </div>
 
-                    {/* Course + Duration */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="sm:col-span-2">
-                        <label
-                          htmlFor="cert-course-select"
-                          className="block text-xs font-semibold text-slate-700 mb-1"
-                        >
-                          Course <span className="text-rose-500">*</span>
-                        </label>
-                        <select
-                          id="cert-course-select"
-                          value={certCourseSelect}
-                          onChange={(e) => handleCourseSelectChange(e.target.value)}
-                          className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA] cursor-pointer"
-                        >
-                          {COURSES.map((courseName) => (
-                            <option key={courseName} value={courseName}>
-                              {courseName}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                    {isCourseCompletionCert ? (
+                      <>
+                        {/* Course Name (Course Completion) */}
+                        <div>
+                          <label
+                            htmlFor="cert-course-name"
+                            className="block text-xs font-semibold text-slate-700 mb-1"
+                          >
+                            Course name <span className="text-rose-500">*</span>
+                          </label>
+                          <input
+                            id="cert-course-name"
+                            type="text"
+                            required
+                            list="course-completion-suggestions"
+                            value={certCourseName}
+                            onChange={(e) => {
+                              setCertCourseName(e.target.value);
+                              setGeneratedCert(null);
+                            }}
+                            placeholder="e.g. Amazon Web Services (AWS)"
+                            className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                          />
+                          <datalist id="course-completion-suggestions">
+                            {coursesData.map((courseItem) => (
+                              <option key={courseItem.id} value={courseItem.title} />
+                            ))}
+                          </datalist>
+                        </div>
 
-                      <div>
-                        <label
-                          htmlFor="cert-duration-select"
-                          className="block text-xs font-semibold text-slate-700 mb-1"
-                        >
-                          Duration <span className="text-rose-500">*</span>
-                        </label>
-                        <select
-                          id="cert-duration-select"
-                          value={certDurationMonths}
-                          onChange={(e) => {
-                            setCertDurationMonths(Number(e.target.value));
-                            setGeneratedCert(null);
-                          }}
-                          className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA] cursor-pointer"
-                        >
-                          {CERTIFICATE_DURATIONS.map((m) => (
-                            <option key={m} value={m}>
-                              {m} {m === 1 ? 'month' : 'months'}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* Custom Course Input if "Other" is selected */}
-                    {certCourseSelect === 'Other' && (
-                      <div>
-                        <label
-                          htmlFor="cert-course-other"
-                          className="block text-xs font-semibold text-slate-700 mb-1"
-                        >
-                          Custom course name <span className="text-rose-500">*</span>
-                        </label>
-                        <input
-                          id="cert-course-other"
-                          type="text"
-                          required
-                          value={certCourseOther}
-                          onChange={(e) => {
-                            setCertCourseOther(e.target.value);
-                            setGeneratedCert(null);
-                          }}
-                          placeholder="Enter custom course title…"
-                          className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
-                        />
-                      </div>
-                    )}
-
-                    {/* Dates: 3 in a row on desktop/tablet, stacked on phones */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div>
-                        <label
-                          htmlFor="cert-start-date"
-                          className="block text-xs font-semibold text-slate-700 mb-1"
-                        >
-                          Start date <span className="text-rose-500">*</span>
-                        </label>
-                        <input
-                          id="cert-start-date"
-                          type="date"
-                          required
-                          value={certStartDate}
-                          onChange={(e) => {
-                            setCertStartDate(e.target.value);
-                            setGeneratedCert(null);
-                          }}
-                          className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="cert-end-date"
-                          className="block text-xs font-semibold text-slate-700 mb-1"
-                        >
-                          End date <span className="text-rose-500">*</span>
-                        </label>
-                        <input
-                          id="cert-end-date"
-                          type="date"
-                          required
-                          value={certEndDate}
-                          onChange={(e) => {
-                            setCertEndDate(e.target.value);
-                            setGeneratedCert(null);
-                          }}
-                          className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="cert-issue-date"
-                          className="block text-xs font-semibold text-slate-700 mb-1"
-                        >
-                          Issue date <span className="text-rose-500">*</span>
-                        </label>
-                        <input
-                          id="cert-issue-date"
-                          type="date"
-                          required
-                          value={certIssueDate}
-                          onChange={(e) => {
-                            setCertIssueDate(e.target.value);
-                            setGeneratedCert(null);
-                          }}
-                          className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
-                        />
-                      </div>
-                    </div>
-
-                    {/* College (only for Student) */}
-                    {certType === 'student' && (
-                      <div>
-                        <label
-                          htmlFor="cert-college"
-                          className="block text-xs font-semibold text-slate-700 mb-1"
-                        >
-                          College <span className="text-rose-500">*</span>
-                        </label>
-                        <input
-                          id="cert-college"
-                          type="text"
-                          required
-                          value={certCollege}
-                          onChange={(e) => {
-                            setCertCollege(e.target.value);
-                            setGeneratedCert(null);
-                          }}
-                          placeholder="e.g. Pondicherry Engineering College"
-                          className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
-                        />
-                      </div>
-                    )}
-
-                    {/* Key Areas of Work (Multi-select chips, max 12) */}
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-1.5">
-                        <span className="text-xs font-semibold text-slate-700">
-                          Key areas of work (max 12) <span className="text-rose-500">*</span>
-                        </span>
-                        <span className="text-xs font-mono font-semibold text-[#1C35EA]">
-                          {certKeyAreas.length} / 12 selected
-                        </span>
-                      </div>
-
-                      <div className="flex flex-wrap gap-1.5 p-3 rounded-xl border border-slate-200 bg-[#F8FAFF] max-h-[260px] overflow-y-auto">
-                        {CERTIFICATE_SKILLS.map((skill) => {
-                          const isSelected = certKeyAreas.includes(skill.name);
-                          return (
-                            <button
-                              key={skill.name}
-                              type="button"
-                              onClick={() => handleToggleSkill(skill.name)}
-                              className={`min-h-[44px] lg:min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border ${
-                                isSelected
-                                  ? 'bg-[#1C35EA] text-white border-[#1C35EA] shadow-2xs'
-                                  : 'bg-white text-slate-700 border-slate-200 hover:border-[#1C35EA]/40'
-                              }`}
+                        {/* Issue Date (Course Completion) */}
+                        <div>
+                          <label
+                            htmlFor="cert-issue-date"
+                            className="block text-xs font-semibold text-slate-700 mb-1"
+                          >
+                            Issue date <span className="text-rose-500">*</span>
+                          </label>
+                          <input
+                            id="cert-issue-date"
+                            type="date"
+                            required
+                            value={certIssueDate}
+                            onChange={(e) => {
+                              setCertIssueDate(e.target.value);
+                              setGeneratedCert(null);
+                            }}
+                            className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {/* Course + Duration */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div className="sm:col-span-2">
+                            <label
+                              htmlFor="cert-course-select"
+                              className="block text-xs font-semibold text-slate-700 mb-1"
                             >
-                              {isSelected && <Check className="w-3.5 h-3.5 shrink-0" />}
-                              <span>{skill.name}</span>
-                            </button>
-                          );
-                        })}
+                              Course <span className="text-rose-500">*</span>
+                            </label>
+                            <select
+                              id="cert-course-select"
+                              value={certCourseSelect}
+                              onChange={(e) => handleCourseSelectChange(e.target.value)}
+                              className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA] cursor-pointer"
+                            >
+                              {COURSES.map((courseName) => (
+                                <option key={courseName} value={courseName}>
+                                  {courseName}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
 
-                        {/* Custom skills typed by the admin: added as chips and removable with ✕ */}
-                        {certKeyAreas
-                          .filter(
-                            (name) =>
-                              !CERTIFICATE_SKILLS.some(
-                                (s) => s.name.toLowerCase() === name.toLowerCase()
+                          <div>
+                            <label
+                              htmlFor="cert-duration-select"
+                              className="block text-xs font-semibold text-slate-700 mb-1"
+                            >
+                              Duration <span className="text-rose-500">*</span>
+                            </label>
+                            <select
+                              id="cert-duration-select"
+                              value={certDurationMonths}
+                              onChange={(e) => {
+                                setCertDurationMonths(Number(e.target.value));
+                                setGeneratedCert(null);
+                              }}
+                              className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA] cursor-pointer"
+                            >
+                              {CERTIFICATE_DURATIONS.map((m) => (
+                                <option key={m} value={m}>
+                                  {m} {m === 1 ? 'month' : 'months'}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* Custom Course Input if "Other" is selected */}
+                        {certCourseSelect === 'Other' && (
+                          <div>
+                            <label
+                              htmlFor="cert-course-other"
+                              className="block text-xs font-semibold text-slate-700 mb-1"
+                            >
+                              Custom course name <span className="text-rose-500">*</span>
+                            </label>
+                            <input
+                              id="cert-course-other"
+                              type="text"
+                              required
+                              value={certCourseOther}
+                              onChange={(e) => {
+                                setCertCourseOther(e.target.value);
+                                setGeneratedCert(null);
+                              }}
+                              placeholder="Enter custom course title…"
+                              className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                            />
+                          </div>
+                        )}
+
+                        {/* Dates: 3 in a row on desktop/tablet, stacked on phones */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div>
+                            <label
+                              htmlFor="cert-start-date"
+                              className="block text-xs font-semibold text-slate-700 mb-1"
+                            >
+                              Start date <span className="text-rose-500">*</span>
+                            </label>
+                            <input
+                              id="cert-start-date"
+                              type="date"
+                              required
+                              value={certStartDate}
+                              onChange={(e) => {
+                                setCertStartDate(e.target.value);
+                                setGeneratedCert(null);
+                              }}
+                              className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                            />
+                          </div>
+
+                          <div>
+                            <label
+                              htmlFor="cert-end-date"
+                              className="block text-xs font-semibold text-slate-700 mb-1"
+                            >
+                              End date <span className="text-rose-500">*</span>
+                            </label>
+                            <input
+                              id="cert-end-date"
+                              type="date"
+                              required
+                              value={certEndDate}
+                              onChange={(e) => {
+                                setCertEndDate(e.target.value);
+                                setGeneratedCert(null);
+                              }}
+                              className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                            />
+                          </div>
+
+                          <div>
+                            <label
+                              htmlFor="cert-issue-date"
+                              className="block text-xs font-semibold text-slate-700 mb-1"
+                            >
+                              Issue date <span className="text-rose-500">*</span>
+                            </label>
+                            <input
+                              id="cert-issue-date"
+                              type="date"
+                              required
+                              value={certIssueDate}
+                              onChange={(e) => {
+                                setCertIssueDate(e.target.value);
+                                setGeneratedCert(null);
+                              }}
+                              className="w-full h-11 min-h-[44px] px-3 text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                            />
+                          </div>
+                        </div>
+
+                        {/* College (only for Student) */}
+                        {certType === 'student' && (
+                          <div>
+                            <label
+                              htmlFor="cert-college"
+                              className="block text-xs font-semibold text-slate-700 mb-1"
+                            >
+                              College <span className="text-rose-500">*</span>
+                            </label>
+                            <input
+                              id="cert-college"
+                              type="text"
+                              required
+                              value={certCollege}
+                              onChange={(e) => {
+                                setCertCollege(e.target.value);
+                                setGeneratedCert(null);
+                              }}
+                              placeholder="e.g. Pondicherry Engineering College"
+                              className="w-full h-11 min-h-[44px] px-3.5 text-[16px] rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                            />
+                          </div>
+                        )}
+
+                        {/* Key Areas of Work (Multi-select chips, max 12) */}
+                        <div>
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <span className="text-xs font-semibold text-slate-700">
+                              Key areas of work (max 12) <span className="text-rose-500">*</span>
+                            </span>
+                            <span className="text-xs font-mono font-semibold text-[#1C35EA]">
+                              {certKeyAreas.length} / 12 selected
+                            </span>
+                          </div>
+
+                          <div className="flex flex-wrap gap-1.5 p-3 rounded-xl border border-slate-200 bg-[#F8FAFF] max-h-[260px] overflow-y-auto">
+                            {CERTIFICATE_SKILLS.map((skill) => {
+                              const isSelected = certKeyAreas.includes(skill.name);
+                              return (
+                                <button
+                                  key={skill.name}
+                                  type="button"
+                                  onClick={() => handleToggleSkill(skill.name)}
+                                  className={`min-h-[44px] lg:min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border ${
+                                    isSelected
+                                      ? 'bg-[#1C35EA] text-white border-[#1C35EA] shadow-2xs'
+                                      : 'bg-white text-slate-700 border-slate-200 hover:border-[#1C35EA]/40'
+                                  }`}
+                                >
+                                  {isSelected && <Check className="w-3.5 h-3.5 shrink-0" />}
+                                  <span>{skill.name}</span>
+                                </button>
+                              );
+                            })}
+
+                            {/* Custom skills typed by the admin: added as chips and removable with ✕ */}
+                            {certKeyAreas
+                              .filter(
+                                (name) =>
+                                  !CERTIFICATE_SKILLS.some(
+                                    (s) => s.name.toLowerCase() === name.toLowerCase()
+                                  )
                               )
-                          )
-                          .map((customName) => (
+                              .map((customName) => (
+                                <button
+                                  key={customName}
+                                  type="button"
+                                  onClick={() => handleToggleSkill(customName)}
+                                  aria-label={`Remove ${customName}`}
+                                  className="min-h-[44px] lg:min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border bg-[#4D19EA] text-white border-[#4D19EA] shadow-2xs hover:bg-[#3b11bd]"
+                                >
+                                  <span>{customName}</span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="ml-0.5 text-white/90 hover:text-white font-bold leading-none"
+                                  >
+                                    ✕
+                                  </span>
+                                </button>
+                              ))}
+                          </div>
+
+                          {/* Optional custom tool chip input */}
+                          <div className="flex flex-col min-[420px]:flex-row items-stretch min-[420px]:items-center gap-2 mt-2">
+                            <input
+                              type="text"
+                              value={customSkillInput}
+                              onChange={(e) => setCustomSkillInput(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  handleAddCustomSkill();
+                                }
+                              }}
+                              placeholder="Add another tool/skill (optional)…"
+                              className="flex-1 h-11 min-h-[44px] px-3.5 text-[16px] sm:text-xs rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                            />
                             <button
-                              key={customName}
                               type="button"
-                              onClick={() => handleToggleSkill(customName)}
-                              aria-label={`Remove ${customName}`}
-                              className="min-h-[44px] lg:min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer border bg-[#4D19EA] text-white border-[#4D19EA] shadow-2xs hover:bg-[#3b11bd]"
+                              onClick={handleAddCustomSkill}
+                              disabled={!customSkillInput.trim() || certKeyAreas.length >= 12}
+                              className="h-11 min-h-[44px] px-4 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                             >
-                              <span>{customName}</span>
-                              <span
-                                aria-hidden="true"
-                                className="ml-0.5 text-white/90 hover:text-white font-bold leading-none"
-                              >
-                                ✕
-                              </span>
+                              <Plus className="w-4 h-4 shrink-0" />
+                              <span>Add</span>
                             </button>
-                          ))}
-                      </div>
+                          </div>
+                        </div>
 
-                      {/* Optional custom tool chip input */}
-                      <div className="flex flex-col min-[420px]:flex-row items-stretch min-[420px]:items-center gap-2 mt-2">
-                        <input
-                          type="text"
-                          value={customSkillInput}
-                          onChange={(e) => setCustomSkillInput(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault();
-                              handleAddCustomSkill();
-                            }
-                          }}
-                          placeholder="Add another tool/skill (optional)…"
-                          className="flex-1 h-11 min-h-[44px] px-3.5 text-[16px] sm:text-xs rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleAddCustomSkill}
-                          disabled={!customSkillInput.trim() || certKeyAreas.length >= 12}
-                          className="h-11 min-h-[44px] px-4 rounded-xl border border-slate-200 bg-white hover:bg-[#EEF4FF] text-[#1C35EA] text-xs font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-                        >
-                          <Plus className="w-4 h-4 shrink-0" />
-                          <span>Add</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Custom Certificate Number (optional) */}
-                    <div>
-                      <label
-                        htmlFor="cert-custom-id"
-                        className="block text-xs font-semibold text-slate-700 mb-1"
-                      >
-                        Custom certificate number{' '}
-                        <span className="text-slate-400 font-normal">(optional)</span>
-                      </label>
-                      <input
-                        id="cert-custom-id"
-                        type="text"
-                        value={certCustomId}
-                        onChange={(e) => {
-                          setCertCustomId(e.target.value);
-                          setGeneratedCert(null);
-                        }}
-                        placeholder="Leave blank to auto-generate (e.g. IAMT-INT-DA-2026-0041)"
-                        className="w-full h-11 min-h-[44px] px-3.5 font-mono text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
-                      />
-                    </div>
+                        {/* Custom Certificate Number (optional) */}
+                        <div>
+                          <label
+                            htmlFor="cert-custom-id"
+                            className="block text-xs font-semibold text-slate-700 mb-1"
+                          >
+                            Custom certificate number{' '}
+                            <span className="text-slate-400 font-normal">(optional)</span>
+                          </label>
+                          <input
+                            id="cert-custom-id"
+                            type="text"
+                            value={certCustomId}
+                            onChange={(e) => {
+                              setCertCustomId(e.target.value);
+                              setGeneratedCert(null);
+                            }}
+                            placeholder="Leave blank to auto-generate (e.g. IAMT-INT-DA-2026-0041)"
+                            className="w-full h-11 min-h-[44px] px-3.5 font-mono text-[16px] sm:text-sm rounded-xl border border-slate-200 bg-[#F4F7FC] text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-hidden focus:border-[#1C35EA]"
+                          />
+                        </div>
+                      </>
+                    )}
 
                     {/* Generate Submit Button (Full width on phones and desktop) */}
                     <div className="pt-2">
@@ -2499,8 +2635,9 @@ const AdminPage: React.FC = () => {
                                   {cert.course}
                                 </div>
                                 <div className="text-xs text-slate-500">
-                                  {cert.type === 'student' ? 'Student' : 'Professional'} ·{' '}
-                                  {formatDuration(cert.durationMonths)}
+                                  {cert.type === 'course_completion'
+                                    ? 'Course Completion'
+                                    : `${cert.type === 'student' ? 'Student' : 'Professional'} · ${formatDuration(cert.durationMonths)}`}
                                 </div>
                               </td>
                               <td className="py-3.5 px-4 whitespace-nowrap text-slate-700">
@@ -2633,8 +2770,9 @@ const AdminPage: React.FC = () => {
                           <div className="min-w-0">
                             <div className="text-xs text-slate-600 break-words">
                               {cert.course} ·{' '}
-                              {cert.type === 'student' ? 'Student' : 'Professional'} (
-                              {formatDuration(cert.durationMonths)})
+                              {cert.type === 'course_completion'
+                                ? 'Course Completion'
+                                : `${cert.type === 'student' ? 'Student' : 'Professional'} (${formatDuration(cert.durationMonths)})`}
                             </div>
                             <div className="text-xs text-slate-500 mt-0.5">
                               Issued: {formatCertificateDate(cert.issueDate)}
