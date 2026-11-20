@@ -2,9 +2,9 @@ import { ServicePageData } from './types';
 
 export const uiUxDesignSeoPage: ServicePageData = {
   slug: 'ui-ux-design',
-  seoTitle: 'UI/UX Design Services | Design Systems & Product Prototyping | IAMTECHNI',
+  seoTitle: 'UI/UX Design Services | IAMTECHNI',
   metaDescription:
-    'Human-centered UI/UX design services by IAMTECHNI. User research, interactive Figma prototypes, WCAG 2.2 AA accessible interfaces, and scalable design systems.',
+    'UI/UX design services in Pondicherry and Tamil Nadu by IAMTECHNI. User research, interface design, prototyping and design systems for web and mobile.',
   h1: 'UI/UX Design',
   sections: [
     {
