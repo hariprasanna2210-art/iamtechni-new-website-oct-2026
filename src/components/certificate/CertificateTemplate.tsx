@@ -317,7 +317,6 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             width: '100%',
             flex: 1,
             minHeight: 0,
-            paddingBottom: showCourseSeal ? '12px' : undefined,
             gap: isCourseCompletion
               ? isTwoRowSkills
                 ? showAnyCourseLogo
@@ -761,32 +760,30 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           )}
         </div>
 
-        {/* Course Completion only: 96px round seal aligned with left edge of Issuing date text (12px gap below = 4px + 8px row paddingTop) */}
+        {/* Course Completion only: 90px flat round seal centred horizontally between body/Key Areas and Issuing date (16px above, 16px below = 8px + 8px row paddingTop) */}
         {showCourseSeal && (
           <div
             data-cert-course-seal="true"
             style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'flex-start',
+              justifyContent: 'center',
               width: '100%',
               maxWidth: '580px',
-              marginTop: '12px',
-              marginBottom: '4px',
+              marginTop: '16px',
+              marginBottom: '8px',
               flexShrink: 0,
             }}
           >
             <div
               style={{
-                width: '96px',
-                height: '96px',
+                width: '90px',
+                height: '90px',
                 borderRadius: '9999px',
                 overflow: 'hidden',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow:
-                  '0 6px 16px rgba(20, 32, 90, 0.18), 0 2px 6px rgba(20, 32, 90, 0.12)',
                 flexShrink: 0,
               }}
             >
@@ -794,12 +791,12 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
                 src={resolvedSealUrl}
                 alt="IAMTECHNI Certificate of Excellence Seal"
                 crossOrigin="anonymous"
-                width={96}
-                height={96}
+                width={90}
+                height={90}
                 onError={() => setSealLoadFailed(true)}
                 style={{
-                  width: '96px',
-                  height: '96px',
+                  width: '90px',
+                  height: '90px',
                   objectFit: 'contain',
                   display: 'block',
                   borderRadius: '9999px',
