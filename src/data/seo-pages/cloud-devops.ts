@@ -4,7 +4,7 @@ export const cloudDevopsSeoPage: ServicePageData = {
   slug: 'cloud-devops',
   seoTitle: 'Cloud & DevOps Engineering Services | AWS, Azure & CI/CD | IAMTECHNI',
   metaDescription:
-    'Resilient cloud architecture and DevOps automation by IAMTECHNI. AWS and Azure infrastructure, Docker/Kubernetes containerization, zero-downtime CI/CD, and FinOps.',
+    'Cloud architecture, Docker and Kubernetes, and CI/CD DevOps services in Pondicherry and Tamil Nadu by IAMTECHNI. AWS and Azure with zero-downtime delivery.',
   h1: 'Cloud & DevOps Engineering',
   sections: [
     {
