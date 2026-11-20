@@ -5,6 +5,9 @@ import {
   getCertificateSkillConfig,
 } from '../../data/certificateSkills';
 
+export const COURSE_COMPLETION_SEAL_URL =
+  '/assets/aistudio/WhatsApp_Image_2026-11-20_at_3.58.19_PM_495875eb.jpeg';
+
 export type CertificateType = 'student' | 'professional' | 'course_completion';
 export type CertificateLogoOption = 'none' | 'aws' | 'custom';
 
@@ -21,6 +24,7 @@ export interface CertificateTemplateData {
   keyAreas?: string[];
   logo?: CertificateLogoOption;
   customLogoUrl?: string;
+  sealUrl?: string;
   status?: 'valid' | 'revoked';
 }
 
@@ -77,6 +81,7 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
   containerRef,
 }) => {
   const [signatureLoadFailed, setSignatureLoadFailed] = React.useState(false);
+  const [sealLoadFailed, setSealLoadFailed] = React.useState(false);
   const recipientNameRef = React.useRef<HTMLDivElement | null>(null);
   const [nameFontSize, setNameFontSize] = React.useState<number>(
     RECIPIENT_NAME_MAX_FONT_SIZE
@@ -88,6 +93,15 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
   const showCustomLogo =
     isCourseCompletion && data.logo === 'custom' && customLogoSrc.length > 0;
   const showAnyCourseLogo = showAwsLogo || showCustomLogo;
+  const resolvedSealUrl =
+    data.sealUrl === undefined ? COURSE_COMPLETION_SEAL_URL : data.sealUrl.trim();
+  const showCourseSeal =
+    isCourseCompletion && resolvedSealUrl.length > 0 && !sealLoadFailed;
+
+  React.useEffect(() => {
+    setSealLoadFailed(false);
+  }, [resolvedSealUrl]);
+
   const displayName = data.fullName.trim() || 'Applicant Full Name';
 
   const adjustRecipientNameSize = React.useCallback(() => {
@@ -894,6 +908,42 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             Scan to verify
           </span>
         </div>
+
+        {/* Course Completion only: 110px round seal badge between QR code and signature */}
+        {showCourseSeal && (
+          <div
+            data-cert-course-seal="true"
+            style={{
+              position: 'absolute',
+              left: '458px',
+              top: '58px',
+              width: '110px',
+              height: '110px',
+              borderRadius: '9999px',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              pointerEvents: 'none',
+            }}
+          >
+            <img
+              src={resolvedSealUrl}
+              alt="IAMTECHNI Certificate of Excellence Seal"
+              crossOrigin="anonymous"
+              width={110}
+              height={110}
+              onError={() => setSealLoadFailed(true)}
+              style={{
+                width: '110px',
+                height: '110px',
+                objectFit: 'contain',
+                display: 'block',
+                borderRadius: '9999px',
+              }}
+            />
+          </div>
+        )}
 
         {/* Right: Signature (fixed 64px height + 6px space before printed name) + Hari Prasanna.R + Founder & CEO */}
         <div
