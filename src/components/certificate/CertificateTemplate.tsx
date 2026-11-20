@@ -296,8 +296,12 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: isTwoRowSkills
-            ? '34px 48px 22px 48px'
-            : '54px 56px 30px 56px',
+            ? showCourseSeal
+              ? '24px 48px 18px 48px'
+              : '34px 48px 22px 48px'
+            : showCourseSeal
+              ? '42px 56px 26px 56px'
+              : '54px 56px 30px 56px',
           boxSizing: 'border-box',
           textAlign: 'center',
           overflow: 'hidden',
@@ -316,13 +320,23 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             gap: isCourseCompletion
               ? isTwoRowSkills
                 ? showAnyCourseLogo
-                  ? '18px'
-                  : '22px'
+                  ? showCourseSeal
+                    ? '12px'
+                    : '18px'
+                  : showCourseSeal
+                    ? '16px'
+                    : '22px'
                 : visibleSkills.length > 0
                   ? showAnyCourseLogo
-                    ? '24px'
-                    : '30px'
-                  : '44px'
+                    ? showCourseSeal
+                      ? '18px'
+                      : '24px'
+                    : showCourseSeal
+                      ? '22px'
+                      : '30px'
+                  : showCourseSeal
+                    ? '32px'
+                    : '44px'
               : isTwoRowSkills
                 ? '18px'
                 : '30px',
@@ -746,6 +760,55 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
           )}
         </div>
 
+        {/* Course Completion only: 120px round seal aligned with left edge of Issuing date & Value ID row */}
+        {showCourseSeal && (
+          <div
+            data-cert-course-seal="true"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              width: '100%',
+              maxWidth: '580px',
+              marginTop: isTwoRowSkills ? '12px' : '16px',
+              marginBottom: isTwoRowSkills ? '4px' : '8px',
+              flexShrink: 0,
+            }}
+          >
+            <div
+              style={{
+                width: '120px',
+                height: '120px',
+                borderRadius: '9999px',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow:
+                  '0 6px 16px rgba(20, 32, 90, 0.18), 0 2px 6px rgba(20, 32, 90, 0.12)',
+                flexShrink: 0,
+              }}
+            >
+              <img
+                src={resolvedSealUrl}
+                alt="IAMTECHNI Certificate of Excellence Seal"
+                crossOrigin="anonymous"
+                width={120}
+                height={120}
+                onError={() => setSealLoadFailed(true)}
+                style={{
+                  width: '120px',
+                  height: '120px',
+                  objectFit: 'contain',
+                  display: 'block',
+                  borderRadius: '9999px',
+                  mixBlendMode: 'multiply',
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Issuing date & Value ID two-column row */}
         <div
           style={{
@@ -908,42 +971,6 @@ export const CertificateTemplate: React.FC<CertificateTemplateProps> = ({
             Scan to verify
           </span>
         </div>
-
-        {/* Course Completion only: 110px round seal badge between QR code and signature */}
-        {showCourseSeal && (
-          <div
-            data-cert-course-seal="true"
-            style={{
-              position: 'absolute',
-              left: '458px',
-              top: '58px',
-              width: '110px',
-              height: '110px',
-              borderRadius: '9999px',
-              overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              pointerEvents: 'none',
-            }}
-          >
-            <img
-              src={resolvedSealUrl}
-              alt="IAMTECHNI Certificate of Excellence Seal"
-              crossOrigin="anonymous"
-              width={110}
-              height={110}
-              onError={() => setSealLoadFailed(true)}
-              style={{
-                width: '110px',
-                height: '110px',
-                objectFit: 'contain',
-                display: 'block',
-                borderRadius: '9999px',
-              }}
-            />
-          </div>
-        )}
 
         {/* Right: Signature (fixed 64px height + 6px space before printed name) + Hari Prasanna.R + Founder & CEO */}
         <div
