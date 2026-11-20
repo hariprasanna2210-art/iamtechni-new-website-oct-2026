@@ -2019,25 +2019,22 @@ export const RobotScene: React.FC<RobotSceneProps> = ({
   onRobotClick,
 }) => {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const [webglAvailable, setWebglAvailable] = useState(true);
-  const globalPointerRef = useRef({ targetX: 0, targetY: 0 });
-  const isVisibleRef = useRef(isVisible);
-  isVisibleRef.current = isVisible;
-
-  useEffect(() => {
+  const [webglAvailable] = useState<boolean>(() => {
+    if (typeof document === 'undefined') return false;
     try {
       const testCanvas = document.createElement('canvas');
       const gl =
         testCanvas.getContext('webgl2') ||
         testCanvas.getContext('webgl') ||
         testCanvas.getContext('experimental-webgl');
-      if (!gl) {
-        setWebglAvailable(false);
-      }
+      return Boolean(gl);
     } catch {
-      setWebglAvailable(false);
+      return false;
     }
-  }, []);
+  });
+  const globalPointerRef = useRef({ targetX: 0, targetY: 0 });
+  const isVisibleRef = useRef(isVisible);
+  isVisibleRef.current = isVisible;
 
   // Track pointer across the window for natural head and upper-body responsiveness without synchronous layout thrashing
   useEffect(() => {

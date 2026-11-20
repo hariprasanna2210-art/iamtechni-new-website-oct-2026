@@ -19,6 +19,27 @@ import { ROBOT_SPEECH_DATA } from '../../data/robotScript';
 
 const RobotScene = React.lazy(() => import('../layout/RobotScene'));
 
+class RobotSceneErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): { hasError: boolean } {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return null;
+    }
+    return this.props.children;
+  }
+}
+
 export interface HeroSectionProps {
   onNavigate: (route: PageRoute) => void;
   onOpenProjectModal: (serviceName?: string) => void;
@@ -530,17 +551,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="relative w-full flex-1 min-h-[250px] self-stretch flex items-center justify-center">
               <div className="absolute inset-0">
                 {isDesktop && (
-                  <React.Suspense fallback={null}>
-                    <RobotScene
-                      activeServiceId={activeSlide.robotServiceId}
-                      animationState={effectiveAnimationState}
-                      isSpeaking={isVoiceSpeaking}
-                      speechEnergy={speechEnergy}
-                      greetTriggerCount={greetTriggerCount}
-                      isVisible={isHeroVisible}
-                      onRobotClick={handleToggleVoiceGuide}
-                    />
-                  </React.Suspense>
+                  <RobotSceneErrorBoundary>
+                    <React.Suspense fallback={null}>
+                      <RobotScene
+                        activeServiceId={activeSlide.robotServiceId}
+                        animationState={effectiveAnimationState}
+                        isSpeaking={isVoiceSpeaking}
+                        speechEnergy={speechEnergy}
+                        greetTriggerCount={greetTriggerCount}
+                        isVisible={isHeroVisible}
+                        onRobotClick={handleToggleVoiceGuide}
+                      />
+                    </React.Suspense>
+                  </RobotSceneErrorBoundary>
                 )}
               </div>
 
@@ -602,17 +625,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="relative w-full max-w-[380px] sm:max-w-[440px] h-[180px] sm:h-[240px] self-stretch mx-auto">
               <div className="absolute inset-0">
                 {!isDesktop && (
-                  <React.Suspense fallback={null}>
-                    <RobotScene
-                      activeServiceId={activeSlide.robotServiceId}
-                      animationState={effectiveAnimationState}
-                      isSpeaking={isVoiceSpeaking}
-                      speechEnergy={speechEnergy}
-                      greetTriggerCount={greetTriggerCount}
-                      isVisible={isHeroVisible}
-                      onRobotClick={handleToggleVoiceGuide}
-                    />
-                  </React.Suspense>
+                  <RobotSceneErrorBoundary>
+                    <React.Suspense fallback={null}>
+                      <RobotScene
+                        activeServiceId={activeSlide.robotServiceId}
+                        animationState={effectiveAnimationState}
+                        isSpeaking={isVoiceSpeaking}
+                        speechEnergy={speechEnergy}
+                        greetTriggerCount={greetTriggerCount}
+                        isVisible={isHeroVisible}
+                        onRobotClick={handleToggleVoiceGuide}
+                      />
+                    </React.Suspense>
+                  </RobotSceneErrorBoundary>
                 )}
               </div>
 

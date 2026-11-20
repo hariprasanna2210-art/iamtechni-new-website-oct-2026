@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import {
   PageRoute,
   ServiceItem,
@@ -1127,9 +1126,21 @@ export interface SeoHeadProps {
   currentRoute: PageRoute;
 }
 
+function isReactManagedNode(el: Element): boolean {
+  if (el.hasAttribute('data-rh')) return true;
+  return Object.keys(el).some((key) => key.startsWith('__react'));
+}
+
 export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
   const cleanPath = currentRoute === '/' ? '/' : currentRoute.replace(/\/+$/, '');
   const seo = resolveRouteSeo(currentRoute);
+  const structuredDataJson =
+    seo.structuredData.length > 0
+      ? JSON.stringify({
+          '@context': 'https://schema.org',
+          '@graph': seo.structuredData,
+        })
+      : '';
 
   // Synchronize head tags and route JSON-LD across all pages from the shared SeoHead template
   useEffect(() => {
@@ -1139,59 +1150,70 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
         : 'noindex, nofollow'
       : 'index, follow';
 
-    const cleanupStaticTags = () => {
+    const syncStaticTags = () => {
       document.title = seo.title;
 
-      const ensureSingleHeadTag = (
+      const ensureHeadTag = (
         selector: string,
+        tagName: 'meta' | 'link',
+        createAttrs: Record<string, string>,
         attrName: 'content' | 'href',
         attrValue: string
       ) => {
-        const matches = Array.from(document.head.querySelectorAll(selector));
-        if (matches.length > 0) {
-          matches[0].setAttribute(attrName, attrValue);
-          matches.slice(1).forEach((el) => el.remove());
+        const staticMatches = Array.from(document.head.querySelectorAll(selector)).filter(
+          (el) => !isReactManagedNode(el)
+        );
+        if (staticMatches.length > 0) {
+          staticMatches[0].setAttribute(attrName, attrValue);
+          staticMatches.slice(1).forEach((el) => el.remove());
+        } else {
+          const el = document.createElement(tagName);
+          Object.entries(createAttrs).forEach(([key, val]) => el.setAttribute(key, val));
+          el.setAttribute(attrName, attrValue);
+          document.head.appendChild(el);
         }
       };
 
-      ensureSingleHeadTag('meta[name="robots"]', 'content', robotsValue);
-      ensureSingleHeadTag('meta[name="description"]', 'content', seo.description);
-      ensureSingleHeadTag('link[rel="canonical"]', 'href', seo.canonicalUrl);
-      ensureSingleHeadTag('meta[property="og:type"]', 'content', seo.ogType);
-      ensureSingleHeadTag('meta[property="og:title"]', 'content', seo.title);
-      ensureSingleHeadTag('meta[property="og:description"]', 'content', seo.description);
-      ensureSingleHeadTag('meta[property="og:url"]', 'content', seo.canonicalUrl);
-      ensureSingleHeadTag('meta[name="twitter:title"]', 'content', seo.title);
-      ensureSingleHeadTag('meta[name="twitter:description"]', 'content', seo.description);
-      ensureSingleHeadTag('meta[name="twitter:url"]', 'content', seo.canonicalUrl);
+      ensureHeadTag('meta[name="robots"]', 'meta', { name: 'robots' }, 'content', robotsValue);
+      ensureHeadTag('meta[name="description"]', 'meta', { name: 'description' }, 'content', seo.description);
+      ensureHeadTag('link[rel="canonical"]', 'link', { rel: 'canonical' }, 'href', seo.canonicalUrl);
+      ensureHeadTag('meta[property="og:type"]', 'meta', { property: 'og:type' }, 'content', seo.ogType);
+      ensureHeadTag('meta[property="og:title"]', 'meta', { property: 'og:title' }, 'content', seo.title);
+      ensureHeadTag('meta[property="og:description"]', 'meta', { property: 'og:description' }, 'content', seo.description);
+      ensureHeadTag('meta[property="og:url"]', 'meta', { property: 'og:url' }, 'content', seo.canonicalUrl);
+      ensureHeadTag('meta[name="twitter:title"]', 'meta', { name: 'twitter:title' }, 'content', seo.title);
+      ensureHeadTag('meta[name="twitter:description"]', 'meta', { name: 'twitter:description' }, 'content', seo.description);
+      ensureHeadTag('meta[name="twitter:url"]', 'meta', { name: 'twitter:url' }, 'content', seo.canonicalUrl);
 
-      // Remove any duplicate or prerendered route JSON-LD scripts (keep #organization-jsonld untouched)
+      // Remove any duplicate static route JSON-LD scripts (keep #organization-jsonld and React-managed scripts untouched)
       document.head
         .querySelectorAll(
           'script[type="application/ld+json"]:not([id="organization-jsonld"]):not([id="route-jsonld"])'
         )
-        .forEach((el) => el.remove());
+        .forEach((el) => {
+          if (!isReactManagedNode(el)) {
+            el.remove();
+          }
+        });
 
       let routeJsonLdEl = document.head.querySelector(
         'script#route-jsonld[type="application/ld+json"]'
       ) as HTMLScriptElement | null;
-      if (seo.structuredData.length > 0) {
+      if (structuredDataJson) {
         if (!routeJsonLdEl) {
           routeJsonLdEl = document.createElement('script');
           routeJsonLdEl.type = 'application/ld+json';
           routeJsonLdEl.id = 'route-jsonld';
           document.head.appendChild(routeJsonLdEl);
         }
-        routeJsonLdEl.textContent = JSON.stringify({
-          '@context': 'https://schema.org',
-          '@graph': seo.structuredData,
-        });
-      } else if (routeJsonLdEl) {
+        routeJsonLdEl.textContent = structuredDataJson;
+      } else if (routeJsonLdEl && !isReactManagedNode(routeJsonLdEl)) {
         routeJsonLdEl.remove();
       }
     };
-    cleanupStaticTags();
-    const timer = window.setTimeout(cleanupStaticTags, 50);
+
+    syncStaticTags();
+    const timer = window.setTimeout(syncStaticTags, 50);
     return () => window.clearTimeout(timer);
   }, [
     currentRoute,
@@ -1201,31 +1223,8 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
     seo.description,
     seo.canonicalUrl,
     seo.ogType,
-    seo.structuredData,
+    structuredDataJson,
   ]);
 
-  return (
-    <Helmet prioritizeSeoTags>
-      <title>{seo.title}</title>
-      <meta name="description" content={seo.description} />
-      <meta
-        name="robots"
-        content={
-          seo.noIndex
-            ? cleanPath.startsWith('/verify/')
-              ? 'noindex'
-              : 'noindex, nofollow'
-            : 'index, follow'
-        }
-      />
-      <link rel="canonical" href={seo.canonicalUrl} />
-      <meta property="og:type" content={seo.ogType} />
-      <meta property="og:title" content={seo.title} />
-      <meta property="og:description" content={seo.description} />
-      <meta property="og:url" content={seo.canonicalUrl} />
-      <meta name="twitter:title" content={seo.title} />
-      <meta name="twitter:description" content={seo.description} />
-      <meta name="twitter:url" content={seo.canonicalUrl} />
-    </Helmet>
-  );
+  return null;
 };
