@@ -196,6 +196,7 @@ const EXACT_META_DESCRIPTIONS = new Set<string>([
   'UI/UX design services in Pondicherry and Tamil Nadu by IAMTECHNI. User research, interface design, prototyping and design systems for web and mobile.',
   'Technology stack used by IAMTECHNI in Pondicherry and Tamil Nadu: React, Python, FastAPI, LangChain, AWS, Azure, Docker and Kubernetes for modern software.',
   'Contact IAMTECHNI in Pondicherry and Tamil Nadu for software, AI and cloud project enquiries. Share your requirements and our team will reply shortly.',
+  'Verify an IAMTECHNI internship or course completion certificate. Enter the certificate ID to confirm it is genuine and was officially issued.',
 ]);
 
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
@@ -1108,9 +1109,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     return {
       ...baseMeta,
       title: formatSeoTitle('Verify Certificate | IAMTECHNI'),
-      description: formatMetaDescription(
-        'Enter the certificate number to check that an IAMTECHNI internship or training certificate is genuine and officially issued.'
-      ),
+      description:
+        'Verify an IAMTECHNI internship or course completion certificate. Enter the certificate ID to confirm it is genuine and was officially issued.',
       canonicalUrl: `${BASE_URL}/verify`,
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
