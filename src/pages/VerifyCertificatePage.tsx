@@ -651,9 +651,13 @@ export const VerifyCertificatePage: React.FC<VerifyCertificatePageProps> = ({
         </title>
         <meta
           name="description"
-          content={formatMetaDescription(
-            'Enter the certificate number to check that an IAMTECHNI internship or training certificate is genuine. Verify official student and professional credentials online.'
-          )}
+          content={
+            isParamRoute
+              ? formatMetaDescription(
+                  'Enter the certificate number to check that an IAMTECHNI internship or training certificate is genuine. Verify official student and professional credentials online.'
+                )
+              : 'Verify an IAMTECHNI internship or course completion certificate. Enter the certificate ID to confirm it is genuine and was officially issued.'
+          }
         />
         {isParamRoute && <meta name="robots" content="noindex" />}
         <link
