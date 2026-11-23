@@ -195,6 +195,7 @@ const EXACT_META_DESCRIPTIONS = new Set<string>([
   'Vendor-neutral IT consulting in Pondicherry and Tamil Nadu by IAMTECHNI. Codebase audits, legacy modernization roadmaps and technical due diligence.',
   'UI/UX design services in Pondicherry and Tamil Nadu by IAMTECHNI. User research, interface design, prototyping and design systems for web and mobile.',
   'Technology stack used by IAMTECHNI in Pondicherry and Tamil Nadu: React, Python, FastAPI, LangChain, AWS, Azure, Docker and Kubernetes for modern software.',
+  'Contact IAMTECHNI in Pondicherry and Tamil Nadu for software, AI and cloud project enquiries. Share your requirements and our team will reply shortly.',
 ]);
 
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
@@ -991,9 +992,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     return {
       ...baseMeta,
       title: formatSeoTitle('Contact IAMTECHNI — Start Your Software, AI or Cloud Project'),
-      description: formatMetaDescription(
-        `Get in touch with IAMTECHNI in Pondicherry & Tamil Nadu, India. Call ${PRIMARY_PHONE} or email ${COMPANY_CONTACT.email} for software, AI, and cloud inquiries.`
-      ),
+      description:
+        'Contact IAMTECHNI in Pondicherry and Tamil Nadu for software, AI and cloud project enquiries. Share your requirements and our team will reply shortly.',
       canonicalUrl,
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
