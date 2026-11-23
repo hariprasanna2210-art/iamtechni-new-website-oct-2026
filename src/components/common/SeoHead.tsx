@@ -194,6 +194,7 @@ const EXACT_META_DESCRIPTIONS = new Set<string>([
   'Full Stack Development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn front-end and back-end skills through hands-on, instructor-led projects.',
   'Vendor-neutral IT consulting in Pondicherry and Tamil Nadu by IAMTECHNI. Codebase audits, legacy modernization roadmaps and technical due diligence.',
   'UI/UX design services in Pondicherry and Tamil Nadu by IAMTECHNI. User research, interface design, prototyping and design systems for web and mobile.',
+  'Technology stack used by IAMTECHNI in Pondicherry and Tamil Nadu: React, Python, FastAPI, LangChain, AWS, Azure, Docker and Kubernetes for modern software.',
 ]);
 
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
@@ -907,9 +908,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     return {
       ...baseMeta,
       title: formatSeoTitle('Technology Stack — React, Python, AI & Cloud | IAMTECHNI'),
-      description: formatMetaDescription(
-        'Explore the production technologies powering IAMTECHNI solutions: React, Next.js, TypeScript, Python, FastAPI, LangChain, AWS, Azure, Docker, and Kubernetes.'
-      ),
+      description:
+        'Technology stack used by IAMTECHNI in Pondicherry and Tamil Nadu: React, Python, FastAPI, LangChain, AWS, Azure, Docker and Kubernetes for modern software.',
       canonicalUrl,
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
