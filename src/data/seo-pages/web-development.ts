@@ -2,7 +2,7 @@ import { ServicePageData } from './types';
 
 export const webDevelopmentSeoPage: ServicePageData = {
   slug: 'web-development',
-  seoTitle: 'Web Development Services | Custom Next.js & React Websites | IAMTECHNI',
+  seoTitle: 'Web Development Services | IAMTECHNI',
   metaDescription:
     'Web development services in Pondicherry and Tamil Nadu by IAMTECHNI. Custom React, Next.js and TypeScript websites built to convert visitors into clients.',
   h1: 'Web Development Services',

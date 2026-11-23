@@ -1019,7 +1019,7 @@ const STATIC_PAGE_HEADINGS = {
       'The rules, terms, and agreements governing the use of IAMTECHNI services and website.',
   },
   '/locations': {
-    h1: 'Locations We Serve Across Puducherry, Chennai & Tamil Nadu',
+    h1: 'Locations We Serve Across Pondicherry, Chennai & Tamil Nadu',
     intro:
       'Headquartered in Puducherry, IAMTECHNI delivers modern software development, web engineering, digital marketing, and live instructor-led online technical training to clients across Chennai and major Tamil Nadu commercial hubs.',
   },
@@ -1150,7 +1150,7 @@ async function main() {
       const slug = routePath.replace('/training/', '');
       const c = coursesData.find((item) => item.id === slug);
       if (c) {
-        h1 = `${c.title} Training Course`;
+        h1 = c.id === 'dotnet-development' ? '.NET Development Training' : `${c.title} Training Course`;
         intro = c.description;
       }
     } else if (routePath.startsWith('/insights/')) {

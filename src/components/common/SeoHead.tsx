@@ -118,7 +118,7 @@ function splitIntoSentences(text: string): string[] {
     .replace(/\s+/g, ' ')
     .trim();
   if (!clean) return [];
-  const matches = clean.match(/[^.!?]+[.!?]+(?=\s|$)/g);
+  const matches = clean.match(/(?:[^.!?]|[.!?](?!\s|$))+[.!?]+(?=\s|$)/g);
   if (!matches) {
     return [/[.!?]$/.test(clean) ? clean : `${clean}.`];
   }
@@ -198,8 +198,8 @@ const EXACT_META_DESCRIPTIONS = new Set<string>([
   'Technology stack used by IAMTECHNI in Pondicherry and Tamil Nadu: React, Python, FastAPI, LangChain, AWS, Azure, Docker and Kubernetes for modern software.',
   'Contact IAMTECHNI in Pondicherry and Tamil Nadu for software, AI and cloud project enquiries. Share your requirements and our team will reply shortly.',
   'Verify an IAMTECHNI internship or course completion certificate. Enter the certificate ID to confirm it is genuine and was officially issued.',
-  '.NET development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn Entity Framework Core, ASP.NET Core Web APIs, dependency injection and clean architecture.',
-  'Web development company in Pondicherry building fast websites with React, Next.js and TypeScript. Custom software, AI and cloud support by IAMTECHNI.',
+  '.NET development training in Pondicherry and Tamil Nadu by IAMTECHNI. Master ASP.NET Core Web APIs, Entity Framework Core, DI, and clean architecture.',
+  'Web development company in Pondicherry building fast websites with React, Next.js and TypeScript. Custom software, AI and cloud solutions by IAMTECHNI.',
 ]);
 
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
@@ -612,6 +612,14 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     const industry: IndustryItem | undefined = industriesData.find((i) => i.id === slug);
     if (industry) {
       const industryMetaDescriptionOverrides: Record<string, string> = {
+        'education-training':
+          'Education and training technology solutions in Pondicherry and Tamil Nadu by IAMTECHNI. Custom LMS portals, coding labs, and student tracking systems.',
+        'retail-ecommerce':
+          'Retail and e-commerce technology solutions in Pondicherry and Tamil Nadu by IAMTECHNI. Modern storefronts, B2B commerce, and real-time inventory sync.',
+        'professional-services':
+          'Professional services software solutions in Pondicherry and Tamil Nadu by IAMTECHNI. Secure client portals, workflow automation, and AI knowledge tools.',
+        'manufacturing-operations':
+          'Manufacturing and operations software in Pondicherry and Tamil Nadu by IAMTECHNI. Real-time factory floor dashboards, OEE tracking, and quality portals.',
         'healthcare-administration':
           'Healthcare administration software in Pondicherry and Tamil Nadu by IAMTECHNI. Privacy-conscious systems for clinics and diagnostic centers.',
         'startups-emerging':
@@ -704,11 +712,15 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
         'full-stack-development':
           'Full Stack Development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn front-end and back-end skills through hands-on, instructor-led projects.',
         'dotnet-development':
-          '.NET development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn Entity Framework Core, ASP.NET Core Web APIs, dependency injection and clean architecture.',
+          '.NET development training in Pondicherry and Tamil Nadu by IAMTECHNI. Master ASP.NET Core Web APIs, Entity Framework Core, DI, and clean architecture.',
       };
+      const courseSeoTitle =
+        slug === 'dotnet-development'
+          ? '.NET Development Training | IAMTECHNI'
+          : formatSeoTitle(`${course.title} Training Course | IAMTECHNI`);
       return {
         ...baseMeta,
-        title: formatSeoTitle(`${course.title} Training Course | IAMTECHNI`),
+        title: courseSeoTitle,
         description:
           courseMetaDescriptionOverrides[slug] ??
           formatMetaDescription(`${course.title} Training: ${course.description}`),
@@ -881,10 +893,16 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
           { name: project.title, path: cleanPath },
         ])
       );
+      const caseStudyMetaDescriptionOverrides: Record<string, string> = {
+        'healthcare-scheduling-portal':
+          'Healthcare patient scheduling and clinical operations portal by IAMTECHNI. Secure web booking for doctor appointments, clinic rooms, and SMS reminders.',
+      };
       return {
         ...baseMeta,
         title: formatSeoTitle(`${project.title} | IAMTECHNI`),
-        description: formatMetaDescription(`${project.title}: ${project.tagline}`),
+        description:
+          caseStudyMetaDescriptionOverrides[slug] ??
+          formatMetaDescription(`${project.title}: ${project.tagline}`),
         canonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(project),

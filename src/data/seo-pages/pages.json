@@ -1,7 +1,7 @@
 [
   {
     "slug": "web-development",
-    "seoTitle": "Web Development Services | Custom Next.js & React Websites | IAMTECHNI",
+    "seoTitle": "Web Development Services | IAMTECHNI",
     "metaDescription": "Web development services in Pondicherry and Tamil Nadu by IAMTECHNI. Custom React, Next.js and TypeScript websites built to convert visitors into clients.",
     "h1": "Web Development Services",
     "sections": [
@@ -268,9 +268,9 @@
   },
   {
     "slug": "cloud-devops",
-    "seoTitle": "Cloud & DevOps Engineering Services | AWS, Azure & CI/CD | IAMTECHNI",
+    "seoTitle": "Cloud & DevOps Engineering Services | IAMTECHNI",
     "metaDescription": "Cloud architecture, Docker and Kubernetes, and CI/CD DevOps services in Pondicherry and Tamil Nadu by IAMTECHNI. AWS and Azure with zero-downtime delivery.",
-    "h1": "Cloud & DevOps Engineering",
+    "h1": "Cloud & DevOps Engineering Services",
     "sections": [
       {
         "h2": "Multi-Cloud Topologies & Containerized Infrastructure",
@@ -300,9 +300,9 @@
   },
   {
     "slug": "cybersecurity",
-    "seoTitle": "Cybersecurity & Hardening Services | OWASP Audits & Security | IAMTECHNI",
+    "seoTitle": "Cybersecurity & Hardening Services | IAMTECHNI",
     "metaDescription": "Cybersecurity and app hardening in Pondicherry and Tamil Nadu by IAMTECHNI. OWASP Top-10 audits, vulnerability assessment and role-based access control.",
-    "h1": "Cybersecurity & Hardening",
+    "h1": "Cybersecurity & Hardening Services",
     "sections": [
       {
         "h2": "Application Security & OWASP Top-10 Defensive Engineering",

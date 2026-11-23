@@ -2,10 +2,10 @@ import { ServicePageData } from './types';
 
 export const cloudDevopsSeoPage: ServicePageData = {
   slug: 'cloud-devops',
-  seoTitle: 'Cloud & DevOps Engineering Services | AWS, Azure & CI/CD | IAMTECHNI',
+  seoTitle: 'Cloud & DevOps Engineering Services | IAMTECHNI',
   metaDescription:
     'Cloud architecture, Docker and Kubernetes, and CI/CD DevOps services in Pondicherry and Tamil Nadu by IAMTECHNI. AWS and Azure with zero-downtime delivery.',
-  h1: 'Cloud & DevOps Engineering',
+  h1: 'Cloud & DevOps Engineering Services',
   sections: [
     {
       h2: 'Multi-Cloud Topologies & Containerized Infrastructure',

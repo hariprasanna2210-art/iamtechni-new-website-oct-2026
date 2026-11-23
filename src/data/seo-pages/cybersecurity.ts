@@ -2,10 +2,10 @@ import { ServicePageData } from './types';
 
 export const cybersecuritySeoPage: ServicePageData = {
   slug: 'cybersecurity',
-  seoTitle: 'Cybersecurity & Hardening Services | OWASP Audits & Security | IAMTECHNI',
+  seoTitle: 'Cybersecurity & Hardening Services | IAMTECHNI',
   metaDescription:
     'Cybersecurity and app hardening in Pondicherry and Tamil Nadu by IAMTECHNI. OWASP Top-10 audits, vulnerability assessment and role-based access control.',
-  h1: 'Cybersecurity & Hardening',
+  h1: 'Cybersecurity & Hardening Services',
   sections: [
     {
       h2: 'Application Security & OWASP Top-10 Defensive Engineering',

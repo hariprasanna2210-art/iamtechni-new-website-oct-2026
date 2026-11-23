@@ -199,6 +199,8 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
     }
   }, [courseSlug]);
 
+  const activeCourse = courseSlug ? coursesData.find((c) => c.id === courseSlug) : undefined;
+
   const filteredCourses =
     selectedCategory === 'All'
       ? coursesData
@@ -344,10 +346,20 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ courseSlug, onNaviga
               </div>
 
               <AnimatedHeading as="h1" hasHighlight={true} className="!font-['Outfit','Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-bold tracking-[-0.015em] text-[#1E3A8A] leading-[1.18] drop-shadow-[0_2px_8px_rgba(30,58,138,0.10)] text-balance">
-                Learn Tomorrow's Technology.{' '}
-                <span className="bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent block sm:inline heading-flowing-accent-light">
-                  Build Your Future.
-                </span>
+                {activeCourse ? (
+                  activeCourse.id === 'dotnet-development' ? (
+                    '.NET Development Training'
+                  ) : (
+                    `${activeCourse.title} Training Course`
+                  )
+                ) : (
+                  <>
+                    Learn Tomorrow's Technology.{' '}
+                    <span className="bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] bg-clip-text text-transparent block sm:inline heading-flowing-accent-light">
+                      Build Your Future.
+                    </span>
+                  </>
+                )}
               </AnimatedHeading>
 
               <p className="text-[13px] sm:text-base text-slate-600 leading-relaxed max-w-2xl line-clamp-3 sm:line-clamp-none">
