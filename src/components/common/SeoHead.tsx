@@ -578,6 +578,16 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     const slug = cleanPath.replace('/industries/', '');
     const industry: IndustryItem | undefined = industriesData.find((i) => i.id === slug);
     if (industry) {
+      const industryMetaDescriptionOverrides: Record<string, string> = {
+        'healthcare-administration':
+          'Healthcare administration software in Pondicherry and Tamil Nadu by IAMTECHNI. Privacy-conscious systems for clinics and diagnostic centers.',
+        'startups-emerging':
+          'Startup and emerging business technology in Pondicherry and Tamil Nadu by IAMTECHNI. Architecting, validating and launching scalable digital products.',
+      };
+      const resolvedIndustryDescription =
+        industryMetaDescriptionOverrides[slug] ??
+        formatMetaDescription(`${industry.name}: ${industry.summary}`);
+
       structuredData.push(
         buildBreadcrumbSchema([
           { name: 'Home', path: '/' },
@@ -588,7 +598,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       return {
         ...baseMeta,
         title: formatSeoTitle(`${industry.name} Technology Solutions | IAMTECHNI`),
-        description: formatMetaDescription(`${industry.name}: ${industry.summary}`),
+        description: resolvedIndustryDescription,
         canonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(industry),
@@ -856,9 +866,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     return {
       ...baseMeta,
       title: formatSeoTitle('Engineering Case Studies & Architectures | IAMTECHNI'),
-      description: formatMetaDescription(
-        `Explore ${projectsData.length} technical case studies covering headless commerce, enterprise AI assistants, cloud migrations, and high-speed web platforms by IAMTECHNI.`
-      ),
+      description:
+        'Six engineering case studies by IAMTECHNI in Pondicherry and Tamil Nadu. Headless commerce, enterprise AI, cloud migrations and web platforms.',
       canonicalUrl,
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
