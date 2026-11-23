@@ -25,6 +25,8 @@ export const COMPANY_CONTACT = {
   website: 'https://www.iamtechni.in',
   logoUrl: 'https://www.iamtechni.in/logo.png',
   ogImageUrl: 'https://www.iamtechni.in/og-image.png',
+  businessDescription:
+    'IAMTECHNI is an enterprise software engineering, web development, and AI company in Puducherry serving businesses across Pondicherry, Chennai, Coimbatore, Madurai, and Tamil Nadu. We build high-speed custom websites, e-commerce platforms, iOS & Android mobile apps, RAG & generative AI assistants, business process automation, and AWS/Azure cloud DevOps architectures with 100% source code and IP ownership. We also offer hands-on corporate and career technical training programs in Full Stack Development, .NET, Python, AI & Machine Learning, AWS, Azure, and DevOps. Contact us at +91 93859 48951 or visit www.iamtechni.in to start your project.',
   headquarters: 'Puducherry & Tamil Nadu, India',
   deliveryZones: 'Global Delivery (India, US, EMEA, APAC)',
   workingHours: 'Mon – Sat: 9:00 AM – 7:00 PM IST',
