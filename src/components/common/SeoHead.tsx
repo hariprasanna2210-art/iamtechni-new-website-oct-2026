@@ -201,6 +201,31 @@ const EXACT_META_DESCRIPTIONS = new Set<string>([
   '.NET development training in Pondicherry and Tamil Nadu by IAMTECHNI. Master ASP.NET Core Web APIs, Entity Framework Core, DI, and clean architecture.',
   'Web development company in Pondicherry building fast websites with React, Next.js and TypeScript. Custom software, AI and cloud solutions by IAMTECHNI.',
   'IAMTECHNI builds fast, SEO-ready websites, e-commerce stores, and custom web applications for businesses in Madurai with 100% source code ownership.',
+  'Replace manual spreadsheet handoffs and email approval chains with automated web pipelines engineered to eliminate operational errors and speed up workflows.',
+  'Private retrieval-augmented intelligence enabling employees to query technical manuals and SOPs with grounded answers and verified source citations.',
+  'Unified KPI telemetry systems presenting real-time executive revenue, production, and customer engagement metrics with sub-second drilldown views.',
+  'Resilient, transaction-ready storefronts engineered for fast mobile checkout, real-time warehouse stock synchronization, and flexible pricing.',
+  'Transition fragile on-premise servers and unmanaged virtual machines into resilient, auto-scaling cloud architectures on AWS and Microsoft Azure.',
+  'Incrementally decompose brittle legacy systems into modern TypeScript and React web applications without interrupting daily business operations.',
+  'Advanced technical SEO foundations, conversion rate optimization, and high-intent content funnels that generate qualified commercial inquiries.',
+  'Unify isolated enterprise ERPs, CRMs, payment gateways, and custom databases into a synchronized, secure event-driven business ecosystem.',
+  'Structured digital platforms for syllabus delivery, student coding lab submissions, and standardized mentor code review scoring systems.',
+  'Discover how hybrid lexical ranking, contextual chunking, and strict citation reranking produce reliable, production-ready enterprise AI assistants.',
+  'A systematic review of FinOps engineering practices, right-sizing compute instances, and automated lifecycle rules that reduce waste by 30%.',
+  'Why modern corporate websites suffer from layout shifts, and how clean component architecture and asset optimization achieve 95+ Lighthouse scores.',
+  'High-speed headless commerce architecture featuring unified inventory synchronization and tiered B2B pricing for wholesale distributors.',
+  'Retrieval-Augmented Generation platform delivering grounded technical answers with verifiable source document citations and zero data leaks.',
+  'Secure web booking portal coordinating doctor appointments, clinic room availability, and automated patient SMS and WhatsApp message reminders.',
+  'Unified operational dashboard aggregating multi-cloud resource spend, idle instance detection, and real-time budget threshold alerts.',
+  'Real-time shop floor production board monitoring batch cycles, scrap rates, and equipment uptime featuring high-contrast display modes.',
+  'Modern educational portal for structured syllabus delivery, practical coding lab submissions, and comprehensive mentor code reviews.',
+  'Advanced custom LMS portals, student project tracking, and digital curriculum delivery platforms engineered for schools and training academies.',
+  'Modern digital storefronts, B2B wholesale portals, and real-time inventory synchronization engineered for retail brands and distributors.',
+  'Secure, privacy-conscious patient scheduling and clinic administration portals with role-based staff access and WCAG 2.2 AA interfaces.',
+  'Secure client document portals, workflow automation tools, and private knowledge management systems designed for legal and consulting firms.',
+  'Real-time factory floor production dashboards, OEE tracking, and preventive maintenance work-order portals built for industrial facilities.',
+  'Rapid MVP development, clean TypeScript architecture, and pragmatic technical advisory guiding ambitious ventures from concept to scale.',
+  'Business process automation, custom internal operations dashboards, and technical search engine optimization for established enterprises.',
 ]);
 
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
@@ -535,23 +560,40 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     const slug = cleanPath.replace('/solutions/', '');
     const solution: SolutionItem | undefined = solutionsData.find((s) => s.id === slug);
     if (solution) {
+      const solutionSeoTitles: Record<string, string> = {
+        'business-process-automation': 'Business Process Automation Solutions | IAMTECHNI',
+        'ai-document-search': 'AI Document Search & Knowledge Systems | IAMTECHNI',
+        'custom-business-dashboards': 'Custom Business & Operational Dashboards | IAMTECHNI',
+        'digital-commerce-engines': 'E-commerce & Digital Commerce Modernization | IAMTECHNI',
+        'cloud-infrastructure-modernization': 'Cloud Infrastructure Modernization & Migration | IAMTECHNI',
+        'application-modernization': 'Application Modernization & Monolith Refactoring | IAMTECHNI',
+        'lead-generation-growth': 'Lead Generation & Digital Growth Engines | IAMTECHNI',
+        'system-integration-middleware': 'System Integration & Enterprise Middleware | IAMTECHNI',
+        'learning-training-platforms': 'Learning & Technical Training Platforms | IAMTECHNI',
+      };
       const solutionMetaDescriptionOverrides: Record<string, string> = {
-        'ai-document-search':
-          'AI-powered knowledge and document search in Pondicherry and Tamil Nadu by IAMTECHNI. Private, retrieval-augmented answers from your manuals and SOPs.',
-        'custom-business-dashboards':
-          'Custom business dashboards in Pondicherry and Tamil Nadu by IAMTECHNI. Unified KPI telemetry showing real-time revenue, production and customer engagement.',
-        'digital-commerce-engines':
-          'E-commerce and digital commerce modernization in Pondicherry and Tamil Nadu by IAMTECHNI. Fast, transaction-ready storefronts with real-time stock sync.',
         'business-process-automation':
-          'Business process automation in Pondicherry and Tamil Nadu by IAMTECHNI. Replace manual workflows and email approval chains with automated pipelines.',
+          'Replace manual spreadsheet handoffs and email approval chains with automated web pipelines engineered to eliminate operational errors and speed up workflows.',
+        'ai-document-search':
+          'Private retrieval-augmented intelligence enabling employees to query technical manuals and SOPs with grounded answers and verified source citations.',
+        'custom-business-dashboards':
+          'Unified KPI telemetry systems presenting real-time executive revenue, production, and customer engagement metrics with sub-second drilldown views.',
+        'digital-commerce-engines':
+          'Resilient, transaction-ready storefronts engineered for fast mobile checkout, real-time warehouse stock synchronization, and flexible pricing.',
+        'cloud-infrastructure-modernization':
+          'Transition fragile on-premise servers and unmanaged virtual machines into resilient, auto-scaling cloud architectures on AWS and Microsoft Azure.',
         'application-modernization':
-          'Application modernization in Pondicherry and Tamil Nadu by IAMTECHNI. Incrementally break brittle legacy systems into modern, strongly typed TypeScript.',
+          'Incrementally decompose brittle legacy systems into modern TypeScript and React web applications without interrupting daily business operations.',
         'lead-generation-growth':
-          'Lead generation in Pondicherry and Tamil Nadu by IAMTECHNI. Technical SEO, conversion rate optimization and high-intent content funnels.',
+          'Advanced technical SEO foundations, conversion rate optimization, and high-intent content funnels that generate qualified commercial inquiries.',
+        'system-integration-middleware':
+          'Unify isolated enterprise ERPs, CRMs, payment gateways, and custom databases into a synchronized, secure event-driven business ecosystem.',
+        'learning-training-platforms':
+          'Structured digital platforms for syllabus delivery, student coding lab submissions, and standardized mentor code review scoring systems.',
       };
       const resolvedSolutionDescription =
         solutionMetaDescriptionOverrides[slug] ??
-        formatMetaDescription(`${solution.title}: ${solution.summary}`);
+        formatMetaDescription(solution.summary);
 
       structuredData.push(
         buildBreadcrumbSchema([
@@ -576,7 +618,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       });
       return {
         ...baseMeta,
-        title: formatSeoTitle(`${solution.title} | IAMTECHNI`),
+        title: formatSeoTitle(solutionSeoTitles[slug] || `${solution.title} | IAMTECHNI`),
         description: resolvedSolutionDescription,
         canonicalUrl,
         ogType: 'website',
@@ -612,23 +654,34 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     const slug = cleanPath.replace('/industries/', '');
     const industry: IndustryItem | undefined = industriesData.find((i) => i.id === slug);
     if (industry) {
+      const industrySeoTitles: Record<string, string> = {
+        'education-training': 'Education & Training Technology Solutions | IAMTECHNI',
+        'retail-ecommerce': 'Retail & E-commerce Technology Solutions | IAMTECHNI',
+        'healthcare-administration': 'Healthcare Administration Software Solutions | IAMTECHNI',
+        'professional-services': 'Professional Services Software Solutions | IAMTECHNI',
+        'manufacturing-operations': 'Manufacturing & Operations Software Solutions | IAMTECHNI',
+        'startups-emerging': 'Startup & Emerging Business Technology | IAMTECHNI',
+        'smes': 'SME Digital Solutions & Cloud Modernization | IAMTECHNI',
+      };
       const industryMetaDescriptionOverrides: Record<string, string> = {
         'education-training':
-          'Education and training technology solutions in Pondicherry and Tamil Nadu by IAMTECHNI. Custom LMS portals, coding labs, and student tracking systems.',
+          'Advanced custom LMS portals, student project tracking, and digital curriculum delivery platforms engineered for schools and training academies.',
         'retail-ecommerce':
-          'Retail and e-commerce technology solutions in Pondicherry and Tamil Nadu by IAMTECHNI. Modern storefronts, B2B commerce, and real-time inventory sync.',
-        'professional-services':
-          'Professional services software solutions in Pondicherry and Tamil Nadu by IAMTECHNI. Secure client portals, workflow automation, and AI knowledge tools.',
-        'manufacturing-operations':
-          'Manufacturing and operations software in Pondicherry and Tamil Nadu by IAMTECHNI. Real-time factory floor dashboards, OEE tracking, and quality portals.',
+          'Modern digital storefronts, B2B wholesale portals, and real-time inventory synchronization engineered for retail brands and distributors.',
         'healthcare-administration':
-          'Healthcare administration software in Pondicherry and Tamil Nadu by IAMTECHNI. Privacy-conscious systems for clinics and diagnostic centers.',
+          'Secure, privacy-conscious patient scheduling and clinic administration portals with role-based staff access and WCAG 2.2 AA interfaces.',
+        'professional-services':
+          'Secure client document portals, workflow automation tools, and private knowledge management systems designed for legal and consulting firms.',
+        'manufacturing-operations':
+          'Real-time factory floor production dashboards, OEE tracking, and preventive maintenance work-order portals built for industrial facilities.',
         'startups-emerging':
-          'Startup and emerging business technology in Pondicherry and Tamil Nadu by IAMTECHNI. Architecting, validating and launching scalable digital products.',
+          'Rapid MVP development, clean TypeScript architecture, and pragmatic technical advisory guiding ambitious ventures from concept to scale.',
+        'smes':
+          'Business process automation, custom internal operations dashboards, and technical search engine optimization for established enterprises.',
       };
       const resolvedIndustryDescription =
         industryMetaDescriptionOverrides[slug] ??
-        formatMetaDescription(`${industry.name}: ${industry.summary}`);
+        formatMetaDescription(industry.summary);
 
       structuredData.push(
         buildBreadcrumbSchema([
@@ -639,7 +692,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       );
       return {
         ...baseMeta,
-        title: formatSeoTitle(`${industry.name} Technology Solutions | IAMTECHNI`),
+        title: formatSeoTitle(industrySeoTitles[slug] || `${industry.name} Technology Solutions | IAMTECHNI`),
         description: resolvedIndustryDescription,
         canonicalUrl,
         ogType: 'website',
@@ -828,6 +881,19 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     const slug = cleanPath.replace('/insights/', '');
     const article: ArticleItem | undefined = insightsData.find((a) => a.slug === slug);
     if (article) {
+      const insightSeoTitles: Record<string, string> = {
+        'modern-rag-architecture': 'Enterprise RAG Systems & Vector Search | IAMTECHNI',
+        'cloud-cost-optimization': 'Cloud Cost Optimization & FinOps Strategies | IAMTECHNI',
+        'web-performance-core-vitals': 'Sub-Second Web Performance & Core Vitals | IAMTECHNI',
+      };
+      const insightMetaDescriptionOverrides: Record<string, string> = {
+        'modern-rag-architecture':
+          'Discover how hybrid lexical ranking, contextual chunking, and strict citation reranking produce reliable, production-ready enterprise AI assistants.',
+        'cloud-cost-optimization':
+          'A systematic review of FinOps engineering practices, right-sizing compute instances, and automated lifecycle rules that reduce waste by 30%.',
+        'web-performance-core-vitals':
+          'Why modern corporate websites suffer from layout shifts, and how clean component architecture and asset optimization achieve 95+ Lighthouse scores.',
+      };
       structuredData.push(
         buildBreadcrumbSchema([
           { name: 'Home', path: '/' },
@@ -851,8 +917,8 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       });
       return {
         ...baseMeta,
-        title: formatSeoTitle(`${article.title} | IAMTECHNI`),
-        description: formatMetaDescription(article.excerpt),
+        title: formatSeoTitle(insightSeoTitles[slug] || `${article.title} | IAMTECHNI`),
+        description: insightMetaDescriptionOverrides[slug] ?? formatMetaDescription(article.excerpt),
         canonicalUrl,
         ogType: 'article',
         ogImage: resolveOgImageUrl(article),
@@ -887,6 +953,28 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     const slug = cleanPath.replace('/case-studies/', '');
     const project = projectsData.find((p) => p.id === slug);
     if (project) {
+      const caseStudySeoTitles: Record<string, string> = {
+        'omnichannel-retail-engine': 'Omnichannel Retail & B2B Commerce Platform | IAMTECHNI',
+        'enterprise-rag-assistant': 'Enterprise Technical RAG Assistant | IAMTECHNI',
+        'healthcare-scheduling-portal': 'Healthcare Patient Scheduling Portal | IAMTECHNI',
+        'finops-cloud-dashboard': 'FinOps Cloud Cost & Health Telemetry | IAMTECHNI',
+        'manufacturing-iot-tracker': 'Manufacturing Line Telemetry & Quality Tracker | IAMTECHNI',
+        'edtech-learning-platform': 'EdTech Curriculum & Lab Management Platform | IAMTECHNI',
+      };
+      const caseStudyMetaDescriptionOverrides: Record<string, string> = {
+        'omnichannel-retail-engine':
+          'High-speed headless commerce architecture featuring unified inventory synchronization and tiered B2B pricing for wholesale distributors.',
+        'enterprise-rag-assistant':
+          'Retrieval-Augmented Generation platform delivering grounded technical answers with verifiable source document citations and zero data leaks.',
+        'healthcare-scheduling-portal':
+          'Secure web booking portal coordinating doctor appointments, clinic room availability, and automated patient SMS and WhatsApp message reminders.',
+        'finops-cloud-dashboard':
+          'Unified operational dashboard aggregating multi-cloud resource spend, idle instance detection, and real-time budget threshold alerts.',
+        'manufacturing-iot-tracker':
+          'Real-time shop floor production board monitoring batch cycles, scrap rates, and equipment uptime featuring high-contrast display modes.',
+        'edtech-learning-platform':
+          'Modern educational portal for structured syllabus delivery, practical coding lab submissions, and comprehensive mentor code reviews.',
+      };
       structuredData.push(
         buildBreadcrumbSchema([
           { name: 'Home', path: '/' },
@@ -894,13 +982,9 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
           { name: project.title, path: cleanPath },
         ])
       );
-      const caseStudyMetaDescriptionOverrides: Record<string, string> = {
-        'healthcare-scheduling-portal':
-          'Healthcare patient scheduling and clinical operations portal by IAMTECHNI. Secure web booking for doctor appointments, clinic rooms, and SMS reminders.',
-      };
       return {
         ...baseMeta,
-        title: formatSeoTitle(`${project.title} | IAMTECHNI`),
+        title: formatSeoTitle(caseStudySeoTitles[slug] || `${project.title} | IAMTECHNI`),
         description:
           caseStudyMetaDescriptionOverrides[slug] ??
           formatMetaDescription(`${project.title}: ${project.tagline}`),
@@ -983,7 +1067,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: formatSeoTitle('About IAMTECHNI — Software, AI & Cloud Engineering Practice'),
+      title: formatSeoTitle('About IAMTECHNI Software & AI Engineering | IAMTECHNI'),
       description: formatMetaDescription(
         'Learn about IAMTECHNI’s engineering principles, 7-stage agile delivery lifecycle, and commitment to building resilient software, AI, and cloud platforms.'
       ),
@@ -1046,7 +1130,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     );
     return {
       ...baseMeta,
-      title: formatSeoTitle('Contact IAMTECHNI — Start Your Software, AI or Cloud Project'),
+      title: formatSeoTitle('Contact IAMTECHNI — Software & AI Projects | IAMTECHNI'),
       description:
         'Contact IAMTECHNI in Pondicherry and Tamil Nadu for software, AI and cloud project enquiries. Share your requirements and our team will reply shortly.',
       canonicalUrl,
