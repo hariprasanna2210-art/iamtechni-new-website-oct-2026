@@ -190,6 +190,7 @@ export function formatSeoTitle(rawTitle: string): string {
  * without mid-sentence hard-cuts or ellipses, and uses "Pondicherry" consistently.
  */
 const EXACT_META_DESCRIPTIONS = new Set<string>([
+  'IAMTECHNI delivers custom web development, e-commerce, mobile apps, enterprise software, AI, Cloud DevOps & digital marketing in Pondicherry & Tamil Nadu.',
   'Web development services in Pondicherry and Tamil Nadu by IAMTECHNI. Custom React, Next.js and TypeScript websites built to convert visitors into clients.',
   'Full Stack Development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn front-end and back-end skills through hands-on, instructor-led projects.',
   'Vendor-neutral IT consulting in Pondicherry and Tamil Nadu by IAMTECHNI. Codebase audits, legacy modernization roadmaps and technical due diligence.',
@@ -284,13 +285,41 @@ function buildBreadcrumbSchema(items: { name: string; path: string }[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: items.map((item, idx) => ({
-      '@type': 'ListItem',
-      position: idx + 1,
-      name: item.name,
-      item: `${BASE_URL}${item.path}`,
-    })),
+    itemListElement: items.map((item, idx) => {
+      const cleanItemPath = item.path === '/' ? '/' : item.path.replace(/\/+$/, '');
+      return {
+        '@type': 'ListItem',
+        position: idx + 1,
+        name: item.name,
+        item: `${BASE_URL}${cleanItemPath}`,
+      };
+    }),
   };
+}
+
+function buildUniqueAreaServed(city?: string, region?: string, state?: string) {
+  const candidates: { '@type': string; name: string }[] = [];
+  const normalizeAreaName = (val?: string) =>
+    String(val || '')
+      .trim()
+      .replace(/\bPuducherry\b/gi, 'Pondicherry');
+
+  const cityNorm = normalizeAreaName(city);
+  const regionNorm = normalizeAreaName(region);
+  const stateNorm = normalizeAreaName(state);
+
+  if (cityNorm) candidates.push({ '@type': 'City', name: cityNorm });
+  if (regionNorm) candidates.push({ '@type': 'AdministrativeArea', name: regionNorm });
+  if (stateNorm) candidates.push({ '@type': 'AdministrativeArea', name: stateNorm });
+  candidates.push({ '@type': 'Country', name: 'India' });
+
+  const seen = new Set<string>();
+  return candidates.filter((entry) => {
+    const key = entry.name.toLowerCase();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 export function resolveRouteSeo(route: PageRoute): SeoMetadata {
@@ -373,12 +402,11 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
           email: COMPANY_CONTACT.email,
           url: `${BASE_URL}/`,
         },
-        areaServed: [
-          { '@type': 'City', name: locationPage.targetLocation.city },
-          { '@type': 'AdministrativeArea', name: locationPage.targetLocation.region },
-          { '@type': 'AdministrativeArea', name: locationPage.targetLocation.state },
-          { '@type': 'Country', name: 'India' },
-        ],
+        areaServed: buildUniqueAreaServed(
+          locationPage.targetLocation.city,
+          locationPage.targetLocation.region,
+          locationPage.targetLocation.state
+        ),
       });
     }
 
@@ -1178,18 +1206,41 @@ function isReactManagedNode(el: Element): boolean {
   return Object.keys(el).some((key) => key.startsWith('__react'));
 }
 
+let cachedBaseOrgGraph: Record<string, unknown>[] | null = null;
+
+function getBaseOrgGraphFromHead(): Record<string, unknown>[] {
+  if (cachedBaseOrgGraph) return cachedBaseOrgGraph;
+  if (typeof document === 'undefined') return [];
+  const orgEl = document.head.querySelector('script#organization-jsonld[type="application/ld+json"]');
+  if (orgEl?.textContent) {
+    try {
+      const parsed = JSON.parse(orgEl.textContent) as { '@graph'?: Record<string, unknown>[] };
+      if (Array.isArray(parsed['@graph'])) {
+        cachedBaseOrgGraph = parsed['@graph'].filter(
+          (node) => node['@type'] === 'Organization' || node['@type'] === 'WebSite'
+        );
+        return cachedBaseOrgGraph;
+      }
+    } catch {
+      // Ignore malformed JSON
+    }
+  }
+  return [];
+}
+
+function stripContextForGraph(node: Record<string, unknown>): Record<string, unknown> {
+  if (!('@context' in node)) return node;
+  const { '@context': _ignored, ...rest } = node;
+  return rest;
+}
+
 export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
   const cleanPath = currentRoute === '/' ? '/' : currentRoute.replace(/\/+$/, '');
   const seo = resolveRouteSeo(currentRoute);
-  const structuredDataJson =
-    seo.structuredData.length > 0
-      ? JSON.stringify({
-          '@context': 'https://schema.org',
-          '@graph': seo.structuredData,
-        })
-      : '';
+  const routeGraphItems = seo.structuredData.map(stripContextForGraph);
+  const routeGraphJson = JSON.stringify(routeGraphItems);
 
-  // Synchronize head tags and route JSON-LD across all pages from the shared SeoHead template
+  // Synchronize head tags and unified single-block JSON-LD across all pages from the shared SeoHead template
   useEffect(() => {
     const robotsValue = seo.noIndex
       ? cleanPath.startsWith('/verify/')
@@ -1232,30 +1283,25 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
       ensureHeadTag('meta[name="twitter:description"]', 'meta', { name: 'twitter:description' }, 'content', seo.description);
       ensureHeadTag('meta[name="twitter:url"]', 'meta', { name: 'twitter:url' }, 'content', seo.canonicalUrl);
 
-      // Remove any duplicate static route JSON-LD scripts (keep #organization-jsonld and React-managed scripts untouched)
+      // Remove any secondary JSON-LD blocks so strictly ONE clean schema block (#organization-jsonld) exists per page
       document.head
-        .querySelectorAll(
-          'script[type="application/ld+json"]:not([id="organization-jsonld"]):not([id="route-jsonld"])'
-        )
+        .querySelectorAll('script[type="application/ld+json"]:not([id="organization-jsonld"])')
         .forEach((el) => {
           if (!isReactManagedNode(el)) {
             el.remove();
           }
         });
 
-      let routeJsonLdEl = document.head.querySelector(
-        'script#route-jsonld[type="application/ld+json"]'
+      const baseOrgGraph = getBaseOrgGraphFromHead();
+      const orgJsonLdEl = document.head.querySelector(
+        'script#organization-jsonld[type="application/ld+json"]'
       ) as HTMLScriptElement | null;
-      if (structuredDataJson) {
-        if (!routeJsonLdEl) {
-          routeJsonLdEl = document.createElement('script');
-          routeJsonLdEl.type = 'application/ld+json';
-          routeJsonLdEl.id = 'route-jsonld';
-          document.head.appendChild(routeJsonLdEl);
-        }
-        routeJsonLdEl.textContent = structuredDataJson;
-      } else if (routeJsonLdEl && !isReactManagedNode(routeJsonLdEl)) {
-        routeJsonLdEl.remove();
+      if (orgJsonLdEl && baseOrgGraph.length > 0) {
+        const mergedGraph = [...baseOrgGraph, ...routeGraphItems];
+        orgJsonLdEl.textContent = JSON.stringify({
+          '@context': 'https://schema.org',
+          '@graph': mergedGraph,
+        });
       }
     };
 
@@ -1270,7 +1316,7 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ currentRoute }) => {
     seo.description,
     seo.canonicalUrl,
     seo.ogType,
-    structuredDataJson,
+    routeGraphJson,
   ]);
 
   return null;

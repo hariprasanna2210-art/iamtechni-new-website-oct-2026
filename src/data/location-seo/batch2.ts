@@ -5,7 +5,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
   {
     slug: 'web-development-company-chennai',
     path: '/web-development-company-chennai/',
-    canonicalUrl: 'https://www.iamtechni.in/web-development-company-chennai/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-company-chennai',
     seoTitle: 'Web Development Company in Chennai | Custom Web Design | IAMTECHNI',
     metaDescription: 'Modern web development company serving Chennai businesses. High-speed websites, Next.js web applications, and digital platforms built with clean code.',
     h1: 'Web Development Company in Chennai',
@@ -113,7 +113,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
   {
     slug: 'ecommerce-website-development-chennai',
     path: '/ecommerce-website-development-chennai/',
-    canonicalUrl: 'https://www.iamtechni.in/ecommerce-website-development-chennai/',
+    canonicalUrl: 'https://www.iamtechni.in/ecommerce-website-development-chennai',
     seoTitle: 'E-Commerce Website Development in Chennai | IAMTECHNI',
     metaDescription: 'Custom e-commerce website development for Chennai brands. Secure checkout, UPI and Indian payment gateways, fast product catalogs, and inventory sync.',
     h1: 'E-Commerce Website Development in Chennai',
@@ -221,7 +221,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
   {
     slug: 'software-development-company-chennai',
     path: '/software-development-company-chennai/',
-    canonicalUrl: 'https://www.iamtechni.in/software-development-company-chennai/',
+    canonicalUrl: 'https://www.iamtechni.in/software-development-company-chennai',
     seoTitle: 'Software Development Company in Chennai | Custom Software | IAMTECHNI',
     metaDescription: 'Custom software development company serving Chennai. Cloud applications, ERP systems, internal business tools, and SaaS platforms built with modern tech.',
     h1: 'Software Development Company in Chennai',
@@ -329,7 +329,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
   {
     slug: 'mobile-app-development-chennai',
     path: '/mobile-app-development-chennai/',
-    canonicalUrl: 'https://www.iamtechni.in/mobile-app-development-chennai/',
+    canonicalUrl: 'https://www.iamtechni.in/mobile-app-development-chennai',
     seoTitle: 'Mobile App Development Company in Chennai | iOS & Android | IAMTECHNI',
     metaDescription: 'Cross-platform mobile app development in Chennai. High-performance React Native and Flutter apps for iOS and Android with secure cloud backends.',
     h1: 'Mobile App Development in Chennai',
@@ -437,7 +437,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
   {
     slug: 'digital-marketing-agency-chennai',
     path: '/digital-marketing-agency-chennai/',
-    canonicalUrl: 'https://www.iamtechni.in/digital-marketing-agency-chennai/',
+    canonicalUrl: 'https://www.iamtechni.in/digital-marketing-agency-chennai',
     seoTitle: 'Digital Marketing Agency in Chennai | Performance Marketing | IAMTECHNI',
     metaDescription: 'Results-focused digital marketing agency serving Chennai businesses. Google Ads, Meta advertising, B2B lead generation, and performance marketing.',
     h1: 'Digital Marketing Agency in Chennai',
@@ -545,7 +545,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
   {
     slug: 'seo-company-chennai',
     path: '/seo-company-chennai/',
-    canonicalUrl: 'https://www.iamtechni.in/seo-company-chennai/',
+    canonicalUrl: 'https://www.iamtechni.in/seo-company-chennai',
     seoTitle: 'SEO Company in Chennai | Search Engine Optimization | IAMTECHNI',
     metaDescription: 'Results-driven SEO company serving Chennai. Technical SEO audits, on-page optimization, Google Business Profile tuning, and content strategies.',
     h1: 'SEO Company in Chennai',
@@ -653,7 +653,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
   {
     slug: 'aws-training-chennai',
     path: '/aws-training-chennai/',
-    canonicalUrl: 'https://www.iamtechni.in/aws-training-chennai/',
+    canonicalUrl: 'https://www.iamtechni.in/aws-training-chennai',
     seoTitle: 'AWS Cloud Training in Chennai | Amazon Web Services | IAMTECHNI',
     metaDescription: 'Practical AWS cloud training for students and professionals in Chennai. Master EC2, S3, Lambda, VPC, and IAM with live cloud console labs. Enquire for details.',
     h1: 'AWS Cloud Training in Chennai',
@@ -769,7 +769,7 @@ export const LOCATION_PAGES_BATCH2: LocationSeoPageData[] = [
   {
     slug: 'devops-training-chennai',
     path: '/devops-training-chennai/',
-    canonicalUrl: 'https://www.iamtechni.in/devops-training-chennai/',
+    canonicalUrl: 'https://www.iamtechni.in/devops-training-chennai',
     seoTitle: 'DevOps Training in Chennai | Docker, Kubernetes & CI/CD | IAMTECHNI',
     metaDescription: 'Practical DevOps training for Chennai developers and engineers. Learn Docker, Kubernetes, CI/CD with GitHub Actions, Terraform, and Linux from practising engineers.',
     h1: 'DevOps Training in Chennai',

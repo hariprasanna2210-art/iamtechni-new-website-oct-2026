@@ -36,7 +36,7 @@ const renderHighlightedHeadline = (headline: string, highlightPhrase: string) =>
 
 const MOBILE_CONCISE_DESCRIPTIONS: Record<string, string> = {
   'ai-generative':
-    'Deploy custom LLMs, private RAG knowledge assistants, and enterprise AI copilots.',
+    'IAMTECHNI engineers custom web development, mobile apps, enterprise software, and AI systems in Pondicherry & Tamil Nadu.',
   'ml-automation':
     'Turn operational data into real-time predictive models and automated workflows.',
   'robotics-systems':

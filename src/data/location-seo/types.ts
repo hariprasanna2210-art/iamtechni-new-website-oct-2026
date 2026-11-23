@@ -29,7 +29,7 @@ export interface LocationTargetInfo {
 export interface LocationSeoPageData {
   slug: string;
   path: string; // trailing slash e.g. "/web-development-company-pondicherry/"
-  canonicalUrl: string; // "https://www.iamtechni.in/.../"
+  canonicalUrl: string; // "https://www.iamtechni.in/..."
   seoTitle: string;
   metaDescription: string;
   h1: string;

@@ -172,9 +172,66 @@ function buildStaticRootHtml(page) {
   return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n${introHtml}${sectionsHtml}\n${locationsHtml}${faqsHtml}\n      </main>\n    `;
 }
 
-function buildJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
-  const serviceSchema = {
+function buildUniqueAreaServed(city, region, state) {
+  const normalizeName = (val) =>
+    String(val || '')
+      .trim()
+      .replace(/\bPuducherry\b/gi, 'Pondicherry');
+  const candidates = [];
+  const cityNorm = normalizeName(city);
+  const regionNorm = normalizeName(region);
+  const stateNorm = normalizeName(state);
+  if (cityNorm) candidates.push({ '@type': 'City', name: cityNorm });
+  if (regionNorm) candidates.push({ '@type': 'AdministrativeArea', name: regionNorm });
+  if (stateNorm) candidates.push({ '@type': 'AdministrativeArea', name: stateNorm });
+  candidates.push({ '@type': 'Country', name: 'India' });
+
+  const seen = new Set();
+  return candidates.filter((entry) => {
+    const key = entry.name.toLowerCase();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function stripContextForGraph(node) {
+  if (!node || typeof node !== 'object' || !('@context' in node)) return node;
+  const { '@context': _ignored, ...rest } = node;
+  return rest;
+}
+
+function mergeOrganizationJsonLd(html, routeSchemas = []) {
+  const cleanRouteNodes = (routeSchemas || []).filter(Boolean).map(stripContextForGraph);
+  const orgScriptRegex =
+    /<script(?=[^>]*\bid=["']organization-jsonld["'])(?=[^>]*\btype=["']application\/ld\+json["'])[^>]*>([\s\S]*?)<\/script>/i;
+  const match = html.match(orgScriptRegex);
+  if (match) {
+    try {
+      const parsed = JSON.parse(match[1]);
+      const baseGraph = Array.isArray(parsed['@graph']) ? parsed['@graph'] : [parsed];
+      const mergedPayload = {
+        '@context': 'https://schema.org',
+        '@graph': [...baseGraph, ...cleanRouteNodes],
+      };
+      return html.replace(
+        orgScriptRegex,
+        `<script type="application/ld+json" id="organization-jsonld">${JSON.stringify(mergedPayload)}</script>`
+      );
+    } catch {
+      // Fallback below if template JSON-LD could not be parsed
+    }
+  }
+  if (cleanRouteNodes.length === 0) return html;
+  const fallbackTag = `<script type="application/ld+json" id="organization-jsonld">${JSON.stringify({
     '@context': 'https://schema.org',
+    '@graph': cleanRouteNodes,
+  })}</script>`;
+  return html.replace('</head>', `    ${fallbackTag}\n  </head>`);
+}
+
+function buildServiceJsonLdSchemas(page, canonicalUrl, formattedMetaDesc) {
+  const serviceSchema = {
     '@type': 'Service',
     '@id': `${canonicalUrl}#service`,
     name: page.h1,
@@ -197,7 +254,6 @@ function buildJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
   };
 
   const breadcrumbSchema = {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       {
@@ -221,14 +277,10 @@ function buildJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
     ],
   };
 
-  const scripts = [
-    `<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(serviceSchema)}</script>`,
-    `<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`,
-  ];
+  const schemas = [serviceSchema, breadcrumbSchema];
 
   if (page.faqs && page.faqs.length > 0) {
-    const faqSchema = {
-      '@context': 'https://schema.org',
+    schemas.push({
       '@type': 'FAQPage',
       mainEntity: page.faqs.map((faq) => ({
         '@type': 'Question',
@@ -238,15 +290,15 @@ function buildJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
           text: faq.answer,
         },
       })),
-    };
-    scripts.push(`<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(faqSchema)}</script>`);
+    });
   }
 
-  return scripts.join('\n    ');
+  return schemas;
 }
 
 function renderServiceHtml(templateHtml, page, formatSeoTitle, formatMetaDescription) {
-  const canonicalUrl = `${BASE_URL}/services/${page.slug}`;
+  const cleanSlug = String(page.slug || '').replace(/^\/+|\/+$/g, '');
+  const canonicalUrl = `${BASE_URL}/services/${cleanSlug}`;
   const formattedTitle = formatSeoTitle ? formatSeoTitle(page.seoTitle) : page.seoTitle;
   const formattedDesc = formatMetaDescription ? formatMetaDescription(page.metaDescription) : page.metaDescription;
   const escapedTitle = escapeHtml(formattedTitle);
@@ -310,9 +362,9 @@ function renderServiceHtml(templateHtml, page, formatSeoTitle, formatMetaDescrip
     `<meta name="twitter:description" content="${escapedDesc}" />`
   );
 
-  // 6. Inject JSON-LD scripts before </head>
-  const jsonLdScripts = buildJsonLdScripts(page, canonicalUrl, formattedDesc);
-  html = html.replace('</head>', `    ${jsonLdScripts}\n  </head>`);
+  // 6. Merge route JSON-LD into single #organization-jsonld @graph block
+  const serviceSchemas = buildServiceJsonLdSchemas(page, canonicalUrl, formattedDesc);
+  html = mergeOrganizationJsonLd(html, serviceSchemas);
 
   // 7. Insert static HTML inside <div id="root">...</div>
   const staticBodyHtml = buildStaticRootHtml(page);
@@ -379,11 +431,10 @@ function buildLocationStaticRootHtml(page) {
   return `\n      <main>\n        <h1>${escapeHtml(page.h1)}</h1>\n        <p class="intro">${escapeHtml(page.intro)}</p>\n${contactDetailsHtml}\n${courseLinkHtml}\n      <section>\n        <h2>Key Capabilities &amp; Advantages</h2>\n${highlightsHtml}\n      </section>\n${sectionsHtml}\n      <section>\n        <h2>Delivery Lifecycle</h2>\n${processHtml}\n      </section>\n${localContextHtml}\n${faqsHtml}\n${internalLinksHtml}\n      </main>\n    `;
 }
 
-function buildLocationJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
+function buildLocationJsonLdSchemas(page, canonicalUrl, formattedMetaDesc) {
   const primarySchema =
     page.schemaType === 'Course'
       ? {
-          '@context': 'https://schema.org',
           '@type': 'Course',
           '@id': `${canonicalUrl}#course`,
           name: page.h1,
@@ -404,7 +455,6 @@ function buildLocationJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
           },
         }
       : {
-          '@context': 'https://schema.org',
           '@type': 'Service',
           '@id': `${canonicalUrl}#service`,
           name: page.h1,
@@ -419,19 +469,17 @@ function buildLocationJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
             email: COMPANY_EMAIL,
             url: `${BASE_URL}/`,
           },
-          areaServed: [
-            { '@type': 'City', name: String(page.targetLocation.city || '').replace(/\bPuducherry\b/gi, 'Pondicherry') },
-            { '@type': 'AdministrativeArea', name: String(page.targetLocation.region || '').replace(/\bPuducherry\b/gi, 'Pondicherry') },
-            { '@type': 'AdministrativeArea', name: String(page.targetLocation.state || '').replace(/\bPuducherry\b/gi, 'Pondicherry') },
-            { '@type': 'Country', name: 'India' },
-          ],
+          areaServed: buildUniqueAreaServed(
+            page.targetLocation.city,
+            page.targetLocation.region,
+            page.targetLocation.state
+          ),
         };
 
   const breadcrumbCategoryPath = page.category === 'Training' ? '/training' : '/services';
   const breadcrumbCategoryName = page.category === 'Training' ? 'Training & Courses' : 'Services';
 
   const breadcrumbSchema = {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       {
@@ -455,14 +503,10 @@ function buildLocationJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
     ],
   };
 
-  const scripts = [
-    `<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(primarySchema)}</script>`,
-    `<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`,
-  ];
+  const schemas = [primarySchema, breadcrumbSchema];
 
   if (page.faqs && page.faqs.length > 0) {
-    const faqSchema = {
-      '@context': 'https://schema.org',
+    schemas.push({
       '@type': 'FAQPage',
       mainEntity: page.faqs.map((faq) => ({
         '@type': 'Question',
@@ -472,16 +516,15 @@ function buildLocationJsonLdScripts(page, canonicalUrl, formattedMetaDesc) {
           text: faq.answer,
         },
       })),
-    };
-    scripts.push(`<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify(faqSchema)}</script>`);
+    });
   }
 
-  return scripts.join('\n    ');
+  return schemas;
 }
 
 function renderLocationHtml(templateHtml, page, formatSeoTitle, formatMetaDescription) {
-  // Canonical URL uses uniform trailing-slash style (no trailing slash on sub-routes)
-  const canonicalUrl = (page.canonicalUrl || `${BASE_URL}/${page.slug}`).replace(/\/+$/, '');
+  // Canonical URL uses uniform non-trailing-slash style on sub-routes
+  const canonicalUrl = normalizeSitemapUrl(page.canonicalUrl || `${BASE_URL}/${page.slug}`);
   const formattedTitle = formatSeoTitle ? formatSeoTitle(page.seoTitle) : page.seoTitle;
   const formattedDesc = formatMetaDescription ? formatMetaDescription(page.metaDescription) : page.metaDescription;
   const escapedTitle = escapeHtml(formattedTitle);
@@ -545,9 +588,9 @@ function renderLocationHtml(templateHtml, page, formatSeoTitle, formatMetaDescri
     `<meta name="twitter:description" content="${escapedDesc}" />`
   );
 
-  // 6. Inject JSON-LD scripts before </head>
-  const jsonLdScripts = buildLocationJsonLdScripts(page, canonicalUrl, formattedDesc);
-  html = html.replace('</head>', `    ${jsonLdScripts}\n  </head>`);
+  // 6. Merge route JSON-LD into single #organization-jsonld @graph block
+  const locationSchemas = buildLocationJsonLdSchemas(page, canonicalUrl, formattedDesc);
+  html = mergeOrganizationJsonLd(html, locationSchemas);
 
   // 7. Insert static HTML inside <div id="root">...</div>
   const staticBodyHtml = buildLocationStaticRootHtml(page);
@@ -670,7 +713,7 @@ ${formattedEntries}
 }
 
 function renderGeneralPageHtml(templateHtml, page) {
-  const canonicalUrl = page.canonicalUrl;
+  const canonicalUrl = normalizeSitemapUrl(page.canonicalUrl);
   const escapedTitle = escapeHtml(page.seoTitle);
   const escapedDesc = escapeHtml(page.metaDescription);
   const escapedUrl = escapeHtml(canonicalUrl);
@@ -758,13 +801,9 @@ function renderGeneralPageHtml(templateHtml, page) {
     );
   }
 
-  // 6. Inject JSON-LD scripts before </head> if provided
+  // 6. Merge route JSON-LD into single #organization-jsonld @graph block
   if (page.structuredData && page.structuredData.length > 0) {
-    const jsonLdScript = `<script class="prerender-jsonld" type="application/ld+json">${JSON.stringify({
-      '@context': 'https://schema.org',
-      '@graph': page.structuredData,
-    })}</script>`;
-    html = html.replace('</head>', `    ${jsonLdScript}\n  </head>`);
+    html = mergeOrganizationJsonLd(html, page.structuredData);
   }
 
   // 7. Insert static HTML inside <div id="root">...</div>

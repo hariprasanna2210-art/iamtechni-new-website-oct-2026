@@ -81,10 +81,10 @@ export const HERO_SERVICE_SLIDES: HeroServiceSlide[] = [
     route: '/services/ai-machine-learning',
     shortTitle: 'Generative AI',
     categoryLabel: 'Artificial Intelligence & Generative AI',
-    headline: 'Next-Gen Artificial Intelligence & Generative AI Solutions',
-    highlightPhrase: 'Generative AI Solutions',
+    headline: 'Web Development, Mobile Apps & AI Engineering in Pondicherry',
+    highlightPhrase: 'AI Engineering in Pondicherry',
     description:
-      'Deploy custom large language models, private RAG knowledge assistants, and multi-agent AI copilots engineered around your enterprise data and security standards.',
+      'IAMTECHNI engineers custom web development, mobile apps, enterprise software, and AI systems in Pondicherry & Tamil Nadu.',
     spokenLine:
       'At IAMTECHNI, we engineer Artificial Intelligence and Generative AI solutions, from private knowledge assistants to autonomous multi-agent copilots.',
     gestureDirection: 'right',

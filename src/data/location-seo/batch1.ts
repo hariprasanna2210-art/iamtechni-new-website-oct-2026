@@ -5,7 +5,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'web-development-company-pondicherry',
     path: '/web-development-company-pondicherry/',
-    canonicalUrl: 'https://www.iamtechni.in/web-development-company-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-company-pondicherry',
     seoTitle: 'Web Development Company in Pondicherry | IAMTECHNI',
     metaDescription: 'Web development company in Pondicherry building fast websites with React, Next.js and TypeScript. Custom software, AI and cloud support by IAMTECHNI.',
     h1: 'Web Development Company in Pondicherry',
@@ -112,7 +112,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'ecommerce-website-development-pondicherry',
     path: '/ecommerce-website-development-pondicherry/',
-    canonicalUrl: 'https://www.iamtechni.in/ecommerce-website-development-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/ecommerce-website-development-pondicherry',
     seoTitle: 'E-Commerce Website Development in Pondicherry | IAMTECHNI',
     metaDescription: 'Custom e-commerce website development in Pondicherry. High-converting online stores, Shopify & custom headless commerce with UPI and Razorpay integration.',
     h1: 'E-Commerce Website Development in Pondicherry',
@@ -219,7 +219,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'software-development-company-pondicherry',
     path: '/software-development-company-pondicherry/',
-    canonicalUrl: 'https://www.iamtechni.in/software-development-company-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/software-development-company-pondicherry',
     seoTitle: 'Software Development Company in Pondicherry | IAMTECHNI',
     metaDescription: 'Custom software development company in Pondicherry. Enterprise ERP, SaaS applications, cloud backends and automated business workflows built to scale.',
     h1: 'Software Development Company in Pondicherry',
@@ -326,7 +326,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'mobile-app-development-pondicherry',
     path: '/mobile-app-development-pondicherry/',
-    canonicalUrl: 'https://www.iamtechni.in/mobile-app-development-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/mobile-app-development-pondicherry',
     seoTitle: 'Mobile App Development Company in Pondicherry | IAMTECHNI',
     metaDescription: 'Expert mobile app development in Pondicherry. Native and cross-platform iOS & Android apps built with React Native and Flutter. Get your app launched.',
     h1: 'Mobile App Development Company in Pondicherry',
@@ -433,7 +433,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'digital-marketing-agency-pondicherry',
     path: '/digital-marketing-agency-pondicherry/',
-    canonicalUrl: 'https://www.iamtechni.in/digital-marketing-agency-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/digital-marketing-agency-pondicherry',
     seoTitle: 'Digital Marketing Agency in Pondicherry | IAMTECHNI',
     metaDescription: 'Results-driven digital marketing agency in Pondicherry. SEO, Google Ads, Meta advertising, social media growth, and content marketing that generate real ROI.',
     h1: 'Digital Marketing Agency in Pondicherry',
@@ -540,7 +540,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'local-seo-services-pondicherry',
     path: '/local-seo-services-pondicherry/',
-    canonicalUrl: 'https://www.iamtechni.in/local-seo-services-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/local-seo-services-pondicherry',
     seoTitle: 'Local SEO Services in Pondicherry | IAMTECHNI',
     metaDescription: 'Dominate Google local search and Google Maps in Pondicherry. Optimize your Google Business Profile, local citations, reviews and local search rankings.',
     h1: 'Local SEO Services in Pondicherry',
@@ -647,7 +647,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'aws-training-pondicherry',
     path: '/aws-training-pondicherry/',
-    canonicalUrl: 'https://www.iamtechni.in/aws-training-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/aws-training-pondicherry',
     seoTitle: 'AWS Cloud Training in Pondicherry | IAMTECHNI',
     metaDescription: 'Hands-on AWS cloud training in Pondicherry. Master EC2, S3, Lambda, VPC, and IAM with live cloud console labs. Enquire for duration and batch details.',
     h1: 'AWS Cloud Training in Pondicherry',
@@ -763,7 +763,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'devops-training-pondicherry',
     path: '/devops-training-pondicherry/',
-    canonicalUrl: 'https://www.iamtechni.in/devops-training-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/devops-training-pondicherry',
     seoTitle: 'DevOps Training Course in Pondicherry | IAMTECHNI',
     metaDescription: 'Practical DevOps training in Pondicherry. Learn Docker, Kubernetes, CI/CD pipelines, Terraform, Linux, and Git from practising DevOps engineers.',
     h1: 'DevOps Training Course in Pondicherry',
@@ -879,7 +879,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'generative-ai-training-pondicherry',
     path: '/generative-ai-training-pondicherry/',
-    canonicalUrl: 'https://www.iamtechni.in/generative-ai-training-pondicherry/',
+    canonicalUrl: 'https://www.iamtechni.in/generative-ai-training-pondicherry',
     seoTitle: 'Generative AI Training in Pondicherry | IAMTECHNI',
     metaDescription: 'Hands-on Generative AI course in Pondicherry. Build LLM apps, RAG pipelines, AI agents, and fine-tuning with Python, LangChain, and Enterprise LLM APIs.',
     h1: 'Generative AI Training in Pondicherry',
@@ -995,7 +995,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'web-development-cuddalore',
     path: '/web-development-cuddalore/',
-    canonicalUrl: 'https://www.iamtechni.in/web-development-cuddalore/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-cuddalore',
     seoTitle: 'Web Development Services in Cuddalore | IAMTECHNI',
     metaDescription: 'Custom web development services in Cuddalore. Fast, modern websites, e-commerce stores, and business portals engineered for growth. Get a free consultation.',
     h1: 'Web Development Services in Cuddalore',
@@ -1103,7 +1103,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'web-development-villupuram',
     path: '/web-development-villupuram/',
-    canonicalUrl: 'https://www.iamtechni.in/web-development-villupuram/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-villupuram',
     seoTitle: 'Web Development Services in Villupuram | IAMTECHNI',
     metaDescription: 'Professional web development in Villupuram. High-performance corporate websites, e-commerce stores, and software solutions built for local business growth.',
     h1: 'Web Development Services in Villupuram',
@@ -1211,7 +1211,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
   {
     slug: 'it-training-cuddalore',
     path: '/it-training-cuddalore/',
-    canonicalUrl: 'https://www.iamtechni.in/it-training-cuddalore/',
+    canonicalUrl: 'https://www.iamtechni.in/it-training-cuddalore',
     seoTitle: 'IT Training & Software Courses in Cuddalore | IAMTECHNI',
     metaDescription: 'Hands-on IT training for students & professionals in Cuddalore. Full stack development, Python, AWS cloud, and AI courses. Enquire for batch schedules.',
     h1: 'IT Training & Software Courses in Cuddalore',

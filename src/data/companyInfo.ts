@@ -34,7 +34,7 @@ export const COMPANY_CONTACT = {
     addressRegion: 'Puducherry & Tamil Nadu',
     addressCountry: 'IN',
   },
-  areaServed: ['Puducherry', 'Pondicherry', 'Tamil Nadu', 'Chennai', 'Coimbatore', 'India'],
+  areaServed: ['Pondicherry', 'Tamil Nadu', 'Chennai', 'Coimbatore', 'India'],
   socialProfiles: [
     'https://www.linkedin.com/company/iamtechni/',
   ],

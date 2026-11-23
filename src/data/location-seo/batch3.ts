@@ -5,7 +5,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
   {
     slug: 'web-development-coimbatore',
     path: '/web-development-coimbatore/',
-    canonicalUrl: 'https://www.iamtechni.in/web-development-coimbatore/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-coimbatore',
     seoTitle: 'Web Development Company in Coimbatore | IAMTECHNI',
     metaDescription: 'High-speed web development for Coimbatore businesses. Custom corporate websites, industrial product portals, and web applications built with Next.js & React.',
     h1: 'Web Development Services in Coimbatore',
@@ -113,7 +113,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
   {
     slug: 'digital-marketing-coimbatore',
     path: '/digital-marketing-coimbatore/',
-    canonicalUrl: 'https://www.iamtechni.in/digital-marketing-coimbatore/',
+    canonicalUrl: 'https://www.iamtechni.in/digital-marketing-coimbatore',
     seoTitle: 'Digital Marketing Agency in Coimbatore | IAMTECHNI',
     metaDescription: 'Performance-driven digital marketing in Coimbatore. Targeted Google Ads, Meta campaigns, and B2B lead generation for manufacturing, textile, and engineering firms.',
     h1: 'Digital Marketing Agency in Coimbatore',
@@ -221,7 +221,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
   {
     slug: 'web-development-madurai',
     path: '/web-development-madurai/',
-    canonicalUrl: 'https://www.iamtechni.in/web-development-madurai/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-madurai',
     seoTitle: 'Web Development Company in Madurai | IAMTECHNI',
     metaDescription: 'Custom web development in Madurai. Fast, responsive websites, e-commerce storefronts, and business portals engineered for regional commercial growth.',
     h1: 'Web Development Services in Madurai',
@@ -329,7 +329,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
   {
     slug: 'it-training-madurai',
     path: '/it-training-madurai/',
-    canonicalUrl: 'https://www.iamtechni.in/it-training-madurai/',
+    canonicalUrl: 'https://www.iamtechni.in/it-training-madurai',
     seoTitle: 'IT Training & Software Courses in Madurai | Online Labs | IAMTECHNI',
     metaDescription: 'Live online IT training for students and graduates in Madurai. Master full-stack web development, React, Node.js, and Python through hands-on coding labs.',
     h1: 'IT Training & Software Courses in Madurai',
@@ -445,7 +445,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
   {
     slug: 'web-development-trichy',
     path: '/web-development-trichy/',
-    canonicalUrl: 'https://www.iamtechni.in/web-development-trichy/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-trichy',
     seoTitle: 'Web Development Company in Trichy | IAMTECHNI',
     metaDescription: 'Modern website development in Tiruchirappalli. Fast, secure websites and cloud portals for Trichy engineering, fabrication, and institutional businesses.',
     h1: 'Web Development Services in Trichy',
@@ -553,7 +553,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
   {
     slug: 'aws-training-coimbatore',
     path: '/aws-training-coimbatore/',
-    canonicalUrl: 'https://www.iamtechni.in/aws-training-coimbatore/',
+    canonicalUrl: 'https://www.iamtechni.in/aws-training-coimbatore',
     seoTitle: 'AWS Cloud Training in Coimbatore | Online Courses | IAMTECHNI',
     metaDescription: 'Practical AWS cloud training for engineers and graduates in Coimbatore. Master EC2, S3, Lambda, VPC, and IAM with interactive online labs and live mentorship.',
     h1: 'AWS Cloud Training in Coimbatore',
@@ -669,7 +669,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
   {
     slug: 'web-development-salem',
     path: '/web-development-salem/',
-    canonicalUrl: 'https://www.iamtechni.in/web-development-salem/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-salem',
     seoTitle: 'Web Development Company in Salem | IAMTECHNI',
     metaDescription: 'Custom web development in Salem. Modern, mobile-first websites and digital catalogs for steel, sago, textile, and manufacturing enterprises across Salem.',
     h1: 'Web Development Services in Salem',
@@ -777,7 +777,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
   {
     slug: 'web-development-erode',
     path: '/web-development-erode/',
-    canonicalUrl: 'https://www.iamtechni.in/web-development-erode/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-erode',
     seoTitle: 'Web Development Company in Erode | IAMTECHNI',
     metaDescription: 'High-performance web development in Erode. Custom websites, textile commerce catalogs, and agro-business platforms engineered for speed and reliability.',
     h1: 'Web Development Services in Erode',
@@ -885,7 +885,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
   {
     slug: 'web-development-vellore',
     path: '/web-development-vellore/',
-    canonicalUrl: 'https://www.iamtechni.in/web-development-vellore/',
+    canonicalUrl: 'https://www.iamtechni.in/web-development-vellore',
     seoTitle: 'Web Development Company in Vellore | IAMTECHNI',
     metaDescription: 'Professional web development services in Vellore. Modern websites, patient appointment portals, and institutional web applications built for performance.',
     h1: 'Web Development Services in Vellore',
@@ -993,7 +993,7 @@ export const LOCATION_PAGES_BATCH3: LocationSeoPageData[] = [
   {
     slug: 'generative-ai-training-tamil-nadu',
     path: '/generative-ai-training-tamil-nadu/',
-    canonicalUrl: 'https://www.iamtechni.in/generative-ai-training-tamil-nadu/',
+    canonicalUrl: 'https://www.iamtechni.in/generative-ai-training-tamil-nadu',
     seoTitle: 'Generative AI Training in Tamil Nadu | LLM & RAG Course | IAMTECHNI',
     metaDescription: 'Statewide online Generative AI training across Tamil Nadu. Learn to build production LLM applications, RAG pipelines, and AI agents with Python and LangChain.',
     h1: 'Generative AI & LLM Training in Tamil Nadu',
