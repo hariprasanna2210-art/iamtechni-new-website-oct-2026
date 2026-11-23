@@ -501,6 +501,18 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     const slug = cleanPath.replace('/solutions/', '');
     const solution: SolutionItem | undefined = solutionsData.find((s) => s.id === slug);
     if (solution) {
+      const solutionMetaDescriptionOverrides: Record<string, string> = {
+        'ai-document-search':
+          'AI-powered knowledge and document search in Pondicherry and Tamil Nadu by IAMTECHNI. Private, retrieval-augmented answers from your manuals and SOPs.',
+        'custom-business-dashboards':
+          'Custom business dashboards in Pondicherry and Tamil Nadu by IAMTECHNI. Unified KPI telemetry showing real-time revenue, production and customer engagement.',
+        'digital-commerce-engines':
+          'E-commerce and digital commerce modernization in Pondicherry and Tamil Nadu by IAMTECHNI. Fast, transaction-ready storefronts with real-time stock sync.',
+      };
+      const resolvedSolutionDescription =
+        solutionMetaDescriptionOverrides[slug] ??
+        formatMetaDescription(`${solution.title}: ${solution.summary}`);
+
       structuredData.push(
         buildBreadcrumbSchema([
           { name: 'Home', path: '/' },
@@ -525,7 +537,7 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
       return {
         ...baseMeta,
         title: formatSeoTitle(`${solution.title} | IAMTECHNI`),
-        description: formatMetaDescription(`${solution.title}: ${solution.summary}`),
+        description: resolvedSolutionDescription,
         canonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(solution),
