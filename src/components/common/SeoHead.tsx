@@ -508,6 +508,12 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
           'Custom business dashboards in Pondicherry and Tamil Nadu by IAMTECHNI. Unified KPI telemetry showing real-time revenue, production and customer engagement.',
         'digital-commerce-engines':
           'E-commerce and digital commerce modernization in Pondicherry and Tamil Nadu by IAMTECHNI. Fast, transaction-ready storefronts with real-time stock sync.',
+        'business-process-automation':
+          'Business process automation in Pondicherry and Tamil Nadu by IAMTECHNI. Replace manual workflows and email approval chains with automated pipelines.',
+        'application-modernization':
+          'Application modernization in Pondicherry and Tamil Nadu by IAMTECHNI. Incrementally break brittle legacy systems into modern, strongly typed TypeScript.',
+        'lead-generation-growth':
+          'Lead generation in Pondicherry and Tamil Nadu by IAMTECHNI. Technical SEO, conversion rate optimization and high-intent content funnels.',
       };
       const resolvedSolutionDescription =
         solutionMetaDescriptionOverrides[slug] ??
