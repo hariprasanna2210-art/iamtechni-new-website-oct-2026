@@ -7,7 +7,7 @@ export const LOCATION_PAGES_BATCH1: LocationSeoPageData[] = [
     path: '/web-development-company-pondicherry/',
     canonicalUrl: 'https://www.iamtechni.in/web-development-company-pondicherry/',
     seoTitle: 'Web Development Company in Pondicherry | IAMTECHNI',
-    metaDescription: 'Leading web development company in Pondicherry. We build fast, custom websites and web applications with React, Next.js, and TypeScript. Get a free quote today.',
+    metaDescription: 'Web development company in Pondicherry building fast websites with React, Next.js and TypeScript. Custom software, AI and cloud support by IAMTECHNI.',
     h1: 'Web Development Company in Pondicherry',
     category: 'Service',
     schemaType: 'Service',

@@ -197,6 +197,8 @@ const EXACT_META_DESCRIPTIONS = new Set<string>([
   'Technology stack used by IAMTECHNI in Pondicherry and Tamil Nadu: React, Python, FastAPI, LangChain, AWS, Azure, Docker and Kubernetes for modern software.',
   'Contact IAMTECHNI in Pondicherry and Tamil Nadu for software, AI and cloud project enquiries. Share your requirements and our team will reply shortly.',
   'Verify an IAMTECHNI internship or course completion certificate. Enter the certificate ID to confirm it is genuine and was officially issued.',
+  '.NET development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn Entity Framework Core, ASP.NET Core Web APIs, dependency injection and clean architecture.',
+  'Web development company in Pondicherry building fast websites with React, Next.js and TypeScript. Custom software, AI and cloud support by IAMTECHNI.',
 ]);
 
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
@@ -670,13 +672,18 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
           },
         },
       });
+      const courseMetaDescriptionOverrides: Record<string, string> = {
+        'full-stack-development':
+          'Full Stack Development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn front-end and back-end skills through hands-on, instructor-led projects.',
+        'dotnet-development':
+          '.NET development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn Entity Framework Core, ASP.NET Core Web APIs, dependency injection and clean architecture.',
+      };
       return {
         ...baseMeta,
         title: formatSeoTitle(`${course.title} Training Course | IAMTECHNI`),
         description:
-          slug === 'full-stack-development'
-            ? 'Full Stack Development training in Pondicherry and Tamil Nadu by IAMTECHNI. Learn front-end and back-end skills through hands-on, instructor-led projects.'
-            : formatMetaDescription(`${course.title} Training: ${course.description}`),
+          courseMetaDescriptionOverrides[slug] ??
+          formatMetaDescription(`${course.title} Training: ${course.description}`),
         canonicalUrl,
         ogType: 'website',
         ogImage: resolveOgImageUrl(course),
