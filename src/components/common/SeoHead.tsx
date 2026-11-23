@@ -200,6 +200,7 @@ const EXACT_META_DESCRIPTIONS = new Set<string>([
   'Verify an IAMTECHNI internship or course completion certificate. Enter the certificate ID to confirm it is genuine and was officially issued.',
   '.NET development training in Pondicherry and Tamil Nadu by IAMTECHNI. Master ASP.NET Core Web APIs, Entity Framework Core, DI, and clean architecture.',
   'Web development company in Pondicherry building fast websites with React, Next.js and TypeScript. Custom software, AI and cloud solutions by IAMTECHNI.',
+  'IAMTECHNI builds fast, SEO-ready websites, e-commerce stores, and custom web applications for businesses in Madurai with 100% source code ownership.',
 ]);
 
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
