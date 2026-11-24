@@ -226,6 +226,7 @@ const EXACT_META_DESCRIPTIONS = new Set<string>([
   'Real-time factory floor production dashboards, OEE tracking, and preventive maintenance work-order portals built for industrial facilities.',
   'Rapid MVP development, clean TypeScript architecture, and pragmatic technical advisory guiding ambitious ventures from concept to scale.',
   'Business process automation, custom internal operations dashboards, and technical search engine optimization for established enterprises.',
+  'Practical cloud cost optimization for growing businesses: rightsizing, reserved capacity, tagging and monitoring. Practical insights by IAMTECHNI engineers.',
 ]);
 
 export function formatMetaDescription(primaryText: string, extraContext?: string): string {
@@ -883,16 +884,16 @@ export function resolveRouteSeo(route: PageRoute): SeoMetadata {
     if (article) {
       const insightSeoTitles: Record<string, string> = {
         'modern-rag-architecture': 'Enterprise RAG Systems & Vector Search | IAMTECHNI',
-        'cloud-cost-optimization': 'Cloud Cost Optimization & FinOps Strategies | IAMTECHNI',
-        'web-performance-core-vitals': 'Sub-Second Web Performance & Core Vitals | IAMTECHNI',
+        'cloud-cost-optimization': 'Cloud Cost Optimization Guide | IAMTECHNI',
+        'web-performance-core-vitals': 'Web Performance & Core Web Vitals Guide | IAMTECHNI',
       };
       const insightMetaDescriptionOverrides: Record<string, string> = {
         'modern-rag-architecture':
           'Discover how hybrid lexical ranking, contextual chunking, and strict citation reranking produce reliable, production-ready enterprise AI assistants.',
         'cloud-cost-optimization':
-          'A systematic review of FinOps engineering practices, right-sizing compute instances, and automated lifecycle rules that reduce waste by 30%.',
+          'Practical cloud cost optimization for growing businesses: rightsizing, reserved capacity, tagging and monitoring. Practical insights by IAMTECHNI engineers.',
         'web-performance-core-vitals':
-          'Why modern corporate websites suffer from layout shifts, and how clean component architecture and asset optimization achieve 95+ Lighthouse scores.',
+          'How to improve Core Web Vitals, page speed and load times for business websites. Practical engineering insights from the IAMTECHNI team in Pondicherry.',
       };
       structuredData.push(
         buildBreadcrumbSchema([
